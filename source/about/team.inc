@@ -31,7 +31,7 @@
           Argonne Scholar in the 
           <a href="https://www.mcs.anl.gov/research/LANS/">Laboratory for 
           Advanced Numerical Simulation</a>. He is a prolific contributor to 
-          <a href="https://www.mcs.anl.gov/petsc/">PETSc</a>, led the 
+          <a href="https://www.mcs.anl.gov/petsc/">PETSc</a>, helped lead the 
           development of its interface to Elemental and 
           <a href="http://github.com/poulson/Clique">Clique</a>, 
           and contributed a large number of patches to Elemental along the way.
@@ -76,6 +76,24 @@
         </div>
 
       	<div class="front-block block">
+  	  <h2><a href="http://www.mit.edu/~mlubin/">Miles Lubin</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Miles Lubin'
+		 src='/_static/images/mugshots/miles-lubin.jpg' />
+	  </div>
+
+          <p><a href="http://www.mit.edu/~mlubin/">Miles</a> is a 
+          Ph.D. student in 
+          <a href="http://www.mit.edu/~orc/">Operations Research at MIT</a>.
+          His interests include high-performance optimization and probability
+          and statistics, and he is associated with the 
+          <a href="http://julialang.org/">Julia project</a> (see 
+          <a href="https://github.com/IainNZ/MathProg.jl">MathProg.jl</a>).
+          He was one of the early users of Elemental (in 2009) and contributed
+          numerous bug reports and suggestions.
+        </div>
+
+      	<div class="front-block block">
   	  <h2><a href="http://www.cs.utexas.edu/~bamarker/">Bryan Marker</a></h2>
           <div class="avatar mugshot">
 	    <img alt='Bryan Marker'
@@ -109,6 +127,22 @@
         </div>
 
       	<div class="front-block block">
+  	  <h2><a href="https://www.alcf.anl.gov/staff-directory/nichols-romero">Nichols Romero</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Nichols Romero'
+		 src='/_static/images/mugshots/nichols-romero.jpg' />
+	  </div>
+
+          <p><a href="https://www.alcf.anl.gov/staff-directory/nichols-romero">Nick</a> is an Assistant Computational Scientist at the 
+          <a href="https://www.alcf.anl.gov/">Argonne Leadership Computing 
+          Facility</a> and received his Ph.D. from <a href="http://illinois.edu/">UIUC</a> in 2005. His primary focus is massively parallel electronic structure
+          calculations and he is a contributor to 
+          <a href="https://wiki.fysik.dtu.dk/gpaw/">GPAW</a>. 
+          He helped support Elemental's port to Blue Gene/P.
+          </p>
+        </div>
+
+      	<div class="front-block block">
   	  <h2>Martin Schatz</h2>
           <div class="avatar mugshot">
 	    <img alt='Martin Schatz'
@@ -121,6 +155,41 @@
           libraries for tensor contractions. He is the author of both the 
           <a href="http://poulson.github.io/Elemental/core/axpy_interface.html">Axpy interface</a> and the <a href="https://github.com/poulson/Elemental/blob/master/experimental/g3d/G3DGemm.cpp">experimental 3D Gemm implementation</a>.
           </p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://folk.uio.no/dagss">Dag Sverre Seljebotn</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Dag Sverre Seljebotn'
+		 src='/_static/images/mugshots/dag-seljebotn.jpeg' />
+	  </div>
+
+          <p><a href="http://folk.uio.no/dagss">Dag</a> is a doctoral student
+          in the <a href="http://www.mn.uio.no/astro/">Institute of Theoretical
+          Astrophysics</a> at the 
+          <a href="https://www.uio.no/english/">University of Oslo</a> analyzing
+          the <a href="https://en.wikipedia.org/wiki/Cosmic_microwave_background_radiation">cosmic microwave background</a>.
+          He is one of the core developers of <a href="http://cython.org/">Cython</a> and <a href="http://fwrap.sourceforge.net/">Fwrap</a> and was the first to
+          work towards a Python interface to Elemental (see <a href="https://github.com/dagss/elemental4py">elemental4py</a>).
+          </p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://andy.terrel.us">Andy Terrel</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Andy Terrel'
+		 src='/_static/images/mugshots/andy-terrel.jpeg' />
+	  </div>
+
+          <p><a href="http://andy.terrel.us">Dr. Andy R. Terrel</a> is a 
+          Research Associate for the <a href="http://chg.ices.utexas.edu/index.html">Computational Hydraulics Group</a> at the 
+          <a href="http://www.ices.utexas.edu">Institute for Computational 
+          Engineering and Sciences</a> which is at the 
+          <a href="http://www.utexas.edu">Universiy of Texas at Austin</a>. 
+          Andy's research includes utilizing supercomputers with Python and 
+          studying methods for speeding up computational fluid dynamics. He 
+          graduated from the <a href="http://www.uchicago.edu">University of 
+          Chicago</a> with a PhD in Computer Science in 2010.</p>
         </div>
 
       	<div class="front-block block">
@@ -138,6 +207,30 @@
           led the development of 
           <a href="http://www.cs.utexas.edu/~plapack">PLAPACK</a>, which was 
           the primary inspiration for Elemental.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://www.mcs.anl.gov/~hzhang">Hong Zhang</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Hong Zhang'
+		 src='/_static/images/mugshots/hong-zhang.jpg' />
+	  </div>
+
+          <p><a href="https://www.mcs.anl.gov/~hzhang">Hong</a> is a research 
+          professor of computer science at <a href="http://www.iit.edu/">IIT</a> and is affiliated with the <a href="http://www.mcs.anl.gov/">MCS division</a> of <a href="http://www.anl.gov/">Argonne National Laboratory</a>.
+          Hong helped lead the development of <a href="https://www.mcs.anl.gov/petsc/">PETSc's</a> interface to Elemental and <a href="http://github.com/poulson/Clique">Clique</a>.
+        </div>
+
+      	<div class="front-block block">
+  	  <h2>Xuan Zhou</h2>
+          <div class="avatar mugshot">
+	    <img alt='Xuan Zhou'
+		 src='/_static/images/mugshots/xuan-zhou.jpg' />
+	  </div>
+
+          <p>Xuan is a Ph.D. candidate in applied mathematics at 
+          <a href="http://www.iit.edu/">IIT</a> and helped develop 
+          <a href="https://www.mcs.anl.gov/petsc/">PETSc's</a> interface to Elemental and <a href="http://github.com/poulson/Clique">Clique</a>.
         </div>
 
       	<div class="front-block block">

@@ -11,9 +11,9 @@ Benevolent dictator
 .. raw:: html
     :file: dictator.inc
 
-==================================
-Active contributors (alphabetical)
-==================================
+===========================
+Contributors (alphabetical)
+===========================
 
 .. raw:: html
     :file: team.inc

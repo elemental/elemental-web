@@ -1,8 +1,19 @@
 .. _team:
 
-########################################
-The team behind Elemental (alphabetical)
-########################################
+########
+The team
+########
+
+===================
+Benevolent dictator
+===================
+
+.. raw:: html
+    :file: dictator.inc
+
+==================================
+Active contributors (alphabetical)
+==================================
 
 .. raw:: html
     :file: team.inc

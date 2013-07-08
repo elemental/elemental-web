@@ -79,7 +79,7 @@
   	  <h2><a href="http://www.mit.edu/~mlubin/">Miles Lubin</a></h2>
           <div class="avatar mugshot">
 	    <img alt='Miles Lubin'
-		 src='/_static/images/mugshots/miles-lubin.jpg' />
+		 src='/_static/images/mugshots/miles-lubin.jpeg' />
 	  </div>
 
           <p><a href="http://www.mit.edu/~mlubin/">Miles</a> is a 

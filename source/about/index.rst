@@ -35,7 +35,7 @@ TODO
 Contributors
 ************
 
-TODO. Please see `the contributors page <./team.html>`__ for now.
+Please see `the list of contributors <./team.html>`__ for now.
 
 .. _about_license:
 

@@ -14,56 +14,42 @@ Download
 Binary packages
 ***************
 
-This is the main FEniCS download, suitable for most users. It includes
-everything needed to get you started with FEniCS.
-
-.. raw:: html
-    :file: index.inc
+**TODO**
 
 ===========================
 Contributed binary packages
 ===========================
 
-For information on user contributed binary packages, see
-:ref:`contributed_packages`.
+**TODO**
 
 ****************************************************
 Other operating systems and installation from source
 ****************************************************
 
-If the binaries do not apply to you, or you want to install directly
-from source, try one of the two other possibilities:
-
-* :ref:`Automated installation using Dorsal <installation_using_dorsal>`
-* :ref:`Manual installation from source <installation_from_source>`
+Users are currently recommended to follow the 
+`instructions for building Elemental <http://poulson.github.io/Elemental/build.html>`__ in order to install 
+it from source.
 
 *************************
 Nightly snapshot releases
 *************************
 
-Every night, FEniCS snapshot releases are automatically generated for
-Ubuntu and Mac OS X. They are made available at our :ref:`snapshots page
-<snapshot_releases>`.
+**TODO**
 
 *******************
 Development version
 *******************
 
-For information on accessing the development repositories, see
-:ref:`developers`.
+The development version of the library may be checked out using the command::
 
-***************
-Data and meshes
-***************
-
-A collection of meshes for free use with FEniCS is available :ref:`here <data>`.
+    git clone https://github.com/poulson/Elemental.git
 
 ***************
 Troubleshooting
 ***************
 
-Visit the :ref:`troubleshooting page <troubleshooting>` if you have
-problems installing FEniCS.
+Please see the `support page <http://libelemental.org/support>`__ for 
+instructions on how to best receive help troubleshooting problems.
 
 .. toctree::
    :hidden:

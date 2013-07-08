@@ -54,3 +54,5 @@ ideally take the form of git-formatted changesets. After submitting several
 high-quality changesets, you may receive direct commit access to the 
 `Google Code <http://code.google.com/p/elemental>`__ and 
 `GitHub <http://github.com/poulson/elemental>`__ repositories.
+Please see the `contributions page <http://libelemental.org/contributing>`__
+for more information.

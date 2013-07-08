@@ -7,21 +7,21 @@
         <div id="products">
           <div class="slides_container">
 	    <div class="slide">
-	      <a href="/featured/2012/csf.html"><img src="/_static/images/featured/featured_item_csf.png" width="366" height="282" alt="Cerebrospinal fluid flow"></a>
+	      <img src="/_static/images/featured/featured_item_csf.png" width="366" height="282" alt="First example">
 	      <div class="caption">
-		<p>Example 1</p>
+		<p>Example 1 (Placeholder)</p>
 	      </div>
 	    </div>
 	    <div class="slide">
-	      <a href="/featured/2011/automated_error_control.html"><img src="/_static/images/featured/featured_item_automated_error_control.png" width="366" height="282" alt="Automated adaptivity and error control"></a>
+	      <img src="/_static/images/featured/featured_item_automated_error_control.png" width="366" height="282" alt="Second example">
 	      <div class="caption">
-		<p>Example 2</p>
+		<p>Example 2 (Placeholder)</p>
 	      </div>
 	    </div>
 	    <div class="slide">
-	      <a href="/featured/2011/pdesys.html"><img src="/_static/images/featured/featured_item_pdesys.png" width="366" height="282" alt="Specifying large systems of PDEs with ease"></a>
+	      <img src="/_static/images/featured/featured_item_pdesys.png" width="366" height="282" alt="Third example">
 	      <div class="caption">
-		<p>Example 3</p>
+		<p>Example 3 (Placeholder)</p>
 	      </div>
 	    </div>
           </div>
@@ -61,18 +61,7 @@
       <div id="sub-feature">
 	<div id="front-block-1" class="front-block block">
 
-          <p>A workshop on Elemental was held on June 10, 2013 at
-             the University of Oregon as part of the <a href="http://ics-conference.org">International Conference on Supercomputing</a>. 
-             Presentations from the workshop
-             can be found <a href="featured/2013/ics13.html">here (eventually)</a>.
-            <br /> <br /> <br /> <br /> <br />
-          </p>
-
-          <h3>Who's behind Elemental?</h3>
-          <a href="/about/team.html"><img alt='' src='/_static/images/mugshots/jack-poulson.jpeg' class='avatar avatar-84 photo' width='84' /></a>
-
-          <p>TODO
-          </p>
+          <h3><a href="/about/team.html">Who's behind Elemental?</a></h3>
 
           <p><a href="/about/" rel="nofollow">Find out more about
           our project &raquo;</a></p>
@@ -80,7 +69,7 @@
         </div><!-- #front-block-1 .front-block .block-->
 
         <div id="front-block-2" class="front-block block">
-          <h3>Recent project news <a href="/_static/news/feed.xml" title="Elemental News RSS feed" rel="alternate nofollow" type="application/rss+xml"><img src="/_static/feed-icon-14x14.gif" alt="RSS"/></a></h3>
+          <h3>Recent GitHub commits <a href="/_static/news/feed.xml" title="Elemental News RSS feed" rel="alternate nofollow" type="application/rss+xml"><img src="/_static/feed-icon-14x14.gif" alt="RSS"/></a></h3>
 	  <!--#include virtual="_static/news/include.html"-->
         </div><!-- #front-block-2 .front-block .block-->
 

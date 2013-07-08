@@ -103,7 +103,9 @@
              developing and applying high-performance eigensolvers to 
              large-scale quantum-mechanical problems. He is one of the lead 
              developers of <a href="http://arxiv.org/abs/1205.2107">PMRRR</a>
-             and <a href="http://code.google.com/p/mr3smp/">MR3-SMP</a>.</p>
+             and <a href="http://code.google.com/p/mr3smp/">MR3-SMP</a>, and the
+             former is an integral part of Elemental's Hermitian 
+             eigensolvers.</p>
         </div>
 
       	<div class="front-block block">
@@ -135,7 +137,8 @@
           <p>Martin is a Ph.D. student at 
           <a href="http://www.utexas.edu">UT Austin</a> interested in the 
           development and application of high-performance algorithms and 
-          libraries for tensor contractions.
+          libraries for tensor contractions. He is the author of both the 
+          <a href="http://poulson.github.io/Elemental/core/axpy_interface.html">Axpy interface</a> and the <a href="https://github.com/poulson/Elemental/blob/master/experimental/g3d/G3DGemm.cpp">experimental 3D Gemm implementation</a>.
           </p>
         </div>
 

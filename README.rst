@@ -1,9 +1,9 @@
-================================
-FEniCS documentation and webpage
-================================
+===================================
+Elemental documentation and webpage
+===================================
 
 The repository contains the source for the pages at
-http://www.fenicsproject.org.
+http://libelemental.org.
 
 * How to: generate web pages
   ::
@@ -20,9 +20,8 @@ http://www.fenicsproject.org.
 
   This will import documentation input files (.rst) from all projects,
   build .html files and add those to 'build/html'. Running this
-  script requires that all projects (currently DOLFIN and UFL) have
-  been built and that the environment variables DOLFIN_DIR and UFL_DIR
-  have been set.
+  script requires that all projects (currently Elemental) have
+  been built and that the environment variable ELEM_DIR has been set.
 
 * How to: publish web pages
   ::
@@ -30,9 +29,9 @@ http://www.fenicsproject.org.
     make publish
 
   This will upload the generated pages from 'build/html' to
-  fenicsproject.org/new, including both the web pages and the
+  libelemental.org/new, including both the web pages and the
   documentation pages. Running this script requires access to the
-  account fenics@fenicsproject.org.
+  account u73318331@libelemental.org.
 
 * How to: do it all
   ::
@@ -40,3 +39,6 @@ http://www.fenicsproject.org.
     make all
 
   This is equivalent to running all of the above targets.
+
+* NOTE: This documentation was forked from fenics-web, which may be found at
+  https://bitbucket.org/fenics-project/fenics-web.

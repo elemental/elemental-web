@@ -16,7 +16,7 @@ help:
 	@echo "  all          to build all targets: html, doc, publish"
 	@echo "  web          to build web pages"
 	@echo "  import_docs  to import documentation for projects"
-	@echo "  publish      to publish everything on www.fenicsproject.org"
+	@echo "  publish      to publish everything on libelemental.org"
 	@echo "  clean        to clean out everything (build directory)"
 	@echo "  fetch_news   to fetch the news"
 	@echo ""

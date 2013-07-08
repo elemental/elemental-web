@@ -9,19 +9,19 @@
 	    <div class="slide">
 	      <a href="/featured/2012/csf.html"><img src="/_static/images/featured/featured_item_csf.png" width="366" height="282" alt="Cerebrospinal fluid flow"></a>
 	      <div class="caption">
-		<p>Simulation of cerebrospinal fluid flow</p>
+		<p>Example 1</p>
 	      </div>
 	    </div>
 	    <div class="slide">
 	      <a href="/featured/2011/automated_error_control.html"><img src="/_static/images/featured/featured_item_automated_error_control.png" width="366" height="282" alt="Automated adaptivity and error control"></a>
 	      <div class="caption">
-		<p>Automated adaptivity and error control</p>
+		<p>Example 2</p>
 	      </div>
 	    </div>
 	    <div class="slide">
 	      <a href="/featured/2011/pdesys.html"><img src="/_static/images/featured/featured_item_pdesys.png" width="366" height="282" alt="Specifying large systems of PDEs with ease"></a>
 	      <div class="caption">
-		<p>Specifying large systems of PDEs with ease</p>
+		<p>Example 3</p>
 	      </div>
 	    </div>
           </div>
@@ -29,12 +29,8 @@
       </div>
 
       <div id="feature-info">
-        <p>The FEniCS Project is a collection of
-          <a href="http://www.gnu.org/philosophy/free-sw.html">free
-            software</a> with an
-            <a href="/about/features.html">extensive list of features</a>
-            for automated, efficient solution of differential equations.
-
+        <p>Elemental is open-source software for distributed-memory dense
+           linear algebra.
         </p>
 
 	<p>Through this web site, you can <a href="/about/">learn more
@@ -65,35 +61,17 @@
       <div id="sub-feature">
 	<div id="front-block-1" class="front-block block">
 
-          <h3>FEniCS'13 at University of Cambridge</h3>
-          <a href="/featured/2013/fenics_13_cambridge.html"><img alt='' src='/_static/images/jesus_college.jpg' class='avatar avatar-84 photo' width='84'/></a>
-
-          <p>The 2013 FEniCS Workshop was held 18-19 March 2013 at
-            Jesus College, Cambridge. Presentations from the workshop
-            can be found <a href="featured/2013/fenics13_program.html">here</a>.
+          <p>A workshop on Elemental was held on June 10, 2013 at
+             the University of Oregon as part of the <a href="http://ics-conference.org">International Conference on Supercomputing</a>. 
+             Presentations from the workshop
+             can be found <a href="featured/2013/ics13.html">here (eventually)</a>.
             <br /> <br /> <br /> <br /> <br />
           </p>
 
-          <h3>FEniCS book released!</h3>
-          <a href="/book/"><img alt='' src='/_static/images/fenics_book_cover.png' class='avatar avatar-84 photo' width='84'/></a>
+          <h3>Who's behind Elemental?</h3>
+          <a href="/about/team.html"><img alt='' src='/_static/images/mugshots/jack-poulson.jpeg' class='avatar avatar-84 photo' width='84' /></a>
 
-          <p>The FEniCS book, titled <i>Automated Solution of Differential
-            Equations by the Finite Element Method</i>, has been published
-            in 2012 as Volume 84 of the
-            Springer Lecture Notes in Computational Science series. The book
-            can be found <a href="http://dx.doi.org/10.1007/978-3-642-23099-8">here</a>.
-          </p>
-
-          <p><a href="/book/" rel="nofollow">Find out more about the
-          book project &raquo;</a></p>
-
-          <h3>Who's behind the FEniCS Project?</h3>
-          <a href="/about/team.html"><img alt='' src='/_static/images/fenics_developers_in_lubbock_2011.png' class='avatar avatar-84 photo' width='84' /></a>
-
-          <p>The FEniCS Project is a collaborative effort between
-            research groups from Simula Research Laboratory, University
-            of Cambridge, University of Chicago, Baylor University
-            and KTH Royal Institute of Technology.
+          <p>TODO
           </p>
 
           <p><a href="/about/" rel="nofollow">Find out more about
@@ -102,7 +80,7 @@
         </div><!-- #front-block-1 .front-block .block-->
 
         <div id="front-block-2" class="front-block block">
-          <h3>Recent project news <a href="/_static/news/feed.xml" title="The FEniCS Project News RSS feed" rel="alternate nofollow" type="application/rss+xml"><img src="/_static/feed-icon-14x14.gif" alt="RSS"/></a></h3>
+          <h3>Recent project news <a href="/_static/news/feed.xml" title="Elemental News RSS feed" rel="alternate nofollow" type="application/rss+xml"><img src="/_static/feed-icon-14x14.gif" alt="RSS"/></a></h3>
 	  <!--#include virtual="_static/news/include.html"-->
         </div><!-- #front-block-2 .front-block .block-->
 

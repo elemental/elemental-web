@@ -4,313 +4,162 @@
       <div id="sub-feature">
 
       	<div class="front-block block">
-  	  <h2>Martin Sandve Alnæs</h2>
+  	  <h2><a href="http://hpac.rwth-aachen.de/~pauldj/">Paolo Bientinesi</a></h2>
           <div class="avatar mugshot">
-	    <img alt='Martin Sandve Alnæs'
-		 src='/_static/images/mugshots/alnaes.jpg' />
+	    <img alt='Paolo Bientinesi'
+		 src='/_static/images/mugshots/paolo-bientinesi.jpg' />
 	  </div>
 
-	  <p>Martin is a postdoctoral fellow at <a
-	  href="http://simula.no/">Simula Research Laboratory</a>.
+          <p>
+          <a href="http://hpac.rwth-aachen.de/~pauldj/">Paolo</a>
+          is a professor of computer science at 
+          <a href="http://www.rwth-aachen.de/">RWTH Aachen</a> and 
+          led the effort behind 
+          <a href="http://arxiv.org/abs/1205.2107">Parallel Multiple Relatively Robust Representations (PMRRR)</a>, which is the 
+          high-performance symmetric-tridiagonal eigensolver at the core of 
+          Elemental's Hermitian eigensolver.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://59a2.org/research/">Jed Brown</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Jed Brown'
+		 src='/_static/images/mugshots/jed-brown.jpg' />
+	  </div>
+
+          <p><a href="http://59a2.org/research/">Jed</a> is currently an 
+          Argonne Scholar in the 
+          <a href="https://www.mcs.anl.gov/research/LANS/">Laboratory for 
+          Advanced Numerical Simulation</a>. He is a prolific contributor to 
+          <a href="https://www.mcs.anl.gov/petsc/">PETSc</a>, led the 
+          development of its interface to Elemental and 
+          <a href="http://github.com/poulson/Clique">Clique</a>, 
+          and contributed a large number of patches to Elemental along the way.
+          He is also the lead developer of 
+          <a href="https://github.com/jedbrown/dohp">dohp</a> and
+          <a href="https://github.com/jedbrown/git-fat">git-fat</a>.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://cvxr.com/bio/">Michael Grant</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Michael Grant'
+		 src='/_static/images/mugshots/michael-grant.png' />
+	  </div>
+
+          <p><a href="http://cvxr.com/bio/">Michael</a> is a computational 
+          mathematician and co-founded (along with <a href="http://stanford.edu/~boyd/">Stephen Boyd</a>) <a href="http://cvxr.com">CVX Research</a>, which 
+          produced the <a href="http://mathopt.org/?nav=boh">award-winning</a> 
+          <a href="http://cvxr.com/cvx/">CVX</a> and 
+          <a href="http://cvxr.com/tfocs/">TFOCS</a> libraries. 
+          Michael is the lead developer behind Elemental's 
+          <a href="http://www.swig.org/">SWIG</a> Python interface.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="https://wiki.alcf.anl.gov/parts/index.php/User:Jhammond">Jeff Hammond</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Jeff Hammond'
+		 src='/_static/images/mugshots/jeff-hammond.jpg' />
+	  </div>
+
+          <p><a href="https://wiki.alcf.anl.gov/parts/index.php/User:Jhammond">Jeff</a> 
+          is an Assistant Computational Scientist at the 
+          <a href="https://www.alcf.anl.gov/">Argonne National 
+          Laboratory Leadership Computing Facility</a>, where he works to 
+          develop scalable algorithms and robust software for computational 
+          chemistry and PGAS programming models.  
+          He has continually helped with efforts to port and tune Elemental 
+          on various supercomputers, including <a href="https://en.wikipedia.org/wiki/Blue_Gene#Blue_Gene.2FP">Blue Gene/P</a>, <a href="https://en.wikipedia.org/wiki/Blue_Gene#Blue_Gene.2FQ">Blue Gene/Q</a>, and 
+          <a href="http://www.cray.com/Products/Computing/XE.aspx">Cray XE6</a> 
+          systems.
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://www.cs.utexas.edu/~bamarker/">Bryan Marker</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Bryan Marker'
+		 src='/_static/images/mugshots/bryan-marker.png' />
+	  </div>
+
+          <p><a href="http://www.cs.utexas.edu/~bamarker/">Bryan</a> is a 
+          Ph.D. candidate at <a href="http://www.utexas.edu">UT Austin</a> 
+          interested in bridging the gap between library developers and 
+          compilers. He has contributed a large number of improvements to 
+          Elemental's BLAS-like routines using 
+          <a href="https://code.google.com/p/dxter/">DxTer</a>.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://hpac.rwth-aachen.de/~petschow/">Matthias Petschow</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Matthias Petschow'
+		 src='/_static/images/mugshots/matthias-petschow.jpg' />
+	  </div>
+
+          <p><a href="http://hpac.rwth-aachen.de/~petschow/">Matthias</a> 
+             is a Ph.D. student at 
+             <a href="http://www.rwth-aachen.de/">RWTH Aachen</a> interested in
+             developing and applying high-performance eigensolvers to 
+             large-scale quantum-mechanical problems. He is one of the lead 
+             developers of <a href="http://arxiv.org/abs/1205.2107">PMRRR</a>
+             and <a href="http://code.google.com/p/mr3smp/">MR3-SMP</a>.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://www.stanford.edu/~poulson">Jack Poulson</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Jack Poulson'
+		 src='/_static/images/mugshots/jack-poulson.jpeg' />
+	  </div>
+
+	  <p><a href="http://www.stanford.edu/~poulson">Jack</a> is a 
+          postdoctoral fellow at <a href="http://www.stanford.edu/">Stanford</a>
+          and will be joining <a href="http://www.cse.gatech.edu">Georgia Tech's School of CS&amp;E</a> in November. 
           </p>
 
-          <p>He has been involved with the FEniCS Project since 2006,
-          is the main developer of UFL and SFC, and one of the
-          developers of UFC, Instant, SyFi and DOLFIN.</p>
-
-	  <p>You can view all Martin&#8217;s contributions on <a
-          href="https://launchpad.net/~martinal">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Johan Hake</h2>
-          <div class="avatar mugshot">
-	    <img alt='Johan Hake'
-		 src='/_static/images/mugshots/hake.jpg' />
-	  </div>
-
-	  <p>Johan is a postdoctoral fellow at <a
-	  href="http://simula.no/">Simula Research Laboratory</a>.
+          <p>He has led the development of Elemental since its start in 2009,
+             as well as that of
+             <a href="http://www.github.com/poulson/Clique.git">a distributed sparse-direct solver</a>, 
+             <a href="http://www.github.com/poulson/dist-butterfly.git">a distributed butterfly algorithm</a>, and <a href="http://bitbucket.org/poulson/dmhm">distributed hierarchical matrices</a>.
           </p>
-
-          <p>He has been involved with the FEniCS Project since 2007,
-          is a maintainer of the Python interface of DOLFIN, and is
-          a developer of Instant, UFC and FFC.</p>
-
-	  <p>You can view all Johans&#8217;s contributions on <a
-          href="https://launchpad.net/~johan-hake">his Launchpad
-          page.</a></p>
-
         </div>
 
       	<div class="front-block block">
-  	  <h2>Johan Hoffman</h2>
+  	  <h2>Martin Schatz</h2>
           <div class="avatar mugshot">
-	    <img alt='Johan Hoffman'
-		 src='/_static/images/mugshots/hoffman.jpg' />
+	    <img alt='Martin Schatz'
+		 src='/_static/images/mugshots/martin-schatz.jpg' />
 	  </div>
 
-	  <p>Johan is a professor at the <a
-	  href="http://www.kth.se/">KTH Royal Institute of Technology</a>.
+          <p>Martin is a Ph.D. student at 
+          <a href="http://www.utexas.edu">UT Austin</a> interested in the 
+          development and application of high-performance algorithms and 
+          libraries for tensor contractions.
           </p>
-
-          <p>He has been involved with the FEniCS Project since 2003
-          and is a developer of DOLFIN and Unicorn.</p>
-
-	  <p>You can view all Johans&#8217;s contributions on <a
-          href="https://launchpad.net/~jhoffman">his Launchpad
-          page.</a></p>
-
         </div>
 
       	<div class="front-block block">
-  	  <h2>Johan Jansson</h2>
+  	  <h2><a href="http://www.cs.utexas.edu/~rvdg/">Robert van de Geijn</a></h2>
           <div class="avatar mugshot">
-	    <img alt='Johan Jansson'
-		 src='/_static/images/mugshots/jansson.jpg' />
+	    <img alt='Robert van de Geijn'
+		 src='/_static/images/mugshots/robert-vdg.jpg' />
 	  </div>
 
-	  <p>Johan is a senior researcher at the <a
-	  href="http://www.kth.se/">KTH Royal Institute of
-	  Technology</a>.</p>
-
-	  <p>He has been involved with the FEniCS Project since 2004
-	    and is a developer of DOLFIN and Unicorn.</p>
-
-	  <p>You can view all Johan&#8217;s contributions
-	  on <a href="https://launchpad.net/~jjan">his Launchpad
-	  page.</a>
-
+          <p><a href="http://www.cs.utexas.edu/~rvdg/">Robert</a> is a professor
+          of computer science at <a href="http://www.utexas.edu">UT Austin</a>
+          and has helped support Elemental since its inception. He is currently
+          leading the research and development of 
+          <a href="http://www.cs.utexas.edu/~flame/web/libFLAME.html">libFLAME</a> and <a href="https://code.google.com/p/blis/">BLIS</a> and previously 
+          led the development of 
+          <a href="http://www.cs.utexas.edu/~plapack">PLAPACK</a>, which was 
+          the primary inspiration for Elemental.</p>
         </div>
 
       	<div class="front-block block">
-  	  <h2>Robert C. Kirby</h2>
+  	  <h2><a href="http://www.libelemental.org/contributing/">Your name here?</a></h2>
           <div class="avatar mugshot">
-	    <img alt='Robert C. Kirby'
-		 src='/_static/images/mugshots/kirby.jpg' />
 	  </div>
-
-          <p>Robert is an associate professor at
-          <a href="http://www.baylor.edu/">Baylor University</a>.
-          </p>
-
-          <p>He has been involved with the FEniCS Project since 2003
-          and is the main developer of FIAT.</p>
-
-	  <p>You can view all Robert&#8217;s contributions on <a
-          href="https://launchpad.net/~robert-c-kirby">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Anders Logg</h2>
-          <div class="avatar mugshot">
-	    <img alt='Anders Logg'
-		 src='/_static/images/mugshots/logg.jpg' />
-	  </div>
-
-          <p>Anders is a senior research scientist at <a
-          href="http://simula.no/">Simula Research Laboratory</a> and
-          an adjunct associate professor at the <a
-          href="http://www.uio.no/">University of Oslo</a>.</p>
-
-          <p>He has been involved with the FEniCS project since 2003
-          and is a developer and maintainer of DOLFIN, FFC, UFC, UFL,
-          CBC.Solve, Exterior and the FEniCS Project web page.</p>
-
-          <p>You can view all Anders' contributions on <a
-          href="https://launchpad.net/~logg">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Kent-Andre Mardal</h2>
-          <div class="avatar mugshot">
-	    <img alt='Kent-Andre Mardal'
-		 src='/_static/images/mugshots/mardal.jpg' />
-	  </div>
-
-	  <p>Kent is a senior research scientist at <a
-	  href="http://simula.no/">Simula Research Laboratory</a> and
-	  an adjunct associate professor at the <a
-	  href="http://www.uio.no/">University of Oslo</a>.</p>
-
-          <p>He has been involved with the FEniCS Project since 2006
-	  and is a developer of DOLFIN, Instant, SyFi, Exterior,
-	  CBC.Block and UFC.</p>
-
-          <p>You can view all Kent&#8217;s contributions on <a
-          href="https://launchpad.net/~kent-and">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Andre Massing</h2>
-          <div class="avatar mugshot">
-	    <img alt='Andre Massing'
-		 src='/_static/images/mugshots/massing.jpg' />
-	  </div>
-
-	  <p>Andre is a Ph.D. student at <a
-	  href="http://simula.no/">Simula Research Laboratory</a>.
-          </p>
-
-          <p>He has been involved with the FEniCS Project since 2009,
-          has developed the mesh intersection functionality in DOLFIN
-          and is the main developer of DOLFIN-OLM.</p>
-
-	  <p>You can view all Andre&#8217;s contributions on <a
-          href="https://launchpad.net/~massing">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Harish Narayanan</h2>
-          <div class="avatar mugshot">
-	    <img alt='Harish Narayanan'
-		 src='/_static/images/mugshots/harish.jpg' />
-	  </div>
-
-	  <p>Harish is a postdoctoral fellow at <a
-	  href="http://simula.no/">Simula Research Laboratory</a>.
-          </p>
-
-	  <p>He has been involved with the FEniCS project since 2007
-	  and is the primary developer of Dorsal (the FEniCS build
-	  system), the FEniCS project web site and CBC.Twist (a
-	  general solid mechanics solver) distributed as part of
-	  CBC.Solve.</p>
-
-	  <p>You can view all Harish&#8217;s contributions on <a
-          href="https://launchpad.net/~hnarayanan">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Johannes Ring</h2>
-          <div class="avatar mugshot">
-	    <img alt='Johannes Ring'
-		 src='/_static/images/mugshots/ring.jpg' />
-	  </div>
-
-	  <p>Johannes is a research engineer at <a
-	  href="http://simula.no/">Simula Research Laboratory</a>.</p>
-
-          <p>He has been involved with the FEniCS Project since 2008,
-          mostly as a build engineer.</p>
-
-	  <p>You can view all Johannes' contributions on <a
-          href="https://launchpad.net/~johannr">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Marie Rognes</h2>
-          <div class="avatar mugshot">
-	    <img alt='Marie Rognes'
-		 src='/_static/images/mugshots/rognes.jpg' />
-	  </div>
-
-	  <p>Marie is a postdoctoral fellow at <a
-	  href="http://simula.no/">Simula Research Laboratory</a>.</p>
-
-	  <p>She has been involed with the FEniCS Project since 2007,
-	  is a developer of FIAT, FFC, UFL, DOLFIN
-	  and the lead developer of ASCoT.</p>
-
-	  <p>You can view all Marie&#8217;s contributions on <a
-          href="https://launchpad.net/~meg-simula">her Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Kristoffer Selim</h2>
-          <div class="avatar mugshot">
-	    <img alt='Kristoffer Selim'
-		 src='/_static/images/mugshots/selim.jpg' />
-	  </div>
-
-	  <p>Kristoffer is a postdoctoral fellow at the <a
-	  href="http://www.ffi.no/">Norwegian Defence Research Establishment</a>.
-          </p>
-
-          <p>He has been involved with the FEniCS Project since 2008 and
-          is one of the developers of the fluid-structure interaction
-          solver CBC.Swing distributed as part of CBC.Solve.</p>
-
-	  <p>You can view all Kristoffer&#8217;s contributions on <a
-          href="https://launchpad.net/~selim-simula">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Ridgway Scott</h2>
-          <div class="avatar mugshot">
-	    <img alt='Ridgway Scott'
-		 src='/_static/images/mugshots/scott.jpg' />
-	  </div>
-
-	  <p>Ridgway is a Professor at the <a
-	  href="http://cs.uchicago.edu/">University of Chicago</a>.
-          </p>
-
-          <p>He has been involved with the FEniCS Project since 2003.</p>
-
-	  <p>You can view all Ridg&#8217;s contributions on <a
-          href="https://launchpad.net/~ridg">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Garth N. Wells</h2>
-          <div class="avatar mugshot">
-	    <img alt='Garth N. Wells'
-		 src='/_static/images/mugshots/wells.jpg' />
-	  </div>
-
-          <p>Garth is the Hibbit Reader in Solid Mechanics at the
-          <a href="http://www.eng.cam.ac.uk/">Department of Engineering</a>,
-          University of Cambridge.</p>
-
-          <p>He has been involved with the FEniCS project since 2005
-          and is a developer and maintainer of DOLFIN, FFC, UFC and
-          UFL.</p>
-
-          <p>You can view all Garth's contributions on <a
-          href="https://launchpad.net/~garth-wells">his Launchpad
-          page.</a></p>
-
-        </div>
-
-      	<div class="front-block block">
-  	  <h2>Kristian Breum Ølgaard</h2>
-          <div class="avatar mugshot">
-	    <img alt='Kristian Breum Ølgaard'
-		 src='/_static/images/mugshots/oelgaard.jpg' />
-	  </div>
-
-	  <p>Kristian is a research assistant at <a
-	  href="http://en.esbjerg.aau.dk/">Aalborg University</a>.
-          </p>
-
-          <p>He has been involved with the FEniCS Project since 2006,
-          is one of the main developers of FFC and FEniCS Plasticity, and a
-          developer of UFL and DOLFIN.</p>
-
-	  <p>You can view all Kristian&#8217;s contributions on <a
-          href="https://launchpad.net/~k.b.oelgaard">his Launchpad
-          page.</a></p>
 
         </div>
 

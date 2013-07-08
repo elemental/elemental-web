@@ -5,61 +5,52 @@ Support
 #######
 
 This page describes how to get in contact to solve problems you might
-encounter when using FEniCS.
+encounter when using Elemental.
 
 .. _help_answers:
 
-Asking questions
-================
+Where to ask questions
+======================
 
-If you need help with anything related to FEniCS, ranging from
-installation issues to how to best solve a PDE, ask your question
-in the `FEniCS Q&A forum <http://fenicsproject.org/qa/>`__.
+elemental-user
+--------------
+General usage questions should be directed to 
+`elemental-user <mailto:elemental-user@googlegroups.com>`__, which is
+`archived here <https://groups.google.com/forum/#!forum/elemental-user>`__.
+Several questions have also been posted on 
+`SciComp <http://scicomp.stackexchange.com>`__, and an interface similar
+to `fenics-qa <http://fenicsproject.org/qa>`__ may be generated for 
+Elemental questions in the future.
+Bugs in the current tarball release of Elemental should be reported here.
 
-Before running away and posting your question, please take a minute
-to consider the follow points:
+elemental-dev
+-------------
+Questions and comments about the development of the library should be sent 
+to `elemental-dev <mailto:elemental-dev@googlegroups.com>`__, which is
+`archived here <https://groups.google.com/forum/#!forum/elemental-dev>`__.
+Bugs in the development version of Elemental should be reported here.
 
-* Search the forum to check that your question has not been answered before.
+elemental-maint
+---------------
+Build system questions and bug reports should be sent to 
+`elemental-maint <mailto:elemental-maint@googlegroups.com>`__, which is
+`archived here <https://groups.google.com/forum/#!forum/elemental-maint>`__.
 
-* Search the `FEniCS user questions on Launchpad <http://answers.launchpad.net/fenics-project/>`__ to check that your question has not been answered before.
+private questions
+-----------------
+The above mailing lists are all publicly archived. Private queries should be
+directed to `Jack Poulson <mailto:jack.poulson@gmail.com>`__.
 
-* Formulate your question well. If we cannot understand your question,
-  we probably cannot help you.
+How to ask questions
+====================
 
-* Post complete, but *minimal* code examples. No one wants to read
-  through your complex application code.
-
-* Please help out in answering questions from other users.
-
-* Tag your question appropriately.
-
-Reporting bugs
-==============
-
-If you encounter something you suspect is a bug, please file a bug report
-using the Bitbucket issue tracking system. In particular, for
-reporting bugs in DOLFIN, visit the `DOLFIN issues page
-<https://bitbucket.org/fenics-project/dolfin/issues>`_. As above, post
-complete but *minimal* code examples.
-
-Mailing list
-============
-
-.. _help_mailinglist:
-
-The `FEniCS mailing list
-<http://fenicsproject.org/mailman/listinfo/fenics>`__ is where
-discussions take place. It covers everything that does not fit into
-any of the above categories (user questions or bug reports). This is
-also the place for announcements of workshops, releases, tutorials,
-papers. Everyone is invited to subscribe to the mailing list and take
-part in discussions.
+TODO
 
 Contributing
 ============
 
-We encourage users to take active part in developing and documenting
-FEniCS. As an active developer, it is easy to influence the direction
-and focus of the project. The step from user to developer is just a
-patch away! For information about how to contribute code to the FEniCS
-Project, visit the page :ref:`developers`.
+Contributions are actively encouraged. Your first few contributions should 
+ideally take the form of git-formatted changesets. After submitting several 
+high-quality changesets, you may receive direct commit access to the 
+`Google Code <http://code.google.com/p/elemental>`__ and 
+`GitHub <http://github.com/poulson/elemental>`__ repositories.

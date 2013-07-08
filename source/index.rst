@@ -1,4 +1,4 @@
-.. title:: Automated Solution of Differential Equations by the Finite Element Method
+.. title:: Elemental: distributed-memory dense linear algebra
 
 .. raw:: html
     :file: index.inc
@@ -14,7 +14,6 @@
     contributing/index
     citing/index
     support/index
-    book/index
     featured/index
     releases/index
     disclaimer

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # This script generates the bibliography in various formats
-# from the common input file 'fenics.pub'.
+# from the common input file 'elemental.pub'.
 
 # Check that we have publish
 PUBLISH=`which publish`
@@ -17,16 +17,16 @@ if [ "x$PUBLISH" = "x" ]; then
 fi
 
 # Export the two files
-publish export fenics.bib database_filename=fenics.pub debug=1
-publish export fenics.rst database_filename=fenics.pub debug=1
+publish export elemental.bib database_filename=elemental.pub debug=1
+publish export elemental.rst database_filename=elemental.pub debug=1
 
 # Rename .rst file to get rid of Sphinx warning
 # Also add comment on how to edit files
-rm -f fenics.rst_
-echo ".. Note! This file should not be edited manually. It should" >> fenics.rst_
-echo ".. instead be generated from within source/_static/bibliography." >> fenics.rst_
-echo "" >> fenics.rst_
-cat fenics.rst >> fenics.rst_
+rm -f elemental.rst_
+echo ".. Note! This file should not be edited manually. It should" >> elemental.rst_
+echo ".. instead be generated from within source/_static/bibliography." >> elemental.rst_
+echo "" >> elemental.rst_
+cat elemental.rst >> elemental.rst_
 
 # Copy file to citing directory
-cp fenics.rst_ ../../citing
+cp elemental.rst_ ../../citing

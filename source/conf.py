@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# FEniCS documentation build configuration file, created by
+# Elemental documentation build configuration file, created by
 # sphinx-quickstart on Thu Apr  8 13:34:04 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -60,8 +60,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'FEniCS'
-copyright = u'2013, The FEniCS Project'
+project = u'Elemental'
+copyright = u'2013, Jack Poulson'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -124,7 +124,7 @@ pygments_style = 'sphinx'
 #html_theme = 'slim-agogo'
 #html_theme = 'classy'
 #html_theme = 'traditional'
-html_theme = 'fenics'
+html_theme = 'elemental'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -136,7 +136,7 @@ html_theme_path = ["_themes"]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "FEniCS Project"
+html_title = "Elemental"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -191,7 +191,7 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'FEniCSdoc'
+htmlhelp_basename = 'ElemDoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------

@@ -166,9 +166,10 @@
 
           <p><a href="http://folk.uio.no/dagss">Dag</a> is a doctoral student
           in the <a href="http://www.mn.uio.no/astro/">Institute of Theoretical
-          Astrophysics</a> at the 
-          <a href="https://www.uio.no/english/">University of Oslo</a> analyzing
-          the <a href="https://en.wikipedia.org/wiki/Cosmic_microwave_background_radiation">cosmic microwave background</a>.
+          Astrophysics</a> at
+          <a href="https://www.uio.no/english/">The University of Oslo</a> 
+          analyzing the
+          <a href="https://en.wikipedia.org/wiki/Cosmic_microwave_background_radiation">cosmic microwave background</a>.
           He is one of the core developers of <a href="http://cython.org/">Cython</a> and <a href="http://fwrap.sourceforge.net/">Fwrap</a> and was the first to
           work towards a Python interface to Elemental (see <a href="https://github.com/dagss/elemental4py">elemental4py</a>).
           </p>
@@ -184,11 +185,11 @@
           <p><a href="http://andy.terrel.us">Dr. Andy R. Terrel</a> is a 
           Research Associate for the <a href="http://chg.ices.utexas.edu/index.html">Computational Hydraulics Group</a> at the 
           <a href="http://www.ices.utexas.edu">Institute for Computational 
-          Engineering and Sciences</a> which is at the 
-          <a href="http://www.utexas.edu">Universiy of Texas at Austin</a>. 
+          Engineering and Sciences</a> which is at 
+          <a href="http://www.utexas.edu">The Universiy of Texas at Austin</a>. 
           Andy's research includes utilizing supercomputers with Python and 
           studying methods for speeding up computational fluid dynamics. He 
-          graduated from the <a href="http://www.uchicago.edu">University of 
+          graduated from <a href="http://www.uchicago.edu">The University of 
           Chicago</a> with a PhD in Computer Science in 2010.</p>
         </div>
 
@@ -203,7 +204,7 @@
           of computer science at <a href="http://www.utexas.edu">UT Austin</a>
           and has helped support Elemental since its inception. He is currently
           leading the research and development of 
-          <a href="http://www.cs.utexas.edu/~flame/web/libFLAME.html">libFLAME</a> and <a href="https://code.google.com/p/blis/">BLIS</a> and previously 
+          <a href="http://www.cs.utexas.edu/~flame/web/libFLAME.html">libflame</a> and <a href="https://code.google.com/p/blis/">BLIS</a> and previously 
           led the development of 
           <a href="http://www.cs.utexas.edu/~plapack">PLAPACK</a>, which was 
           the primary inspiration for Elemental.</p>

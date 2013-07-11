@@ -8,39 +8,16 @@
 Download
 ########
 
-.. _binary_packages:
+Releases
+--------
+The current release is 
+`Elemental 0.80 <http://libelemental.org/releases/0.80>`__, and the relevant 
+tarball `is available here <http://libelemental.org/pub/releases/elemental-0.80.tgz>`__. There is also `a list of release notes <http://libelemental.org/releases/>`__.
 
-***************
-Binary packages
-***************
-
-**TODO**
-
-===========================
-Contributed binary packages
-===========================
-
-**TODO**
-
-****************************************************
-Other operating systems and installation from source
-****************************************************
-
-Users are currently recommended to follow the 
-`instructions for building Elemental <http://poulson.github.io/Elemental/build.html>`__ in order to install 
-it from source.
-
-*************************
-Nightly snapshot releases
-*************************
-
-**TODO**
-
-*******************
-Development version
-*******************
-
-The development version of the library may be checked out using the command::
+Direct repository access
+------------------------
+The project is `openly developed on GitHub <http://github.com/poulson/Elemental.git>`__.
+The bleeding-edge version of the library may be checked out using the command::
 
     git clone https://github.com/poulson/Elemental.git
 

@@ -109,6 +109,22 @@
         </div>
 
       	<div class="front-block block">
+  	  <h2><a href="http://www.opt.mist.i.u-tokyo.ac.jp/~nakatsukasa/">Yuji Nakatsukasa</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Yuji Nakatsukasa'
+		 src='/_static/images/mugshots/yuji-nakatsukasa.jpg' />
+	  </div>
+
+          <p><a href="http://www.opt.mist.i.u-tokyo.ac.jp/~nakatsukasa/">Yuji</a> 
+          is an assistant professor in the 
+          <a href="http://www.opt.mist.i.u-tokyo.ac.jp/">Operations Research group</a> at 
+          <a href="http://www.u-tokyo.ac.jp/en/">The University of Tokyo</a>.
+          His research focuses on algorithms and perturbation theory for 
+          eigenvalue problems, and his implementation of <a href="http://www.mathworks.com/matlabcentral/fileexchange/36830">QDWH</a> served as the basis for Elemental's implementation.
+          </p>
+        </div>
+
+      	<div class="front-block block">
   	  <h2><a href="http://hpac.rwth-aachen.de/~petschow/">Matthias Petschow</a></h2>
           <div class="avatar mugshot">
 	    <img alt='Matthias Petschow'
@@ -124,6 +140,23 @@
              and <a href="http://code.google.com/p/mr3smp/">MR3-SMP</a>, and the
              former is an integral part of Elemental's Hermitian 
              eigensolvers.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://www3.uji.es/~gquintan/">Gregorio Quintana Orti</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Gregorio Quintana Orti'
+		 src='/_static/images/mugshots/gregorio-quintana.jpg' />
+	  </div>
+
+          <p><a href="http://www3.uji.es/~gquintan/">Gregorio</a> is a professor
+          of computer science at 
+          <a href="http://ujiapps.uji.es/">Universitat Jaume-I</a> and has 
+          extensive experience with parallel algorithms for rank-revealing 
+          factorizations and control theory. He contributed to Elemental's 
+          implementation of QDWH and helped with the process of wrapping 
+          libflame's bidiaogonal QR algorithm.
+          </p>
         </div>
 
       	<div class="front-block block">
@@ -208,6 +241,24 @@
           led the development of 
           <a href="http://www.cs.utexas.edu/~plapack">PLAPACK</a>, which was 
           the primary inspiration for Elemental.</p>
+        </div>
+
+      	<div class="front-block block">
+  	  <h2><a href="http://www.cs.utexas.edu/~field/">Field Van Zee</a></h2>
+          <div class="avatar mugshot">
+	    <img alt='Field Van Zee'
+		 src='/_static/images/mugshots/field-vanzee.jpg' />
+	  </div>
+
+          <p><a href="http://www.cs.utexas.edu/~field/">Field</a> is a Research
+          Scientist Associate III at 
+          <a href="http://www.utexas.edu">UT Austin</a> and is the lead
+          developer of 
+          <a href="http://www.cs.utexas.edu/~flame/web/libFLAME.html">libflame</a>
+          and <a href="https://code.google.com/p/blis/">BLIS</a>. He helped 
+          support the usage of libflame's high-performance bidiagonal
+          QR algorithm within Elemental's parallel SVD.
+          </p>
         </div>
 
       	<div class="front-block block">

@@ -66,12 +66,27 @@
           <p><a href="/about/" rel="nofollow">Find out more about
           our project &raquo;</a></p>
 
+          <h3>Related projects</h3>
+          <h4>Implementations</h4>
+          <ul>
+            <li><a href="http://elpa.rzg.mpg.de/">ELPA</a></li>
+            <li><a href="http://icl.eecs.utk.edu/dplasma/">DPLASMA</a></li>
+            <li><a href="http://www.cs.utexas.edu/~plapack/">PLAPACK</a></li>
+            <li><a href="http://www.netlib.org/scalapack/">ScaLAPACK</a></li>
+          </ul>
+          <h4>Wrappers</h4>
+          <ul>
+            <li><a href="https://www.mcs.anl.gov/petsc/">PETSc</a></li>
+            <li><a href="http://trilinos.sandia.gov/">Trilinos</a></li>
+          </ul>
+
         </div><!-- #front-block-1 .front-block .block-->
 
         <div id="front-block-2" class="front-block block">
           <h3>Recent GitHub commits <a href="/_static/news/feed.xml" title="Elemental News RSS feed" rel="alternate nofollow" type="application/rss+xml"><img src="/_static/feed-icon-14x14.gif" alt="RSS"/></a></h3>
 	  <!--#include virtual="_static/news/include.html"-->
         </div><!-- #front-block-2 .front-block .block-->
+
 
       </div><!-- #sub-feature -->
     </div><!-- #content -->

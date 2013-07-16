@@ -7,21 +7,33 @@
         <div id="products">
           <div class="slides_container">
 	    <div class="slide">
-	      <img src="/_static/images/featured/featured_item_csf.png" width="366" height="282" alt="First example">
+	      <img src="/_static/images/featured/elem-cpp-walsh.png" width="366" height="282" alt="First example">
 	      <div class="caption">
-		<p>Example 1 (Placeholder)</p>
+		<p>Factor/display Walsh matrix (C++)</p>
 	      </div>
 	    </div>
 	    <div class="slide">
-	      <img src="/_static/images/featured/featured_item_automated_error_control.png" width="366" height="282" alt="Second example">
+	      <img src="/_static/images/featured/elem-py-walsh.png" width="366" height="282" alt="Second example">
 	      <div class="caption">
-		<p>Example 2 (Placeholder)</p>
+		<p>Factor/display Walsh matrix (Python)</p>
 	      </div>
 	    </div>
 	    <div class="slide">
-	      <img src="/_static/images/featured/featured_item_pdesys.png" width="366" height="282" alt="Third example">
+	      <img src="/_static/images/featured/elem-serp.png" width="282" height="282" alt="Third example">
 	      <div class="caption">
-		<p>Example 3 (Placeholder)</p>
+		<p>Displayed factor</p>
+	      </div>
+	    </div>
+	    <div class="slide">
+	      <img src="/_static/images/featured/elem-py-dft.png" width="366" height="282" alt="Fourth example">
+	      <div class="caption">
+		<p>Analyze low-rank block of DFT (Python)</p>
+	      </div>
+	    </div>
+	    <div class="slide">
+	      <img src="/_static/images/featured/elem-dft.png" width="282" height="282" alt="Fifth example">
+	      <div class="caption">
+		<p>Real part of DFT matrix</p>
 	      </div>
 	    </div>
           </div>

@@ -5,41 +5,62 @@ Support
 #######
 
 This page describes how to get in contact to solve problems you might
-encounter when using Elemental.
+encounter when using Elemental. All of the following lists will eventually
+be archived at 
+`news.gmane.org <http://news.gmane.org/index.php?prefix=gmane.elemental>`__.
 
 .. _help_answers:
 
 Where to ask questions
 ======================
 
-elemental-user
---------------
+users@libelemental.org
+----------------------
 General usage questions should be directed to 
-`elemental-user <mailto:elemental-user@googlegroups.com>`__, which is
-`archived here <https://groups.google.com/forum/#!forum/elemental-user>`__.
+`users@libelemental.org <mailto:users@libelemental.org>`__, which will
+soon be `archived here <http://news.gmane.org/index.php?prefix=gmane.elemental.users>`__.
 Several questions have also been posted on 
 `SciComp <http://scicomp.stackexchange.com>`__, and an interface similar
 to `fenics-qa <http://fenicsproject.org/qa>`__ may be generated for 
 Elemental questions in the future.
 Bugs in the current tarball release of Elemental should be reported here.
 
-elemental-dev
--------------
+.. raw:: html
+    :file: users.inc
+
+dev@libelemental.org
+--------------------
 Questions and comments about the development of the library should be sent 
-to `elemental-dev <mailto:elemental-dev@googlegroups.com>`__, which is
-`archived here <https://groups.google.com/forum/#!forum/elemental-dev>`__.
+to `dev@libelemental.org <mailto:dev@libelemental.org>`__, which will soon
+be `archived here <http://news.gmane.org/index.php?prefix=gmane.elemental.dev>`__.
 Bugs in the development version of Elemental should be reported here.
 
-elemental-maint
----------------
-Build system questions and bug reports should be sent to 
-`elemental-maint <mailto:elemental-maint@googlegroups.com>`__, which is
-`archived here <https://groups.google.com/forum/#!forum/elemental-maint>`__.
+.. raw:: html
+    :file: dev.inc
+
+maint@libelemental.org
+----------------------
+Build system questions and detailed bug reports should be sent to 
+`maint@libelemental.org <mailto:maint@libelemental.org>`__, which will soon
+be `archived here <http://news.gmane.org/index.php?prefix=gmane.elemental.maint>`__.
+
+.. raw:: html
+    :file: maint.inc
+
+discuss@libelemental.org
+------------------------
+Tangential (but still professional) discussion should be directed to
+`discuss@libelemental.org <mailto:discuss@libelemental.org>`__, which will soon
+be `archived here <http://news.gmane.org/index.php?prefix=gmane.elemental.discuss>`__.
+
+.. raw:: html
+    :file: discuss.inc
 
 private questions
 -----------------
-The above mailing lists are all publicly archived. Private queries should be
-directed to `Jack Poulson <mailto:jackpoulson@lavabit.com>`__.
+The above mailing lists will eventually be publicly archived. 
+Private queries should be directed to 
+`Jack Poulson <mailto:jackpoulson@lavabit.com>`__.
 
 How to ask questions
 ====================

@@ -39,7 +39,7 @@ Build system questions and bug reports should be sent to
 private questions
 -----------------
 The above mailing lists are all publicly archived. Private queries should be
-directed to `Jack Poulson <mailto:jack.poulson@gmail.com>`__.
+directed to `Jack Poulson <mailto:jackpoulson@lavabit.com>`__.
 
 How to ask questions
 ====================

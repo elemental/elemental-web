@@ -11,15 +11,15 @@ Download
 Releases
 --------
 The current release is 
-`Elemental 0.80 <http://libelemental.org/releases/0.80>`__, and the relevant 
-tarball `is available here <http://libelemental.org/pub/releases/elemental-0.80.tgz>`__. There is also `a list of release notes <http://libelemental.org/releases/>`__.
+`Elemental 0.81 <http://libelemental.org/releases/0.81>`__, and the relevant 
+tarball `is available here <http://libelemental.org/pub/releases/elemental-0.81.tgz>`__. There is also `a list of release notes <http://libelemental.org/releases/>`__.
 
 Direct repository access
 ------------------------
 The project is `openly developed on GitHub <http://github.com/poulson/Elemental.git>`__.
 The bleeding-edge version of the library may be checked out using the command::
 
-    git clone https://github.com/poulson/Elemental.git
+    git clone git://github.com/poulson/Elemental.git
 
 ***************
 Troubleshooting

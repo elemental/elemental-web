@@ -16,10 +16,10 @@ tarball `is available here <http://libelemental.org/pub/releases/elemental-0.81.
 
 Direct repository access
 ------------------------
-The project is `openly developed on GitHub <http://github.com/poulson/Elemental.git>`__.
+The project is `openly developed on GitHub <http://github.com/elemental/Elemental.git>`__.
 The bleeding-edge version of the library may be checked out using the command::
 
-    git clone git://github.com/poulson/Elemental.git
+    git clone git://github.com/elemental/Elemental.git
 
 ***************
 Troubleshooting

@@ -51,13 +51,13 @@ published by the `Open Source Initiative <http://opensource.org>`__.
 About these pages
 *****************
 
-`This website <http://github.com/poulson/elemental-web.git>`__  was 
+`This website <http://github.com/elemental/elemental-web.git>`__  was 
 created by `Jack Poulson <http://www.stanford.edu/~poulson>`__ by 
 checking out a copy of 
 `fenics-web <https://bitbucket.org/fenics-project/fenics-web>`__ and slowly 
 replacing FEniCS-specific content with the appropriate Elemental content.
 The modified source code 
-`can be found here <http://github.com/poulson/elemental-web.git>`__.
+`can be found here <http://github.com/elemental/elemental-web.git>`__.
 
 .. toctree::
    :hidden:

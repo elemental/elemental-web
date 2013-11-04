@@ -1,9 +1,21 @@
+.. Elemental documentation master file, created by
+   sphinx-quickstart on Mon Jan 31 15:52:41 2011.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-.. title:: Documentation for 0.81
+Welcome to Elemental's documentation!
+#####################################
 
-################################
-Documentation for Elemental 0.81 
-################################
+.. toctree::
+   :maxdepth: 2
 
-This page will be expanded soon, but, for now, please see the 
-`Sphinx documentation for Elemental 0.81 <http://poulson.github.io/Elemental/>`__.
+   intro
+   build
+   core
+   blas-like
+   lapack-like
+   convex
+   control
+   matrices
+   io
+   indices

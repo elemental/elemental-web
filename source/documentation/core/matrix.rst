@@ -103,6 +103,10 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       A copy (not a view) of the matrix :math:`A` is built.
 
+   .. cpp:function:: Matrix( Matrix<T>&& A )
+
+      A C++11 move constructor.
+
    .. rubric:: Basic information
 
    .. cpp:function:: int Height() const
@@ -242,6 +246,10 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
    .. cpp:function:: const Matrix<T>& operator=( const Matrix<T>& A )
 
       Create a copy of matrix :math:`A`.
+
+   .. cpp:function:: Matrix<T>& operator=( Matrix<T>&& A )
+
+      A C++11 move assignment.
 
    .. cpp:function:: void Empty()
 

@@ -51,24 +51,20 @@ to be available for all matrix distributions.
    .. rubric:: Basic information
 
    .. cpp:function:: int Height() const
-
-      Return the height of the matrix.
-
    .. cpp:function:: int Width() const
 
-      Return the width of the matrix.
+      Return the height (width) of the distributed matrix.
 
    .. cpp:function:: int LocalHeight() const
-
-      Return the local height of the matrix.
-
    .. cpp:function:: int LocalWidth() const
 
-      Return the local width of the matrix.
+      Return the height (width) of the local matrix stored by a particular 
+      process.
 
    .. cpp:function:: int LDim() const
 
-      Return the local leading dimension of the matrix.
+      Return the leading dimension of the local matrix stored by a particular 
+      process.
 
    .. cpp:function:: size_t AllocatedMemory() const
 
@@ -80,23 +76,15 @@ to be available for all matrix distributions.
       Return the grid that this distributed matrix is distributed over.
 
    .. cpp:function:: T* Buffer( int iLoc=0, int jLoc=0 )
-
-      Return a pointer to the portion of the local buffer that stores entry 
-      `(iLoc,jLoc)`.
-
    .. cpp:function:: const T* LockedBuffer( int iLoc=0, int jLoc=0 ) const
 
-      Return a pointer to the portion of the local buffer that stores entry
-      `(iLoc,jLoc)`, but do not allow for the data to be modified through
-      the returned pointer.
+      Return an (immutable) pointer to the portion of the local buffer that stores entry 
+      `(iLoc,jLoc)`.
 
    .. cpp:function:: Matrix<T>& Matrix()
-
-      Return a reference to the local matrix.
-
    .. cpp:function:: const Matrix<T>& LockedMatrix() const
 
-      Return an unmodifiable reference to the local matrix.
+      Return an (immutable) reference to the local matrix.
 
    .. rubric:: Distribution details
 
@@ -412,87 +400,19 @@ It should also be noted that this is the default distribution format for the
       Build a copy of the distributed matrix `A`, but force it to be in the
       ``[MC,MR]`` distribution.
 
+   .. cpp:function:: DistMatrix( DistMatrix<T,MC,MR>&& A )
+
+      A C++11 move constructor.
+
    .. rubric:: Redistribution
 
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,MC,MR>& A )
+   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,U,V>& A )
 
-      If this matrix can be properly aligned with `A`, then perform a local
-      copy, otherwise perform an :cpp:func:`mpi::SendRecv` permutation first.
+      Redistribute from any distribution into a standard matrix distribution.
 
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,MC,STAR>& A )
+   .. cpp:function:: DistMatrix<T,MC,MR>& operator=( DistMatrix<T,MC,MR>&& A )
 
-      Perform a local (filtered) copy to form an ``[MC,MR ]`` distribution and 
-      then, if necessary, fix the alignment of the ``MC`` distribution via an 
-      :cpp:func:`mpi::SendRecv` within process columns.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,STAR,MR>& A )
-       
-      Perform a local (filtered) copy to form an ``[MC,MR ]`` distribution and 
-      then, if necessary, fix the alignment of the ``MR`` distribution via an 
-      :cpp:func:`mpi::SendRecv` within process rows.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,MD,STAR>& A )
-
-      Since the ``[MD,STAR]`` distribution is defined such that its columns are
-      distributed like a diagonal of an ``[MC,MR]`` distributed matrix, this 
-      operation is not very common. 
-
-      .. note::
-         This redistribution routine is not yet implemented.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,STAR,MD>& A )
-
-      .. note::
-         This redistribution routine is not yet implemented.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,MR,MC>& A )
-
-      This routine serves to transpose the distribution of ``A[MR,MC]`` into 
-      the standard matrix distribution, ``A[MC,MR]``. This redistribution is 
-      implemented with four different approaches: one for matrices that are 
-      taller than they are wide, one for matrices that are wider than they are 
-      tall, one for column vectors, and one for row vectors.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,MR,STAR>& A )
-
-      This is similar to the above routine, but with each row of `A` being 
-      undistributed, and only one approach is needed: 
-      :math:`A[M_C,M_R] \leftarrow A[V_C,\star] \leftarrow A[V_R,\star] \leftarrow A[M_R,\star]`.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,STAR,MC>& A )
-
-      This routine is dual to the :math:`A[M_C,M_R] \leftarrow A[M_R,\star]` 
-      redistribution and is accomplished through the sequence: 
-      :math:`A[M_C,M_R] \leftarrow A[\star,V_R] \leftarrow A[\star,V_C] \leftarrow A[\star,M_C]`.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,VC,STAR>& A )
-
-      Perform an :cpp:func:`mpi::AllToAll` within process rows in order to 
-      redistribute to the ``[MC,MR]`` distribution 
-      (an :cpp:func:`mpi::SendRecv` within process columns may be required for 
-      alignment).
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,STAR,VC>& A )
-
-      Accomplished through the sequence 
-      :math:`A[M_C,M_R] \leftarrow A[\star,V_R] \leftarrow A[\star,V_C]`.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,VR,STAR>& A )
-
-      Accomplished through the sequence
-      :math:`A[M_C,M_R] \leftarrow A[V_C,\star] \leftarrow A[V_R,\star]`.
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,STAR,VR>& A )
-
-      Perform an :cpp:func:`mpi::AllToAll` within process columns in order to 
-      redistribute to the ``[MC,MR]`` distribution 
-      (an :cpp:func:`mpi::SendRecv` within process rows may be required for 
-      alignment).
-
-   .. cpp:function:: const DistMatrix<T,MC,MR>& operator=( const DistMatrix<T,STAR,STAR>& A )
-
-      Perform an :cpp:func:`mpi::AllGather` over the entire grid in order to 
-      give every process a full copy of `A`.
+      A C++11 move assignment.
 
    .. rubric:: Diagonal manipulation
 

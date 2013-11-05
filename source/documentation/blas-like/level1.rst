@@ -202,6 +202,55 @@ Swap
    implicitly symmetric (Hermitian) matrix :math:`A` which stores its data
    in the specified triangle.
 
+QuasiDiagonalScale
+------------------
+
+.. note::
+
+   This is not a standard BLAS routine.
+
+.. cpp:function:: void QuasiDiagonalScale( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<FMain>& d, const Matrix<F>& dSub, Matrix<F>& X, bool conjugate=false )
+.. cpp:function:: void QuasiDiagonalScale( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<FMain,U,V>& d, const DistMatrix<F,U,V>& dSub, DistMatrix<F>& X, bool conjugate=false )
+
+   Apply a symmetric (Hermitian) quasi-diagonal matrix to the matrix X.
+
+QuasiDiagonalSolve
+------------------
+
+.. note::
+
+   This is not a standard BLAS routine.
+
+.. cpp:function:: void QuasiDiagonalSolve( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<FMain>& d, const Matrix<F>& dSub, Matrix<F>& X, bool conjugate=false )
+.. cpp:function:: void QuasiDiagonalSolve( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<FMain,U,V>& d, const DistMatrix<F,U,V>& dSub, DistMatrix<F>& X, bool conjugate=false )
+
+   Apply the inverse of a symmetric (Hermitian) quasi-diagonal matrix to the 
+   matrix X.
+
+Symmetric2x2Scale
+-----------------
+
+.. note::
+
+   This is not a standard BLAS routine.
+
+.. cpp:function:: void Symmetric2x2Scale( LeftOrRight side, UpperOrLower uplo, const Matrix<F>& D, Matrix<F>& A, bool conjugate=false )
+.. cpp:function:: void Symmetric2x2Scale( LeftOrRight side, UpperOrLower uplo, const DistMatrix<F,STAR,STAR>& D, DistMatrix<F>& A, bool conjugate=false )
+
+   Apply a 2x2 symmetric (Hermitian) matrix to the matrix A.
+
+Symmetric2x2Solve
+-----------------
+
+.. note::
+
+   This is not a standard BLAS routine.
+
+.. cpp:function:: void Symmetric2x2Solve( LeftOrRight side, UpperOrLower uplo, const Matrix<F>& D, Matrix<F>& A, bool conjugate=false )
+.. cpp:function:: void Symmetric2x2Solve( LeftOrRight side, UpperOrLower uplo, const DistMatrix<F,STAR,STAR>& D, DistMatrix<F>& A, bool conjugate=false )
+
+   Apply the inverse of a 2x2 symmetric (Hermitian) matrix to the matrix A.
+
 UpdateDiagonal
 --------------
 .. note::

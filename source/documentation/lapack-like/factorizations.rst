@@ -46,7 +46,7 @@ be thrown.
    Overwrite the `uplo` triangle of the potentially singular matrix `A` with
    its Cholesky factor.
 
-Detailed interface
+cholesky namespace
 ^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
@@ -107,8 +107,8 @@ be thrown.
    portion of :math:`L` (:math:`L` implicitly has ones on its diagonal) and 
    the diagonal with :math:`D`.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+ldl namespace
+^^^^^^^^^^^^^
 
 .. cpp:function:: ldl::SolveAfter( const Matrix<F>& A, Matrix<F>& B, bool conjugated=false )
 .. cpp:function:: ldl::SolveAfter( const DistMatrix<F>& A, DistMatrix<F>& B, bool conjugated=false )
@@ -180,8 +180,8 @@ trapezoid.
    phase information is needed in order to define the (generalized) 
    Householder transformations and is stored in the column vector `t`.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+lq namespace
+^^^^^^^^^^^^
 
 .. cpp:function:: void lq::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
 .. cpp:function:: void lq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
@@ -221,8 +221,8 @@ trapezoid.
    Column-pivoted QR factorization. The current implementation uses 
    Businger-Golub pivoting.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+qr namespace
+^^^^^^^^^^^^
 
 .. cpp:function:: void qr::Explicit( Matrix<F>& A, bool colPiv=false )
 .. cpp:function:: void qr::Explicit( DistMatrix<F>& A, bool colPiv=false )
@@ -267,6 +267,44 @@ Detailed interface
    Either execute `maxSteps` iterations or stop after the maximum remaining 
    column norm is less than or equal to `tol` times the maximum original column
    norm.
+
+.. cpp:type:: struct TreeData<F>
+
+   .. cpp:member:: Matrix<F> QR0
+
+      Initial QR factorization
+
+   .. cpp:member:: Matrix<F> t0
+
+      Phases from initial QR factorization
+
+   .. cpp:member:: std::vector<Matrix<F>> QRList
+
+      Factorizations within reduction tree
+
+   .. cpp:member:: std::vector<Matrix<F>> tList
+
+      Phases within reduction tree
+
+.. cpp:function:: qr::TreeData<F> qr::TS( const DistMatrix<F,U,STAR>& A )
+
+   Forms an implicit tall-skinny QR decomposition.
+
+.. cpp:function:: void qr::ExplicitTS( DistMatrix<F,U,STAR>& A, DistMatrix<F,STAR,STAR>& R )
+
+   Forms an explicit QR decomposition using a tall-skinny algorithm: 
+   A is overwritten with Q.
+
+qr::ts namespace
+________________
+
+.. cpp:function:: DistMatrix<F,STAR,STAR> qr::ts::FormR( const DistMatrix<F,U,STAR>& A, const qr::TreeData<F>& treeData )
+
+   Return the R from the QR decomposition.
+
+.. cpp:function:: void qr::ts::FormQ( DistMatrix<F,U,STAR>& A, qr::TreeData<F>& treeData )
+
+   Overwrite A with the Q from the QR decomposition.
 
 :math:`RQ` factorization
 ------------------------

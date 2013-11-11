@@ -49,6 +49,10 @@ The return value is the rank of the soft-thresholded matrix.
    from the partial :math:`QR` decomposition produced from `numSteps` iterations
    of (Businger/Golub) column-pivoted QR.
 
+.. cpp:function:: int SVT( Matrix<F,U,STAR>& A, Base<F> tau )
+
+   TSQR-based SVT algorithm.
+
 Soft-thresholding
 -----------------
 Overwrites each entry of :math:`A` with its soft-thresholded value.

@@ -382,8 +382,8 @@ computed through (a dynamically-weighted) Halley iteration.
    equivalent to a Hermitian sign decomposition (if :math:`\text{sgn}(0)` is 
    set to 1), these routines are equivalent to `HermitianSign`.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+polar namespace
+^^^^^^^^^^^^^^^
 
 .. cpp:function:: int polar::QDWH( Matrix<F>& A, bool colPiv=false, int maxits=20 )
 .. cpp:function:: int polar::QDWH( DistMatrix<F>& A, bool colPiv=false, int maxIts=20 )
@@ -426,3 +426,34 @@ non-negative entries.
 
    Forms the singular values of :math:`A` in `s`. Note that `A` is overwritten in order to compute the singular values.
 
+svd namespace
+^^^^^^^^^^^^^
+
+.. cpp:function:: void svd::QRSVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V )
+
+   SVD which uses bidiagonal QR algorithm.
+
+.. cpp:function:: void svd::DivideAndConquerSVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V )
+
+   SVD which uses a bidiagonal divide-and-conquer algorithm.
+
+.. cpp:function:: void svd::Chan( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, double heightRatio=1.2 )
+.. cpp:function:: void svd::Chan( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V, double heightRatio=1.5 )
+
+   SVD which preprocesses with an initial QR decomposition if the matrix is 
+   sufficiently tall relative to its width.
+
+.. cpp:function:: void svd::GolubReinschUpper( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s )
+.. cpp:function:: void svd::GolubReinschUpper( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V )
+
+   Computes the singular values (and vectors) of a matrix which is taller than
+   it is wide using the Golub-Reinsch algorithm, though DQDS is used when only
+   the singular values are sought.
+
+.. cpp:function:: void svd::Thresholded( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V, Base<F> tol=0 )
+.. cpp:function:: void svd::Thresholded( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V, Base<F> tol=0 )
+
+   Computes the singular triplets whose singular values are larger than a 
+   specified tolerance using the cross-product algorithm. This is often 
+   advantageous because tridiagonal eigensolvers tend to enjoy better parallel
+   implementations than bidiagonal SVD's.

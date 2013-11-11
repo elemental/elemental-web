@@ -21,7 +21,7 @@ Axpy
 Performs :math:`Y := \alpha X + Y` (hence the name *axpy*).
 
 .. cpp:function:: void Axpy( T alpha, const Matrix<T>& X, Matrix<T>& Y )
-.. cpp:function:: void Axpy( T alpha, const DistMatrix<T,U,V>& X, DistMatrix<T,U,V>& Y )
+.. cpp:function:: void Axpy( T alpha, const DistMatrix<T,U1,V1>& X, DistMatrix<T,U2,V2>& Y )
 
 Conjugate
 ---------

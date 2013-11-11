@@ -25,8 +25,8 @@ and stores the scaled Householder vectors in place of the introduced zeroes.
 Please see the :ref:`lapack-tuning` section for extensive information on 
 maximizing the performance of Householder tridiagonalization.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+hermitian_tridiag namespace
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
@@ -63,15 +63,15 @@ matrix.
    .. note:: The :math:`m < n` case is not yet supported for the distributed 
              version.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+bidiag namespace
+^^^^^^^^^^^^^^^^
 **TODO**
 
-.. cpp:function:: void ApplyU( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
-.. cpp:function:: void ApplyU( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
-.. cpp:function:: void ApplyU( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
+.. cpp:function:: void bidiag::ApplyU( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
+.. cpp:function:: void bidiag::ApplyU( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
+.. cpp:function:: void bidiag::ApplyU( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
 
-.. cpp:function:: void ApplyV( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
-.. cpp:function:: void ApplyV( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
-.. cpp:function:: void ApplyV( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
+.. cpp:function:: void bidiag::ApplyV( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
+.. cpp:function:: void bidiag::ApplyV( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
+.. cpp:function:: void bidiag::ApplyV( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
 

@@ -121,8 +121,8 @@ where each eigenvalue :math:`\lambda = r e^{i\theta}` maps to
 
 **TODO: HermitianSquareRoot**
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+square_root namespace
+^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: int square_root::Newton( Matrix<F>& A, int maxIts=100, Base<F> tol=0 )
 .. cpp:function:: int square_root::Newton( DistMatrix<F>& A, int maxIts=100, Base<F> tol=0 )
@@ -161,8 +161,8 @@ as long as :math:`A` does not have any pure-imaginary eigenvalues.
    where :math:`A` is overwritten by :math:`S`. Note that this will also be 
    a polar decomposition.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+sign namespace
+^^^^^^^^^^^^^^
 
 .. cpp:type:: sign::Scaling
 

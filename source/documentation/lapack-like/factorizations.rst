@@ -321,8 +321,8 @@ much sparser triangular factor when the matrix is wider than it is tall.
    phase information is needed in order to define the (generalized) 
    Householder transformations and is stored in the column vector `t`.
 
-Detailed interface
-^^^^^^^^^^^^^^^^^^
+rq namespace
+^^^^^^^^^^^^
 
 .. cpp:function:: void rq::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
 .. cpp:function:: void rq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )

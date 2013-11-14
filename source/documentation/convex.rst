@@ -40,18 +40,53 @@ The return value is the rank of the soft-thresholded matrix.
 .. cpp:function:: int SVT( Matrix<F>& A, Base<F> tau )
 .. cpp:function:: int SVT( DistMatrix<F>& A, Base<F> tau )
 
-   Uses a thresholded cross-product SVD.
+   Runs the default SVT algorithm. In the sequential case, this is currently
+   `svt::Normal`, and, in the parallel case, it is `svt::Cross`.
 
-.. cpp:function:: int SVT( Matrix<F>& A, Base<F> tau, int numSteps )
-.. cpp:function:: int SVT( DistMatrix<F>& A, Base<F> tau, int numSteps )
+.. cpp:function:: int SVT( Matrix<F>& A, Base<F> tau, int relaxedRank )
+.. cpp:function:: int SVT( DistMatrix<F>& A, Base<F> tau, int relaxedRank )
 
-   Same as above, but run the thresholded cross-product SVD on the :math:`R` 
-   from the partial :math:`QR` decomposition produced from `numSteps` iterations
-   of (Businger/Golub) column-pivoted QR.
+   Runs a faster (for small ranks), but less accurate, algorithm given an
+   upper bound on the rank of the soft-thresholded matrix.
+   The current implementation preprocesses via `relaxedRank` steps of 
+   (Businger-Golub) column-pivoted QR via the routine `svt::PivotedQR`.
 
 .. cpp:function:: int SVT( Matrix<F,U,STAR>& A, Base<F> tau )
 
-   TSQR-based SVT algorithm.
+   Runs an SVT algorithm designed for tall-skinny matrices. 
+   The current implementation is based on TSQR factorization and is
+   `svt::TSQR`.
+
+namespace svt
+^^^^^^^^^^^^^
+
+.. cpp:function:: int svt::Normal( Matrix<F>& A, Base<F> tau )
+.. cpp:function:: int svt::Normal( DistMatrix<F>& A, Base<F> tau )
+
+   Runs a standard SVD, soft-thresholds the singular values, and then reforms
+   the matrix.
+
+.. cpp:function:: int svt::Cross( Matrix<F>& A, Base<F> tau )
+.. cpp:function:: int svt::Cross( DistMatrix<F>& A, Base<F> tau )
+
+   Forms the normal matrix, computes its Hermitian EVD, soft-thresholds the
+   eigenvalues, and then reforms the matrix. Note that Elemental's parallel 
+   Hermitian EVD is much faster than its parallel SVD; this is typically worth
+   the loss of accuracy in the computed small (truncated) singular values and
+   is therefore the default choice for parallel SVT.
+
+.. cpp:function:: int svt::PivotedQR( Matrix<F>& A, Base<F> tau, int numStepsQR )
+.. cpp:function:: int svt::PivotedQR( DistMatrix<F>& A, Base<F> tau, int numStepsQR )
+
+   Computes an approximate SVT by first approximating A as the rank-`numSteps`
+   approximation produced by `numSteps` iterations of column-pivoted QR.
+
+.. cpp:function:: int svt::TSQR( Matrix<F>& A, Base<F> tau )
+.. cpp:function:: int svt::TSQR( DistMatrix<F>& A, Base<F> tau )
+
+   Since the majority of the work in a tall-skinny SVT will be in the initial
+   QR factorization, this algorithm runs a TSQR factorization and then 
+   computes the SVT of the small R factor using a single process.
 
 Soft-thresholding
 -----------------

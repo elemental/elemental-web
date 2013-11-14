@@ -52,7 +52,7 @@ About these pages
 *****************
 
 `This website <http://github.com/elemental/elemental-web.git>`__  was 
-created by `Jack Poulson <http://www.stanford.edu/~poulson>`__ by 
+created by `Jack Poulson <http://www.cc.gatech.edu/~jpoulson>`__ by 
 checking out a copy of 
 `fenics-web <https://bitbucket.org/fenics-project/fenics-web>`__ and slowly 
 replacing FEniCS-specific content with the appropriate Elemental content.

@@ -73,12 +73,14 @@ Range-based subset computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
 .. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
 
    Compute the eigenvalues of a Hermitian matrix `A` lying in the half-open 
    interval :math:`(a,b]`.
 
 .. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, DistMatrix<F,STAR,STAR>& Z, SortType sort=UNSORTED )
 .. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
 
    Compute the eigenpairs of a Hermitian matrix `A` with eigenvalues lying in 
@@ -450,8 +452,8 @@ svd namespace
    it is wide using the Golub-Reinsch algorithm, though DQDS is used when only
    the singular values are sought.
 
-.. cpp:function:: void svd::Thresholded( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V, Base<F> tol=0 )
-.. cpp:function:: void svd::Thresholded( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V, Base<F> tol=0 )
+.. cpp:function:: void svd::Thresholded( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V, Base<F> tol=0, bool relative=false )
+.. cpp:function:: void svd::Thresholded( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V, Base<F> tol=0, bool relative=false )
 
    Computes the singular triplets whose singular values are larger than a 
    specified tolerance using the cross-product algorithm. This is often 

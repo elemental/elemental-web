@@ -6,6 +6,8 @@
 
 `elemental-0.81.tgz <http://libelemental.org/pub/releases/elemental-0.81.tgz>`__
 
+`documentation <http://libelemental.org/documentation/0.81/>`__
+
 Features
 ========
 - Matrix sign and square-root functions

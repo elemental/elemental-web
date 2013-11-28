@@ -31,19 +31,7 @@ Spy
 Write
 -----
 
-.. cpp:type:: enum FileFormat
+.. cpp:function:: void Write( const Matrix<T>& A, std::string title="", std::string filename="Matrix" )
+.. cpp:function:: void Write( const DistMatrix<T>& A, std::string title="", std::string filename="DistMatrix" )
 
-   * ``ASCII``: simple ASCII text file
-   * ``MATLAB_ASCII``: MATLAB-ready ASCII text file
-   * ``BMP``: bitmap image format (requires Qt5)
-   * ``JPG``: JPG image format (requires Qt5)
-   * ``JPEG``: JPEG image format (requires Qt5)
-   * ``PNG``: PNG image format (requires Qt5)
-   * ``PPM``: PPM image format (requires Qt5)
-   * ``XBM``: XBM image format (requires Qt5)
-   * ``XPM``: XPM image format (requires Qt5)
-
-.. cpp:function:: void Write( const Matrix<T>& A, FileFormat format=ASCII, std::string basename="matrix", std::string title="" )
-.. cpp:function:: void Write( const DistMatrix<T,U,V>& A, FileFormat format=ASCII, std::string basename="matrix", std::string title="" )
-
-   The matrix is written to a file (the given basename plus the appropriate extension) in the specified format. Note that Qt5 is required for the image formats.
+   The matrix is printed to the file with the specified name.

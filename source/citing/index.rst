@@ -32,7 +32,8 @@ Elemental's Pivoted-QR/ID/Skeleton decompositions
 -------------------------------------------------
 
 * **J. Poulson, L. Demanet, N. Maxwell, and L. Ying (2013)** 
-  *A parallel butterfly algorithm*,
+  *A parallel butterfly algorithm*, SIAM Journal on Scientific Computing 
+  (To appear).
   [`arXiv:1305.4650 <http://arxiv.org/abs/1305.4650>`_]
 * **J. Poulson, B. Marker, R. van de Geijn, J. Hammond, and N. Romero (2013)**.
   *Elemental: A new framework for distributed memory dense matrix computations*,

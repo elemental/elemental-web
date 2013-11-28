@@ -88,64 +88,92 @@ to be available for all matrix distributions.
 
    .. rubric:: Distribution details
 
-   .. cpp:function:: void FreeAlignments()
+   .. cpp:function:: mpi::Comm ColComm() const
+   .. cpp:function:: int ColRank() const
+   .. cpp:function:: int ColAlign() const
+   .. cpp:function:: int ColShift() const
+   .. cpp:function:: int ColStride() const
 
-      Free all alignment constaints.
+      Return the communicator used to distribute each column of the 
+      matrix, this process's rank in it, which process owns the first entry, 
+      what our first locally owned entry would be, and how many processes 
+      are in the column communicator, respectively.
+
+   .. cpp:function:: mpi::Comm RowComm() const
+   .. cpp:function:: int RowRank() const
+   .. cpp:function:: int RowAlign() const
+   .. cpp:function:: int RowShift() const
+   .. cpp:function:: int RowStride() const
+
+      Return the communicator used to distribute each row of the 
+      matrix, this process's rank in it, which process owns the first entry, 
+      what our first locally owned entry would be, and how many processes 
+      are in the row communicator, respectively.
 
    .. cpp:function:: bool ColConstrained() const
    .. cpp:function:: bool RowConstrained() const
 
       Return whether or not the column (row) alignment is constrained.
 
-   .. cpp:function:: int ColAlign() const
-   .. cpp:function:: int RowAlign() const
+   .. cpp:function:: void FreeAlignments()
 
-      Return the alignment of the columns (rows) of the matrix.
-
-   .. cpp:function:: int ColShift() const
-   .. cpp:function:: int RowShift() const
-
-      Return the first global row (column) that our process owns.
-
-   .. cpp:function:: mpi::Comm ColComm() const
-   .. cpp:function:: mpi::Comm RowComm() const
-
-      Return the communicator used to distribute each column (row) of the 
-      matrix.
-
-   .. cpp:function:: int ColRank() const
-   .. cpp:function:: int RowRank() const
-
-      Return this process's rank in its column (row) communicator.
-
-   .. cpp:function:: int ColStride() const
-   .. cpp:function:: int RowStride() const
-
-      Return the number of rows (columns) between locally owned entries.
-      This is equal to the size of the column (row) communicator.
+      Free all alignment constaints.
 
    .. cpp:function:: elem::DistData DistData() const
 
       Returns a description of the distribution and alignment information
 
    .. cpp:function:: mpi::Comm DistComm() const
+   .. cpp:function:: int DistRank() const
+   .. cpp:function:: int DistSize() const
 
       The communicator used to distribute the entire set of entries of the 
-      matrix (in some sense, the product of the column and row communicators).
-      [For this distribution, it is the `VC` communicator.]
+      matrix (in some sense, the product of the column and row communicators), 
+      our rank in the communicator, and the total number of processes in the
+      communicator, respectively.
 
    .. cpp:function:: mpi::Comm RedundantComm() const
+   .. cpp:function:: int RedundantRank() const
+   .. cpp:function:: int RedundantSize() const
 
-      The communicator over which data is redundantly stored.
-      [For this distribution, it is the trivial communicator.]
+      The communicator over which data is redundantly stored, our rank in the
+      communicator, and the total number of processes in the communicator,
+      respectively.
 
    .. cpp:function:: mpi::Comm CrossComm() const
+   .. cpp:function:: int CrossRank() const
+   .. cpp:function:: int CrossSize() const
 
       The orthogonal complement of the product of the `Dist` and `Redundant`
-      communicators with respect to the process grid.
-      [For this distribution, it is the trivial communicator.]
+      communicators with respect to the process grid, our rank in the
+      communicator, and the total number of processes in the communicator,
+      respectively.
+
+   .. cpp:function:: int Root() const
+   .. cpp:function:: void SetRoot( int root )
+      
+      For querying and changing the process rank in the cross communicator which
+      owns the data.
+
+   .. cpp:function:: bool Participating() const
+
+      Return whether or not this process can be assigned matrix data (that is, 
+      whether or not this process is both in the process grid and the root of 
+      its cross communicator).
 
    .. rubric:: Entry manipulation
+
+   .. cpp:function:: int RowOwner( int i ) const
+
+      Return the rank (in `ColComm`) of the process which owns row `i`.
+
+   .. cpp:function:: int ColOwner( int j ) const
+
+      Return the rank (in `RowComm`) of the process which owns column `j`.
+
+   .. cpp:function:: int Owner( int i, int j ) const
+
+      Return the rank (in `DistComm`) of the process which owns entry `(i,j)`.
 
    .. cpp:function:: T Get( int i, int j ) const
 
@@ -180,12 +208,12 @@ to be available for all matrix distributions.
       Add :math:`\alpha` to the real (imaginary) part of the `(i,j)` entry of 
       the global matrix.
 
-   .. cpp:function:: void MakeReal( Int i, Int j )
+   .. cpp:function:: void MakeReal( int i, int j )
 
       Forces the imaginary component (if it exists) of entry :math:`(i,j)` to
       zero.
 
-   .. cpp:function:: void Conjugate( Int i, Int j )
+   .. cpp:function:: void Conjugate( int i, int j )
 
       Conjugates the imaginary component (if it exists) of entry :math:`(i,j)`.
 
@@ -219,12 +247,12 @@ to be available for all matrix distributions.
       Add :math:`\alpha` to the real (imaginary) part of the `(iLoc,jLoc)` 
       entry of our local matrix.
 
-   .. cpp:function:: void MakeRealLocal( Int iLoc, Int jLoc )
+   .. cpp:function:: void MakeRealLocal( int iLoc, int jLoc )
 
       Forces the imaginary component (if it exists) of entry `(iLoc,jLoc)` of
       the local matrix to zero.
 
-   .. cpp:function:: void ConjugateLocal( Int iLoc, Int jLoc )
+   .. cpp:function:: void ConjugateLocal( int iLoc, int jLoc )
 
       Conjugates the imaginary component (if it exists) of entry `(iLoc,jLoc)`
       in the local matrix.
@@ -242,10 +270,19 @@ to be available for all matrix distributions.
 
    .. rubric:: Utilities
 
+   .. cpp:function:: void MakeConsistent()
+
+      Gives every non-participating process a copy of the metadata stored
+      by the root process in the distribution communicator.
+
+   .. cpp:function:: void EmptyData()
+
+      Sets the matrix size to zero and frees associated memory 
+      (the alignments are left unchanged).
+
    .. cpp:function:: void Empty()
 
-      Resize the distributed matrix so that it is :math:`0 \times 0` and free 
-      all allocated storage.
+      Empties the data and frees all alignments.
 
    .. cpp:function:: void ResizeTo( int height, int width )
 
@@ -1172,15 +1209,6 @@ sets of processes:
 This ``distribution`` stores the entire matrix on a single process.
 
 .. cpp:type:: class DistMatrix<T,CIRC,CIRC>
-
-   .. cpp:function:: int Root()
-
-      Returns the rank of the process owning the matrix.
-
-   .. cpp:function:: void SetRoot( int root )
-
-      Sets the rank of the process owning the matrix (and clears the current
-      contents).
 
 Special cases used in Elemental
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

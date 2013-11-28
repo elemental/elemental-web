@@ -57,7 +57,7 @@
 	<p style="text-align:center;">
 	  <a href="/download/">
 	    <img style="margin-left:auto; margin-right:auto; margin-top:10px;"
-		 src="/_static/download-button-0.82.png" alt="Download button" />
+		 src="/_static/download-button-0.82-p1.png" alt="Download button" />
 	  </a>
 	</p>
 

@@ -1,20 +1,25 @@
 Build system
 ************
-Elemental's build system relies on `CMake <http://www.cmake.org>`__ 
-in order to manage a large number of configuration options in a 
+Elemental's build system relies on `CMake <http://www.cmake.org>`__
+in order to manage a large number of configuration options in a
 platform-independent manner; it can be easily configured to build on Linux and 
-Unix environments (including Darwin) as well as various versions of 
-Microsoft Windows.
+Unix environments (including Darwin), and, at least in theory, various versions
+of Microsoft Windows. A relatively up-to-date C++11 compiler 
+(e.g., gcc >= 4.7) is required in all cases.
 
 Elemental's main dependencies are
 
-1. `CMake <http://www.cmake.org/>`__ (required)
-2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`_ (required) 
-3. `BLAS <http://netlib.org/blas>`__ and `LAPACK <http://netlib.org/lapack>`__ (required)
-4. `PMRRR <http://code.google.com/p/pmrrr>`_ (required for eigensolvers)
-5. `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ (recommended for faster SVD's) 
+1. `CMake <http://www.cmake.org/>`__
+2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`__
+3. `BLAS <http://netlib.org/blas>`__
+4. `LAPACK <http://netlib.org/lapack>`__
 
-Each of these dependencies is discussed in detail below.
+and it includes the package `PMRRR <http://code.google.com/p/pmrrr>`_, which is
+required for Elemental's parallel symmetric tridiagonal eigensolver.
+Furthermore, `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended
+for faster SVD's due to its high-performance bidiagonal QR algorithm
+implementation, and `Qt5 <http://qt-project.org>`_ is required for matrix
+visualization.
 
 Dependencies
 ============
@@ -183,6 +188,15 @@ and then installation should simply be a matter of running::
     make
     make install
 
+Qt5
+---
+Qt is an open source cross-platform library for creating Graphical User
+Interfaces (GUIs) in C++. Elemental currently supports using version 5.1.1 of
+the library to display and save images of matrices.
+
+Please visit Qt Project's `download page <http://qt-project.org/downloads>`__
+for download and installation instructions. 
+
 Getting Elemental's source 
 ==========================
 There are two basic approaches:
@@ -249,7 +263,7 @@ to ::
 Elemental's performance in Singular Value Decompositions (SVD's) is 
 greatly improved on many architectures when libFLAME is linked.
 
-Build Modes
+Build modes
 -----------
 Elemental currently has four different build modes:
 
@@ -263,6 +277,11 @@ Elemental currently has four different build modes:
 The build mode can be specified with the ``CMAKE_BUILD_TYPE`` option, e.g., 
 ``-D CMAKE_BUILD_TYPE=PureDebug``. If this option is not specified, Elemental
 defaults to the **PureRelease** build mode.
+
+Once the build mode is selected, one might also want to manually set the
+optimization level of the compiler, e.g., via the CMake option 
+``-D CXX_FLAGS="-O3 -std=c++11"``, which both sets the optimization level to 3
+and provides the usual flags for requesting C++11 support.
 
 Testing the installation
 ========================

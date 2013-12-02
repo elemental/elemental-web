@@ -64,6 +64,16 @@
         </div>
 
         <div class="front-block block app">
+          <h3><a href="http://github.com/poulson/rt-lps-mri">Real-Time Low-rank Plus Sparse MRI</a></h3>
+          <img alt='' src='/_static/images/rt-lps-mri.png'
+          class='avatar avatar-84 photo' height='84' width='84' />
+          <p><a href="http://github.com/poulson/rt-lps-mri">RT-LPS-MRI</a>
+             is a distributed-memory parallelization of a Low-Rank Plus Sparse
+             decomposition for dynamically accelerated MRI.
+          </p>
+        </div>
+
+        <div class="front-block block app">
           <h3>Your application here?</h3>
         </div>
 

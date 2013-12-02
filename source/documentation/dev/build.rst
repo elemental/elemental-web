@@ -3,18 +3,23 @@ Build system
 Elemental's build system relies on `CMake <http://www.cmake.org>`__ 
 in order to manage a large number of configuration options in a 
 platform-independent manner; it can be easily configured to build on Linux and 
-Unix environments (including Darwin) as well as various versions of 
-Microsoft Windows.
+Unix environments (including Darwin), and, at least in theory, various versions
+of Microsoft Windows. A relatively up-to-date C++11 compiler 
+(e.g., gcc >= 4.7) is required in all cases.
 
 Elemental's main dependencies are
 
-1. `CMake <http://www.cmake.org/>`__ (required)
-2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`_ (required) 
-3. `BLAS <http://netlib.org/blas>`__ and `LAPACK <http://netlib.org/lapack>`__ (required)
-4. `PMRRR <http://code.google.com/p/pmrrr>`_ (required for eigensolvers)
-5. `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ (recommended for faster SVD's) 
+1. `CMake <http://www.cmake.org/>`__ 
+2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`__ 
+3. `BLAS <http://netlib.org/blas>`__ 
+4. `LAPACK <http://netlib.org/lapack>`__ 
 
-Each of these dependencies is discussed in detail below.
+and it includes the package `PMRRR <http://code.google.com/p/pmrrr>`_, which is
+required for Elemental's parallel symmetric tridiagonal eigensolver. 
+Furthermore, `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
+for faster SVD's due to its high-performance bidiagonal QR algorithm 
+implementation, and `Qt5 <http://qt-project.org>`_ is required for matrix
+visualization.
 
 Dependencies
 ============
@@ -22,7 +27,7 @@ Dependencies
 CMake
 -----
 Elemental uses several new CMake modules, so it is important to ensure that 
-version 2.8.5 or later is installed. Thankfully the 
+version 2.8.8 or later is installed. Thankfully the 
 `installation process <http://www.cmake.org/cmake/help/install.html>`_
 is extremely straightforward: either download a platform-specific binary from
 the `downloads page <http://www.cmake.org/cmake/resources/software.html>`_,
@@ -34,7 +39,7 @@ following commands::
     make
     make install
 
-Note that recent versions of `Ubuntu <http://www.ubuntu.com/>`__ (e.g., version 12.04) have sufficiently up-to-date
+Note that recent versions of `Ubuntu <http://www.ubuntu.com/>`__ (e.g., version 13.10) have sufficiently up-to-date
 versions of CMake, and so the following command is sufficient for installation::
 
     sudo apt-get install cmake
@@ -133,7 +138,8 @@ and the reference implementation of BLAS can be found at
 
 However, it is better to install an optimized version of these libraries,
 especialy for the BLAS. The most commonly used open source versions are 
-`ATLAS <http://math-atlas.sourceforge.net/>`__ and `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__.
+`ATLAS <http://math-atlas.sourceforge.net/>`__ and `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__. Support for `BLIS <http://code.google.com/p/blis>`__ is
+planned in the near future.
 
 PMRRR
 -----
@@ -182,6 +188,19 @@ and then installation should simply be a matter of running::
     ./configure
     make
     make install
+
+Qt5
+---
+Qt is an open source cross-platform library for creating Graphical User 
+Interfaces (GUIs) in C++. Elemental currently supports using version 5.1.1 of 
+the library to display and save images of matrices.
+
+Please visit Qt Project's `download page <http://qt-project.org/downloads>`__
+for download and installation instructions. Note that, if Elemental is launched
+with the `-no-gui` command-line option, then Qt5 will be started without GUI
+support. This supports using Elemental on clusters whose compute nodes do not
+run display servers, but PNG's of matrices need to be created using Qt5's 
+simple interface.
 
 Getting Elemental's source 
 ==========================
@@ -249,7 +268,7 @@ to ::
 Elemental's performance in Singular Value Decompositions (SVD's) is 
 greatly improved on many architectures when libFLAME is linked.
 
-Build Modes
+Build modes
 -----------
 Elemental currently has four different build modes:
 
@@ -263,6 +282,10 @@ Elemental currently has four different build modes:
 The build mode can be specified with the ``CMAKE_BUILD_TYPE`` option, e.g., 
 ``-D CMAKE_BUILD_TYPE=PureDebug``. If this option is not specified, Elemental
 defaults to the **PureRelease** build mode.
+
+Once the build mode is selected, one might also want to manually set the 
+optimization level of the compiler, e.g., via the CMake option 
+``-D CXX_FLAGS="-O3"``.
 
 Testing the installation
 ========================

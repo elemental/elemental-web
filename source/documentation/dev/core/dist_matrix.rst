@@ -500,32 +500,21 @@ It should also be noted that this is the default distribution format for the
    All of the following clear the distributed matrix's contents and then 
    reconfigure the alignments as described.
 
-   .. cpp:function:: void AlignWith( const AbstractDistMatrix<T>& A )
-
-      Force the alignments to match those of `A`.
-
    .. cpp:function:: void AlignWith( const elem::DistData& data )
 
       A mechanism for aligning with a distributed matrix of a different 
-      datatype, via ``AlignWith( A.DistData() );``
-
-   .. cpp:function:: void AlignColsWith( const AbstractDistMatrix<T>& A )
-
-      Force the column alignment to match that of `A`.
+      datatype, via ``AlignWith( A.DistData() );``, or just ``AlignWith( A )``,
+      as the conversion will happen implicitly.
 
    .. cpp:function:: void AlignColsWith( const elem::DistData& data )
 
       A mechanism for aligning with a distributed matrix of a different 
-      datatype, via ``AlignColsWith( A.DistData() );``
-
-   .. cpp:function:: void AlignRowsWith( const AbstractDistMatrix<T>& A )
-
-      Force the row alignment to match that of `A`.
+      datatype, via ``AlignColsWith( A )``.
 
    .. cpp:function:: void AlignRowsWith( const elem::DistData& data )
 
       A mechanism for aligning with a distributed matrix of a different 
-      datatype, via ``AlignRowsWith( A.DistData() );``
+      datatype, via ``AlignRowsWith( A );``
 
    .. rubric:: Views
 

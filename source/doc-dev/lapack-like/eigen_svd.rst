@@ -92,8 +92,8 @@ Spectral divide and conquer
 The primary references for this approach is Demmel et al.'s *Fast linear algebra
 is stable* and Nakatsukasa et al.'s *Stable and efficient spectral divide and conquer algorithms for the symmetric eigenvalue problem*.
 
-.. cpp:function:: void hermitian_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void hermitian_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void hermitian_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void hermitian_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
 
    Compute the eigenvalues of the matrix :math:`A` via a QDWH-based spectral 
    divide and conquer process. 
@@ -104,8 +104,8 @@ is stable* and Nakatsukasa et al.'s *Stable and efficient spectral divide and co
    iterations is how many random Mobius transformations to try for each spectral
    split before giving up.
 
-.. cpp:function:: void hermitian_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Q, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void hermitian_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Q, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void hermitian_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Q, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void hermitian_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Q, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
 
    Attempt to also compute the eigenvectors.
 
@@ -307,8 +307,8 @@ is stable*. While the current implementation needs a large number of algorithmic
 improvements, especially with respect to choosing the Mobius transformations,
 it tends to succeed on random matrices.
 
-.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool formATR=false, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool formATR=false, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool formATR=false, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool formATR=false, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
 
    Compute the eigenvalues of the matrix :math:`A` via a spectral divide and
    conquer process. On exit, the eigenvalues of :math:`A` will be stored on its
@@ -321,10 +321,49 @@ it tends to succeed on random matrices.
    the number of outer iterations is how many random Mobius transformations to
    try for each spectral split before giving up.
 
-.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool formATR=true, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, DistMatrix<F>& Q, bool formATR=true, Int cutoff=256, Int maxInnerIts=1, Int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool formATR=true, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, DistMatrix<F>& Q, bool formATR=true, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
 
    Attempt to also compute the Schur vectors.
+
+Pseudospectra
+-------------
+The :math:`\epsilon`-*pseudospectrum* of a square matrix :math:`A` is the set
+of all shifts :math:`z` such that :math:`\hat A - z` is singular for some 
+:math:`\hat A` such that :math:`\| \hat A - A \|_2 \le \epsilon`. In other
+words, :math:`z` is in the :math:`\epsilon`-pseudospectrum of :math:`A` if
+the smallest singular value of :math:`A - z` is less than or equal to 
+:math:`\epsilon`. 
+
+The method used by Elemental is a high-performance improvement upon the 
+triangularization followed by inverse-iteration approach suggested by 
+Shiu-Hong Lui in *Computation of pseudospectra by continuation* (please see 
+Trefethen's *Computation of pseudospectra* for a comprehensive review).
+In particular, Elemental begins by computing the Schur decomposition of the
+given matrix, which preserves the :math:`\epsilon`-pseudospectrum, up to 
+round-off error, and then simultaneously performs many Lanczos decompositions
+on the inverse normal matrix for each shift in a manner which communicates 
+no more data than a standard triangular solve with many right-hand sides.
+Converged pseudospectrum estimates are deflate after convergence.
+
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+
+   Returns the norms of the shifted inverses in the vector ``invNorms`` for a 
+   given set of shifts. The returned integer vector is a list of the number of 
+   iterations required for convergence of each shift.
+
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> halfWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> halfWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+
+   Returns the norms of the shifted inverses over the specified 2D grid in the
+   matrix ``invNormMap``. The returned integer matrix corresponds to the number
+   of iterations required for convergence at each shift in the 2D grid.
+
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> halfWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> halfWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+
+   Same as the above, but no initial Schur decomposition is required.
 
 Hermitian SVD
 -------------

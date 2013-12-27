@@ -170,12 +170,12 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       Add :math:`\alpha` to the real (imaginary) part of entry :math:`(i,j)`.
 
-   .. cpp:function:: void MakeReal( Int i, Int j )
+   .. cpp:function:: void MakeReal( int i, int j )
  
       Forces the imaginary component (if it exists) of entry :math:`(i,j)` to
       zero.
 
-   .. cpp:function:: void Conjugate( Int i, Int j )
+   .. cpp:function:: void Conjugate( int i, int j )
 
       Conjugates the imaginary component (if it exists) of entry :math:`(i,j)`.
 
@@ -192,12 +192,12 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
       Modify :math:`d` into a column-vector containing the real (imaginary) 
       parts of the entries in the `offset` diagonal.
 
-   .. cpp:function:: Matrix<T> GetDiagonal( Int offset=0 ) const
+   .. cpp:function:: Matrix<T> GetDiagonal( int offset=0 ) const
 
       Efficiently construct and return the diagonal via C++11 move semantics.
 
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( Int offset=0 ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( Int offset=0 ) const
+   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
+   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
 
       Use C++11 move semantics to return the real (imaginary) part of the 
       diagonal.

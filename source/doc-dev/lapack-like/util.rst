@@ -13,13 +13,13 @@ treat the identity matrix as a Householder transform since it requires the
 .. cpp:function:: F reflector::Col( DistMatrix<F>& chi, DistMatrix<F>& x )
 .. cpp:function:: F reflector::Row( DistMatrix<F>& chi, DistMatrix<F>& x )
 
-.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, Int offset, const Matrix<F>& H, const Matrix<F>& t, Matrix<F>& A )
-.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, Int offset, const DistMatrix<F>& H, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& A )
-.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, Int offset, const DistMatrix<F>& H, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& A )
+.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, int offset, const Matrix<F>& H, const Matrix<F>& t, Matrix<F>& A )
+.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, int offset, const DistMatrix<F>& H, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& A )
+.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, int offset, const DistMatrix<F>& H, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& A )
 
-.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, Int offset, Matrix<F>& H, const Matrix<F>& t )
-.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, Int offset, DistMatrix<F>& H, const DistMatrix<F,MD,STAR>& t )
-.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, Int offset, DistMatrix<F>& H, const DistMatrix<F,STAR,STAR>& t )
+.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, Matrix<F>& H, const Matrix<F>& t )
+.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, DistMatrix<F>& H, const DistMatrix<F,MD,STAR>& t )
+.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, DistMatrix<F>& H, const DistMatrix<F,STAR,STAR>& t )
 
 Applying pivots
 ---------------

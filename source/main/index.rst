@@ -15,3 +15,4 @@
     citing/index
     support/index
     releases/index
+    compilers/index

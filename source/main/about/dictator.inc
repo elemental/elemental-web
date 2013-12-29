@@ -6,7 +6,7 @@
   	  <h2><a href="http://www.cc.gatech.edu/~jpoulson">Jack Poulson</a></h2>
           <div class="avatar mugshot">
 	    <img alt='Jack Poulson'
-		 src='/_static/images/mugshots/jack-poulson.jpeg' />
+		 src='/_static/images/mugshots/jack-poulson.jpg' />
 	  </div>
 	  <p><a href="http://www.cc.gatech.edu/~jpoulson">Jack</a> is an 
           Assistant Professor of Computational Science and Engineering at 

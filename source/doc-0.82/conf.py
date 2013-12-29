@@ -199,10 +199,6 @@ htmlhelp_basename = 'ElemDoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  #('demos/index-cpp', 'cpp_demos.tex', u'FEniCS Demos (C++ version)',
-  # u'FEniCS Core, https://launchpad.net/\\textasciitilde{}fenics-core', 'manual'),
-  #('demos/index-python', 'python_demos.tex', u'FEniCS Demos (Python version)',
-  # u'FEniCS Core, https://launchpad.net/\\textasciitilde{}fenics-core', 'manual'),
   ('index', 'Elemental.tex', u'Elemental Manual',
    u'Jack Poulson', 'manual'),
 ]

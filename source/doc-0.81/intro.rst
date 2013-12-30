@@ -3,37 +3,40 @@ Introduction
 
 Overview
 ========
-Elemental is a library for distributed-memory dense linear algebra that 
-is essentially a careful combination of the following:
+Elemental is a library for distributed-memory dense linear algebra that
+draws heavily from the `PLAPACK <http://cs.utexas.edu/users/plapack>`_ approach
+of building a graph of matrix distributions with a simple interface for
+redistributions (much of the syntax of the library is also inspired from
+`FLAME <http://cs.utexas.edu/users/flame>`_). Elemental is also similar in
+functionality to `ScaLAPACK <http://netlib.org/scalapack>`_, which is the very
+widely used effort towards extending `LAPACK <http://netlib.org/lapack>`_ onto
+distributed-memory architectures.
+Unlike PLAPACK and ScaLAPACK, Elemental performs all computations using
+element-wise, rather than block, matrix distributions (please see the first
+journal publication on Elemental, *Elemental: A new framework for distributed
+memory dense matrix computations*, for a detailed discussion of this design
+choice).
+Some of the unique features of Elemental include distributed implementations of:
 
-* A `PLAPACK <http://cs.utexas.edu/users/plapack>`_-like framework of matrix 
-  distributions that are trivial for users to redistribute between.
-* A `FLAME <http://cs.utexas.edu/users/flame>`_ approach to tracking 
-  submatrices within (blocked) algorithms. 
-* Element-wise distribution of matrices. One of the major benefits to this 
-  approach is the much more convenient handling of submatrices, relative to 
-  block distribution schemes.
+* Column-pivoted QR and interpolative/skeleton decompositions
+* Quadratically Weighted Dynamic Halley iteration for the polar decomposition
+* Hermitian matrix functions
+* Sign-based Lyapunov/Ricatti/Sylvester solvers
 
-Just like `ScaLAPACK <http://netlib.org/scalapack>`_ and PLAPACK, Elemental's 
-primary goal is in extending `BLAS <http://netlib.org/blas>`_ and 
-`LAPACK <http://netlib.org/lapack>`_-like functionality into distributed-memory 
-environments. 
+For the sake of objectivity, here are a few reasons why one might want to
+use ScaLAPACK or PLAPACK instead:
 
-Though Elemental already contains high-quality implementations of a large 
-portion of BLAS and LAPACK-like routines, there are a few important reasons 
-why ScaLAPACK or PLAPACK might be more appropriate:
-
-* Elemental does not yet support non-Hermitian eigenvalue problems, but 
-  ScaLAPACK does.
-* Elemental does not yet provide routines for narrowly banded linear systems,
-  though ScaLAPACK does (though you may want to consider the sparse-direct 
-  solver, `Clique <http://github.com/poulson/Clique>`__, which is built on 
-  top of Elemental).
-* Some applications exploit the block distribution format used by ScaLAPACK 
-  and PLAPACK in order to increase the efficiency of matrix 
+* This release of Elemental does not yet contain a parallel algorithm for 
+  computing Schur decompositions, but ScaLAPACK does.
+* Some applications exploit the block distribution format used by ScaLAPACK
+  and PLAPACK in order to increase the efficiency of matrix
   construction. Though it is clearly possible to redistribute the matrix into
-  an element-wise distribution format after construction, this might add 
+  an element-wise distribution format after construction, this might add
   an unnecessary level of complexity.
+* Elemental is primarily intended to be used from C++, though interfaces to
+  other languages, such as C, Fortran 90, and Python, are in various stages of
+  development. ScaLAPACK and PLAPACK routines are currently significantly more
+  straightforward to call from C and Fortran.
 
 .. note::
    At this point, the vast majority of Elemental's source code is in header 
@@ -63,9 +66,9 @@ Dependencies
   requires recent LAPACK routines).
 * `CMake <http://www.cmake.org>`_ (version 2.8.8 or later).
 
-Elemental should successfully build on nearly every platform, as it has been
-verified to build on most major desktop platforms (including Linux, Mac OS X, 
-Microsoft Windows, and Cygwin), as well as a wide variety of Linux clusters (including Blue Gene/P).
+Elemental should be straightforward to build on Unix-like platforms. 
+Building on Microsoft Windows platforms should also be possible with minor 
+effort.
 
 License and copyright
 =====================

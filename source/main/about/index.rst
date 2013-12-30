@@ -13,8 +13,9 @@ ease-of-use and high-performance.
 The development of Elemental has led to a number of 
 :doc:`research articles<../citing/index>` and 
 a number of related projects, such as the sparse-direct solver, 
-`Clique <http://github.com/poulson/Clique.git/>`__, and the parallel sweeping 
-preconditioner, `PSP <http://github.com/poulson/PSP.git/>`__.
+`Clique <http://github.com/poulson/Clique>`__, the parallel sweeping 
+preconditioner, `PSP <http://github.com/poulson/PSP>`__, and a parallel 
+algorithm for Low-rank Plus Sparse MRI, `RT-LPS-MRI <http://github.com/poulson/rt-lps-mri>`__.
 Additionally, a number of routines in Elemental, such as pivoted QR, 
 interpolative, and skeleton decompositions, were implemented as a result of 
 work on `a parallel butterfly algorithm <http://github.com/poulson/dist-butterfly.git/>`__.
@@ -23,13 +24,17 @@ work on `a parallel butterfly algorithm <http://github.com/poulson/dist-butterfl
 Features
 ********
 
-TODO
-
-**********
-Components
-**********
-
-TODO
+* Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
+* LU and Cholesky with full pivoting
+* Column-pivoted QR and interpolative/skeleton decompositions
+* Quadratically Weighted Dynamic Halley iteration for the polar decomposition
+* Spectral Divide and Conquer Schur decomposition and Hermitian EVD
+* Multi-shift Lanczos-based inverse iteration for computing pseudospectra
+* Multiple Relatively Robust Representations for the symmetric tridiagonal EVP
+* Many algorithms for Singular-Value soft-Thresholding (SVT)
+* Tall-skinny QR decompositions
+* Hermitian matrix functions
+* Sign-based Lyapunov/Ricatti/Sylvester solvers
 
 ************
 Contributors

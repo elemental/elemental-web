@@ -1,6 +1,7 @@
 # Makefile for Elemental documentation
 
 # You can set these variables from the command line
+MAKE = make
 SPHINXOPTS  =
 SPHINXBUILD = sphinx-build
 PAPER       =
@@ -63,6 +64,14 @@ latex:
 	$(SPHINXBUILD) -b latex $(OPTSPRE) source/doc-0.82-p1 build/latex/0.82-p1
 	$(SPHINXBUILD) -b latex $(OPTSPRE) source/doc-0.82 build/latex/0.82
 	$(SPHINXBUILD) -b latex $(OPTSPRE) source/doc-0.81 build/latex/0.81
+	$(MAKE) -C build/latex/dev
+	$(MAKE) -C build/latex/0.82-p1
+	$(MAKE) -C build/latex/0.82
+	$(MAKE) -C build/latex/0.81
+	cp build/latex/dev/Elemental.pdf build/html/documentation/elem-dev.pdf
+	cp build/latex/0.82-p1/Elemental.pdf build/html/documentation/elem-0.82-p1.pdf
+	cp build/latex/0.82/Elemental.pdf build/html/documentation/elem-0.82.pdf
+	cp build/latex/0.81/Elemental.pdf build/html/documentation/elem-0.81.pdf
 	@echo
 	@echo "Build finished. LaTeX generated in build/latex."
 

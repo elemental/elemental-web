@@ -62,11 +62,6 @@ The above mailing lists will eventually be publicly archived.
 Private queries should be directed to 
 `Jack Poulson <mailto:jackpoulson@lavabit.com>`__.
 
-How to ask questions
-====================
-
-TODO
-
 Contributing
 ============
 

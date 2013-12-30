@@ -15,8 +15,8 @@
           </p>
           <p>He has led the development of Elemental since its start in 2009,
              as well as that of
-             <a href="http://www.github.com/poulson/Clique.git">a distributed sparse-direct solver</a>, 
-             <a href="http://www.github.com/poulson/dist-butterfly.git">a distributed butterfly algorithm</a>, and <a href="http://bitbucket.org/poulson/dmhm">distributed hierarchical matrices</a>.
+             <a href="http://www.github.com/poulson/Clique">a sparse-direct solver</a>, 
+             <a href="http://www.github.com/poulson/dist-butterfly">butterfly algorithms</a>, and <a href="http://github.com/poulson/rt-lps-mri">Low-rank Plus Sparse MRI</a>.
           </p>
         </div>
       </div>

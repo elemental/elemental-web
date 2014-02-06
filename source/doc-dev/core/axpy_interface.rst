@@ -1,5 +1,5 @@
-The Axpy interface
-==================
+The "Axpy" interface
+====================
 The Axpy interface is Elemental's version of the PLAPACK Axpy interface, where 
 *Axpy*  is derived from the BLAS shorthand for :math:`Y := \alpha X + Y` 
 (Alpha X Plus Y). Rather than always requiring users to manually fill their 

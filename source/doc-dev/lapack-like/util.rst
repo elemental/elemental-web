@@ -7,10 +7,12 @@ Householder reflectors
 treat the identity matrix as a Householder transform since it requires the 
 :math:`u` in :math:`H=I-2uu'` to have norm zero rather than one). 
 
-.. cpp:function:: F Reflector( Matrix<F>& chi, Matrix<F>& x )
-.. cpp:function:: F Reflector( DistMatrix<F>& chi, DistMatrix<F>& x )
-
+.. cpp:function:: F LeftReflector( Matrix<F>& chi, Matrix<F>& x )
+.. cpp:function:: F LeftReflector( DistMatrix<F>& chi, DistMatrix<F>& x )
 .. cpp:function:: F reflector::Col( DistMatrix<F>& chi, DistMatrix<F>& x )
+
+.. cpp:function:: F RightReflector( Matrix<F>& chi, Matrix<F>& x )
+.. cpp:function:: F RightReflector( DistMatrix<F>& chi, DistMatrix<F>& x )
 .. cpp:function:: F reflector::Row( DistMatrix<F>& chi, DistMatrix<F>& x )
 
 .. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, int offset, const Matrix<F>& H, const Matrix<F>& t, Matrix<F>& A )
@@ -20,19 +22,6 @@ treat the identity matrix as a Householder transform since it requires the
 .. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, Matrix<F>& H, const Matrix<F>& t )
 .. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, DistMatrix<F>& H, const DistMatrix<F,MD,STAR>& t )
 .. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, DistMatrix<F>& H, const DistMatrix<F,STAR,STAR>& t )
-
-Applying pivots
----------------
-
-.. cpp:function:: void ApplyColumnPivots( Matrix<F>& A, const Matrix<int>& p )
-.. cpp:function:: void ApplyColumnPivots( DistMatrix<F>& A, const DistMatrix<int,U,V>& p )
-.. cpp:function:: void ApplyInverseColumnPivots( Matrix<F>& A, const Matrix<int>& p )
-.. cpp:function:: void ApplyInverseColumnPivots( DistMatrix<F>& A, const DistMatrix<int,U,V>& p )
-
-.. cpp:function:: void ApplyRowPivots( Matrix<F>& A, const Matrix<int>& p )
-.. cpp:function:: void ApplyRowPivots( DistMatrix<F>& A, const DistMatrix<int,U,V>& p )
-.. cpp:function:: void ApplyInverseRowPivots( Matrix<F>& A, const Matrix<int>& p )
-.. cpp:function:: void ApplyInverseRowPivots( DistMatrix<F>& A, const DistMatrix<int,U,V>& p )
 
 Sorting
 -------

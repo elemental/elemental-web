@@ -1,5 +1,5 @@
-Invariants, inner products, norms, etc.
-=======================================
+Matrix properties
+=================
 
 Condition number
 ----------------
@@ -52,6 +52,9 @@ the product of the eigenvalues (including multiplicity):
 
    \mbox{det}(A) = \prod_{i=0}^{n-1} \lambda_i.
 
+General
+^^^^^^^
+
 Since :math:`\mbox{det}(AB)=\mbox{det}(A)\mbox{det}(B)`, we can compute the 
 determinant of an arbitrary matrix in :math:`\mathcal{O}(n^3)` work by 
 computing its LU decomposition (with partial pivoting), :math:`PA=LU`, 
@@ -102,8 +105,8 @@ where :math:`\upsilon_{i,i}` is the i'th diagonal entry of :math:`U`.
    The determinant of the square matrix `A` in an expanded form 
    which is less likely to over/under-flow.
 
-HPDDeterminant
---------------
+HPD
+^^^
 A version of the above determinant specialized for Hermitian positive-definite
 matrices (which will therefore have all positive eigenvalues and a positive 
 determinant).
@@ -294,15 +297,6 @@ important characterization.
 
    Return the trace of the square matrix `A`.
 
-Hadamard
---------
-The Hadamard product of two :math:`m \times n` matrices :math:`A` and 
-:math:`B` is given entrywise by :math:`\alpha_{i,j} \beta_{i,j}` and denoted
-by :math:`C = A \circ B`.
-
-.. cpp:function:: void Hadamard( const Matrix<F>& A, const Matrix<F>& B, Matrix<F>& C )
-.. cpp:function:: void Hadamard( const DistMatrix<F,U,V>& A, const DistMatrix<F,U,V>& B, DistMatrix<F,U,V>& C )
-
 HermitianInertia
 ----------------
 
@@ -312,11 +306,3 @@ HermitianInertia
    Returns the triplet containing the number of positive, negative, and 
    zero eigenvalues of the Hermitian matrix by analyzing the block diagonal
    resulting from a pivoted LDL factorization.
-
-HilbertSchmidt
---------------
-The Hilbert-Schmidt inner-product of two :math:`m \times n` matrices :math:`A`
-and :math:`B` is :math:`\mbox{tr}(A^H B)`.
-
-.. cpp:function:: F HilbertSchmidt( const Matrix<F>& A, const Matrix<F>& B )
-.. cpp:function:: F HilbertSchmidt( const DistMatrix<F,U,V>& A, const DistMatrix<F,U,V>& B )

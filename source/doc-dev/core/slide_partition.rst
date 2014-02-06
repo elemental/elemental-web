@@ -1,5 +1,5 @@
-Sliding partitions
-==================
+Moving partitions
+=================
 
 SlidePartitionUp
 ----------------

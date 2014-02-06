@@ -1,5 +1,5 @@
-Repartitioning
-==============
+Repartitioning matrices
+=======================
 
 RepartitionUp
 -------------

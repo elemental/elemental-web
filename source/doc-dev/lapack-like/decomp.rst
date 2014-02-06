@@ -1,5 +1,5 @@
-Eigensolvers and SVD
-====================
+Matrix decompositions
+=====================
 
 Hermitian eigensolver
 ---------------------

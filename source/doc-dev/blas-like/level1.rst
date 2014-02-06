@@ -95,6 +95,31 @@ Returns :math:`x^T y`, which is **not** an inner product.
 .. cpp:function:: T Dotu( const Matrix<T>& x, const Matrix<T>& y )
 .. cpp:function:: T Dotu( const DistMatrix<T,U,V>& x, const DistMatrix<T,U,V>& y )
 
+Hadamard
+--------
+.. note::
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+The Hadamard product of two :math:`m \times n` matrices :math:`A` and
+:math:`B` is given entrywise by :math:`\alpha_{i,j} \beta_{i,j}` and denoted
+by :math:`C = A \circ B`.
+
+.. cpp:function:: void Hadamard( const Matrix<F>& A, const Matrix<F>& B, Matrix<F>& C )
+.. cpp:function:: void Hadamard( const DistMatrix<F,U,V>& A, const DistMatrix<F,U,V>& B, DistMatrix<F,U,V>& C )
+
+HilbertSchmidt
+--------------
+.. note::
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+The Hilbert-Schmidt inner-product of two :math:`m \times n` matrices :math:`A`
+and :math:`B` is :math:`\mbox{tr}(A^H B)`.
+
+.. cpp:function:: F HilbertSchmidt( const Matrix<F>& A, const Matrix<F>& B )
+.. cpp:function:: F HilbertSchmidt( const DistMatrix<F,U,V>& A, const DistMatrix<F,U,V>& B )
+
 MakeTrapezoidal
 ---------------
 .. note::

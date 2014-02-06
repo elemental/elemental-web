@@ -394,6 +394,12 @@ Other typedefs and enums
         \|A\|_{\infty} = \max_{\|x\|_{\infty}=1} \|Ax\|_{\infty} 
                        = \max_i \sum_{j=0}^{n-1} |\alpha_{i,j}|
 
+   * ``ENTRYWISE_ONE_NORM``:
+
+     .. math::
+
+       \|\text{vec}(A)\|_1 = \sum_{i,j} |\alpha_{i,j}|
+
    * ``MAX_NORM``:
 
      .. math::
@@ -449,13 +455,13 @@ Indexing utilities
    this routine returns the first entry owned by the process with rank
    `rank`.
 
-.. cpp:function:: int LocalLength( int n, int shift, int numProcs )
+.. cpp:function:: int Length( int n, int shift, int numProcs )
 
    Given a vector with :math:`n` entries distributed over `numProcs` 
    processes with shift as defined above, this routine returns the number of 
    entries of the vector which are owned by this process.
 
-.. cpp:function:: int LocalLength( int n, int rank, int firstRank, int numProcs )
+.. cpp:function:: int Length( int n, int rank, int firstRank, int numProcs )
 
    Given a vector with :math:`n` entries distributed over `numProcs` 
    processes, with the first entry owned by process `firstRank`, this routine

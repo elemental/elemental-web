@@ -176,9 +176,8 @@ trapezoid.
 .. cpp:function:: void LQ( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t )
 
    Overwrite the complex matrix :math:`A` with :math:`L` and the 
-   Householder reflectors representing :math:`\hat Q`. In the complex case, 
-   phase information is needed in order to define the (generalized) 
-   Householder transformations and is stored in the column vector `t`.
+   Householder reflectors representing :math:`\hat Q`. The scalings for the
+   Householder reflectors are stored in the vector `t`.
 
 lq namespace
 ^^^^^^^^^^^^
@@ -209,9 +208,8 @@ trapezoid.
 .. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t )
 
    Overwrite the complex matrix :math:`A` with :math:`R` and the 
-   Householder reflectors representing :math:`\hat Q`. In the complex case,
-   phase information is needed in order to define the (generalized) 
-   Householder transformations and is stored in the column vector `t`.
+   Householder reflectors representing :math:`\hat Q`. The scalings for the
+   Householder reflectors are stored in the vector `t`.
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<int>& p )
 .. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p )
@@ -317,9 +315,8 @@ much sparser triangular factor when the matrix is wider than it is tall.
 .. cpp:function:: void RQ( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t )
 
    Overwrite the complex matrix :math:`A` with :math:`R` and the 
-   Householder reflectors representing :math:`\hat Q`. In the complex case, 
-   phase information is needed in order to define the (generalized) 
-   Householder transformations and is stored in the column vector `t`.
+   Householder reflectors representing :math:`\hat Q`. The scalings for the
+   Householder reflectors are stored in the vector `t`.
 
 rq namespace
 ^^^^^^^^^^^^

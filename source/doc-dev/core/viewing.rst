@@ -1,5 +1,5 @@
-Viewing
-=======
+Matrix views
+============
 
 View a full matrix
 ------------------

@@ -5,6 +5,78 @@ The prototypes for the following routines can be found at
 `include/elemental/blas-like_decl.hpp <https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like_decl.hpp>`_, while the
 implementations are in `include/elemental/blas-like/level2/ <https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like/level2>`_.
 
+ApplyColumnPivots
+-----------------
+.. note:: 
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+.. cpp:function:: void ApplyColumnPivots( Matrix<F>& A, const Matrix<int>& p )
+.. cpp:function:: void ApplyColumnPivots( DistMatrix<F,U1,V1>& A, const DistMatrix<Int,U2,V2>& p )
+
+ApplyInverseColumnPivots
+------------------------
+.. note:: 
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+.. cpp:function:: void ApplyInverseColumnPivots( Matrix<F>& A, const Matrix<int>& p )
+.. cpp:function:: void ApplyInverseColumnPivots( DistMatrix<F,U1,V1>& A, const DistMatrix<Int,U2,V2>& p )
+
+ApplyRowPivots
+--------------
+.. note:: 
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+.. cpp:function:: void ApplyRowPivots( Matrix<F>& A, const Matrix<int>& p )
+.. cpp:function:: void ApplyRowPivots( DistMatrix<F,U1,V1>& A, const DistMatrix<Int,U2,V2>& p )
+
+ApplyInverseRowPivots
+---------------------
+.. note:: 
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+.. cpp:function:: void ApplyInverseRowPivots( Matrix<F>& A, const Matrix<int>& p )
+.. cpp:function:: void ApplyInverseRowPivots( DistMatrix<F,U1,V1>& A, const DistMatrix<Int,U2,V2>& p )
+
+ApplySymmetricPivots
+--------------------
+.. note:: 
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+.. cpp:function:: void ApplySymmetricPivots( UpperOrLower uplo, Matrix<F>& A, const Matrix<int>& p, bool conjugate=false )
+.. cpp:function:: void ApplySymmetricPivots( UpperOrLower uplo, DistMatrix<F>& A, const DistMatrix<Int,VC,STAR>& p, bool conjugate=false )
+
+ApplyInverseSymmetricPivots
+---------------------------
+.. note:: 
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+.. cpp:function:: void ApplyInverseSymmetricPivots( UpperOrLower uplo, Matrix<F>& A, const Matrix<int>& p, bool conjugate=false )
+.. cpp:function:: void ApplyInverseSymmetricPivots( UpperOrLower uplo, DistMatrix<F>& A, const DistMatrix<Int,VC,STAR>& p, bool conjugate=false )
+
+ComposePivots
+-------------
+.. note:: 
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+.. cpp:function:: void ComposePivots( const Matrix<int>& p, std::vector<int>& image, std::vector<int>& preimage )
+.. cpp:function:: void ComposePivots( const DistMatrix<Int,VC,STAR>& p, std::vector<int>& image, std::vector<int>& preimage )
+.. cpp:function:: void ComposePivots( const DistMatrix<Int,STAR,STAR>& p, std::vector<int>& image, std::vector<int>& preimage )
+
+.. cpp:function:: void ComposePivots( const Matrix<int>& p, int pivotOffset, std::vector<int>& image, std::vector<int>& preimage )
+.. cpp:function:: void ComposePivots( const DistMatrix<Int,STAR,STAR>& p, int pivotOffset, std::vector<int>& image, std::vector<int>& preimage )
+
+FormPivotMeta
+^^^^^^^^^^^^^
+
+.. cpp:function:: PivotMeta FormPivotMeta( mpi::Comm comm, int align, const std::vector<int>& image, const std::vector<int>& preimage )
+
 Gemv
 ----
 General matrix-vector multiply:

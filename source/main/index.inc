@@ -48,8 +48,8 @@
       <p>Through this web site, you can <a href="/about/">learn more
           about the project</a> and learn <a href="/download/">how to
           obtain</a> and <a href="/documentation/">how to use</a> our
-          software. We'd be delighted to <a href="/support/">offer
-          support</a> in case you need it,
+          software. We'd be delighted to <a href="/help/">offer
+          help</a> in case you need it,
           and <a href="/contributing/">encourage contributions</a>
           from our users.
         </p>

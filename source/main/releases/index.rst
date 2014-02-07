@@ -1,6 +1,5 @@
 .. _releases:
 
-###########################
 Release notes for Elemental
 ###########################
 .. toctree::

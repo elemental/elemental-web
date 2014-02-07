@@ -129,8 +129,8 @@ determinant).
    The determinant of the Hermitian positive-definite matrix `A` in an 
    expanded form which is less likely to over/under-flow.
 
-Norm
-----
+Matrix norms
+------------
 The following routines can return either
 :math:`\|A\|_1`, :math:`\|A\|_\infty`, :math:`\|A\|_F` (the Frobenius norm),
 the maximum entrywise norm, :math:`\|A\|_2`, or :math:`\|A\|_*`
@@ -138,20 +138,19 @@ the maximum entrywise norm, :math:`\|A\|_2`, or :math:`\|A\|_*`
 
 .. cpp:function:: Base<F> Norm( const Matrix<F>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> Norm( const DistMatrix<F,U,V>& A, NormType type=FROBENIUS_NORM )
-
-   Assumes that the input is a fully-specified matrix.
-
 .. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const Matrix<F>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const DistMatrix<F>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const Matrix<F>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const DistMatrix<F>& A, NormType type=FROBENIUS_NORM )
 
-   Same as :cpp:func:`Norm`, but the matrix is implicitly
-   Hermitian/symmetric with the data stored in the triangle specified by
-   :cpp:type:`UpperOrLower`.
-   Also, while :cpp:func:`Norm` supports every type of distribution,
-   :cpp:func:`HermitianNorm`/:cpp:func:`SymmetricNorm` currently only supports 
-   the standard matrix distribution.
+   Compute a norm of a fully-populated or implicitly symmetric/Hermitian (with 
+   the data stored in the specified triangle) matrix. 
+
+   .. note::
+
+      While :cpp:func:`Norm` supports every type of matrix distribution,
+      :cpp:func:`HermitianNorm` and :cpp:func:`SymmetricNorm` currently only support
+      the standard matrix distribution.
 
 Alternatively, one may directly call the following routines (note that the entrywise, KyFan, and Schatten norms have an extra parameter and must be called 
 directly).
@@ -265,7 +264,7 @@ directly).
    Return the number of nonzero entries in the matrix.
 
 Two-norm estimates
-------------------
+^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: Base<F> TwoNormEstimate( Matrix<F>& A, Base<F> tol=1e-6 )
 .. cpp:function:: Base<F> TwoNormEstimate( DistMatrix<F>& A, Base<F> tol=1e-6 )
@@ -276,6 +275,54 @@ Two-norm estimates
 
    Return an estimate for the two-norm which should be accurate within a 
    factor of :math:`n` times the specified tolerance.
+
+Pseudospectra
+-------------
+The :math:`\epsilon`-*pseudospectrum* of a square matrix :math:`A` is the set
+of all shifts :math:`z` such that :math:`\hat A - z` is singular for some
+:math:`\hat A` such that :math:`\| \hat A - A \|_2 < \epsilon`. In other
+words, :math:`z` is in the :math:`\epsilon`-pseudospectrum of :math:`A` if
+the smallest singular value of :math:`A - z` is less than :math:`\epsilon`.
+
+The method used by Elemental is a high-performance improvement upon the
+triangularization followed by inverse-iteration approach suggested by
+Shiu-Hong Lui in *Computation of pseudospectra by continuation* (please see
+Trefethen's *Computation of pseudospectra* for a comprehensive review).
+In particular, Elemental begins by computing the Schur decomposition of the
+given matrix, which preserves the :math:`\epsilon`-pseudospectrum, up to
+round-off error, and then simultaneously performs many Lanczos decompositions
+on the inverse normal matrix for each shift in a manner which communicates
+no more data than a standard triangular solve with many right-hand sides.
+Converged pseudospectrum estimates are deflated after convergence.
+
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+
+   Returns the norms of the shifted inverses in the vector ``invNorms`` for a
+   given set of shifts. The returned integer vector is a list of the number of
+   iterations required for convergence of each shift.
+
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+
+   Returns the norms of the shifted inverses over a 2D grid
+   (in the matrix ``invNormMap``) with the specified x and y resolutions.
+   The width of the grid in the complex plane is determined based upon the one
+   and two norms of the Schur factor. The returned integer matrix corresponds
+   to the number of iterations required for convergence at each shift in the
+   2D grid.
+
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+
+   Same as above, but the x and y widths of the 2D grid in the complex plane
+   are manually specified.
 
 Trace
 -----

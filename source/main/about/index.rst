@@ -2,7 +2,6 @@
 
 .. _About:
 
-###############
 About Elemental
 ###############
 
@@ -20,7 +19,6 @@ Additionally, a number of routines in Elemental, such as pivoted QR,
 interpolative, and skeleton decompositions, were implemented as a result of 
 work on `a parallel butterfly algorithm <http://github.com/poulson/dist-butterfly.git/>`__.
 
-********
 Features
 ********
 
@@ -36,7 +34,6 @@ Features
 * Hermitian matrix functions
 * Sign-based Lyapunov/Ricatti/Sylvester solvers
 
-************
 Contributors
 ************
 
@@ -44,7 +41,6 @@ Please see `the list of contributors <./team.html>`__ for now.
 
 .. _about_license:
 
-*******
 License
 *******
 
@@ -52,7 +48,6 @@ All of Elemental is licensed under the
 `New BSD License <http://opensource.org/licenses/BSD-3-Clause>`__ as
 published by the `Open Source Initiative <http://opensource.org>`__.
 
-*****************
 About these pages
 *****************
 

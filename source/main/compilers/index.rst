@@ -10,6 +10,7 @@ releases of Elemental:
 
 * GCC >= 4.7.1
 * Clang >= 3.4
+* Intel >= 14.0.1 (support is very recent)
 
 Releases 0.81 and before support the majority of common compilers, with the
 known exception of the Sun Studio Compilers.

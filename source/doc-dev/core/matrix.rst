@@ -98,13 +98,13 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       A `height` :math:`\times` `width` matrix is created with an unspecified
       leading dimension (though it is currently implemented as 
-      ``std::max(height,1)``).
+      :math:`\max(height,1)`).
 
    .. cpp:function:: Matrix( int height, int width, int ldim, bool fixed=false )
 
       A `height` :math:`\times` `width` matrix is created with a leading 
       dimension equal to `ldim` (which must be greater than or equal 
-      ``std::min(height,1)``).
+      :math:`\max(height,1)`).
 
    .. cpp:function:: Matrix( int height, int width, const T* buffer, int ldim, bool fixed=false )
    .. cpp:function:: Matrix( int height, int width, T* buffer, int ldim, bool fixed=false )
@@ -152,7 +152,7 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       Reconfigures the matrix to be `height` :math:`\times` `width`, but with 
       leading dimension equal to `ldim` (which must be greater than or equal to 
-      ``std::min(height,1)``).
+      :math:`\max(height,1)`).
 
    .. cpp:function:: void Attach( int height, int width, T* buffer, int ldim )
    .. cpp:function:: void LockedAttach( int height, int width, const T* buffer, int ldim )
@@ -271,41 +271,49 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
       Add the contents of :math:`d` onto the entries (or the real or imaginary 
       parts) in the `offset` diagonal.
 
+   .. cpp:function:: void MakeDiagonalReal( int offset=0 )
+
+      Force the specified diagonal of the matrix to be real.
+
+   .. cpp:function:: void ConjugateDiagonal( int offset=0 )
+
+      Conjugate the specified diagonal of the matrix. 
+
    .. rubric:: Arbitrary-submatrix manipulation
 
-   .. cpp:function:: void Get( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<T>& ASub ) const
-   .. cpp:function:: void GetRealPart( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<Base<T>>& ASub ) const
-   .. cpp:function:: void GetImagPart( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<Base<T>>& ASub ) const
+   .. cpp:function:: void GetSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<T>& ASub ) const
+   .. cpp:function:: void GetRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<Base<T>>& ASub ) const
+   .. cpp:function:: void GetImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<Base<T>>& ASub ) const
 
       Return the submatrix (or its real or imaginary part) with the specified 
       row and column indices via `ASub`.
 
-   .. cpp:function:: Matrix<T> Get( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPart( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
-   .. cpp:function:: Matrix<Base<T>> GetImagPart( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
+   .. cpp:function:: Matrix<T> GetSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
+   .. cpp:function:: Matrix<Base<T>> GetRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
+   .. cpp:function:: Matrix<Base<T>> GetImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
 
       Return the submatrix (or its real or imaginary part) with the specified
       row and column indices via C++11 move semantics.
 
-   .. cpp:function:: void Set( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<T>& ASub )
-   .. cpp:function:: void SetRealPart( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void SetImagPart( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void SetSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<T>& ASub )
+   .. cpp:function:: void SetRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void SetImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<Base<T>>& ASub )
 
       Set the submatrix (or its real or imaginary part) with the specified 
       row and column indices equal to the matrix `ASub`.
 
-   .. cpp:function:: void Update( const std::vector<int>& rowInd, const std::vector<int>& colInd, T alpha, const Matrix<T>& ASub )
-   .. cpp:function:: void UpdateRealPart( const std::vector<int>& rowInd, const std::vector<int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void UpdateImagPart( const std::vector<int>& rowInd, const std::vector<int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void UpdateSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, T alpha, const Matrix<T>& ASub )
+   .. cpp:function:: void UpdateRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void UpdateImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
 
       Update the submatrix (or its real or imaginary part) with the specified
       row and column indices with `alpha` times `ASub`.
 
-   .. cpp:function:: void MakeReal( const std::vector<int>& rowInd, const std::vector<int>& colInd )
+   .. cpp:function:: void MakeSubmatrixReal( const std::vector<int>& rowInd, const std::vector<int>& colInd )
 
       Force the submatrix with the specified row and column indices to be real.
 
-   .. cpp:function:: void Conjugate( const std::vector<int>& rowInd, const std::vector<int>& colInd )
+   .. cpp:function:: void ConjugateSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd )
 
       Conjugate the entries in the submatrix with the specified row and column
       indices.

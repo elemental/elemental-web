@@ -7,7 +7,7 @@ About Elemental
 
 Elemental is an open-source library for distributed-memory dense 
 linear algebra which attempts to strike a careful balance between 
-ease-of-use and high-performance.
+ease of use and high performance.
 
 The development of Elemental has led to a number of 
 :doc:`research articles<../citing/index>` and 

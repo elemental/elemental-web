@@ -8,12 +8,12 @@
     :hidden:
 
     about/index
-    applications/index
-    citing/index
-    compilers/index
-    contributing/index
-    documentation/index
     download/index
-    help/index
+    documentation/index
+    citing/index
+    contributing/index
     releases/index
     support/index
+    applications/index
+    compilers/index
+    help/index

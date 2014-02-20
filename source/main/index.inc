@@ -16,10 +16,10 @@
             </div>
             <div class="slide">
               <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectrum.cpp">
-              <img src="/_static/images/featured/uniform-pseudo-count.png" width="282" height="282" alt="Lanczos iteration count">
+              <img src="/_static/images/featured/uniform-pseudo-count.png" width="282" height="282" alt="Lanczos iteration counts">
               </a>
               <div class="caption">
-                <p>Lanczos iteration count for pseudospectrum</p>
+                <p>Lanczos iteration counts for pseudospectrum</p>
               </div>
             </div>
             <div class="slide">
@@ -57,7 +57,7 @@
       <p style="text-align:center;">
         <a href="/download/">
           <img style="margin-left:auto; margin-right:auto; margin-top:10px;"
-             src="/_static/download-button-0.82-p1.png" alt="Download button" />
+             src="/_static/download-button-0.83.png" alt="Download button" />
         </a>
       </p>
 

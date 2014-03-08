@@ -23,5 +23,5 @@ The bleeding-edge version of the library may be checked out using the command::
 Troubleshooting
 ***************
 
-Please see the `support page <http://libelemental.org/support>`__ for 
+Please see the `help page <http://libelemental.org/help>`__ for 
 instructions on how to best receive help troubleshooting problems.

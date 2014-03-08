@@ -59,6 +59,35 @@ Please see :cpp:func:`SetLocalTrrkBlocksize\<T>`
 and :cpp:func:`LocalTrrkBlocksize\<T>` in the :ref:`blas-tuning`
 section for information on tuning the distributed :cpp:func:`Herk`.
 
+Multi-shift Trsm
+----------------
+Solve for :math:`X` in the linear system
+
+.. math::
+
+   \text{op}(T) X - X D = Y
+
+or
+
+.. math::
+
+   X \text{op}(T) - D X = Y
+
+where :math:`T` is triangular, :math:`D` is diagonal, and :math:`\text{op}(A)` 
+is either :math:`A`, :math:`A^T`, or :math:`A^H`. The data movement
+requires almost no modification from that of :cpp:func:`Trsm`.
+
+.. note::
+
+   There is no corresponding BLAS routine, but it is a natural modification
+   of Trsm.
+
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X )
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X )
+
+   Overwrite the columns of `X` with the solutions to the shifted linear 
+   systems.
+
 Symm
 ----
 Symmetric matrix-matrix multiplication: updates

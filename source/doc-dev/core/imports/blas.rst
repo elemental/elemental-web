@@ -35,7 +35,7 @@ Level 1
    Similar to ``blas::Dot``, but this routine instead returns 
    :math:`\alpha := x^T y` (`x` is not conjugated).
 
-.. cpp:function:: Base<T>::type blas::Nrm2( int n, const T* x, int incx )
+.. cpp:function:: Base<T> blas::Nrm2( int n, const T* x, int incx )
 
    Return the Euclidean two-norm of the vector `x`, where
    :math:`||x||_2 = \sqrt{\sum_{i=0}^{n-1} |x_i|^2}`. Note that if `T` 
@@ -43,10 +43,18 @@ Level 1
    (e.g., ``T=Complex<double>`` results in a return type of `double`), 
    otherwise `T` equals the return type.
 
+.. cpp:function:: void blas::Rot( int n, F* x, int incx, F* y, int incy, Base<F> c, F s )
+
+   Apply a Givens rotation to the length `n` vectors `x` and `y`.
+
 .. cpp:function:: void blas::Scal( int n, T alpha, T* x, int incx )
 
    Performs :math:`x := \alpha x`, where :math:`x \in T^n` is stored in the 
    manner described in ``blas::Axpy``, and :math:`\alpha \in T`.
+
+.. cpp:function:: void blas::Swap( int n, T* x, int incx, T* y, int incy )
+
+   Swap the length `n` vectors `x` and `y`.
 
 Level 2
 ^^^^^^^

@@ -75,9 +75,9 @@ Given :math:`\phi, \gamma \in \mathbb{C}^{n \times n}`, carefully compute
 where :math:`c^2 + |s|^2 = 1` and the mapping from :math:`(\phi,\gamma) \rightarrow (c,s,\rho)` is "as continuous as possible", in the manner described by 
 Kahan and Demmel's "On computing Givens rotations reliably and efficiently".
 
-.. cpp:function:: void lapack::ComputeGivens( F phi, F gamma, Base<F>* c, F* s, F* rho )
+.. cpp:function:: F lapack::Givens( F phi, F gamma, Base<F>* c, F* s )
 
-   Computes a Givens rotation.
+   Computes a Givens rotation and returns the combined result, :math:`\rho`.
 
 MRRR-based Hermitian EVP 
 ^^^^^^^^^^^^^^^^^^^^^^^^

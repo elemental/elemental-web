@@ -284,9 +284,10 @@ of all shifts :math:`z` such that :math:`\hat A - z` is singular for some
 words, :math:`z` is in the :math:`\epsilon`-pseudospectrum of :math:`A` if
 the smallest singular value of :math:`A - z` is less than :math:`\epsilon`.
 
-The method used by Elemental is a high-performance improvement upon the
-triangularization followed by inverse-iteration approach suggested by
-Shiu-Hong Lui in *Computation of pseudospectra by continuation* (please see
+Elemental currently supports two methods for computing pseudospectra: 
+the first is a high-performance improvement of Shiu-Hong Lui's 
+triangularization followed by inverse iteration approach suggested in
+*Computation of pseudospectra by continuation* (please see
 Trefethen's *Computation of pseudospectra* for a comprehensive review).
 In particular, Elemental begins by computing the Schur decomposition of the
 given matrix, which preserves the :math:`\epsilon`-pseudospectrum, up to
@@ -295,19 +296,31 @@ on the inverse normal matrix for each shift in a manner which communicates
 no more data than a standard triangular solve with many right-hand sides.
 Converged pseudospectrum estimates are deflated after convergence.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+The second approach is quite similar and, instead of reducing to triangular
+form, reduces to Hessenberg form and performs multi-shift triangular solves
+in a manner similar to Greg Henry's *The shifted Hessenberg system solve 
+computation* and Purkayastha et al.'s *A parallel algorithm for the 
+Sylvester-Observer Equation*. This algorithm is not yet performance-tuned in
+Elemental, but should be preferred in massively-parallel situations where the
+Schur decomposition is considered infeasible.
+
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool schur=true, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool schur=false, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 .. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 .. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 
    Returns the norms of the shifted inverses in the vector ``invNorms`` for a
    given set of shifts. The returned integer vector is a list of the number of
    iterations required for convergence of each shift.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool schur=true, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool schur=false, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 .. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 .. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 
    Returns the norms of the shifted inverses over a 2D grid
    (in the matrix ``invNormMap``) with the specified x and y resolutions.
@@ -316,10 +329,12 @@ Converged pseudospectrum estimates are deflated after convergence.
    to the number of iterations required for convergence at each shift in the
    2D grid.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool schur=true, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool schur=false, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 .. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 .. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 
    Same as above, but the x and y widths of the 2D grid in the complex plane
    are manually specified.

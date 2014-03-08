@@ -49,6 +49,22 @@ If :math:`m \ge n`, then the first step is to form the QR factorization of
    be solved. Upon completion, :math:`A` is overwritten with its QR or LQ 
    factorization, and :math:`X` is overwritten with the solution.
 
+Multi-shift Hessenberg solves
+-----------------------------
+Solve for :math:`X` in the system
+
+.. math::
+
+   \text{op}(H) X - X D = Y
+
+where :math:`H` is Hessenberg, :math:`D` is diagonal, and :math:`\text{op}(A)` 
+is either :math:`A`, :math:`A^T`, or :math:`A^H`.
+
+.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& H, const Matrix<F>& shifts, Matrix<F>& X )
+.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F,UH,VH>& H, const DistMatrix<F,VX,STAR>& shifts, DistMatrix<F,STAR,VX>& X )
+
+   Overwrite the columsn of `X` with the solutions to shifted linear systems.
+
 Solve after Cholesky
 --------------------
 Uses an existing in-place Cholesky factorization to solve against one or more 

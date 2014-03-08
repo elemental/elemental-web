@@ -234,8 +234,8 @@ QuasiDiagonalScale
 
    This is not a standard BLAS routine.
 
-.. cpp:function:: void QuasiDiagonalScale( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<FMain>& d, const Matrix<F>& dSub, Matrix<F>& X, bool conjugate=false )
-.. cpp:function:: void QuasiDiagonalScale( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<FMain,U,V>& d, const DistMatrix<F,U,V>& dSub, DistMatrix<F>& X, bool conjugate=false )
+.. cpp:function:: void QuasiDiagonalScale( LeftOrRight side, UpperOrLower uplo, const Matrix<FMain>& d, const Matrix<F>& dSub, Matrix<F>& X, bool conjugate=false )
+.. cpp:function:: void QuasiDiagonalScale( LeftOrRight side, UpperOrLower uplo, const DistMatrix<FMain,U,V>& d, const DistMatrix<F,U,V>& dSub, DistMatrix<F>& X, bool conjugate=false )
 
    Apply a symmetric (Hermitian) quasi-diagonal matrix to the matrix X.
 
@@ -246,8 +246,8 @@ QuasiDiagonalSolve
 
    This is not a standard BLAS routine.
 
-.. cpp:function:: void QuasiDiagonalSolve( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<FMain>& d, const Matrix<F>& dSub, Matrix<F>& X, bool conjugate=false )
-.. cpp:function:: void QuasiDiagonalSolve( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<FMain,U,V>& d, const DistMatrix<F,U,V>& dSub, DistMatrix<F>& X, bool conjugate=false )
+.. cpp:function:: void QuasiDiagonalSolve( LeftOrRight side, UpperOrLower uplo, const Matrix<FMain>& d, const Matrix<F>& dSub, Matrix<F>& X, bool conjugate=false )
+.. cpp:function:: void QuasiDiagonalSolve( LeftOrRight side, UpperOrLower uplo, const DistMatrix<FMain,U,V>& d, const DistMatrix<F,U,V>& dSub, DistMatrix<F>& X, bool conjugate=false )
 
    Apply the inverse of a symmetric (Hermitian) quasi-diagonal matrix to the 
    matrix X.

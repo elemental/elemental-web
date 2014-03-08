@@ -31,7 +31,6 @@ then all of the below information is reported.
     Elemental configuration:
       Math libraries: /usr/lib/liblapack.so;/usr/lib/libblas.so
       HAVE_F90_INTERFACE
-      HAVE_PMRRR
       HAVE_MPI_REDUCE_SCATTER_BLOCK
       HAVE_MPI_IN_PLACE
       USE_BYTE_ALLGATHERS

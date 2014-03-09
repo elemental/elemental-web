@@ -20,6 +20,15 @@ thrown.
 
    Performs Cholesky factorization with full (diagonal) pivoting.
 
+.. cpp:function:: void CholeskyMod( UpperOrLower uplo, Matrix<F>& T, Base<F>& alpha, Matrix<F>& V )
+
+   Updates the Cholesky factorization to incorporate the modification
+   :math:`\alpha V V^H` to the original matrix.
+
+   .. note::
+
+      Downdates are not yet supported.
+
 It is possible to compute the Cholesky factor of a Hermitian positive
 semi-definite (HPSD) matrix through its eigenvalue decomposition, though it
 is significantly more expensive than the HPD case: Let :math:`A = U \Lambda U^H`

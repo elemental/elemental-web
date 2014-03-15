@@ -144,10 +144,12 @@
 
       	<div class="front-block block">
   	  <h2><a href="http://www3.uji.es/~gquintan/">Gregorio Quintana Orti</a></h2>
+          <!---
           <div class="avatar mugshot">
 	    <img alt='Gregorio Quintana Orti'
 		 src='/_static/images/mugshots/gregorio-quintana.jpg' />
 	  </div>
+          ---!>
 
           <p><a href="http://www3.uji.es/~gquintan/">Gregorio</a> is a professor
           of computer science at 
@@ -177,10 +179,12 @@
 
       	<div class="front-block block">
   	  <h2>Martin Schatz</h2>
+          <!---
           <div class="avatar mugshot">
 	    <img alt='Martin Schatz'
 		 src='/_static/images/mugshots/martin-schatz.jpg' />
 	  </div>
+          ---!>
 
           <p>Martin is a Ph.D. student at 
           <a href="http://www.utexas.edu">UT Austin</a> interested in the 

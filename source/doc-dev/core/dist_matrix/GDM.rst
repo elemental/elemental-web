@@ -50,7 +50,7 @@ distribution.
 
    .. rubric:: Constructors and destructors
 
-   .. cpp:function:: GeneralDistMatrix( GeneralDistMatrix<T,U,V>&& A )
+   .. cpp:function:: GeneralDistMatrix( GeneralDistMatrix<T,U,V>&& A ) noexcept
 
       A C++11 move constructor which cheaply transfers resources from `A` to
       the new matrix by swapping metadata.

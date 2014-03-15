@@ -100,7 +100,7 @@ process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossCom
       Construct the current matrix to be a redistributed copy of the input 
       matrix.
 
-   .. cpp:function:: DistMatrix( const DistMatrix<T,U,V>&& A )
+   .. cpp:function:: DistMatrix( const DistMatrix<T,U,V>&& A ) noexcept
 
       Use C++11 move semantics to construct the current matrix in a way which
       transfers the resources from the input matrix.
@@ -111,7 +111,7 @@ process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossCom
 
    .. rubric:: Assignment and reconfiguration
 
-   .. cpp:function:: const DistMatrix<T,U,V>& operator=( const DistMatrix<T,Y,Z>& A )
+   .. cpp:function:: DistMatrix<T,U,V>& operator=( const DistMatrix<T,Y,Z>& A )
 
       Set the current distributed matrix equal to the matrix `A` redistributed
       into the appropriate form.

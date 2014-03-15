@@ -11,7 +11,7 @@ prototype *does* depend upon the particular matrix distribution.
 
    .. rubric:: Constructors and destructors
 
-   .. cpp:function:: AbstractDistMatrix( AbstractDistMatrix<T>&& A )
+   .. cpp:function:: AbstractDistMatrix( AbstractDistMatrix<T>&& A ) noexcept
 
       A C++11 move constructor which transfers the metadata from the specified
       matrix over to the new matrix as a means of cheaply transferring 

@@ -21,13 +21,12 @@ thrown.
    Performs Cholesky factorization with full (diagonal) pivoting.
 
 .. cpp:function:: void CholeskyMod( UpperOrLower uplo, Matrix<F>& T, Base<F>& alpha, Matrix<F>& V )
+.. cpp:function:: void CholeskyMod( UpperOrLower uplo, DistMatrix<F>& T, Base<F>& alpha, DistMatrix<F>& V )
 
    Updates the Cholesky factorization to incorporate the modification
-   :math:`\alpha V V^H` to the original matrix.
-
-   .. note::
-
-      Downdates are not yet supported.
+   :math:`\alpha V V^H` to the original matrix. The current algorithm uses 
+   Householder transformations for updates (:math:`\alpha \ge 0`) and 
+   hyperbolic Householder transformations for downdates.
 
 It is possible to compute the Cholesky factor of a Hermitian positive
 semi-definite (HPSD) matrix through its eigenvalue decomposition, though it
@@ -176,27 +175,28 @@ form the thin factors :math:`L \in \mathbb{F}^{m \times \mbox{min}(m,n)}` and
 :math:`L` and :math:`Q` to first :math:`\mbox{min}(m,n)` columns and rows of 
 :math:`\hat L` and :math:`\hat Q`, respectively. Upon completion :math:`L` is 
 stored in the lower trapezoid of :math:`A` and the Householder reflectors 
-representing :math:`\hat Q` are stored within the rows of the strictly upper 
-trapezoid.
+(and preceding unitary diagonal matrix forcing :math:`L` to have a positive 
+diagonal, defined by the vector `d`) representing :math:`\hat Q` are stored 
+within the rows of the strictly upper trapezoid.
 
 .. cpp:function:: void LQ( Matrix<F>& A )
 .. cpp:function:: void LQ( DistMatrix<F>& A )
-.. cpp:function:: void LQ( Matrix<F>& A, Matrix<F>& t )
-.. cpp:function:: void LQ( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t )
+.. cpp:function:: void LQ( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d )
+.. cpp:function:: void LQ( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d )
 
-   Overwrite the complex matrix :math:`A` with :math:`L` and the 
+   Overwrite the matrix :math:`A` with :math:`L` and the 
    Householder reflectors representing :math:`\hat Q`. The scalings for the
-   Householder reflectors are stored in the vector `t`.
+   Householder reflectors are stored in the vector `t` and the diagonal 
+   matrix which forces :math:`L` to be positive in `d`.
 
 lq namespace
 ^^^^^^^^^^^^
 
-.. cpp:function:: void lq::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
-.. cpp:function:: void lq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
-.. cpp:function:: void lq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
+.. cpp:function:: void lq::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, Matrix<F>& B )
+.. cpp:function:: void lq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,Ut,Vt>& t, const DistMatrix<Base<F>,Ud,Vd>& d, DistMatrix<F>& B )
 
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
-   `A` and `t` from either the left or the right to :math:`B`.
+   `A`, `t`, and `d` from either the left or the right to :math:`B`.
 
 :math:`QR` factorization
 ------------------------
@@ -209,21 +209,23 @@ form the thin factors :math:`Q \in \mathbb{F}^{m \times \mbox{min}(m,n)}` and
 :math:`\hat Q` and :math:`\hat R`, respectively. Upon completion :math:`R` is 
 stored in the upper trapezoid of :math:`A` and the Householder reflectors 
 representing :math:`\hat Q` are stored within the columns of the strictly lower 
-trapezoid.
+trapezoid (this unitary matrix is scaled from the right by a unitary diagonal
+matrix with entries given by `d` so that :math:`R` has a positive diagonal).
 
 .. cpp:function:: void QR( Matrix<F>& A )
 .. cpp:function:: void QR( DistMatrix<F>& A )
-.. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t )
-.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t )
+.. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d )
+.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d )
 
-   Overwrite the complex matrix :math:`A` with :math:`R` and the 
-   Householder reflectors representing :math:`\hat Q`. The scalings for the
+   Overwrite the matrix :math:`A` with :math:`R` and the 
+   Householder reflectors (and subsequent unitary diagonal matrix defined by
+   the vector, `d`) representing :math:`\hat Q`. The scalings for the
    Householder reflectors are stored in the vector `t`.
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<int>& p )
 .. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p )
-.. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<int>& p )
-.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<int,VR,STAR>& p )
+.. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p )
+.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,VR,STAR>& p )
 
    Column-pivoted QR factorization. The current implementation uses 
    Businger-Golub pivoting.
@@ -242,17 +244,16 @@ qr namespace
 
    Additionally explicitly return the :math:`R` from the QR factorization.
 
-.. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
-.. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
-.. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
+.. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, Matrix<F>& B )
+.. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,Ut,Vt>& t, const DistMatrix<Base<F>,Ud,Vd>& d, DistMatrix<F>& B )
 
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
-   `A` and `t` from either the left or the right to :math:`B`.
+   `A`, `t`, and `d` from either the left or the right to :math:`B`.
 
 .. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p )
 .. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p )
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<int>& p )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<int,VR,STAR>& p )
+.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p )
+.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,VR,STAR>& p )
 
    Column-pivoted versions of the above routines which use the Businger/Golub 
    strategy, i.e., the pivot is chosen as the remaining column with maximum
@@ -260,8 +261,8 @@ qr namespace
 
 .. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p, int numSteps )
 .. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p, int numSteps )
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<int>& p, int numSteps )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<int,VR,STAR>& p, int numSteps )
+.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p, int numSteps )
+.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,VR,STAR>& p, int numSteps )
 
    Same as above, but only execute a fixed number of steps of the rank-revealing
    factorization.
@@ -285,6 +286,10 @@ qr namespace
 
       Phases from initial QR factorization
 
+   .. cpp:member:: Matrix<Base<F>> d0
+
+      Signature (-1,+1) which scales the Householder matrix from the right.
+
    .. cpp:member:: std::vector<Matrix<F>> QRList
 
       Factorizations within reduction tree
@@ -292,6 +297,10 @@ qr namespace
    .. cpp:member:: std::vector<Matrix<F>> tList
 
       Phases within reduction tree
+
+   .. cpp:member:: std::vector<Matrix<Base<F>>> dList
+
+      Signatures within reduction tree
 
 .. cpp:function:: qr::TreeData<F> qr::TS( const DistMatrix<F,U,STAR>& A )
 
@@ -320,22 +329,22 @@ much sparser triangular factor when the matrix is wider than it is tall.
 
 .. cpp:function:: void RQ( Matrix<F>& A )
 .. cpp:function:: void RQ( DistMatrix<F>& A )
-.. cpp:function:: void RQ( Matrix<F>& A, Matrix<F>& t )
-.. cpp:function:: void RQ( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t )
+.. cpp:function:: void RQ( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d )
+.. cpp:function:: void RQ( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d )
 
-   Overwrite the complex matrix :math:`A` with :math:`R` and the 
+   Overwrite the matrix :math:`A` with :math:`R` and the 
    Householder reflectors representing :math:`\hat Q`. The scalings for the
-   Householder reflectors are stored in the vector `t`.
+   Householder reflectors are stored in the vector `t` and the unitary diagonal
+   matrix which forces :math:`R` to be positive is defined by the vector `d`.
 
 rq namespace
 ^^^^^^^^^^^^
 
-.. cpp:function:: void rq::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
-.. cpp:function:: void rq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
-.. cpp:function:: void rq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
+.. cpp:function:: void rq::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, Matrix<F>& B )
+.. cpp:function:: void rq::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,Ut,Vt>& t, const DistMatrix<Base<F>,Ud,Vd>& d, DistMatrix<F>& B )
 
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
-   `A` and `t` from either the left or the right to :math:`B`.
+   `A`, `t`, and `d` from either the left or the right to :math:`B`.
 
 Interpolative Decomposition (ID)
 --------------------------------

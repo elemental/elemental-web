@@ -59,6 +59,20 @@ where :math:`op(D)` equals :math:`D=D^T`, or :math:`D^H=\bar D`, where
 .. cpp:function:: void DiagonalScale( LeftOrRight side, Orientation orientation, const Matrix<T>& d, Matrix<T>& X )
 .. cpp:function:: void DiagonalScale( LeftOrRight side, Orientation orientation, const DistMatrix<T,U,V>& d, DistMatrix<T,W,Z>& X )
 
+DiagonalScaleTrapezoid
+----------------------
+.. note::
+
+   This is not a standard BLAS routine, but it is BLAS-like.
+
+Performs either :math:`A := \mbox{op}(D) A` or :math:`A := A \mbox{op}(D)`, 
+where :math:`A` is trapezoidal (upper or lower with the boundary diagonal 
+of given offset), :math:`op(D)` equals :math:`D=D^T`, or :math:`D^H=\bar D`, 
+where :math:`D = \mbox{diag}(d)` and :math:`d` is a column vector.
+
+.. cpp:function:: void DiagonalScaleTrapezoid( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<T>& d, Matrix<T>& A, int offset=0 )
+.. cpp:function:: void DiagonalScaleTrapezoid( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<T,U,V>& d, DistMatrix<T,W,Z>& A, int offset=0 )
+
 DiagonalSolve
 -------------
 .. note::
@@ -127,15 +141,13 @@ MakeTrapezoidal
    This is not a standard BLAS routine, but it is BLAS-like.
 
 Sets all entries outside of the specified trapezoidal submatrix to zero.
-The diagonal of the trapezoidal matrix is defined relative to either the 
-upper-left or bottom-right corner of the matrix, depending on the 
-value of ``side``; whether or not the trapezoid is upper or lower
+Whether or not the trapezoid is upper or lower
 (analogous to an upper or lower-triangular matrix) is determined by the 
 ``uplo`` parameter, and the last diagonal is defined with the ``offset`` 
 integer.
 
-.. cpp:function:: void MakeTrapezoidal( UpperOrLower uplo, Matrix<T>& A, int offset=0, LeftOrRight side=LEFT )
-.. cpp:function:: void MakeTrapezoidal( UpperOrLower uplo, DistMatrix<T,U,V>& A, int offset=0, LeftOrRight side=LEFT )
+.. cpp:function:: void MakeTrapezoidal( UpperOrLower uplo, Matrix<T>& A, int offset=0 )
+.. cpp:function:: void MakeTrapezoidal( UpperOrLower uplo, DistMatrix<T,U,V>& A, int offset=0 )
 
 Nrm2
 ----
@@ -162,8 +174,8 @@ ScaleTrapezoid
 Scales the entries within the specified trapezoid of a general matrix.
 The parameter conventions follow those of ``MakeTrapezoidal`` described above.
 
-.. cpp:function:: void ScaleTrapezoid( T alpha, UpperOrLower uplo, Matrix<T>& A, int offset=0, LeftOrRight side=LEFT )
-.. cpp:function:: void ScaleTrapezoid( T alpha, UpperOrLower uplo, DistMatrix<T,U,V>& A, int offset=0, LeftOrRight side=LEFT )
+.. cpp:function:: void ScaleTrapezoid( T alpha, UpperOrLower uplo, Matrix<T>& A, int offset=0 )
+.. cpp:function:: void ScaleTrapezoid( T alpha, UpperOrLower uplo, DistMatrix<T,U,V>& A, int offset=0 )
 
 Transpose
 ---------

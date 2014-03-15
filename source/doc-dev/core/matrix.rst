@@ -117,7 +117,7 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       A copy (not a view) of the matrix :math:`A` is built.
 
-   .. cpp:function:: Matrix( Matrix<T>&& A )
+   .. cpp:function:: Matrix( Matrix<T>&& A ) noexcept
 
       A C++11 move constructor which creates a new matrix by moving the metadata
       from the specified matrix over to the new matrix, which cheaply gives the
@@ -130,7 +130,7 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
    .. rubric:: Assignment and reconfiguration
 
-   .. cpp:function:: const Matrix<T>& operator=( const Matrix<T>& A )
+   .. cpp:function:: Matrix<T>& operator=( const Matrix<T>& A )
 
       Create a full copy of the specified matrix.
 

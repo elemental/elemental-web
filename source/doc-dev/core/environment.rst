@@ -358,7 +358,8 @@ Other typedefs and enums
 .. cpp:type:: enum GridOrder
 
    An enum for specifying either a ``ROW_MAJOR`` or ``COLUMN_MAJOR`` ordering;
-   it is used to tune one of the algorithms in :cpp:func:`HermitianTridiag`
+   it is used to decide how to construct process grids and is also useful for 
+   tuning one of the algorithms in :cpp:func:`HermitianTridiag`
    which requires building a smaller square process grid from a rectangular 
    process grid, as the ordering of the processes can greatly impact 
    performance. See :cpp:func:`SetHermitianTridiagGridOrder`.
@@ -466,3 +467,26 @@ Indexing utilities
    processes, with the first entry owned by process `firstRank`, this routine
    returns the number of entries locally owned by the process with rank 
    `rank`.
+
+.. cpp:function:: int MaxLength( int n, int numProcs )
+
+   The maximum result of :cpp:func:`Length` with the given parameters.
+   This is useful for padding collective communication routines which are
+   almost regular.
+
+.. cpp:function:: int Mod( int a, int b )
+
+   An extension of C++'s ``%`` operator which handles cases where `a` is 
+   negative and still returns a result in :math:`[0,b)`.
+
+.. cpp:function:: int GCD( int a, int b )
+
+   Return the greatest common denominator of the integers `a` and `b`.
+
+.. cpp:function:: unsigned Log2( unsigned n )
+
+   Return the base-two logarithm of a positive integer.
+
+.. cpp:function:: bool PowerOfTwo( unsigned n )
+
+   Return whether or not a positive integer is an integer power of two.

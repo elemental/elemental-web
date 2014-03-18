@@ -7,17 +7,21 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
 
 .. cpp:type:: class Grid
 
-   .. cpp:function:: Grid( mpi::Comm comm=mpi::COMM_WORLD )
+   .. cpp:function:: Grid( mpi::Comm comm=mpi::COMM_WORLD, GridOrder order=COLUMN_MAJOR )
 
       Construct a process grid over the specified communicator and let Elemental
       decide the process grid dimensions. If no communicator is specified, 
-      mpi::COMM_WORLD is used.
+      mpi::COMM_WORLD is used. The processes in the chosen communicator are
+      arranged into a two-dimensional grid in a column-major order by default
+      but a row-major ordering can also be specified.
 
-   .. cpp:function:: Grid( mpi::Comm comm, int height )
+   .. cpp:function:: Grid( mpi::Comm comm, int height, GridOrder order=COLUMN_MAJOR )
 
       Construct a process grid over the specified communicator with the 
       given height. Note that the size of the communicator must be divisible
-      by `height`.
+      by `height`. The processes in the chosen communicator are
+      arranged into a two-dimensional grid in a column-major order by default
+      but a row-major ordering can also be specified.
 
    .. rubric:: Simple interface (simpler version of distribution-based interface)
 
@@ -32,9 +36,9 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
 
    .. cpp:function:: int Rank() const
 
-      Return our process's rank in the grid. The result is equivalent to the 
-      ``VCRank()`` function described below, but this interface is provided for
-      simplicity.
+      Return our process's rank in the grid: in the case that the 
+      processes in the grid were arranged with a column-major ordering,
+      this is :cpp:func:`VCRank`, otherwise, it is :cpp:func:`VRRank`.
 
    .. cpp:function:: int Height() const
 
@@ -49,6 +53,11 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
       Return the number of active processes in the process grid. This number 
       is equal to ``Height()`` :math:`\times` ``Width()``.
 
+   .. cpp:function:: GridOrder Order() const
+
+      Returns whether the processes were ordered in a ``COLUMN_MAJOR`` or
+      ``ROW_MAJOR`` manner in order to form the process grid.
+
    .. cpp:function:: mpi::Comm ColComm() const
 
       Return the communicator for this process's column of the process grid.
@@ -59,7 +68,9 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
 
    .. cpp:function:: mpi::Comm Comm() const
 
-      Return the communicator for the process grid.
+      Return the communicator for the process grid: in the case that the 
+      processes in the grid were arranged with a column-major ordering,
+      this is :cpp:func:`VCComm`, otherwise, it is :cpp:func:`VRComm`.
 
    .. rubric:: Distribution-based interface
 
@@ -125,16 +136,18 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
 
    .. rubric:: Advanced routines
 
-   .. cpp:function:: Grid( mpi::Comm viewingComm, mpi::Group owningGroup )
+   .. cpp:function:: Grid( mpi::Comm viewingComm, mpi::Group owningGroup, int height, GridOrder order=COLUMN_MAJOR )
 
       Construct a process grid where only a subset of the participating 
       processes should actively participate in the process grid. In particular,
       `viewingComm` should consist of the set of all processes constructing 
       this ``Grid`` instance, and `owningGroup` should define a subset of the
-      processes in `viewingComm`. Elemental then chooses the grid dimensions. 
+      processes in `viewingComm`. The height of the process grid is set to the
+      specified value and either a column-major or row-major ordering of the
+      participating processes is used to form the grid.
       Most users should not call this routine, as this type of grid is only 
       supported for a few ``DistMatrix`` types.
-      The size of `owningGroup` must be divisible by `height`.
+      Note that the size of `owningGroup` must be divisible by `height`.
 
    .. cpp:function:: int GCD() const
 

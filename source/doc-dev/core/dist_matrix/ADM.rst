@@ -279,11 +279,23 @@ prototype *does* depend upon the particular matrix distribution.
       Return the rank (in :cpp:func:`DistComm`) of the process which owns entry
       `(i,j)`.
 
+   .. cpp:function:: int GlobalRow( int iLoc ) const
+   .. cpp:function:: int GlobalCol( int jLoc ) const
+
+      Return the global row (column) index corresponding to the given local row
+      (column) index.
+
    .. cpp:function:: int LocalRow( int i ) const
    .. cpp:function:: int LocalCol( int j ) const
 
       Return the local row (column) index for row `i` (`j`); if this process
       is not assigned row `i` (column `j`), then throw an exception.
+
+   .. cpp:function:: int LocalRowOffset( int i ) const
+   .. cpp:function:: int LocalColOffset( int j ) const
+ 
+      Return the number of local rows (columns) occurring before the given
+      global row (column) index.
 
    .. cpp:function:: bool IsLocalRow( int i ) const
    .. cpp:function:: bool IsLocalCol( int j ) const

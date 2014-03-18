@@ -139,18 +139,12 @@ the maximum entrywise norm, :math:`\|A\|_2`, or :math:`\|A\|_*`
 .. cpp:function:: Base<F> Norm( const Matrix<F>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> Norm( const DistMatrix<F,U,V>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const Matrix<F>& A, NormType type=FROBENIUS_NORM )
-.. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const DistMatrix<F>& A, NormType type=FROBENIUS_NORM )
+.. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const Matrix<F>& A, NormType type=FROBENIUS_NORM )
-.. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const DistMatrix<F>& A, NormType type=FROBENIUS_NORM )
+.. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, NormType type=FROBENIUS_NORM )
 
    Compute a norm of a fully-populated or implicitly symmetric/Hermitian (with 
    the data stored in the specified triangle) matrix. 
-
-   .. note::
-
-      While :cpp:func:`Norm` supports every type of matrix distribution,
-      :cpp:func:`HermitianNorm` and :cpp:func:`SymmetricNorm` currently only support
-      the standard matrix distribution.
 
 Alternatively, one may directly call the following routines (note that the entrywise, KyFan, and Schatten norms have an extra parameter and must be called 
 directly).
@@ -158,9 +152,9 @@ directly).
 .. cpp:function:: Base<F> EntrywiseNorm( const Matrix<F>& A, Base<F> p )
 .. cpp:function:: Base<F> EntrywiseNorm( const DistMatrix<F,U,V>& A, Base<F> p )
 .. cpp:function:: Base<F> HermitianEntrywiseNorm( UpperOrLower uplo, const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> HermitianEntrywiseNorm( UpperOrLower uplo, const DistMatrix<F>& A, Base<F> p )
+.. cpp:function:: Base<F> HermitianEntrywiseNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, Base<F> p )
 .. cpp:function:: Base<F> SymmetricEntrywiseNorm( UpperOrLower uplo, const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> SymmetricEntrywiseNorm( UpperOrLower uplo, const DistMatrix<F>& A, Base<F> p )
+.. cpp:function:: Base<F> SymmetricEntrywiseNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, Base<F> p )
 
    The :math:`\ell_p` norm of the columns of `A` stacked into a single vector. 
    Note that the Frobenius norm corresponds to the :math:`p=2` case.
@@ -168,18 +162,18 @@ directly).
 .. cpp:function:: Base<F> EntrywiseOneNorm( const Matrix<F>& A )
 .. cpp:function:: Base<F> EntrywiseOneNorm( const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> HermitianEntrywiseOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianEntrywiseOneNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> HermitianEntrywiseOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> SymmetricEntrywiseOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricEntrywiseOneNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> SymmetricEntrywiseOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 
    The :math:`\ell_1` norm of the columns of `A` stacked into a single vector. 
 
 .. cpp:function:: Base<F> FrobeniusNorm( const Matrix<F>& A )
 .. cpp:function:: Base<F> FrobeniusNorm( const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> HermitianFrobeniusNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianFrobeniusNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> HermitianFrobeniusNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> SymmetricFrobeniusNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricFrobeniusNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> SymmetricFrobeniusNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 
    The :math:`\ell_2` norm of the singular values (the Schatten norm with 
    :math:`p=2`), which can be cheaply computed as the :math:`\ell_2` norm of 
@@ -197,9 +191,9 @@ directly).
 .. cpp:function:: Base<F> InfinityNorm( const Matrix<F>& A )
 .. cpp:function:: Base<F> InfinityNorm( const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> HermitianInfinityNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianInfinityNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> HermitianInfinityNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 
    The maximum :math:`\ell_1` norm of the rows of `A`. In the symmetric and 
    Hermitian cases, this is equivalent to the :math:`\|\cdot \|_1` norm.
@@ -207,9 +201,9 @@ directly).
 .. cpp:function:: Base<F> MaxNorm( const Matrix<F>& A )
 .. cpp:function:: Base<F> MaxNorm( const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> HermitianMaxNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianMaxNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> HermitianMaxNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> SymmetricMaxNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricMaxNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> SymmetricMaxNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 
    The maximum absolute value of the matrix entries.
 
@@ -228,9 +222,9 @@ directly).
 .. cpp:function:: Base<F> OneNorm( const Matrix<F>& A )
 .. cpp:function:: Base<F> OneNorm( const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> HermitianOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianOneNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> HermitianOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 .. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
 
    The maximum :math:`\ell_1` norm of the columns of `A`. In the symmetric and 
    Hermitian cases, this is equivalent to the :math:`\| \cdot \|_\infty` norm.
@@ -255,13 +249,13 @@ directly).
    equal to one and the Schatten norm with :math:`p=\infty`.
 
 .. cpp:function:: int ZeroNorm( const Matrix<F>& A )
-.. cpp:function:: int ZeroNorm( const DistMatrix<F>& A )
-.. cpp:function:: int HermitianZeroNorm( const Matrix<F>& A )
-.. cpp:function:: int HermitianZeroNorm( const DistMatrix<F>& A )
-.. cpp:function:: int SymmetricZeroNorm( const Matrix<F>& A )
-.. cpp:function:: int SymmetricZeroNorm( const DistMatrix<F>& A )
+.. cpp:function:: int ZeroNorm( const DistMatrix<F,U,V>& A )
 
    Return the number of nonzero entries in the matrix.
+
+   .. note::
+
+      Symmetric/Hermitian versions are not yet written
 
 Two-norm estimates
 ^^^^^^^^^^^^^^^^^^

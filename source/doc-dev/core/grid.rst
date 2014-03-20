@@ -159,10 +159,14 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
       Return the lowest common multiple of the height and width of the process
       grid.
 
+   .. cpp:function:: bool HaveViewers() const
+
+      Return true if there are processes which constructed this Grid instance 
+      but are not a member of the grid.
+
    .. cpp:function:: bool InGrid() const
 
-      Return whether or not our process is actively participating in the process
-      grid.
+      Return true if our process is actively participating in the process grid.
 
    .. cpp:function:: int OwningRank() const
 
@@ -218,8 +222,8 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
 
 .. cpp:function:: bool operator==( const Grid& A, const Grid& B )
 
-   Returns whether or not !A! and !B! are the same process grid.
+   Returns true if !A! and !B! are the same process grid.
 
 .. cpp:function:: bool operator!=( const Grid& A, const Grid& B )
 
-   Returns whether or not !A! and !B! are different process grids.
+   Returns true if !A! and !B! are different process grids.

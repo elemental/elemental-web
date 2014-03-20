@@ -79,22 +79,6 @@ process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossCom
 
       Create a `height` :math:`\times` `width` distributed matrix.
 
-   .. cpp:function:: DistMatrix( int height, int width, int colAlign, int rowAlign, const Grid& grid=DefaultGrid(), int root=0 )
-
-      Create a `height` :math:`\times` `width` distributed matrix with the
-      specified alignments.
-
-   .. cpp:function:: DistMatrix( int height, int width, int colAlign, int rowAlign, int ldim, const Grid& grid=DefaultGrid(), int root=0 )
-
-      Create a `height` :math:`\times` `width` distributed matrix with the
-      specified alignments and local leading dimension.
-
-   .. cpp:function:: DistMatrix( int height, int width, int colAlign, int rowAlign, T* buffer, int ldim, const Grid& grid, int root=0 )
-   .. cpp:function:: DistMatrix( int height, int width, int colAlign, int rowAlign, const T* buffer, int ldim, const Grid& grid, int root=0 )
-
-      Construct a distributed matrix with the specified dimensions, alignments,
-      underlying (immutable) buffer, and leading dimension.
-
    .. cpp:function:: DistMatrix( const DistMatrix<T,Y,Z>& A )
 
       Construct the current matrix to be a redistributed copy of the input 

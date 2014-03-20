@@ -78,12 +78,24 @@ Constants
 
    Equivalent to ``MPI_UNDEFINED``.
 
+.. cpp:member:: const mpi::Group mpi::GROUP_NULL
+
+   Equivalent to ``MPI_GROUP_NULL``.
+
+.. cpp:member:: const mpi::Comm mpi::COMM_NULL
+
+   Equivalent to ``MPI_COMM_NULL``.
+
+.. cpp:member:: const mpi::Comm mpi::COMM_SELF
+
+   Equivalent to ``MPI_COMM_SELF``.
+
 .. cpp:member:: const mpi::Comm mpi::COMM_WORLD
 
    Equivalent to ``MPI_COMM_WORLD``.
 
 .. cpp:member:: const mpi::ErrorHandler mpi::ERRORS_RETURN
-   
+
    Equivalent to ``MPI_ERRORS_RETURN``.
 
 .. cpp:member:: const mpi::ErrorHandler mpi::ERRORS_ARE_FATAL
@@ -179,11 +191,11 @@ Routines
 
 .. cpp:function:: bool mpi::Initialized()
 
-   Return whether or not MPI has been initialized.
+   Return true if MPI has been initialized.
 
 .. cpp:function:: bool mpi::Finalized()
 
-   Return whether or not MPI has been finalized.
+   Return true if MPI has been finalized.
 
 .. cpp:function:: double mpi::Time()
 
@@ -240,8 +252,8 @@ Routines
 
 .. cpp:function:: bool mpi::CongruentComms( mpi::Comm comm1, mpi::Comm comm2 )
 
-   Return whether or not the two communicators consist of the same set of 
-   processes (in the same order).
+   Return true if the two communicators consist of the same set of processes
+   (in the same order).
 
 .. cpp:function:: void mpi::ErrorHandlerSet( mpi::Comm comm, mpi::ErrorHandler errorHandler )
 
@@ -277,6 +289,15 @@ Routines
 
    Extract the underlying group from the specified communicator.
 
+.. cpp:function:: void mpi::GroupDup( mpi::Group group, mpi::Group& newGroup )
+
+   While ``MPI_Group_dup`` does not exist, we can mirror its functionality by
+   unioning a group with itself.
+
+.. cpp:function:: void mpi::GroupUnion( mpi::Group groupA, mpi::Group groupB, mpi::Group& newGroup )
+
+   Unions the ranks in groups A and B into a single new group.
+
 .. cpp:function:: void mpi::GroupIncl( mpi::Group group, int n, const int* ranks, mpi::Group& subGroup )
 
    Create a subgroup of `group` that consists of the `n` processes whose 
@@ -311,11 +332,11 @@ Routines
 
 .. cpp:function:: bool mpi::Test( mpi::Request& request )
 
-   Return whether or not the specified request has completed.
+   Return true if the specified request has completed.
 
 .. cpp:function:: bool mpi::IProbe( int source, int tag, mpi::Comm comm, mpi::Status& status )
 
-   Return whether or not there is a message ready which
+   Return true if there is a message ready which
 
    * is from the process with rank `source` in the communicator `comm`
      (note that ``mpi::ANY_SOURCE`` is allowed)

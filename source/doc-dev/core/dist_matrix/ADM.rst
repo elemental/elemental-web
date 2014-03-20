@@ -85,15 +85,15 @@ prototype *does* depend upon the particular matrix distribution.
 
    .. rubric:: Buffer attachment
 
-   .. cpp:function:: void Attach( int height, int width, int colAlign, int rowAlign, T* buffer, int ldim, const Grid& grid, int root=0 )
-   .. cpp:function:: void LockedAttach( int height, int width, int colAlign, int rowAlign, const T* buffer, int ldim, const Grid& grid, int root=0 )
+   .. cpp:function:: void Attach( int height, int width, const Grid& grid, int colAlign, int rowAlign, T* buffer, int ldim, int root=0 )
+   .. cpp:function:: void LockedAttach( int height, int width, const Grid& grid, int colAlign, int rowAlign, const T* buffer, int ldim, int root=0 )
 
       Reconfigure around the (immutable) buffer of an implicit distributed
       matrix with the specified dimensions, alignments, process grid, and 
       local leading dimension.
 
-   .. cpp:function:: void Attach( int height, int width, int colAlign, int rowAlign, Matrix<T>& A, const Grid& grid, int root=0 )
-   .. cpp:function:: void LockedAttach( int height, int width, int colAlign, int rowAlign, const Matrix<T>& A, const Grid& grid, int root=0 )
+   .. cpp:function:: void Attach( int height, int width, const Grid& grid, int colAlign, int rowAlign, Matrix<T>& A, int root=0 )
+   .. cpp:function:: void LockedAttach( int height, int width, const Grid& grid, int colAlign, int rowAlign, const Matrix<T>& A, int root=0 )
 
       Reconfigure around the (immutable) local matrix of an implicit distributed
       matrix with the specified alignments, process grid, and local leading
@@ -112,12 +112,12 @@ prototype *does* depend upon the particular matrix distribution.
 
    .. cpp:function:: bool Viewing() const
 
-      Return whether or not this matrix is viewing another.
+      Return true if this matrix is viewing another.
 
    .. cpp:function:: bool Locked() const
 
-      Return whether or not this matrix is viewing another in a manner
-      that does not allow for modifying the viewed data.
+      Return true if this matrix is viewing another in a manner that does not
+      allow for modifying the viewed data.
 
    .. cpp:function:: int LocalHeight() const
    .. cpp:function:: int LocalWidth() const
@@ -160,7 +160,7 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: bool ColConstrained() const
    .. cpp:function:: bool RowConstrained() const
 
-      Return whether or not the column (row) alignment is constrained.
+      Return true if the column (row) alignment is constrained.
 
    .. cpp:function:: int ColAlign() const
    .. cpp:function:: int RowAlign() const
@@ -260,8 +260,8 @@ prototype *does* depend upon the particular matrix distribution.
 
    .. cpp:function:: bool Participating() const
 
-      Return whether or not this process can be assigned matrix data (that is, 
-      whether or not this process is both in the process grid and the root of 
+      Return true if this process can be assigned matrix data (that is, if
+      this process is both in the process grid and the root of 
       :cpp:func:`CrossComm`).
 
    .. cpp:function:: int RowOwner( int i ) const
@@ -301,8 +301,8 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: bool IsLocalCol( int j ) const
    .. cpp:function:: bool IsLocal( int i, int j ) const
 
-      Return whether or not the row, column, or entry, respectively, is assigned
-      to this process.
+      Return true if the row, column, or entry, respectively, is assigned to
+      this process.
 
    .. cpp:function:: DistData DistData() const
 

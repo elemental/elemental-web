@@ -62,6 +62,16 @@ distribution.
       A C++11 move assignment which cheaply transfers resources from `A` to
       this matrix by swapping metadata.
 
+   .. note::
+
+      The following routines are for advanced users/developers and can be
+      safely ignored by most users.
+
+   .. cpp:function:: void Translate( DistMatrix<T,U,V>& A ) const
+
+      Handles redistributing between matrices with the same distribution and
+      grid, but possibly different alignments.
+
    .. cpp:function:: void AllGather( DistMatrix<T,UGath,VGath>& A ) const
    .. cpp:function:: void ColAllGather( DistMatrix<T,UGath,V>& A ) const
    .. cpp:function:: void RowAllGather( DistMatrix<T,U,VGath>& A ) const

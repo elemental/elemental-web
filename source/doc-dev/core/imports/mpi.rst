@@ -15,9 +15,32 @@ while the implementations are in
 Datatypes
 ^^^^^^^^^
 
-.. cpp:type:: mpi::Comm
+.. cpp:type:: struct mpi::Comm
 
-   Equivalent to ``MPI_Comm``.
+   .. cpp:member:: MPI_Comm comm
+
+   .. cpp:function:: Comm( MPI_Comm mpiComm=MPI_COMM_NULL )
+
+.. cpp:function:: bool operator==( const mpi::Comm& a, const mpi::Comm& b ) 
+.. cpp:function:: bool operator!=( const mpi::Comm& a, const mpi::Comm& b )
+
+.. cpp:type:: struct mpi::Group
+
+   .. cpp:member:: MPI_Group group
+
+   .. cpp:function:: Group( MPI_Group mpiGroup=MPI_GROUP_NULL )
+
+.. cpp:function:: bool operator==( const mpi::Group& a, const mpi::Group& b ) 
+.. cpp:function:: bool operator!=( const mpi::Group& a, const mpi::Group& b )
+
+.. cpp:type:: struct mpi::Op
+
+   .. cpp:member:: MPI_Op op
+
+   .. cpp:function:: Op( MPI_Op mpiOp=MPI_OP_NULL )
+
+.. cpp:function:: bool operator==( const mpi::Op& a, const mpi::Op& b ) 
+.. cpp:function:: bool operator!=( const mpi::Op& a, const mpi::Op& b )
 
 .. cpp:type:: mpi::Datatype
 
@@ -26,14 +49,6 @@ Datatypes
 .. cpp:type:: mpi::ErrorHandler
 
    Equivalent to ``MPI_Errhandler``.
-
-.. cpp:type:: mpi::Group
-
-   Equivalent to ``MPI_Group``.
-
-.. cpp:type:: mpi::Op
-
-   Equivalent to ``MPI_Op``.
 
 .. cpp:type:: mpi::Request
 
@@ -201,7 +216,7 @@ Routines
 
    Return the current wall-time in seconds.
 
-.. cpp:function:: void mpi::OpCreate( mpi::UserFunction* func, bool commutes, Op& op )
+.. cpp:function:: void mpi::Create( mpi::UserFunction* func, bool commutes, Op& op )
 
    Create a custom operation for use in reduction routines, e.g., 
    ``mpi::Reduce``, ``mpi::AllReduce``, and ``mpi::ReduceScatter``, where
@@ -217,40 +232,40 @@ Routines
    the operation ``b[i] = a[i] op b[i], for i=0,...,length-1``, can be 
    performed in an arbitrary order (for example, using a minimum spanning tree).
 
-.. cpp:function:: void mpi::OpFree( mpi::Op& op )
+.. cpp:function:: void mpi::Free( mpi::Op& op )
 
    Free the specified MPI reduction operator.
 
 .. rubric:: Communicator manipulation
 
-.. cpp:function:: int mpi::CommRank( mpi::Comm comm )
+.. cpp:function:: int mpi::Rank( mpi::Comm comm )
 
    Return our rank in the specified communicator.
 
-.. cpp:function:: int mpi::CommSize( mpi::Comm comm )
+.. cpp:function:: int mpi::Size( mpi::Comm comm )
 
    Return the number of processes in the specified communicator.
 
-.. cpp:function:: void mpi::CommCreate( mpi::Comm parentComm, mpi::Group subsetGroup, mpi::Comm& subsetComm )
+.. cpp:function:: void mpi::Create( mpi::Comm parentComm, mpi::Group subsetGroup, mpi::Comm& subsetComm )
 
    Create a communicator (`subsetComm`) which is a subset of `parentComm` 
    consisting of the processes specified by `subsetGroup`.
 
-.. cpp:function:: void mpi::CommDup( mpi::Comm original, mpi::Comm& duplicate )
+.. cpp:function:: void mpi::Dup( mpi::Comm original, mpi::Comm& duplicate )
 
    Create a copy of a communicator.
 
-.. cpp:function:: void mpi::CommSplit( mpi::Comm comm, int color, int key, mpi::Comm& newComm )
+.. cpp:function:: void mpi::Split( mpi::Comm comm, int color, int key, mpi::Comm& newComm )
 
    Split the communicator `comm` into different subcommunicators, where each 
    process specifies the `color` (unique integer) of the subcommunicator it 
    will reside in, as well as its `key` (rank) for the new subcommunicator.
 
-.. cpp:function:: void mpi::CommFree( mpi::Comm& comm )
+.. cpp:function:: void mpi::Free( mpi::Comm& comm )
 
    Free the specified communicator.
 
-.. cpp:function:: bool mpi::CongruentComms( mpi::Comm comm1, mpi::Comm comm2 )
+.. cpp:function:: bool mpi::Congruent( mpi::Comm comm1, mpi::Comm comm2 )
 
    Return true if the two communicators consist of the same set of processes
    (in the same order).
@@ -277,11 +292,11 @@ Routines
 
 .. rubric:: Group manipulation
 
-.. cpp:function:: int mpi::GroupRank( mpi::Group group )
+.. cpp:function:: int mpi::Rank( mpi::Group group )
 
    Return our rank in the specified group.
 
-.. cpp:function:: int mpi::GroupSize( mpi::Group group )
+.. cpp:function:: int mpi::Size( mpi::Group group )
 
    Return the number of processes in the specified group.
 
@@ -289,33 +304,44 @@ Routines
 
    Extract the underlying group from the specified communicator.
 
-.. cpp:function:: void mpi::GroupDup( mpi::Group group, mpi::Group& newGroup )
+.. cpp:function:: void mpi::Dup( mpi::Group group, mpi::Group& newGroup )
 
    While ``MPI_Group_dup`` does not exist, we can mirror its functionality by
    unioning a group with itself.
 
-.. cpp:function:: void mpi::GroupUnion( mpi::Group groupA, mpi::Group groupB, mpi::Group& newGroup )
+.. cpp:function:: void mpi::Union( mpi::Group groupA, mpi::Group groupB, mpi::Group& newGroup )
 
    Unions the ranks in groups A and B into a single new group.
 
-.. cpp:function:: void mpi::GroupIncl( mpi::Group group, int n, const int* ranks, mpi::Group& subGroup )
+.. cpp:function:: void mpi::Incl( mpi::Group group, int n, const int* ranks, mpi::Group& subGroup )
 
    Create a subgroup of `group` that consists of the `n` processes whose 
    ranks are specified in the `ranks` array.
 
-.. cpp:function:: void mpi::GroupDifference( mpi::Group parent, mpi::Group subset, mpi::Group& complement )
+.. cpp:function:: void mpi::Difference( mpi::Group parent, mpi::Group subset, mpi::Group& complement )
 
    Form a group (`complement`) out of the set of processes which are in 
    the `parent` communicator, but not in the `subset` communicator.
 
-.. cpp:function:: void mpi::GroupFree( mpI::Group& group )
+.. cpp:function:: void mpi::Free( mpI::Group& group )
 
    Free the specified group.
 
-.. cpp:function:: void mpi::GroupTranslateRanks( mpi::Group origGroup, int size, const int* origRanks, mpi::Group newGroup, int* newRanks )
+.. cpp:function:: int mpi::Translate( mpi::Group origGroup, int origRank, mpi::Group newGroup )
+.. cpp:function:: int mpi::Translate( mpi::Comm origComm, int origRank, mpi::Group newGroup )
+.. cpp:function:: int mpi::Translate( mpi::Group origGroup, int origRank, mpi::Comm newComm )
+.. cpp:function:: int mpi::Translate( mpi::Comm origComm, int origRank, mpi::Comm newComm )
 
-   Return the ranks within `newGroup` of the `size` processes specified 
-   by their ranks in the `origGroup` communicator using the `origRanks` 
+   Return the new rank within `newGroup` (`newComm`) of the process
+   specified by its rank in `origGroup` (`origComm`).
+
+.. cpp:function:: void mpi::Translate( mpi::Group origGroup, int size, const int* origRanks, mpi::Group newGroup, int* newRanks )
+.. cpp:function:: void mpi::Translate( mpi::Comm origComm, int size, const int* origRanks, mpi::Group newGroup, int* newRanks )
+.. cpp:function:: void mpi::Translate( mpi::Group origGroup, int size, const int* origRanks, mpi::Comm newComm, int* newRanks )
+.. cpp:function:: void mpi::Translate( mpi::Comm origComm, int size, const int* origRanks, mpi::Comm newComm, int* newRanks )
+
+   Return the ranks within `newGroup` (`newComm`) of the `size` processes 
+   specified by their ranks in `origGroup` (`origComm`) using the `origRanks` 
    array. The result will be in the `newRanks` array, which must have been 
    preallocated to a length at least as large as `size`.
 

@@ -82,9 +82,21 @@ Kahan and Demmel's "On computing Givens rotations reliably and efficiently".
 MRRR-based Hermitian EVP 
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void lapack::HermitianEig( char job, char range, char uplo, int n, F* A, int lda, Base<F> vl, Base<F> vu, int il, int iu, Base<F> abstol, Base<F>* w, F* Z, int ldz )
+.. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, Base<F> absTol=0 )
+.. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, F* Z, int ldz, Base<F> absTol=0 )
 
-   Computes the eigenvalue decomposition of a Hermitian matrix using MRRR.
+   Compute all eigen-values/pairs of a Hermitian matrix.
+
+.. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, int il, int iu, Base<F> absTol=0 )
+.. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, F* Z, int ldz, int il, int iu, Base<F> absTol=0 )
+
+   Compute the `il`'th through `iu`'th eigen-values/pairs of a Hermitian matrix.
+
+.. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, Base<F> vl, Base<F> vu, Base<F> absTol=0 )
+.. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, F* Z, int ldz, Base<F> vl, Base<F> vu, Base<F> absTol=0 )
+
+   Compute the eigen-values/pairs of a Hermitian matrix with eigenvalues in the
+   half-open interval :math:`(v_l,v_u]`.
 
 QR- and DQDS-based SVD
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -114,21 +126,52 @@ Bidiagonal QR
 
    Computes the SVD of a bidiagonal matrix using the QR algorithm.
 
-Hessenberg QR
-^^^^^^^^^^^^^
+Hessenberg Schur decomposition
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cpp:function:: void lapack::HessenbergSchur( int n, F* H, int ldh, Complex<Base<F>>* w, bool fullTriangle=false )
+
+   Computes the eigenvalues (and possibly the full Schur factor) of an upper 
+   Hessenberg matrix using the QR algorithm.
+
+.. cpp:function:: void lapack::HessenbergSchur( int n, F* H, int ldh, Complex<Base<F>>* w, F* Q, int ldq, bool fullTriangle=true, bool multiplyQ=false )
+
+   Computes the eigenvalues (and possibly the full Schur factor) as well as 
+   the Schur vectors of of an upper Hessenberg matrix using the QR algorithm.
+   If `multiplyQ` is true, then the Schur vectors are multiplied against the
+   input matrix from the right.
+
+Hessenberg eigenvalues/pairs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void lapack::HessenbergEig( int n, F* H, int ldh, Complex<Base<F>>* w )
 
    Computes the eigenvalues of an upper Hessenberg matrix using the QR 
    algorithm.
 
+.. note::
+
+   There are not yet wrappers for computing Hessenberg eigenvectors.
+
 Schur decomposition
 ^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void lapack::Eig( int n, F* A, int lda, Complex<Base<F>>* w, bool fullTriangle=false )
+.. cpp:function:: void lapack::Schur( int n, F* A, int lda, Complex<Base<F>>* w, bool fullTriangle=false )
+
+   Returns the eigenvalues (and possibly also the Schur factor) of a square 
+   matrix using the QR algorithm.
+
+.. cpp:function:: void lapack::Schur( int n, F* A, int lda, Complex<Base<F>>* w, F* Q, int ldq, bool fullTriangle=true )
+
+   Returns the Schur decomposition of a square matrix using the QR algorithm.
+
+Eigenvalues/pairs
+^^^^^^^^^^^^^^^^^
+
+.. cpp:function:: void lapack::Eig( int n, F* A, int lda, Complex<Base<F>>* w )
 
    Returns the eigenvalues of a square matrix using the QR algorithm.
 
-.. cpp:function:: void lapack::Schur( int n, F* A, int lda, F* Q, int ldq, Complex<Base<F>>* w, bool fullTriangle=true )
+.. note::
 
-   Returns the Schur decomposition of a square matrix using the QR algorithm.
+   There are not yet wrappers for computing general eigenvectors.

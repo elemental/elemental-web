@@ -162,6 +162,11 @@ prototype *does* depend upon the particular matrix distribution.
 
       Return true if the column (row) alignment is constrained.
 
+   .. cpp:function:: bool RootConstrained() const
+
+      Return if the root (the alignment with respect to the 
+      :cpp:func:`CrossComm`) is constrained.
+
    .. cpp:function:: int ColAlign() const
    .. cpp:function:: int RowAlign() const
 

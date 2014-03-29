@@ -17,3 +17,4 @@ works.
    imports/mpi
    imports/pmrrr
    imports/flame
+   imports/scalapack

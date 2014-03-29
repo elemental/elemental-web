@@ -14,8 +14,8 @@ Elemental's main dependencies are
 3. `BLAS <http://netlib.org/blas>`__ 
 4. `LAPACK <http://netlib.org/lapack>`__ 
 
-and it includes the package `PMRRR <http://code.google.com/p/pmrrr>`_, which is
-required for Elemental's parallel symmetric tridiagonal eigensolver. 
+and it includes the package `PMRRR <http://code.google.com/p/pmrrr>`_, which 
+Elemental uses for its parallel symmetric tridiagonal eigensolver. 
 Furthermore, `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
 for faster SVD's due to its high-performance bidiagonal QR algorithm 
 implementation, and `Qt5 <http://qt-project.org>`_ is required for matrix
@@ -149,8 +149,8 @@ PMRRR is a parallel implementation of the MRRR algorithm introduced by
 :math:`k` eigenvectors of a tridiagonal matrix of size :math:`n` in 
 :math:`\mathcal{O}(nk)` time. PMRRR was written by 
 `Matthias Petschow <http://www.aices.rwth-aachen.de/people/petschow>`_ and 
-`Paolo Bientinesi <http://www.aices.rwth-aachen.de/people/bientinesi>`_ and is 
-available at:
+`Paolo Bientinesi <http://www.aices.rwth-aachen.de/people/bientinesi>`_ and,
+while it is included within Elemental, it is also available at:
 
     http://code.google.com/p/pmrrr
 
@@ -345,7 +345,7 @@ Elemental source tree in a subdirectory of your main project folder, say
 ``external/elemental``, and then create a ``CMakeLists.txt`` file in your main 
 project folder that builds off of the following snippet::
 
-    cmake_minimum_required(VERSION 2.8.5) 
+    cmake_minimum_required(VERSION 2.8.8) 
     project(Foo)
 
     add_subdirectory(external/elemental)
@@ -360,10 +360,10 @@ project folder that builds off of the following snippet::
 Troubleshooting
 ===============
 If you run into build problems, please email 
-`elemental-maint@googlegroups.com <mailto:elemental-maint@googlegroups.com>`_ 
+`maint@libelemental.org <mailto:maint@libelemental.org>`_ 
 and make sure to attach the file ``include/elemental/config.h``, which should 
 be generated within your build directory. 
 Please only direct usage questions to 
-`elemental-user@googlegroups.com <mailto:elemental-user@googlegroups.com>`_, 
+`users@libelemental.org <mailto:users@libelemental.org>`_, 
 and development questions to 
-`elemental-dev@googlegroups.com <mailto:elemental-dev@googlegroups.com>`_.
+`dev@libelemental.org <mailto:dev@libelemental.org>`_.

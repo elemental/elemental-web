@@ -294,10 +294,23 @@ Granat et al.'s parallel QR algorithm.
 Hessenberg QR algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w )
-.. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q )
+.. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool fullTriangle=false )
+.. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool fullTriangle=true )
 
-   Use a sequential QR algorithm to compute the Schur decomposition.
+   Condense the matrix to upper-Hessenberg form and then use a sequential QR 
+   algorithm to compute a (partial) Schur decomposition. 
+   It is optional whether or not the full Schur factor is computed.
+
+.. cpp:function:: void schur::QR( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool fullTriangle=false, bool aed=false )
+.. cpp:function:: void schur::QR( BlockDistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool fullTriangle=false, bool aed=false )
+.. cpp:function:: void schur::QR( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, DistMatrix<F>& Q, bool fullTriangle=true, bool aed=false )
+.. cpp:function:: void schur::QR( BlockDistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, BlockDistMatrix<F>& Q, bool fullTriangle=true, bool aed=false )
+
+   Condense the matrix to upper-Hessenberg form and then use ScaLAPACK's 
+   parallel QR algorithm to compute a (partial) Schur decomposition.
+   It is optional whether or not the full Schur factor is computed, and 
+   Aggressive Early Deflation is also optional for real matrices (as of now,
+   its usage is not recommended due to known bugs in the implementation).
 
 Spectral divide and conquer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

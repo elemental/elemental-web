@@ -15,7 +15,7 @@ while the implementations are in
 Datatypes
 ^^^^^^^^^
 
-.. cpp:type:: struct mpi::Comm
+.. cpp:type:: mpi::Comm
 
    .. cpp:member:: MPI_Comm comm
 
@@ -24,7 +24,7 @@ Datatypes
 .. cpp:function:: bool operator==( const mpi::Comm& a, const mpi::Comm& b ) 
 .. cpp:function:: bool operator!=( const mpi::Comm& a, const mpi::Comm& b )
 
-.. cpp:type:: struct mpi::Group
+.. cpp:type:: mpi::Group
 
    .. cpp:member:: MPI_Group group
 
@@ -33,7 +33,7 @@ Datatypes
 .. cpp:function:: bool operator==( const mpi::Group& a, const mpi::Group& b ) 
 .. cpp:function:: bool operator!=( const mpi::Group& a, const mpi::Group& b )
 
-.. cpp:type:: struct mpi::Op
+.. cpp:type:: mpi::Op
 
    .. cpp:member:: MPI_Op op
 

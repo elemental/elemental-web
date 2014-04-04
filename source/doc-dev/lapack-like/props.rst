@@ -3,6 +3,11 @@ Matrix properties
 
 Condition number
 ----------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Condition.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Condition>`__
+
 The condition number of a matrix with respect to a particular norm is
 
 .. math::
@@ -44,6 +49,11 @@ with the most common choice being the matrix two-norm.
 
 Determinant
 -----------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Determinant.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Determinant>`__
+
 Though there are many different possible definitions of the determinant of a 
 matrix :math:`A \in \mathbb{F}^{n \times n}`, the simplest one is in terms of 
 the product of the eigenvalues (including multiplicity):
@@ -78,7 +88,7 @@ where :math:`\upsilon_{i,i}` is the i'th diagonal entry of :math:`U`.
    Some of the variants allow for overwriting the input matrix in order to 
    avoid forming another temporary matrix.
 
-.. cpp:type:: struct SafeProduct<F>
+.. cpp:type:: SafeProduct<F>
 
    Represents the product of `n` values as :math:`\rho \exp(\kappa n)`, 
    where :math:`|\rho| \le 1` and :math:`\kappa \in \mathbb{R}`.
@@ -131,6 +141,11 @@ determinant).
 
 Matrix norms
 ------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Norm.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Norm>`__
+
 The following routines can return either
 :math:`\|A\|_1`, :math:`\|A\|_\infty`, :math:`\|A\|_F` (the Frobenius norm),
 the maximum entrywise norm, :math:`\|A\|_2`, or :math:`\|A\|_*`
@@ -272,6 +287,19 @@ Two-norm estimates
 
 Pseudospectra
 -------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Pseudospectrum.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Pseudospectrum>`__
+
+`Pseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectrum.cpp>`__
+
+`ChunkedPseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ChunkedPseudospectrum.cpp>`__
+
+`TriangularPseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/TriangularPseudospectrum.cpp>`__
+
+`ChunkedTriangularPseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ChunkedTriangularPseudospectrum.cpp>`__
+
 The :math:`\epsilon`-*pseudospectrum* of a square matrix :math:`A` is the set
 of all shifts :math:`z` such that :math:`\hat A - z` is singular for some
 :math:`\hat A` such that :math:`\| \hat A - A \|_2 < \epsilon`. In other
@@ -298,23 +326,23 @@ Sylvester-Observer Equation*. This algorithm is not yet performance-tuned in
 Elemental, but should be preferred in massively-parallel situations where the
 Schur decomposition is considered infeasible.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool schur=true, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool schur=false, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool schur=true, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool schur=false, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectrum( const DistMatrix<F>& U, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectrum( const DistMatrix<F>& H, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 
    Returns the norms of the shifted inverses in the vector ``invNorms`` for a
    given set of shifts. The returned integer vector is a list of the number of
    iterations required for convergence of each shift.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool schur=true, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool schur=false, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool schur=true, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool schur=false, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 
    Returns the norms of the shifted inverses over a 2D grid
    (in the matrix ``invNormMap``) with the specified x and y resolutions.
@@ -323,18 +351,21 @@ Schur decomposition is considered infeasible.
    to the number of iterations required for convergence at each shift in the
    2D grid.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool schur=true, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool schur=false, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> xWidth, Base<F> yWidth, int xSize, int ySize, bool lanczos=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool schur=true, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool schur=false, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool lanczos=true, int krylovSize=10, bool reorthog=true, bool deflate=true, int maxIts=1000, Base<F> tol=1e-6, bool progress=false )
 
-   Same as above, but the x and y widths of the 2D grid in the complex plane
-   are manually specified.
+   Same as above, but the real and imaginary widths of the 2D grid in the 
+   complex plane are manually specified.
 
 Trace
 -----
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Trace.hpp>`__
+
 The two equally useful definitions of the trace of a square matrix 
 :math:`A \in \mathbb{F}^{n \times n}` are
 
@@ -353,11 +384,22 @@ important characterization.
 
    Return the trace of the square matrix `A`.
 
-HermitianInertia
-----------------
+Inertia
+-------
 
-.. cpp:function:: void HermitianInertia( UpperOrLower uplo, Matrix<F>& A, LDLPivotType pivotType=BUNCH_PARLETT )
-.. cpp:function:: void HermitianInertia( UpperOrLower uplo, DistMatrix<F>& A, LDLPivotType pivotType=BUNCH_PARLETT )
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Inertia.hpp>`__
+
+.. cpp:type:: InertiaType
+
+   .. cpp:member:: int numPositive
+   .. cpp:member:: int numNegative
+   .. cpp:member:: int numZero
+
+      The basic eigenvalue structure of a Hermitian matrix (which can be quickly
+      computed from the quasi-diagonal matrix produced by Bunch-Kaufman).
+
+.. cpp:function:: InertiaType Inertia( UpperOrLower uplo, Matrix<F>& A, LDLPivotType pivotType=BUNCH_PARLETT )
+.. cpp:function:: InertiaType Inertia( UpperOrLower uplo, DistMatrix<F>& A, LDLPivotType pivotType=BUNCH_PARLETT )
 
    Returns the triplet containing the number of positive, negative, and 
    zero eigenvalues of the Hermitian matrix by analyzing the block diagonal

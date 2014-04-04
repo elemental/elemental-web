@@ -9,6 +9,12 @@ the matrix to real symmetric tridiagonal form (usually through Householder
 transformations). This routine performs said reduction on a Hermitian matrix 
 and stores the scaled Householder vectors in place of the introduced zeroes. 
 
+`Main source file <https://github.com/elemental/Elemental/blob/master/src/lapack-like/HermitianTridiag.cpp>`__
+
+`Subroutine implementations <https://github.com/elemental/Elemental/tree/master/src/lapack-like/HermitianTridiag>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianTridiag.cpp>`__
+
 .. cpp:function:: void HermitianTridiag( UpperOrLower uplo, Matrix<F>& A, Matrix<F>& t )
 .. cpp:function:: void HermitianTridiag( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F,STAR,STAR>& t )
 
@@ -31,6 +37,8 @@ maximizing the performance of Householder tridiagonalization.
 hermitian_tridiag namespace
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+`Implementations <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/condense/HermitianTridiag/ApplyQ.hpp>`__
+
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& B )
@@ -42,6 +50,12 @@ hermitian_tridiag namespace
 
 Square to Hessenberg
 --------------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/condense/Hessenberg.hpp>`__
+
+`Subroutine header files <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/condense/Hessenberg>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Hessenberg.cpp>`__
 
 .. cpp:function:: void Hessenberg( UpperOrLower uplo, Matrix<F>& A, Matrix<F>& t )
 .. cpp:function:: void Hessenberg( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F,STAR,STAR>& t )
@@ -71,6 +85,12 @@ through two-sided Householder transformations; when the :math:`m \ge n`, the
 result is upper bidiagonal, otherwise it is lower bidiagonal. This routine is 
 most commonly used as a preprocessing step in computing the SVD of a general
 matrix.
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/condense/Bidiag.hpp>`__
+
+`Subroutine implementations <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/condense/Bidiag>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Bidiag.cpp>`__
 
 .. cpp:function:: void Bidiag( Matrix<F>& A, Matrix<F>& tP, Matrix<F>& tQ )
 .. cpp:function:: void Bidiag( DistMatrix<F>& A, DistMatrix<F,STAR,STAR>& tP, DistMatrix<F,STAR,STAR>& tQ )

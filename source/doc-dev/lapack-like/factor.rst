@@ -10,6 +10,12 @@ decomposed into the form :math:`A = L L^H` or :math:`A = U^H U`, where
 numerically indefinite, then a :cpp:type:`NonHPDMatrixException` will be 
 thrown.
 
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/Cholesky.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/Cholesky>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Cholesky.cpp>`__
+
 .. cpp:function:: void Cholesky( UpperOrLower uplo, Matrix<F>& A )
 .. cpp:function:: void Cholesky( UpperOrLower uplo, DistMatrix<F>& A )
 
@@ -48,6 +54,8 @@ If :math:`A` is found to have eigenvalues less than
 :math:`-n \epsilon \| A \|_2`, then a :cpp:type:`NonHPSDMatrixException` will
 be thrown.
 
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/HPSDCholesky.cpp>`__
+
 .. cpp:function:: void HPSDCholesky( UpperOrLower uplo, Matrix<F>& A )
 .. cpp:function:: void HPSDCholesky( UpperOrLower uplo, DistMatrix<F>& A )
 
@@ -81,10 +89,18 @@ cholesky namespace
    * ``BUNCH_KAUFMAN_BOUNDED`` (not yet supported)
    * ``BUNCH_PARLETT``
 
-.. cpp:type:: struct LDLPivot
+.. cpp:type:: LDLPivot
 
    .. cpp:member:: int nb
    .. cpp:member:: int from[2]
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LDL.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/LDL>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LDL.cpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/LDL.cpp>`__
 
 .. cpp:function:: void LDLH( Matrix<F>& A, Matrix<F>& dSub, Matrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 .. cpp:function:: void LDLT( Matrix<F>& A, Matrix<F>& dSub, Matrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
@@ -130,6 +146,15 @@ ldl namespace
 
 :math:`LU` factorization
 ------------------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LU.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/LU>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LU.cpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/GaussianElimination.cpp>`__
+
 Given :math:`A \in \mathbb{F}^{m \times n}`, an LU factorization 
 (without pivoting) finds a unit lower-trapezoidal 
 :math:`L \in \mathbb{F}^{m \times \mbox{min}(m,n)}` and upper-trapezoidal 
@@ -167,6 +192,13 @@ and :math:`U` are as described above and :math:`P` is a permutation matrix.
 
 :math:`LQ` factorization
 ------------------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LQ.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/LQ>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LQ.cpp>`__
+
 Given :math:`A \in \mathbb{F}^{m \times n}`, an LQ factorization typically 
 computes an implicit unitary matrix :math:`\hat Q \in \mathbb{F}^{n \times n}` 
 such that :math:`\hat L \equiv A\hat Q^H` is lower trapezoidal. One can then 
@@ -200,6 +232,15 @@ lq namespace
 
 :math:`QR` factorization
 ------------------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/QR.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/QR>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/QR.cpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/QR.cpp>`__
+
 Given :math:`A \in \mathbb{F}^{m \times n}`, a QR factorization typically 
 computes an implicit unitary matrix :math:`\hat Q \in \mathbb{F}^{m \times m}` 
 such that :math:`\hat R \equiv \hat Q^H A` is upper trapezoidal. One can then 
@@ -276,7 +317,7 @@ qr namespace
    column norm is less than or equal to `tol` times the maximum original column
    norm.
 
-.. cpp:type:: struct TreeData<F>
+.. cpp:type:: TreeData<F>
 
    .. cpp:member:: Matrix<F> QR0
 
@@ -324,6 +365,13 @@ ________________
 
 :math:`RQ` factorization
 ------------------------
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/RQ.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/RQ>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/RQ.cpp>`__
+
 Just like an LQ factorization, but the orthogonalization process starts from the bottom row and produces a 
 much sparser triangular factor when the matrix is wider than it is tall.
 
@@ -348,6 +396,11 @@ rq namespace
 
 Interpolative Decomposition (ID)
 --------------------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/ID.hpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ID.cpp>`__
+
 Interpolative Decompositions (ID's) are closely related to pivoted QR 
 factorizations and are useful for representing (approximately) low-rank 
 matrices in terms of linear combinations of a few of their columns, i.e., 
@@ -376,6 +429,11 @@ representing the remaining columns in terms of the selected columns of
 
 Skeleton decomposition
 ----------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/Skeleton.hpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Skeleton.cpp>`__
+
 Skeleton decompositions are essentially two-sided interpolative decompositions,
 but the terminology is unfortunately extremely contested. We follow the 
 convention that a skeleton decomposition is an approximation

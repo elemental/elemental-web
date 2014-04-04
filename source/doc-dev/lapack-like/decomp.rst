@@ -41,6 +41,12 @@ Paolo Bientinesi's PMRRR for the tridiagonal eigenvalue problem.
    the reduction to tridiagonal form, as it is the dominant cost in all of 
    Elemental's Hermitian eigensolvers.
 
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/HermitianEig.cpp>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianEig.cpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/HermitianEig.cpp>`__
+
 Full spectrum computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -88,6 +94,8 @@ Range-based subset computation
 
 Spectral divide and conquer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/HermitianEig/SDC.hpp>`__
 
 The primary references for this approach is Demmel et al.'s *Fast linear algebra
 is stable* and Nakatsukasa et al.'s *Stable and efficient spectral divide and conquer algorithms for the symmetric eigenvalue problem*.
@@ -138,6 +146,8 @@ Please see the :cpp:func:`HermitianEig` documentation for more details.
    Please see the :ref:`lapack-tuning` section for information on optimizing
    the reduction to tridiagonal form, as it is the dominant cost in all of 
    Elemental's Hermitian eigensolvers.
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/SkewHermitianEig.hpp>`__
 
 Full spectrum computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -212,6 +222,10 @@ which uses the ``AXBX`` enum value.
    An enum for specifying either the ``ABX``, ``BAX``, or ``AXBX`` 
    generalized eigenvalue problems (described above).
 
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/HermitianGenDefiniteEig.hpp>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianGenDefiniteEig.cpp>`__
+
 Full spectrum computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -281,6 +295,8 @@ Only a prototype spectral divide and conquer implementation is currently
 available, though Elemental will eventually also include an implementation of
 Granat et al.'s parallel QR algorithm.
 
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Schur.hpp>`__
+
 .. cpp:function:: void Schur( Matrix<F>& A )
 .. cpp:function:: void Schur( Matrix<F>& A, Matrix<F>& Q )
 
@@ -289,10 +305,18 @@ Granat et al.'s parallel QR algorithm.
 .. cpp:function:: void Schur( DistMatrix<F>& A )
 .. cpp:function:: void Schur( DistMatrix<F>& A, DistMatrix<F>& Q )
 
-   Currently defaults to the prototype spectral divide and conquer approach.
+   If ScaLAPACK is detected, this routine combines Elemental's transformations
+   to and from upper-Hessenberg form with ScaLAPACK's non-AED Hessenberg 
+   QR algorithm (p{s,d,c,z}lahqr). If ScaLAPACK was not detected during 
+   Elemental's configuration, a prototype Spectral Divide and Conquer algorithm
+   is used (note that Elemental's SDC implementation only works for matrices
+   without strong eigenvalue clustering).
 
 Hessenberg QR algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^
+**TODO: A full explanation of which ScaLAPACK routines are currently used**
+
+`QR algorithm header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Schur/QR.hpp>`__
 
 .. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool fullTriangle=false )
 .. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool fullTriangle=true )
@@ -319,6 +343,8 @@ The primary reference for this approach is Demmel et al.'s *Fast linear algebra
 is stable*. While the current implementation needs a large number of algorithmic
 improvements, especially with respect to choosing the Mobius transformations,
 it tends to succeed on random matrices.
+
+`SDC header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Schur/SDC.hpp>`__
 
 .. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool formATR=false, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
 .. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool formATR=false, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
@@ -357,6 +383,8 @@ Then an SVD of :math:`A` can easily be computed as
 where the columns of :math:`U` equal the columns of :math:`V`, modulo sign 
 flips introduced by negative eigenvalues.
 
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/SVD.hpp>`__
+
 .. cpp:function:: void HermitianSVD( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& U, Matrix<F>& V )
 .. cpp:function:: void HermitianSVD( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& U, DistMatrix<F>& V )
 
@@ -378,6 +406,12 @@ the *polar decomposition* of :math:`A` and can be constructed as
 :math:`Q := U V^H` and :math:`P := V \Sigma V^H`, where 
 :math:`A = U \Sigma V^H` is the SVD of :math:`A`. Alternatively, it can be 
 computed through (a dynamically-weighted) Halley iteration.
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Polar.hpp>`__
+
+`SVD approach <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Polar/SVD.hpp>`__
+
+`QWDH approach <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Polar/QDWH.hpp>`__
 
 .. cpp:function:: void Polar( Matrix<F>& A )
 .. cpp:function:: void Polar( DistMatrix<F>& A )
@@ -429,6 +463,10 @@ triplet :math:`(U,\Sigma,V)` such that
 where :math:`U` and :math:`V` are unitary, and :math:`\Sigma` is diagonal with 
 non-negative entries.
 
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/SVD.hpp>`__
+
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/decomp/SVD>`__
+
 .. cpp:function:: void SVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V )
 
 .. cpp:function:: void SVD( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V )
@@ -440,6 +478,7 @@ non-negative entries.
 .. cpp:function:: void SVD( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s )
 
    Forms the singular values of :math:`A` in `s`. Note that `A` is overwritten in order to compute the singular values.
+
 
 svd namespace
 ^^^^^^^^^^^^^

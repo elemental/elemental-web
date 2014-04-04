@@ -128,6 +128,18 @@ Blocksize manipulation
 
    Pops the stack of blocksizes. See above.
 
+.. cpp:function:: int DefaultBlockHeight()
+.. cpp:function:: int DefaultBlockWidth()
+
+   Returns the default block height (width) for 
+   :cpp:type:`BlockDistMatrix\<T,U,V>`.
+
+.. cpp:function:: void SetDefaultBlockHeight( int mb )
+.. cpp:function:: void SetDefaultBlockWidth( int nb )
+
+   Change the default block height (width) for 
+   :cpp:type:`BlockDistMatrix\<T,U,V>`.
+
 Default process grid
 --------------------
 

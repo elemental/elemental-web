@@ -479,7 +479,7 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: void AssertSameGrid( const Grid& grid ) const
    .. cpp:function:: void AssertSameSize( int height, int width ) const
 
-.. cpp:type:: struct DistData
+.. cpp:type:: DistData
 
    .. cpp:member:: Distribution colDist
 

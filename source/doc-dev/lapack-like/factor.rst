@@ -65,13 +65,13 @@ be thrown.
 cholesky namespace
 ^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
-.. cpp:function:: cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B )
 
    Solve linear systems using an unpivoted Cholesky factorization.
 
-.. cpp:function:: cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B, Matrix<int>& p )
-.. cpp:function:: cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<int,VC,STAR>& p )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B, Matrix<int>& p )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<int,VC,STAR>& p )
 
    Solve linear systems using a pivoted Cholesky factorization.
 
@@ -134,13 +134,13 @@ be thrown.
 ldl namespace
 ^^^^^^^^^^^^^
 
-.. cpp:function:: ldl::SolveAfter( const Matrix<F>& A, Matrix<F>& B, bool conjugated=false )
-.. cpp:function:: ldl::SolveAfter( const DistMatrix<F>& A, DistMatrix<F>& B, bool conjugated=false )
+.. cpp:function:: void ldl::SolveAfter( const Matrix<F>& A, Matrix<F>& B, bool conjugated=false )
+.. cpp:function:: void ldl::SolveAfter( const DistMatrix<F>& A, DistMatrix<F>& B, bool conjugated=false )
 
    Solve linear systems using an unpivoted LDL factorization.
 
-.. cpp:function:: ldl::SolveAfter( const Matrix<F>& A, const Matrix<F>& dSub, const Matrix<int>& p, Matrix<F>& B, bool conjugated=false )
-.. cpp:function:: ldl::SolveAfter( const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& dSub, const DistMatrix<int,VC,STAR>& p, DistMatrix<F>& B, bool conjugated=false )
+.. cpp:function:: void ldl::SolveAfter( const Matrix<F>& A, const Matrix<F>& dSub, const Matrix<int>& p, Matrix<F>& B, bool conjugated=false )
+.. cpp:function:: void ldl::SolveAfter( const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& dSub, const DistMatrix<int,VC,STAR>& p, DistMatrix<F>& B, bool conjugated=false )
 
    Solve linear systems using a pivoted LDL factorization.
 

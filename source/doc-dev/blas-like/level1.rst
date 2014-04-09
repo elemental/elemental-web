@@ -109,6 +109,17 @@ Returns :math:`x^T y`, which is **not** an inner product.
 .. cpp:function:: T Dotu( const Matrix<T>& x, const Matrix<T>& y )
 .. cpp:function:: T Dotu( const DistMatrix<T,U,V>& x, const DistMatrix<T,U,V>& y )
 
+EntrywiseMap
+------------
+
+.. cpp:function:: void EntrywiseMap( Matrix<T>& A, Function func )
+.. cpp:function:: void EntrywiseMap( DistMatrix<T,U,V>& A, Function func )
+.. cpp:function:: void EntrywiseMap( BlockDistMatrix<T,U,V>& A, Function func )
+
+   Replaces each entry of the passed in matrix with a specified function of
+   the existing entry. ``func`` will typically be a lambda function which 
+   accepts a single argument of type `T` and returns a value of type `T`.
+
 Hadamard
 --------
 .. note::

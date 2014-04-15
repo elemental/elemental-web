@@ -169,12 +169,12 @@ as a column vector.
 .. cpp:function:: Base<F> Nrm2( const Matrix<F>& x )
 .. cpp:function:: Base<F> Nrm2( const DistMatrix<F>& x )
 
-Scal
-----
+Scale
+-----
 :math:`X := \alpha X`.
 
-.. cpp:function:: void Scal( T alpha, Matrix<T>& X )
-.. cpp:function:: void Scal( T alpha, DistMatrix<T,U,V>& X )
+.. cpp:function:: void Scale( T alpha, Matrix<T>& X )
+.. cpp:function:: void Scale( T alpha, DistMatrix<T,U,V>& X )
 
 ScaleTrapezoid
 --------------

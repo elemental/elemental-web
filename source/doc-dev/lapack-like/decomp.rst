@@ -100,20 +100,30 @@ Spectral divide and conquer
 The primary references for this approach is Demmel et al.'s *Fast linear algebra
 is stable* and Nakatsukasa et al.'s *Stable and efficient spectral divide and conquer algorithms for the symmetric eigenvalue problem*.
 
-.. cpp:function:: void hermitian_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void hermitian_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:type:: HermitianSdcCtrl<Real>
+
+   .. cpp:member:: int cutoff
+   .. cpp:member:: int maxInnerIts
+   .. cpp:member:: int maxOuterIts
+   .. cpp:member:: Real tol
+   .. cpp:member:: Real spreadFactor
+   .. cpp:member:: bool random
+   .. cpp:member:: bool progress
+
+.. cpp:type:: HermitianSdcCtrl<Base<F>>
+
+   A particular case where the datatype is the base of the potentially complex
+   type ``F``.
+
+
+.. cpp:function:: void herm_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, HermitianSdcCtrl<Base<F>> sdcCtrl=HermitianSdcCtrl<Base<F>>() )
+.. cpp:function:: void herm_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, HermitianSdcCtrl<Base<F>> sdcCtrl=HermitianSdcCtrl<Base<F>>() )
 
    Compute the eigenvalues of the matrix :math:`A` via a QDWH-based spectral 
    divide and conquer process. 
 
-   The cutoff controls when the problem is sufficiently small to switch to 
-   a standard algorithm, the number of inner iterations is how many attempts 
-   to make with the same randomized URV decomposition, and the number of outer 
-   iterations is how many random Mobius transformations to try for each spectral
-   split before giving up.
-
-.. cpp:function:: void hermitian_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Q, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void hermitian_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Q, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void herm_eig::SDC( Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Q, HermitianSdcCtrl<Base<F>> sdcCtrl=HermitianSdcCtrl<Base<F>>() )
+.. cpp:function:: void herm_eig::SDC( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Q, HermitianSdcCtrl<Base<F>> sdcCtrl=HermitianSdcCtrl<Base<F>>() )
 
    Attempt to also compute the eigenvectors.
 
@@ -346,22 +356,31 @@ it tends to succeed on random matrices.
 
 `SDC header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Schur/SDC.hpp>`__
 
-.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool formATR=false, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool formATR=false, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:type:: SdcCtrl<Real>
+
+   .. cpp:member:: int cutoff
+   .. cpp:member:: int maxInnerIts
+   .. cpp:member:: int maxOuterIts
+   .. cpp:member:: Real tol
+   .. cpp:member:: Real spreadFactor
+   .. cpp:member:: bool random
+   .. cpp:member:: bool progress
+
+.. cpp:type:: SdcCtrl<Base<F>>
+
+   A particular case where the datatype is the base of the potentially complex
+   type ``F``.
+
+.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool formATR=false, SdcCtrl<Base<F>> sdcCtrl=SdcCtrl<Base<F>>() )
+.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool formATR=false, SdcCtrl<Base<F>> sdcCtrl=SdcCtrl<Base<F>>() )
 
    Compute the eigenvalues of the matrix :math:`A` via a spectral divide and
    conquer process. On exit, the eigenvalues of :math:`A` will be stored on its
    diagonal, and, if ``formATR`` was set to true, the upper triangle of 
    :math:`A` will be its corresponding upper-triangular Schur factor.
 
-   The cutoff controls when the problem is sufficiently small to switch to 
-   a sequential Hessenberg QR algorithm, the number of inner iterations is 
-   how many attempts to make with the same randomized URV decomposition, and 
-   the number of outer iterations is how many random Mobius transformations to
-   try for each spectral split before giving up.
-
-.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool formATR=true, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
-.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, DistMatrix<F>& Q, bool formATR=true, int cutoff=256, int maxInnerIts=1, int maxOuterIts=10, Base<F> relTol=0 )
+.. cpp:function:: void schur::SDC( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool formATR=true, SdcCtrl<Base<F>> sdcCtrl=SdcCtrl<Base<F>>() )
+.. cpp:function:: void schur::SDC( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, DistMatrix<F>& Q, bool formATR=true, SdcCtrl<Base<F>> sdcCtrl=SdcCtrl<Base<F>>() )
 
    Attempt to also compute the Schur vectors.
 

@@ -212,10 +212,31 @@ The matrix sign function can be written as
 
 as long as :math:`A` does not have any pure-imaginary eigenvalues.
 
-.. cpp:function:: void Sign( Matrix<F>& A )
-.. cpp:function:: void Sign( DistMatrix<F>& A )
-.. cpp:function:: void Sign( Matrix<F>& A, Matrix<F>& N )
-.. cpp:function:: void Sign( DistMatrix<F>& A, DistMatrix<F>& N )
+.. cpp:type:: SignScaling
+
+   An enum which can be set to one of
+
+   * ``SIGN_SCALE_NONE``
+   * ``SIGN_SCALE_DET``
+   * ``SIGN_SCALE_FROB``
+
+.. cpp:type:: SignCtrl<Real>
+
+   .. cpp:member:: int maxIts
+   .. cpp:member:: Real tol
+   .. cpp:member:: Real power
+   .. cpp:member:: SignScaling scaling
+   .. cpp:member:: bool progress
+
+.. cpp:type:: SignCtrl<Base<F>>
+
+   A particular case where the datatype is the base of the potentially complex
+   datatype ``F``.
+
+.. cpp:function:: void Sign( Matrix<F>& A, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
+.. cpp:function:: void Sign( DistMatrix<F>& A, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
+.. cpp:function:: void Sign( Matrix<F>& A, Matrix<F>& N, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
+.. cpp:function:: void Sign( DistMatrix<F>& A, DistMatrix<F>& N, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
 
    Compute the matrix sign through a globally-convergent Newton iteration
    scaled with the Frobenius norm of the iterate and its inverse.
@@ -231,20 +252,3 @@ as long as :math:`A` does not have any pure-imaginary eigenvalues.
    reform the matrix. Optionally return the full decomposition, :math:`A=SN`,
    where :math:`A` is overwritten by :math:`S`. Note that this will also be 
    a polar decomposition.
-
-sign namespace
-^^^^^^^^^^^^^^
-
-.. cpp:type:: sign::Scaling
-
-   An enum for specifying the scaling strategy to be used for the Newton 
-   iteration for the matrix sign function. It must be either ``NONE``, 
-   ``DETERMINANT``, or ``FROB_NORM`` (the default).
-
-.. cpp:function:: int sign::Newton( Matrix<F>& A, sign::Scaling scaling=FROB_NORM, int maxIts=100, Base<F> tol=0 )
-.. cpp:function:: int sign::Newton( DistMatrix<F>& A, sign::Scaling scaling=FROB_NORM, int maxIts=100, Base<F> tol=0 )
-
-   Runs a (scaled) Newton iteration for at most ``maxIts`` iterations with 
-   the specified tolerance, which, if undefined, is set to :math:`n \epsilon`,
-   where :math:`n` is the matrix dimension and :math:`\epsilon` is the 
-   machine epsilon. The return value is the number of performed iterations.

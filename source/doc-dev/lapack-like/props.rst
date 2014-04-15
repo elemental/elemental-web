@@ -313,9 +313,10 @@ triangularization followed by inverse iteration approach suggested in
 Trefethen's *Computation of pseudospectra* for a comprehensive review).
 In particular, Elemental begins by computing the Schur decomposition of the
 given matrix, which preserves the :math:`\epsilon`-pseudospectrum, up to
-round-off error, and then simultaneously performs many Lanczos decompositions
-on the inverse normal matrix for each shift in a manner which communicates
-no more data than a standard triangular solve with many right-hand sides.
+round-off error, and then simultaneously performs many Implicitly Restarted 
+Arnoldi (IRA) iterations with the inverse normal matrix for each shift in a 
+manner which communicates no more data than a standard triangular solve with 
+many right-hand sides.
 Converged pseudospectrum estimates are deflated after convergence.
 
 The second approach is quite similar and, instead of reducing to triangular
@@ -331,11 +332,18 @@ Schur decomposition is considered infeasible.
    .. cpp:member:: int realSize
    .. cpp:member:: int imagSize
 
-   .. cpp:member:: int imgFreq
-   .. cpp:member:: int numFreq
+   .. cpp:member:: int imgSaveFreq
+   .. cpp:member:: int numSaveFreq
+   .. cpp:member:: int imgDispFreq 
+
+      Negative if no snapshots should be saved/displayed, 
+      zero if only a final snapshot should be saved/displayed, and equal to :math:`n > 0`
+      if, in addition to a final snapshot, the partial results should be output roughly overy `n`
+      iterations (there is no output in the middle of Impliclty Restarted Arnoldi cycles). 
 
    .. cpp:member:: int imgSaveCount
    .. cpp:member:: int numSaveCount
+   .. cpp:member:: int imgDispCount
 
    .. cpp:member:: std::string imgBase
    .. cpp:member:: std::string numBase
@@ -345,26 +353,69 @@ Schur decomposition is considered infeasible.
 
    .. cpp:function::  SnapshotCtrl()
 
-      Initializes all integers to zero, the basename strings to "ps",
-      the image format to ``PNG`` and the numerical format to ``ASCII_MATLAB``.
+      All counters and dimensions are initially zero, all save/display "frequencies" are set
+      to -1 (no output), the basename strings are initialized to "ps",
+      the image format to ``PNG``, and the numerical format to ``ASCII_MATLAB``.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool schur=true, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool schur=true, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectrum( const DistMatrix<F>& U, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectrum( const DistMatrix<F>& H, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
+   .. cpp:function:: void ResetCounts()
+
+      Resets all counters to zero
+
+   .. cpp:function:: void Iterate()
+
+      Increments all counters by one
+
+.. cpp:type:: PseudospecCtrl<Real>
+
+   .. cpp:member::bool schur
+
+   .. cpp:member:: bool forceComplexSchur
+
+   .. cpp:member:: bool forceComplexPs
+
+   .. cpp:member:: SdcCtrl<Real> sdcCtrl
+
+   .. cpp:member:: int maxIts
+
+   .. cpp:member:: Real tol
+
+   .. cpp:member:: bool deflate
+
+   .. cpp:member:: bool arnoldi
+
+   .. cpp:member:: int basisSize
+
+   .. cpp:member:: bool reorthog
+
+   .. cpp:member:: bool progress
+
+   .. cpp:member:: SnapshotCtrl snapCtrl
+
+.. cpp:type:: PseudospecCtrl<Base<F>>
+
+   A particular case where the datatype is the base of the potentially complex
+   type ``F``.
+
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectrum( const DistMatrix<F>& U, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> QuasiTriangularPseudospectrum( const DistMatrix<Real>& U, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real,VR,STAR>& invNorms, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectrum( const DistMatrix<F>& H, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
    Returns the norms of the shifted inverses in the vector ``invNorms`` for a
    given set of shifts. The returned integer vector is a list of the number of
    iterations required for convergence of each shift.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool schur=true, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool schur=true, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> QuasiTriangularPseudospectrum( const Matrix<Real>& U, Matrix<Real>& invNormMap, Complex<Real> center, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectrum( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, Complex<Real> center, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
    Returns the norms of the shifted inverses over a 2D grid
    (in the matrix ``invNormMap``) with the specified x and y resolutions.
@@ -373,12 +424,14 @@ Schur decomposition is considered infeasible.
    to the number of iterations required for convergence at each shift in the
    2D grid.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool schur=true, bool arnoldi=true, int basisSize=10,  int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool schur=true, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, bool arnoldi=true, int basisSize=10, int maxIts=1000, Base<F> tol=1e-6, bool progress=false, bool deflate=true, SnapshotCtrl snapCtrl=SnapshotCtrl() )
+.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> QuasiTriangularPseudospectrum( const Matrix<Real>& U, Matrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectrum( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
    Same as above, but the real and imaginary widths of the 2D grid in the 
    complex plane are manually specified.

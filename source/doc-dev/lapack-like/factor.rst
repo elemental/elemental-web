@@ -75,8 +75,8 @@ cholesky namespace
 
    Solve linear systems using a pivoted Cholesky factorization.
 
-:math:`LDL` factorization
--------------------------
+LDL factorization
+-----------------
 
 .. cpp:type:: enum LDLPivotType
 
@@ -144,8 +144,8 @@ ldl namespace
 
    Solve linear systems using a pivoted LDL factorization.
 
-:math:`LU` factorization
-------------------------
+LU factorization
+----------------
 
 `Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LU.hpp>`__
 
@@ -190,8 +190,35 @@ and :math:`U` are as described above and :math:`P` is a permutation matrix.
    :math:`PAQ`, where :math:`P` is represented by the pivot vector `p`, 
    and likewise for :math:`Q`.
 
-:math:`LQ` factorization
-------------------------
+lu namespace
+^^^^^^^^^^^^
+
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B )
+
+   Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or
+   :math:`B := A^{-H} B`, where :math:`A` has been overwritten with its LU
+   factors (without partial pivoting).
+
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<int>& p, Matrix<F>& B )
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,VC,STAR>& p, DistMatrix<F>& B )
+
+   Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or
+   :math:`B := A^{-H} B`, where :math:`A` has been overwritten with
+   its LU factors with partial pivoting, which satisfy :math:`P A = L U`, where
+   the permutation matrix :math:`P` is represented by the pivot vector ``p``.
+
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<int>& p, const Matrix<int>& q, Matrix<F>& B )
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,VC,STAR>& p, const DistMatrix<int,VC,STAR>& q, DistMatrix<F>& B )
+
+   Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or
+   :math:`B := A^{-H} B`, where :math:`A` has been overwritten with
+   its LU factors with full pivoting, which satisfy :math:`P A Q = L U`, where
+   the permutation matrices :math:`P` and :math:`Q` are represented by the
+   pivot vector ``p`` and ``q``, respectively.
+
+LQ factorization
+----------------
 
 `Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LQ.hpp>`__
 
@@ -230,8 +257,8 @@ lq namespace
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
    `A`, `t`, and `d` from either the left or the right to :math:`B`.
 
-:math:`QR` factorization
-------------------------
+QR factorization
+----------------
 
 `Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/QR.hpp>`__
 
@@ -255,21 +282,27 @@ matrix with entries given by `d` so that :math:`R` has a positive diagonal).
 
 .. cpp:function:: void QR( Matrix<F>& A )
 .. cpp:function:: void QR( DistMatrix<F>& A )
+
+   Overwrite :math:`A` with :math:`R`.
+
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d )
 .. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d )
 
-   Overwrite the matrix :math:`A` with :math:`R` and the 
+   Overwrite the matrix :math:`A` with both :math:`R` and the 
    Householder reflectors (and subsequent unitary diagonal matrix defined by
    the vector, `d`) representing :math:`\hat Q`. The scalings for the
    Householder reflectors are stored in the vector `t`.
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<int>& p )
 .. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p )
+
+   Overwrite :math:`A` with the :math:`R` from a column-pivoted QR factorization.
+
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p )
 .. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,VR,STAR>& p )
 
-   Column-pivoted QR factorization. The current implementation uses 
-   Businger-Golub pivoting.
+   Overwrite :math:`A` with both the :math:`R` and (scaled) Householder reflectors 
+   from a column-pivoted QR factorization.
 
 qr namespace
 ^^^^^^^^^^^^
@@ -363,8 +396,46 @@ ________________
 
    Overwrite A with the Q from the QR decomposition.
 
-:math:`RQ` factorization
-------------------------
+Generalized QR factorization
+----------------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/GQR.hpp>`__
+
+The *generalized QR factorization* of a pair of matrices :math:`(A,B)` is 
+analogous to a QR factorization of :math:`B^{-1} A` but does not require that
+:math:`B` is square or invertible: 
+unitary matrices :math:`Q` and :math:`Z`, and (right) upper-triangular matrices 
+:math:`R` and :math:`T`, are computed such that
+
+.. math::
+
+   A = Q R
+
+
+and
+
+.. math::
+
+   B = Q T Z.
+
+Thus, if :math:`B` was square and invertible, then the QR factorization of 
+:math:`B^{-1} A` would be given by :math:`Z^H (T^{-1} R)`.
+
+.. cpp:function:: void GQR( Matrix<F>& A, Matrix<F>& B )
+.. cpp:function:: void GQR( DistMatrix<F>& A, DistMatrix<F>& B )
+
+   Overwrite :math:`A` with :math:`R` and :math:`B` with :math:`T`.
+
+.. cpp:function:: void GQR( Matrix<F>& A, Matrix<F>& tA, Matrix<Base<F>>& dA, Matrix<F>& B, Matrix<F>& tB, Matrix<Base<F>>& dB )
+.. cpp:function:: void GQR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& tA, DistMatrix<Base<F>,MD,STAR>& dA, DistMatrix<F>& B, DistMatrix<F,MD,STAR>& tB, DistMatrix<Base<F>,MD,STAR>& dB )
+
+   Overwrite :math:`A` with both :math:`R` and the (scaled) Householder vectors 
+   which, along with the scalings :math:`tA` and sign changes :math:`dA`, define
+   :math:`Q`. Likewise, :math:`B` is overwritten with both :math:`T` and the 
+   (scaled) Householder vectors which define :math:`Z`.
+
+RQ factorization
+----------------
 
 `Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/RQ.hpp>`__
 
@@ -393,6 +464,44 @@ rq namespace
 
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
    `A`, `t`, and `d` from either the left or the right to :math:`B`.
+
+Generalized RQ factorization
+----------------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/GRQ.hpp>`__
+
+The *generalized RQ factorization* of a pair of matrices :math:`(A,B)` is 
+analogous to an RQ factorization of :math:`A B^{-1}` but does not require that
+:math:`B` is square or invertible:
+unitary matrices :math:`Q` and :math:`Z`, and (right) upper-triangular matrices
+:math:`R` and :math:`T`, are computed such that
+
+.. math::
+
+   A = R Q
+
+
+and
+
+.. math::
+
+   B = Z T Q.
+
+Thus, is :math:`B` was square and invertible, then the RQ factorization of 
+:math:`A B^{-1}` would be given by :math:`(R T^{-1}) Z^H`.
+
+.. cpp:function:: void GRQ( Matrix<F>& A, Matrix<F>& B )
+.. cpp:function:: void GRQ( DistMatrix<F>& A, DistMatrix<F>& B )
+
+   Overwrite :math:`A` with :math:`R` and :math:`B` with :math:`T`.
+
+.. cpp:function:: void GRQ( Matrix<F>& A, Matrix<F>& tA, Matrix<Base<F>>& dA, Matrix<F>& B, Matrix<F>& tB, Matrix<Base<F>>& dB )
+.. cpp:function:: void GRQ( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& tA, DistMatrix<Base<F>,MD,STAR>& dA, DistMatrix<F>& B, DistMatrix<F,MD,STAR>& tB, DistMatrix<Base<F>,MD,STAR>& dB )
+
+   Overwrite :math:`A` with both :math:`R` and the (scaled) Householder vectors
+   which, along with the scalings :math:`tA` and sign changes :math:`dA`, define
+   :math:`Q`. Likewise, :math:`B` is overwritten with both :math:`T` and the
+   (scaled) Householder vectors which define :math:`Z`.
 
 Interpolative Decomposition (ID)
 --------------------------------

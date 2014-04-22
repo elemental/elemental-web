@@ -3,8 +3,13 @@ Linear solvers
 
 HPD solve
 ---------
-Solves either :math:`AX=B` or :math:`A^T X=B` for :math:`X` given Hermitian 
-positive-definite (HPD) :math:`A` and right-hand side matrix :math:`B`. 
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/HPDSolve.hpp>`__
+
+Solves :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X=B` for :math:`X` given 
+Hermitian positive-definite (HPD) :math:`A` and right-hand side matrix 
+:math:`B` (note that these options are all identical except for when :math:`A`. 
+is complex).
 The solution is computed by first finding the Cholesky factorization of 
 :math:`A` and then performing two successive triangular solves against 
 :math:`B`.
@@ -16,8 +21,49 @@ The solution is computed by first finding the Cholesky factorization of
    where `A` is Hermitian positive-definite and only the triangle of `A` 
    specified by `uplo` is accessed.
 
+Symmetric solve
+---------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/SymmetricSolve.hpp>`__
+
+Solve :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X = B` for :math:`X` 
+given a symmetric or Hermitian matrix :math:`A` and a right-hand side matrix
+:math:`B` using Bunch-Kaufman.
+
+.. cpp:function:: void SymmetricSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void SymmetricSolve( UpperOrLower uplo, Orientation orientation, DistMatrix<F>& A, DistMatrix<F>& B, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+
+   Overwrites :math:`B` with the solution to the linear system. :math:`A`
+   is assumed symmetric if ``conjugate`` is false, and Hermitian otherwise.
+
+.. note:: 
+
+   Only the lower-storage case is currently supported.
+
+Hermitian solve
+---------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/HermitianSolve.hpp>`__
+
+Solve :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X = B` for :math:`X` 
+given a Hermitian matrix :math:`A` and a right-hand side matrix
+:math:`B` using Bunch-Kaufman.
+
+.. cpp:function:: void HermitianSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void HermitianSolve( UpperOrLower uplo, Orientation orientation, DistMatrix<F>& A, DistMatrix<F>& B, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+
+   Overwrites :math:`B` with the solution to the linear system.
+
+.. note:: 
+
+   Only the lower-storage case is currently supported, as this is a simple 
+   wrapper around :cpp:func:`SymmetricSolve`.
+
 Gaussian elimination
 --------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/GaussianElimination.hpp>`__
+
 Solves :math:`AX=B` for :math:`X` given a general square nonsingular matrix 
 :math:`A` and right-hand side matrix :math:`B`. The solution is computed through
 (partially pivoted) Gaussian elimination.
@@ -28,18 +74,35 @@ Solves :math:`AX=B` for :math:`X` given a general square nonsingular matrix
    Upon completion, :math:`A` will have been overwritten with Gaussian 
    elimination and :math:`B` will be overwritten with :math:`X`.
 
-Least-squares
+Least Squares
 -------------
-Solves :math:`AX=B` or :math:`A^H X = B` for :math:`X` in a least-squares sense 
-given a general full-rank matrix :math:`A \in \mathbb{F}^{m \times n}`. 
-If :math:`m \ge n`, then the first step is to form the QR factorization of 
-:math:`A`, otherwise the LQ factorization is computed. 
 
-* If solving :math:`AX=B`, then either :math:`X=R^{-1} Q^H B` or 
-  :math:`X=Q^H L^{-1} B`.
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/LeastSquares.hpp>`__
 
-* If solving :math:`A^H X=B`, then either :math:`X=Q R^{-H} B` or 
-  :math:`X=L^{-H} Q B`.
+Given :math:`A \in \mathbb{F}^{m \times n}` and a right-hand side 
+:math:`b \in \mathbb{F}^m`, a *least-squares* method solves
+:math:`A x \approx b` differently depending upon whether :math:`m \ge n`.
+
+When :math:`m \ge n`, there are at least as many constraints as degrees of freedom, and 
+so a solution is sought for
+
+.. math::
+
+   \min_x \| A x - b \|_2
+
+This problem is solved through the use of :cpp:func:`QR`.
+
+When :math:`m < n`, the problem is under-constrained and a solution is sought for the
+problem
+
+.. math::
+
+   \min_x \| x \|_2 \;\;\; \text{such that } A x = b.
+
+This problem is solved through the use of :cpp:func:`LQ`.
+
+The above optimization problems can be readily generalized to multiple right-hand
+sides by switching to Frobenius norms. 
 
 .. cpp:function:: void LeastSquares( Orientation orientation, Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
 .. cpp:function:: void LeastSquares( Orientation orientation, DistMatrix<F>& A, const DistMatrix<F>& B, DistMatrix<F>& X )
@@ -47,61 +110,56 @@ If :math:`m \ge n`, then the first step is to form the QR factorization of
    If `orientation` is set to ``NORMAL``, then solve :math:`AX=B`, otherwise 
    `orientation` must be equal to ``ADJOINT`` and :math:`A^H X=B` will 
    be solved. Upon completion, :math:`A` is overwritten with its QR or LQ 
-   factorization, and :math:`X` is overwritten with the solution.
+   factorization, and each column of :math:`X` is overwritten with a solution vector.
+
+General (Gauss-Markov) Linear Model (GLM)
+-----------------------------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/GLM.hpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/GLM.cpp>`__
+
+.. math::
+
+   \min_{X,Y} \| Y \|_F \;\;\; \text{subject to } A X + B Y = D.
+
+.. cpp:function:: void GLM( Matrix<F>& A, Matrix<F>& B, Matrix<F>& D, Matrix<F>& Y )
+.. cpp:function:: void GLM( DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<F>& D, DistMatrix<F>& Y )
+
+Equality-constrained Least Squares (LSE)
+----------------------------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/LSE.hpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/LSE.cpp>`__
+
+.. math::
+
+   \min_X \| A X - C \|_F \;\;\; \text{subject to } B X = D.
+
+.. cpp:function:: void LSE( Matrix<F>& A, Matrix<F>& B, Matrix<F>& C, Matrix<F>& D, Matrix<F>& X, bool computeResidual=false )
+.. cpp:function:: void LSE( DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<F>& C, DistMatrix<F>& D, DistMatrix<F>& X, bool computeResidual=false )
 
 Multi-shift Hessenberg solves
 -----------------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/MultiShiftHessSolve.hpp>`__
+
 Solve for :math:`X` in the system
 
 .. math::
 
-   \text{op}(H) X - X D = Y
+   H^\# X - X D^\# = Y
 
-where :math:`H` is Hessenberg, :math:`D` is diagonal, and :math:`\text{op}(A)` 
-is either :math:`A`, :math:`A^T`, or :math:`A^H`.
+where :math:`H` is Hessenberg, :math:`D` is diagonal, and :math:`A^\#` 
+is defined to be one of :math:`\{A,A^T,A^H\}`.
 
 .. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& H, const Matrix<F>& shifts, Matrix<F>& X )
 .. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F,UH,VH>& H, const DistMatrix<F,VX,STAR>& shifts, DistMatrix<F,STAR,VX>& X )
 
-   Overwrite the columsn of `X` with the solutions to shifted linear systems.
+   Overwrite the columns of `X` with the solutions to shifted linear systems.
 
-Solve after Cholesky
---------------------
-Uses an existing in-place Cholesky factorization to solve against one or more 
-right-hand sides.
+.. note::
 
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B )
-
-   Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or 
-   :math:`B := A^{-H} B`, where one triangle of :math:`A` has been overwritten 
-   with its Cholesky factor.
-
-Solve after LU
---------------
-Uses an existing in-place LU factorization (with or without partial pivoting) 
-to solve against one or more right-hand sides.
-
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B )
-
-   Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or 
-   :math:`B := A^{-H} B`, where :math:`A` has been overwritten with its LU 
-   factors (without partial pivoting).
-
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<int>& p, Matrix<F>& B )
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,VC,STAR>& p, DistMatrix<F>& B )
-
-   Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or 
-   :math:`B := A^{-H} B`, where :math:`A` has been overwritten with 
-   its LU factors with partial pivoting, which satisfy :math:`P A = L U`, where
-   the permutation matrix :math:`P` is represented by the pivot vector ``p``.
-
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<int>& p, const Matrix<int>& q, Matrix<F>& B )
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,VC,STAR>& p, const DistMatrix<int,VC,STAR>& q, DistMatrix<F>& B )
-
-   Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or 
-   :math:`B := A^{-H} B`, where :math:`A` has been overwritten with 
-   its LU factors with full pivoting, which satisfy :math:`P A Q = L U`, where
-   the permutation matrices :math:`P` and :math:`Q` are represented by the 
-   pivot vector ``p`` and ``q``, respectively.
+   Only a few subcases are currently supported, as this was added as part of 
+   :cpp:func:`HessenbergPseudospectrum`

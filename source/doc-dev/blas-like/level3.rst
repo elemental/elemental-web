@@ -9,9 +9,9 @@ implementations are in
 Gemm
 ----
 General matrix-matrix multiplication: updates
-:math:`C := \alpha \mbox{op}_A(A) \mbox{op}_B(B) + \beta C`,
-where :math:`\mbox{op}_A(M)` and :math:`\mbox{op}_B(M)` can each be chosen from 
-:math:`M`, :math:`M^T`, and :math:`M^H`.
+:math:`C := \alpha A^\# B^\sharp + \beta C`,
+where :math:`M^\#` and :math:`M^\sharp` are individually defined to be one of
+:math:`\{M,M^T,M^H\}`.
 
 .. cpp:function:: void Gemm( Orientation orientationOfA, Orientation orientationOfB, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
 .. cpp:function:: void Gemm( Orientation orientationOfA, Orientation orientationOfB, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, T beta, DistMatrix<T>& C )
@@ -65,17 +65,17 @@ Solve for :math:`X` in the linear system
 
 .. math::
 
-   \text{op}(T) X - X D = Y
+   T^\# X - X D^\# = Y
 
 or
 
 .. math::
 
-   X \text{op}(T) - D X = Y
+   X T^\# - D^\# X = Y
 
-where :math:`T` is triangular, :math:`D` is diagonal, and :math:`\text{op}(A)` 
-is either :math:`A`, :math:`A^T`, or :math:`A^H`. The data movement
-requires almost no modification from that of :cpp:func:`Trsm`.
+where :math:`T` is triangular, :math:`D` is diagonal, and 
+:math:`A^\#` is defined to be one of :math:`\{A,A^T,A^H\}`. 
+The data movement requires almost no modification from that of :cpp:func:`Trsm`.
 
 .. note::
 
@@ -134,11 +134,11 @@ section for information on tuning the distributed :cpp:func:`Syrk`.
 Trmm
 ----
 Triangular matrix-matrix multiplication: performs
-:math:`C := \alpha \mbox{op}(A) B`, or 
-:math:`C := \alpha B \mbox{op}(A)`, depending upon whether `side` was chosen
+:math:`C := \alpha A^\# B`, or 
+:math:`C := \alpha B A^\#`, depending upon whether `side` was chosen
 to be ``LEFT`` or ``RIGHT``, respectively. Whether :math:`A` is treated as 
-lower or upper triangular is determined by `uplo`, and :math:`\mbox{op}(A)` 
-can be any of :math:`A`, :math:`A^T`, and :math:`A^H` (and `diag` determines
+lower or upper triangular is determined by `uplo`, and :math:`A^\#` is defined to
+be one of :math:`\{A,A^T,A^H\}` (and `diag` determines
 whether :math:`A` is treated as unit-diagonal or not).
 
 .. cpp:function:: void Trmm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, T alpha, const Matrix<T>& A, Matrix<T>& B )
@@ -147,10 +147,10 @@ whether :math:`A` is treated as unit-diagonal or not).
 Trr2k
 -----
 Triangular rank-2k update: performs 
-:math:`E := \alpha ( \mbox{op}(A) \mbox{op}(B) + \mbox{op}(C) \mbox{op}(D) ) + \beta E`,
+:math:`E := \alpha ( A^\# B^\sharp + C^\Diamond D^\triangle ) + \beta E`,
 where only the triangle of `E` specified by `uplo` is modified, and 
-:math:`\mbox{op}(X)` is determined by `orientationOfX`, for each 
-:math:`X \in \left\{A,B,C,D\right\}`.
+the orientation of each input matrix, e.g., :math:`A^\# \in \{A,A^T,A^H\}`, is determined 
+by `orientationOfX` for each :math:`X \in \left\{A,B,C,D\right\}`.
 
 .. note::
 
@@ -163,9 +163,9 @@ where only the triangle of `E` specified by `uplo` is modified, and
 Trrk
 ----
 Triangular rank-k update: performs 
-:math:`C := \alpha \mbox{op}(A) \mbox{op}(B) + \beta C`, where only the 
-triangle of `C` specified by `uplo` is modified, and :math:`\mbox{op}(A)` and 
-:math:`\mbox{op}(B)` are determined by `orientationOfA` and `orientationOfB`, 
+:math:`C := \alpha A^\# B^\sharp + \beta C`, where only the 
+triangle of `C` specified by `uplo` is modified, and the orientations :math:`A^\#` and 
+:math:`B^\sharp` are determined by `orientationOfA` and `orientationOfB`, 
 respectively.
 
 .. note::
@@ -211,11 +211,11 @@ overwritten with :math:`D`.
 Trsm
 ----
 Triangular solve with multiple right-hand sides: performs
-:math:`C := \alpha \mbox{op}(A)^{-1} B`, or 
-:math:`C := \alpha B \mbox{op}(A)^{-1}`, depending upon whether `side` was 
+:math:`C := \alpha A^{-\#} B`, or 
+:math:`C := \alpha B A^{-\#}`, depending upon whether `side` was 
 chosen to be ``LEFT`` or ``RIGHT``, respectively. Whether :math:`A` is treated 
-as lower or upper triangular is determined by `uplo`, and :math:`\mbox{op}(A)` 
-can be any of :math:`A`, :math:`A^T`, and :math:`A^H` (and `diag` determines
+as lower or upper triangular is determined by `uplo`, and :math:`A^{-\#}` 
+can be :math:`A^{-1}`, :math:`A^{-T}`, or :math:`A^{-H}` (and `diag` determines
 whether :math:`A` is treated as unit-diagonal or not).
 
 .. cpp:function:: void Trsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, F alpha, const Matrix<F>& A, Matrix<F>& B )

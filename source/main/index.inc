@@ -8,6 +8,14 @@
           <div class="slides_container">
             <div class="slide">
               <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectrum.cpp">
+              <img src="/_static/images/featured/trefethen-12.5.png" width="282" height="282" alt="Contours of log resolvent norm of Trefethen matrix of size 20,000">
+              </a>
+              <div class="caption">
+                <p>Contours of log resolvent norm of 20,000 x 20,000 "Trefethen" matrix</p>
+              </div>
+            </div>
+            <div class="slide">
+              <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectrum.cpp">
               <img src="/_static/images/featured/uniform-pseudo.png" width="282" height="282" alt="Discrete pseudospectrum">
               </a>
               <div class="caption">

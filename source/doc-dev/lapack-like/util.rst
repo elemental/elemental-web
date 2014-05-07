@@ -54,4 +54,3 @@ Sorting
 
 .. cpp:function:: ValueInt<Real> Median( const Matrix<Real>& x )
 .. cpp:function:: ValueInt<Real> Median( const DistMatrix<Real,U,V>& x )
-

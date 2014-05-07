@@ -14,6 +14,7 @@ matrix decompositions, are placed here.
    lapack-like/decomp
    lapack-like/factor
    lapack-like/funcs
+   lapack-like/perm
    lapack-like/props
    lapack-like/solve
    lapack-like/util 

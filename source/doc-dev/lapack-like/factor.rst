@@ -24,7 +24,9 @@ thrown.
 .. cpp:function:: void Cholesky( UpperOrLower uplo, Matrix<F>& A, Matrix<int>& p )
 .. cpp:function:: void Cholesky( UpperOrLower uplo, DistMatrix<F>& A, Matrix<int>& p )
 
-   Performs Cholesky factorization with full (diagonal) pivoting.
+   Performs Cholesky factorization with full (diagonal) pivoting. On exit, the 
+   vector :math:`p` consists of the nonzero row indices of the permutation 
+   matrix :math:`P` such that :math:`P A P^T = L L^H = U^H U`.
 
 .. cpp:function:: void CholeskyMod( UpperOrLower uplo, Matrix<F>& T, Base<F>& alpha, Matrix<F>& V )
 .. cpp:function:: void CholeskyMod( UpperOrLower uplo, DistMatrix<F>& T, Base<F>& alpha, DistMatrix<F>& V )
@@ -70,8 +72,8 @@ cholesky namespace
 
    Solve linear systems using an unpivoted Cholesky factorization.
 
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B, Matrix<int>& p )
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<int,VC,STAR>& p )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B, Matrix<int>& perm )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<int,UPerm,STAR>& perm )
 
    Solve linear systems using a pivoted Cholesky factorization.
 
@@ -104,12 +106,16 @@ LDL factorization
 
 .. cpp:function:: void LDLH( Matrix<F>& A, Matrix<F>& dSub, Matrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 .. cpp:function:: void LDLT( Matrix<F>& A, Matrix<F>& dSub, Matrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void LDLH( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& dSub, DistMatrix<int,VC,STAR>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void LDLT( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& dSub, DistMatrix<int,VC,STAR>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void LDLH( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& dSub, DistMatrix<int,UPerm,STAR>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void LDLT( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& dSub, DistMatrix<int,UPerm,STAR>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
-   Pivoted LDL factorization. The Bunch-Kaufman pivoting rules are used within
-   a higher-performance blocked algorithm, whereas the Bunch-Parlett strategy
-   uses an unblocked algorithm.
+   Returns a pivoted LDL factorization, where the vector :math:`p` contains the
+   row indices of the nonzero entries of the permutation matrix :math:`P` such
+   that :math:`PAP^T` equals either :math:`LDL^T` or 
+   :math:`LDL^H`, where :math:`D` is quasi-diagonal. 
+   The Bunch-Kaufman pivoting rules are used within a higher-performance 
+   blocked algorithm, whereas the Bunch-Parlett strategy uses an unblocked 
+   algorithm.
 
 Though the Cholesky factorization is ideal for most HPD matrices, the 
 unpivoted `LDL` factorizations exist as slight relaxation of the Cholesky 
@@ -140,7 +146,7 @@ ldl namespace
    Solve linear systems using an unpivoted LDL factorization.
 
 .. cpp:function:: void ldl::SolveAfter( const Matrix<F>& A, const Matrix<F>& dSub, const Matrix<int>& p, Matrix<F>& B, bool conjugated=false )
-.. cpp:function:: void ldl::SolveAfter( const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& dSub, const DistMatrix<int,VC,STAR>& p, DistMatrix<F>& B, bool conjugated=false )
+.. cpp:function:: void ldl::SolveAfter( const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& dSub, const DistMatrix<int,UPerm,STAR>& p, DistMatrix<F>& B, bool conjugated=false )
 
    Solve linear systems using a pivoted LDL factorization.
 
@@ -178,17 +184,21 @@ pivoted). An LU factorization with partial pivoting therefore computes
 and :math:`U` are as described above and :math:`P` is a permutation matrix.
 
 .. cpp:function:: void LU( Matrix<F>& A, Matrix<int>& p )
-.. cpp:function:: void LU( DistMatrix<F>& A, DistMatrix<F,VC,STAR>& p )
+.. cpp:function:: void LU( DistMatrix<F>& A, DistMatrix<F,UPerm,STAR>& p )
 
    Overwrites the matrix :math:`A` with the LU decomposition of 
-   :math:`PA`, where :math:`P` is represented by the pivot vector `p`.
+   :math:`PA`, where :math:`P` is represented by the permutation vector `p`, 
+   which consists of the row indices of the nonzero entry in each column of 
+   :math:`P`.
 
 .. cpp:function:: void LU( Matrix<F>& A, Matrix<int>& p, Matrix<int>& q )
-.. cpp:function:: void LU( DistMatrix<F>& A, DistMatrix<F,VC,STAR>& p, DistMatrix<F,VC,STAR>& q )
+.. cpp:function:: void LU( DistMatrix<F>& A, DistMatrix<F,UPerm,STAR>& p, DistMatrix<F,UPerm,STAR>& q )
 
    Overwrites the matrix :math:`A` with the LU decomposition of 
-   :math:`PAQ`, where :math:`P` is represented by the pivot vector `p`, 
-   and likewise for :math:`Q`.
+   :math:`PAQ^T`, where :math:`P` and :math:`Q` are represented by the
+   permutation vectors `p` and `q`, 
+   which consist of the row indices of the nonzero entry in each column of 
+   :math:`P` and :math:`Q`, respectively.
 
 lu namespace
 ^^^^^^^^^^^^
@@ -201,15 +211,16 @@ lu namespace
    factors (without partial pivoting).
 
 .. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<int>& p, Matrix<F>& B )
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,VC,STAR>& p, DistMatrix<F>& B )
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,UPerm,STAR>& p, DistMatrix<F>& B )
 
+   HERE
    Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or
    :math:`B := A^{-H} B`, where :math:`A` has been overwritten with
    its LU factors with partial pivoting, which satisfy :math:`P A = L U`, where
    the permutation matrix :math:`P` is represented by the pivot vector ``p``.
 
 .. cpp:function:: void lu::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<int>& p, const Matrix<int>& q, Matrix<F>& B )
-.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,VC,STAR>& p, const DistMatrix<int,VC,STAR>& q, DistMatrix<F>& B )
+.. cpp:function:: void lu::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<int,UPerm,STAR>& p, const DistMatrix<int,UPerm,STAR>& q, DistMatrix<F>& B )
 
    Update :math:`B := A^{-1} B`, :math:`B := A^{-T} B`, or
    :math:`B := A^{-H} B`, where :math:`A` has been overwritten with
@@ -294,15 +305,18 @@ matrix with entries given by `d` so that :math:`R` has a positive diagonal).
    Householder reflectors are stored in the vector `t`.
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<int>& p )
-.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p )
+.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p )
 
-   Overwrite :math:`A` with the :math:`R` from a column-pivoted QR factorization.
+   Overwrite :math:`A` with the :math:`R` from a column-pivoted QR 
+   factorization, :math:`A P = Q R`. The permutation matrix :math:`P` is 
+   represented via the permutation vector :math:`p`, which contains the 
+   row indices of the nonzero entry in each column of :math:`P`.
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p )
-.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,VR,STAR>& p )
+.. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,UPerm,STAR>& p )
 
-   Overwrite :math:`A` with both the :math:`R` and (scaled) Householder reflectors 
-   from a column-pivoted QR factorization.
+   Overwrite :math:`A` with both the :math:`R` and (scaled) Householder 
+   reflectors from a column-pivoted QR factorization.
 
 qr namespace
 ^^^^^^^^^^^^
@@ -318,37 +332,43 @@ qr namespace
 
    Additionally explicitly return the :math:`R` from the QR factorization.
 
+.. cpp:function:: void qr::Explicit( Matrix<F>& A, Matrix<F>& R, Matrix<Int>& p )
+.. cpp:function:: void qr::Explicit( DistMatrix<F>& A, DistMatrix<F>& R, DistMatrix<int,UPerm,STAR>& p )
+
+   Return representations of all matrices of the pivoted QR factorization
+   (note that the pivot *vector* is returned, not the full pivot matrix).
+
 .. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, Matrix<F>& B )
 .. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,Ut,Vt>& t, const DistMatrix<Base<F>,Ud,Vd>& d, DistMatrix<F>& B )
 
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
    `A`, `t`, and `d` from either the left or the right to :math:`B`.
 
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p )
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,VR,STAR>& p )
+.. cpp:function:: int qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p )
+.. cpp:function:: int qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p )
+.. cpp:function:: int qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p )
+.. cpp:function:: int qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,UPerm,STAR>& p )
 
    Column-pivoted versions of the above routines which use the Businger/Golub 
    strategy, i.e., the pivot is chosen as the remaining column with maximum
-   two norm.
+   two norm. The return value is the number of performed iterations.
 
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p, int numSteps )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p, int numSteps )
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p, int numSteps )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,VR,STAR>& p, int numSteps )
+.. cpp:function:: int qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p, int numSteps )
+.. cpp:function:: int qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p, int numSteps )
+.. cpp:function:: int qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p, int numSteps )
+.. cpp:function:: int qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,UPerm,STAR>& p, int numSteps )
 
    Same as above, but only execute a fixed number of steps of the rank-revealing
-   factorization.
+   factorization. The return value is the number of performed iterations.
 
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p, int maxSteps, Base<F> tol )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p, int maxSteps, Base<F> tol )
-.. cpp:function:: void qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<int>& p, int maxSteps, Base<F> tol )
-.. cpp:function:: void qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<int,VR,STAR>& p, int maxSteps, Base<F> tol )
+.. cpp:function:: int qr::BusingerGolub( Matrix<F>& A, Matrix<int>& p, int maxSteps, Base<F> tol )
+.. cpp:function:: int qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p, int maxSteps, Base<F> tol )
+.. cpp:function:: int qr::BusingerGolub( Matrix<F>& A, Matrix<F>& t, Matrix<int>& p, int maxSteps, Base<F> tol )
+.. cpp:function:: int qr::BusingerGolub( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<int,UPerm,STAR>& p, int maxSteps, Base<F> tol )
 
    Either execute `maxSteps` iterations or stop after the maximum remaining 
    column norm is less than or equal to `tol` times the maximum original column
-   norm.
+   norm. The return value is the number of performed iterations.
 
 .. cpp:type:: TreeData<F>
 
@@ -524,13 +544,13 @@ representing the remaining columns in terms of the selected columns of
 :math:`A`.
 
 .. cpp:function:: void ID( const Matrix<F>& A, Matrix<int>& p, Matrix<F>& Z, int numSteps )
-.. cpp:function:: void ID( const DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p, DistMatrix<F,STAR,VR>& Z, int numSteps )
+.. cpp:function:: void ID( const DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p, DistMatrix<F,STAR,VR>& Z, int numSteps )
 
    `numSteps` steps of a pivoted QR factorization are used to return an 
    Interpolative Decomposition of :math:`A`.
 
 .. cpp:function:: void ID( const Matrix<F>& A, Matrix<int>& p, Matrix<F>& Z, int maxSteps, Base<F> tol )
-.. cpp:function:: void ID( const DistMatrix<F>& A, DistMatrix<int,VR,STAR>& p, DistMatrix<F,STAR,VR>& Z, int maxSteps, Base<F> tol )
+.. cpp:function:: void ID( const DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p, DistMatrix<F,STAR,VR>& Z, int maxSteps, Base<F> tol )
 
    Either `maxSteps` steps of a pivoted QR factorization are used, or 
    executation stopped after the maximum remaining column norm was less than or
@@ -557,7 +577,7 @@ where :math:`A_C` is a (small) selection of columns of :math:`A`,
 common to call this a CUR decomposition.
 
 .. cpp:function:: void Skeleton( const Matrix<F>& A, Matrix<int>& pR, Matrix<int>& pC, Matrix<F>& Z, int maxSteps, Base<F> tol )
-.. cpp:function:: void Skeleton( const DistMatrix<F>& A, DistMatrix<int,VR,STAR>& pR, DistMatrix<int,VR,STAR>& pC, int maxSteps, Base<F> tol )
+.. cpp:function:: void Skeleton( const DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& pR, DistMatrix<int,UPerm,STAR>& pC, int maxSteps, Base<F> tol )
 
    Rather than returning :math:`A_R` and :math:`A_C`, the permutation matrices
    which implicitly define them are returned instead. At most `maxSteps` steps 

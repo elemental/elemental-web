@@ -5,8 +5,8 @@ Permutation vectors
 -------------------
 In order to represent arbitrary permutations, Elemental recently switched from
 LAPACK-style pivot sequence representations to general permutation vectors, 
-where entry `i` of the *permutation* *vector* `p` contains the row index of
-the nonzero entry in column `i` of the corresponding permutation matrix.
+where entry `i` of the *permutation* *vector* `p` contains the column index of
+the nonzero entry in row `i` of the corresponding permutation matrix.
 
 PermuteCols
 ^^^^^^^^^^^

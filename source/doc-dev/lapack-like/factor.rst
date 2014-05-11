@@ -25,7 +25,7 @@ thrown.
 .. cpp:function:: void Cholesky( UpperOrLower uplo, DistMatrix<F>& A, Matrix<int>& p )
 
    Performs Cholesky factorization with full (diagonal) pivoting. On exit, the 
-   vector :math:`p` consists of the nonzero row indices of the permutation 
+   vector :math:`p` consists of the nonzero column indices of the permutation 
    matrix :math:`P` such that :math:`P A P^T = L L^H = U^H U`.
 
 .. cpp:function:: void CholeskyMod( UpperOrLower uplo, Matrix<F>& T, Base<F>& alpha, Matrix<F>& V )
@@ -110,8 +110,8 @@ LDL factorization
 .. cpp:function:: void LDLT( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& dSub, DistMatrix<int,UPerm,STAR>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
    Returns a pivoted LDL factorization, where the vector :math:`p` contains the
-   row indices of the nonzero entries of the permutation matrix :math:`P` such
-   that :math:`PAP^T` equals either :math:`LDL^T` or 
+   column indices of the nonzero entries of the permutation matrix :math:`P` 
+   such that :math:`PAP^T` equals either :math:`LDL^T` or 
    :math:`LDL^H`, where :math:`D` is quasi-diagonal. 
    The Bunch-Kaufman pivoting rules are used within a higher-performance 
    blocked algorithm, whereas the Bunch-Parlett strategy uses an unblocked 
@@ -188,7 +188,7 @@ and :math:`U` are as described above and :math:`P` is a permutation matrix.
 
    Overwrites the matrix :math:`A` with the LU decomposition of 
    :math:`PA`, where :math:`P` is represented by the permutation vector `p`, 
-   which consists of the row indices of the nonzero entry in each column of 
+   which consists of the column indices of the nonzero entry in each row of 
    :math:`P`.
 
 .. cpp:function:: void LU( Matrix<F>& A, Matrix<int>& p, Matrix<int>& q )
@@ -197,8 +197,19 @@ and :math:`U` are as described above and :math:`P` is a permutation matrix.
    Overwrites the matrix :math:`A` with the LU decomposition of 
    :math:`PAQ^T`, where :math:`P` and :math:`Q` are represented by the
    permutation vectors `p` and `q`, 
-   which consist of the row indices of the nonzero entry in each column of 
+   which consist of the column indices of the nonzero entry in each row of 
    :math:`P` and :math:`Q`, respectively.
+
+.. cpp:function:: void LUMod( Matrix<F>& A, Matrix<int>& p, const Matrix<F>& u, const Matrix<F>& v, bool conjugate=true, Base<F> tau=0.1 )
+.. cpp:function:: void LUMod( DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p, const DistMatrix<F>& u, const DistMatrix<F>& v, bool conjugate=true, Base<F> tau=0.1 )
+
+   Modify an existing LU factorization, :math:`A = P^T L U`, to incorporate
+   the rank-one update :math:`A + u v^T` or :math:`A + u v^H`. This algorithm
+   only requires a quadratic number of operations.
+
+   .. note::
+
+      The current implementation has only been tested for square matrices.
 
 lu namespace
 ^^^^^^^^^^^^
@@ -310,7 +321,7 @@ matrix with entries given by `d` so that :math:`R` has a positive diagonal).
    Overwrite :math:`A` with the :math:`R` from a column-pivoted QR 
    factorization, :math:`A P = Q R`. The permutation matrix :math:`P` is 
    represented via the permutation vector :math:`p`, which contains the 
-   row indices of the nonzero entry in each column of :math:`P`.
+   column indices of the nonzero entry in each row of :math:`P`.
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p )
 .. cpp:function:: void QR( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, DistMatrix<Base<F>,MD,STAR>& d, DistMatrix<int,UPerm,STAR>& p )

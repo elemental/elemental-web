@@ -32,16 +32,10 @@
             </div>
             <div class="slide">
               <a href="https://github.com/elemental/Elemental/blob/master/examples/matrices/Walsh.cpp">
-              <img src="/_static/images/featured/elem-cpp-walsh.png" width="366" height="282" alt="Walsh (C++)">
+              <img src="/_static/images/featured/elem-cpp-walsh.png" width="366" height="282" alt="Walsh">
               </a>
               <div class="caption">
-                <p>Factor/display Walsh matrix (C++)</p>
-              </div>
-            </div>
-            <div class="slide">
-              <img src="/_static/images/featured/elem-py-dft.png" width="366" height="282" alt="Low-rank DFT">
-              <div class="caption">
-                <p>Analyze low-rank block of DFT (Python)</p>
+                <p>Factor/display Walsh matrix</p>
               </div>
             </div>
           </div>

@@ -190,7 +190,7 @@
           <a href="http://www.utexas.edu">UT Austin</a> interested in the 
           development and application of high-performance algorithms and 
           libraries for tensor contractions. He is the author of both the 
-          <a href="http://elemental.github.io/Elemental/core/axpy_interface.html">Axpy interface</a> and the <a href="https://github.com/elemental/Elemental/blob/master/experimental/g3d/G3DGemm.cpp">experimental 3D Gemm implementation</a>.
+          "Axpy interface" and the experimental 3D Gemm implementation</a>.
           </p>
         </div>
 

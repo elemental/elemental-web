@@ -3,6 +3,13 @@ Matrix decompositions
 
 Hermitian eigensolver
 ---------------------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/HermitianEig.cpp>`__
+
+`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianEig.cpp>`__
+
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/HermitianEig.cpp>`__
+
 Elemental provides a collection of routines for both full and partial 
 solution of the Hermitian eigenvalue problem 
 
@@ -35,42 +42,46 @@ Paolo Bientinesi's PMRRR for the tridiagonal eigenvalue problem.
    so the parallel versions of these routines are limited to real and complex 
    double-precision matrices.
 
-.. note:: 
+.. cpp:type:: HermitianEigCtrl<Real>
 
-   Please see the :ref:`lapack-tuning` section for information on optimizing
-   the reduction to tridiagonal form, as it is the dominant cost in all of 
-   Elemental's Hermitian eigensolvers.
+   .. cpp:member:: HermitianTridiagCtrl tridiagCtrl
+   .. cpp:member:: HermitianSdcCtrl<Real> sdcCtrl
+   .. cpp:member:: bool useSdc
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/HermitianEig.cpp>`__
+   .. cpp:function:: HermitianEigCtrl()
 
-`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianEig.cpp>`__
+      Initializes `tridiagCtrl` and `sdcCtrl` to their defaults and sets
+      `useSdc` to false.
 
-`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/HermitianEig.cpp>`__
+.. note::
+
+   Please see the :ref:`lapack-tuning` section for extensive information on 
+   maximizing the performance of Householder tridiagonalization.
 
 Full spectrum computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the full set of eigenvalues of the Hermitian matrix `A`.
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the full set of eigenpairs of the Hermitian matrix `A`.
 
 Index-based subset computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, int a, int b, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, int a, int b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, int a, int b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, int a, int b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenvalues of a Hermitian matrix `A` with indices in the range 
    :math:`a,a+1,...,b`.
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenpairs of a Hermitian matrix `A` with indices in the range 
    :math:`a,a+1,...,b`.
@@ -78,16 +89,16 @@ Index-based subset computation
 Range-based subset computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenvalues of a Hermitian matrix `A` lying in the half-open 
    interval :math:`(a,b]`.
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, DistMatrix<F,STAR,STAR>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, DistMatrix<F,STAR,STAR>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenpairs of a Hermitian matrix `A` with eigenvalues lying in 
    the half-open interval :math:`(a,b]`.
@@ -95,7 +106,7 @@ Range-based subset computation
 Spectral divide and conquer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/HermitianEig/SDC.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/HermitianEig/SDC.hpp>`__
 
 The primary references for this approach is Demmel et al.'s *Fast linear algebra
 is stable* and Nakatsukasa et al.'s *Stable and efficient spectral divide and conquer algorithms for the symmetric eigenvalue problem*.
@@ -151,38 +162,32 @@ Please see the :cpp:func:`HermitianEig` documentation for more details.
    so the parallel versions of these routines are limited to real and complex 
    double-precision matrices.
 
-.. note:: 
-
-   Please see the :ref:`lapack-tuning` section for information on optimizing
-   the reduction to tridiagonal form, as it is the dominant cost in all of 
-   Elemental's Hermitian eigensolvers.
-
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/SkewHermitianEig.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/SkewHermitianEig.hpp>`__
 
 Full spectrum computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the full set of eigenvalues of the skew-Hermitian matrix `G`.
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the full set of eigenpairs of the skew-Hermitian matrix `G`.
 
 Index-based subset computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, int a, int b, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, int a, int b, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, int a, int b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, int a, int b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenvalues of a skew-Hermitian matrix `G` with
    indices in the range :math:`a,a+1,...,b`.
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenpairs of a skew-Hermitian matrix `G` with 
    indices in the range :math:`a,a+1,...,b`.
@@ -190,14 +195,14 @@ Index-based subset computation
 Range-based subset computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Base<F> a, Base<F> b, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Base<F> a, Base<F> b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, Base<F> a, Base<F> b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenvalues of a skew-Hermitian matrix `G` 
    lying in the half-open interval :math:`(a,b]i`.
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenpairs of a skew-Hermitian matrix `G` with 
    eigenvalues lying in the half-open interval :math:`(a,b]i`.
@@ -232,21 +237,21 @@ which uses the ``AXBX`` enum value.
    An enum for specifying either the ``ABX``, ``BAX``, or ``AXBX`` 
    generalized eigenvalue problems (described above).
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/HermitianGenDefiniteEig.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/HermitianGenDefiniteEig.hpp>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianGenDefiniteEig.cpp>`__
 
 Full spectrum computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the full set of eigenvalues of a generalized EVP involving the 
    Hermitian matrices `A` and `B`, where `B` is also positive-definite.
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<Base<F>>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<Base<F>>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<Base<F>>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<Base<F>>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the full set of eigenpairs of a generalized EVP involving the 
    Hermitian matrices `A` and `B`, where `B` is also positive-definite.
@@ -254,15 +259,15 @@ Full spectrum computation
 Index-based subset computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, int a, int b, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, int a, int b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, int a, int b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, int a, int b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenvalues with indices in the range :math:`a,a+1,...,b` of a 
    generalized EVP involving the Hermitian matrices `A` and `B`, where `B` is 
    also positive-definite.
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenpairs with indices in the range :math:`a,a+1,...,b` of a 
    generalized EVP involving the Hermitian matrices `A` and `B`, where `B` is 
@@ -271,15 +276,15 @@ Index-based subset computation
 Range-based subset computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, Base<F> a, Base<F> b, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenvalues lying in the half-open interval :math:`(a,b]` of a 
    generalized EVP involving the Hermitian matrices `A` and `B`, where `B` is 
    also positive-definite.
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the eigenpairs whose eigenvalues lie in the half-open interval 
    :math:`(a,b]` of a generalized EVP involving the Hermitian matrices `A` and 
@@ -301,32 +306,26 @@ meantime.
 
 Schur decomposition
 -------------------
-Only a prototype spectral divide and conquer implementation is currently 
-available, though Elemental will eventually also include an implementation of
-Granat et al.'s parallel QR algorithm.
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Schur.hpp>`__
+Elemental contains a native prototype implementation of a spectral divide and
+conquer scheme for the Schur decomposition, but it is not yet robust enough
+to handle general matrices. For local matrices, Elemental defaults to calling
+LAPACK's Hessenberg QR algorithm (with Aggressive Early Deflation); if 
+support for ScaLAPACK was detected during configuration, Elemental defaults to
+ScaLAPACK's Hessenberg QR algorithm (without deflation), otherwise the 
+Spectral Divide and Conquer approach is attempted.
+
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/Schur.hpp>`__
 
 .. cpp:function:: void Schur( Matrix<F>& A )
-.. cpp:function:: void Schur( Matrix<F>& A, Matrix<F>& Q )
-
-   Currently defaults to the sequential Hessenberg QR algorithm.
-
 .. cpp:function:: void Schur( DistMatrix<F>& A )
+.. cpp:function:: void Schur( Matrix<F>& A, Matrix<F>& Q )
 .. cpp:function:: void Schur( DistMatrix<F>& A, DistMatrix<F>& Q )
-
-   If ScaLAPACK is detected, this routine combines Elemental's transformations
-   to and from upper-Hessenberg form with ScaLAPACK's non-AED Hessenberg 
-   QR algorithm (p{s,d,c,z}lahqr). If ScaLAPACK was not detected during 
-   Elemental's configuration, a prototype Spectral Divide and Conquer algorithm
-   is used (note that Elemental's SDC implementation only works for matrices
-   without strong eigenvalue clustering).
 
 Hessenberg QR algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^
-**TODO: A full explanation of which ScaLAPACK routines are currently used**
 
-`QR algorithm header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Schur/QR.hpp>`__
+`QR algorithm header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/Schur/QR.hpp>`__
 
 .. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool fullTriangle=false )
 .. cpp:function:: void schur::QR( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool fullTriangle=true )
@@ -346,6 +345,42 @@ Hessenberg QR algorithm
    Aggressive Early Deflation is also optional for real matrices (as of now,
    its usage is not recommended due to known bugs in the implementation).
 
+Quasi-triangular manipulation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cpp:function:: void schur::QuasiTriangEig( const Matrix<F>& U, Matrix<Complex<Base<F>>>& w )
+.. cpp:function:: void schur::QuasiTriangEig( const DistMatrix<F>& U, DistMatrix<Complex<Base<F>>,colDist,rowDist>& w )
+
+   Return the eigenvalues of the upper quasi-triangular matrix `U` in the vector
+   `w`.
+
+.. cpp:function:: Matrix<Complex<Base<F>>> schur::QuasiTriangEig( const Matrix<F>& U )
+.. cpp:function:: DistMatrix<Complex<Base<F>>,VR,STAR> schur::QuasiTriangEig( const DistMatrix<F>& U )
+
+   Return the eigenvalues of the upper quasi-triangular matrix `U`.
+
+.. cpp:function:: void schur::QuasiTriangEig( const Matrix<F>& dMain, const Matrix<F>& dSub, const Matrix<F>& dSup, Matrix<Complex<Base<F>>>& w )
+
+   The underlying computation routine for computing the eigenvalues of 
+   quasi-triangular matrices. The vectors `dMain`, `dSub`, and `dSup` should
+   respectively contain the main, sub, and super-diagonals of the 
+   upper quasi-triangular matrix.
+
+.. cpp:function:: void schur::RealToComplex( const Matrix<Real>& UQuasi, Matrix<Complex<Real>>& U )
+.. cpp:function:: void schur::RealToComplex( const DistMatrix<Real>& UQuasi, DistMatrix<Complex<Real>>& U )
+
+   Rotate a real upper quasi-triangular matrix into a complex upper triangular
+   matrix.
+
+.. cpp:function:: void schur::CheckRealSchur( const Matrix<Real>& U, bool standardForm=false )
+.. cpp:function:: void schur::CheckRealSchur( const DistMatrix<Real>& U, bool standardForm=false )
+
+   Check whether or not the largest diagonal blocks of the upper quasi-triangular
+   matrix are at most :math:`2 \times 2` and, optionally, check if the 
+   :math:`2 \times 2` diagonal blocks are in standard form 
+   (if so, their diagonal must be constant and the product of the off-diagonal 
+   entries should be negative).
+
 Spectral divide and conquer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -354,7 +389,7 @@ is stable*. While the current implementation needs a large number of algorithmic
 improvements, especially with respect to choosing the Mobius transformations,
 it tends to succeed on random matrices.
 
-`SDC header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Schur/SDC.hpp>`__
+`SDC header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/Schur/SDC.hpp>`__
 
 .. cpp:type:: SdcCtrl<Real>
 
@@ -402,7 +437,7 @@ Then an SVD of :math:`A` can easily be computed as
 where the columns of :math:`U` equal the columns of :math:`V`, modulo sign 
 flips introduced by negative eigenvalues.
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/SVD.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/SVD.hpp>`__
 
 .. cpp:function:: void HermitianSVD( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& U, Matrix<F>& V )
 .. cpp:function:: void HermitianSVD( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& U, DistMatrix<F>& V )
@@ -426,11 +461,11 @@ the *polar decomposition* of :math:`A` and can be constructed as
 :math:`A = U \Sigma V^H` is the SVD of :math:`A`. Alternatively, it can be 
 computed through (a dynamically-weighted) Halley iteration.
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Polar.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/Polar.hpp>`__
 
-`SVD approach <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Polar/SVD.hpp>`__
+`SVD approach <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/Polar/SVD.hpp>`__
 
-`QWDH approach <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/Polar/QDWH.hpp>`__
+`QWDH approach <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/Polar/QDWH.hpp>`__
 
 .. cpp:function:: void Polar( Matrix<F>& A )
 .. cpp:function:: void Polar( DistMatrix<F>& A )
@@ -482,9 +517,9 @@ triplet :math:`(U,\Sigma,V)` such that
 where :math:`U` and :math:`V` are unitary, and :math:`\Sigma` is diagonal with 
 non-negative entries.
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/decomp/SVD.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/decomp/SVD.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/decomp/SVD>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/decomp/SVD>`__
 
 .. cpp:function:: void SVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V )
 

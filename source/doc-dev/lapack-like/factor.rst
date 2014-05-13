@@ -10,9 +10,9 @@ decomposed into the form :math:`A = L L^H` or :math:`A = U^H U`, where
 numerically indefinite, then a :cpp:type:`NonHPDMatrixException` will be 
 thrown.
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/Cholesky.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/Cholesky.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/Cholesky>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/Cholesky>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Cholesky.cpp>`__
 
@@ -22,7 +22,7 @@ thrown.
    Overwrite the `uplo` triangle of the HPD matrix `A` with its Cholesky factor.
 
 .. cpp:function:: void Cholesky( UpperOrLower uplo, Matrix<F>& A, Matrix<int>& p )
-.. cpp:function:: void Cholesky( UpperOrLower uplo, DistMatrix<F>& A, Matrix<int>& p )
+.. cpp:function:: void Cholesky( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<int,UPerm,STAR>& p )
 
    Performs Cholesky factorization with full (diagonal) pivoting. On exit, the 
    vector :math:`p` consists of the nonzero column indices of the permutation 
@@ -96,9 +96,9 @@ LDL factorization
    .. cpp:member:: int nb
    .. cpp:member:: int from[2]
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LDL.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/LDL.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/LDL>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/LDL>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LDL.cpp>`__
 
@@ -153,9 +153,9 @@ ldl namespace
 LU factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LU.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/LU.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/LU>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/LU>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LU.cpp>`__
 
@@ -242,9 +242,9 @@ lu namespace
 LQ factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/LQ.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/LQ.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/LQ>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/LQ>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LQ.cpp>`__
 
@@ -279,12 +279,20 @@ lq namespace
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
    `A`, `t`, and `d` from either the left or the right to :math:`B`.
 
+.. cpp:function:: void lq::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, const Matrix<F>& B, Matrix<F>& X )
+.. cpp:function:: void lq::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, const DistMatrix<Base<F>,MD,STAR>& d, const DistMatrix<F>& B, DistMatrix<F>& X )
+
+   Solves a set of linear systems using an existing packed LQ factorization given
+   by :math:`A` and the vectors :math:`t` and :math:`d`.
+   :math:`B` is the matrix of input vectors and :math:`X` is the matrix of 
+   solutions.
+
 QR factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/QR.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/QR.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/QR>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/QR>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/QR.cpp>`__
 
@@ -381,6 +389,14 @@ qr namespace
    column norm is less than or equal to `tol` times the maximum original column
    norm. The return value is the number of performed iterations.
 
+.. cpp:function:: void qr::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, const Matrix<F>& B, Matrix<F>& X )
+.. cpp:function:: void qr::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, const DistMatrix<Base<F>,MD,STAR>& d, const DistMatrix<F>& B, DistMatrix<F>& X )
+
+   Solves a set of linear systems using an existing packed QR factorization given
+   by :math:`A` and the vectors :math:`t` and :math:`d`.
+   :math:`B` is the matrix of input vectors and :math:`X` is the matrix of
+   solutions.
+
 .. cpp:type:: TreeData<F>
 
    .. cpp:member:: Matrix<F> QR0
@@ -430,7 +446,7 @@ ________________
 Generalized QR factorization
 ----------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/GQR.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/GQR.hpp>`__
 
 The *generalized QR factorization* of a pair of matrices :math:`(A,B)` is 
 analogous to a QR factorization of :math:`B^{-1} A` but does not require that
@@ -468,9 +484,9 @@ Thus, if :math:`B` was square and invertible, then the QR factorization of
 RQ factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/RQ.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/RQ.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/factor/RQ>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/RQ>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/RQ.cpp>`__
 
@@ -496,10 +512,18 @@ rq namespace
    Applies the implicitly-defined :math:`Q` (or its adjoint) stored within
    `A`, `t`, and `d` from either the left or the right to :math:`B`.
 
+.. cpp:function:: void rq::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, const Matrix<F>& B, Matrix<F>& X )
+.. cpp:function:: void rq::SolveAfter( Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, const DistMatrix<Base<F>,MD,STAR>& d, const DistMatrix<F>& B, DistMatrix<F>& X )
+
+   Solves a set of linear systems using an existing packed RQ factorization given
+   by :math:`A` and the vectors :math:`t` and :math:`d`.
+   :math:`B` is the matrix of input vectors and :math:`X` is the matrix of
+   solutions.
+
 Generalized RQ factorization
 ----------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/GRQ.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/GRQ.hpp>`__
 
 The *generalized RQ factorization* of a pair of matrices :math:`(A,B)` is 
 analogous to an RQ factorization of :math:`A B^{-1}` but does not require that
@@ -537,7 +561,7 @@ Thus, is :math:`B` was square and invertible, then the RQ factorization of
 Interpolative Decomposition (ID)
 --------------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/ID.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/ID.hpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ID.cpp>`__
 
@@ -570,7 +594,7 @@ representing the remaining columns in terms of the selected columns of
 Skeleton decomposition
 ----------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/factor/Skeleton.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/Skeleton.hpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Skeleton.cpp>`__
 

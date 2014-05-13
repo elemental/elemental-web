@@ -22,7 +22,7 @@ Attempt to minimize :math:`\| x \|_1` such that :math:`Ax=b` using ADMM.
 .. cpp:function:: int BasisPursuit( const Matrix<F>& A, const Matrix<F>& b, Matrix<F>& x, Matrix<F>& z, Matrix<F>& u, Base<F> rho=1, Base<F> alpha=1.2, Int maxIter=500, Base<F> absTol=1e-6, Base<F> relTol=1e-4, bool usePinv=true, Base<F> pinvTol=0, bool progress=false )
 .. cpp:function:: int BasisPursuit( const DistMatrix<F>& A, const DistMatrix<F>& b, DistMatrix<F>& x, DistMatrix<F>& z, DistMatrix<F>& u, Base<F> rho=1, Base<F> alpha=1.2, Int maxIter=500, Base<F> absTol=1e-6, Base<F> relTol=1e-4, bool usePinv=true, Base<F> pinvTol=0, bool progress=false )
 
-    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/BasisPursuit.hpp>`__
+    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/BasisPursuit.hpp>`__
 
     `Example driver on GitHub <https://github.com/elemental/Elemental/blob/master/examples/convex/BasisPursuit.cpp>`__
 
@@ -78,7 +78,7 @@ using ADMM.
 .. cpp:function:: int LinearProgram( const Matrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, Matrix<Real>& x, Matrix<Real>& z, Matrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=false, bool progress=true )
 .. cpp:function:: int LinearProgram( const DistMatrix<Real>& A, const DistMatrix<Real>& b, const DistMatrix<Real>& c, DistMatrix<Real>& x, DistMatrix<Real>& z, DistMatrix<F>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=true, bool progress=true )
 
-    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/LinearProgram.hpp>`__
+    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/LinearProgram.hpp>`__
 
     `Example driver on GitHub <https://github.com/elemental/Elemental/blob/master/examples/convex/LinearProgram.cpp>`__
 
@@ -135,7 +135,7 @@ using ADMM.
 .. cpp:function:: int QuadraticProgram( const Matrix<Real>& P, const Matrix<Real>& q, Real lb, Real ub, Matrix<Real>& x, Matrix<Real>& z, Matrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=false, bool progress=true )
 .. cpp:function:: int QuadraticProgram( const DistMatrix<Real>& P, const DistMatrix<Real>& q, Real lb, Real ub, DistMatrix<Real>& x, DistMatrix<Real>& z, DistMatrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=true, bool progress=true )
 
-    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/QuadraticProgram.hpp>`__
+    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/QuadraticProgram.hpp>`__
 
     `Example driver on GitHub <https://github.com/elemental/Elemental/blob/master/examples/convex/QuadraticProgram.cpp>`__
 
@@ -196,7 +196,7 @@ using ADMM.
 .. cpp:function:: int SparseInvCov( const Matrix<Real>& D, Matrix<Real>& X, Matrix<Real>& Z, Matrix<Real>& U, Real lambda, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool progress=true )
 .. cpp:function:: int SparseInvCov( const DistMatrix<Real>& D, DistMatrix<Real>& X, DistMatrix<Real>& Z, DistMatrix<Real>& U, Real lambda, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool progress=true )
 
-    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/SparseInvCov.hpp>`__
+    `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/SparseInvCov.hpp>`__
 
     `Example driver on GitHub <https://github.com/elemental/Elemental/blob/master/examples/convex/SparseInvCov.cpp>`__
 
@@ -242,7 +242,7 @@ Clip
 ----
 Force every entry of a matrix to lie within a given (half-)interval.
 
-`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/Clip.hpp>`__
+`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/Clip.hpp>`__
 
 .. cpp:function:: void LowerClip( Matrix<Real>& X, Real lowerBound=0 )
 .. cpp:function:: void LowerClip( DistMatrix<Real>& X, Real lowerBound=0 )
@@ -265,7 +265,7 @@ Uses a careful calculation of the log of the determinant in order to return
 the *log barrier* of a Hermitian positive-definite matrix `A`,
 :math:`-\log(\mbox{det}(A))`.
 
-`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/LogBarrier.hpp>`__
+`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/LogBarrier.hpp>`__
 
 .. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, const Matrix<F>& A )
 .. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, const DistMatrix<F>& A )
@@ -289,7 +289,7 @@ In particular, if we set :math:`Z = L_B^{-1} L_A`, where :math:`A=L_A L_A^H` and
 
    D_{ld}(A,B) = \| Z \|_F^2 - 2 \log(\mbox{det}(Z)) - n.
 
-`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/LogDetDiv.hpp>`__
+`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/LogDetDiv.hpp>`__
 
 `Example driver on GitHub <https://github.com/elemental/Elemental/blob/master/examples/convex/LogDetDiv.cpp>`__
 
@@ -301,7 +301,7 @@ Singular-value soft-thresholding
 Overwrites :math:`A` with :math:`U S_{\tau}(\Sigma) V^H`, where :math:`U \Sigma V^H` is the singular-value decomposition of :math:`A` upon input and :math:`S_{\tau}` performs soft-thresholding with parameter :math:`\tau`.
 The return value is the rank of the soft-thresholded matrix.
 
-`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/SVT.hpp>`__
+`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/SVT.hpp>`__
 
 .. cpp:function:: int SVT( Matrix<F>& A, Base<F> tau, bool relative=false )
 .. cpp:function:: int SVT( DistMatrix<F>& A, Base<F> tau, bool relative=false )
@@ -357,7 +357,7 @@ Soft-thresholding
 -----------------
 Overwrites each entry of :math:`A` with its soft-thresholded value.
 
-`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/elemental/convex/SoftThreshold.hpp>`__
+`Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/SoftThreshold.hpp>`__
 
 .. cpp:function:: void SoftThreshold( Matrix<F>& A, Base<F> tau, bool relative=false )
 .. cpp:function:: void SoftThreshold( DistMatrix<F>& A, Base<F> tau, bool relative=false )

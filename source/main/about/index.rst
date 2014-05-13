@@ -19,16 +19,16 @@ Additionally, a number of routines in Elemental, such as pivoted QR,
 interpolative, and skeleton decompositions, were implemented as a result of 
 work on `a parallel butterfly algorithm <http://github.com/poulson/dist-butterfly.git/>`__.
 
-Features
-********
+Unique Features
+***************
 
+* High-performance pseudospectral computation and visualization
+* Quadratic-time low-rank Cholesky and LU modifications
 * Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
 * LU and Cholesky with full pivoting
 * Column-pivoted QR and interpolative/skeleton decompositions
 * Quadratically Weighted Dynamic Halley iteration for the polar decomposition
 * Spectral Divide and Conquer Schur decomposition and Hermitian EVD
-* Multi-shift Lanczos-based inverse iteration for computing pseudospectra
-* Multiple Relatively Robust Representations for the symmetric tridiagonal EVP
 * Many algorithms for Singular-Value soft-Thresholding (SVT)
 * Tall-skinny QR decompositions
 * Hermitian matrix functions

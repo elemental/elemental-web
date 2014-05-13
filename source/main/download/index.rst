@@ -8,9 +8,9 @@ Download
 Releases
 --------
 The current release is 
-`Elemental 0.83 <http://libelemental.org/releases/0.83>`__, 
+`Elemental 0.84-rc1 <http://libelemental.org/releases/0.84-rc1>`__, 
 and the relevant tarball 
-`is available here <http://libelemental.org/pub/releases/elemental-0.83.tgz>`__.
+`is available here <http://libelemental.org/pub/releases/Elemental-0.84-rc1.tgz>`__.
 There is also `a list of release notes <http://libelemental.org/releases/>`__.
 
 Direct repository access

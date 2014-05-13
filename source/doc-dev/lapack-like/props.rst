@@ -4,9 +4,9 @@ Matrix properties
 Condition number
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Condition.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Condition.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Condition>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/props/Condition>`__
 
 The condition number of a matrix with respect to a particular norm is
 
@@ -50,9 +50,9 @@ with the most common choice being the matrix two-norm.
 Determinant
 -----------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Determinant.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Determinant.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Determinant>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/props/Determinant>`__
 
 Though there are many different possible definitions of the determinant of a 
 matrix :math:`A \in \mathbb{F}^{n \times n}`, the simplest one is in terms of 
@@ -142,9 +142,9 @@ determinant).
 Matrix norms
 ------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Norm.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Norm.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Norm>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/props/Norm>`__
 
 The following routines can return either
 :math:`\|A\|_1`, :math:`\|A\|_\infty`, :math:`\|A\|_F` (the Frobenius norm),
@@ -288,9 +288,9 @@ Two-norm estimates
 Pseudospectra
 -------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Pseudospectrum.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Pseudospectrum.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/props/Pseudospectrum>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/props/Pseudospectrum>`__
 
 `Pseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectrum.cpp>`__
 
@@ -439,7 +439,7 @@ Schur decomposition is considered infeasible.
 Trace
 -----
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Trace.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Trace.hpp>`__
 
 The two equally useful definitions of the trace of a square matrix 
 :math:`A \in \mathbb{F}^{n \times n}` are
@@ -462,7 +462,7 @@ important characterization.
 Inertia
 -------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/props/Inertia.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Inertia.hpp>`__
 
 .. cpp:type:: InertiaType
 

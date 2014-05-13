@@ -290,12 +290,12 @@ functioning properly. An example of generating a random distributed matrix,
 computing its Singular Value Decomposition (SVD), and checking for numerical 
 error is available in `examples/lapack-like/SVD.cpp <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/SVD.cpp>`__.
 
-As you can see, the only required header is ``elemental.hpp``, which must be
+As you can see, the only required header is ``El.hpp``, which must be
 in the include path when compiling this simple driver, ``SVD.cpp``. 
 If Elemental was installed in ``/usr/local``, then 
-``/usr/local/conf/elemvariables`` can be used to build a simple Makefile::
+``/usr/local/conf/ElVars`` can be used to build a simple Makefile::
 
-    include /usr/local/conf/elemvariables
+    include /usr/local/conf/ElVars
 
     SVD: SVD.cpp
         ${CXX} ${ELEM_COMPILE_FLAGS} $< -o $@ ${ELEM_LINK_FLAGS} ${ELEM_LIBS}
@@ -349,19 +349,19 @@ project folder that builds off of the following snippet::
     project(Foo)
 
     add_subdirectory(external/elemental)
-    include_directories("${PROJECT_BINARY_DIR}/external/elemental/include")
+    include_directories("${PROJECT_BINARY_DIR}/external/El/include")
     include_directories(${MPI_CXX_INCLUDE_PATH})
 
     # Build your project here
     # e.g., 
     #   add_library(foo ${LIBRARY_TYPE} ${FOO_SRC})
-    #   target_link_libraries(foo elemental)
+    #   target_link_libraries(foo El)
 
 Troubleshooting
 ===============
 If you run into build problems, please email 
 `maint@libelemental.org <mailto:maint@libelemental.org>`_ 
-and make sure to attach the file ``include/elemental/config.h``, which should 
+and make sure to attach the file ``include/El/config.h``, which should 
 be generated within your build directory. 
 Please only direct usage questions to 
 `users@libelemental.org <mailto:users@libelemental.org>`_, 

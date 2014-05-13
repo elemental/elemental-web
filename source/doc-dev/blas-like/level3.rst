@@ -2,9 +2,9 @@ Level 3
 =======
 
 The prototypes for the following routines can be found at          
-`include/elemental/blas-like_decl.hpp <https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like_decl.hpp>`_, while the
+`include/El/blas-like_decl.hpp <https://github.com/elemental/Elemental/tree/master/include/El/blas-like_decl.hpp>`_, while the
 implementations are in 
-`include/elemental/blas-like/level3/ <https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like/level3>`_.
+`include/El/blas-like/level3/ <https://github.com/elemental/Elemental/tree/master/include/El/blas-like/level3>`_.
 
 Gemm
 ----
@@ -59,6 +59,46 @@ Please see :cpp:func:`SetLocalTrrkBlocksize\<T>`
 and :cpp:func:`LocalTrrkBlocksize\<T>` in the :ref:`blas-tuning`
 section for information on tuning the distributed :cpp:func:`Herk`.
 
+Multi-shift QuasiTrsm
+---------------------
+Solve for :math:`X` in the linear system
+
+.. math::
+
+   T^\# X - X D^\# = Y
+
+or
+
+.. math::
+
+   X T^\# - D^\# X = Y
+
+where :math:`T` is *quasi-triangular*, :math:`D` is diagonal, and 
+:math:`A^\#` is defined to be one of :math:`\{A,A^T,A^H\}`. 
+The data movement requires almost no modification from that of 
+:cpp:func:`QuasiTrsm`.
+
+Note that the term *quasi-triangular* is in the context of real Schur
+decompositions, which produce triangular matrices with mixes of
+:math:`1 \times 1` and :math:`2 \times 2` diagonal blocks.
+
+.. note::
+
+   There is no corresponding BLAS routine, but it is a natural extension of
+   Trsm.
+
+.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X )
+.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X )
+
+   Overwrite the columns of `X` with the solutions to the shifted linear 
+   systems.
+
+.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const Matrix<Real>& T, const Matrix<Complex<Real>>& shifts, Matrix<Real>& XReal, Matrix<Real>& XImag )
+.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const DistMatrix<Real>& T, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real>& XReal, DistMatrix<Real>& XImag )
+
+   Overwrite the columns of the real and imaginary parts of `X` with the 
+   solutions to the shifted linear systems.
+
 Multi-shift Trsm
 ----------------
 Solve for :math:`X` in the linear system
@@ -82,10 +122,49 @@ The data movement requires almost no modification from that of :cpp:func:`Trsm`.
    There is no corresponding BLAS routine, but it is a natural modification
    of Trsm.
 
-.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X )
-.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X )
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X )
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X )
 
    Overwrite the columns of `X` with the solutions to the shifted linear 
+   systems.
+
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const Matrix<Real>& T, const Matrix<Complex<Real>>& shifts, Matrix<Real>& XReal, Matrix<Real>& XImag )
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const DistMatrix<Real>& T, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real>& XReal, DistMatrix<Real>& XImag )
+
+   Overwrite the columns of the real and imaginary parts of `X` with the
+   solutions to the shifted linear systems.
+
+QuasiTrsm
+---------
+Solve for :math:`X` in the linear system
+
+.. math::
+
+   T^\# X = Y
+
+or
+
+.. math::
+
+   X T^\# = Y
+
+where :math:`T` is *quasi-triangular* and
+:math:`A^\#` is defined to be one of :math:`\{A,A^T,A^H\}`.
+The algorithm is very similar to that of :cpp:func:`Trsm`.
+
+Note that the term *quasi-triangular* is in the context of real Schur
+decompositions, which produce triangular matrices with mixes of
+:math:`1 \times 1` and :math:`2 \times 2` diagonal blocks.
+
+.. note::
+
+   There is no corresponding BLAS routine, but it is a natural extension of
+   Trsm.
+
+.. cpp:function:: void QuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X, bool checkIfSingular=false )
+.. cpp:function:: void QuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X, bool checkIfSingular=false )
+
+   Overwrite the columns of `X` with the solutions to the shifted linear
    systems.
 
 Symm

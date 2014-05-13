@@ -1,11 +1,6 @@
 Level 3
 =======
 
-The prototypes for the following routines can be found at          
-`include/elemental/blas-like_decl.hpp <https://github.com/poulson/Elemental/tree/master/include/elemental/blas-like_decl.hpp>`_, while the
-implementations are in 
-`include/elemental/blas-like/level3/ <https://github.com/poulson/Elemental/tree/master/include/elemental/blas-like/level3>`_.
-
 Gemm
 ----
 General matrix-matrix multiplication: updates

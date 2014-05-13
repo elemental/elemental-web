@@ -4,7 +4,7 @@ Linear solvers
 HPD solve
 ---------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/HPDSolve.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/HPDSolve.hpp>`__
 
 Solves :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X=B` for :math:`X` given 
 Hermitian positive-definite (HPD) :math:`A` and right-hand side matrix 
@@ -24,7 +24,7 @@ The solution is computed by first finding the Cholesky factorization of
 Symmetric solve
 ---------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/SymmetricSolve.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/SymmetricSolve.hpp>`__
 
 Solve :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X = B` for :math:`X` 
 given a symmetric or Hermitian matrix :math:`A` and a right-hand side matrix
@@ -43,7 +43,7 @@ given a symmetric or Hermitian matrix :math:`A` and a right-hand side matrix
 Hermitian solve
 ---------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/HermitianSolve.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/HermitianSolve.hpp>`__
 
 Solve :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X = B` for :math:`X` 
 given a Hermitian matrix :math:`A` and a right-hand side matrix
@@ -62,7 +62,7 @@ given a Hermitian matrix :math:`A` and a right-hand side matrix
 Gaussian elimination
 --------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/GaussianElimination.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/GaussianElimination.hpp>`__
 
 Solves :math:`AX=B` for :math:`X` given a general square nonsingular matrix 
 :math:`A` and right-hand side matrix :math:`B`. The solution is computed through
@@ -77,7 +77,7 @@ Solves :math:`AX=B` for :math:`X` given a general square nonsingular matrix
 Least Squares
 -------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/LeastSquares.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/LeastSquares.hpp>`__
 
 Given :math:`A \in \mathbb{F}^{m \times n}` and a right-hand side 
 :math:`b \in \mathbb{F}^m`, a *least-squares* method solves
@@ -115,7 +115,7 @@ sides by switching to Frobenius norms.
 General (Gauss-Markov) Linear Model (GLM)
 -----------------------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/GLM.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/GLM.hpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/GLM.cpp>`__
 
@@ -129,7 +129,7 @@ General (Gauss-Markov) Linear Model (GLM)
 Equality-constrained Least Squares (LSE)
 ----------------------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/LSE.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/LSE.hpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/LSE.cpp>`__
 
@@ -143,7 +143,7 @@ Equality-constrained Least Squares (LSE)
 Multi-shift Hessenberg solves
 -----------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/elemental/lapack-like/solve/MultiShiftHessSolve.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/solve/MultiShiftHessSolve.hpp>`__
 
 Solve for :math:`X` in the system
 

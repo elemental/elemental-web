@@ -22,8 +22,8 @@ An example usage might be:
 
 .. code-block:: cpp
 
-   #include "elemental.hpp"
-   using namespace elem;
+   #include "El.hpp"
+   using namespace El;
    ...
    // Create an 8 x 8 distributed matrix over the given grid
    DistMatrix<double> A( 8, 8, grid );

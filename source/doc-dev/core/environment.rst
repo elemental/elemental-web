@@ -30,35 +30,35 @@ then all of the below information is reported.
 
     Elemental configuration:
       Math libraries: /usr/lib/liblapack.so;/usr/lib/libblas.so
-      HAVE_F90_INTERFACE
-      HAVE_MPI_REDUCE_SCATTER_BLOCK
-      HAVE_MPI_IN_PLACE
-      USE_BYTE_ALLGATHERS
+      EL_HAVE_F90_INTERFACE
+      EL_HAVE_MPI_REDUCE_SCATTER_BLOCK
+      EL_HAVE_MPI_IN_PLACE
+      EL_USE_BYTE_ALLGATHERS
 
 .. cpp:function:: void PrintCCompilerInfo( std::ostream& os=std::cout )
 
    Prints the relevant C compilation information. For example::
 
     Elemental's C compiler info:
-      CMAKE_C_COMPILER:    /usr/local/bin/gcc
-      MPI_C_COMPILER:      /home/poulson/Install/bin/mpicc
-      MPI_C_INCLUDE_PATH:  /home/poulson/Install/include
-      MPI_C_COMPILE_FLAGS: 
-      MPI_C_LINK_FLAGS:     -Wl,-rpath  -Wl,/home/poulson/Install/lib
-      MPI_C_LIBRARIES:     /home/poulson/Install/lib/libmpich.so;/home/poulson/Install/lib/libopa.so;/home/poulson/Install/lib/libmpl.so;/usr/lib/i386-linux-gnu/librt.so;/usr/lib/i386-linux-gnu/libpthread.so
+      EL_CMAKE_C_COMPILER:    /usr/local/bin/gcc
+      EL_MPI_C_COMPILER:      /home/poulson/Install/bin/mpicc
+      EL_MPI_C_INCLUDE_PATH:  /home/poulson/Install/include
+      EL_MPI_C_COMPILE_FLAGS: 
+      EL_MPI_C_LINK_FLAGS:     -Wl,-rpath  -Wl,/home/poulson/Install/lib
+      EL_MPI_C_LIBRARIES:     /home/poulson/Install/lib/libmpich.so;/home/poulson/Install/lib/libopa.so;/home/poulson/Install/lib/libmpl.so;/usr/lib/i386-linux-gnu/librt.so;/usr/lib/i386-linux-gnu/libpthread.so
 
 .. cpp:function:: void PrintCxxCompilerInfo( std::ostream& os=std::cout )
 
    Prints the relevant C++ compilation information. For example::
 
     Elemental's C++ compiler info:
-      CMAKE_CXX_COMPILER:    /usr/local/bin/g++
-      CXX_FLAGS:             -Wall
-      MPI_CXX_COMPILER:      /home/poulson/Install/bin/mpicxx
-      MPI_CXX_INCLUDE_PATH:  /home/poulson/Install/include
-      MPI_CXX_COMPILE_FLAGS: 
-      MPI_CXX_LINK_FLAGS:     -Wl,-rpath  -Wl,/home/poulson/Install/lib
-      MPI_CXX_LIBRARIES:     /home/poulson/Install/lib/libmpichcxx.so;/home/poulson/Install/lib/libmpich.so;/home/poulson/Install/lib/libopa.so;/home/poulson/Install/lib/libmpl.so;/usr/lib/i386-linux-gnu/librt.so;/usr/lib/i386-linux-gnu/libpthread.so
+      EL_CMAKE_CXX_COMPILER:    /usr/local/bin/g++
+      EL_CXX_FLAGS:             -Wall
+      EL_MPI_CXX_COMPILER:      /home/poulson/Install/bin/mpicxx
+      EL_MPI_CXX_INCLUDE_PATH:  /home/poulson/Install/include
+      EL_MPI_CXX_COMPILE_FLAGS: 
+      EL_MPI_CXX_LINK_FLAGS:     -Wl,-rpath  -Wl,/home/poulson/Install/lib
+      EL_MPI_CXX_LIBRARIES:     /home/poulson/Install/lib/libmpichcxx.so;/home/poulson/Install/lib/libmpich.so;/home/poulson/Install/lib/libopa.so;/home/poulson/Install/lib/libmpl.so;/usr/lib/i386-linux-gnu/librt.so;/usr/lib/i386-linux-gnu/libpthread.so
 
 Set up and clean up
 -------------------
@@ -70,12 +70,12 @@ Set up and clean up
 
    .. code-block:: cpp
 
-      #include "elemental.hpp"
+      #include "El.hpp"
       int main( int argc, char* argv[] )
       {
-          elem::Initialize( argc, argv );
+          El::Initialize( argc, argv );
           // ...
-          elem::Finalize();
+          El::Finalize();
           return 0;
       }
 
@@ -93,14 +93,14 @@ Set up and clean up
 
    .. code-block:: cpp
 
-      #include "elemental.hpp"
+      #include "El.hpp"
       int main( int argc, char* argv[] )
       {
-          elem::Initialize( argc, argv );
+          El::Initialize( argc, argv );
           try {
               // ...
           } catch( std::exception& e ) { ReportException(e); }
-          elem::Finalize();
+          El::Finalize();
           return 0;
       }
 
@@ -153,7 +153,7 @@ Default process grid
    .. code-block:: cpp
 
       // Build a 10 x 10 distributed matrix over mpi::COMM_WORLD
-      elem::DistMatrix<T,MC,MR> A( 10, 10 );
+      El::DistMatrix<T,MC,MR> A( 10, 10 );
 
 Call stack manipulation
 -----------------------
@@ -192,7 +192,7 @@ Custom exceptions
 
    .. code-block:: cpp
 
-      throw elem::SingularMatrixException();
+      throw El::SingularMatrixException();
 
 .. cpp:type:: class NonHPDMatrixException 
 
@@ -207,7 +207,7 @@ Custom exceptions
 
    .. code-block:: cpp
 
-      throw elem::NonHPDMatrixException();
+      throw El::NonHPDMatrixException();
 
 .. cpp:type:: class NonHPSDMatrixException 
 
@@ -222,7 +222,7 @@ Custom exceptions
 
    .. code-block:: cpp
 
-      throw elem::NonHPSDMatrixException();
+      throw El::NonHPSDMatrixException();
 
 Complex data
 ------------

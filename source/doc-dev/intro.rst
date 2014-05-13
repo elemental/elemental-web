@@ -11,44 +11,29 @@ redistributions (much of the syntax of the library is also inspired from
 functionality to `ScaLAPACK <http://netlib.org/scalapack>`_, which is the very 
 widely used effort towards extending `LAPACK <http://netlib.org/lapack>`_ onto 
 distributed-memory architectures.
-Unlike PLAPACK and ScaLAPACK, Elemental performs all computations using 
+Unlike PLAPACK and ScaLAPACK, Elemental performs virtually all computations using 
 element-wise, rather than block, matrix distributions (please see the first
 journal publication on Elemental, *Elemental: A new framework for distributed
 memory dense matrix computations*, for a detailed discussion of this design 
 choice).
 Some of the unique features of Elemental include distributed implementations of:
 
+* High-performance pseudospectral computation and visualization
+* Quadratic-time low-rank Cholesky and LU modifications
 * Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
 * LU and Cholesky with full pivoting
 * Column-pivoted QR and interpolative/skeleton decompositions
 * Quadratically Weighted Dynamic Halley iteration for the polar decomposition
 * Spectral Divide and Conquer Schur decomposition and Hermitian EVD
-* Multi-shift Lanczos-based inverse iteration for computing pseudospectra
 * Many algorithms for Singular-Value soft-Thresholding (SVT)
 * Tall-skinny QR decompositions
 * Hermitian matrix functions
 * Sign-based Lyapunov/Ricatti/Sylvester solvers
 
-For the sake of objectivity, here are a few reasons why one might want to 
-use ScaLAPACK or PLAPACK instead:
-
-* Elemental currently supports a divide-and-conquer scheme for parallel Schur
-  decompositions, but not a QR-based algorithm. The Aggressive Early Deflation
-  implementation of the Hessenberg QR algorithm in ScaLAPACK should be 
-  significantly more accurate and faster for small to medium sized matrices,
-  but the divide-and-conquer scheme should likely be preferred for very 
-  large-scale Schur decompositions using several thousand cores. Ideally 
-  Elemental will eventually contain implementations of both algorithms, with 
-  an appropriate switching mechanism.
-* Some applications exploit the block distribution format used by ScaLAPACK 
-  and PLAPACK in order to increase the efficiency of matrix 
-  construction. Though it is clearly possible to redistribute the matrix into
-  an element-wise distribution format after construction, this might add 
-  an unnecessary level of complexity.
-* Elemental is primarily intended to be used from C++11, though interfaces to 
-  other languages, such as C, Fortran 90, and Python, are in various stages of 
-  development. ScaLAPACK and PLAPACK routines are currently significantly more 
-  straightforward to call from C and Fortran.
+For the sake of objectivity: Elemental is primarily intended to be used from 
+C++11, though interfaces to other languages, such as C, Fortran 90, and Python, 
+are in various stages of development. ScaLAPACK and PLAPACK routines are 
+currently significantly more straightforward to call from C and Fortran.
 
 .. note::
    At this point, the vast majority of Elemental's source code is in header 
@@ -71,11 +56,7 @@ Dependencies
 ============
 * Functioning C++11 and ANSI C compilers.
 * A working MPI2 implementation.
-* BLAS and LAPACK (ideally version 3.3 or greater) implementations. If 
-  a sufficiently up-to-date LAPACK implementation is not provided, then 
-  a working F90 compiler is required in order to build Elemental's eigensolvers
-  (the tridiagonal eigensolver, `PMRRR <http://code.google.com/p/pmrrr>`_, 
-  requires recent LAPACK routines).
+* BLAS and LAPACK (ideally version 3.3 or greater) implementations. 
 * `CMake <http://www.cmake.org>`_ (version 2.8.8 or later).
 
 If a sufficiently up-to-date C++11 compiler is used (e.g., recent versions of 
@@ -117,7 +98,7 @@ which states::
 
 Most source files contain the copyright notice::
 
-    Copyright (c) 2009-2013, Jack Poulson
+    Copyright (c) 2009-2014, Jack Poulson
     All rights reserved.
 
 For an up-to-date list of contributing authors, please see the 

@@ -11,8 +11,8 @@ numbers where the :math:`(i,j)` entry is equal to :math:`i-j` would be:
 
   .. code-block:: cpp
 
-     #include "elemental.hpp"
-     using namespace elem;
+     #include "El.hpp"
+     using namespace El;
      ...
      Matrix<double> A( m, n );
      for( int j=0; j<n; ++j )
@@ -33,8 +33,8 @@ of the first code sample as follows:
 
   .. code-block:: cpp
      
-     #include "elemental.hpp"
-     using namespace elem;
+     #include "El.hpp"
+     using namespace El;
      ...
      Matrix<double> A( m, n );
      double* buffer = A.Buffer();
@@ -58,7 +58,7 @@ to view the bottom-right :math:`6 \times 7` submatrix using
 
   .. code-block:: cpp
 
-     #include "elemental.hpp"
+     #include "El.hpp"
      ...
      auto ABR = View( A, 1, 2, 3, 4 );
 

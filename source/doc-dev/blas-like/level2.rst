@@ -2,8 +2,8 @@ Level 2
 =======
 
 The prototypes for the following routines can be found at          
-`include/elemental/blas-like_decl.hpp <https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like_decl.hpp>`_, while the
-implementations are in `include/elemental/blas-like/level2/ <https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like/level2>`_.
+`include/El/blas-like_decl.hpp <https://github.com/elemental/Elemental/tree/master/include/El/blas-like_decl.hpp>`_, while the
+implementations are in `include/El/blas-like/level2/ <https://github.com/elemental/Elemental/tree/master/include/El/blas-like/level2>`_.
 
 Gemv
 ----
@@ -70,6 +70,25 @@ where only the triangle of :math:`A` specified by `uplo` is updated.
 
 .. cpp:function:: void Her2( UpperOrLower uplo, T alpha, const Matrix<T>& x, const Matrix<T>& y, Matrix<T>& A )
 .. cpp:function:: void Her2( UpperOrLower uplo, T alpha, const DistMatrix<T>& x, const DistMatrix<T>& y, DistMatrix<T>& A )
+
+QuasiTrsv
+---------
+*Quasi-triangular* solve with a vector: computes
+:math:`x := \mbox{op}(A)^{-1} x`, where :math:`\mbox{op}(A)` is either 
+:math:`A`, :math:`A^T`, or :math:`A^H`, and :math:`A` is treated an either a 
+lower or upper quasi-triangular matrix, depending upon `uplo`.
+
+Note that the term *quasi-triangular* is in the context of real Schur 
+decompositions, which produce triangular matrices with mixes of 
+:math:`1 \times 1` and :math:`2 \times 2` diagonal blocks.
+
+.. note::
+
+   There is no corresponding BLAS routine, but it is a natural extension of 
+   Trsv.
+
+.. cpp:function:: void QuasiTrsv( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& x, bool checkIfSingular=false )
+.. cpp:function:: void QuasiTrsv( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& x, bool checkIfSingular=false )
 
 Symv
 ----

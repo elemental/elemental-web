@@ -6,7 +6,7 @@ Release notes for Elemental
     :maxdepth: 1
     :glob:
 
-    0.84-rc1/*
+    0.84/*
     0.83/*
     0.82-p1/*
     0.82/*

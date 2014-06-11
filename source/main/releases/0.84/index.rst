@@ -1,12 +1,12 @@
-.. _release_0_84_rc1:
+.. _release_0_84:
 
-##############################
-05/11/2014: Elemental 0.84-rc1
-##############################
+##########################
+06/04/2014: Elemental 0.84
+##########################
 
-`Elemental-0.84-rc1.tgz <http://libelemental.org/pub/releases/Elemental-0.84-rc1.tgz>`__
+`Elemental-0.84.tgz <http://libelemental.org/pub/releases/Elemental-0.84.tgz>`__
 
-Documentation: `[HTML] <http://libelemental.org/documentation/0.84-rc1/>`__ `[PDF] <http://libelemental.org/documentation/elem-0.84-rc1.pdf>`__ 
+Documentation: `[HTML] <http://libelemental.org/documentation/0.84/>`__ `[PDF] <http://libelemental.org/documentation/elem-0.84.pdf>`__ 
 
 The significant changes since release 0.83 are listed below.
 

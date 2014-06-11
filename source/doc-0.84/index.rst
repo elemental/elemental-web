@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Elemental 0.84-rc1's documentation
-##################################
+Elemental 0.84's documentation
+##############################
 
 .. toctree::
    :maxdepth: 2

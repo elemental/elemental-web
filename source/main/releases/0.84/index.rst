@@ -4,7 +4,7 @@
 06/04/2014: Elemental 0.84
 ##########################
 
-`Elemental-0.84.tgz <http://libelemental.org/pub/releases/Elemental-0.84.tgz>`__
+`Elemental-0.84-p1.tgz <http://libelemental.org/pub/releases/Elemental-0.84-p1.tgz>`__ (patch applied on 06/13/2014)
 
 Documentation: `[HTML] <http://libelemental.org/documentation/0.84/>`__ `[PDF] <http://libelemental.org/documentation/elem-0.84.pdf>`__ 
 

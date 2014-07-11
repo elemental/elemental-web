@@ -10,7 +10,7 @@ Releases
 The current release is 
 `Elemental 0.84 <http://libelemental.org/releases/0.84>`__, 
 and the relevant tarball 
-`is available here <http://libelemental.org/pub/releases/Elemental-0.84.tgz>`__.
+`is available here <http://libelemental.org/pub/releases/Elemental-0.84-p1.tgz>`__.
 There is also `a list of release notes <http://libelemental.org/releases/>`__.
 
 Direct repository access

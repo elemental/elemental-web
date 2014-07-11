@@ -27,6 +27,17 @@
         </div>
 
         <div class="front-block block app">
+          <h3><a href="http://smallk.github.io/">SmallK</a></h3>
+          <img alt='' src='/_static/images/smallk.png'
+          class='avatar avatar-84 photo' height='84' width='84' />
+
+          <p>The <a href="http://smallk.github.io/">SmallK</a> 
+            is a high performance software package for low rank matrix 
+            approximation via the nonnegative matrix factorization (NMF).
+          </p>
+        </div>
+
+        <div class="front-block block app">
           <h3><a href="http://researcher.ibm.com/researcher/view_project.php?id=5131">Skylark</a></h3>
 
           <p>The <a href="http://researcher.ibm.com/researcher/view_project.php?id=5131">Skylark</a> 
@@ -34,10 +45,6 @@
             kernels for general statistical data analysis and optimization 
             applications.  
           </p>
-        </div>
-
-        <div class="front-block block app">
-          <h3>Your application here?</h3>
         </div>
       </div><!-- #sub-feature -->
     </div><!-- #content -->

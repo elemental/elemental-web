@@ -1,5 +1,6 @@
 Reduction to condensed form
 ===========================
+`Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/condense.hpp>`__
 
 Hermitian to tridiagonal
 ------------------------
@@ -9,7 +10,7 @@ the matrix to real symmetric tridiagonal form (usually through Householder
 transformations). This routine performs said reduction on a Hermitian matrix 
 and stores the scaled Householder vectors in place of the introduced zeroes. 
 
-`Main source file <https://github.com/elemental/Elemental/blob/master/src/lapack-like/HermitianTridiag.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/HermitianTridiag.cpp>`__
 
 `Subroutine implementations <https://github.com/elemental/Elemental/tree/master/src/lapack-like/HermitianTridiag>`__
 
@@ -49,7 +50,7 @@ and stores the scaled Householder vectors in place of the introduced zeroes.
 hermitian_tridiag namespace
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Implementations <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/condense/HermitianTridiag/ApplyQ.hpp>`__
+`Implementations <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/HermitianTridiag/ApplyQ.hpp>`__
 
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
@@ -63,7 +64,7 @@ hermitian_tridiag namespace
 Square to Hessenberg
 --------------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/condense/Hessenberg.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/Hessenberg.cpp>`__
 
 `Subroutine header files <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/condense/Hessenberg>`__
 
@@ -86,9 +87,9 @@ hessenberg namespace
 ^^^^^^^^^^^^^^^^^^^^
 **TODO**
 
-.. cpp:function:: void hessenberg::ApplyQ( UpperOrLower uplo, LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& H )
-.. cpp:function:: void hessenberg::ApplyQ( UpperOrLower uplo, LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& H )
-.. cpp:function:: void hessenberg::ApplyQ( UpperOrLower uplo, LeftOrRight side, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& H )
+.. cpp:function:: void hessenberg::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& H )
+.. cpp:function:: void hessenberg::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& H )
+.. cpp:function:: void hessenberg::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,STAR,STAR>& t, DistMatrix<F>& H )
 
 General to bidiagonal
 ---------------------
@@ -98,7 +99,7 @@ result is upper bidiagonal, otherwise it is lower bidiagonal. This routine is
 most commonly used as a preprocessing step in computing the SVD of a general
 matrix.
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/condense/Bidiag.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/Bidiag.cpp>`__
 
 `Subroutine implementations <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/condense/Bidiag>`__
 

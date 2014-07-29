@@ -109,16 +109,24 @@ Returns :math:`x^T y`, which is **not** an inner product.
 .. cpp:function:: T Dotu( const Matrix<T>& x, const Matrix<T>& y )
 .. cpp:function:: T Dotu( const DistMatrix<T,U,V>& x, const DistMatrix<T,U,V>& y )
 
+EntrywiseFill
+-------------
+
+.. cpp:function:: void EntrywiseFill( Matrix<T>& A, std::function<T(void)> func )
+.. cpp:function:: void EntrywiseFill( DistMatrix<T,U,V>& A, std::function<T(void)> func )
+.. cpp:function:: void EntrywiseFill( BlockDistMatrix<T,U,V>& A, std::function<T(void)> func )
+
+   Fills each entry of the passed in matrix by querying the specified function.
+
 EntrywiseMap
 ------------
 
-.. cpp:function:: void EntrywiseMap( Matrix<T>& A, Function func )
-.. cpp:function:: void EntrywiseMap( DistMatrix<T,U,V>& A, Function func )
-.. cpp:function:: void EntrywiseMap( BlockDistMatrix<T,U,V>& A, Function func )
+.. cpp:function:: void EntrywiseMap( Matrix<T>& A, std::function<T(T)> func )
+.. cpp:function:: void EntrywiseMap( DistMatrix<T,U,V>& A, std::function<T(T)> func )
+.. cpp:function:: void EntrywiseMap( BlockDistMatrix<T,U,V>& A, std::function<T(T)> func )
 
    Replaces each entry of the passed in matrix with a specified function of
-   the existing entry. ``func`` will typically be a lambda function which 
-   accepts a single argument of type `T` and returns a value of type `T`.
+   the existing entry.
 
 Hadamard
 --------
@@ -144,6 +152,26 @@ and :math:`B` is :math:`\mbox{tr}(A^H B)`.
 
 .. cpp:function:: F HilbertSchmidt( const Matrix<F>& A, const Matrix<F>& B )
 .. cpp:function:: F HilbertSchmidt( const DistMatrix<F,U,V>& A, const DistMatrix<F,U,V>& B )
+
+IndexDependentFill
+------------------
+
+.. cpp:function:: void IndexDependentFill( Matrix<T>& A, std::function<T(Int,Int)> func )
+.. cpp:function:: void IndexDependentFill( DistMatrix<T,U,V>& A, std::function<T(Int,Int)> func )
+.. cpp:function:: void IndexDependentFill( BlockDistMatrix<T,U,V>& A, std::function<T(Int,Int)> func )
+
+   Fills each entry of the passed in matrix by querying the specified function
+   which depends upon the global index of the entry.
+
+IndexDependentMap
+-----------------
+
+.. cpp:function:: void IndexDependentMap( Matrix<T>& A, std::function<T(Int,Int,T)> func )
+.. cpp:function:: void IndexDependentMap( DistMatrix<T,U,V>& A, std::function<T(Int,Int,T)> func )
+.. cpp:function:: void IndexDependentMap( BlockDistMatrix<T,U,V>& A, std::function<T(Int,Int,T)> func )
+
+   Replaces each entry of the passed in matrix with a specified function of
+   the existing entry and its global indices.
 
 MakeTrapezoidal
 ---------------

@@ -14,7 +14,7 @@ where :math:`\chi_i` is the :math:`i`'th entry of :math:`x` and :math:`\eta_j`
 is the :math:`j`'th entry of :math:`y`.
 
 .. cpp:function:: void Cauchy( Matrix<F>& A, const std::vector<F>& x, const std::vector<F>& y )
-.. cpp:function:: void Cauchy( DistMatrix<F,U,V>& A, const std::vector<F>& x, const std::vector<F>& y )
+.. cpp:function:: void Cauchy( AbstractDistMatrix<F>& A, const std::vector<F>& x, const std::vector<F>& y )
 
    Generate a Cauchy matrix using the defining vectors, :math:`x` and :math:`y`. 
 
@@ -32,7 +32,7 @@ entry of :math:`s`, :math:`\chi_i` is the :math:`i`'th entry of :math:`x`, and :
 is the :math:`j`'th entry of :math:`y`.
 
 .. cpp:function:: void CauchyLike( Matrix<F>& A, const std::vector<F>& r, const std::vector<F>& s, const std::vector<F>& x, const std::vector<F>& y )
-.. cpp:function:: void CauchyLike( DistMatrix<F,U,V>& A, const std::vector<F>& r, const std::vector<F>& s, const std::vector<F>& x, const std::vector<F>& y )
+.. cpp:function:: void CauchyLike( AbstractDistMatrix<F>& A, const std::vector<F>& r, const std::vector<F>& s, const std::vector<F>& x, const std::vector<F>& y )
 
    Generate a Cauchy-like matrix using the defining vectors: :math:`r`, :math:`s`, :math:`x`, and :math:`y`.
 
@@ -48,7 +48,7 @@ such that
 where :math:`\beta_k` is the :math:`k`'th entry of vector :math:`b`.
 
 .. cpp:function:: void Circulant( Matrix<T>& A, const std::vector<T>& a )
-.. cpp:function:: void Circulant( DistMatrix<T,U,V>& A, const std::vector<T>& a )
+.. cpp:function:: void Circulant( AbstractDistMatrix<T>& A, const std::vector<T>& a )
 
    Generate a circulant matrix using the vector ``a``.
 
@@ -59,7 +59,7 @@ An :math:`n \times n` matrix :math:`A` is called *diagonal* if each entry :math:
 :math:`i = j`.
 
 .. cpp:function:: void Diagonal( Matrix<T>& D, const std::vector<T>& d )
-.. cpp:function:: void Diagonal( DistMatrix<T,U,V>& D, const std::vector<T>& d )
+.. cpp:function:: void Diagonal( AbstractDistMatrix<T>& D, const std::vector<T>& d )
 
    Construct a diagonal matrix from the vector of diagonal values, :math:`d`.
 
@@ -72,29 +72,29 @@ equal to
 
    \exp(i \phi(i,j)).
 
-.. cpp:function:: void Egorov( Matrix<Complex<Real> >& A, const RealFunctor& phase, int n )
-.. cpp:function:: void Egorov( DistMatrix<Complex<Real>,U,V>& A, const RealFunctor& phase, int n )
+.. cpp:function:: void Egorov( Matrix<Complex<Real> >& A, std::function<Real(Int,Int)> phi, int n )
+.. cpp:function:: void Egorov( AbstractDistMatrix<Complex<Real>>& A, std::function<Real(Int,Int)> phi, int n )
 
 Extended Kahan
 --------------
 **TODO**
 
 .. cpp:function:: void ExtendedKahan( Matrix<F>& A, int k, Base<F> phi, Base<F> mu )
-.. cpp:function:: void ExtendedKahan( DistMatrix<F,U,V>& A, int k, Base<F> phi, Base<F> mu )
+.. cpp:function:: void ExtendedKahan( AbstractDistMatrix<F>& A, int k, Base<F> phi, Base<F> mu )
 
 Fiedler
 -------
 **TODO**
 
 .. cpp:function:: void Fiedler( Matrix<F>& A, const std::vector<F>& c )
-.. cpp:function:: void Fiedler( DistMatrix<F,U,V>& A, const std::vector<F>& c )
+.. cpp:function:: void Fiedler( AbstractDistMatrix<F>& A, const std::vector<F>& c )
 
 Forsythe
 --------
 **TODO**
 
 .. cpp:function:: void Forsythe( Matrix<T>& J, int n, T alpha, T lambda )
-.. cpp:function:: void Forsythe( DistMatrix<T,U,V>& J, int n, T alpha, T lambda )
+.. cpp:function:: void Forsythe( AbstractDistMatrix<T>& J, int n, T alpha, T lambda )
 
 Fourier
 -------
@@ -105,42 +105,37 @@ The :math:`n \times n` *Discrete Fourier Transform* (DFT) matrix, say :math:`A`,
    \alpha_{i,j} = \frac{e^{-2\pi i j / n}}{\sqrt{n}}.
 
 .. cpp:function:: void Fourier( Matrix<Complex<Real> >& A, int n )
-.. cpp:function:: void Fourier( DistMatrix<Complex<Real>,U,V>& A, int n )
+.. cpp:function:: void Fourier( AbstractDistMatrix<Complex<Real>>& A, int n )
 
    Set the matrix ``A`` equal to the :math:`n \times n` DFT matrix.
-
-.. cpp:function:: void MakeFourier( Matrix<Complex<Real> >& A )
-.. cpp:function:: void MakeFourier( DistMatrix<Complex<Real>,U,V>& A )
-
-   Turn the existing :math:`n \times n` matrix ``A`` into a DFT matrix.
 
 GCDMatrix
 ---------
 **TODO**
 
 .. cpp:function:: void GCDMatrix( Matrix<T>& G, int m, int n )
-.. cpp:function:: void GCDMatrix( DistMatrix<T,U,V>& G, int m, int n )
+.. cpp:function:: void GCDMatrix( AbstractDistMatrix<T>& G, int m, int n )
 
 Gear
 ----
 **TODO**
 
 .. cpp:function:: void Gear( Matrix<T>& G, int n, int s, int t )
-.. cpp:function:: void Gear( DistMatrix<T,U,V>& G, int n, int s, int t )
+.. cpp:function:: void Gear( AbstractDistMatrix<T>& G, int n, int s, int t )
 
 Golub/Klema/Stewart 
 -------------------
 **TODO**
 
 .. cpp:function:: void GKS( Matrix<F>& A, int n )
-.. cpp:function:: void GKS( DistMatrix<F,U,V>& A, int n )
+.. cpp:function:: void GKS( AbstractDistMatrix<F>& A, int n )
 
 Grcar
 -----
 **TODO**
 
 .. cpp:function:: void Grcar( Matrix<T>& A, int n, int k=3 )
-.. cpp:function:: void Grcar( DistMatrix<T,U,V>& A, int n, int k=3 )
+.. cpp:function:: void Grcar( AbstractDistMatrix<T>& A, int n, int k=3 )
 
 Hankel
 ------
@@ -155,7 +150,7 @@ where :math:`\alpha_{i,j}` is the :math:`(i,j)` entry of :math:`A` and
 :math:`\beta_k` is the :math:`k`'th entry of the vector :math:`b`.
 
 .. cpp:function:: void Hankel( Matrix<T>& A, int m, int n, const std::vector<T>& b )
-.. cpp:function:: void Hankel( DistMatrix<T,U,V>& A, int m, int n, const std::vector<T>& b )
+.. cpp:function:: void Hankel( AbstractDistMatrix<T>& A, int m, int n, const std::vector<T>& b )
 
    Create an :math:`m \times n` Hankel matrix from the generate vector, 
    :math:`b`.
@@ -165,24 +160,24 @@ Hanowa
 **TODO**
 
 .. cpp:function:: void Hanowa( Matrix<T>& A, int n, T mu )
-.. cpp:function:: void Hanowa( DistMatrix<T,U,V>& A, int n, T mu )
+.. cpp:function:: void Hanowa( AbstractDistMatrix<T>& A, int n, T mu )
 
 Helmholtz
 ---------
 **TODO**
 
 .. cpp:function:: void Helmholtz( Matrix<F>& H, int n, F shift )
-.. cpp:function:: void Helmholtz( DistMatrix<F,U,V>& H, int n, F shift )
+.. cpp:function:: void Helmholtz( AbstractDistMatrix<F>& H, int n, F shift )
 
    1D Helmholtz: **TODO**
 
 .. cpp:function:: void Helmholtz( Matrix<F>& H, int nx, int ny, F shift )
-.. cpp:function:: void Helmholtz( DistMatrix<F,U,V>& H, int nx, int ny, F shift )
+.. cpp:function:: void Helmholtz( AbstractDistMatrix<F>& H, int nx, int ny, F shift )
 
    2D Helmholtz: **TODO**
 
 .. cpp:function:: void Helmholtz( Matrix<F>& H, int nx, int ny, int nz, F shift )
-.. cpp:function:: void Helmholtz( DistMatrix<F,U,V>& H, int nx, int ny, int nz, F shift )
+.. cpp:function:: void Helmholtz( AbstractDistMatrix<F>& H, int nx, int ny, int nz, F shift )
 
    3D Helmholtz: **TODO**
 
@@ -192,14 +187,9 @@ The Hilbert matrix of order :math:`n` is the :math:`n \times n` matrix where
 entry :math:`(i,j)` is equal to :math:`1/(i+j+1)`.
 
 .. cpp:function:: void Hilbert( Matrix<F>& A, int n )
-.. cpp:function:: void Hilbert( DistMatrix<F,U,V>& A, int n )
+.. cpp:function:: void Hilbert( AbstractDistMatrix<F>& A, int n )
 
    Generate the :math:`n \times n` Hilbert matrix ``A``.
-
-.. cpp:function:: void MakeHilbert( Matrix<F>& A )
-.. cpp:function:: void MakeHilbert( DistMatrix<F,U,V>& A )
-
-   Turn the square matrix ``A`` into a Hilbert matrix.
 
 HermitianFromEVD
 ----------------
@@ -224,12 +214,12 @@ reasons, we generalize this definition to nonsquare, :math:`m \times n`,
 matrices.
 
 .. cpp:function:: void Identity( Matrix<T>& A, int m, int n )
-.. cpp:function:: void Identity( DistMatrix<T,U,V>& A, int m, int n )
+.. cpp:function:: void Identity( AbstractDistMatrix<T>& A, int m, int n )
 
    Set the matrix ``A`` equal to the :math:`m \times n` identity(-like) matrix.
 
 .. cpp:function:: void MakeIdentity( Matrix<T>& A )
-.. cpp:function:: void MakeIdentity( DistMatrix<T,U,V>& A ) 
+.. cpp:function:: void MakeIdentity( AbstractDistMatrix<T>& A ) 
 
    Set the matrix ``A`` to be identity-like.
 
@@ -238,7 +228,7 @@ Jordan
 **TODO**
 
 .. cpp:function:: void Jordan( Matrix<T>& J, int n, T lambda )
-.. cpp:function:: void Jordan( DistMatrix<T,U,V>& J, int n, T lambda )
+.. cpp:function:: void Jordan( AbstractDistMatrix<T>& J, int n, T lambda )
 
 Kahan
 -----
@@ -255,7 +245,7 @@ the corresponding :math:`n \times n` Kahan matrix is given by:
    0      &        & \cdots &        & 1 \end{pmatrix}
 
 .. cpp:function:: void Kahan( Matrix<F>& A, int n, F phi )
-.. cpp:function:: void Kahan( DistMatrix<F>& A, int n, F phi )
+.. cpp:function:: void Kahan( AbstractDistMatrix<F>& A, int n, F phi )
 
    Sets the matrix ``A`` equal to the :math:`n \times n` Kahan matrix with 
    the specified value for :math:`\phi`.
@@ -265,24 +255,24 @@ KMS
 **TODO**
 
 .. cpp:function:: void KMS( Matrix<T>& K, int n, T rho )
-.. cpp:function:: void KMS( DistMatrix<T,U,V>& K, int n, T rho )
+.. cpp:function:: void KMS( AbstractDistMatrix<T>& K, int n, T rho )
 
 Laplacian
 ---------
 **TODO**
 
 .. cpp:function:: void Laplacian( Matrix<F>& L, int n )
-.. cpp:function:: void Laplacian( DistMatrix<F,U,V>& L, int n )
+.. cpp:function:: void Laplacian( AbstractDistMatrix<F>& L, int n )
 
    1D Laplacian: **TODO**
 
 .. cpp:function:: void Laplacian( Matrix<F>& L, int nx, int ny )
-.. cpp:function:: void Laplacian( DistMatrix<F,U,V>& L, int nx, int ny )
+.. cpp:function:: void Laplacian( AbstractDistMatrix<F>& L, int nx, int ny )
 
    2D Laplacian: **TODO**
 
 .. cpp:function:: void Laplacian( Matrix<F>& L, int nx, int ny, int nz )
-.. cpp:function:: void Laplacian( DistMatrix<F,U,V>& L, int nx, int ny, int nz )
+.. cpp:function:: void Laplacian( AbstractDistMatrix<F>& L, int nx, int ny, int nz )
 
    3D Laplacian: **TODO**
 
@@ -291,7 +281,7 @@ Lauchli
 **TODO**
 
 .. cpp:function:: void Lauchli( Matrix<T>& A, int n, T mu )
-.. cpp:function:: void Lauchli( DistMatrix<T,U,V>& A, int n, T mu )
+.. cpp:function:: void Lauchli( AbstractDistMatrix<T>& A, int n, T mu )
 
 Legendre
 --------
@@ -311,7 +301,7 @@ by doubling the square of the first entry of the corresponding normalized
 eigenvector.
 
 .. cpp:function:: void Legendre( Matrix<F>& A, int n )
-.. cpp:function:: void Legendre( DistMatrix<F,U,V>& A, int n )
+.. cpp:function:: void Legendre( AbstractDistMatrix<F>& A, int n )
 
    Sets the matrix ``A`` equal to the :math:`n \times n` Jacobi matrix.
 
@@ -320,21 +310,21 @@ Lehmer
 **TODO**
 
 .. cpp:function:: void Lehmer( Matrix<F>& L, int n )
-.. cpp:function:: void Lehmer( DistMatrix<F,U,V>& L, int n )
+.. cpp:function:: void Lehmer( AbstractDistMatrix<F>& L, int n )
 
 Lotkin
 ------
 **TODO**
 
 .. cpp:function:: void Lotkin( Matrix<F>& A, int n )
-.. cpp:function:: void Lotkin( DistMatrix<F,U,V>& A, int n )
+.. cpp:function:: void Lotkin( AbstractDistMatrix<F>& A, int n )
 
 MinIJ
 -----
 **TODO**
 
 .. cpp:function:: void MinIJ( Matrix<T>& M, int n )
-.. cpp:function:: void MinIJ( DistMatrix<T,U,V>& M, int n )
+.. cpp:function:: void MinIJ( AbstractDistMatrix<T>& M, int n )
 
 NormalFromEVD
 -------------
@@ -356,16 +346,9 @@ Ones
 Create an :math:`m \times n` matrix of all ones.
 
 .. cpp:function:: void Ones( Matrix<T>& A, int m, int n )
-.. cpp:function:: void Ones( DistMatrix<T,U,V>& A, int m, int n )
+.. cpp:function:: void Ones( AbstractDistMatrix<T>& A, int m, int n )
 
    Set the matrix ``A`` to be an :math:`m \times n` matrix of all ones.
-
-Change all entries of the matrix :math:`A` to one.
-
-.. cpp:function:: void MakeOnes( Matrix<T>& A )
-.. cpp:function:: void MakeOnes( DistMatrix<T,U,V>& A )
-
-   Change the entries of the matrix to ones.
 
 OneTwoOne
 ---------
@@ -373,49 +356,44 @@ A "1-2-1" matrix is tridiagonal with a diagonal of all twos and sub- and
 super-diagonals of all ones.
 
 .. cpp:function:: void OneTwoOne( Matrix<T>& A, int n )
-.. cpp:function:: void OneTwoOne( DistMatrix<T,U,V>& A, int n )
+.. cpp:function:: void OneTwoOne( AbstractDistMatrix<T>& A, int n )
 
    Set ``A`` to a :math:`n \times n` "1-2-1" matrix.
-
-.. cpp:function:: void MakeOneTwoOne( Matrix<T>& A )
-.. cpp:function:: void MakeOneTwoOne( DistMatrix<T,U,V>& A )
-
-   Modify the entries of the square matrix ``A`` to be "1-2-1".
 
 Parter
 ------
 **TODO**
 
 .. cpp:function:: void Parter( Matrix<F>& P, int n )
-.. cpp:function:: void Parter( DistMatrix<F,U,V>& P, int n )
+.. cpp:function:: void Parter( AbstractDistMatrix<F>& P, int n )
 
 Pei
 ---
 **TODO**
 
 .. cpp:function:: void Pei( Matrix<T>& P, int n, T alpha )
-.. cpp:function:: void Pei( DistMatrix<T,U,V>& P, int n, T alpha )
+.. cpp:function:: void Pei( AbstractDistMatrix<T>& P, int n, T alpha )
 
 Redheffer
 ---------
 **TODO**
 
 .. cpp:function:: void Redheffer( Matrix<T>& R, int n )
-.. cpp:function:: void Redheffer( DistMatrix<T,U,V>& R, int n )
+.. cpp:function:: void Redheffer( AbstractDistMatrix<T>& R, int n )
 
 Riemann
 -------
 **TODO**
 
 .. cpp:function:: void Riemann( Matrix<T>& R, int n )
-.. cpp:function:: void Riemann( DistMatrix<T,U,V>& R, int n )
+.. cpp:function:: void Riemann( AbstractDistMatrix<T>& R, int n )
 
 Ris
 ---
 **TODO**
 
 .. cpp:function:: void Ris( Matrix<F>& R, int n )
-.. cpp:function:: void Ris( DistMatrix<F,U,V>& R, int n )
+.. cpp:function:: void Ris( AbstractDistMatrix<F>& R, int n )
 
 Toeplitz
 --------
@@ -428,7 +406,7 @@ An :math:`m \times n` matrix is *Toeplitz* if there exists a vector :math:`b` su
 where :math:`\beta_k` is the :math:`k`'th entry of :math:`b`.
 
 .. cpp:function:: void Toeplitz( Matrix<T>& A, int m, int n, const std::vector<T>& b )
-.. cpp:function:: void Toeplitz( DistMatrix<T,U,V>& A, int m, int n, const std::vector<T>& b )
+.. cpp:function:: void Toeplitz( AbstractDistMatrix<T>& A, int m, int n, const std::vector<T>& b )
 
    Build the matrix ``A`` using the generating vector :math:`b`.
 
@@ -437,7 +415,7 @@ TriW
 **TODO**
 
 .. cpp:function:: void TriW( Matrix<T>& A, int m, int n, T alpha, int k )
-.. cpp:function:: void TriW( DistMatrix<T,U,V>& A, int m, int n, T alpha, int k )
+.. cpp:function:: void TriW( AbstractDistMatrix<T>& A, int m, int n, T alpha, int k )
 
 Walsh
 -----
@@ -458,7 +436,7 @@ A *binary* Walsh matrix changes the bottom-right entry of :math:`W_1` from
 :math:`-1` to :math:`0`.
 
 .. cpp:function:: void Walsh( Matrix<T>& W, int k, bool binary=false )
-.. cpp:function:: void Walsh( DistMatrix<T,U,V>& W, int k, bool binary=false )
+.. cpp:function:: void Walsh( AbstractDistMatrix<T>& W, int k, bool binary=false )
 
    Set the matrix :math:`W` equal to the :math:`k`'th (possibly binary) Walsh 
    matrix.
@@ -474,7 +452,7 @@ A *Wilkinson matrix* of order :math:`k` is a tridiagonal matrix with diagonal
 and sub- and super-diagonals of all ones.
 
 .. cpp:function:: void Wilkinson( Matrix<T>& W, int k )
-.. cpp:function:: void Wilkinson( DistMatrix<T,U,V>& W, int k )
+.. cpp:function:: void Wilkinson( AbstractDistMatrix<T>& W, int k )
 
    Set the matrix :math:`W` equal to the :math:`k`'th Wilkinson matrix.
 
@@ -483,13 +461,6 @@ Zeros
 Create an :math:`m \times n` matrix of all zeros.
 
 .. cpp:function:: void Zeros( Matrix<T>& A, int m, int n )
-.. cpp:function:: void Zeros( DistMatrix<T,U,V>& A, int m, int n )
+.. cpp:function:: void Zeros( AbstractDistMatrix<T>& A, int m, int n )
 
    Set the matrix ``A`` to be an :math:`m \times n` matrix of all zeros. 
-
-Change all entries of the matrix :math:`A` to zero.
-
-.. cpp:function:: void MakeZeros( Matrix<T>& A )
-.. cpp:function:: void MakeZeros( DistMatrix<T,U,V>& A )
-
-   Change the entries of the matrix to zero.

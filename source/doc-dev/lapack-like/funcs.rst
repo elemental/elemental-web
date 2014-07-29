@@ -96,25 +96,22 @@ matrix and the latter in a normal (in fact, unitary) matrix.
    Since Elemental currently depends on PMRRR for its tridiagonal 
    eigensolver, only double-precision results are supported as of now.
 
-.. cpp:function:: void RealHermitianFunction( UpperOrLower uplo, Matrix<F>& A, const RealFunctor& f )
-.. cpp:function:: void RealHermitianFunction( UpperOrLower uplo, DistMatrix<F>& A, const RealFunctor& f )
+.. cpp:function:: void HermitianFunction( UpperOrLower uplo, Matrix<F>& A, std::function<Real(Real)> f )
+.. cpp:function:: void HermitianFunction( UpperOrLower uplo, DistMatrix<F>& A, std::function<Real(Real)> f )
 
    Modifies the eigenvalues of the passed-in Hermitian matrix by replacing 
    each eigenvalue :math:`\lambda_i` with :math:`f(\lambda_i) \in \mathbb{R}`. 
-   ``RealFunctor`` is any 
-   class which has the member function ``Real operator()( Real omega ) const``.
    See `examples/lapack-like/RealSymmetricFunction.cpp <https://github.com/elemental/Elemental/tree/master/examples/lapack-like/RealHermitianFunction.cpp>`_ for an example usage.
 
-.. cpp:function:: void ComplexHermitianFunction( UpperOrLower uplo, Matrix<Complex<Real> >& A, const ComplexFunctor& f )
-.. cpp:function:: void ComplexHermitianFunction( UpperOrLower uplo, DistMatrix<Complex<Real> >& A, const ComplexFunctor& f )
+.. cpp:function:: void HermitianFunction( UpperOrLower uplo, Matrix<Complex<Real> >& A, std::function<Complex<Real>(Real)> f )
+.. cpp:function:: void HermitianFunction( UpperOrLower uplo, DistMatrix<Complex<Real> >& A, std::function<Complex<Real>(Real)> f )
 
    Modifies the eigenvalues of the passed-in complex Hermitian matrix by
    replacing each eigenvalue :math:`\lambda_i` with 
-   :math:`f(\lambda_i) \in \mathbb{C}`. ``ComplexFunctor`` can be any class
-   which has the member function ``Complex<Real> operator()( Real omega ) const``.
+   :math:`f(\lambda_i) \in \mathbb{C}`. 
    See `examples/lapack-like/ComplexHermitianFunction.cpp <https://github.com/elemental/Elemental/tree/master/examples/lapack-like/ComplexHermitianFunction.cpp>`_ for an example usage.
 
-**TODO: A version of ComplexHermitianFunction which begins with a real matrix**
+**TODO: A version of (complex) HermitianFunction which begins with a real matrix**
 
 Pseudoinverse
 -------------
@@ -142,7 +139,7 @@ Pseudoinverse
 .. cpp:function:: HermitianPseudoinverse( UpperOrLower uplo, DistMatrix<F>& A, Base<F> tolerance=0 )
 
    Computes the pseudoinverse of a Hermitian matrix through a customized version
-   of :cpp:func:`RealHermitianFunction` which used the eigenvalue mapping 
+   of :cpp:func:`HermitianFunction` which used the eigenvalue mapping 
    function
 
    .. math::

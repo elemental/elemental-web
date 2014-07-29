@@ -1,5 +1,6 @@
 Factorizations
 ==============
+`Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor.hpp>`__
 
 Cholesky factorization
 ----------------------
@@ -10,7 +11,7 @@ decomposed into the form :math:`A = L L^H` or :math:`A = U^H U`, where
 numerically indefinite, then a :cpp:type:`NonHPDMatrixException` will be 
 thrown.
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/Cholesky.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/Cholesky.cpp>`__
 
 `Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/Cholesky>`__
 
@@ -96,9 +97,9 @@ LDL factorization
    .. cpp:member:: int nb
    .. cpp:member:: int from[2]
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/LDL.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/LDL.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/LDL>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack-like/factor/LDL>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LDL.cpp>`__
 
@@ -153,9 +154,9 @@ ldl namespace
 LU factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/LU.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/LU.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/LU>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack-like/factor/LU>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LU.cpp>`__
 
@@ -242,9 +243,9 @@ lu namespace
 LQ factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/LQ.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/LQ.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/LQ>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack-like/factor/LQ>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/LQ.cpp>`__
 
@@ -290,9 +291,9 @@ lq namespace
 QR factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/QR.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/QR.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/QR>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack-like/factor/QR>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/QR.cpp>`__
 
@@ -446,7 +447,7 @@ ________________
 Generalized QR factorization
 ----------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/GQR.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/GQR.cpp>`__
 
 The *generalized QR factorization* of a pair of matrices :math:`(A,B)` is 
 analogous to a QR factorization of :math:`B^{-1} A` but does not require that
@@ -484,9 +485,9 @@ Thus, if :math:`B` was square and invertible, then the QR factorization of
 RQ factorization
 ----------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/RQ.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/RQ.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/RQ>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack-like/factor/RQ>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/RQ.cpp>`__
 
@@ -523,7 +524,7 @@ rq namespace
 Generalized RQ factorization
 ----------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/GRQ.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/GRQ.cpp>`__
 
 The *generalized RQ factorization* of a pair of matrices :math:`(A,B)` is 
 analogous to an RQ factorization of :math:`A B^{-1}` but does not require that
@@ -561,7 +562,7 @@ Thus, is :math:`B` was square and invertible, then the RQ factorization of
 Interpolative Decomposition (ID)
 --------------------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/ID.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/ID.cpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ID.cpp>`__
 
@@ -594,7 +595,7 @@ representing the remaining columns in terms of the selected columns of
 Skeleton decomposition
 ----------------------
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/factor/Skeleton.hpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/Skeleton.cpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Skeleton.cpp>`__
 

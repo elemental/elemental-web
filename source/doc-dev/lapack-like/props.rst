@@ -17,33 +17,33 @@ The condition number of a matrix with respect to a particular norm is
 with the most common choice being the matrix two-norm.
 
 .. cpp:function:: Base<F> Condition( const Matrix<F>& A, NormType type=TWO_NORM )
-.. cpp:function:: Base<F> Condition( const DistMatrix<F,U,V>& A, NormType type=TWO_NORM )
+.. cpp:function:: Base<F> Condition( const AbstractDistMatrix<F>& A, NormType type=TWO_NORM )
 
    Returns the condition number with respect to the specified norm 
    (one, two, or Frobenius).
 
 .. cpp:function:: Base<F> FrobeniusCondition( const Matrix<F>& A )
-.. cpp:function:: Base<F> FrobeniusCondition( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> FrobeniusCondition( const AbstractDistMatrix<F>& A )
 
    Returns the condition number with respect to the Frobenius norm.
 
 .. cpp:function:: Base<F> InfinityCondition( const Matrix<F>& A )
-.. cpp:function:: Base<F> InfinityCondition( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> InfinityCondition( const AbstractDistMatrix<F>& A )
 
    Returns the condition number with respect to the infinity norm.
 
 .. cpp:function:: Base<F> MaxCondition( const Matrix<F>& A )
-.. cpp:function:: Base<F> MaxCondition( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> MaxCondition( const AbstractDistMatrix<F>& A )
 
    Returns the condition number with respect to the entrywise maximum norm.
 
 .. cpp:function:: Base<F> OneCondition( const Matrix<F>& A )
-.. cpp:function:: Base<F> OneCondition( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> OneCondition( const AbstractDistMatrix<F>& A )
 
    Returns the condition number with respect to the one norm.
 
 .. cpp:function:: Base<F> TwoCondition( const Matrix<F>& A )
-.. cpp:function:: Base<F> TwoCondition( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> TwoCondition( const AbstractDistMatrix<F>& A )
 
    Returns the condition number with respect to the two norm.
 
@@ -80,7 +80,7 @@ recognizing that :math:`\mbox{det}(P)=\pm 1`
 where :math:`\upsilon_{i,i}` is the i'th diagonal entry of :math:`U`.
 
 .. cpp:function:: F Determinant( const Matrix<F>& A )
-.. cpp:function:: F Determinant( const DistMatrix<F>& A )
+.. cpp:function:: F Determinant( const AbstractDistMatrix<F>& A )
 .. cpp:function:: F Determinant( Matrix<F>& A, bool canOverwrite=false )
 .. cpp:function:: F Determinant( DistMatrix<F>& A, bool canOverwrite=false )
 
@@ -108,7 +108,7 @@ where :math:`\upsilon_{i,i}` is the i'th diagonal entry of :math:`U`.
       The number of values in the product.
 
 .. cpp:function:: SafeProduct<F> SafeDeterminant( const Matrix<F>& A )
-.. cpp:function:: SafeProduct<F> SafeDeterminant( const DistMatrix<F>& A )
+.. cpp:function:: SafeProduct<F> SafeDeterminant( const AbstractDistMatrix<F>& A )
 .. cpp:function:: SafeProduct<F> SafeDeterminant( Matrix<F>& A, bool canOverwrite=false )
 .. cpp:function:: SafeProduct<F> SafeDeterminant( DistMatrix<F>& A, bool canOverwrite=false )
 
@@ -122,7 +122,7 @@ matrices (which will therefore have all positive eigenvalues and a positive
 determinant).
 
 .. cpp:function:: Base<F> HPDDeterminant( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HPDDeterminant( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: Base<F> HPDDeterminant( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HPDDeterminant( UpperOrLower uplo, Matrix<F>& A, bool canOverwrite=false )
 .. cpp:function:: Base<F> HPDDeterminant( UpperOrLower uplo, DistMatrix<F>& A, bool canOverwrite=false )
 
@@ -132,7 +132,7 @@ determinant).
    avoid forming another temporary matrix.
 
 .. cpp:function:: SafeProduct<F> SafeHPDDeterminant( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: SafeProduct<F> SafeHPDDeterminant( UpperOrLower uplo, const DistMatrix<F>& A )
+.. cpp:function:: SafeProduct<F> SafeHPDDeterminant( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: SafeProduct<F> SafeHPDDeterminant( UpperOrLower uplo, Matrix<F>& A, bool canOverwrite=false )
 .. cpp:function:: SafeProduct<F> SafeHPDDeterminant( UpperOrLower uplo, DistMatrix<F>& A, bool canOverwrite=false )
 
@@ -152,11 +152,11 @@ the maximum entrywise norm, :math:`\|A\|_2`, or :math:`\|A\|_*`
 (the nuclear/trace norm) of fully-populated matrices.
 
 .. cpp:function:: Base<F> Norm( const Matrix<F>& A, NormType type=FROBENIUS_NORM )
-.. cpp:function:: Base<F> Norm( const DistMatrix<F,U,V>& A, NormType type=FROBENIUS_NORM )
+.. cpp:function:: Base<F> Norm( const AbstractDistMatrix<F>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const Matrix<F>& A, NormType type=FROBENIUS_NORM )
-.. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, NormType type=FROBENIUS_NORM )
+.. cpp:function:: Base<F> HermitianNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, NormType type=FROBENIUS_NORM )
 .. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const Matrix<F>& A, NormType type=FROBENIUS_NORM )
-.. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, NormType type=FROBENIUS_NORM )
+.. cpp:function:: Base<F> SymmetricNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, NormType type=FROBENIUS_NORM )
 
    Compute a norm of a fully-populated or implicitly symmetric/Hermitian (with 
    the data stored in the specified triangle) matrix. 
@@ -165,69 +165,69 @@ Alternatively, one may directly call the following routines (note that the entry
 directly).
 
 .. cpp:function:: Base<F> EntrywiseNorm( const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> EntrywiseNorm( const DistMatrix<F,U,V>& A, Base<F> p )
+.. cpp:function:: Base<F> EntrywiseNorm( const AbstractDistMatrix<F>& A, Base<F> p )
 .. cpp:function:: Base<F> HermitianEntrywiseNorm( UpperOrLower uplo, const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> HermitianEntrywiseNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, Base<F> p )
+.. cpp:function:: Base<F> HermitianEntrywiseNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, Base<F> p )
 .. cpp:function:: Base<F> SymmetricEntrywiseNorm( UpperOrLower uplo, const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> SymmetricEntrywiseNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, Base<F> p )
+.. cpp:function:: Base<F> SymmetricEntrywiseNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, Base<F> p )
 
    The :math:`\ell_p` norm of the columns of `A` stacked into a single vector. 
    Note that the Frobenius norm corresponds to the :math:`p=2` case.
 
 .. cpp:function:: Base<F> EntrywiseOneNorm( const Matrix<F>& A )
-.. cpp:function:: Base<F> EntrywiseOneNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> EntrywiseOneNorm( const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HermitianEntrywiseOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianEntrywiseOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> HermitianEntrywiseOneNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> SymmetricEntrywiseOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricEntrywiseOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> SymmetricEntrywiseOneNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 
    The :math:`\ell_1` norm of the columns of `A` stacked into a single vector. 
 
 .. cpp:function:: Base<F> FrobeniusNorm( const Matrix<F>& A )
-.. cpp:function:: Base<F> FrobeniusNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> FrobeniusNorm( const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HermitianFrobeniusNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianFrobeniusNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> HermitianFrobeniusNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> SymmetricFrobeniusNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricFrobeniusNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> SymmetricFrobeniusNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 
    The :math:`\ell_2` norm of the singular values (the Schatten norm with 
    :math:`p=2`), which can be cheaply computed as the :math:`\ell_2` norm of 
    :math:`\text{vec}(A)`.
 
 .. cpp:function:: Base<F> KyFanNorm( const Matrix<F>& A, int k )
-.. cpp:function:: Base<F> KyFanNorm( const DistMatrix<F,U,V>& A, int k )
+.. cpp:function:: Base<F> KyFanNorm( const AbstractDistMatrix<F>& A, int k )
 .. cpp:function:: Base<F> HermitianKyFanNorm( UpperOrLower uplo, const Matrix<F>& A, int k )
-.. cpp:function:: Base<F> HermitianKyFanNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, int k )
+.. cpp:function:: Base<F> HermitianKyFanNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, int k )
 .. cpp:function:: Base<F> SymmetricKyFanNorm( UpperOrLower uplo, const Matrix<F>& A, int k )
-.. cpp:function:: Base<F> SymmetricKyFanNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, int k )
+.. cpp:function:: Base<F> SymmetricKyFanNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, int k )
 
    The sum of the largest `k` singular values.
 
 .. cpp:function:: Base<F> InfinityNorm( const Matrix<F>& A )
-.. cpp:function:: Base<F> InfinityNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> InfinityNorm( const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HermitianInfinityNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianInfinityNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> HermitianInfinityNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 
    The maximum :math:`\ell_1` norm of the rows of `A`. In the symmetric and 
    Hermitian cases, this is equivalent to the :math:`\|\cdot \|_1` norm.
 
 .. cpp:function:: Base<F> MaxNorm( const Matrix<F>& A )
-.. cpp:function:: Base<F> MaxNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> MaxNorm( const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HermitianMaxNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianMaxNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> HermitianMaxNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> SymmetricMaxNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricMaxNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> SymmetricMaxNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 
    The maximum absolute value of the matrix entries.
 
 .. cpp:function:: Base<F> NuclearNorm( const Matrix<F>& A )
-.. cpp:function:: Base<F> NuclearNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> NuclearNorm( const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HermitianNuclearNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianNuclearNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> HermitianNuclearNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> SymmetricNuclearNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricNuclearNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> SymmetricNuclearNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 
    The sum of the singular values. This is equivalent to both the KyFan 
    norm with :math:`k=n` and the Schatten norm with :math:`p=1`.
@@ -235,36 +235,36 @@ directly).
    Schatten norm with :math:`p=\infty`.
 
 .. cpp:function:: Base<F> OneNorm( const Matrix<F>& A )
-.. cpp:function:: Base<F> OneNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> OneNorm( const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HermitianOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> HermitianOneNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 
    The maximum :math:`\ell_1` norm of the columns of `A`. In the symmetric and 
    Hermitian cases, this is equivalent to the :math:`\| \cdot \|_\infty` norm.
 
 .. cpp:function:: Base<F> SchattenNorm( const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> SchattenNorm( const DistMatrix<F,U,V>& A, Base<F> p )
+.. cpp:function:: Base<F> SchattenNorm( const AbstractDistMatrix<F>& A, Base<F> p )
 .. cpp:function:: Base<F> HermitianSchattenNorm( UpperOrLower uplo, const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> HermitianSchattenNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, Base<F> p )
+.. cpp:function:: Base<F> HermitianSchattenNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, Base<F> p )
 .. cpp:function:: Base<F> SymmetricSchattenNorm( UpperOrLower uplo, const Matrix<F>& A, Base<F> p )
-.. cpp:function:: Base<F> SymmetricSchattenNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A, Base<F> p )
+.. cpp:function:: Base<F> SymmetricSchattenNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A, Base<F> p )
 
    The :math:`\ell_p` norm of the singular values.
 
 .. cpp:function:: Base<F> TwoNorm( const Matrix<F>& A )
-.. cpp:function:: Base<F> TwoNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> TwoNorm( const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> HermitianTwoNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> HermitianTwoNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> HermitianTwoNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 .. cpp:function:: Base<F> SymmetricTwoNorm( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> SymmetricTwoNorm( UpperOrLower uplo, const DistMatrix<F,U,V>& A )
+.. cpp:function:: Base<F> SymmetricTwoNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
 
    The maximum singular value. This is equivalent to the KyFan norm with `k` 
    equal to one and the Schatten norm with :math:`p=\infty`.
 
 .. cpp:function:: int ZeroNorm( const Matrix<F>& A )
-.. cpp:function:: int ZeroNorm( const DistMatrix<F,U,V>& A )
+.. cpp:function:: int ZeroNorm( const AbstractDistMatrix<F>& A )
 
    Return the number of nonzero entries in the matrix.
 
@@ -275,12 +275,12 @@ directly).
 Two-norm estimates
 ^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: Base<F> TwoNormEstimate( Matrix<F>& A, Base<F> tol=1e-6 )
-.. cpp:function:: Base<F> TwoNormEstimate( DistMatrix<F>& A, Base<F> tol=1e-6 )
-.. cpp:function:: Base<F> HermitianTwoNormEstimate( Matrix<F>& A, Base<F> tol=1e-6 )
-.. cpp:function:: Base<F> HermitianTwoNormEstimate( DistMatrix<F>& A, Base<F> tol=1e-6 )
-.. cpp:function:: Base<F> SymmetricTwoNormEstimate( Matrix<F>& A, Base<F> tol=1e-6 )
-.. cpp:function:: Base<F> SymmetricTwoNormEstimate( DistMatrix<F>& A, Base<F> tol=1e-6 )
+.. cpp:function:: Base<F> TwoNormEstimate( const Matrix<F>& A, Base<F> tol=1e-6 )
+.. cpp:function:: Base<F> TwoNormEstimate( const DistMatrix<F>& A, Base<F> tol=1e-6 )
+.. cpp:function:: Base<F> HermitianTwoNormEstimate( const Matrix<F>& A, Base<F> tol=1e-6 )
+.. cpp:function:: Base<F> HermitianTwoNormEstimate( const DistMatrix<F>& A, Base<F> tol=1e-6 )
+.. cpp:function:: Base<F> SymmetricTwoNormEstimate( const Matrix<F>& A, Base<F> tol=1e-6 )
+.. cpp:function:: Base<F> SymmetricTwoNormEstimate( const DistMatrix<F>& A, Base<F> tol=1e-6 )
 
    Return an estimate for the two-norm which should be accurate within a 
    factor of :math:`n` times the specified tolerance.
@@ -288,17 +288,17 @@ Two-norm estimates
 Pseudospectra
 -------------
 
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Pseudospectrum.hpp>`__
+`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack-like/props/Pseudospectra.hpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/props/Pseudospectrum>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/props/Pseudospectra>`__
 
-`Pseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectrum.cpp>`__
+`Pseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectra.cpp>`__
 
-`ChunkedPseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ChunkedPseudospectrum.cpp>`__
+`ChunkedPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ChunkedPseudospectra.cpp>`__
 
-`TriangularPseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/TriangularPseudospectrum.cpp>`__
+`TriangularPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/TriangularPseudospectra.cpp>`__
 
-`ChunkedTriangularPseudospectrum example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ChunkedTriangularPseudospectrum.cpp>`__
+`ChunkedTriangularPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/ChunkedTriangularPseudospectra.cpp>`__
 
 The :math:`\epsilon`-*pseudospectrum* of a square matrix :math:`A` is the set
 of all shifts :math:`z` such that :math:`\hat A - z` is singular for some
@@ -317,7 +317,7 @@ round-off error, and then simultaneously performs many Implicitly Restarted
 Arnoldi (IRA) iterations with the inverse normal matrix for each shift in a 
 manner which communicates no more data than a standard triangular solve with 
 many right-hand sides.
-Converged pseudospectrum estimates are deflated after convergence.
+Converged pseudospectral estimates are deflated after convergence.
 
 The second approach is quite similar and, instead of reducing to triangular
 form, reduces to Hessenberg form and performs multi-shift triangular solves
@@ -396,45 +396,43 @@ Schur decomposition is considered infeasible.
    A particular case where the datatype is the base of the potentially complex
    type ``F``.
 
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectrum( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectrum( const DistMatrix<F>& U, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> QuasiTriangularPseudospectrum( const DistMatrix<Real>& U, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real,VR,STAR>& invNorms, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectrum( const DistMatrix<F>& H, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> Pseudospectra( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> Pseudospectra( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> TriangularPseudospectra( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectra( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> QuasiTriangularPseudospectra( const Matrix<Real>& U, Matrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectra( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: Matrix<int> HessenbergPseudospectra( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectra( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+
+   Returns the norms of the shifted inverses over a 2D window in the complex
+   plane (in the matrix ``invNormMap``) with the specified x and y resolutions.
+   The returned integer matrix corresponds to the number of iterations required
+   for convergence at each shift in the 2D grid.
+
+.. cpp:function:: Matrix<int> Pseudospectra( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> Pseudospectra( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> TriangularPseudospectra( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectra( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> QuasiTriangularPseudospectra( const Matrix<Real>& U, Matrix<Real>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectra( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: Matrix<int> HessenbergPseudospectra( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectra( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+
+   Same as above, but the window in the complex plane is automatically
+   determined.
+
+.. cpp:function:: Matrix<int> Pseudospectra( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectra( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: Matrix<int> TriangularPseudospectra( const Matrix<F>& U, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectra( const DistMatrix<F>& U, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> QuasiTriangularPseudospectra( const DistMatrix<Real>& U, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real,VR,STAR>& invNorms, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: Matrix<int> HessenbergPseudospectra( const Matrix<F>& H, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectra( const DistMatrix<F>& H, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
    Returns the norms of the shifted inverses in the vector ``invNorms`` for a
    given set of shifts. The returned integer vector is a list of the number of
    iterations required for convergence of each shift.
-
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: Matrix<int> QuasiTriangularPseudospectrum( const Matrix<Real>& U, Matrix<Real>& invNormMap, Complex<Real> center, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
-.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectrum( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, Complex<Real> center, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-
-   Returns the norms of the shifted inverses over a 2D grid
-   (in the matrix ``invNormMap``) with the specified x and y resolutions.
-   The width of the grid in the complex plane is determined based upon the one
-   and two norms of the Schur factor. The returned integer matrix corresponds
-   to the number of iterations required for convergence at each shift in the
-   2D grid.
-
-.. cpp:function:: Matrix<int> Pseudospectrum( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> Pseudospectrum( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: Matrix<int> TriangularPseudospectrum( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectrum( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: Matrix<int> QuasiTriangularPseudospectrum( const Matrix<Real>& U, Matrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
-.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectrum( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
-.. cpp:function:: Matrix<int> HessenbergPseudospectrum( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectrum( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-
-   Same as above, but the real and imaginary widths of the 2D grid in the 
-   complex plane are manually specified.
 
 Trace
 -----
@@ -454,8 +452,8 @@ where :math:`\alpha_{i,i}` is the i'th diagonal entry of :math:`A` and
 Clearly the former equation is easier to compute, but the latter is an 
 important characterization.
 
-.. cpp:function:: F Trace( const Matrix<F>& A )
-.. cpp:function:: F Trace( const DistMatrix<F>& A )
+.. cpp:function:: T Trace( const Matrix<T>& A )
+.. cpp:function:: T Trace( const AbstractDistMatrix<T>& A )
 
    Return the trace of the square matrix `A`.
 

@@ -11,11 +11,16 @@ matrix decompositions, are placed here.
    :maxdepth: 2
 
    lapack-like/condense
-   lapack-like/decomp
    lapack-like/factor
+
+   lapack-like/spectral
+
    lapack-like/funcs
-   lapack-like/perm
+
    lapack-like/props
    lapack-like/solve
+
+   lapack-like/perm
+
    lapack-like/util 
    lapack-like/tuning

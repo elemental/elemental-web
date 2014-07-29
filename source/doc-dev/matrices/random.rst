@@ -1,33 +1,26 @@
 Random
 ======
 
+Ehrenfest
+---------
+**TODO**
+
 Gaussian
 --------
 An :math:`m \times n` matrix is Gaussian if each entry is independently drawn
 from a normal distribution.
 
 .. cpp:function:: void Gaussian( Matrix<T>& A, int m, int n, T mean=0, Base<T> stddev=1 )
-.. cpp:function:: void Gaussian( DistMatrix<T,U,V>& A, int m, int n, T mean=0, Base<T> stddev=1 )
+.. cpp:function:: void Gaussian( AbstractDistMatrix<T>& A, int m, int n, T mean=0, Base<T> stddev=1 )
 
    Sets the matrix ``A`` to an :math:`m \times n` Gaussian matrix with the
    specified mean and standard deviation.
 
 .. cpp:function:: void MakeGaussian( Matrix<T>& A, T mean=0, Base<T> stddev=1 )
-.. cpp:function:: void MakeGaussian( DistMatrix<T,U,V>& A, T mean=0, Base<T> stddev=1 )
+.. cpp:function:: void MakeGaussian( AbstractDistMatrix<T>& A, T mean=0, Base<T> stddev=1 )
 
    Changes each entry to an independent sample from the specified normal
    distribution.
-
-Wigner
-------
-A Hermitian matrix whose entries in one triangle are all independent samples
-from a normal distribution. The spectra of these matrices are well-studied.
-
-.. cpp:function:: void Wigner( Matrix<T>& A, int n, T mean=0, Base<T> stddev=1 )
-.. cpp:function:: void Wigner( DistMatrix<T,U,V>& A, int n, T mean=0, Base<T> stddev=1 )
-
-   Sets the matrix ``A`` to an :math:`n \times n` Wigner matrix with the
-   specified mean and standard deviation.
 
 Haar
 ----
@@ -49,21 +42,9 @@ complex unitary matrices.
    the result of a QR decomposition. The product of these reflectors is a 
    sample from the Haar distribution.
 
-Uniform
--------
-We call an :math:`m \times n` matrix is uniformly random if each entry is drawn 
-from a uniform distribution over some ball :math:`B_r(x)`, which is centered 
-around some point :math:`x` and of radius :math:`r`.
-
-.. cpp:function:: void Uniform( Matrix<T>& A, int m, int n, T center=0, Base<T> radius=1 )
-.. cpp:function:: void Uniform( DistMatrix<T,U,V>& A, int m, int n, T center=0, Base<T> radius=1 )
-
-   Set the matrix ``A`` to an :math:`m \times n` matrix with each entry sampled from the uniform distribution centered at `center` with radius `radius`.
-
-.. cpp:function:: void MakeUniform( Matrix<T>& A, T center=0, Base<T> radius=1 )
-.. cpp:function:: void MakeUniform( DistMatrix<T,U,V>& A, T center=0, Base<T> radius=1 )
-
-   Sample each entry of ``A`` from :math:`U(B_r(x))`, where :math:`r` is given by ``radius`` and :math:`x` is given by ``center``.
+Hatano-Nelson
+-------------
+**TODO**
 
 HermitianUniformSpectrum
 ------------------------
@@ -77,12 +58,6 @@ Householder transform.
    Build the :math:`n \times n` matrix ``A`` with a spectrum sampled uniformly 
    from the interval :math:`(lower,upper]`.
 
-.. cpp:function:: void MakeHermitianUniformSpectrum( Matrix<F>& A, Base<F> lower=0, Base<F> upper=1 )
-.. cpp:function:: void MakeHermitianUniformSpectrum( DistMatrix<F,U,V>& A, Base<F> lower=0, Base<F> upper=1 )
-
-   Sample the entries of the square matrix ``A`` from the interval 
-   :math:`(lower,upper]`.
-
 NormalUniformSpectrum
 ---------------------
 These routines sample a diagonal matrix from the specified ball in the 
@@ -95,8 +70,33 @@ Householder transform.
    Build the :math:`n \times n` matrix ``A`` with a spectrum sampled uniformly 
    from the ball :math:`B_{\mathrm{radius}}(\mathrm{center})`.
 
-.. cpp:function:: void MakeNormalUniformSpectrum( Matrix<Complex<Real> >& A, Complex<Real> center=0, Real radius=1 )
-.. cpp:function:: void MakeNormalUniformSpectrum( DistMatrix<Complex<Real>,U,V>& A, Complex<Real> center=0, Real radius=1 )
+Uniform
+-------
+We call an :math:`m \times n` matrix is uniformly random if each entry is drawn 
+from a uniform distribution over some ball :math:`B_r(x)`, which is centered 
+around some point :math:`x` and of radius :math:`r`.
 
-   Sample the entries of the square matrix ``A`` from the ball in the complex 
-   plane centered at ``center`` with radius ``radius``.
+.. cpp:function:: void Uniform( Matrix<T>& A, int m, int n, T center=0, Base<T> radius=1 )
+.. cpp:function:: void Uniform( AbstractDistMatrix<T>& A, int m, int n, T center=0, Base<T> radius=1 )
+
+   Set the matrix ``A`` to an :math:`m \times n` matrix with each entry sampled from the uniform distribution centered at `center` with radius `radius`.
+
+.. cpp:function:: void MakeUniform( Matrix<T>& A, T center=0, Base<T> radius=1 )
+.. cpp:function:: void MakeUniform( AbstractDistMatrix<T>& A, T center=0, Base<T> radius=1 )
+
+   Sample each entry of ``A`` from :math:`U(B_r(x))`, where :math:`r` is given by ``radius`` and :math:`x` is given by ``center``.
+
+Uniform Helmholtz Green's
+-------------------------
+**TODO**
+
+Wigner
+------
+A Hermitian matrix whose entries in one triangle are all independent samples
+from a normal distribution. The spectra of these matrices are well-studied.
+
+.. cpp:function:: void Wigner( Matrix<T>& A, int n, T mean=0, Base<T> stddev=1 )
+.. cpp:function:: void Wigner( AbstractDistMatrix<T>& A, int n, T mean=0, Base<T> stddev=1 )
+
+   Sets the matrix ``A`` to an :math:`n \times n` Wigner matrix with the
+   specified mean and standard deviation.

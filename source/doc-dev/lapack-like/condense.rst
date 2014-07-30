@@ -12,24 +12,9 @@ and stores the scaled Householder vectors in place of the introduced zeroes.
 
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/HermitianTridiag.cpp>`__
 
-`Subroutine implementations <https://github.com/elemental/Elemental/tree/master/src/lapack-like/HermitianTridiag>`__
+`Subroutine implementations <https://github.com/elemental/Elemental/tree/master/src/lapack-like/condense/HermitianTridiag>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianTridiag.cpp>`__
-
-.. cpp:type:: HermitianTridiagCtrl
-
-   .. cpp:member:: HermitianTridiagApproach approach
-   .. cpp:member:: GridOrder order
-
-   .. cpp:function:: HermitianTridiagCtrl()
-
-      Sets `approach` to ``HERMITIAN_TRIDIAG_SQUARE`` and `order` to 
-      ``ROW_MAJOR``.
-
-.. note::
-
-   Please see the :ref:`lapack-tuning` section for extensive information on 
-   maximizing the performance of Householder tridiagonalization.
 
 .. cpp:function:: void HermitianTridiag( UpperOrLower uplo, Matrix<F>& A, Matrix<F>& t )
 .. cpp:function:: void HermitianTridiag( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F,STAR,STAR>& t, const HermitianTridiagCtrl& ctrl=HermitianTridiagCtrl() )
@@ -47,10 +32,28 @@ and stores the scaled Householder vectors in place of the introduced zeroes.
 
    Returns just the (appropriate triangle of the) resulting tridiagonal matrix.
 
-hermitian_tridiag namespace
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Algorithmic options
+^^^^^^^^^^^^^^^^^^^
 
-`Implementations <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/HermitianTridiag/ApplyQ.hpp>`__
+.. cpp:type:: HermitianTridiagCtrl
+
+   .. cpp:member:: HermitianTridiagApproach approach
+   .. cpp:member:: GridOrder order
+
+   .. cpp:function:: HermitianTridiagCtrl()
+
+      Sets `approach` to ``HERMITIAN_TRIDIAG_SQUARE`` and `order` to 
+      ``ROW_MAJOR``.
+
+.. note::
+
+   Please see the :ref:`lapack-tuning` section for extensive information on 
+   maximizing the performance of Householder tridiagonalization.
+
+Auxiliary routines
+^^^^^^^^^^^^^^^^^^
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/HermitianTridiag/ApplyQ.hpp>`__
 
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )
 .. cpp:function:: void hermitian_tridiag::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, const DistMatrix<F,MD,STAR>& t, DistMatrix<F>& B )
@@ -66,7 +69,7 @@ Square to Hessenberg
 
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/Hessenberg.cpp>`__
 
-`Subroutine header files <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/condense/Hessenberg>`__
+`Subroutine header files <https://github.com/elemental/Elemental/tree/master/src/lapack-like/condense/Hessenberg>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Hessenberg.cpp>`__
 
@@ -83,8 +86,8 @@ Square to Hessenberg
 
     Returns just the Hessenberg matrix.
 
-hessenberg namespace
-^^^^^^^^^^^^^^^^^^^^
+Auxiliary routines
+^^^^^^^^^^^^^^^^^^
 **TODO**
 
 .. cpp:function:: void hessenberg::ApplyQ( LeftOrRight side, UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& H )
@@ -101,7 +104,7 @@ matrix.
 
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/Bidiag.cpp>`__
 
-`Subroutine implementations <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/condense/Bidiag>`__
+`Subroutine implementations <https://github.com/elemental/Elemental/tree/master/src/lapack-like/condense/Bidiag>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Bidiag.cpp>`__
 
@@ -119,8 +122,8 @@ matrix.
 
    Returns just the resulting bidiagonal matrix.
 
-bidiag namespace
-^^^^^^^^^^^^^^^^
+Auxiliary routines
+^^^^^^^^^^^^^^^^^^
 **TODO**
 
 .. cpp:function:: void bidiag::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, Matrix<F>& B )

@@ -298,7 +298,7 @@ If Elemental was installed in ``/usr/local``, then
     include /usr/local/conf/ElVars
 
     SVD: SVD.cpp
-        ${CXX} ${ELEM_COMPILE_FLAGS} $< -o $@ ${ELEM_LINK_FLAGS} ${ELEM_LIBS}
+        ${CXX} ${EL_COMPILE_FLAGS} $< -o $@ ${EL_LINK_FLAGS} ${EL_LIBS}
 
 As long as ``SVD.cpp`` and this ``Makefile`` are in the current directory,
 simply typing ``make`` should build the driver. 
@@ -331,11 +331,11 @@ eight processes would be::
 You can also build a wide variety of example and test drivers 
 (unfortunately the line is a little blurred) by using the CMake options::
 
-    -D ELEM_EXAMPLES=ON
+    -D EL_EXAMPLES=ON
 
 and/or ::
 
-    -D ELEM_TESTS=ON  
+    -D EL_TESTS=ON  
 
 Elemental as a subproject
 =========================

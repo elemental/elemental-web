@@ -13,7 +13,7 @@ thrown.
 
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/factor/Cholesky.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack-like/factor/Cholesky>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack-like/factor/Cholesky>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Cholesky.cpp>`__
 

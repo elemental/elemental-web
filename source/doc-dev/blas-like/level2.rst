@@ -14,7 +14,7 @@ Whether or not :math:`x` and :math:`y` are stored as row vectors, they will
 be interpreted as column vectors.
 
 .. cpp:function:: void Gemv( Orientation orientation, T alpha, const Matrix<T>& A, const Matrix<T>& x, T beta, Matrix<T>& y )
-.. cpp:function:: void Gemv( Orientation orientation, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& x, T beta, DistMatrix<T>& y )
+.. cpp:function:: void Gemv( Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& x, T beta, AbstractDistMatrix<T>& y )
 
 Ger
 ---
@@ -23,7 +23,7 @@ are free to be stored as either row or column vectors, but they will be
 interpreted as column vectors.
 
 .. cpp:function:: void Ger( T alpha, const Matrix<T>& x, const Matrix<T>& y, Matrix<T>& A )
-.. cpp:function:: void Ger( T alpha, const DistMatrix<T>& x, const DistMatrix<T>& y, DistMatrix<T>& A )
+.. cpp:function:: void Ger( T alpha, const AbstractDistMatrix<T>& x, const AbstractDistMatrix<T>& y, AbstractDistMatrix<T>& A )
 
 Gerc
 ----
@@ -31,7 +31,7 @@ This is the same as :cpp:func:`Ger`, but the name is provided because it exists
 in the BLAS.
 
 .. cpp:function:: void Gerc( T alpha, const Matrix<T>& x, const Matrix<T>& y, Matrix<T>& A )
-.. cpp:function:: void Gerc( T alpha, const DistMatrix<T>& x, const DistMatrix<T>& y, DistMatrix<T>& A )
+.. cpp:function:: void Gerc( T alpha, const AbstractDistMatrix<T>& x, const AbstractDistMatrix<T>& y, AbstractDistMatrix<T>& A )
 
 Geru
 ----
@@ -40,7 +40,7 @@ and :math:`y` are free to be stored as either row or column vectors, but they
 will be interpreted as column vectors.
 
 .. cpp:function:: void Geru( T alpha, const Matrix<T>& x, const Matrix<T>& y, Matrix<T>& A )
-.. cpp:function:: void Geru( T alpha, const DistMatrix<T>& x, const DistMatrix<T>& y, DistMatrix<T>& A )
+.. cpp:function:: void Geru( T alpha, const AbstractDistMatrix<T>& x, const AbstractDistMatrix<T>& y, AbstractDistMatrix<T>& A )
 
 Hemv
 ----
@@ -48,7 +48,7 @@ Hermitian matrix-vector multiply: :math:`y := \alpha A x + \beta y`, where
 :math:`A` is Hermitian.
 
 .. cpp:function:: void Hemv( UpperOrLower uplo, T alpha, const Matrix<T>& A, const Matrix<T>& x, T beta, Matrix<T>& y )
-.. cpp:function:: void Hemv( UpperOrLower uplo, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& x, T beta, DistMatrix<T>& y )
+.. cpp:function:: void Hemv( UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& x, T beta, AbstractDistMatrix<T>& y )
 
 Please see :cpp:func:`SetLocalSymvBlocksize\<T>` and 
 :cpp:func:`LocalSymvBlocksize\<T>` in the :ref:`blas-tuning` section for 
@@ -60,7 +60,7 @@ Hermitian rank-one update: implicitly performs :math:`A := \alpha x x^H + A`,
 where only the triangle of :math:`A` specified by `uplo` is updated.
 
 .. cpp:function:: void Her( UpperOrLower uplo, T alpha, const Matrix<T>& x, Matrix<T>& A )
-.. cpp:function:: void Her( UpperOrLower uplo, T alpha, const DistMatrix<T>& x, DistMatrix<T>& A )
+.. cpp:function:: void Her( UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& x, AbstractDistMatrix<T>& A )
 
 Her2
 ----
@@ -69,7 +69,7 @@ Hermitian rank-two update: implicitly performs
 where only the triangle of :math:`A` specified by `uplo` is updated.
 
 .. cpp:function:: void Her2( UpperOrLower uplo, T alpha, const Matrix<T>& x, const Matrix<T>& y, Matrix<T>& A )
-.. cpp:function:: void Her2( UpperOrLower uplo, T alpha, const DistMatrix<T>& x, const DistMatrix<T>& y, DistMatrix<T>& A )
+.. cpp:function:: void Her2( UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& x, const AbstractDistMatrix<T>& y, AbstractDistMatrix<T>& A )
 
 QuasiTrsv
 ---------
@@ -88,7 +88,12 @@ decompositions, which produce triangular matrices with mixes of
    Trsv.
 
 .. cpp:function:: void QuasiTrsv( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& x, bool checkIfSingular=false )
-.. cpp:function:: void QuasiTrsv( UpperOrLower uplo, Orientation orientation, const DistMatrix<F>& A, DistMatrix<F>& x, bool checkIfSingular=false )
+.. cpp:function:: void QuasiTrsv( UpperOrLower uplo, Orientation orientation, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& x, bool checkIfSingular=false )
+
+   .. note::
+
+      For the best performance, both `A` and `x` should be in [MC,MR] 
+      distributions.
 
 Symv
 ----
@@ -96,7 +101,7 @@ Symmetric matrix-vector multiply: :math:`y := \alpha A x + \beta y`, where
 :math:`A` is symmetric.
 
 .. cpp:function:: void Symv( UpperOrLower uplo, T alpha, const Matrix<T>& A, const Matrix<T>& x, T beta, Matrix<T>& y, bool conjugate=false )
-.. cpp:function:: void Symv( UpperOrLower uplo, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& x, T beta, DistMatrix<T>& y, bool conjugate=false )
+.. cpp:function:: void Symv( UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& x, T beta, AbstractDistMatrix<T>& y, bool conjugate=false )
 
 Please see :cpp:func:`SetLocalSymvBlocksize\<T>` and 
 :cpp:func:`LocalSymvBlocksize\<T>` in the :ref:`blas-tuning` section for 
@@ -108,7 +113,7 @@ Symmetric rank-one update: implicitly performs :math:`A := \alpha x x^T + A`,
 where only the triangle of :math:`A` specified by `uplo` is updated.
 
 .. cpp:function:: void Syr( UpperOrLower uplo, T alpha, const Matrix<T>& x, Matrix<T>& A, bool conjugate=false )
-.. cpp:function:: void Syr( UpperOrLower uplo, T alpha, const DistMatrix<T>& x, DistMatrix<T>& A, bool conjugate=false )
+.. cpp:function:: void Syr( UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& x, AbstractDistMatrix<T>& A, bool conjugate=false )
 
 Syr2
 ----
@@ -117,7 +122,7 @@ Symmetric rank-two update: implicitly performs
 where only the triangle of :math:`A` specified by `uplo` is updated.
 
 .. cpp:function:: void Syr2( UpperOrLower uplo, T alpha, const Matrix<T>& x, const Matrix<T>& y, Matrix<T>& A, bool conjugate=false )
-.. cpp:function:: void Syr2( UpperOrLower uplo, T alpha, const DistMatrix<T>& x, const DistMatrix<T>& y, DistMatrix<T>& A, bool conjugate=false )
+.. cpp:function:: void Syr2( UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& x, const AbstractDistMatrix<T>& y, AbstractDistMatrix<T>& A, bool conjugate=false )
 
 Trmv
 ----
@@ -132,4 +137,9 @@ lower or upper triangular matrix, depending upon `uplo`. :math:`A` can also be
 treated as implicitly having a unit-diagonal if `diag` is set to ``UNIT``.
 
 .. cpp:function:: void Trsv( UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, const Matrix<F>& A, Matrix<F>& x )
-.. cpp:function:: void Trsv( UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, const DistMatrix<F>& A, DistMatrix<F>& x )
+.. cpp:function:: void Trsv( UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& x )
+
+   .. note::
+
+      For the best performance, `A` and `x` should both be in [MC,MR] 
+      distributions.

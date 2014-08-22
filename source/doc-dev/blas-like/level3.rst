@@ -14,7 +14,12 @@ where :math:`M^\#` and :math:`M^\sharp` are individually defined to be one of
 :math:`\{M,M^T,M^H\}`.
 
 .. cpp:function:: void Gemm( Orientation orientationOfA, Orientation orientationOfB, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
-.. cpp:function:: void Gemm( Orientation orientationOfA, Orientation orientationOfB, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, T beta, DistMatrix<T>& C )
+.. cpp:function:: void Gemm( Orientation orientationOfA, Orientation orientationOfB, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C )
+
+   .. note::
+
+      For the best performance, `A`, `B`, and `C` should all be in [MC,MR] 
+      distributions.
 
 Hemm
 ----
@@ -26,23 +31,12 @@ Hermitian matrix-matrix multiplication: updates
 accessed.
 
 .. cpp:function:: void Hemm( LeftOrRight side, UpperOrLower uplo, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
-.. cpp:function:: void Hemm( LeftOrRight side, UpperOrLower uplo, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, T beta, DistMatrix<T>& C )
+.. cpp:function:: void Hemm( LeftOrRight side, UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C )
 
-Her2k
------
-Hermitian rank-2K update: updates
-:math:`C := \alpha (A B^H + B A^H) + \beta C`, or 
-:math:`C := \alpha (A^H B + B^H A) + \beta C`, depending upon whether 
-`orientation` is set to ``NORMAL`` or ``ADJOINT``, respectively. Only the 
-triangle of :math:`C` specified by the `uplo` parameter is modified.
+   .. note::
 
-.. cpp:function:: void Her2k( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
-.. cpp:function:: void Her2k( UpperOrLower uplo, Orientation orientation, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, T beta, DistMatrix<T>& C )
-
-Please see :cpp:func:`SetLocalTrr2kBlocksize\<T>` 
-and :cpp:func:`LocalTrr2kBlocksize\<T>` in the 
-:ref:`blas-tuning` section for information on tuning the distributed 
-:cpp:func:`Her2k`.
+      For the best performance, `A`, `B`, and `C` should all be in [MC,MR] 
+      distributions.
 
 Herk
 ----
@@ -53,11 +47,37 @@ set to ``NORMAL`` or ``ADJOINT``, respectively. Only the triangle of :math:`C`
 specified by the `uplo` parameter is modified.
 
 .. cpp:function:: void Herk( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, T beta, Matrix<T>& C )
-.. cpp:function:: void Herk( UpperOrLower uplo, Orientation orientation, T alpha, const DistMatrix<T>& A, T beta, DistMatrix<T>& C )
+.. cpp:function:: void Herk( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, T beta, AbstractDistMatrix<T>& C )
+
+   .. note::
+
+      For the best performance, `A` and `C` should both be in [MC,MR] 
+      distributions.
 
 Please see :cpp:func:`SetLocalTrrkBlocksize\<T>` 
 and :cpp:func:`LocalTrrkBlocksize\<T>` in the :ref:`blas-tuning`
 section for information on tuning the distributed :cpp:func:`Herk`.
+
+Her2k
+-----
+Hermitian rank-2K update: updates
+:math:`C := \alpha (A B^H + B A^H) + \beta C`, or 
+:math:`C := \alpha (A^H B + B^H A) + \beta C`, depending upon whether 
+`orientation` is set to ``NORMAL`` or ``ADJOINT``, respectively. Only the 
+triangle of :math:`C` specified by the `uplo` parameter is modified.
+
+.. cpp:function:: void Her2k( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
+.. cpp:function:: void Her2k( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C )
+
+   .. note::
+
+      For the best performance, `A`, `B`, and `C` should all be in [MC,MR] 
+      distributions.
+
+Please see :cpp:func:`SetLocalTrr2kBlocksize\<T>` 
+and :cpp:func:`LocalTrr2kBlocksize\<T>` in the 
+:ref:`blas-tuning` section for information on tuning the distributed 
+:cpp:func:`Her2k`.
 
 Multi-shift QuasiTrsm
 ---------------------
@@ -88,13 +108,13 @@ decompositions, which produce triangular matrices with mixes of
    Trsm.
 
 .. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X )
-.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X )
+.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const AbstractDistMatrix<F>& T, const AbstractDistMatrix<F>& shifts, AbstractDistMatrix<F>& X )
 
    Overwrite the columns of `X` with the solutions to the shifted linear 
    systems.
 
 .. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const Matrix<Real>& T, const Matrix<Complex<Real>>& shifts, Matrix<Real>& XReal, Matrix<Real>& XImag )
-.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const DistMatrix<Real>& T, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real>& XReal, DistMatrix<Real>& XImag )
+.. cpp:function:: void MultiShiftQuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const AbstractDistMatrix<Real>& T, const AbstractDistMatrix<Complex<Real>>& shifts, AbstractDistMatrix<Real>& XReal, AbstractDistMatrix<Real>& XImag )
 
    Overwrite the columns of the real and imaginary parts of `X` with the 
    solutions to the shifted linear systems.
@@ -123,13 +143,13 @@ The data movement requires almost no modification from that of :cpp:func:`Trsm`.
    of Trsm.
 
 .. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X )
-.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X )
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const AbstractDistMatrix<F>& T, const AbstractDistMatrix<F>& shifts, AbstractDistMatrix<F>& X )
 
    Overwrite the columns of `X` with the solutions to the shifted linear 
    systems.
 
 .. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const Matrix<Real>& T, const Matrix<Complex<Real>>& shifts, Matrix<Real>& XReal, Matrix<Real>& XImag )
-.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const DistMatrix<Real>& T, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real>& XReal, DistMatrix<Real>& XImag )
+.. cpp:function:: void MultiShiftTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, Complex<Real> alpha, const AbstractDistMatrix<Real>& T, const AbstractDistMatrix<Complex<Real>>& shifts, AbstractDistMatrix<Real>& XReal, AbstractDistMatrix<Real>& XImag )
 
    Overwrite the columns of the real and imaginary parts of `X` with the
    solutions to the shifted linear systems.
@@ -161,11 +181,15 @@ decompositions, which produce triangular matrices with mixes of
    There is no corresponding BLAS routine, but it is a natural extension of
    Trsm.
 
-.. cpp:function:: void QuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& T, const Matrix<F>& shifts, Matrix<F>& X, bool checkIfSingular=false )
-.. cpp:function:: void QuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F>& T, const DistMatrix<F,VR,STAR>& shifts, DistMatrix<F>& X, bool checkIfSingular=false )
+.. cpp:function:: void QuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& T, Matrix<F>& X, bool checkIfSingular=false )
+.. cpp:function:: void QuasiTrsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, F alpha, const AbstractDistMatrix<F>& T, AbstractDistMatrix<F>& X, bool checkIfSingular=false )
 
-   Overwrite the columns of `X` with the solutions to the shifted linear
-   systems.
+   Overwrite the columns of `X` with the solutions to the quasi-triangular
+   linear systems.
+
+   .. note::
+
+   For best performance, `T` and `X` should be in [MC,MR] distributions.
 
 Symm
 ----
@@ -177,23 +201,12 @@ Symmetric matrix-matrix multiplication: updates
 is accessed.
 
 .. cpp:function:: void Symm( LeftOrRight side, UpperOrLower uplo, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C, bool conjugate=false )
-.. cpp:function:: void Symm( LeftOrRight side, UpperOrLower uplo, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, T beta, DistMatrix<T>& C, bool conjugate=false )
+.. cpp:function:: void Symm( LeftOrRight side, UpperOrLower uplo, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C, bool conjugate=false )
 
-Syr2k
------
-Symmetric rank-2K update: updates
-:math:`C := \alpha (A B^T + B A^T) + \beta C`, or 
-:math:`C := \alpha (A^T B + B^T A) + \beta C`, depending upon whether 
-`orientation` is set to ``NORMAL`` or ``TRANSPOSE``, respectively. Only the 
-triangle of :math:`C` specified by the `uplo` parameter is modified.
+   .. note::
 
-.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
-.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, T beta, DistMatrix<T>& C )
-
-Please see :cpp:func:`SetLocalTrr2kBlocksize\<T>` 
-and :cpp:func:`LocalTrr2kBlocksize\<T>` in the 
-:ref:`blas-tuning` section for information on tuning the distributed 
-:cpp:func:`Syr2k`.
+      For best performance, `A`, `B`, and `C` should all be in [MC,MR]
+      distributions.
 
 Syrk
 ----
@@ -204,11 +217,37 @@ set to ``NORMAL`` or ``TRANSPOSE``, respectively. Only the triangle of :math:`C`
 specified by the `uplo` parameter is modified.
 
 .. cpp:function:: void Syrk( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, T beta, Matrix<T>& C )
-.. cpp:function:: void Syrk( UpperOrLower uplo, Orientation orientation, T alpha, const DistMatrix<T>& A, T beta, DistMatrix<T>& C )
+.. cpp:function:: void Syrk( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, T beta, AbstractDistMatrix<T>& C )
+
+   .. note::
+
+      For the best performance, `A` and `C` should both be in [MC,MR] 
+      distributions.
 
 Please see :cpp:func:`SetLocalTrrkBlocksize\<T>` 
 and :cpp:func:`LocalTrrkBlocksize\<T>` in the :ref:`blas-tuning`
 section for information on tuning the distributed :cpp:func:`Syrk`.
+
+Syr2k
+-----
+Symmetric rank-2K update: updates
+:math:`C := \alpha (A B^T + B A^T) + \beta C`, or 
+:math:`C := \alpha (A^T B + B^T A) + \beta C`, depending upon whether 
+`orientation` is set to ``NORMAL`` or ``TRANSPOSE``, respectively. Only the 
+triangle of :math:`C` specified by the `uplo` parameter is modified.
+
+.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
+.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C )
+
+   .. note::
+
+      For the best performance, `A`, `B`, and `C` should all be in [MC,MR] 
+      distributions.
+
+Please see :cpp:func:`SetLocalTrr2kBlocksize\<T>` 
+and :cpp:func:`LocalTrr2kBlocksize\<T>` in the 
+:ref:`blas-tuning` section for information on tuning the distributed 
+:cpp:func:`Syr2k`.
 
 Trmm
 ----
@@ -221,23 +260,12 @@ be one of :math:`\{A,A^T,A^H\}` (and `diag` determines
 whether :math:`A` is treated as unit-diagonal or not).
 
 .. cpp:function:: void Trmm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, T alpha, const Matrix<T>& A, Matrix<T>& B )
-.. cpp:function:: void Trmm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, T alpha, const DistMatrix<T>& A, DistMatrix<T>& B )
+.. cpp:function:: void Trmm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, T alpha, const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B )
 
-Trr2k
------
-Triangular rank-2k update: performs 
-:math:`E := \alpha ( A^\# B^\sharp + C^\Diamond D^\triangle ) + \beta E`,
-where only the triangle of `E` specified by `uplo` is modified, and 
-the orientation of each input matrix, e.g., :math:`A^\# \in \{A,A^T,A^H\}`, is determined 
-by `orientationOfX` for each :math:`X \in \left\{A,B,C,D\right\}`.
+   .. note::
 
-.. note::
-
-   There is no corresponding BLAS routine, but it is a natural generalization
-   of "symmetric" and "Hermitian" updates.
-
-.. cpp:function:: void Trr2k( UpperOrLower uplo, Orientation orientationOfA, Orientation orientationOfB, Orientation orientationOfC, Orientation orientationOfD, T alpha, const Matrix<T>& A, const Matrix<T>& B, const Matrix<T>& C, const Matrix<T>& D, T beta, Matrix<T>& E )
-.. cpp:function:: void Trr2k( UpperOrLower uplo, Orientation orientationOfA, Orientation orientationOfB, Orientation orientationOfC, Orientation orientationOfD, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, const DistMatrix<T>& C, const DistMatrix<T>& D, T beta, DistMatrix<T>& E )
+      For the best performance, `A` and `B` should both be in [MC,MR] 
+      distributions.
 
 Trrk
 ----
@@ -255,7 +283,33 @@ respectively.
    two update matrices is scaled by D.
 
 .. cpp:function:: void Trrk( UpperOrLower uplo, Orientation orientationOfA, Orientation orientationOfB, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
-.. cpp:function:: void Trrk( UpperOrLower uplo, Orientation orientationOfA, Orientation orientationOfB, T alpha, const DistMatrix<T>& A, const DistMatrix<T>& B, T beta, DistMatrix<T>& C )
+.. cpp:function:: void Trrk( UpperOrLower uplo, Orientation orientationOfA, Orientation orientationOfB, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C )
+
+   .. note::
+
+      For the best performance, `A`, `B`, and `C` should all be in [MC,MR] 
+      distributions.
+
+Trr2k
+-----
+Triangular rank-2k update: performs 
+:math:`E := \alpha ( A^\# B^\sharp + C^\Diamond D^\triangle ) + \beta E`,
+where only the triangle of `E` specified by `uplo` is modified, and 
+the orientation of each input matrix, e.g., :math:`A^\# \in \{A,A^T,A^H\}`, is determined 
+by `orientationOfX` for each :math:`X \in \left\{A,B,C,D\right\}`.
+
+.. note::
+
+   There is no corresponding BLAS routine, but it is a natural generalization
+   of "symmetric" and "Hermitian" updates.
+
+.. cpp:function:: void Trr2k( UpperOrLower uplo, Orientation orientationOfA, Orientation orientationOfB, Orientation orientationOfC, Orientation orientationOfD, T alpha, const Matrix<T>& A, const Matrix<T>& B, const Matrix<T>& C, const Matrix<T>& D, T beta, Matrix<T>& E )
+.. cpp:function:: void Trr2k( UpperOrLower uplo, Orientation orientationOfA, Orientation orientationOfB, Orientation orientationOfC, Orientation orientationOfD, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, const AbstractDistMatrix<T>& C, const AbstractDistMatrix<T>& D, T beta, AbstractDistMatrix<T>& E )
+
+   .. note::
+
+      For the best performance, `A`, `B`, `C`, `D`, and `E` should all be in 
+      [MC,MR] distributions.
 
 Trtrmm
 ------
@@ -269,7 +323,11 @@ Symmetric/Hermitian triangular matrix-matrix multiply: performs
 `uplo` parameters. 
 
 .. cpp:function:: void Trtrmm( Orientation orientation, UpperOrLower uplo, Matrix<T>& A )
-.. cpp:function:: void Trtrmm( Orientation orientation, UpperOrLower uplo, DistMatrix<T>& A )
+.. cpp:function:: void Trtrmm( Orientation orientation, UpperOrLower uplo, AbstractDistMatrix<T>& A )
+
+   .. note::
+
+      For the best performance, `A` should be in a [MC,MR] distribution.
 
 Trdtrmm
 -------
@@ -285,7 +343,22 @@ Note that :math:`L` and :math:`U` are unit-diagonal and their diagonal is
 overwritten with :math:`D`.
 
 .. cpp:function:: void Trdtrmm( Orientation orientation, UpperOrLower uplo, Matrix<F>& A )
-.. cpp:function:: void Trdtrmm( Orientation orientation, UpperOrLower uplo, DistMatrix<F>& A )
+.. cpp:function:: void Trdtrmm( Orientation orientation, UpperOrLower uplo, AbstractDistMatrix<F>& A )
+
+   .. note::
+
+      For the best performance, `A` should be in a [MC,MR] distribution.
+
+.. cpp:function:: void Trdtrmm( Orientation orientation, UpperOrLower uplo, Matrix<F>& A, const Matrix<F>& dSub )
+.. cpp:function:: void Trdtrmm( Orientation orientation, UpperOrLower uplo, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& dSub )
+
+   An extension to quasi-diagonal :math:`D`, where the main diagonal is stored
+   over the main diagonal of `A` and the subdiagonal is given by `dSub`.
+
+   .. note::
+
+      For the best performance, `A` should be in a [MC,MR] distribution,
+      while `dSub` should be in a [MD,STAR] distribution.
 
 Trsm
 ----
@@ -299,7 +372,12 @@ whether :math:`A` is treated as unit-diagonal or not).
 
 .. cpp:function:: void Trsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, F alpha, const Matrix<F>& A, Matrix<F>& B )
 
-.. cpp:function:: void Trsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, F alpha, const DistMatrix<F>& A, DistMatrix<F>& B )
+.. cpp:function:: void Trsm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, F alpha, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
+
+   .. note::
+
+      For the best performance, `A` and `B` should both be in [MC,MR] 
+      distributions.
 
 Trstrm
 ------
@@ -307,7 +385,12 @@ Performs a triangular solve against a triangular matrix. Only the Left Lower
 Normal option is currently supported.
 
 .. cpp:function:: void Trstrm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, F alpha, const Matrix<F>& A, Matrix<F>& X, bool checkIfSingular=true )
-.. cpp:function:: void Trstrm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, F alpha, const DistMatrix<F>& A, DistMatrix<F>& X, bool checkIfSingular=true )
+.. cpp:function:: void Trstrm( LeftOrRight side, UpperOrLower uplo, Orientation orientation, UnitOrNonUnit diag, F alpha, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& X, bool checkIfSingular=true )
+
+   .. note::
+
+      For the best performance, `A` and `B` should both be in [MC,MR] 
+      distributions.
 
 Two-sided Trmm
 --------------
@@ -316,8 +399,13 @@ which preserves the symmetry of the input matrix,
 either :math:`A := L^H A L` or :math:`A := U A U^H`.
 
 .. cpp:function:: void TwoSidedTrmm( UpperOrLower uplo, UnitOrNonUnit diag, Matrix<T>& A, const Matrix<T>& B )
+.. cpp:function:: void TwoSidedTrmm( UpperOrLower uplo, UnitOrNonUnit diag, AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B )
 
-.. cpp:function:: void TwoSidedTrmm( UpperOrLower uplo, UnitOrNonUnit diag, DistMatrix<T>& A, const DistMatrix<T>& B )
+   .. note::
+
+      For the best performance, `A` and `B` should both be in [MC,MR] 
+      distributions.
+
 
 Two-sided Trsm
 --------------
@@ -326,4 +414,9 @@ preserves the symmetry of the input matrix,
 either :math:`A := L^{-1} A L^{-H}` or :math:`A := U^{-H} A U^{-1}`.
 
 .. cpp:function:: void TwoSidedTrsm( UpperOrLower uplo, UnitOrNonUnit diag, Matrix<F>& A, const Matrix<F>& B )
-.. cpp:function:: void TwoSidedTrsm( UpperOrLower uplo, UnitOrNonUnit diag, DistMatrix<F>& A, const DistMatrix<F>& B )
+.. cpp:function:: void TwoSidedTrsm( UpperOrLower uplo, UnitOrNonUnit diag, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B )
+
+   .. note::
+
+      For the best performance, `A` and `B` should both be in [MC,MR] 
+      distributions.

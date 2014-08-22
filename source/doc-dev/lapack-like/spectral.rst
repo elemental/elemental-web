@@ -21,7 +21,7 @@ where `A` is the given Hermitian matrix, and unitary `Z` and real diagonal
 :math:`\Lambda` are sought. 
 
 .. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the set of eigenvalues of the Hermitian matrix `A` determined by
    the `subset` structure (the default is to compute all eigenvalues).
@@ -36,7 +36,7 @@ where `A` is the given Hermitian matrix, and unitary `Z` and real diagonal
       and Conquer.
 
 .. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& w, AbstractDistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the set of eigenpairs of the Hermitian matrix `A` determined by
    the `subset` structure (the default is to compute all eigenpairs).
@@ -103,23 +103,23 @@ Conquer algorithm (see, for example, *Stable and efficient spectral divide and c
 .. cpp:type:: HermitianEigCtrl<Real>
 
    .. cpp:member:: HermitianTridiagCtrl tridiagCtrl
-   .. cpp:member:: HermitianSdcCtrl<Real> sdcCtrl
-   .. cpp:member:: bool useSdc
+   .. cpp:member:: HermitianSDCCtrl<Real> sdcCtrl
+   .. cpp:member:: bool useSDC
 
    .. cpp:function:: HermitianEigCtrl()
 
       Initializes `tridiagCtrl` and `sdcCtrl` to their defaults and sets
-      `useSdc` to false.
+      `useSDC` to false.
 
 .. cpp:type:: HermitianEigCtrl<Base<F>>
 
    A particular case where the datatype is the base of the potentially complex
    type ``F``.
 
-should be modified so that `useSdc` is set to `true`. The Spectral Divide and
+should be modified so that `useSDC` is set to `true`. The Spectral Divide and
 Conquer algorithm is controlled via the structure
 
-.. cpp:type:: HermitianSdcCtrl<Real>
+.. cpp:type:: HermitianSDCCtrl<Real>
 
    .. cpp:member:: int cutoff
    .. cpp:member:: int maxInnerIts
@@ -129,7 +129,7 @@ Conquer algorithm is controlled via the structure
    .. cpp:member:: bool random
    .. cpp:member:: bool progress
 
-.. cpp:type:: HermitianSdcCtrl<Base<F>>
+.. cpp:type:: HermitianSDCCtrl<Base<F>>
 
    A particular case where the datatype is the base of the potentially complex
    type ``F``.
@@ -162,7 +162,7 @@ Please see the :cpp:func:`HermitianEig` documentation for more details.
    double-precision matrices.
 
 .. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& G, AbstractDistMatrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the imaginary components of the eigenvalues of the skew-Hermitian 
    matrix `G` determined by
@@ -178,7 +178,7 @@ Please see the :cpp:func:`HermitianEig` documentation for more details.
       and Conquer.
 
 .. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& w, Matrix<Complex<Base<F>>>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<Complex<Base<F>>>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& G, AbstractDistMatrix<Base<F>>& w, AbstractDistMatrix<Complex<Base<F>>>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>>& ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the set of eigenpairs (note that only the imaginary components of 
    the eigenvalues are returned) of the skew-Hermitian matrix `G` determined by
@@ -227,7 +227,7 @@ which uses the ``AXBX`` enum value.
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/HermitianGenDefEig.cpp>`__
 
 .. cpp:function:: void HermitianGenDefEig( Pencil pencil, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void HermitianGenDefEig( Pencil pencil, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefEig( Pencil pencil, UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the set of eigenvalues of the Hermitian-definite matrix pencil 
    determined by
@@ -243,7 +243,7 @@ which uses the ``AXBX`` enum value.
       and Conquer.
 
 .. cpp:function:: void HermitianGenDefEig( Pencil pencil, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void HermitianGenDefEig( Pencil pencil, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianGenDefEig( Pencil pencil, UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<Base<F>>& w, AbstractDistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
 
    Compute the set of eigenpairs of the Hermitian-definite matrix pencil 
    determined by
@@ -286,9 +286,9 @@ Spectral Divide and Conquer approach is attempted.
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/spectral/Schur.cpp>`__
 
 .. cpp:function:: void Schur( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, bool fullTriangle=false, const SchurCtrl<Base<F>> ctrl=SchurCtrl<Base<F>>() )
-.. cpp:function:: void Schur( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, bool fullTriangle=false, const SchurCtrl<Base<F>> ctrl=SchurCtrl<Base<F>>() )
+.. cpp:function:: void Schur( AbstractDistMatrix<F>& A, AbstractDistMatrix<Complex<Base<F>>>& w, bool fullTriangle=false, const SchurCtrl<Base<F>> ctrl=SchurCtrl<Base<F>>() )
 .. cpp:function:: void Schur( Matrix<F>& A, Matrix<Complex<Base<F>>>& w, Matrix<F>& Q, bool fullTriangle=true, const SchurCtrl<Base<F>> ctrl=SchurCtrl<Base<F>>() )
-.. cpp:function:: void Schur( DistMatrix<F>& A, DistMatrix<Complex<Base<F>>,VR,STAR>& w, DistMatrix<F>& Q, bool fullTriangle=true, const SchurCtrl<Base<F>> ctrl=SchurCtrl<Base<F>>() )
+.. cpp:function:: void Schur( AbstractDistMatrix<F>& A, AbstractDistMatrix<Complex<Base<F>>>& w, AbstractDistMatrix<F>& Q, bool fullTriangle=true, const SchurCtrl<Base<F>> ctrl=SchurCtrl<Base<F>>() )
 
 Algorithmic options
 ^^^^^^^^^^^^^^^^^^^
@@ -300,15 +300,15 @@ algorithm.
 
 .. cpp:type:: SchurCtrl<Real>
 
-   .. cpp:member:: bool useSdc
+   .. cpp:member:: bool useSDC
 
       Whether or not to use Spectral Divide and Conquer
 
-   .. cpp:member:: HessQrCtrl qrCtrl
+   .. cpp:member:: HessQRCtrl qrCtrl
 
       The control structure for the Hessenberg QR algorithm
 
-   .. cpp:member:: SdcCtrl<Real> sdcCtrl
+   .. cpp:member:: SDCCtrl<Real> sdcCtrl
 
       The control structure for the Spectral Divide and Conquer algorithm
 
@@ -319,9 +319,9 @@ algorithm.
 
 *TODO:* Reference to the distributed Hessenberg QR work of Granat, Kagstrom, Kressner, et al.
 
-.. cpp:type:: HessQrCtrl
+.. cpp:type:: HessQRCtrl
 
-   .. cpp:member:: bool distAed
+   .. cpp:member:: bool distAED
 
       Whether or not Aggressive Early Deflation should be attempted for
       distributed matrices (due to existing bugs in the ScaLAPACK 
@@ -340,7 +340,7 @@ succeeds on random matrices.
 
 `SDC header file <https://github.com/elemental/Elemental/blob/master/src/lapack-like/spectral/Schur/SDC.hpp>`__
 
-.. cpp:type:: SdcCtrl<Real>
+.. cpp:type:: SDCCtrl<Real>
 
    .. cpp:member:: int cutoff
    .. cpp:member:: int maxInnerIts
@@ -350,7 +350,7 @@ succeeds on random matrices.
    .. cpp:member:: bool random
    .. cpp:member:: bool progress
 
-.. cpp:type:: SdcCtrl<Base<F>>
+.. cpp:type:: SDCCtrl<Base<F>>
 
    A particular case where the datatype is the base of the potentially complex
    type ``F``.
@@ -359,13 +359,13 @@ Quasi-triangular manipulation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void schur::QuasiTriangEig( const Matrix<F>& U, Matrix<Complex<Base<F>>>& w )
-.. cpp:function:: void schur::QuasiTriangEig( const DistMatrix<F>& U, DistMatrix<Complex<Base<F>>,colDist,rowDist>& w )
+.. cpp:function:: void schur::QuasiTriangEig( const AbstractDistMatrix<F>& U, AbstractDistMatrix<Complex<Base<F>>>& w )
 
    Return the eigenvalues of the upper quasi-triangular matrix `U` in the vector
    `w`.
 
 .. cpp:function:: Matrix<Complex<Base<F>>> schur::QuasiTriangEig( const Matrix<F>& U )
-.. cpp:function:: DistMatrix<Complex<Base<F>>,VR,STAR> schur::QuasiTriangEig( const DistMatrix<F>& U )
+.. cpp:function:: DistMatrix<Complex<Base<F>>,VR,STAR> schur::QuasiTriangEig( const AbstractDistMatrix<F>& U )
 
    Return the eigenvalues of the upper quasi-triangular matrix `U`.
 
@@ -377,13 +377,13 @@ Quasi-triangular manipulation
    upper quasi-triangular matrix.
 
 .. cpp:function:: void schur::RealToComplex( const Matrix<Real>& UQuasi, Matrix<Complex<Real>>& U )
-.. cpp:function:: void schur::RealToComplex( const DistMatrix<Real>& UQuasi, DistMatrix<Complex<Real>>& U )
+.. cpp:function:: void schur::RealToComplex( const AbstractDistMatrix<Real>& UQuasi, AbstractDistMatrix<Complex<Real>>& U )
 
    Rotate a real upper quasi-triangular matrix into a complex upper triangular
    matrix.
 
 .. cpp:function:: void schur::CheckRealSchur( const Matrix<Real>& U, bool standardForm=false )
-.. cpp:function:: void schur::CheckRealSchur( const DistMatrix<Real>& U, bool standardForm=false )
+.. cpp:function:: void schur::CheckRealSchur( const AbstractDistMatrix<Real>& U, bool standardForm=false )
 
    Check whether or not the largest diagonal blocks of the upper quasi-triangular
    matrix are at most :math:`2 \times 2` and, optionally, check if the 
@@ -412,14 +412,14 @@ flips introduced by negative eigenvalues.
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/spectral/SVD.cpp>`__
 
 .. cpp:function:: void HermitianSVD( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& U, Matrix<F>& V )
-.. cpp:function:: void HermitianSVD( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& U, DistMatrix<F>& V )
+.. cpp:function:: void HermitianSVD( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& s, AbstractDistMatrix<F>& U, AbstractDistMatrix<F>& V )
 
    Return a vector of singular values, :math:`s`, and the left and right 
    singular vector matrices, :math:`U` and :math:`V`, such that 
    :math:`A=U \mathrm{diag}(s) V^H`.
 
 .. cpp:function:: void HermitianSVD( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& s )
-.. cpp:function:: void HermitianSVD( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s )
+.. cpp:function:: void HermitianSVD( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& s )
 
    Return the singular values of :math:`A` in `s`. Note that the appropriate 
    triangle of `A` is overwritten during computation.
@@ -440,18 +440,18 @@ computed through (a dynamically-weighted) Halley iteration.
 `QWDH approach <https://github.com/elemental/Elemental/blob/master/src/lapack-like/spectral/Polar/QDWH.hpp>`__
 
 .. cpp:function:: void Polar( Matrix<F>& A, const PolarCtrl& ctrl=PolarCtrl() )
-.. cpp:function:: void Polar( DistMatrix<F>& A, const PolarCtrl& ctrl=PolarCtrl() )
+.. cpp:function:: void Polar( AbstractDistMatrix<F>& A, const PolarCtrl& ctrl=PolarCtrl() )
 .. cpp:function:: void Polar( Matrix<F>& A, Matrix<F>& P, const PolarCtrl& ctrl=PolarCtrl() )
-.. cpp:function:: void Polar( DistMatrix<F>& A, DistMatrix<F>& P, const PolarCtrl& ctrl=PolarCtrl() )
+.. cpp:function:: void Polar( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& P, const PolarCtrl& ctrl=PolarCtrl() )
 
    Compute the polar decomposition of :math:`A`, :math:`A=QP`, returning 
    :math:`Q` within `A` and :math:`P` within `P`. The current implementation
    first computes the SVD.
 
 .. cpp:function:: void HermitianPolar( UpperOrLower uplo, Matrix<F>& A, const PolarCtrl& ctrl=PolarCtrl() )
-.. cpp:function:: void HermitianPolar( UpperOrLower uplo, DistMatrix<F>& A, const PolarCtrl& ctrl=PolarCtrl() )
+.. cpp:function:: void HermitianPolar( UpperOrLower uplo, AbstractDistMatrix<F>& A, const PolarCtrl& ctrl=PolarCtrl() )
 .. cpp:function:: void HermitianPolar( UpperOrLower uplo, Matrix<F>& A, Matrix<F>& P, const PolarCtrl& ctrl=PolarCtrl() )
-.. cpp:function:: void HermitianPolar( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& P, const PolarCtrl& ctrl=PolarCtrl() )
+.. cpp:function:: void HermitianPolar( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& P, const PolarCtrl& ctrl=PolarCtrl() )
 
    Compute the polar decomposition through a Hermitian EVD. Since this is 
    equivalent to a Hermitian sign decomposition (if :math:`\text{sgn}(0)` is 
@@ -498,47 +498,63 @@ non-negative entries.
 
 `Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack-like/spectral/SVD>`__
 
-.. cpp:function:: void SVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V )
+.. cpp:function:: void SVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V, const SVDCtrl<Base<F>>& ctrl=SVDCtrl<Base<F>>() )
 
-.. cpp:function:: void SVD( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V )
+.. cpp:function:: void SVD( AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& s, AbstractDistMatrix<F>& V, const SVDCtrl<Base<F>>& ctrl=SVDCtrl<Base<F>>() )
 
    Overwrites `A` with :math:`U`, `s` with the diagonal entries of :math:`\Sigma`, and `V` with :math:`V`. 
 
 .. cpp:function:: void SVD( Matrix<F>& A, Matrix<Base<F>>& s )
 
-.. cpp:function:: void SVD( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s )
+.. cpp:function:: void SVD( AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& s )
 
    Forms the singular values of :math:`A` in `s`. Note that `A` is overwritten in order to compute the singular values.
 
+Algorithmic options
+^^^^^^^^^^^^^^^^^^^
 
-svd namespace
-^^^^^^^^^^^^^
+.. cpp:type:: SVDCtrl<Real>
 
-.. cpp:function:: void svd::QRSVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V )
+   .. cpp:member:: bool seqQR
 
-   SVD which uses bidiagonal QR algorithm.
+      Whether or not sequential implementations should use the QR algorithm
+      instead of a Divide and Conquer when computing singular vectors.
+      When only singular values are requested, a bidiagonal DQDS algorithms is 
+      always run.
 
-.. cpp:function:: void svd::DivideAndConquerSVD( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V )
+   .. cpp:member:: double valChanRatio
 
-   SVD which uses a bidiagonal divide-and-conquer algorithm.
+      The minimum height/width ratio before preprocessing with a QR 
+      decomposition when only computing singular values.
 
-.. cpp:function:: void svd::Chan( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, double heightRatio=1.2 )
-.. cpp:function:: void svd::Chan( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V, double heightRatio=1.5 )
+   .. cpp:member:: double fullChanRatio
 
-   SVD which preprocesses with an initial QR decomposition if the matrix is 
-   sufficiently tall relative to its width.
+      The minimum height/width ratio before preprocessing with a QR 
+      decomposition when computing a full SVD.
 
-.. cpp:function:: void svd::GolubReinschUpper( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s )
-.. cpp:function:: void svd::GolubReinschUpper( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V )
+   .. cpp:member:: bool thresholded
+ 
+      If the sufficiently small singular triplets should be thrown away.
+      When thresholded, a cross-product algorithm is used. This is often
+      advantageous since tridiagonal eigensolvers tend to have faster 
+      parallel implementations than bidiagonal SVD's.
 
-   Computes the singular values (and vectors) of a matrix which is taller than
-   it is wide using the Golub-Reinsch algorithm, though DQDS is used when only
-   the singular values are sought.
+   .. cpp:member:: bool relative
 
-.. cpp:function:: void svd::Thresholded( Matrix<F>& A, Matrix<Base<F>>& s, Matrix<F>& V, Base<F> tol=0, bool relative=false )
-.. cpp:function:: void svd::Thresholded( DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& s, DistMatrix<F>& V, Base<F> tol=0, bool relative=false )
+      If the tolerance should be relative to the largest singular value.
 
-   Computes the singular triplets whose singular values are larger than a 
-   specified tolerance using the cross-product algorithm. This is often 
-   advantageous because tridiagonal eigensolvers tend to enjoy better parallel
-   implementations than bidiagonal SVD's.
+   .. cpp:member:: Real tol
+
+      The numerical tolerance for the thresholding. If this value is kept at
+      zero, then a value is automatically chosen based upon the matrix.
+
+   .. cpp:function:: SVDCtrl()
+
+      Sets ``seqQR=false``, ``valChanRatio=1.2``, ``fullChanRatio=1.5``,
+      ``thresholded=false``, ``relative=true``, and ``tol=0``.
+
+.. cpp:type:: SVDCtrl<Base<F>>
+
+   A particular case where the datatype is the base of the potentially complex
+   type ``F``.
+

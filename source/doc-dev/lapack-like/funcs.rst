@@ -9,7 +9,7 @@ Triangular
 Inverts a (possibly unit-diagonal) triangular matrix in-place.
 
 .. cpp:function:: void TriangularInverse( UpperOrLower uplo, UnitOrNonUnit diag, Matrix<F>& A )
-.. cpp:function:: void TriangularInverse( UpperOrLower uplo, UnitOrNonUnit diag, DistMatrix<F>& A )
+.. cpp:function:: void TriangularInverse( UpperOrLower uplo, UnitOrNonUnit diag, AbstractDistMatrix<F>& A )
 
    Inverts the triangle of `A` specified by the parameter `uplo`;
    if `diag` is set to `UNIT`, then `A` is treated as unit-diagonal.
@@ -29,7 +29,7 @@ solves against :math:`L` one block column at a time, and then applies the
 row pivots in reverse order to the columns of the result.
 
 .. cpp:function:: void Inverse( Matrix<F>& A )
-.. cpp:function:: void Inverse( DistMatrix<F>& A )
+.. cpp:function:: void Inverse( AbstractDistMatrix<F>& A )
 
    Overwrites the general matrix `A` with its inverse.
 
@@ -37,12 +37,12 @@ Symmetric/Hermitian
 ^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void SymmetricInverse( UpperOrLower uplo, Matrix<F>& A, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void SymmetricInverse( UpperOrLower uplo, DistMatrix<F>& A, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void SymmetricInverse( UpperOrLower uplo, AbstractDistMatrix<F>& A, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
    Invert a symmetric or Hermitian matrix using a pivoted LDL factorization.
 
 .. cpp:function:: void HermitianInverse( UpperOrLower uplo, Matrix<F>& A, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void HermitianInverse( UpperOrLower uplo, DistMatrix<F>& A, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void HermitianInverse( UpperOrLower uplo, AbstractDistMatrix<F>& A, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
    Invert a Hermitian matrix using a pivoted LDL factorization.
 
@@ -67,7 +67,7 @@ If the matrix is found to not be HPD, then a :cpp:type:`NonHPDMatrixException`
 is thrown.
 
 .. cpp:function:: void HPDInverse( UpperOrLower uplo, Matrix<F>& A )
-.. cpp:function:: void HPDInverse( UpperOrLower uplo, DistMatrix<F>& A )
+.. cpp:function:: void HPDInverse( UpperOrLower uplo, AbstractDistMatrix<F>& A )
 
    Overwrite the `uplo` triangle of the HPD matrix `A` with the same
    triangle of the inverse of `A`.
@@ -97,14 +97,14 @@ matrix and the latter in a normal (in fact, unitary) matrix.
    eigensolver, only double-precision results are supported as of now.
 
 .. cpp:function:: void HermitianFunction( UpperOrLower uplo, Matrix<F>& A, std::function<Real(Real)> f )
-.. cpp:function:: void HermitianFunction( UpperOrLower uplo, DistMatrix<F>& A, std::function<Real(Real)> f )
+.. cpp:function:: void HermitianFunction( UpperOrLower uplo, AbstractDistMatrix<F>& A, std::function<Real(Real)> f )
 
    Modifies the eigenvalues of the passed-in Hermitian matrix by replacing 
    each eigenvalue :math:`\lambda_i` with :math:`f(\lambda_i) \in \mathbb{R}`. 
    See `examples/lapack-like/RealSymmetricFunction.cpp <https://github.com/elemental/Elemental/tree/master/examples/lapack-like/RealHermitianFunction.cpp>`_ for an example usage.
 
-.. cpp:function:: void HermitianFunction( UpperOrLower uplo, Matrix<Complex<Real> >& A, std::function<Complex<Real>(Real)> f )
-.. cpp:function:: void HermitianFunction( UpperOrLower uplo, DistMatrix<Complex<Real> >& A, std::function<Complex<Real>(Real)> f )
+.. cpp:function:: void HermitianFunction( UpperOrLower uplo, Matrix<Complex<Real>>& A, std::function<Complex<Real>(Real)> f )
+.. cpp:function:: void HermitianFunction( UpperOrLower uplo, AbstractDistMatrix<Complex<Real>>& A, std::function<Complex<Real>(Real)> f )
 
    Modifies the eigenvalues of the passed-in complex Hermitian matrix by
    replacing each eigenvalue :math:`\lambda_i` with 
@@ -117,7 +117,7 @@ Pseudoinverse
 -------------
 
 .. cpp:function:: Pseudoinverse( Matrix<F>& A, Base<F> tolerance=0 )
-.. cpp:function:: Pseudoinverse( DistMatrix<F>& A, Base<F> tolerance=0 )
+.. cpp:function:: Pseudoinverse( AbstractDistMatrix<F>& A, Base<F> tolerance=0 )
 
    Computes the pseudoinverse of a general matrix through computing its SVD,
    modifying the singular values with the function
@@ -136,7 +136,7 @@ Pseudoinverse
    :math:`\epsilon n \| A \|_2`.
 
 .. cpp:function:: HermitianPseudoinverse( UpperOrLower uplo, Matrix<F>& A, Base<F> tolerance=0 )
-.. cpp:function:: HermitianPseudoinverse( UpperOrLower uplo, DistMatrix<F>& A, Base<F> tolerance=0 )
+.. cpp:function:: HermitianPseudoinverse( UpperOrLower uplo, AbstractDistMatrix<F>& A, Base<F> tolerance=0 )
 
    Computes the pseudoinverse of a Hermitian matrix through a customized version
    of :cpp:func:`HermitianFunction` which used the eigenvalue mapping 
@@ -175,13 +175,13 @@ where each eigenvalue :math:`\lambda = r e^{i\theta}` maps to
 :math:`\sqrt{\lambda} = \sqrt{r} e^{i\theta/2}`. 
 
 .. cpp:function:: void SquareRoot( Matrix<F>& A )
-.. cpp:function:: void SquareRoot( DistMatrix<F>& A )
+.. cpp:function:: void SquareRoot( AbstractDistMatrix<F>& A )
 
    Currently uses a Newton iteration to compute the general matrix square-root. 
    See ``square_root::Newton`` for the more detailed interface.
 
 .. cpp:function:: void HPSDSquareRoot( UpperOrLower uplo, Matrix<F>& A )
-.. cpp:function:: void HPSDSquareRoot( UpperOrLower uplo, DistMatrix<F>& A )
+.. cpp:function:: void HPSDSquareRoot( UpperOrLower uplo, AbstractDistMatrix<F>& A )
 
    Computes the Hermitian EVD, square-roots the eigenvalues, and then 
    reforms the matrix. If any of the eigenvalues were sufficiently negative,
@@ -193,7 +193,7 @@ square_root namespace
 ^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: int square_root::Newton( Matrix<F>& A, int maxIts=100, Base<F> tol=0 )
-.. cpp:function:: int square_root::Newton( DistMatrix<F>& A, int maxIts=100, Base<F> tol=0 )
+.. cpp:function:: int square_root::Newton( AbstractDistMatrix<F>& A, int maxIts=100, Base<F> tol=0 )
 
    Performs at most ``maxIts`` Newton steps in an attempt to compute the 
    matrix square-root within the specified tolerance, which defaults to 
@@ -231,9 +231,9 @@ as long as :math:`A` does not have any pure-imaginary eigenvalues.
    datatype ``F``.
 
 .. cpp:function:: void Sign( Matrix<F>& A, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
-.. cpp:function:: void Sign( DistMatrix<F>& A, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
+.. cpp:function:: void Sign( AbstractDistMatrix<F>& A, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
 .. cpp:function:: void Sign( Matrix<F>& A, Matrix<F>& N, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
-.. cpp:function:: void Sign( DistMatrix<F>& A, DistMatrix<F>& N, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
+.. cpp:function:: void Sign( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& N, SignCtrl<Base<F>> signCtrl=SignCtrl<Base<F>>() )
 
    Compute the matrix sign through a globally-convergent Newton iteration
    scaled with the Frobenius norm of the iterate and its inverse.
@@ -241,9 +241,9 @@ as long as :math:`A` does not have any pure-imaginary eigenvalues.
    is overwritten by :math:`S`.
 
 .. cpp:function:: void HermitianSign( UpperOrLower uplo, Matrix<F>& A )
-.. cpp:function:: void HermitianSign( UpperOrLower uplo, DistMatrix<F>& A )
+.. cpp:function:: void HermitianSign( UpperOrLower uplo, AbstractDistMatrix<F>& A )
 .. cpp:function:: void HermitianSign( UpperOrLower uplo, Matrix<F>& A, Matrix<F>& N )
-.. cpp:function:: void HermitianSign( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& N )
+.. cpp:function:: void HermitianSign( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& N )
 
    Compute the Hermitian EVD, replace the eigenvalues with their sign, and then
    reform the matrix. Optionally return the full decomposition, :math:`A=SN`,

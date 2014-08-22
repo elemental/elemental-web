@@ -12,10 +12,10 @@ PermuteCols
 ^^^^^^^^^^^
 
 .. cpp:function:: void PermuteCols( Matrix<T>& A, const Matrix<int>& perm )
-.. cpp:function:: void PermuteCols( DistMatrix<T,U,V>& A, const DistMatrix<int,UPerm,STAR>& perm )
+.. cpp:function:: void PermuteCols( AbstractDistMatrix<T>& A, const AbstractDistMatrix<int>& perm )
 
 .. cpp:function:: void PermuteCols( Matrix<T>& A, const Matrix<int>& perm, const Matrix<int>& invPerm )
-.. cpp:function:: void PermuteCols( DistMatrix<T,U,V>& A, const DistMatrix<int,UPerm,STAR>& perm, const DistMatrix<int,UPerm,STAR>& invPerm )
+.. cpp:function:: void PermuteCols( AbstractDistMatrix<T>& A, const AbstractDistMatrix<int>& perm, const AbstractDistMatrix<int>& invPerm )
 
    Provide the inverse permutations so that they do not need to be internally
    computed and discarded.
@@ -24,10 +24,10 @@ PermuteRows
 ^^^^^^^^^^^
 
 .. cpp:function:: void PermuteRows( Matrix<T>& A, const Matrix<int>& perm )
-.. cpp:function:: void PermuteRows( DistMatrix<T,U,V>& A, const DistMatrix<int,UPerm,STAR>& perm )
+.. cpp:function:: void PermuteRows( AbstractDistMatrix<T>& A, const AbstractDistMatrix<int>& perm )
 
 .. cpp:function:: void PermuteRows( Matrix<T>& A, const Matrix<int>& perm, const Matrix<int>& invPerm )
-.. cpp:function:: void PermuteRows( DistMatrix<T,U,V>& A, const DistMatrix<int,UPerm,STAR>& perm, const DistMatrix<int,UPerm,STAR>& invPerm )
+.. cpp:function:: void PermuteRows( AbstractDistMatrix<T>& A, const AbstractDistMatrix<int>& perm, const AbstractDistMatrix<int>& invPerm )
 
    Provide the inverse permutations so that they do not need to be internally
    computed and discarded.
@@ -36,19 +36,19 @@ InversePermuteCols
 ^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void InversePermuteCols( Matrix<T>& A, const Matrix<int>& perm )
-.. cpp:function:: void InversePermuteCols( DistMatrix<T,U,V>& A, const DistMatrix<int,UPerm,STAR>& perm )
+.. cpp:function:: void InversePermuteCols( AbstractDistMatrix<T>& A, const AbstractDistMatrix<int>& perm )
 
 InversePermuteRows
 ^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void InversePermuteRows( Matrix<T>& A, const Matrix<int>& perm )
-.. cpp:function:: void InversePermuteRows( DistMatrix<T,U,V>& A, const DistMatrix<int,UPerm,STAR>& perm )
+.. cpp:function:: void InversePermuteRows( AbstractDistMatrix<T>& A, const AbstractDistMatrix<int>& perm )
 
 InvertPermutation
 ^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: void InvertPermutation( const Matrix<int>& perm, Matrix<int>& invPerm )
-.. cpp:function:: void InvertPermutation( const DistMatrix<int,UPerm,STAR>& perm, DistMatrix<int,UPerm,STAR>& invPerm )
+.. cpp:function:: void InvertPermutation( const AbstractDistMatrix<int>& perm, AbstractDistMatrix<int>& invPerm )
 
    Compute the inverse permutation matrix in compressed (vector) form.
 
@@ -96,7 +96,7 @@ PermutationMeta
    .. cpp:function:: void ScaleUp( int length )
    .. cpp:function:: void ScaleDown( int length )
 
-   .. cpp:function:: PermutationMeta( const DistMatrix<int,U,STAR>& perm, const DistMatrix<int,U,STAR>& invPerm )
+   .. cpp:function:: PermutationMeta( const AbstractDistMatrix<int>& perm, const AbstractDistMatrix<int>& invPerm )
 
 Pivot sequences
 ---------------

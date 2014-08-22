@@ -479,6 +479,17 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: void AssertSameGrid( const Grid& grid ) const
    .. cpp:function:: void AssertSameSize( int height, int width ) const
 
+.. cpp:type:: AbstractDistMatrix<F>
+
+   An instance of `AbstractDistMatrix` where the underlying datatype is 
+   assumed to be a field.
+
+.. cpp:type:: AbstractDistMatrix<Base<F>>
+
+   An instance of `AbstractDistMatrix` where the underlying datatype is the
+   underlying real datatype from a field (e.g., ``double`` is the base type
+   of ``Complex<double>``).
+
 .. cpp:type:: DistData
 
    .. cpp:member:: Distribution colDist

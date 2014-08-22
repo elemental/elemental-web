@@ -397,13 +397,13 @@ Schur decomposition is considered infeasible.
    type ``F``.
 
 .. cpp:function:: Matrix<int> Pseudospectra( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> Pseudospectra( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> Pseudospectra( const AbstractDistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: Matrix<int> TriangularPseudospectra( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectra( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectra( const AbstractDistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: Matrix<int> QuasiTriangularPseudospectra( const Matrix<Real>& U, Matrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
-.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectra( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectra( const AbstractDistMatrix<Real>& U, DistMatrix<Real>& invNormMap, Complex<Real> center, Real realWidth, Real imagWidth, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
 .. cpp:function:: Matrix<int> HessenbergPseudospectra( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectra( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectra( const AbstractDistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
    Returns the norms of the shifted inverses over a 2D window in the complex
    plane (in the matrix ``invNormMap``) with the specified x and y resolutions.
@@ -411,24 +411,24 @@ Schur decomposition is considered infeasible.
    for convergence at each shift in the 2D grid.
 
 .. cpp:function:: Matrix<int> Pseudospectra( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> Pseudospectra( const DistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> Pseudospectra( const AbstractDistMatrix<F>& A, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: Matrix<int> TriangularPseudospectra( const Matrix<F>& U, Matrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> TriangularPseudospectra( const DistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> TriangularPseudospectra( const AbstractDistMatrix<F>& U, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: Matrix<int> QuasiTriangularPseudospectra( const Matrix<Real>& U, Matrix<Real>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
-.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectra( const DistMatrix<Real>& U, DistMatrix<Real>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: DistMatrix<int> QuasiTriangularPseudospectra( const AbstractDistMatrix<Real>& U, DistMatrix<Real>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
 .. cpp:function:: Matrix<int> HessenbergPseudospectra( const Matrix<F>& H, Matrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int> HessenbergPseudospectra( const DistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int> HessenbergPseudospectra( const AbstractDistMatrix<F>& H, DistMatrix<Base<F>>& invNormMap, int realSize, int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
    Same as above, but the window in the complex plane is automatically
    determined.
 
 .. cpp:function:: Matrix<int> Pseudospectra( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectra( const DistMatrix<F>& A, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> Pseudospectra( const AbstractDistMatrix<F>& A, const AbstractDistMatrix<Complex<Base<F>>>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: Matrix<int> TriangularPseudospectra( const Matrix<F>& U, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectra( const DistMatrix<F>& U, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> QuasiTriangularPseudospectra( const DistMatrix<Real>& U, const DistMatrix<Complex<Real>,VR,STAR>& shifts, DistMatrix<Real,VR,STAR>& invNorms, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> TriangularPseudospectra( const AbstractDistMatrix<F>& U, const AbstractDistMatrix<Complex<Base<F>>>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> QuasiTriangularPseudospectra( const AbstractDistMatrix<Real>& U, const AbstractDistMatrix<Complex<Real>>& shifts, DistMatrix<Real,VR,STAR>& invNorms, PseudospecCtrl<Real> psCtrl=PseudospecCtrl<Real>() )
 .. cpp:function:: Matrix<int> HessenbergPseudospectra( const Matrix<F>& H, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
-.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectra( const DistMatrix<F>& H, const DistMatrix<Complex<Base<F>>,VR,STAR>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
+.. cpp:function:: DistMatrix<int,VR,STAR> HessenbergPseudospectra( const AbstractDistMatrix<F>& H, const AbstractDistMatrix<Complex<Base<F>>>& shifts, DistMatrix<Base<F>,VR,STAR>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
    Returns the norms of the shifted inverses in the vector ``invNorms`` for a
    given set of shifts. The returned integer vector is a list of the number of

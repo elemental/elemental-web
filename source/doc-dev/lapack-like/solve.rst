@@ -16,7 +16,7 @@ The solution is computed by first finding the Cholesky factorization of
 :math:`B`.
 
 .. cpp:function:: void HPDSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B )
-.. cpp:function:: void HPDSolve( UpperOrLower uplo, Orientation orientation, DistMatrix<F>& A, DistMatrix<F>& B )
+.. cpp:function:: void HPDSolve( UpperOrLower uplo, Orientation orientation, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
 
    Overwrite `B` with the solution to :math:`AX=B` or :math:`A^T X=B`, 
    where `A` is Hermitian positive-definite and only the triangle of `A` 
@@ -32,7 +32,7 @@ given a symmetric or Hermitian matrix :math:`A` and a right-hand side matrix
 :math:`B` using Bunch-Kaufman.
 
 .. cpp:function:: void SymmetricSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void SymmetricSolve( UpperOrLower uplo, Orientation orientation, DistMatrix<F>& A, DistMatrix<F>& B, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void SymmetricSolve( UpperOrLower uplo, Orientation orientation, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
    Overwrites :math:`B` with the solution to the linear system. :math:`A`
    is assumed symmetric if ``conjugate`` is false, and Hermitian otherwise.
@@ -51,7 +51,7 @@ given a Hermitian matrix :math:`A` and a right-hand side matrix
 :math:`B` using Bunch-Kaufman.
 
 .. cpp:function:: void HermitianSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void HermitianSolve( UpperOrLower uplo, Orientation orientation, DistMatrix<F>& A, DistMatrix<F>& B, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void HermitianSolve( UpperOrLower uplo, Orientation orientation, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
    Overwrites :math:`B` with the solution to the linear system.
 
@@ -70,7 +70,7 @@ Solves :math:`AX=B` for :math:`X` given a general square nonsingular matrix
 (partially pivoted) Gaussian elimination.
 
 .. cpp:function:: void GaussianElimination( Matrix<F>& A, Matrix<F>& B )
-.. cpp:function:: void GaussianElimination( DistMatrix<F>& A, DistMatrix<F>& B )
+.. cpp:function:: void GaussianElimination( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
 
    Upon completion, :math:`A` will have been overwritten with Gaussian 
    elimination and :math:`B` will be overwritten with :math:`X`.
@@ -106,7 +106,7 @@ The above optimization problems can be readily generalized to multiple right-han
 sides by switching to Frobenius norms. 
 
 .. cpp:function:: void LeastSquares( Orientation orientation, Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
-.. cpp:function:: void LeastSquares( Orientation orientation, DistMatrix<F>& A, const DistMatrix<F>& B, DistMatrix<F>& X )
+.. cpp:function:: void LeastSquares( Orientation orientation, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
 
    If `orientation` is set to ``NORMAL``, then solve :math:`AX=B`, otherwise 
    `orientation` must be equal to ``ADJOINT`` and :math:`A^H X=B` will 
@@ -125,7 +125,7 @@ General (Gauss-Markov) Linear Model (GLM)
    \min_{X,Y} \| Y \|_F \;\;\; \text{subject to } A X + B Y = D.
 
 .. cpp:function:: void GLM( Matrix<F>& A, Matrix<F>& B, Matrix<F>& D, Matrix<F>& Y )
-.. cpp:function:: void GLM( DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<F>& D, DistMatrix<F>& Y )
+.. cpp:function:: void GLM( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& D, AbstractDistMatrix<F>& Y )
 
 Equality-constrained Least Squares (LSE)
 ----------------------------------------
@@ -139,7 +139,7 @@ Equality-constrained Least Squares (LSE)
    \min_X \| A X - C \|_F \;\;\; \text{subject to } B X = D.
 
 .. cpp:function:: void LSE( Matrix<F>& A, Matrix<F>& B, Matrix<F>& C, Matrix<F>& D, Matrix<F>& X, bool computeResidual=false )
-.. cpp:function:: void LSE( DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<F>& C, DistMatrix<F>& D, DistMatrix<F>& X, bool computeResidual=false )
+.. cpp:function:: void LSE( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& C, AbstractDistMatrix<F>& D, AbstractDistMatrix<F>& X, bool computeResidual=false )
 
 Multi-shift Hessenberg solves
 -----------------------------
@@ -156,7 +156,7 @@ where :math:`H` is Hessenberg, :math:`D` is diagonal, and :math:`A^\#`
 is defined to be one of :math:`\{A,A^T,A^H\}`.
 
 .. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& H, const Matrix<F>& shifts, Matrix<F>& X )
-.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const DistMatrix<F,UH,VH>& H, const DistMatrix<F,VX,STAR>& shifts, DistMatrix<F,STAR,VX>& X )
+.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const AbstractDistMatrix<F>& H, const AbstractDistMatrix<F>& shifts, AbstractDistMatrix<F>& X )
 
    Overwrite the columns of `X` with the solutions to shifted linear systems.
 

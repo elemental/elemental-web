@@ -7,7 +7,7 @@ depend upon the particular matrix distribution; the
 :cpp:type:`GeneralDistMatrix\<T,U,V>` class exists for general routines whose 
 prototype *does* depend upon the particular matrix distribution.
 
-.. cpp:type:: class AbstractDistMatrix<T>
+.. cpp:type:: AbstractDistMatrix<T>
 
    .. rubric:: Constructors and destructors
 
@@ -484,11 +484,28 @@ prototype *does* depend upon the particular matrix distribution.
    An instance of `AbstractDistMatrix` where the underlying datatype is 
    assumed to be a field.
 
+.. cpp:type:: AbstractDistMatrix<Real>
+
+   An instance of `AbstractDistMatrix` where the underlying datatype is real
+   (e.g., ``float`` or ``double``).
+
 .. cpp:type:: AbstractDistMatrix<Base<F>>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is the
    underlying real datatype from a field (e.g., ``double`` is the base type
    of ``Complex<double>``).
+
+.. cpp:type:: AbstractDistMatrix<Complex<Base<F>>>
+
+   An instance of `AbstractDistMatrix` where the underlying datatype is the
+   complex extension of the base type of the field `F` (
+   (e.g., ``Complex<double>`` is the complex extension of both ``double``
+   and ``Complex<double>``).
+
+.. cpp:type:: AbstractDistMatrix<int>
+
+   An instance of `AbstractDistMatrix` where the underlying datatype is 
+   an ``int``.
 
 .. cpp:type:: DistData
 

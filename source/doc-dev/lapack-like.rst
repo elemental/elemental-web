@@ -22,5 +22,7 @@ matrix decompositions, are placed here.
 
    lapack-like/perm
 
+   lapack-like/reflect
+
    lapack-like/util 
    lapack-like/tuning

@@ -10,7 +10,7 @@ a parent class is required in order to support both general and specialized
 implementations of member functions whose prototype depends upon the matrix 
 distribution.
 
-.. cpp:type:: class GeneralDistMatrix<T,U,V>
+.. cpp:type:: GeneralDistMatrix<T,U,V>
 
    .. rubric:: Related row and column distributions
 

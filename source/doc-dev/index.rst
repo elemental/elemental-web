@@ -14,7 +14,7 @@ Elemental's development documentation
    core
    blas-like
    lapack-like
-   convex
+   optimization
    control
    matrices
    io

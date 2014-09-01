@@ -1,5 +1,5 @@
-High-level linear algebra
-*************************
+LAPACK-like linear algebra
+**************************
 
 This chapter describes all of the linear algebra operations which are not basic
 enough to fall within the BLAS (Basic Linear Algebra Subprograms) framework.

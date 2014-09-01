@@ -13,22 +13,24 @@ thrown.
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack-like/Cholesky.cpp>`__
 
-Factor without pivoting
------------------------
+Without pivoting
+----------------
 The following routines overwrite the `uplo` triangle of the Hermitian 
-positive-definite matrix `A` with its Cholesky factor.
+positive-definite matrix `A` with its Cholesky factor without performing any
+pivoting.
+
+Factorization
+^^^^^^^^^^^^^
 
 C++ API
-^^^^^^^
+"""""""
 
 .. cpp:function:: void Cholesky( UpperOrLower uplo, Matrix<F>& A )
 .. cpp:function:: void Cholesky( UpperOrLower uplo, AbstractDistMatrix<F>& A )
 
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
 
 C API
-^^^^^
+"""""
 
 .. c:function:: ElError ElCholesky_s( ElUpperOrLower uplo, ElMatrix_s A )
 .. c:function:: ElError ElCholesky_d( ElUpperOrLower uplo, ElMatrix_d A )
@@ -40,6 +42,18 @@ C API
 .. c:function:: ElError ElCholeskyDist_c( ElUpperOrLower uplo, ElDistMatrix_c A )
 .. c:function:: ElError ElCholeskyDist_z( ElUpperOrLower uplo, ElDistMatrix_z A )
 
+Solving linear systems with the factorization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C++ API
+"""""""
+
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
+
+C API
+"""""
+
 .. c:function:: ElError ElSolveAfterCholesky_s( ElUpperOrLower uplo, ElOrientation orientation, ElConstMatrix_s A, ElMatrix_s B )
 .. c:function:: ElError ElSolveAfterCholesky_d( ElUpperOrLower uplo, ElOrientation orientation, ElConstMatrix_d A, ElMatrix_d B )
 .. c:function:: ElError ElSolveAfterCholesky_c( ElUpperOrLower uplo, ElOrientation orientation, ElConstMatrix_c A, ElMatrix_c B )
@@ -50,25 +64,25 @@ C API
 .. c:function:: ElError ElSolveAfterCholeskyDist_c( ElUpperOrLower uplo, ElOrientation orientation, ElConstDistMatrix_c A, ElDistMatrix_c B )
 .. c:function:: ElError ElSolveAfterCholeskyDist_z( ElUpperOrLower uplo, ElOrientation orientation, ElConstDistMatrix_z A, ElDistMatrix_z B )
 
-Factor with diagonal (full) pivoting
-------------------------------------
+Full pivoting
+-------------
 The following routines perform Cholesky factorization with diagonal pivoting,
 which can be shown to be equivalent to full pivoting for Hermitian 
 positive-definite matrices. On exit, the vector :math:`p` consists of the 
 nonzero column indices of the permutation matrix :math:`P` such that either
 :math:`P A P^T = L L^H` or :math:`P A P^T = U^H U`.
 
+Factorization
+^^^^^^^^^^^^^
+
 C++ API
-^^^^^^^
+"""""""
 
 .. cpp:function:: void Cholesky( UpperOrLower uplo, Matrix<F>& A, Matrix<int>& p )
 .. cpp:function:: void Cholesky( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<int>& p )
 
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B, Matrix<int>& p )
-.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<int>& p )
-
 C API
-^^^^^
+"""""
 
 .. c:function:: ElError ElCholeskyPiv_s( ElUpperOrLower uplo, ElMatrix_s A, ElMatrix_i p )
 .. c:function:: ElError ElCholeskyPiv_d( ElUpperOrLower uplo, ElMatrix_d A, ElMatrix_i p )
@@ -79,6 +93,18 @@ C API
 .. c:function:: ElError ElCholeskyPivDist_d( ElUpperOrLower uplo, ElDistMatrix_d A, ElMatrix_i p )
 .. c:function:: ElError ElCholeskyPivDist_c( ElUpperOrLower uplo, ElDistMatrix_c A, ElMatrix_i p )
 .. c:function:: ElError ElCholeskyPivDist_z( ElUpperOrLower uplo, ElDistMatrix_z A, ElMatrix_i p )
+
+Solving linear systems with the factorization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C++ API
+"""""""
+
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const Matrix<F>& A, Matrix<F>& B, Matrix<int>& p )
+.. cpp:function:: void cholesky::SolveAfter( UpperOrLower uplo, Orientation orientation, const AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<int>& p )
+
+C API
+"""""
 
 .. c:function:: ElError ElSolveAfterCholeskyPiv_s( ElUpperOrLower uplo, ElOrientation orientation, ElConstMatrix_s A, ElConstMatrix_i p, ElMatrix_s B )
 .. c:function:: ElError ElSolveAfterCholeskyPiv_d( ElUpperOrLower uplo, ElOrientation orientation, ElConstMatrix_d A, ElConstMatrix_i p, ElMatrix_d B )

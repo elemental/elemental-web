@@ -1,5 +1,5 @@
-Basic linear algebra
-********************
+BLAS-like linear algebra
+************************
 
 This chapter describes Elemental's support for basic linear algebra routines, 
 such as matrix-matrix multiplication, triangular solves, and matrix-vector

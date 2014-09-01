@@ -49,15 +49,17 @@ working on a *sweeping preconditioner* for 3D Helmholtz equations, and this
 led to the development of the sparse-direct solver, 
 `Clique <http://github.com/poulson/Clique>`__, which is built on top of 
 Elemental. Jack finished his PhD under 
-`Lexing Ying <http://math.stanford.edu/~lexing>`__ at the end of 2012, moved to
-Stanford's math department as a postdoc for ten months, 
-and is currently leading the project while serving as an Assistant Professor of 
-Computational Science and Engineering at Georgia Tech.
+`Lexing Ying <http://math.stanford.edu/~lexing>`__ at the end of 2012 and 
+moved to Stanford's math department as a postdoc for ten months.
+After serving as an Assistant Professor of Computational Science and 
+Engineering at the Georgia Institute for Technology, he accepted a Simon's 
+Math+X position in Stanford's `Math department <http://math.stanford.edu>`__ 
+and `Institute for Computational and Mathematical Engineering (ICME).<https://icme.stanford.edu>`__.
 
-The project was originally hosted on `GitHub <http://github.com>`__ in 2009
-(briefly under the poorly-chosen name `Glass`, which was meant to emphasize 
-the simplicity of each operation's implementation), development soon switched 
-to Mercurial with hosting on 
+The source code which became Elemental was originally hosted on 
+`GitHub <http://github.com>`__ in 2009 (briefly under the poorly-chosen name 
+`Glass`, which was meant to emphasize the simplicity of each operation's 
+implementation), development soon switched to Mercurial with hosting on 
 `Google Code <http://code.google.com/p/elemental>`__ for roughly four years, 
 and in mid-2013 Elemental's home moved to the custom website 
 `libelemental.org <http://libelemental.org>`__ with development switching back

@@ -75,7 +75,7 @@
       <div id="sub-feature">
       <div id="front-block-1" class="front-block block">
 
-          <h3><a href="/about/team.html">Who's behind Elemental?</a></h3>
+          <h3><a href="/about/team.html">Elemental's development team</a></h3>
 
           <p><a href="/about/" rel="nofollow">Find out more about
           our project &raquo;</a></p>

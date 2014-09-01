@@ -9,8 +9,8 @@ LU factorization
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/GaussianElimination.cpp>`__
 
-LU with partial pivoting
-------------------------
+Partial pivoting
+----------------
 Since LU factorization without pivoting is known to be unstable for general 
 matrices, it is standard practice to pivot the rows of :math:`A` during the 
 factorization (this is called partial pivoting since the columns are not also 
@@ -67,8 +67,8 @@ C API
 .. c:function:: ElError ElSolveAfterLUPartialPivDist_c( ElOrientation orientation, ElConstDistMatrix_c A, ElConstDistMatrix_i p, ElDistMatrix_c B )
 .. c:function:: ElError ElSolveAfterLUPartialPivDist_z( ElOrientation orientation, ElConstDistMatrix_z A, ElConstDistMatrix_i p, ElDistMatrix_z B )
 
-LU with full pivoting
----------------------
+Full pivoting
+-------------
 Overwrites the matrix :math:`A` with the LU decomposition of 
 :math:`PAQ^T`, where :math:`P` and :math:`Q` are represented by the
 permutation vectors `p` and `q`, 
@@ -119,8 +119,8 @@ C API
 .. c:function:: ElError ElSolveAfterLUFullPivDist_c( ElOrientation orientation, ElConstDistMatrix_c A, ElConstDistMatrix_i p, ElConstDistMatrix_i q, ElDistMatrix_c B )
 .. c:function:: ElError ElSolveAfterLUFullPivDist_z( ElOrientation orientation, ElConstDistMatrix_z A, ElConstDistMatrix_i p, ElConstDistMatrix_i q, ElDistMatrix_z B )
 
-LU with no pivoting
--------------------
+No pivoting
+-----------
 
 Given :math:`A \in \mathbb{F}^{m \times n}`, an LU factorization 
 (without pivoting) attempts to find a unit lower-trapezoidal 

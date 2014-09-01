@@ -7,11 +7,14 @@ Factorizations
 
    factor/cholesky
    factor/ldl
-   factor/lq
    factor/lu
+
+   factor/lq
    factor/qr
-   factor/gqr
    factor/rq
+
+   factor/gqr
    factor/grq
+
    factor/id
    factor/skeleton

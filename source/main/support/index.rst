@@ -18,9 +18,10 @@ support the development of Elemental since its development began in 2009.
 .. image:: gtri.jpg
    :scale: 90 %
 
-* Jack Poulson is currently supported as an Assistant Professor in Georgia 
+* Jack Poulson was supported as an Assistant Professor in Georgia 
   Tech's Department of Computational Science and Engineering and as a researcher
-  with the Georgia Tech Research Institute.
+  with the Georgia Tech Research Institute from November 2013 through 
+  August 2014.
 
 .. image:: stanford.png
    :scale: 75 %

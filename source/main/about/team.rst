@@ -1,17 +1,14 @@
 .. _team:
 
-########
 The team
 ########
 
-===================
-Benevolent dictator
-===================
+Project leader
+==============
 
 .. raw:: html
     :file: dictator.inc
 
-===========================
 Contributors (alphabetical)
 ===========================
 

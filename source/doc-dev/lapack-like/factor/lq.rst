@@ -33,25 +33,20 @@ C++ API
    Householder reflectors are stored in the vector `t` and the diagonal 
    matrix which forces :math:`L` to be positive in `d`.
 
-.. note::
-
-   The following three sets of routines should likely be renamed so that 
-   their functionality is more apparent.
-
-.. cpp:function:: void LQ( Matrix<F>& A )
-.. cpp:function:: void LQ( AbstractDistMatrix<F>& A )
-
-   Overwrite `A` with the triangular factor, `L`.
-
-.. cpp:function:: void lq::Explicit( Matrix<F>& A )
-.. cpp:function:: void lq::Explicit( AbstractDistMatrix<F>& A )
-
-   Overwrite `A` with `Q`.
-
 .. cpp:function:: void lq::Explicit( Matrix<F>& L, Matrix<F>& A )
 .. cpp:function:: void lq::Explicit( AbstractDistMatrix<F>& L, AbstractDistMatrix<F>& A )
 
    Overwrite `A` with `Q` and return `L`.
+
+.. cpp:function:: void lq::ExplicitTriang( Matrix<F>& A )
+.. cpp:function:: void lq::ExplicitTriang( AbstractDistMatrix<F>& A )
+
+   Overwrite `A` with the triangular factor, `L`.
+
+.. cpp:function:: void lq::ExplicitUnitary( Matrix<F>& A )
+.. cpp:function:: void lq::ExplicitUnitary( AbstractDistMatrix<F>& A )
+
+   Overwrite `A` with `Q`.
 
 C API
 ^^^^^
@@ -70,28 +65,6 @@ C API
    Householder reflectors are stored in the vector `t` and the diagonal 
    matrix which forces :math:`L` to be positive in `d`.
 
-.. c:function:: ElError ElLQTriang_s( ElMatrix_s A )
-.. c:function:: ElError ElLQTriang_d( ElMatrix_d A )
-.. c:function:: ElError ElLQTriang_c( ElMatrix_c A )
-.. c:function:: ElError ElLQTriang_z( ElMatrix_z A )
-.. c:function:: ElError ElLQTriangDist_s( ElDistMatrix_s A )
-.. c:function:: ElError ElLQTriangDist_d( ElDistMatrix_d A )
-.. c:function:: ElError ElLQTriangDist_c( ElDistMatrix_c A )
-.. c:function:: ElError ElLQTriangDist_z( ElDistMatrix_z A )
-
-   Ovewrite `A` with the triangular factor, `L`.
-
-.. c:function:: ElError ElLQUnitary_s( ElMatrix_s A )
-.. c:function:: ElError ElLQUnitary_d( ElMatrix_d A )
-.. c:function:: ElError ElLQUnitary_c( ElMatrix_c A )
-.. c:function:: ElError ElLQUnitary_z( ElMatrix_z A )
-.. c:function:: ElError ElLQUnitaryDist_s( ElDistMatrix_s A )
-.. c:function:: ElError ElLQUnitaryDist_d( ElDistMatrix_d A )
-.. c:function:: ElError ElLQUnitaryDist_c( ElDistMatrix_c A )
-.. c:function:: ElError ElLQUnitaryDist_z( ElDistMatrix_z A )
-
-   Overwrite `A` with `Q`.
-
 .. c:function:: ElError ElLQExplicit_s( ElMatrix_s L, ElMatrix_s A )
 .. c:function:: ElError ElLQExplicit_d( ElMatrix_d L, ElMatrix_d A )
 .. c:function:: ElError ElLQExplicit_c( ElMatrix_c L, ElMatrix_c A )
@@ -102,6 +75,28 @@ C API
 .. c:function:: ElError ElLQExplicitDist_z( ElDistMatrix_z L, ElDistMatrix_z A )
 
    Overwrite `A` with `Q` and return `L`.
+
+.. c:function:: ElError ElLQExplicitTriang_s( ElMatrix_s A )
+.. c:function:: ElError ElLQExplicitTriang_d( ElMatrix_d A )
+.. c:function:: ElError ElLQExplicitTriang_c( ElMatrix_c A )
+.. c:function:: ElError ElLQExplicitTriang_z( ElMatrix_z A )
+.. c:function:: ElError ElLQExplicitTriangDist_s( ElDistMatrix_s A )
+.. c:function:: ElError ElLQExplicitTriangDist_d( ElDistMatrix_d A )
+.. c:function:: ElError ElLQExplicitTriangDist_c( ElDistMatrix_c A )
+.. c:function:: ElError ElLQExplicitTriangDist_z( ElDistMatrix_z A )
+
+   Ovewrite `A` with the triangular factor, `L`.
+
+.. c:function:: ElError ElLQExplicitUnitary_s( ElMatrix_s A )
+.. c:function:: ElError ElLQExplicitUnitary_d( ElMatrix_d A )
+.. c:function:: ElError ElLQExplicitUnitary_c( ElMatrix_c A )
+.. c:function:: ElError ElLQExplicitUnitary_z( ElMatrix_z A )
+.. c:function:: ElError ElLQExplicitUnitaryDist_s( ElDistMatrix_s A )
+.. c:function:: ElError ElLQExplicitUnitaryDist_d( ElDistMatrix_d A )
+.. c:function:: ElError ElLQExplicitUnitaryDist_c( ElDistMatrix_c A )
+.. c:function:: ElError ElLQExplicitUnitaryDist_z( ElDistMatrix_z A )
+
+   Overwrite `A` with `Q`.
 
 Applying the factored matrix
 ----------------------------

@@ -24,8 +24,8 @@ C++ API
    Householder reflectors are stored in the vector `t` and the unitary diagonal
    matrix which forces :math:`R` to be positive is defined by the vector `d`.
 
-.. cpp:function:: void RQ( Matrix<F>& A )
-.. cpp:function:: void RQ( AbstractDistMatrix<F>& A )
+.. cpp:function:: void rq::ExplicitTriang( Matrix<F>& A )
+.. cpp:function:: void rq::ExplicitTriang( AbstractDistMatrix<F>& A )
 
    Overwrite `A` with the triangular factor, `R`.
 
@@ -46,10 +46,10 @@ C API
    Householder reflectors are stored in the vector `t` and the unitary diagonal
    matrix which forces :math:`R` to be positive is defined by the vector `d`.
 
-.. c:function:: ElError ElRQTriang_s( ElMatrix_s A )
-.. c:function:: ElError ElRQTriang_d( ElMatrix_d A )
-.. c:function:: ElError ElRQTriang_c( ElMatrix_c A )
-.. c:function:: ElError ElRQTriang_z( ElMatrix_z A )
+.. c:function:: ElError ElRQExplicitTriang_s( ElMatrix_s A )
+.. c:function:: ElError ElRQExplicitTriang_d( ElMatrix_d A )
+.. c:function:: ElError ElRQExplicitTriang_c( ElMatrix_c A )
+.. c:function:: ElError ElRQExplicitTriang_z( ElMatrix_z A )
 
    Overwrite `A` with the triangular factor, `R`.
 

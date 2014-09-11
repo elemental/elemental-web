@@ -18,7 +18,7 @@ Direct repository access
 The project is `openly developed on GitHub <http://github.com/elemental/Elemental.git>`__.
 The bleeding-edge version of the library may be checked out using the command::
 
-    git clone git://github.com/elemental/Elemental.git
+    git clone --recursive git://github.com/elemental/Elemental.git
 
 Troubleshooting
 ***************

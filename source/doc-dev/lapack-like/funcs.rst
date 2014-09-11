@@ -91,11 +91,6 @@ Two important special cases are :math:`f(\lambda) = \exp(\lambda)` and
 :math:`f(\lambda)=\exp(i \lambda)`, where the former results in a Hermitian 
 matrix and the latter in a normal (in fact, unitary) matrix.
 
-.. note:: 
-
-   Since Elemental currently depends on PMRRR for its tridiagonal 
-   eigensolver, only double-precision results are supported as of now.
-
 .. cpp:function:: void HermitianFunction( UpperOrLower uplo, Matrix<F>& A, std::function<Real(Real)> f )
 .. cpp:function:: void HermitianFunction( UpperOrLower uplo, AbstractDistMatrix<F>& A, std::function<Real(Real)> f )
 

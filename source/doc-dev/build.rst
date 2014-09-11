@@ -7,19 +7,28 @@ Unix environments (including Darwin), and, at least in theory, various versions
 of Microsoft Windows. A relatively up-to-date C++11 compiler 
 (e.g., gcc >= 4.7) is required in all cases.
 
-Elemental's main dependencies are
+Elemental's main external dependencies are
 
 1. `CMake <http://www.cmake.org/>`__ 
 2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`__ 
 3. `BLAS <http://netlib.org/blas>`__ 
-4. `LAPACK <http://netlib.org/lapack>`__ 
+4. `LAPACK <http://netlib.org/lapack>`__.
 
-and it includes the package `PMRRR <http://code.google.com/p/pmrrr>`_, which 
-Elemental uses for its parallel symmetric tridiagonal eigensolver. 
-Furthermore, `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
+Included within the project are
+
+1. `PMRRR <http://code.google.com/p/pmrrr>`__, which Elemental depends upon for
+   parallel symmetric tridiagonal eigensolvers, which is included within the 
+   `external/pmrrr` folder, and
+2. `METIS 5.1.0 <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
+   which is used for graph partitioning and is included within the 
+   `external/metis` folder.
+
+Furthermore, there are several optional external dependencies:
+
+1. `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
 for faster SVD's due to its high-performance bidiagonal QR algorithm 
-implementation, and `Qt5 <http://qt-project.org>`_ is required for matrix
-visualization.
+implementation, and 
+2. `Qt5 <http://qt-project.org>`_ is required for matrix visualization.
 
 Dependencies
 ============
@@ -209,7 +218,7 @@ There are two basic approaches:
 2. Install `git <http://git-scm.com/>`_ and check out a copy of 
    the repository by running ::
 
-    git clone git://github.com/elemental/Elemental.git
+    git clone --recursive git://github.com/elemental/Elemental.git
 
 Building Elemental
 ==================

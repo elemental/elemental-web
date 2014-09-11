@@ -66,7 +66,8 @@ possible with minor effort.
 
 License and copyright
 =====================
-All files distributed with Elemental are made available under the 
+All files distributed with Elemental, with the exception of METIS 5.1.0, are 
+made available under the 
 `New BSD license <http://www.opensource.org/licenses/bsd-license.php>`_,
 which states::
 
@@ -95,6 +96,9 @@ which states::
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
+
+Note that METIS 5.1.0 is distributed under the (equally permissive) 
+`Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>`__.
 
 Most source files contain the copyright notice::
 

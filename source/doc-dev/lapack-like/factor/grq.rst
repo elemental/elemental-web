@@ -34,8 +34,8 @@ C++ API
    `Q`. Likewise, `B` is overwritten with both `T` and the (scaled) Householder
    vectors which define `Z`.
 
-.. cpp:function:: void GRQ( Matrix<F>& A, Matrix<F>& B )
-.. cpp:function:: void GRQ( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
+.. cpp:function:: void grq::ExplicitTriang( Matrix<F>& A, Matrix<F>& B )
+.. cpp:function:: void grq::ExplicitTriang( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
 
    Overwrite `A` with `R` and `B` with `T`.
 
@@ -56,13 +56,13 @@ C API
    `Q`. Likewise, `B` is overwritten with both `T` and the (scaled) Householder
    vectors which define `Z`.
 
-.. c:function:: ElError ElGRQTriang_s( ElMatrix_s A, ElMatrix_s B )
-.. c:function:: ElError ElGRQTriang_d( ElMatrix_d A, ElMatrix_d B )
-.. c:function:: ElError ElGRQTriang_c( ElMatrix_c A, ElMatrix_c B )
-.. c:function:: ElError ElGRQTriang_z( ElMatrix_z A, ElMatrix_z B )
-.. c:function:: ElError ElGRQTriangDist_s( ElDistMatrix_s A, ElDistMatrix_s B )
-.. c:function:: ElError ElGRQTriangDist_d( ElDistMatrix_d A, ElDistMatrix_d B )
-.. c:function:: ElError ElGRQTriangDist_c( ElDistMatrix_c A, ElDistMatrix_c B )
-.. c:function:: ElError ElGRQTriangDist_z( ElDistMatrix_z A, ElDistMatrix_z B )
+.. c:function:: ElError ElGRQExplicitTriang_s( ElMatrix_s A, ElMatrix_s B )
+.. c:function:: ElError ElGRQExplicitTriang_d( ElMatrix_d A, ElMatrix_d B )
+.. c:function:: ElError ElGRQExplicitTriang_c( ElMatrix_c A, ElMatrix_c B )
+.. c:function:: ElError ElGRQExplicitTriang_z( ElMatrix_z A, ElMatrix_z B )
+.. c:function:: ElError ElGRQExplicitTriangDist_s( ElDistMatrix_s A, ElDistMatrix_s B )
+.. c:function:: ElError ElGRQExplicitTriangDist_d( ElDistMatrix_d A, ElDistMatrix_d B )
+.. c:function:: ElError ElGRQExplicitTriangDist_c( ElDistMatrix_c A, ElDistMatrix_c B )
+.. c:function:: ElError ElGRQExplicitTriangDist_z( ElDistMatrix_z A, ElDistMatrix_z B )
 
    Overwrite `A` with `R` and `B` with `T`.

@@ -8,10 +8,10 @@
           <div class="slides_container">
             <div class="slide">
               <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectra.cpp">
-              <img src="/_static/images/featured/trefethen-12.5.png" width="282" height="282" alt="Contours of log resolvent norm of Trefethen matrix of size 20,000">
+              <img src="/_static/images/featured/trefethen-12.5.png" width="282" height="282" alt="Contours of log resolvent norm of Trefethen-Embree matrix of size 20,000">
               </a>
               <div class="caption">
-                <p>Contours of log resolvent norm of 20,000 x 20,000 "Trefethen" matrix</p>
+                <p>Contours of log resolvent norm of 20,000 x 20,000 "Trefethen-Embree" matrix</p>
               </div>
             </div>
             <div class="slide">
@@ -44,7 +44,7 @@
 
       <div id="feature-info">
         <p>Elemental is open-source software for distributed-memory dense
-           linear algebra.
+           and sparse-direct linear algebra.
         </p>
 
       <p>Through this web site, you can <a href="/about/">learn more

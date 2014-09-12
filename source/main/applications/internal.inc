@@ -11,7 +11,8 @@
 	  <p><a href="http://github.com/poulson/Clique">Clique</a> is a
           distributed-memory sparse-direct solver with a focus on memory
           and triangular-solve scalability. It currently supports 
-          symmetric and Hermitian linear systems.</p>
+          symmetric and Hermitian linear systems and is currently being merged
+          into Elemental.</p>
         </div>
 
       	<div class="front-block block app">

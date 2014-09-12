@@ -3,7 +3,13 @@ Deterministic
 
 Bull's Head
 -----------
-**TODO: Description**
+The *Bull's head* matrix is a banded Toeplitz matrix with symbol
+
+.. math::
+
+   f(z) = 2i z^{-1} + z^2 + \frac{7}{10} z^3.
+
+Please see L. Reichel and L. N. Trefethen's *Eigenvalues and pseudo-eigenvalues of Toeplitz matrices* for more details.
 
 C++ API
 ^^^^^^^
@@ -181,7 +187,7 @@ equal to
 
 .. math::
 
-   \exp(i \phi(i,j)).
+   A(i,j) = \exp(i \phi(i,j)).
 
 C++ API
 ^^^^^^^
@@ -196,6 +202,58 @@ C API
 .. c:function:: ElError ElEgorov_z( ElMatrix_z A, double (*phase)(ElInt,ElInt), ElInt n )
 .. c:function:: ElError ElEgorovDist_c( ElDistMatrix_c A, float (*phase)(ElInt,ElInt), ElInt n )
 .. c:function:: ElError ElEgorovDist_z( ElDistMatrix_z A, double (*phase)(ElInt,ElInt), ElInt n )
+
+Ehrenfest
+---------
+**TODO: Add descriptions**
+
+C++ API
+^^^^^^^
+
+.. cpp:function:: void Ehrenfest( Matrix<F>& P, Int n )
+.. cpp:function:: void Ehrenfest( AbstractDistMatrix<F>& P, Int n )
+.. cpp:function:: void Ehrenfest( AbstractBlockDistMatrix<F>& P, Int n )
+
+.. cpp:function:: void Ehrenfest( Matrix<F>& P, Matrix<F>& PInf, Int n )
+.. cpp:function:: void Ehrenfest( AbstractDistMatrix<F>& P, AbstractDistMatrix<F>& PInf, Int n )
+.. cpp:function:: void Ehrenfest( AbstractBlockDistMatrix<F>& P, AbstractBlockDistMatrix<F>& PInf, Int n )
+
+.. cpp:function:: void EhrenfestStationary( Matrix<F>& PInf, Int n )
+.. cpp:function:: void EhrenfestStationary( AbstractDistMatrix<F>& PInf, Int n )
+.. cpp:function:: void EhrenfestStationary( AbstractBlockDistMatrix<F>& PInf, Int n )
+
+.. cpp:function:: void EhrenfestDecay( Matrix<F>& A, Int n )
+.. cpp:function:: void EhrenfestDecay( AbstractDistMatrix<F>& A, Int n )
+
+C API
+^^^^^
+
+.. c:function:: ElError ElEhrenfest_s( ElMatrix_s P, ElInt n )
+.. c:function:: ElError ElEhrenfest_d( ElMatrix_d P, ElInt n )
+.. c:function:: ElError ElEhrenfest_c( ElMatrix_c P, ElInt n )
+.. c:function:: ElError ElEhrenfest_z( ElMatrix_z P, ElInt n )
+.. c:function:: ElError ElEhrenfestDist_s( ElMatrix_s P, ElInt n )
+.. c:function:: ElError ElEhrenfestDist_d( ElMatrix_d P, ElInt n )
+.. c:function:: ElError ElEhrenfestDist_c( ElMatrix_c P, ElInt n )
+.. c:function:: ElError ElEhrenfestDist_z( ElMatrix_z P, ElInt n )
+
+.. c:function:: ElError ElEhrenfestStationary_s( ElMatrix_s PInf, ElInt n )
+.. c:function:: ElError ElEhrenfestStationary_d( ElMatrix_d PInf, ElInt n )
+.. c:function:: ElError ElEhrenfestStationary_c( ElMatrix_c PInf, ElInt n )
+.. c:function:: ElError ElEhrenfestStationary_z( ElMatrix_z PInf, ElInt n )
+.. c:function:: ElError ElEhrenfestStationaryDist_s( ElDistMatrix_s PInf, ElInt n )
+.. c:function:: ElError ElEhrenfestStationaryDist_d( ElDistMatrix_d PInf, ElInt n )
+.. c:function:: ElError ElEhrenfestStationaryDist_c( ElDistMatrix_c PInf, ElInt n )
+.. c:function:: ElError ElEhrenfestStationaryDist_z( ElDistMatrix_z PInf, ElInt n )
+
+.. c:function:: ElError ElEhrenfestDecay_s( ElMatrix_s A, ElInt n )
+.. c:function:: ElError ElEhrenfestDecay_d( ElMatrix_d A, ElInt n )
+.. c:function:: ElError ElEhrenfestDecay_c( ElMatrix_c A, ElInt n )
+.. c:function:: ElError ElEhrenfestDecay_z( ElMatrix_z A, ElInt n )
+.. c:function:: ElError ElEhrenfestDecayDist_s( ElDistMatrix_s A, ElInt n )
+.. c:function:: ElError ElEhrenfestDecayDist_d( ElDistMatrix_d A, ElInt n )
+.. c:function:: ElError ElEhrenfestDecayDist_c( ElDistMatrix_c A, ElInt n )
+.. c:function:: ElError ElEhrenfestDecayDist_z( ElDistMatrix_z A, ElInt n )
 
 Extended Kahan
 --------------
@@ -230,7 +288,12 @@ C API
 
 Fiedler
 -------
-**TODO**
+Given a vector :math:`c` of length :math:`n`, a *Fielder matrix* is an 
+:math:`n \times n` matrix with entry :math:`(i,j)` (counting from zero) set to
+
+.. math::
+
+   A(i,j) = |c(i)-c(j)|.
 
 C++ API
 ^^^^^^^
@@ -252,7 +315,10 @@ C API
 
 Forsythe
 --------
-**TODO**
+A *Forsythe matrix* is a Jordan block with the bottom-left entry replaced with
+an arbitrary value. In the below routines, the eigenvalue of the 
+:math:`n \times n` Jordan block is :math:`\lambda`, and the entry placed in the 
+:math:`(n-1,0)` position is :math:`\alpha`.
 
 C++ API
 ^^^^^^^
@@ -301,7 +367,13 @@ C API
 
 GCDMatrix
 ---------
-**TODO**
+A *GCD matrix* fills each entry :math:`(i,j)` (counting from zero) of an 
+:math:`m \times n` matrix with the greatest common denominator of :math:`i+1` 
+and :math:`j+1`, i.e.,
+
+.. math::
+
+   A(i,j) = \text{gcd}(i+1,j+1).
 
 C++ API
 ^^^^^^^
@@ -325,7 +397,10 @@ C API
 
 Gear
 ----
-**TODO**
+An :math:`n \times n` *Gear matrix* with integer parameters :math:`s,t \neq 0` 
+is a modification of the tridiagonal matrix with a main diagonal of zeros and 
+sub and superdiagonals of ones such that entries :math:`(0,|s|-1)` and :math:`(n-1,n-|t|)` are respectively set to :math:`\text{sgn}(s)` and 
+:math:`\text{sgn}(t)`.
 
 C++ API
 ^^^^^^^
@@ -347,9 +422,44 @@ C API
 .. c:function:: ElError ElGearDist_c( ElDistMatrix_c G, ElInt n, ElInt s, ElInt t )
 .. c:function:: ElError ElGearDist_z( ElDistMatrix_z G, ElInt n, ElInt s, ElInt t )
 
+GEPP Growth
+-----------
+:math:`n \times n` extensions of matrices of the form
+
+.. math::
+
+   A = \begin{pmatrix} 1 & 0 & 0 & 1 \\
+                      -1 & 1 & 0 & 1 \\
+                      -1 &-1 & 1 & 1 \\
+                      -1 &-1 &-1 & 1 \end{pmatrix}
+
+were known by Wilkinson to lead to an element-growth factor of 
+:math:`2^{n-1}` for Gaussian Elimination with Partial Pivoting (GEPP).
+
+C++ API
+^^^^^^^
+
+.. cpp:function:: void GEPPGrowth( Matrix<F>& A, Int n )
+.. cpp:function:: void GEPPGrowth( AbstractDistMatrix<F>& A, Int n )
+
+C API
+^^^^^
+
+.. c:function:: ElError ElGEPPGrowth_s( ElMatrix_s A, ElInt n )
+.. c:function:: ElError ElGEPPGrowth_d( ElMatrix_d A, ElInt n )
+.. c:function:: ElError ElGEPPGrowth_c( ElMatrix_c A, ElInt n )
+.. c:function:: ElError ElGEPPGrowth_z( ElMatrix_z A, ElInt n )
+.. c:function:: ElError ElGEPPGrowthDist_s( ElDistMatrix_s A, ElInt n )
+.. c:function:: ElError ElGEPPGrowthDist_d( ElDistMatrix_d A, ElInt n )
+.. c:function:: ElError ElGEPPGrowthDist_c( ElDistMatrix_c A, ElInt n )
+.. c:function:: ElError ElGEPPGrowthDist_z( ElDistMatrix_z A, ElInt n )
+
 Golub/Klema/Stewart 
 -------------------
-**TODO**
+The *Golub/Klema/Stewart matrix* is upper-triangular with :math:`1/\sqrt{j+1}`
+in the :math:`j`'th entry of its main diagonal and :math:`-1/\sqrt{j+1}` in the
+:math:`j`'th column of the upper triangle. It was originally introduced as an
+example of where greedy Rank-Revealing QR factorizations fail.
 
 C++ API
 ^^^^^^^
@@ -371,7 +481,10 @@ C API
 
 Grcar
 -----
-**TODO**
+An :math:`n \times n` *Grcar matrix* of order :math:`k` is a banded Toeplitz 
+matrix with its subdiagonal set to :math:`-1` and both its main and :math:`k` 
+superdiagonals set to :math:`1`. It is a highly non-normal matrix whose 
+pseudospectra is regularly visualized.
 
 C++ API
 ^^^^^^^
@@ -427,7 +540,16 @@ C API
 
 Hanowa
 ------
-**TODO**
+A :math:`2n \times 2n` matrix is said to be a *Hanowa matrix* if it is
+of the form
+
+.. math::
+
+   A = \begin{pmatrix} \mu I_{n \times n} & -D \\ 
+                       D                  & \mu I_{n \times n} \end{pmatrix},
+
+where :math:`D = \text{diag}( [1,2,...,n] )` and :math:`I_{n \times n}` is the
+:math:`n \times n` identity matrix.
 
 C++ API
 ^^^^^^^
@@ -451,7 +573,7 @@ C API
 
 Helmholtz
 ---------
-**TODO**
+A shifted discrete Laplacian over :math:`[0,1]^d`.
 
 C++ API
 ^^^^^^^
@@ -459,17 +581,17 @@ C++ API
 .. cpp:function:: void Helmholtz( Matrix<F>& H, Int n, F shift )
 .. cpp:function:: void Helmholtz( AbstractDistMatrix<F>& H, Int n, F shift )
 
-   1D Helmholtz: **TODO**
+   1D Helmholtz
 
 .. cpp:function:: void Helmholtz( Matrix<F>& H, Int nx, Int ny, F shift )
 .. cpp:function:: void Helmholtz( AbstractDistMatrix<F>& H, Int nx, Int ny, F shift )
 
-   2D Helmholtz: **TODO**
+   2D Helmholtz
 
 .. cpp:function:: void Helmholtz( Matrix<F>& H, Int nx, Int ny, Int nz, F shift )
 .. cpp:function:: void Helmholtz( AbstractDistMatrix<F>& H, Int nx, Int ny, Int nz, F shift )
 
-   3D Helmholtz: **TODO**
+   3D Helmholtz
 
 C API
 ^^^^^
@@ -483,7 +605,7 @@ C API
 .. c:function:: ElError ElHelmholtz1DDist_c( ElDistMatrix_c H, ElInt nx, complex_float shift )
 .. c:function:: ElError ElHelmholtz1DDist_z( ElDistMatrix_z H, ElInt nx, complex_double shift )
 
-   1D Helmholtz: **TODO**
+   1D Helmholtz
 
 .. c:function:: ElError ElHelmholtz2D_s( ElMatrix_s H, ElInt nx, ElInt ny, float shift )
 .. c:function:: ElError ElHelmholtz2D_d( ElMatrix_d H, ElInt nx, ElInt ny, double shift )
@@ -494,7 +616,7 @@ C API
 .. c:function:: ElError ElHelmholtz2DDist_c( ElDistMatrix_c H, ElInt nx, ElInt ny, complex_float shift )
 .. c:function:: ElError ElHelmholtz2DDist_z( ElDistMatrix_z H, ElInt nx, ElInt ny, complex_double shift )
 
-   2D Helmholtz: **TODO**
+   2D Helmholtz
 
 .. c:function:: ElError ElHelmholtz3D_s( ElMatrix_s H, ElInt nx, ElInt ny, ElInt nz, float shift )
 .. c:function:: ElError ElHelmholtz3D_d( ElMatrix_d H, ElInt nx, ElInt ny, ElInt nz, double shift )
@@ -505,11 +627,15 @@ C API
 .. c:function:: ElError ElHelmholtz3DDist_c( ElDistMatrix_c H, ElInt nx, ElInt ny, ElInt nz, complex_float shift )
 .. c:function:: ElError ElHelmholtz3DDist_z( ElDistMatrix_z H, ElInt nx, ElInt ny, ElInt nz, complex_double shift )
 
-   3D Helmholtz: **TODO**
+   3D Helmholtz
 
 Helmholtz with PML
 ------------------
-**TODO**
+The following routines return a simple second-order discretization of the 
+constant coefficient Helmholtz equation over :math:`[0,1]^d` with Perfectly
+Matched Layer boundary conditions with profile defined by the amplitude 
+:math:`\sigma` and exponent `pmlExp`, discretized over `numPmlPoints` grid
+points.
 
 C++ API
 ^^^^^^^
@@ -517,17 +643,17 @@ C++ API
 .. cpp:function:: void HelmholtzPML( Matrix<Complex<Real>>& H, Int n, Complex<Real> shift, Int numPmlPoints, Real sigma, Real pmlExp )
 .. cpp:function:: void HelmholtzPML( AbstractDistMatrix<Complex<Real>>& H, Int n, Complex<Real> shift, Int numPmlPoints, Real sigma, Real pmlExp )
 
-   1D Helmholtz: **TODO**
+   1D Helmholtz
 
 .. cpp:function:: void HelmholtzPML( Matrix<Complex<Real>>& H, Int nx, Int ny, Complex<Real> shift, Int numPmlPoints, Real sigma, Real pmlExp )
 .. cpp:function:: void HelmholtzPML( AbstractDistMatrix<Complex<Real>>& H, Int nx, Int ny, Complex<Real> shift, Int numPmlPoints, Real sigma, Real pmlExp )
 
-   2D Helmholtz: **TODO**
+   2D Helmholtz
 
 .. cpp:function:: void HelmholtzPML( Matrix<Complex<Real>>& H, Int nx, Int ny, Int nz, Complex<Real> shift, Int numPmlPoints, Real sigma, Real pmlExp )
 .. cpp:function:: void HelmholtzPML( AbstractDistMatrix<Complex<Real>>& H, Int nx, Int ny, Int nz, Complex<Real> shift, Int numPmlPoints, Real sigma, Real pmlExp )
 
-   3D Helmholtz: **TODO**
+   3D Helmholtz
 
 
 C API
@@ -538,70 +664,25 @@ C API
 .. c:function:: ElError ElHelmholtzPML1DDist_c( ElDistMatrix_c H, ElInt nx, complex_float omega, ElInt numPmlPoints, float sigma, float pmlExp )
 .. c:function:: ElError ElHelmholtzPML1DDist_z( ElDistMatrix_z H, ElInt nx, complex_double omega, ElInt numPmlPoints, double sigma, double pmlExp )
 
-   1D Helmholtz: **TODO**
+   1D Helmholtz
 
 .. c:function:: ElError ElHelmholtzPML2D_c( ElMatrix_c H, ElInt nx, ElInt ny, complex_float omega, ElInt numPmlPoints, float sigma, float pmlExp )
 .. c:function:: ElError ElHelmholtzPML2D_z( ElMatrix_z H, ElInt nx, ElInt ny, complex_double omega, ElInt numPmlPoints, double sigma, double pmlExp )
 .. c:function:: ElError ElHelmholtzPML2DDist_c( ElDistMatrix_c H, ElInt nx, ElInt ny, complex_float omega, ElInt numPmlPoints, float sigma, float pmlExp )
 .. c:function:: ElError ElHelmholtzPML2DDist_z( ElDistMatrix_z H, ElInt nx, ElInt ny, complex_double omega, ElInt numPmlPoints, double sigma, double pmlExp )
 
-   2D Helmholtz: **TODO**
+   2D Helmholtz
 
 .. c:function:: ElError ElHelmholtzPML3D_c( ElMatrix_c H, ElInt nx, ElInt ny, ElInt nz, complex_float omega, ElInt numPmlPoints, float sigma, float pmlExp )
 .. c:function:: ElError ElHelmholtzPML3D_z( ElMatrix_z H, ElInt nx, ElInt ny, ElInt nz, complex_double omega, ElInt numPmlPoints, double sigma, double pmlExp )
 .. c:function:: ElError ElHelmholtzPML3DDist_c( ElDistMatrix_c H, ElInt nx, ElInt ny, ElInt nz, complex_float omega, ElInt numPmlPoints, float sigma, float pmlExp )
 .. c:function:: ElError ElHelmholtzPML3DDist_z( ElDistMatrix_z H, ElInt nx, ElInt ny, ElInt nz, complex_double omega, ElInt numPmlPoints, double sigma, double pmlExp )
 
-   3D Helmholtz: **TODO**
+   3D Helmholtz
 
 Hermitian from EVD
 ------------------
-
-C++ API
-^^^^^^^
-
-.. cpp:function:: void HermitianFromEVD( UpperOrLower uplo, Matrix<F>& A, const Matrix<Base<F>>& w, const Matrix<F>& Z )
-.. cpp:function:: void HermitianFromEVD( UpperOrLower uplo, AbstractDistMatrix<F>& A, const AbstractDistMatrix<Base<F>>& w, const AbstractDistMatrix<F>& Z )
-
-C API
-^^^^^
-
-.. c:function:: ElError ElHermitianFromEVD_s( ElUpperOrLower uplo, ElMatrix_s A, ElConstMatrix_s w, ElConstMatrix_s Z )
-.. c:function:: ElError ElHermitianFromEVD_d( ElUpperOrLower uplo, ElMatrix_d A, ElConstMatrix_d w, ElConstMatrix_d Z )
-.. c:function:: ElError ElHermitianFromEVD_c( ElUpperOrLower uplo, ElMatrix_c A, ElConstMatrix_s w, ElConstMatrix_c Z )
-.. c:function:: ElError ElHermitianFromEVD_z( ElUpperOrLower uplo, ElMatrix_z A, ElConstMatrix_d w, ElConstMatrix_z Z )
-.. c:function:: ElError ElHermitianFromEVDDist_s( ElUpperOrLower uplo, ElDistMatrix_s A, ElConstDistMatrix_s w, ElConstDistMatrix_s Z )
-.. c:function:: ElError ElHermitianFromEVDDist_d( ElUpperOrLower uplo, ElDistMatrix_d A, ElConstDistMatrix_d w, ElConstDistMatrix_d Z )
-.. c:function:: ElError ElHermitianFromEVDDist_c( ElUpperOrLower uplo, ElDistMatrix_c A, ElConstDistMatrix_s w, ElConstDistMatrix_c Z )
-.. c:function:: ElError ElHermitianFromEVDDist_z( ElUpperOrLower uplo, ElDistMatrix_z A, ElConstDistMatrix_d w, ElConstDistMatrix_z Z )
-
-Hilbert
--------
-The Hilbert matrix of order :math:`n` is the :math:`n \times n` matrix where
-entry :math:`(i,j)` is equal to :math:`1/(i+j+1)`.
-
-The following routines generate the :math:`n \times n` Hilbert matrix ``A``.
-
-C++ API
-^^^^^^^
-
-.. cpp:function:: void Hilbert( Matrix<F>& A, Int n )
-.. cpp:function:: void Hilbert( AbstractDistMatrix<F>& A, Int n )
-
-C API
-^^^^^
-
-.. c:function:: ElError ElHilbert_s( ElMatrix_s A, ElInt n )
-.. c:function:: ElError ElHilbert_d( ElMatrix_d A, ElInt n )
-.. c:function:: ElError ElHilbert_c( ElMatrix_c A, ElInt n )
-.. c:function:: ElError ElHilbert_z( ElMatrix_z A, ElInt n )
-.. c:function:: ElError ElHilbertDist_s( ElDistMatrix_s A, ElInt n )
-.. c:function:: ElError ElHilbertDist_d( ElDistMatrix_d A, ElInt n )
-.. c:function:: ElError ElHilbertDist_c( ElDistMatrix_c A, ElInt n )
-.. c:function:: ElError ElHilbertDist_z( ElDistMatrix_z A, ElInt n )
-
-HermitianFromEVD
-----------------
+Construct a Hermitian matrix from its spectral decomposition,
 Form
 
 .. math::
@@ -627,6 +708,32 @@ C API
 .. c:function:: ElError ElHermitianFromEVDDist_d( ElUpperOrLower uplo, ElDistMatrix_d A, ElConstDistMatrix_d w, ElConstDistMatrix_d Z )
 .. c:function:: ElError ElHermitianFromEVDDist_c( ElUpperOrLower uplo, ElDistMatrix_c A, ElConstDistMatrix_s w, ElConstDistMatrix_c Z )
 .. c:function:: ElError ElHermitianFromEVDDist_z( ElUpperOrLower uplo, ElDistMatrix_z A, ElConstDistMatrix_d w, ElConstDistMatrix_z Z )
+
+Hilbert
+-------
+The Hilbert matrix of order :math:`n` is the :math:`n \times n` matrix where
+
+.. math::
+
+   A(i,j) = \frac{1}{i+j+1}.
+
+C++ API
+^^^^^^^
+
+.. cpp:function:: void Hilbert( Matrix<F>& A, Int n )
+.. cpp:function:: void Hilbert( AbstractDistMatrix<F>& A, Int n )
+
+C API
+^^^^^
+
+.. c:function:: ElError ElHilbert_s( ElMatrix_s A, ElInt n )
+.. c:function:: ElError ElHilbert_d( ElMatrix_d A, ElInt n )
+.. c:function:: ElError ElHilbert_c( ElMatrix_c A, ElInt n )
+.. c:function:: ElError ElHilbert_z( ElMatrix_z A, ElInt n )
+.. c:function:: ElError ElHilbertDist_s( ElDistMatrix_s A, ElInt n )
+.. c:function:: ElError ElHilbertDist_d( ElDistMatrix_d A, ElInt n )
+.. c:function:: ElError ElHilbertDist_c( ElDistMatrix_c A, ElInt n )
+.. c:function:: ElError ElHilbertDist_z( ElDistMatrix_z A, ElInt n )
 
 Identity
 --------
@@ -664,7 +771,9 @@ C API
 
 Jordan
 ------
-**TODO**
+An :math:`n \times n` Jordan block with eigenvalue :math:`\lambda` is a
+bidiagonal matrix with main diagonal equal to :math:`\lambda` and superdiagonal
+equal to :math:`1`.
 
 C++ API
 ^^^^^^^
@@ -723,7 +832,12 @@ C API
 
 KMS
 ---
-**TODO**
+An :math:`n \times n` *KMS matrix* with parameter :math:`\rho` is a 
+skew-Hermitian matrix such that
+
+.. math::
+
+   A(i,j) = \rho^{j-i},\;\;\; i <= j.
 
 C++ API
 ^^^^^^^
@@ -796,7 +910,10 @@ C API
 
 Lauchli
 -------
-**TODO**
+An :math:`n+1 \times n` *Lauchli matrix* has is a concatenation of a 
+:math:`1 \times n` row-vector of all ones with the :math:`n \times n` matrix
+:math:`mu I`. The case where :math:`mu = \sqrt{\epsilon}` is a prominent 
+example of where the explicit formation of :math:`A^H A` can be catastrophic.
 
 C++ API
 ^^^^^^^
@@ -857,7 +974,20 @@ C API
 
 Lehmer
 ------
-**TODO**
+An :math:`n \times n` *Lehmer matrix* is a symmetric positive-definite matrix 
+whose upper-triangle is defined via the equation
+
+.. math::
+
+   A(i,j) = \frac{i+1}{j+1},\;\;\; i \le j.
+
+The inverse of the Lehmer matrix is known to be symmetric tridiagonal (with
+positive eigenvalues), and the condition number is known to be bounded by the
+relationship
+
+.. math::
+
+   n \le \text{cond}(A) \le 4 n^2.
 
 C++ API
 ^^^^^^^
@@ -879,7 +1009,9 @@ C API
 
 Lotkin
 ------
-**TODO**
+The :math:`n \times n` *Lotkin matrix* is equal to the Hilbert matrix with its
+first row replaced with ones. Its inverse is analytically known and contains
+integer entries.
 
 C++ API
 ^^^^^^^
@@ -987,8 +1119,6 @@ C++ API
 .. cpp:function:: void OneTwoOne( Matrix<T>& A, Int n )
 .. cpp:function:: void OneTwoOne( AbstractDistMatrix<T>& A, Int n )
 
-   Set ``A`` to a :math:`n \times n` "1-2-1" matrix.
-
 C API
 ^^^^^
 
@@ -1005,7 +1135,11 @@ C API
 
 Parter
 ------
-**TODO**
+An :math:`n \times n` *Parter matrix* has entry :math:`(i,j)` set to
+
+.. math::
+
+   P(i,j) = \frac{1}{i-j+\frac{1}{2}}.
 
 C++ API
 ^^^^^^^
@@ -1027,7 +1161,8 @@ C API
 
 Pei
 ---
-**TODO**
+An :math:`n \times n` *Pei matrix* with parameter :math:`\alpha` has a main 
+diagonal of :math:`\alpha+1` and all other entries set to :math:`1`.
 
 C++ API
 ^^^^^^^
@@ -1061,6 +1196,15 @@ zero) set to
      0, & \text{otherwise}.
    \end{array}
 
+The determinants of such matrices are connected to the Riemann hypothesis,
+which holds if and only if
+
+.. math::
+
+   \text{det}(R) = O(n^{1/2+\epsilon})  
+
+for every :math:`\epsilon > 0`.
+
 C++ API
 ^^^^^^^
 
@@ -1081,33 +1225,12 @@ C API
 .. c:function:: ElError ElRedhefferDist_c( ElDistMatrix_c R, ElInt n )
 .. c:function:: ElError ElRedhefferDist_z( ElDistMatrix_z R, ElInt n )
 
-Riemann
--------
-**TODO**
-
-C++ API
-^^^^^^^
-
-.. cpp:function:: void Riemann( Matrix<T>& R, Int n )
-.. cpp:function:: void Riemann( AbstractDistMatrix<T>& R, Int n )
-
-C API
-^^^^^
-
-.. c:function:: ElError ElRiemann_i( ElMatrix_i R, ElInt n )
-.. c:function:: ElError ElRiemann_s( ElMatrix_s R, ElInt n )
-.. c:function:: ElError ElRiemann_d( ElMatrix_d R, ElInt n )
-.. c:function:: ElError ElRiemann_c( ElMatrix_c R, ElInt n )
-.. c:function:: ElError ElRiemann_z( ElMatrix_z R, ElInt n )
-.. c:function:: ElError ElRiemannDist_i( ElDistMatrix_i R, ElInt n )
-.. c:function:: ElError ElRiemannDist_s( ElDistMatrix_s R, ElInt n )
-.. c:function:: ElError ElRiemannDist_d( ElDistMatrix_d R, ElInt n )
-.. c:function:: ElError ElRiemannDist_c( ElDistMatrix_c R, ElInt n )
-.. c:function:: ElError ElRiemannDist_z( ElDistMatrix_z R, ElInt n )
-
 Riffle
 ------
-**TODO**
+This is an implementation of the riffle-shuffle transition matrix made famous by
+Diaconis et al. The computation of binomial and Eulerian coefficients closely
+follows the scripts provided in Trefethen and Embree's 
+*Spectra and Pseudospectra: The Behaviour of Nonnormal Matrices and Operators*.
 
 C++ API
 ^^^^^^^
@@ -1228,23 +1351,32 @@ C API
 .. c:function:: ElError ElToeplitzDist_c( ElDistMatrix_c A, ElInt m, ElInt n, ElInt aSize, complex_float* aBuf )
 .. c:function:: ElError ElToeplitzDist_z( ElDistMatrix_z A, ElInt m, ElInt n, ElInt aSize, complex_double* aBuf )
 
-Trefethen
----------
+Trefethen-Embree
+----------------
+The *Trefethen-Embree matrix* (since the author is not aware of another name) 
+is a banded Toeplitz matrix with symbol
+
+.. math::
+
+   f(z) = 2 z^{-3} - z^{-2} + 2i z^{-1} - 4 z^2 - 2i z^3.
+
+Please see Chapter II of Lloyd N. Trefethen and Mark Embree's 
+*Spectra and Pseudospectra* for more details.
 
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void Trefethen( Matrix<Complex<Real>>& A, Int n )
-.. cpp:function:: void Trefethen( AbstractDistMatrix<Complex<Real>>& A, Int n )
-.. cpp:function:: void Trefethen( AbstractBlockDistMatrix<Complex<Real>>& A, Int n )
+.. cpp:function:: void TrefethenEmbree( Matrix<Complex<Real>>& A, Int n )
+.. cpp:function:: void TrefethenEmbree( AbstractDistMatrix<Complex<Real>>& A, Int n )
+.. cpp:function:: void TrefethenEmbree( AbstractBlockDistMatrix<Complex<Real>>& A, Int n )
 
 C API
 ^^^^^
 
-.. c:function:: ElError ElTrefethen_c( ElMatrix_c A, ElInt n )
-.. c:function:: ElError ElTrefethen_z( ElMatrix_z A, ElInt n )
-.. c:function:: ElError ElTrefethenDist_c( ElDistMatrix_c A, ElInt n )
-.. c:function:: ElError ElTrefethenDist_z( ElDistMatrix_z A, ElInt n )
+.. c:function:: ElError ElTrefethenEmbree_c( ElMatrix_c A, ElInt n )
+.. c:function:: ElError ElTrefethenEmbree_z( ElMatrix_z A, ElInt n )
+.. c:function:: ElError ElTrefethenEmbreeDist_c( ElDistMatrix_c A, ElInt n )
+.. c:function:: ElError ElTrefethenEmbreeDist_z( ElDistMatrix_z A, ElInt n )
 
 Triangle
 --------
@@ -1270,27 +1402,30 @@ C API
 
 TriW
 ----
-**TODO**
+An :math:`n \times n` *TriW matrix* of order :math:`k` is a banded 
+upper-triangular matrix with its main diagonal set to one and its :math:`k` 
+super-diagonals each set to some value :math:`\alpha`.
+This family of matrices was regularly employed by Wilkinson.
 
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void TriW( Matrix<T>& A, Int m, Int n, T alpha, Int k )
-.. cpp:function:: void TriW( AbstractDistMatrix<T>& A, Int m, Int n, T alpha, Int k )
+.. cpp:function:: void TriW( Matrix<T>& A, Int n, T alpha, Int k )
+.. cpp:function:: void TriW( AbstractDistMatrix<T>& A, Int n, T alpha, Int k )
 
 C API
 ^^^^^
 
-.. c:function:: ElError ElTriW_i( ElMatrix_i A, ElInt m, ElInt n, ElInt alpha, ElInt k )
-.. c:function:: ElError ElTriW_s( ElMatrix_s A, ElInt m, ElInt n, float alpha, ElInt k )
-.. c:function:: ElError ElTriW_d( ElMatrix_d A, ElInt m, ElInt n, double alpha, ElInt k )
-.. c:function:: ElError ElTriW_c( ElMatrix_c A, ElInt m, ElInt n, complex_float alpha, ElInt k )
-.. c:function:: ElError ElTriW_z( ElMatrix_z A, ElInt m, ElInt n, complex_double alpha, ElInt k )
-.. c:function:: ElError ElTriWDist_i( ElDistMatrix_i A, ElInt m, ElInt n, ElInt alpha, ElInt k )
-.. c:function:: ElError ElTriWDist_s( ElDistMatrix_s A, ElInt m, ElInt n, float alpha, ElInt k )
-.. c:function:: ElError ElTriWDist_d( ElDistMatrix_d A, ElInt m, ElInt n, double alpha, ElInt k )
-.. c:function:: ElError ElTriWDist_c( ElDistMatrix_c A, ElInt m, ElInt n, complex_float alpha, ElInt k )
-.. c:function:: ElError ElTriWDist_z( ElDistMatrix_z A, ElInt m, ElInt n, complex_double alpha, ElInt k )
+.. c:function:: ElError ElTriW_i( ElMatrix_i A, ElInt n, ElInt alpha, ElInt k )
+.. c:function:: ElError ElTriW_s( ElMatrix_s A, ElInt n, float alpha, ElInt k )
+.. c:function:: ElError ElTriW_d( ElMatrix_d A, ElInt n, double alpha, ElInt k )
+.. c:function:: ElError ElTriW_c( ElMatrix_c A, ElInt n, complex_float alpha, ElInt k )
+.. c:function:: ElError ElTriW_z( ElMatrix_z A, ElInt n, complex_double alpha, ElInt k )
+.. c:function:: ElError ElTriWDist_i( ElDistMatrix_i A, ElInt n, ElInt alpha, ElInt k )
+.. c:function:: ElError ElTriWDist_s( ElDistMatrix_s A, ElInt n, float alpha, ElInt k )
+.. c:function:: ElError ElTriWDist_d( ElDistMatrix_d A, ElInt n, double alpha, ElInt k )
+.. c:function:: ElError ElTriWDist_c( ElDistMatrix_c A, ElInt n, complex_float alpha, ElInt k )
+.. c:function:: ElError ElTriWDist_z( ElDistMatrix_z A, ElInt n, complex_double alpha, ElInt k )
 
 Walsh
 -----
@@ -1332,6 +1467,14 @@ C API
 
 Whale
 -----
+The *Whale matrix* is a banded Toeplitz matrix with symbol
+
+.. math::
+
+   f(z) = -z^{-4} - (3+2i) z^{-3} + i z^{-2} + z^{-1} + 10 z + (3+i) z^2 + 4 z^3 + i z^4
+
+Please see A. Bottcher's *Infinite matrices and projection methods* for more
+details.
 
 C++ API
 ^^^^^^^

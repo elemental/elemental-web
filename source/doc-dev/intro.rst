@@ -3,17 +3,18 @@ Introduction
 
 Overview
 ========
-Elemental is a library for distributed-memory dense linear algebra that 
-draws heavily from the `PLAPACK <http://cs.utexas.edu/users/plapack>`_ approach
-of building a graph of matrix distributions with a simple interface for 
-redistributions (much of the syntax of the library is also inspired from 
-`FLAME <http://cs.utexas.edu/users/flame>`_). Elemental is also similar in 
-functionality to `ScaLAPACK <http://netlib.org/scalapack>`_, which is the very 
+Elemental is a library for distributed-memory dense and sparse-direct linear 
+algebra that draws heavily from the 
+`PLAPACK <http://cs.utexas.edu/users/plapack>`_ approach of building a graph of
+matrix distributions with a simple interface for redistributions 
+Elemental is also similar in functionality to 
+`ScaLAPACK <http://netlib.org/scalapack>`_, which is the very 
 widely used effort towards extending `LAPACK <http://netlib.org/lapack>`_ onto 
 distributed-memory architectures.
-Unlike PLAPACK and ScaLAPACK, Elemental performs virtually all computations using 
-element-wise, rather than block, matrix distributions (please see the first
-journal publication on Elemental, *Elemental: A new framework for distributed
+Unlike PLAPACK and ScaLAPACK, Elemental performs virtually all computations 
+using element-wise, rather than block, matrix distributions 
+(please see the first journal publication on Elemental, 
+*Elemental: A new framework for distributed
 memory dense matrix computations*, for a detailed discussion of this design 
 choice).
 Some of the unique features of Elemental include distributed implementations of:
@@ -31,26 +32,17 @@ Some of the unique features of Elemental include distributed implementations of:
 * Sign-based Lyapunov/Ricatti/Sylvester solvers
 
 For the sake of objectivity: Elemental is primarily intended to be used from 
-C++11, though interfaces to other languages, such as C, Fortran 90, and Python, 
+C++11 or C, though interfaces to other languages, Fortran 90, Python, and R
 are in various stages of development. ScaLAPACK and PLAPACK routines are 
-currently significantly more straightforward to call from C and Fortran.
+currently significantly more straightforward to call from Fortran.
 
 .. note::
-   At this point, the vast majority of Elemental's source code is in header 
-   files, so do not be surprised by the sparsity of the ``src/`` folder; please
-   also look in ``include/``. There were essentially two reasons for moving as 
-   much of Elemental as possible into header files:
 
-   1. In practice, most executables only require a small subset of the library, 
-      so avoiding the overhead of compiling the entire library beforehand can be
-      significant. On the other hand, if one naively builds many such 
-      executables with overlapping functionality, then the mainly-header 
-      approach becomes slower. 
-   2. Though Elemental does not yet fully support computation over arbitrary 
-      fields, the vast majority of its pieces do. Moving templated 
-      implementations into header files is a necessary step in the process and 
-      also allowed for certain templating techniques to exploited in order to 
-      simplify the class hierarchy.
+   Though Elemental does not yet fully support computation over arbitrary 
+   fields, the vast majority of its pieces do. Moving templated 
+   implementations into header files is a necessary step in the process and 
+   also allowed for certain templating techniques to exploited in order to 
+   simplify the class hierarchy.
 
 Dependencies
 ============

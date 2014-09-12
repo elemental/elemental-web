@@ -1,4 +1,4 @@
-.. title:: Elemental: distributed-memory dense linear algebra
+.. title:: Elemental: distributed-memory dense and sparse-direct linear algebra
 
 .. raw:: html
     :file: index.inc

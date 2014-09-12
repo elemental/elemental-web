@@ -15,12 +15,26 @@ The solution is computed by first finding the Cholesky factorization of
 :math:`A` and then performing two successive triangular solves against 
 :math:`B`.
 
+Note that only the `uplo` triangle of :math:`A` is accessed by the below 
+routines.
+
+C++ API
+^^^^^^^
+
 .. cpp:function:: void HPDSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B )
 .. cpp:function:: void HPDSolve( UpperOrLower uplo, Orientation orientation, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
 
-   Overwrite `B` with the solution to :math:`AX=B` or :math:`A^T X=B`, 
-   where `A` is Hermitian positive-definite and only the triangle of `A` 
-   specified by `uplo` is accessed.
+C API
+^^^^^
+
+.. c:function:: ElError ElHPDSolve_s( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_s A, ElMatrix_s B )
+.. c:function:: ElError ElHPDSolve_d( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_d A, ElMatrix_d B )
+.. c:function:: ElError ElHPDSolve_c( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_c A, ElMatrix_c B )
+.. c:function:: ElError ElHPDSolve_z( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_z A, ElMatrix_z B )
+.. c:function:: ElError ElHPDSolveDist_s( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_s A, ElDistMatrix_s B )
+.. c:function:: ElError ElHPDSolveDist_d( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_d A, ElDistMatrix_d B )
+.. c:function:: ElError ElHPDSolveDist_c( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_c A, ElDistMatrix_c B )
+.. c:function:: ElError ElHPDSolveDist_z( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_z A, ElDistMatrix_z B )
 
 Symmetric solve
 ---------------
@@ -31,15 +45,28 @@ Solve :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X = B` for :math:`X`
 given a symmetric or Hermitian matrix :math:`A` and a right-hand side matrix
 :math:`B` using Bunch-Kaufman.
 
+.. note::
+
+   Only the lower-triangular storage case (``uplo=LOWER``) is supported by
+   the following routines.
+
+C++ API
+^^^^^^^
+
 .. cpp:function:: void SymmetricSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 .. cpp:function:: void SymmetricSolve( UpperOrLower uplo, Orientation orientation, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, bool conjugate=false, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
-   Overwrites :math:`B` with the solution to the linear system. :math:`A`
-   is assumed symmetric if ``conjugate`` is false, and Hermitian otherwise.
+C API
+^^^^^
 
-.. note:: 
-
-   Only the lower-storage case is currently supported.
+.. c:function:: ElError ElSymmetricSolve_s( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_s A, ElMatrix_s B )
+.. c:function:: ElError ElSymmetricSolve_d( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_d A, ElMatrix_d B )
+.. c:function:: ElError ElSymmetricSolve_c( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_c A, ElMatrix_c B, bool conjugate )
+.. c:function:: ElError ElSymmetricSolve_z( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_z A, ElMatrix_z B, bool conjugate )
+.. c:function:: ElError ElSymmetricSolveDist_s( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_s A, ElDistMatrix_s B )
+.. c:function:: ElError ElSymmetricSolveDist_d( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_d A, ElDistMatrix_d B )
+.. c:function:: ElError ElSymmetricSolveDist_c( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_c A, ElDistMatrix_c B, bool conjugate )
+.. c:function:: ElError ElSymmetricSolveDist_z( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_z A, ElDistMatrix_z B, bool conjugate )
 
 Hermitian solve
 ---------------
@@ -50,15 +77,24 @@ Solve :math:`AX=B`, :math:`A^T X = B`, or :math:`A^H X = B` for :math:`X`
 given a Hermitian matrix :math:`A` and a right-hand side matrix
 :math:`B` using Bunch-Kaufman.
 
+.. note::
+
+   Only the lower-triangular storage case (``uplo=LOWER``) is supported by
+   the following routines.
+
+C++ API
+^^^^^^^
+
 .. cpp:function:: void HermitianSolve( UpperOrLower uplo, Orientation orientation, Matrix<F>& A, Matrix<F>& B, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 .. cpp:function:: void HermitianSolve( UpperOrLower uplo, Orientation orientation, AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
 
-   Overwrites :math:`B` with the solution to the linear system.
+C API
+^^^^^
 
-.. note:: 
-
-   Only the lower-storage case is currently supported, as this is a simple 
-   wrapper around :cpp:func:`SymmetricSolve`.
+.. c:function:: ElError ElHermitianSolve_c( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_c A, ElMatrix_c B )
+.. c:function:: ElError ElHermitianSolve_z( ElUpperOrLower uplo, ElOrientation orientation, ElMatrix_z A, ElMatrix_z B )
+.. c:function:: ElError ElHermitianSolveDist_c( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_c A, ElDistMatrix_c B )
+.. c:function:: ElError ElHermitianSolveDist_z( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_z A, ElDistMatrix_z B )
 
 Gaussian elimination
 --------------------
@@ -69,11 +105,23 @@ Solves :math:`AX=B` for :math:`X` given a general square nonsingular matrix
 :math:`A` and right-hand side matrix :math:`B`. The solution is computed through
 (partially pivoted) Gaussian elimination.
 
+C++ API
+^^^^^^^
+
 .. cpp:function:: void GaussianElimination( Matrix<F>& A, Matrix<F>& B )
 .. cpp:function:: void GaussianElimination( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B )
 
-   Upon completion, :math:`A` will have been overwritten with Gaussian 
-   elimination and :math:`B` will be overwritten with :math:`X`.
+C API
+^^^^^
+
+.. c:function:: ElError ElGaussianElimination_s( ElMatrix_s A, ElMatrix_s B )
+.. c:function:: ElError ElGaussianElimination_d( ElMatrix_d A, ElMatrix_d B )
+.. c:function:: ElError ElGaussianElimination_c( ElMatrix_c A, ElMatrix_c B )
+.. c:function:: ElError ElGaussianElimination_z( ElMatrix_z A, ElMatrix_z B )
+.. c:function:: ElError ElGaussianEliminationDist_s( ElDistMatrix_s A, ElDistMatrix_s B )
+.. c:function:: ElError ElGaussianEliminationDist_d( ElDistMatrix_d A, ElDistMatrix_d B )
+.. c:function:: ElError ElGaussianEliminationDist_c( ElDistMatrix_c A, ElDistMatrix_c B )
+.. c:function:: ElError ElGaussianEliminationDist_z( ElDistMatrix_z A, ElDistMatrix_z B )
 
 Least Squares
 -------------
@@ -102,16 +150,34 @@ problem
 
 This problem is solved through the use of :cpp:func:`LQ`.
 
-The above optimization problems can be readily generalized to multiple right-hand
-sides by switching to Frobenius norms. 
+The above optimization problems can be readily generalized to multiple 
+right-hand sides by switching to Frobenius norms. 
 
-.. cpp:function:: void LeastSquares( Orientation orientation, Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
-.. cpp:function:: void LeastSquares( Orientation orientation, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
+.. note::
 
    If `orientation` is set to ``NORMAL``, then solve :math:`AX=B`, otherwise 
    `orientation` must be equal to ``ADJOINT`` and :math:`A^H X=B` will 
    be solved. Upon completion, :math:`A` is overwritten with its QR or LQ 
-   factorization, and each column of :math:`X` is overwritten with a solution vector.
+   factorization, and each column of :math:`X` is overwritten with a solution 
+   vector.
+
+C++ API
+^^^^^^^
+
+.. cpp:function:: void LeastSquares( Orientation orientation, Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
+.. cpp:function:: void LeastSquares( Orientation orientation, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
+
+C API
+^^^^^
+
+.. c:function:: ElError ElLeastSquares_s( ElOrientation orientation, ElMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
+.. c:function:: ElError ElLeastSquares_d( ElOrientation orientation, ElMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
+.. c:function:: ElError ElLeastSquares_c( ElOrientation orientation, ElMatrix_c A, ElConstMatrix_c B, ElMatrix_c X )
+.. c:function:: ElError ElLeastSquares_z( ElOrientation orientation, ElMatrix_z A, ElConstMatrix_z B, ElMatrix_z X )
+.. c:function:: ElError ElLeastSquaresDist_s( ElOrientation orientation, ElDistMatrix_s A, ElConstDistMatrix_s B, ElDistMatrix_s X )
+.. c:function:: ElError ElLeastSquaresDist_d( ElOrientation orientation, ElDistMatrix_d A, ElConstDistMatrix_d B, ElDistMatrix_d X )
+.. c:function:: ElError ElLeastSquaresDist_c( ElOrientation orientation, ElDistMatrix_c A, ElConstDistMatrix_c B, ElDistMatrix_c X )
+.. c:function:: ElError ElLeastSquaresDist_z( ElOrientation orientation, ElDistMatrix_z A, ElConstDistMatrix_z B, ElDistMatrix_z X )
 
 General (Gauss-Markov) Linear Model (GLM)
 -----------------------------------------
@@ -124,8 +190,23 @@ General (Gauss-Markov) Linear Model (GLM)
 
    \min_{X,Y} \| Y \|_F \;\;\; \text{subject to } A X + B Y = D.
 
+C++ API
+^^^^^^^
+
 .. cpp:function:: void GLM( Matrix<F>& A, Matrix<F>& B, Matrix<F>& D, Matrix<F>& Y )
 .. cpp:function:: void GLM( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& D, AbstractDistMatrix<F>& Y )
+
+C API
+^^^^^
+
+.. c:function:: ElError ElGLM_s( ElMatrix_s A, ElMatrix_s B, ElMatrix_s D, ElMatrix_s Y )
+.. c:function:: ElError ElGLM_d( ElMatrix_d A, ElMatrix_d B, ElMatrix_d D, ElMatrix_d Y )
+.. c:function:: ElError ElGLM_c( ElMatrix_c A, ElMatrix_c B, ElMatrix_c D, ElMatrix_c Y )
+.. c:function:: ElError ElGLM_z( ElMatrix_z A, ElMatrix_z B, ElMatrix_z D, ElMatrix_z Y )
+.. c:function:: ElError ElGLMDist_s( ElDistMatrix_s A, ElDistMatrix_s B, ElDistMatrix_s D, ElDistMatrix_s Y )
+.. c:function:: ElError ElGLMDist_d( ElDistMatrix_d A, ElDistMatrix_d B, ElDistMatrix_d D, ElDistMatrix_d Y )
+.. c:function:: ElError ElGLMDist_c( ElDistMatrix_c A, ElDistMatrix_c B, ElDistMatrix_c D, ElDistMatrix_c Y )
+.. c:function:: ElError ElGLMDist_z( ElDistMatrix_z A, ElDistMatrix_z B, ElDistMatrix_z D, ElDistMatrix_z Y )
 
 Equality-constrained Least Squares (LSE)
 ----------------------------------------
@@ -138,8 +219,23 @@ Equality-constrained Least Squares (LSE)
 
    \min_X \| A X - C \|_F \;\;\; \text{subject to } B X = D.
 
+C++ API
+^^^^^^^
+
 .. cpp:function:: void LSE( Matrix<F>& A, Matrix<F>& B, Matrix<F>& C, Matrix<F>& D, Matrix<F>& X, bool computeResidual=false )
 .. cpp:function:: void LSE( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& C, AbstractDistMatrix<F>& D, AbstractDistMatrix<F>& X, bool computeResidual=false )
+
+C API
+^^^^^
+
+.. c:function:: ElError ElLSE_s( ElMatrix_s A, ElMatrix_s B, ElMatrix_s C, ElMatrix_s D, ElMatrix_s X )
+.. c:function:: ElError ElLSE_d( ElMatrix_d A, ElMatrix_d B, ElMatrix_d C, ElMatrix_d D, ElMatrix_d X )
+.. c:function:: ElError ElLSE_c( ElMatrix_c A, ElMatrix_c B, ElMatrix_c C, ElMatrix_c D, ElMatrix_c X )
+.. c:function:: ElError ElLSE_z( ElMatrix_z A, ElMatrix_z B, ElMatrix_z C, ElMatrix_z D, ElMatrix_z X )
+.. c:function:: ElError ElLSEDist_s( ElDistMatrix_s A, ElDistMatrix_s B, ElDistMatrix_s C, ElDistMatrix_s D, ElDistMatrix_s X )
+.. c:function:: ElError ElLSEDist_d( ElDistMatrix_d A, ElDistMatrix_d B, ElDistMatrix_d C, ElDistMatrix_d D, ElDistMatrix_d X )
+.. c:function:: ElError ElLSEDist_c( ElDistMatrix_c A, ElDistMatrix_c B, ElDistMatrix_c C, ElDistMatrix_c D, ElDistMatrix_c X )
+.. c:function:: ElError ElLSEDist_z( ElDistMatrix_z A, ElDistMatrix_z B, ElDistMatrix_z C, ElDistMatrix_z D, ElDistMatrix_z X )
 
 Multi-shift Hessenberg solves
 -----------------------------
@@ -155,12 +251,25 @@ Solve for :math:`X` in the system
 where :math:`H` is Hessenberg, :math:`D` is diagonal, and :math:`A^\#` 
 is defined to be one of :math:`\{A,A^T,A^H\}`.
 
-.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& H, const Matrix<F>& shifts, Matrix<F>& X )
-.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const AbstractDistMatrix<F>& H, const AbstractDistMatrix<F>& shifts, AbstractDistMatrix<F>& X )
-
-   Overwrite the columns of `X` with the solutions to shifted linear systems.
-
 .. note::
 
    Only a few subcases are currently supported, as this was added as part of 
    :cpp:func:`HessenbergPseudospectrum`
+
+C++ API
+^^^^^^^
+
+.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const Matrix<F>& H, const Matrix<F>& shifts, Matrix<F>& X )
+.. cpp:function:: void MultiShiftHessSolve( UpperOrLower uplo, Orientation orientation, F alpha, const AbstractDistMatrix<F>& H, const AbstractDistMatrix<F>& shifts, AbstractDistMatrix<F>& X )
+
+C API
+^^^^^
+
+.. c:function:: ElError ElMultiShiftHessSolve_s( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstMatrix_s H, ElConstMatrix_s shifts, ElMatrix_s X )
+.. c:function:: ElError ElMultiShiftHessSolve_d( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstMatrix_d H, ElConstMatrix_d shifts, ElMatrix_d X )
+.. c:function:: ElError ElMultiShiftHessSolve_c( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstMatrix_c H, ElConstMatrix_c shifts, ElMatrix_c X )
+.. c:function:: ElError ElMultiShiftHessSolve_z( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstMatrix_z H, ElConstMatrix_z shifts, ElMatrix_z X )
+.. c:function:: ElError ElMultiShiftHessSolveDist_s( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstDistMatrix_s H, ElConstDistMatrix_s shifts, ElDistMatrix_s X )
+.. c:function:: ElError ElMultiShiftHessSolveDist_d( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstDistMatrix_d H, ElConstDistMatrix_d shifts, ElDistMatrix_d X )
+.. c:function:: ElError ElMultiShiftHessSolveDist_c( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstDistMatrix_c H, ElConstDistMatrix_c shifts, ElDistMatrix_c X )
+.. c:function:: ElError ElMultiShiftHessSolveDist_z( ElUpperOrLower uplo, ElOrientation orientation, float alpha, ElConstDistMatrix_z H, ElConstDistMatrix_z shifts, ElDistMatrix_z X )

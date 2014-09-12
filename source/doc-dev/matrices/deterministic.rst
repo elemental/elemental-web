@@ -205,7 +205,16 @@ C API
 
 Ehrenfest
 ---------
-**TODO: Add descriptions**
+An :math:`n \times n` *Ehrenfest matrix* is the transition matrix for the 
+famous Ehrenfest urns: a set of two urns collectively contains :math:`n-1` 
+balls, and, at each step, a ball is selected at random and moved to the other 
+urn.
+
+The transition matrix for the Markov chain is described by a tridiagonal matrix where the main diagonal is zero, the superdiagonal is of the form :math:`\frac{1}{N-1},\frac{2}{N-1},...,1`, and the subdiagonal is of the form :math:`1,\frac{N-2}{N-1},...,\frac{1}{N-1}`.
+
+There is a well-known connection between this model and a random walk over the
+corners of a hypercube. Please see Lloyd N. Trefethen and S. J. Chapman's
+*Wave packet pseudomodes of twisted Toepitz matrices* for more details.
 
 C++ API
 ^^^^^^^

@@ -79,7 +79,13 @@ C API
 
 Hatano-Nelson
 -------------
-**TODO: Add descriptions**
+*Hatano-Nelson matrices* extend the (Nobel prize winning) work of Anderson on 
+the localization of eigenvalues of random tridiagonal matrices. The matrices
+have a main diagonal with each entry sampled from the uniform distribution
+over a ball from the real line or complex plane; each entry of the superdiagonal
+is set to :math:`e^g` (if periodic, also the bottom-left corner), 
+each entry of the subdiagonal is set to :math:`e^{-g}` 
+(if periodic, also the top-right corner).
 
 C++ API
 ^^^^^^^
@@ -173,7 +179,13 @@ C API
 
 Uniform Helmholtz Green's
 -------------------------
-**TODO: Add descriptions**
+These routines generate a member of the family of "random Green's matrices"
+from A. Goetschy and S. E. Skipetrov's 
+*Non-Hermitian Euclidean random matrix theory*.
+Each such matrix is the restriction of a 3D Helmholtz Green's function
+to a subset of points chosen uniformly from the unit ball. The behaviour of the
+spectrum is known to change dramatically dependening upon the number of points
+sampled per wavelength.
 
 C++ API
 ^^^^^^^

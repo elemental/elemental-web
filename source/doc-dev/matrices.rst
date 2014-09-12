@@ -1,20 +1,11 @@
 Special matrices
 ****************
-
-It is frequently useful to test algorithms on well-known, trivial, and random 
-matrices, such as
-
-1. matrices with entries sampled from a uniform distribution,
-2. matrices with spectrum sampled from a uniform distribution,
-3. Wilkinson matrices,
-4. identity matrices,
-5. matrices of all ones, and
-6. matrices of all zeros.
-
-Elemental therefore provides utilities for generating many such matrices.
+It is frequently useful to generate matrices with well-studied properties, and
+so Elemental provides routines for generating a wide variety of both 
+deterministic and random matrices.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    matrices/deterministic
    matrices/random

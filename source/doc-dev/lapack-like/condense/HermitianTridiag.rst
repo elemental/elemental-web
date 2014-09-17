@@ -1,10 +1,18 @@
 Hermitian to tridiagonal
 ========================
-The currently best-known algorithms for computing eigenpairs of dense Hermitian 
-matrices begin by performing a unitary similarity transformation which reduces 
+The standard approach for computing eigenpairs of dense Hermitian 
+matrices begins by performing a unitary similarity transformation which reduces 
 the matrix to real symmetric tridiagonal form (usually through Householder 
-transformations). This routine performs said reduction on a Hermitian matrix 
-and stores the scaled Householder vectors in place of the introduced zeroes. 
+transformations). The following routines perform said reduction on a Hermitian 
+matrix and store the scaled Householder vectors in place of the introduced 
+zeroes. 
+
+.. note:: 
+
+   While so-called *Successive Band Reduction* approaches, which reduce the
+   matrix to tridiagonal form using a two-stage process, are sometimes 
+   preferred, they are not yet supported within Elemental. Please see 
+   `ELPA <http://elpa.rzg.mpg.de/>`__ for such an implementation.
 
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack-like/condense/HermitianTridiag.cpp>`__
 

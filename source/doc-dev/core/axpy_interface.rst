@@ -25,11 +25,9 @@ An example usage might be:
    #include "El.hpp"
    using namespace El;
    ...
-   // Create an 8 x 8 distributed matrix over the given grid
-   DistMatrix<double> A( 8, 8, grid );
-
-   // Set every entry of A to zero
-   MakeZeros( A );
+   // Create an 8 x 8 distributed matrix of all zeros over the given grid
+   DistMatrix<double> A( grid );
+   Zeros( A, 8, 8 );
 
    // Open up a LOCAL_TO_GLOBAL interface to A 
    AxpyInterface<double> interface;

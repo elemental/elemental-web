@@ -19,8 +19,8 @@ BasisPursuit
 
 Attempt to minimize :math:`\| x \|_1` such that :math:`Ax=b` using ADMM.
 
-.. cpp:function:: int BasisPursuit( const Matrix<F>& A, const Matrix<F>& b, Matrix<F>& x, Matrix<F>& z, Matrix<F>& u, Base<F> rho=1, Base<F> alpha=1.2, Int maxIter=500, Base<F> absTol=1e-6, Base<F> relTol=1e-4, bool usePinv=true, Base<F> pinvTol=0, bool progress=false )
-.. cpp:function:: int BasisPursuit( const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& b, AbstractDistMatrix<F>& x, AbstractDistMatrix<F>& z, AbstractDistMatrix<F>& u, Base<F> rho=1, Base<F> alpha=1.2, Int maxIter=500, Base<F> absTol=1e-6, Base<F> relTol=1e-4, bool usePinv=true, Base<F> pinvTol=0, bool progress=false )
+.. cpp:function:: Int BasisPursuit( const Matrix<F>& A, const Matrix<F>& b, Matrix<F>& x, Matrix<F>& z, Matrix<F>& u, Base<F> rho=1, Base<F> alpha=1.2, Int maxIter=500, Base<F> absTol=1e-6, Base<F> relTol=1e-4, bool usePinv=true, Base<F> pinvTol=0, bool progress=false )
+.. cpp:function:: Int BasisPursuit( const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& b, AbstractDistMatrix<F>& x, AbstractDistMatrix<F>& z, AbstractDistMatrix<F>& u, Base<F> rho=1, Base<F> alpha=1.2, Int maxIter=500, Base<F> absTol=1e-6, Base<F> relTol=1e-4, bool usePinv=true, Base<F> pinvTol=0, bool progress=false )
 
     `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/BasisPursuit.hpp>`__
 
@@ -75,8 +75,8 @@ Attempt to solve the linear program
 
 using ADMM.
 
-.. cpp:function:: int LinearProgram( const Matrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, Matrix<Real>& x, Matrix<Real>& z, Matrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=false, bool progress=true )
-.. cpp:function:: int LinearProgram( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, const AbstractDistMatrix<Real>& c, AbstractDistMatrix<Real>& x, AbstractDistMatrix<Real>& z, AbstractDistMatrix<F>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=true, bool progress=true )
+.. cpp:function:: Int LinearProgram( const Matrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, Matrix<Real>& x, Matrix<Real>& z, Matrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=false, bool progress=true )
+.. cpp:function:: Int LinearProgram( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, const AbstractDistMatrix<Real>& c, AbstractDistMatrix<Real>& x, AbstractDistMatrix<Real>& z, AbstractDistMatrix<F>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=true, bool progress=true )
 
     `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/LinearProgram.hpp>`__
 
@@ -132,8 +132,8 @@ Attempt to solve the quadratic program
 
 using ADMM.
 
-.. cpp:function:: int QuadraticProgram( const Matrix<Real>& P, const Matrix<Real>& q, Real lb, Real ub, Matrix<Real>& x, Matrix<Real>& z, Matrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=false, bool progress=true )
-.. cpp:function:: int QuadraticProgram( const AbstractDistMatrix<Real>& P, const AbstractDistMatrix<Real>& q, Real lb, Real ub, AbstractDistMatrix<Real>& x, AbstractDistMatrix<Real>& z, AbstractDistMatrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=true, bool progress=true )
+.. cpp:function:: Int QuadraticProgram( const Matrix<Real>& P, const Matrix<Real>& q, Real lb, Real ub, Matrix<Real>& x, Matrix<Real>& z, Matrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=false, bool progress=true )
+.. cpp:function:: Int QuadraticProgram( const AbstractDistMatrix<Real>& P, const AbstractDistMatrix<Real>& q, Real lb, Real ub, AbstractDistMatrix<Real>& x, AbstractDistMatrix<Real>& z, AbstractDistMatrix<Real>& u, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool inv=true, bool progress=true )
 
     `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/QuadraticProgram.hpp>`__
 
@@ -193,8 +193,8 @@ observations by solving the program
 
 using ADMM.
 
-.. cpp:function:: int SparseInvCov( const Matrix<Real>& D, Matrix<Real>& X, Matrix<Real>& Z, Matrix<Real>& U, Real lambda, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool progress=true )
-.. cpp:function:: int SparseInvCov( const AbstractDistMatrix<Real>& D, AbstractDistMatrix<Real>& X, AbstractDistMatrix<Real>& Z, AbstractDistMatrix<Real>& U, Real lambda, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool progress=true )
+.. cpp:function:: Int SparseInvCov( const Matrix<Real>& D, Matrix<Real>& X, Matrix<Real>& Z, Matrix<Real>& U, Real lambda, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool progress=true )
+.. cpp:function:: Int SparseInvCov( const AbstractDistMatrix<Real>& D, AbstractDistMatrix<Real>& X, AbstractDistMatrix<Real>& Z, AbstractDistMatrix<Real>& U, Real lambda, Real rho=1., Real alpha=1.2, Int maxIter=500, Real absTol=1e-6, Real relTol=1e-4, bool progress=true )
 
     `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/SparseInvCov.hpp>`__
 
@@ -303,21 +303,21 @@ The return value is the rank of the soft-thresholded matrix.
 
 `Implementations on GitHub <https://github.com/elemental/Elemental/blob/master/include/El/convex/SVT.hpp>`__
 
-.. cpp:function:: int SVT( Matrix<F>& A, Base<F> tau, bool relative=false )
-.. cpp:function:: int SVT( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int SVT( Matrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int SVT( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
 
    Runs the default SVT algorithm. In the sequential case, this is currently
    `svt::Normal`, and, in the parallel case, it is `svt::Cross`.
 
-.. cpp:function:: int SVT( Matrix<F>& A, Base<F> tau, int relaxedRank, bool relative=false )
-.. cpp:function:: int SVT( AbstractDistMatrix<F>& A, Base<F> tau, int relaxedRank, bool relative=false )
+.. cpp:function:: Int SVT( Matrix<F>& A, Base<F> tau, Int relaxedRank, bool relative=false )
+.. cpp:function:: Int SVT( AbstractDistMatrix<F>& A, Base<F> tau, Int relaxedRank, bool relative=false )
 
    Runs a faster (for small ranks), but less accurate, algorithm given an
    upper bound on the rank of the soft-thresholded matrix.
    The current implementation preprocesses via `relaxedRank` steps of 
    (Businger-Golub) column-pivoted QR via the routine `svt::PivotedQR`.
 
-.. cpp:function:: int SVT( DistMatrix<F,U,STAR>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int SVT( DistMatrix<F,U,STAR>& A, Base<F> tau, bool relative=false )
 
    Runs an SVT algorithm designed for tall-skinny matrices. 
    The current implementation is based on TSQR factorization and is
@@ -326,14 +326,14 @@ The return value is the rank of the soft-thresholded matrix.
 namespace svt
 ^^^^^^^^^^^^^
 
-.. cpp:function:: int svt::Normal( Matrix<F>& A, Base<F> tau, bool relative=false )
-.. cpp:function:: int svt::Normal( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int svt::Normal( Matrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int svt::Normal( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
 
    Runs a standard SVD, soft-thresholds the singular values, and then reforms
    the matrix.
 
-.. cpp:function:: int svt::Cross( Matrix<F>& A, Base<F> tau, bool relative=false )
-.. cpp:function:: int svt::Cross( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int svt::Cross( Matrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int svt::Cross( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
 
    Forms the normal matrix, computes its Hermitian EVD, soft-thresholds the
    eigenvalues, and then reforms the matrix. Note that Elemental's parallel 
@@ -341,13 +341,13 @@ namespace svt
    the loss of accuracy in the computed small (truncated) singular values and
    is therefore the default choice for parallel SVT.
 
-.. cpp:function:: int svt::PivotedQR( Matrix<F>& A, Base<F> tau, int numStepsQR, bool relative=false )
-.. cpp:function:: int svt::PivotedQR( AbstractDistMatrix<F>& A, Base<F> tau, int numStepsQR, bool relative=false )
+.. cpp:function:: Int svt::PivotedQR( Matrix<F>& A, Base<F> tau, Int numStepsQR, bool relative=false )
+.. cpp:function:: Int svt::PivotedQR( AbstractDistMatrix<F>& A, Base<F> tau, Int numStepsQR, bool relative=false )
 
    Computes an approximate SVT by first approximating A as the rank-`numSteps`
    approximation produced by `numSteps` iterations of column-pivoted QR.
 
-.. cpp:function:: int svt::TSQR( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false ) 
+.. cpp:function:: Int svt::TSQR( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false ) 
 
    Since the majority of the work in a tall-skinny SVT will be in the initial
    QR factorization, this algorithm runs a TSQR factorization and then 

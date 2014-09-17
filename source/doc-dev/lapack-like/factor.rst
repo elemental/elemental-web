@@ -7,16 +7,16 @@ Factorizations
 .. toctree::
    :maxdepth: 1
 
-   factor/cholesky
-   factor/ldl
-   factor/lu
+   factor/Cholesky
+   factor/LDL
+   factor/LU
 
-   factor/lq
-   factor/qr
-   factor/rq
+   factor/LQ
+   factor/QR
+   factor/RQ
 
-   factor/gqr
-   factor/grq
+   factor/GQR
+   factor/GRQ
 
-   factor/id
-   factor/skeleton
+   factor/ID
+   factor/Skeleton

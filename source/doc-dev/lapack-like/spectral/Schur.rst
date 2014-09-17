@@ -68,9 +68,9 @@ succeeds on random matrices.
 
 .. cpp:type:: SDCCtrl<Real>
 
-   .. cpp:member:: int cutoff
-   .. cpp:member:: int maxInnerIts
-   .. cpp:member:: int maxOuterIts
+   .. cpp:member:: Int cutoff
+   .. cpp:member:: Int maxInnerIts
+   .. cpp:member:: Int maxOuterIts
    .. cpp:member:: Real tol
    .. cpp:member:: Real spreadFactor
    .. cpp:member:: bool random

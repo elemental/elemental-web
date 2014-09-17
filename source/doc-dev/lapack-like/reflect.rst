@@ -27,14 +27,14 @@ treat the identity matrix as a Householder transform since it requires the
 Apply packed reflectors
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, int offset, const Matrix<F>& H, const Matrix<F>& t, Matrix<F>& A )
-.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, int offset, const AbstractDistMatrix<F>& H, const AbstractDistMatrix<F>& t, AbstractDistMatrix<F>& A )
+.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, Int offset, const Matrix<F>& H, const Matrix<F>& t, Matrix<F>& A )
+.. cpp:function:: void ApplyPackedReflectors( LeftOrRight side, UpperOrLower uplo, VerticalOrHorizontal dir, ForwardOrBackward order, Conjugation conjugation, Int offset, const AbstractDistMatrix<F>& H, const AbstractDistMatrix<F>& t, AbstractDistMatrix<F>& A )
 
 Expand packed reflectors
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, Matrix<F>& H, const Matrix<F>& t )
-.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, int offset, AbstractDistMatrix<F>& H, const AbstractDistMatrix<F>& t )
+.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, Int offset, Matrix<F>& H, const Matrix<F>& t )
+.. cpp:function:: void ExpandPackedReflectors( UpperOrLower uplo, VerticalOrHorizontal dir, Conjugation conjugation, Int offset, AbstractDistMatrix<F>& H, const AbstractDistMatrix<F>& t )
 
 Hyperbolic reflectors
 ---------------------

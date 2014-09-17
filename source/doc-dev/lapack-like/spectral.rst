@@ -7,9 +7,11 @@ Spectral decompositions
 .. toctree::
    :maxdepth: 1
 
+   spectral/HermitianTridiagEig
    spectral/HermitianEig
    spectral/SkewHermitianEig
    spectral/HermitianGenDefEig
+   spectral/HermitianSVD
 
    spectral/SVD
    spectral/Polar

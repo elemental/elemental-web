@@ -94,7 +94,7 @@ C++ API
 
    .. cpp:member:: bool boundRank
 
-   .. cpp:member:: int maxRank
+   .. cpp:member:: Int maxRank
 
    .. cpp:member:: bool adaptive
 

@@ -7,7 +7,7 @@ Hermitian eigensolvers
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack-like/HermitianEig.cpp>`__
 
 Elemental provides a collection of routines for both full and partial 
-solution of the Hermitian eigenvalue problem 
+solutions of the Hermitian eigenvalue problem 
 
 .. math::
 
@@ -33,8 +33,8 @@ usage of a (prototype) Spectral Divide and Conquer algorithm.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& w, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, SortType sort=ASCENDING, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& w, SortType sort=ASCENDING, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
 
 C API
 ^^^^^
@@ -80,8 +80,8 @@ usage of a (prototype) Spectral Divide and Conquer algorithm.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& w, AbstractDistMatrix<F>& Z, SortType sort=UNSORTED, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=ASCENDING, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& w, AbstractDistMatrix<F>& Z, SortType sort=ASCENDING, const HermitianEigSubset<Base<F>> subset=HermitianEigSubset<Base<F>>(), const HermitianEigCtrl<Base<F>> ctrl=HermitianEigCtrl<Base<F>>() )
 
 C API
 ^^^^^
@@ -109,74 +109,6 @@ C API
 .. c:function:: ElError ElHermitianEigPairPartialDist_z( ElUpperOrLower uplo, ElDistMatrix_z A, ElDistMatrix_d w, ElDistMatrix_z Z, ElSortType sort, ElHermitianEigSubset_d subset )
 
    Return a subset of the eigenpairs
-
-Subset computation
-------------------
-The :cpp:type:`HermitianEigSubset\<Real>` structure is used to control subset
-computation, and, when not explicitly manipulated, defaults to a request for
-the entire set of eigenvalues or eigenpairs.
-
-C++ API
-^^^^^^^
-
-.. cpp:type:: HermitianEigSubset<Real>
-
-   .. cpp:member:: bool indexSubset
-   .. cpp:member:: Int lowerIndex
-   .. cpp:member:: Int upperIndex
-
-      If `indexSubset` is true, then the eigenvalues/pairs with indices 
-      (inclusively) between `lowerIndex` and `upperIndex` will be found.
-
-   .. cpp:member:: bool rangeSubset
-   .. cpp:member:: Real lowerBound
-   .. cpp:member:: Real upperBound
-
-      Alternatively, if `rangeSubset` is true, 
-      then the eigenvalues/pairs within the numerical range
-      :math:`(lowerBound,upperBound]` will be found.
-
-.. cpp:type:: HermitianEigSubset<Base<F>>
-
-   A particular case where the datatype is the base of the potentially complex
-   type ``F``.
-
-C API
-^^^^^
-
-.. c:type:: HermitianEigSubset_s
-
-   .. c:member:: bool indexSubset
-   .. c:member:: Int lowerIndex
-   .. c:member:: Int upperIndex
-
-      If `indexSubset` is true, then the eigenvalues/pairs with indices 
-      (inclusively) between `lowerIndex` and `upperIndex` will be found.
-
-   .. c:member:: bool rangeSubset
-   .. c:member:: float lowerBound
-   .. c:member:: float upperBound
-
-      Alternatively, if `rangeSubset` is true, 
-      then the eigenvalues/pairs within the numerical range
-      :math:`(lowerBound,upperBound]` will be found.
-
-.. c:type:: HermitianEigSubset_d
-
-   .. c:member:: bool indexSubset
-   .. c:member:: Int lowerIndex
-   .. c:member:: Int upperIndex
-
-      If `indexSubset` is true, then the eigenvalues/pairs with indices 
-      (inclusively) between `lowerIndex` and `upperIndex` will be found.
-
-   .. c:member:: bool rangeSubset
-   .. c:member:: double lowerBound
-   .. c:member:: double upperBound
-
-      Alternatively, if `rangeSubset` is true, 
-      then the eigenvalues/pairs within the numerical range
-      :math:`(lowerBound,upperBound]` will be found.
 
 Algorithmic options
 -------------------
@@ -216,9 +148,9 @@ C++ API
 
 .. cpp:type:: HermitianSDCCtrl<Real>
 
-   .. cpp:member:: int cutoff
-   .. cpp:member:: int maxInnerIts
-   .. cpp:member:: int maxOuterIts
+   .. cpp:member:: Int cutoff
+   .. cpp:member:: Int maxInnerIts
+   .. cpp:member:: Int maxOuterIts
    .. cpp:member:: Real tol
    .. cpp:member:: Real spreadFactor
    .. cpp:member:: bool random
@@ -264,9 +196,9 @@ C API
 
 .. c:type:: ElHermitianSDCCtrl_s
 
-   .. c:member:: int cutoff
-   .. c:member:: int maxInnerIts
-   .. c:member:: int maxOuterIts
+   .. c:member:: ElInt cutoff
+   .. c:member:: ElInt maxInnerIts
+   .. c:member:: ElInt maxOuterIts
    .. c:member:: float tol
    .. c:member:: float spreadFactor
    .. c:member:: bool random
@@ -274,9 +206,9 @@ C API
 
 .. c:type:: ElHermitianSDCCtrl_d
 
-   .. c:member:: int cutoff
-   .. c:member:: int maxInnerIts
-   .. c:member:: int maxOuterIts
+   .. c:member:: ElInt cutoff
+   .. c:member:: ElInt maxInnerIts
+   .. c:member:: ElInt maxOuterIts
    .. c:member:: double tol
    .. c:member:: double spreadFactor
    .. c:member:: bool random

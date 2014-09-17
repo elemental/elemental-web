@@ -85,6 +85,7 @@
           <ul>
             <li><a href="http://elpa.rzg.mpg.de/">ELPA</a></li>
             <li><a href="http://icl.eecs.utk.edu/dplasma/">DPLASMA</a></li>
+            <li><a href="https://github.com/solomonik/NuLAB">NuLAB</a></li>
             <li><a href="http://www.cs.utexas.edu/~plapack/">PLAPACK</a></li>
             <li><a href="http://www.netlib.org/scalapack/">ScaLAPACK</a></li>
           </ul>

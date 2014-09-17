@@ -38,11 +38,11 @@ C++ API
 
 .. cpp:type:: LDLPivot
 
-   .. cpp:member:: int nb
+   .. cpp:member:: Int nb
 
       Whether the pivot is 1x1 or 2x2.
 
-   .. cpp:member:: int from[2]
+   .. cpp:member:: Int from[2]
 
       The source indices of the row or rows to swap with for the 1x1 or 2x2
       pivot.
@@ -69,11 +69,11 @@ C API
 
 .. cpp:type:: ElLDLPivot
 
-   .. cpp:member:: int nb
+   .. cpp:member:: Int nb
 
       Whether the pivot is 1x1 or 2x2.
 
-   .. cpp:member:: int from[2]
+   .. cpp:member:: Int from[2]
 
       The source indices of the row or rows to swap with for the 1x1 or 2x2
       pivot.

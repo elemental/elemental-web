@@ -6,6 +6,7 @@ Core functionality
 
    core/imports
    core/environment
+   core/element
    core/matrix
    core/grid
    core/dist_matrix

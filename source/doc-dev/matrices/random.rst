@@ -9,8 +9,8 @@ from a normal distribution.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void Gaussian( Matrix<T>& A, int m, int n, T mean=0, Base<T> stddev=1 )
-.. cpp:function:: void Gaussian( AbstractDistMatrix<T>& A, int m, int n, T mean=0, Base<T> stddev=1 )
+.. cpp:function:: void Gaussian( Matrix<T>& A, Int m, Int n, T mean=0, Base<T> stddev=1 )
+.. cpp:function:: void Gaussian( AbstractDistMatrix<T>& A, Int m, Int n, T mean=0, Base<T> stddev=1 )
 
    Sets the matrix ``A`` to an :math:`m \times n` Gaussian matrix with the
    specified mean and standard deviation.
@@ -41,16 +41,16 @@ complex unitary matrices.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void Haar( Matrix<F>& A, int n )
-.. cpp:function:: void Haar( DistMatrix<F>& A, int n )
+.. cpp:function:: void Haar( Matrix<F>& A, Int n )
+.. cpp:function:: void Haar( DistMatrix<F>& A, Int n )
 
    Draws ``A`` from the Haar distribution. The current scheme performs a QR
    factorization of a Gaussian matrix, but Stewart introduced a well-known 
    scheme which only requires quadratic work for the implicit representation 
    as a product of random Householder reflectors.
 
-.. cpp:function:: void ImplicitHaar( Matrix<F>& A, Matrix<F>& t, int n )
-.. cpp:function:: void ImplicitHaar( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, int n )
+.. cpp:function:: void ImplicitHaar( Matrix<F>& A, Matrix<F>& t, Int n )
+.. cpp:function:: void ImplicitHaar( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, Int n )
 
    Sets ``A`` to a set of Householder reflectors with the same structure as
    the result of a QR decomposition. The product of these reflectors is a 
@@ -114,8 +114,8 @@ transformation using a random Householder transform.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void HermitianUniformSpectrum( Matrix<F>& A, int n, Base<F> lower=0, Base<F> upper=1 )
-.. cpp:function:: void HermitianUniformSpectrum( DistMatrix<F,U,V>& A, int n, Base<F> lower=0, Base<F> upper=1 )
+.. cpp:function:: void HermitianUniformSpectrum( Matrix<F>& A, Int n, Base<F> lower=0, Base<F> upper=1 )
+.. cpp:function:: void HermitianUniformSpectrum( DistMatrix<F,U,V>& A, Int n, Base<F> lower=0, Base<F> upper=1 )
 
 C API
 ^^^^^
@@ -138,8 +138,8 @@ similarity transformation using a random Householder transform.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void NormalUniformSpectrum( Matrix<Complex<Real> >& A, int n, Complex<Real> center=0, Real radius=1 )
-.. cpp:function:: void NormalUniformSpectrum( DistMatrix<Complex<Real>,U,V>& A, int n, Complex<Real> center=0, Real radius=1 )
+.. cpp:function:: void NormalUniformSpectrum( Matrix<Complex<Real> >& A, Int n, Complex<Real> center=0, Real radius=1 )
+.. cpp:function:: void NormalUniformSpectrum( DistMatrix<Complex<Real>,U,V>& A, Int n, Complex<Real> center=0, Real radius=1 )
 
 C API
 ^^^^^
@@ -157,8 +157,8 @@ from a uniform distribution over a ball with the specified center and radius.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void Uniform( Matrix<T>& A, int m, int n, T center=0, Base<T> radius=1 )
-.. cpp:function:: void Uniform( AbstractDistMatrix<T>& A, int m, int n, T center=0, Base<T> radius=1 )
+.. cpp:function:: void Uniform( Matrix<T>& A, Int m, Int n, T center=0, Base<T> radius=1 )
+.. cpp:function:: void Uniform( AbstractDistMatrix<T>& A, Int m, Int n, T center=0, Base<T> radius=1 )
 
 .. cpp:function:: void MakeUniform( Matrix<T>& A, T center=0, Base<T> radius=1 )
 .. cpp:function:: void MakeUniform( AbstractDistMatrix<T>& A, T center=0, Base<T> radius=1 )
@@ -209,8 +209,8 @@ from a normal distribution. The spectra of these matrices are well-studied.
 C++ API
 ^^^^^^^
 
-.. cpp:function:: void Wigner( Matrix<T>& A, int n, T mean=0, Base<T> stddev=1 )
-.. cpp:function:: void Wigner( AbstractDistMatrix<T>& A, int n, T mean=0, Base<T> stddev=1 )
+.. cpp:function:: void Wigner( Matrix<T>& A, Int n, T mean=0, Base<T> stddev=1 )
+.. cpp:function:: void Wigner( AbstractDistMatrix<T>& A, Int n, T mean=0, Base<T> stddev=1 )
 
 C API
 ^^^^^

@@ -76,7 +76,7 @@ PermutationMeta
 
 .. cpp:type:: PermutationMeta
 
-   .. cpp:member:: int align
+   .. cpp:member:: Int align
    .. cpp:member:: mpi::Comm comm
 
    .. cpp:member:: std::vector<int> sendCounts

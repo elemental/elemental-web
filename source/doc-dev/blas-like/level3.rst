@@ -2,9 +2,9 @@ Level 3
 =======
 
 The prototypes for the following routines can be found at          
-`include/El/blas-like/decl.hpp <https://github.com/elemental/Elemental/tree/master/include/El/blas-like/decl.hpp>`_, while the
+`include/El/blas-like/level3.hpp <https://github.com/elemental/Elemental/tree/master/include/El/blas-like/level3.hpp>`_, while the
 implementations are in 
-`include/El/blas-like/level3/ <https://github.com/elemental/Elemental/tree/master/include/El/blas-like/level3>`_.
+`src/blas-like/level3/ <https://github.com/elemental/Elemental/tree/master/src/blas-like/level3>`_.
 
 Gemm
 ----

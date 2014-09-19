@@ -11,8 +11,9 @@
           <p>
           Jack was recently affiliated with the Georgia Institute of Technology 
           but has recently accepted a Simon's Math+X joint tenure-track 
-          position in Stanford's Math department and Institute for 
-          Computational and Mathematical Engineering (ICME).
+          position in Stanford's Department of Mathematics; he is also
+          affiliated with the Institute for Computational and Mathematical 
+          Engineering (ICME).
           </p>
           <p>He has led the development of Elemental since its start in 2009,
              as well as that of

@@ -15,8 +15,8 @@ numbers where the :math:`(i,j)` entry is equal to :math:`i-j` would be:
      using namespace El;
      ...
      Matrix<double> A( m, n );
-     for( int j=0; j<n; ++j )
-         for( int i=0; i<m; ++i )
+     for( Int j=0; j<n; ++j )
+         for( Int i=0; i<m; ++i )
              A.Set( i, j, double(i-j) );
 
 whereas the complex double-precision equivalent could use :cpp:type:`Complex\<double>`, which is currently a typedef for ``std::complex<double>``.
@@ -38,9 +38,9 @@ of the first code sample as follows:
      ...
      Matrix<double> A( m, n );
      double* buffer = A.Buffer();
-     const int ldim = A.LDim();
-     for( int j=0; j<n; ++j )
-         for( int i=0; i<m; ++i )
+     const Int ldim = A.LDim();
+     for( Int j=0; j<n; ++j )
+         for( Int i=0; i<m; ++i )
              buffer[i+j*ldim] = double(i-j);
 
 For immutable instances of the :cpp:type:`Matrix\<T>` class, a ``const`` pointer
@@ -52,19 +52,15 @@ with a call to :cpp:func:`Matrix\<T>::Buffer` or
 :cpp:func:`Matrix\<T>::LockedBuffer`.
 
 It is also important to be able to create matrices which are simply *views* 
-of existing (sub)matrices. For example, if `A` is a :math:`10 \times 10` 
-matrix of complex doubles, then a matrix :math:`A_{BR}` can easily be created 
-to view the bottom-right :math:`6 \times 7` submatrix using
+of existing (sub)matrices. In general, to view the submatrix with row indices 
+:math:`[\text{iBeg},\text{iEnd}]` and column indices 
+:math:`[\text{jBeg},\text{jEnd}]`, one can use a statement of the form
 
   .. code-block:: cpp
 
      #include "El.hpp"
      ...
-     auto ABR = View( A, 1, 2, 3, 4 );
-
-since the bottom-right :math:`3 \times 4` submatrix beings at index 
-:math:`(1,2)`. In general, to view the :math:`M \times N` submatrix starting
-at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
+     auto ASub = A( IR(iBeg,iEnd), IR(jBeg,jEnd) );
 
 .. cpp:type:: class Matrix<T>
 
@@ -94,20 +90,20 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
       This simply creates a default :math:`0 \times 0` matrix with a leading 
       dimension of one (BLAS and LAPACK require positive leading dimensions).
 
-   .. cpp:function:: Matrix( int height, int width, bool fixed=false )
+   .. cpp:function:: Matrix( Int height, Int width, bool fixed=false )
 
       A `height` :math:`\times` `width` matrix is created with an unspecified
       leading dimension (though it is currently implemented as 
       :math:`\max(height,1)`).
 
-   .. cpp:function:: Matrix( int height, int width, int ldim, bool fixed=false )
+   .. cpp:function:: Matrix( Int height, Int width, Int ldim, bool fixed=false )
 
       A `height` :math:`\times` `width` matrix is created with a leading 
       dimension equal to `ldim` (which must be greater than or equal 
       :math:`\max(height,1)`).
 
-   .. cpp:function:: Matrix( int height, int width, const T* buffer, int ldim, bool fixed=false )
-   .. cpp:function:: Matrix( int height, int width, T* buffer, int ldim, bool fixed=false )
+   .. cpp:function:: Matrix( Int height, Int width, const T* buffer, Int ldim, bool fixed=false )
+   .. cpp:function:: Matrix( Int height, Int width, T* buffer, Int ldim, bool fixed=false )
 
       A matrix is built around a column-major (immutable) buffer 
       with the specified dimensions. The memory pointed to by `buffer` should
@@ -144,43 +140,43 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       Sets the matrix to :math:`0 \times 0` and frees any owned resources.
 
-   .. cpp:function:: void Resize( int height, int width )
+   .. cpp:function:: void Resize( Int height, Int width )
 
       Reconfigures the matrix to be `height` :math:`\times` `width`.
 
-   .. cpp:function:: void Resize( int height, int width, int ldim )
+   .. cpp:function:: void Resize( Int height, Int width, Int ldim )
 
       Reconfigures the matrix to be `height` :math:`\times` `width`, but with 
       leading dimension equal to `ldim` (which must be greater than or equal to 
       :math:`\max(height,1)`).
 
-   .. cpp:function:: void Attach( int height, int width, T* buffer, int ldim )
-   .. cpp:function:: void LockedAttach( int height, int width, const T* buffer, int ldim )
+   .. cpp:function:: void Attach( Int height, Int width, T* buffer, Int ldim )
+   .. cpp:function:: void LockedAttach( Int height, Int width, const T* buffer, Int ldim )
 
       Reconfigure the matrix around the specified (unmodifiable) buffer.
 
-   .. cpp:function:: void Control( int height, int width, T* buffer, int ldim )
+   .. cpp:function:: void Control( Int height, Int width, T* buffer, Int ldim )
 
       Reconfigure the matrix around a specified buffer and give ownership of
       the resource to the matrix.
 
    .. rubric:: Basic queries
 
-   .. cpp:function:: int Height() const
-   .. cpp:function:: int Width() const
+   .. cpp:function:: Int Height() const
+   .. cpp:function:: Int Width() const
 
       Return the height/width of the matrix.
 
-   .. cpp:function:: int LDim() const
+   .. cpp:function:: Int LDim() const
 
       Return the leading dimension of the underlying buffer.
 
-   .. cpp:function:: int MemorySize() const
+   .. cpp:function:: Int MemorySize() const
 
       Return the number of entries of type `T` that this :cpp:type:`Matrix\<T>`
       instance has allocated space for.
 
-   .. cpp:function:: int DiagonalLength( int offset=0 ) const
+   .. cpp:function:: Int DiagonalLength( Int offset=0 ) const
 
       Return the length of the specified diagonal of the matrix: an offset of 
       :math:`0` refers to the main diagonal, an offset of :math:`1` refers to 
@@ -192,8 +188,8 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       Return a pointer to the (immutable) underlying buffer.
 
-   .. cpp:function:: T* Buffer( int i, int j )
-   .. cpp:function:: const T* LockedBuffer( int i, int j ) const
+   .. cpp:function:: T* Buffer( Int i, Int j )
+   .. cpp:function:: const T* LockedBuffer( Int i, Int j ) const
 
       Return a pointer to the (immutable) portion of the buffer that holds entry
       :math:`(i,j)`.
@@ -213,107 +209,107 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
    .. rubric:: Single-entry manipulation
 
-   .. cpp:function:: T Get( int i, int j ) const
-   .. cpp:function:: Base<T> GetRealPart( int i, int j ) const
-   .. cpp:function:: Base<T> GetImagPart( int i, int j ) const
+   .. cpp:function:: T Get( Int i, Int j ) const
+   .. cpp:function:: Base<T> GetRealPart( Int i, Int j ) const
+   .. cpp:function:: Base<T> GetImagPart( Int i, Int j ) const
 
       Return entry :math:`(i,j)` (or its real or imaginary part).
 
-   .. cpp:function:: void Set( int i, int j, T alpha )
-   .. cpp:function:: void SetRealPart( int i, int j, Base<T> alpha )
-   .. cpp:function:: void SetImagPart( int i, int j, Base<T> alpha )
+   .. cpp:function:: void Set( Int i, Int j, T alpha )
+   .. cpp:function:: void SetRealPart( Int i, Int j, Base<T> alpha )
+   .. cpp:function:: void SetImagPart( Int i, Int j, Base<T> alpha )
 
       Set entry :math:`(i,j)` (or its real or imaginary part) to :math:`\alpha`.
 
-   .. cpp:function:: void Update( int i, int j, T alpha )
-   .. cpp:function:: void UpdateRealPart( int i, int j, Base<T> alpha )
-   .. cpp:function:: void UpdateImagPart( int i, int j, Base<T> alpha ) 
+   .. cpp:function:: void Update( Int i, Int j, T alpha )
+   .. cpp:function:: void UpdateRealPart( Int i, Int j, Base<T> alpha )
+   .. cpp:function:: void UpdateImagPart( Int i, Int j, Base<T> alpha ) 
 
       Add :math:`\alpha` to entry :math:`(i,j)` (or its real or imaginary part).
 
-   .. cpp:function:: void MakeReal( int i, int j )
+   .. cpp:function:: void MakeReal( Int i, Int j )
  
       Force the :math:`(i,j)` entry to be real.
 
-   .. cpp:function:: void Conjugate( int i, int j )
+   .. cpp:function:: void Conjugate( Int i, Int j )
 
       Conjugate the :math:`(i,j)` entry of the matrix.
 
    .. rubric:: Diagonal manipulation
 
-   .. cpp:function:: void GetDiagonal( Matrix<T>& d, int offset=0 ) const
-   .. cpp:function:: void GetRealPartOfDiagonal( Matrix<Base<T>>& d, int offset=0 ) const
-   .. cpp:function:: void GetImagPartOfDiagonal( Matrix<Base<T>>& d, int offset=0 ) const
+   .. cpp:function:: void GetDiagonal( Matrix<T>& d, Int offset=0 ) const
+   .. cpp:function:: void GetRealPartOfDiagonal( Matrix<Base<T>>& d, Int offset=0 ) const
+   .. cpp:function:: void GetImagPartOfDiagonal( Matrix<Base<T>>& d, Int offset=0 ) const
 
       Modify :math:`d` into a column-vector containing the entries (or their 
       real or imaginary parts) lying on the `offset` diagonal of our matrix 
       (for instance, the main diagonal has offset :math:`0`, the subdiagonal 
       has offset :math:`-1`, and the superdiagonal has offset :math:`+1`).
 
-   .. cpp:function:: Matrix<T> GetDiagonal( int offset=0 ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
+   .. cpp:function:: Matrix<T> GetDiagonal( Int offset=0 ) const
+   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( Int offset=0 ) const
+   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( Int offset=0 ) const
 
       Efficiently construct and return the particular diagonal 
       (or its real or imaginary part) via C++11 move semantics.
 
-   .. cpp:function:: void SetDiagonal( const Matrix<T>& d, int offset=0 )
-   .. cpp:function:: void SetRealPartOfDiagonal( const Matrix<Base<T>>& d, int offset=0 )
-   .. cpp:function:: void SetImagPartOfDiagonal( const Matrix<Base<T>>& d, int offset=0 )
+   .. cpp:function:: void SetDiagonal( const Matrix<T>& d, Int offset=0 )
+   .. cpp:function:: void SetRealPartOfDiagonal( const Matrix<Base<T>>& d, Int offset=0 )
+   .. cpp:function:: void SetImagPartOfDiagonal( const Matrix<Base<T>>& d, Int offset=0 )
 
       Set the entries (or their real or imaginary parts) in the `offset` 
       diagonal entries from the contents of the column-vector :math:`d`.
 
-   .. cpp:function:: void UpdateDiagonal( const Matrix<T>& d, int offset=0 )
-   .. cpp:function:: void UpdateRealPartOfDiagonal( const Matrix<Base<T>>& d, int offset=0 )
-   .. cpp:function:: void UpdateImagPartOfDiagonal( const Matrix<Base<T>>& d, int offset=0 )
+   .. cpp:function:: void UpdateDiagonal( const Matrix<T>& d, Int offset=0 )
+   .. cpp:function:: void UpdateRealPartOfDiagonal( const Matrix<Base<T>>& d, Int offset=0 )
+   .. cpp:function:: void UpdateImagPartOfDiagonal( const Matrix<Base<T>>& d, Int offset=0 )
 
       Add the contents of :math:`d` onto the entries (or the real or imaginary 
       parts) in the `offset` diagonal.
 
-   .. cpp:function:: void MakeDiagonalReal( int offset=0 )
+   .. cpp:function:: void MakeDiagonalReal( Int offset=0 )
 
       Force the specified diagonal of the matrix to be real.
 
-   .. cpp:function:: void ConjugateDiagonal( int offset=0 )
+   .. cpp:function:: void ConjugateDiagonal( nt offset=0 )
 
       Conjugate the specified diagonal of the matrix. 
 
    .. rubric:: Arbitrary-submatrix manipulation
 
-   .. cpp:function:: void GetSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<T>& ASub ) const
-   .. cpp:function:: void GetRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<Base<T>>& ASub ) const
-   .. cpp:function:: void GetImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Matrix<Base<T>>& ASub ) const
+   .. cpp:function:: void GetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Matrix<T>& ASub ) const
+   .. cpp:function:: void GetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Matrix<Base<T>>& ASub ) const
+   .. cpp:function:: void GetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Matrix<Base<T>>& ASub ) const
 
       Return the submatrix (or its real or imaginary part) with the specified 
       row and column indices via `ASub`.
 
-   .. cpp:function:: Matrix<T> GetSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
-   .. cpp:function:: Matrix<Base<T>> GetImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd ) const
+   .. cpp:function:: Matrix<T> GetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd ) const
+   .. cpp:function:: Matrix<Base<T>> GetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd ) const
+   .. cpp:function:: Matrix<Base<T>> GetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd ) const
 
       Return the submatrix (or its real or imaginary part) with the specified
       row and column indices via C++11 move semantics.
 
-   .. cpp:function:: void SetSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<T>& ASub )
-   .. cpp:function:: void SetRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void SetImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void SetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const Matrix<T>& ASub )
+   .. cpp:function:: void SetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void SetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const Matrix<Base<T>>& ASub )
 
       Set the submatrix (or its real or imaginary part) with the specified 
       row and column indices equal to the matrix `ASub`.
 
-   .. cpp:function:: void UpdateSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, T alpha, const Matrix<T>& ASub )
-   .. cpp:function:: void UpdateRealPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void UpdateImagPartOfSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void UpdateSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, T alpha, const Matrix<T>& ASub )
+   .. cpp:function:: void UpdateRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void UpdateImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const Matrix<Base<T>>& ASub )
 
       Update the submatrix (or its real or imaginary part) with the specified
       row and column indices with `alpha` times `ASub`.
 
-   .. cpp:function:: void MakeSubmatrixReal( const std::vector<int>& rowInd, const std::vector<int>& colInd )
+   .. cpp:function:: void MakeSubmatrixReal( const std::vector<Int>& rowInd, const std::vector<Int>& colInd )
 
       Force the submatrix with the specified row and column indices to be real.
 
-   .. cpp:function:: void ConjugateSubmatrix( const std::vector<int>& rowInd, const std::vector<int>& colInd )
+   .. cpp:function:: void ConjugateSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd )
 
       Conjugate the entries in the submatrix with the specified row and column
       indices.
@@ -337,7 +333,7 @@ cases of :cpp:type:`Matrix\<T>`.
 
    Used to denote that the underlying datatype `F` is a field.
 
-.. cpp:type:: class Matrix<int>
+.. cpp:type:: class Matrix<Int>
 
    When the underlying datatype is a signed integer.
 

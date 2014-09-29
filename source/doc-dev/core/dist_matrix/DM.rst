@@ -71,11 +71,11 @@ process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossCom
 
    .. rubric:: Constructors and destructors
 
-   .. cpp:function:: DistMatrix( const Grid& grid=DefaultGrid(), int root=0 )
+   .. cpp:function:: DistMatrix( const Grid& grid=DefaultGrid(), Int root=0 )
 
       Construct an empty (:math:`0 \times 0`) distributed matrix.
 
-   .. cpp:function:: DistMatrix( int height, int width, const Grid& grid=DefaultGrid(), int root=0 )
+   .. cpp:function:: DistMatrix( Int height, Int width, const Grid& grid=DefaultGrid(), Int root=0 )
 
       Create a `height` :math:`\times` `width` distributed matrix.
 
@@ -624,22 +624,22 @@ cases of :cpp:type:`DistMatrix\<T,U,V>`.
 
    The underlying datatype, `F`, is a field.
 
-.. cpp:type:: DistMatrix<int,U,V>
-.. cpp:type:: DistMatrix<int>
-.. cpp:type:: DistMatrix<int,CIRC,CIRC>
-.. cpp:type:: DistMatrix<int,MC,MR>
-.. cpp:type:: DistMatrix<int,MC,STAR>
-.. cpp:type:: DistMatrix<int,MD,STAR>
-.. cpp:type:: DistMatrix<int,MR,MC>
-.. cpp:type:: DistMatrix<int,MR,STAR>
-.. cpp:type:: DistMatrix<int,STAR,MC>
-.. cpp:type:: DistMatrix<int,STAR,MD>
-.. cpp:type:: DistMatrix<int,STAR,MR>
-.. cpp:type:: DistMatrix<int,STAR,STAR>
-.. cpp:type:: DistMatrix<int,STAR,VC>
-.. cpp:type:: DistMatrix<int,STAR,VR>
-.. cpp:type:: DistMatrix<int,VC,STAR>
-.. cpp:type:: DistMatrix<int,VR,STAR>
+.. cpp:type:: DistMatrix<Int,U,V>
+.. cpp:type:: DistMatrix<Int>
+.. cpp:type:: DistMatrix<Int,CIRC,CIRC>
+.. cpp:type:: DistMatrix<Int,MC,MR>
+.. cpp:type:: DistMatrix<Int,MC,STAR>
+.. cpp:type:: DistMatrix<Int,MD,STAR>
+.. cpp:type:: DistMatrix<Int,MR,MC>
+.. cpp:type:: DistMatrix<Int,MR,STAR>
+.. cpp:type:: DistMatrix<Int,STAR,MC>
+.. cpp:type:: DistMatrix<Int,STAR,MD>
+.. cpp:type:: DistMatrix<Int,STAR,MR>
+.. cpp:type:: DistMatrix<Int,STAR,STAR>
+.. cpp:type:: DistMatrix<Int,STAR,VC>
+.. cpp:type:: DistMatrix<Int,STAR,VR>
+.. cpp:type:: DistMatrix<Int,VC,STAR>
+.. cpp:type:: DistMatrix<Int,VR,STAR>
 
    The underlying datatype is a signed integer (of standard size).
 

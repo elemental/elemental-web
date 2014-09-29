@@ -2,7 +2,7 @@ FLAME-like partition tracking
 =============================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    flame-part/partition
    flame-part/repartition

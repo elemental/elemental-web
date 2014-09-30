@@ -8,11 +8,11 @@ the submatrices cannot be modified.
 .. toctree::
    :maxdepth: 1
 
-   partition/Down
-   partition/Up
-   partition/Right
-   partition/Left
-   partition/DownDiag
-   partition/DownOffsetDiag
-   partition/UpDiag
-   partition/UpOffsetDiag
+   Partition/Down
+   Partition/Up
+   Partition/Right
+   Partition/Left
+   Partition/DownDiag
+   Partition/DownOffsetDiag
+   Partition/UpDiag
+   Partition/UpOffsetDiag

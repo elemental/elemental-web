@@ -16,6 +16,6 @@ assumption.
 .. toctree::
    :maxdepth: 1
 
-   merge/OneByTwo
-   merge/TwoByOne
-   merge/TwoByTwo
+   Merge/OneByTwo
+   Merge/TwoByOne
+   Merge/TwoByTwo

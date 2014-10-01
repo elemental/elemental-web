@@ -10,7 +10,7 @@ Core functionality
    core/matrix
    core/grid
    core/dist_matrix
-   core/view
+   core/View
    core/proxies
    core/flame-part
    core/axpy_interface

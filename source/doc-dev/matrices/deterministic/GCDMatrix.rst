@@ -27,3 +27,8 @@ C API
 .. c:function:: ElError ElGCDMatrixDist_d( ElDistMatrix_d G, ElInt m, ElInt n )
 .. c:function:: ElError ElGCDMatrixDist_c( ElDistMatrix_c G, ElInt m, ElInt n )
 .. c:function:: ElError ElGCDMatrixDist_z( ElDistMatrix_z G, ElInt m, ElInt n )
+
+Python API
+----------
+
+.. py:function:: GCDMatrix(G,m,n)

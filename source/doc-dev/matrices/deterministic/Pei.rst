@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElPeiDist_d( ElDistMatrix_d P, ElInt n, double alpha )
 .. c:function:: ElError ElPeiDist_c( ElDistMatrix_c P, ElInt n, complex_float alpha )
 .. c:function:: ElError ElPeiDist_z( ElDistMatrix_z P, ElInt n, complex_double alpha )
+
+Python API
+----------
+
+.. py:function:: Pei(P,n,alpha)

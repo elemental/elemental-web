@@ -21,3 +21,8 @@ C API
 .. c:function:: ElError ElZerosDist_d( ElDistMatrix_d A, ElInt m, ElInt n )
 .. c:function:: ElError ElZerosDist_c( ElDistMatrix_c A, ElInt m, ElInt n )
 .. c:function:: ElError ElZerosDist_z( ElDistMatrix_z A, ElInt m, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Zeros(A,m,n)

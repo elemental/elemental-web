@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElTriWDist_d( ElDistMatrix_d A, ElInt n, double alpha, ElInt k )
 .. c:function:: ElError ElTriWDist_c( ElDistMatrix_c A, ElInt n, complex_float alpha, ElInt k )
 .. c:function:: ElError ElTriWDist_z( ElDistMatrix_z A, ElInt n, complex_double alpha, ElInt k )
+
+Python API
+----------
+
+.. py:function:: TriW(A,n,alpha,k)

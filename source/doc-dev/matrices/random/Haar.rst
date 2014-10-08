@@ -41,3 +41,9 @@ C API
 .. c:function:: ElError ElImplicitHaarDist_d( ElDistMatrix_d A, ElDistMatrix_d t, ElDistMatrix_d d, ElInt n )
 .. c:function:: ElError ElImplicitHaarDist_c( ElDistMatrix_c A, ElDistMatrix_c t, ElDistMatrix_s d, ElInt n )
 .. c:function:: ElError ElImplicitHaarDist_z( ElDistMatrix_z A, ElDistMatrix_z t, ElDistMatrix_d d, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Haar(A,n)
+.. py:function:: ImplicitHaar(A,t,d,n)

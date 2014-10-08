@@ -26,3 +26,8 @@ C API
 .. c:function:: ElError ElKMSDist_d( ElDistMatrix_d K, ElInt n, double rho )
 .. c:function:: ElError ElKMSDist_c( ElDistMatrix_c K, ElInt n, complex_float rho )
 .. c:function:: ElError ElKMSDist_z( ElDistMatrix_z K, ElInt n, complex_double rho )
+
+Python API
+----------
+
+.. py:function:: KMS(K,n,rho)

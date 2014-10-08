@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElNormalFromEVD_z( ElMatrix_z A, ElConstMatrix_z w, ElConstMatrix_z Z )
 .. c:function:: ElError ElNormalFromEVDDist_c( ElDistMatrix_c A, ElConstDistMatrix_c w, ElConstDistMatrix_c Z )
 .. c:function:: ElError ElNormalFromEVDDist_z( ElDistMatrix_z A, ElConstDistMatrix_z w, ElConstDistMatrix_z Z )
+
+Python API
+----------
+
+.. py:function:: NormalFromEVD(A,w,Z)

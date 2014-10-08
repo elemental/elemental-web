@@ -25,3 +25,8 @@ C API
 .. c:function:: ElError ElUniformDist_d( ElDistMatrix_d A, ElInt m, ElInt n, double center, double radius )
 .. c:function:: ElError ElUniformDist_c( ElDistMatrix_c A, ElInt m, ElInt n, complex_float center, float radius )
 .. c:function:: ElError ElUniformDist_z( ElDistMatrix_z A, ElInt m, ElInt n, complex_double center, double radius )
+
+Python API
+----------
+
+.. py:function:: Uniform(A,m,n,center=0,radius=1)

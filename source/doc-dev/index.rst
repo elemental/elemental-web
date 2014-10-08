@@ -12,8 +12,8 @@ Elemental's development documentation
    intro
    build
    core
-   blas-like
-   lapack-like
+   blas_like
+   lapack_like
    optimization
    control
    matrices

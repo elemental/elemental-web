@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElGKSDist_d( ElDistMatrix_d A, ElInt n )
 .. c:function:: ElError ElGKSDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElGKSDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: GKS(A,n)

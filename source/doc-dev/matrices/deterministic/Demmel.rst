@@ -30,3 +30,8 @@ C API
 .. c:function:: ElError ElDemmelDist_d( ElDistMatrix_d A, ElInt n )
 .. c:function:: ElError ElDemmelDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElDemmelDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Demmel(A,n)

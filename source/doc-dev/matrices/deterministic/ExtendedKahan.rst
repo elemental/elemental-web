@@ -28,3 +28,8 @@ C API
 .. c:function:: ElError ElExtendedKahanDist_d( ElDistMatrix_d A, ElInt k, double phi, double mu )
 .. c:function:: ElError ElExtendedKahanDist_c( ElDistMatrix_c A, ElInt k, float phi, float mu )
 .. c:function:: ElError ElExtendedKahanDist_z( ElDistMatrix_z A, ElInt k, double phi, double mu )
+
+Python API
+----------
+
+.. py:function:: ExtendedKahan(A,k,phi,mu)

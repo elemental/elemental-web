@@ -48,3 +48,10 @@ C API
 .. c:function:: ElError ElHelmholtzPML3DDist_z( ElDistMatrix_z H, ElInt nx, ElInt ny, ElInt nz, complex_double omega, ElInt numPmlPoints, double sigma, double pmlExp )
 
    3D Helmholtz
+
+Python API
+----------
+
+.. py:function:: HelmholtzPML1D(H,nx,omega,numPmlPoints,sigma,pmlExp)
+.. py:function:: HelmholtzPML2D(H,nx,ny,omega,numPmlPoints,sigma,pmlExp)
+.. py:function:: HelmholtzPML3D(H,nx,ny,nz,omega,numPmlPoints,sigma,pmlExp)

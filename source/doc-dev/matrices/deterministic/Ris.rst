@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElRisDist_d( ElDistMatrix_d R, ElInt n )
 .. c:function:: ElError ElRisDist_c( ElDistMatrix_c R, ElInt n )
 .. c:function:: ElError ElRisDist_z( ElDistMatrix_z R, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Ris(R,n)

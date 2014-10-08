@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElOneTwoOneDist_d( ElDistMatrix_d A, ElInt n )
 .. c:function:: ElError ElOneTwoOneDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElOneTwoOneDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: OneTwoOne(A,n)

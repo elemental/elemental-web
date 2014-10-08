@@ -26,3 +26,7 @@ C API
 .. c:function:: ElError ElHatanoNelsonDist_c( ElDistMatrix_c A, ElInt n, complex_float center, float radius, complex_float g, bool periodic )
 .. c:function:: ElError ElHatanoNelsonDist_z( ElDistMatrix_z A, ElInt n, complex_double center, double radius, complex_double g, bool periodic )
 
+Python API
+----------
+
+.. py:function:: HatanoNelson(A,n,center,radius,g,periodic=True)

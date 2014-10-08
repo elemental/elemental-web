@@ -58,3 +58,10 @@ C API
 .. c:function:: ElError ElEhrenfestDecayDist_d( ElDistMatrix_d A, ElInt n )
 .. c:function:: ElError ElEhrenfestDecayDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElEhrenfestDecayDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Ehrenfest(P,n)
+.. py:function:: EhrenfestStationary(PInf,n)
+.. py:function:: EhrenfestDecay(A,n)

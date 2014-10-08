@@ -26,3 +26,8 @@ C API
 .. c:function:: ElError ElHermitianFromEVDDist_d( ElUpperOrLower uplo, ElDistMatrix_d A, ElConstDistMatrix_d w, ElConstDistMatrix_d Z )
 .. c:function:: ElError ElHermitianFromEVDDist_c( ElUpperOrLower uplo, ElDistMatrix_c A, ElConstDistMatrix_s w, ElConstDistMatrix_c Z )
 .. c:function:: ElError ElHermitianFromEVDDist_z( ElUpperOrLower uplo, ElDistMatrix_z A, ElConstDistMatrix_d w, ElConstDistMatrix_z Z )
+
+Python API
+----------
+
+.. py:function:: HermitianFromEVD(uplo,A,w,Z)

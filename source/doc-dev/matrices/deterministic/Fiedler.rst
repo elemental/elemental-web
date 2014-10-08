@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElFiedlerDist_d( ElDistMatrix_d A, ElInt cSize, double* cBuf )
 .. c:function:: ElError ElFiedlerDist_c( ElDistMatrix_c A, ElInt cSize, complex_float* cBuf )
 .. c:function:: ElError ElFiedlerDist_z( ElDistMatrix_z A, ElInt cSize, complex_double* cBuf )
+
+Python API
+----------
+
+.. py:function:: Fiedler(A,c)

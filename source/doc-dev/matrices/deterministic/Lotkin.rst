@@ -21,3 +21,8 @@ C API
 .. c:function:: ElError ElLotkinDist_d( ElDistMatrix_d A, ElInt n )
 .. c:function:: ElError ElLotkinDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElLotkinDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Lotkin(A,n)

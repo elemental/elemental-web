@@ -17,3 +17,8 @@ C API
 .. c:function:: ElError ElNormalUniformSpectrum_z( ElMatrix_z A, ElInt n, complex_double center, double radius )
 .. c:function:: ElError ElNormalUniformSpectrumDist_c( ElDistMatrix_c A, ElInt n, complex_float center, float radius )
 .. c:function:: ElError ElNormalUniformSpectrumDist_z( ElDistMatrix_z A, ElInt n, complex_double center, double radius )
+
+Python API
+----------
+
+.. py:function:: NormalUniformSpectrum(A,n,center=0,radius=1)

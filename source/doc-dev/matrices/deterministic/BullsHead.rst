@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElBullsHead_z( ElMatrix_z A, ElInt n )
 .. c:function:: ElError ElBullsHeadDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElBullsHeadDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: BullsHead(A,n)

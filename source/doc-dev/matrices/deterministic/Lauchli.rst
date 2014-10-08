@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElLauchliDist_d( ElDistMatrix_d A, ElInt n, double mu )
 .. c:function:: ElError ElLauchliDist_c( ElDistMatrix_c A, ElInt n, complex_float mu )
 .. c:function:: ElError ElLauchliDist_z( ElDistMatrix_z A, ElInt n, complex_double mu )
+
+Python API
+----------
+
+.. py:function:: Lauchli(A,n,mu)

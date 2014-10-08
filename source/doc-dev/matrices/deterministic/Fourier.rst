@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElFourier_z( ElMatrix_z A, ElInt n )
 .. c:function:: ElError ElFourierDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElFourierDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Fourier(A,n)

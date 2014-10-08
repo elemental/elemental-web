@@ -55,3 +55,10 @@ C API
 .. c:function:: ElError ElHelmholtz3DDist_z( ElDistMatrix_z H, ElInt nx, ElInt ny, ElInt nz, complex_double shift )
 
    3D Helmholtz
+
+Python API
+----------
+
+.. py:function:: Helmholtz1D(H,nx,shift)
+.. py:function:: Helmholtz2D(H,nx,ny,shift)
+.. py:function:: Helmholtz3D(H,nx,ny,nz,shift)

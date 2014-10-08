@@ -30,3 +30,8 @@ C API
 .. c:function:: ElError ElHanowaDist_d( ElDistMatrix_d A, ElInt n, double mu )
 .. c:function:: ElError ElHanowaDist_c( ElDistMatrix_c A, ElInt n, complex_float mu )
 .. c:function:: ElError ElHanowaDist_z( ElDistMatrix_z A, ElInt n, complex_double mu )
+
+Python API
+----------
+
+.. py:function:: Hanowa(A,n,mu)

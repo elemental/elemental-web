@@ -32,3 +32,8 @@ C API
 .. c:function:: ElError ElLehmerDist_d( ElDistMatrix_d L, ElInt n )
 .. c:function:: ElError ElLehmerDist_c( ElDistMatrix_c L, ElInt n )
 .. c:function:: ElError ElLehmerDist_z( ElDistMatrix_z L, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Lehmer(L,n)

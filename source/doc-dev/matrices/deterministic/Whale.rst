@@ -23,3 +23,8 @@ C API
 .. c:function:: ElError ElWhale_z( ElMatrix_z A, ElInt n )
 .. c:function:: ElError ElWhaleDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElWhaleDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Whale(A,n)

@@ -27,3 +27,8 @@ C API
 .. c:function:: ElError ElDiagonalDist_d( ElDistMatrix_d A, ElInt dSize, double* dBuf )
 .. c:function:: ElError ElDiagonalDist_c( ElDistMatrix_c A, ElInt dSize, complex_float* dBuf )
 .. c:function:: ElError ElDiagonalDist_z( ElDistMatrix_z A, ElInt dSize, complex_double* dBuf )
+
+Python API
+----------
+
+.. py:function:: Diagonal(A,d)

@@ -7,7 +7,7 @@
         <div id="products">
           <div class="slides_container">
             <div class="slide">
-              <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectra.cpp">
+              <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Pseudospectra.cpp">
               <img src="/_static/images/featured/trefethen-12.5.png" width="282" height="282" alt="Contours of log resolvent norm of Trefethen-Embree matrix of size 20,000">
               </a>
               <div class="caption">
@@ -15,7 +15,7 @@
               </div>
             </div>
             <div class="slide">
-              <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectra.cpp">
+              <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Pseudospectra.cpp">
               <img src="/_static/images/featured/uniform-pseudo.png" width="282" height="282" alt="Discrete pseudospectra">
               </a>
               <div class="caption">
@@ -23,7 +23,7 @@
               </div>
             </div>
             <div class="slide">
-              <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack-like/Pseudospectra.cpp">
+              <a href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Pseudospectra.cpp">
               <img src="/_static/images/featured/uniform-pseudo-count.png" width="282" height="282" alt="Lanczos iteration counts">
               </a>
               <div class="caption">

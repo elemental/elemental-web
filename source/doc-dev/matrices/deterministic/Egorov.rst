@@ -20,3 +20,8 @@ C API
 .. c:function:: ElError ElEgorov_z( ElMatrix_z A, double (*phase)(ElInt,ElInt), ElInt n )
 .. c:function:: ElError ElEgorovDist_c( ElDistMatrix_c A, float (*phase)(ElInt,ElInt), ElInt n )
 .. c:function:: ElError ElEgorovDist_z( ElDistMatrix_z A, double (*phase)(ElInt,ElInt), ElInt n )
+
+Python API
+----------
+
+.. py:function:: Egorov(A,phase,n)

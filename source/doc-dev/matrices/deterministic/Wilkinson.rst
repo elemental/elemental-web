@@ -28,3 +28,8 @@ C API
 .. c:function:: ElError ElWilkinsonDist_d( ElDistMatrix_d W, ElInt k )
 .. c:function:: ElError ElWilkinsonDist_c( ElDistMatrix_c W, ElInt k )
 .. c:function:: ElError ElWilkinsonDist_z( ElDistMatrix_z W, ElInt k )
+
+Python API
+----------
+
+.. py:function:: Wilkinson(W,k)

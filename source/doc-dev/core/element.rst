@@ -16,8 +16,10 @@ C++ API
 C API
 """""
 
-.. c:function:: ElError ElRealPart_c( complex_float alpha, float* result )
-.. c:function:: ElError ElRealPart_z( complex_double alpha, double* result )
+.. note::
+
+   Since C does not support generic programming, it is best to directly
+   manipulate the structure for complex data.
 
 Set the real/imaginary part of an element
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -36,8 +38,10 @@ C++ API
 C API
 """""
 
-.. c:function:: ElError ElSetRealPart_c( complex_float* alpha, float* result )
-.. c:function:: ElError ElSetRealPart_z( complex_double* alpha, double* result )
+.. note::
+
+   Since C does not support generic programming, it is best to directly
+   manipulate the structure for complex data.
 
 Update the real/imaginary part of an element
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -56,8 +60,10 @@ C++ API
 C API
 """""
 
-.. c:function:: ElError ElUpdateRealPart_c( complex_float* alpha, float* result )
-.. c:function:: ElError ElUpdateRealPart_z( complex_double* alpha, double* result )
+.. note::
+
+   Since C does not support generic programming, it is best to directly
+   manipulate the structure for complex data.
 
 Conjugate an element
 ^^^^^^^^^^^^^^^^^^^^
@@ -70,8 +76,10 @@ C++ API
 C API
 """""
 
-.. c:function:: ElError ElConj_c( complex_float alpha, complex_float* result )
-.. c:function:: ElError ElConj_z( complex_double alpha, complex_double* result )
+.. note::
+
+   Since C does not support generic programming, it is best to directly
+   manipulate the structure for complex data.
 
 Return the complex argument
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

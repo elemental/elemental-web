@@ -386,11 +386,31 @@ prototype *does* depend upon the particular matrix distribution.
 
       Conjugate the specified diagonal.
 
+   .. cpp:function:: void GetDiagonal( AbstractDistMatrix<T>& d, Int offset=0 ) const
+   .. cpp:function:: void GetRealPartOfDiagonal( AbstractDistMatrix<Base<T>>& d, Int offset=0 ) const
+   .. cpp:function:: void GetImagPartOfDiagonal( AbstractDistMatrix<Base<T>>& d, Int offset=0 ) const
+
+      Extracts either the (possibly real or complex portion of the) diagonal
+
+   .. cpp:function:: void SetDiagonal( const AbstractDistMatrix<T>& d, Int offset=0 )
+   .. cpp:function:: void SetRealPartOfDiagonal( const AbstractDistMatrix<Base<T>>& d, Int offset=0 ) 
+   .. cpp:function:: void SetImagPartOfDiagonal( const AbstractDistMatrix<Base<T>>& d, Int offset=0 )
+
+      Sets the (possibly real or complex portion of the) diagonal to the 
+      specified vector, :math:`d`
+
+   .. cpp:function:: void UpdateDiagonal( T alpha, const AbstractDistMatrix<T>& d, Int offset=0 )
+   .. cpp:function:: void UpdateRealPartOfDiagonal( Base<T> alpha, const AbstractDistMatrix<Base<T>>& d, Int offset=0 ) 
+   .. cpp:function:: void UpdateImagPartOfDiagonal( Base<T> alpha, const AbstractDistMatrix<Base<T>>& d, Int offset=0 )
+
+      Updates the (possibly real or complex portion of the) diagonal by
+      adding :math:`\alpha d`
+
    .. rubric:: Arbitrary-submatrix manipulation (global)
 
-   .. cpp:function:: void GetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, DistMatrix<T,STAR,STAR>& ASub ) const
-   .. cpp:function:: void GetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, DistMatrix<Base<T>,STAR,STAR>& ASub ) const
-   .. cpp:function:: void GetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, DistMatrix<Base<T>,STAR,STAR>& ASub ) const
+   .. cpp:function:: void GetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, AbstractDistMatrix<T>& ASub ) const
+   .. cpp:function:: void GetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, AbstractDistMatrix<Base<T>>& ASub ) const
+   .. cpp:function:: void GetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, AbstractDistMatrix<Base<T>>& ASub ) const
 
       Return the submatrix (or its real or imaginary part) with the specified
       row and column indices via `ASub`.
@@ -402,16 +422,16 @@ prototype *does* depend upon the particular matrix distribution.
       Return the submatrix (or its real or imaginary part) with the specified
       row and column indices via C++11 move semantics.
 
-   .. cpp:function:: void SetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const DistMatrix<T,STAR,STAR>& ASub )
-   .. cpp:function:: void SetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const DistMatrix<Base<T>,STAR,STAR>& ASub )
-   .. cpp:function:: void SetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const DistMatrix<Base<T>,STAR,STAR>& ASub )
+   .. cpp:function:: void SetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const AbstractDistMatrix<T>& ASub )
+   .. cpp:function:: void SetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const AbstractDistMatrix<Base<T>>& ASub )
+   .. cpp:function:: void SetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const AbstractDistMatrix<Base<T>>& ASub )
 
       Set the submatrix (or its real or imaginary part) with the specified
       row and column indices equal to the matrix `ASub`.
 
-   .. cpp:function:: void UpdateSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, T alpha, const DistMatrix<T,STAR,STAR>& ASub )
-   .. cpp:function:: void UpdateRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const DistMatrix<Base<T>,STAR,STAR>& ASub )
-   .. cpp:function:: void UpdateImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const DistMatrix<Base<T>,STAR,STAR>& ASub )
+   .. cpp:function:: void UpdateSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, T alpha, const AbstractDistMatrix<T>& ASub )
+   .. cpp:function:: void UpdateRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const AbstractDistMatrix<Base<T>>& ASub )
+   .. cpp:function:: void UpdateImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const AbstractDistMatrix<Base<T>>& ASub )
 
       Update the submatrix (or its real or imaginary part) with the specified
       row and column indices with `alpha` times `ASub`.

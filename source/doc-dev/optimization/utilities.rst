@@ -8,6 +8,7 @@ non-trivial implementations.
    :maxdepth: 1
 
    utilities/Clip
+   utilities/Coherence
    utilities/Covariance
    utilities/FrobeniusProx
    utilities/HingeLossProx

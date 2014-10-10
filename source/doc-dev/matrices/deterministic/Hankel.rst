@@ -29,3 +29,8 @@ C API
 .. c:function:: ElError ElHankelDist_d( ElDistMatrix_d A, ElInt m, ElInt n, ElInt aSize, double* aBuf )
 .. c:function:: ElError ElHankelDist_c( ElDistMatrix_c A, ElInt m, ElInt n, ElInt aSize, complex_float* aBuf )
 .. c:function:: ElError ElHankelDist_z( ElDistMatrix_z A, ElInt m, ElInt n, ElInt aSize, complex_double* aBuf )
+
+Python API
+----------
+
+.. py:function:: Hankel(A,m,n,a)

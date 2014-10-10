@@ -21,3 +21,8 @@ C API
 .. c:function:: ElError ElUniformHelmholtzGreens_z( ElMatrix_z A, ElInt n, double lambda )
 .. c:function:: ElError ElUniformHelmholtzGreensDist_c( ElDistMatrix_c A, ElInt n, float lambda )
 .. c:function:: ElError ElUniformHelmholtzGreensDist_z( ElDistMatrix_z A, ElInt n, double lambda )
+
+Python API
+----------
+
+.. py:function:: UniformHelmholtzGreens(A,n,lamb)

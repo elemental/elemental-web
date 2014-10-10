@@ -35,3 +35,8 @@ C API
 .. c:function:: ElError ElWalshDist_d( ElDistMatrix_d W, ElInt k, bool binary )
 .. c:function:: ElError ElWalshDist_c( ElDistMatrix_c W, ElInt k, bool binary )
 .. c:function:: ElError ElWalshDist_z( ElDistMatrix_z W, ElInt k, bool binary )
+
+Python API
+----------
+
+.. py:function:: Walsh(W,k,binary=False)

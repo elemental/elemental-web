@@ -27,3 +27,8 @@ C API
 .. c:function:: ElError ElCauchyDist_d( ElDistMatrix_d A, ElInt xSize, double* xBuf, ElInt ySize, double* yBuf )
 .. c:function:: ElError ElCauchyDist_c( ElDistMatrix_c A, ElInt xSize, complex_float* xBuf, ElInt ySize, complex_float* yBuf )
 .. c:function:: ElError ElCauchyDist_z( ElDistMatrix_z A, ElInt xSize, complex_double* xBuf, ElInt ySize, complex_double* yBuf )
+
+Python API
+----------
+
+.. py:function:: Cauchy(A,x,y)

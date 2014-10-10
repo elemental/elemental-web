@@ -415,9 +415,9 @@ prototype *does* depend upon the particular matrix distribution.
       Return the submatrix (or its real or imaginary part) with the specified
       row and column indices via `ASub`.
 
-   .. cpp:function:: DistMatrix<T,STAR,STAR> GetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd ) const
-   .. cpp:function:: DistMatrix<Base<T>,STAR,STAR> GetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd ) const
-   .. cpp:function:: DistMatrix<Base<T>,STAR,STAR> GetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd ) const
+   .. cpp:function:: DistMatrix<T,STAR,STAR> GetSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
+   .. cpp:function:: DistMatrix<Base<T>,STAR,STAR> GetRealPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
+   .. cpp:function:: DistMatrix<Base<T>,STAR,STAR> GetImagPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
 
       Return the submatrix (or its real or imaginary part) with the specified
       row and column indices via C++11 move semantics.
@@ -436,51 +436,51 @@ prototype *does* depend upon the particular matrix distribution.
       Update the submatrix (or its real or imaginary part) with the specified
       row and column indices with `alpha` times `ASub`.
 
-   .. cpp:function:: void MakeSubmatrixReal( const std::vector<Int>& rowInd, const std::vector<Int>& colInd )
+   .. cpp:function:: void MakeSubmatrixReal( const std::vector<Int>& I, const std::vector<Int>& J )
 
       Force the submatrix with the specified row and column indices to be real.
 
-   .. cpp:function:: void ConjugateSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd )
+   .. cpp:function:: void ConjugateSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J )
 
       Conjugate the entries in the submatrix with the specified row and column
       indices.
 
    .. rubric:: Arbitrary-submatrix manipulation (local)
 
-   .. cpp:function:: void GetLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, Matrix<T>& ASub ) const
-   .. cpp:function:: void GetRealPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, Matrix<Base<T>>& ASub ) const
-   .. cpp:function:: void GetImagPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, Matrix<Base<T>>& ASub ) const
+   .. cpp:function:: void GetLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Matrix<T>& ASub ) const
+   .. cpp:function:: void GetRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Matrix<Base<T>>& ASub ) const
+   .. cpp:function:: void GetImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Matrix<Base<T>>& ASub ) const
 
       Return the local submatrix (or its real or imaginary part) with the specified
       row and column indices via `ASub`.
 
-   .. cpp:function:: Matrix<T> GetLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc ) const
-   .. cpp:function:: Matrix<Base<T>> GetImagPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc ) const
+   .. cpp:function:: Matrix<T> GetLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc ) const
+   .. cpp:function:: Matrix<Base<T>> GetRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc ) const
+   .. cpp:function:: Matrix<Base<T>> GetImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc ) const
 
       Return the local submatrix (or its real or imaginary part) with the 
       specified row and column indices via C++11 move semantics.
 
-   .. cpp:function:: void SetLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, const Matrix<T>& ASub )
-   .. cpp:function:: void SetRealPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void SetImagPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void SetLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, const Matrix<T>& ASub )
+   .. cpp:function:: void SetRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void SetImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, const Matrix<Base<T>>& ASub )
 
       Set the local submatrix (or its real or imaginary part) with the specified
       row and column indices equal to the matrix `ASub`.
 
-   .. cpp:function:: void UpdateLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, T alpha, const Matrix<T>& ASub )
-   .. cpp:function:: void UpdateRealPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, Base<T> alpha, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void UpdateImagPartOfLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc, Base<T> alpha, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void UpdateLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, T alpha, const Matrix<T>& ASub )
+   .. cpp:function:: void UpdateRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Base<T> alpha, const Matrix<Base<T>>& ASub )
+   .. cpp:function:: void UpdateImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Base<T> alpha, const Matrix<Base<T>>& ASub )
 
       Update the local submatrix (or its real or imaginary part) with the 
       specified row and column indices with `alpha` times `ASub`.
 
-   .. cpp:function:: void MakeLocalSubmatrixReal( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc )
+   .. cpp:function:: void MakeLocalSubmatrixReal( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc )
 
       Force the local submatrix with the specified row and column indices to be
       real.
 
-   .. cpp:function:: void ConjugateLocalSubmatrix( const std::vector<Int>& rowIndLoc, const std::vector<Int>& colIndLoc )
+   .. cpp:function:: void ConjugateLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc )
 
       Conjugate the entries in the local submatrix with the specified row and 
       column indices.

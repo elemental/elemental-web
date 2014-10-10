@@ -23,3 +23,8 @@ C API
 .. c:function:: ElError ElParterDist_d( ElDistMatrix_d P, ElInt n )
 .. c:function:: ElError ElParterDist_c( ElDistMatrix_c P, ElInt n )
 .. c:function:: ElError ElParterDist_z( ElDistMatrix_z P, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Parter(P,n)

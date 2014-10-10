@@ -29,3 +29,8 @@ C API
 .. c:function:: ElError ElGEPPGrowthDist_d( ElDistMatrix_d A, ElInt n )
 .. c:function:: ElError ElGEPPGrowthDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElGEPPGrowthDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: GEPPGrowth(A,n)

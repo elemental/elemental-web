@@ -34,3 +34,8 @@ C API
 .. c:function:: ElError ElLegendreDist_d( ElDistMatrix_d A, ElInt n )
 .. c:function:: ElError ElLegendreDist_c( ElDistMatrix_c A, ElInt n )
 .. c:function:: ElError ElLegendreDist_z( ElDistMatrix_z A, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Legendre(A,n)

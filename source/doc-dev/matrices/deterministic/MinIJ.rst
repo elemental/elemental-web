@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ELMinIJDist_d( ElDistMatrix_d M, ElInt n )
 .. c:function:: ElError ELMinIJDist_c( ElDistMatrix_c M, ElInt n )
 .. c:function:: ElError ELMinIJDist_z( ElDistMatrix_z M, ElInt n )
+
+Python API
+----------
+
+.. py:function:: MinIJ(M,n)

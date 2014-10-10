@@ -23,3 +23,8 @@ C API
 .. c:function:: ElError ElJordanDist_d( ElDistMatrix_d J, ElInt n, double lambda )
 .. c:function:: ElError ElJordanDist_c( ElDistMatrix_c J, ElInt n, complex_float lambda )
 .. c:function:: ElError ElJordanDist_z( ElDistMatrix_z J, ElInt n, complex_double lambda )
+
+Python API
+----------
+
+.. py:function:: Jordan(J,n,lamb)

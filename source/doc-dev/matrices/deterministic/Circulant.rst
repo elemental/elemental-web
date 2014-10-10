@@ -28,3 +28,8 @@ C API
 .. c:function:: ElError ElCirculantDist_d( ElDistMatrix_d A, ElInt aSize, double* aBuf )
 .. c:function:: ElError ElCirculantDist_c( ElDistMatrix_c A, ElInt aSize, complex_float* aBuf )
 .. c:function:: ElError ElCirculantDist_z( ElDistMatrix_z A, ElInt aSize, complex_double* aBuf )
+
+Python API
+----------
+
+.. py:function:: Circulant(A,a)

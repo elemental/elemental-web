@@ -32,3 +32,8 @@ C API
 .. c:function:: ElError ElKahanDist_d( ElDistMatrix_d A, ElInt n, double phi )
 .. c:function:: ElError ElKahanDist_c( ElDistMatrix_c A, ElInt n, complex_float phi )
 .. c:function:: ElError ElKahanDist_z( ElDistMatrix_z A, ElInt n, complex_double phi )
+
+Python API
+----------
+
+.. py:function:: Kahan(A,n,phi)

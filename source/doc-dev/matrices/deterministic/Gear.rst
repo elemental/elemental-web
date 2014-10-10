@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElGearDist_d( ElDistMatrix_d G, ElInt n, ElInt s, ElInt t )
 .. c:function:: ElError ElGearDist_c( ElDistMatrix_c G, ElInt n, ElInt s, ElInt t )
 .. c:function:: ElError ElGearDist_z( ElDistMatrix_z G, ElInt n, ElInt s, ElInt t )
+
+Python API
+----------
+
+.. py:function:: Gear(G,n,s,t)

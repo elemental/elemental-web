@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElForsytheDist_d( ElDistMatrix_d J, ElInt n, double alpha, double lambda )
 .. c:function:: ElError ElForsytheDist_c( ElDistMatrix_c J, ElInt n, complex_float alpha, complex_float lambda )
 .. c:function:: ElError ElForsytheDist_z( ElDistMatrix_z J, ElInt n, complex_double alpha, complex_double lambda )
+
+Python API
+----------
+
+.. py:function:: Forsythe(J,n,alpha,lamb)

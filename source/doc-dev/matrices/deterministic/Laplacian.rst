@@ -46,3 +46,10 @@ C API
 
    Discrete Laplacian over :math:`[0,1]^2` with :math:`n_x \times n_y`
    grid points
+
+Python API
+----------
+
+.. py:function:: Laplacian1D(L,nx)
+.. py:function:: Laplacian2D(L,nx,ny)
+.. py:function:: Laplacian3D(L,nx,ny,nz)

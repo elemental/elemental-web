@@ -21,3 +21,8 @@ C API
 .. c:function:: ElError ElHermitianUniformSpectrumDist_d( ElDistMatrix_d A, ElInt n, double lower, double upper )
 .. c:function:: ElError ElHermitianUniformSpectrumDist_c( ElDistMatrix_c A, ElInt n, float lower, float upper )
 .. c:function:: ElError ElHermitianUniformSpectrumDist_z( ElDistMatrix_z A, ElInt n, double lower, double upper )
+
+Python API
+----------
+
+.. py:function:: HermitianUniformSpectrum(A,n,lower=0,upper=1)

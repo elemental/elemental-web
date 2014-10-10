@@ -38,3 +38,8 @@ C API
 .. c:function:: ElError ElRedhefferDist_d( ElDistMatrix_d R, ElInt n )
 .. c:function:: ElError ElRedhefferDist_c( ElDistMatrix_c R, ElInt n )
 .. c:function:: ElError ElRedhefferDist_z( ElDistMatrix_z R, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Redheffer(R,n)

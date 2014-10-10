@@ -16,6 +16,7 @@ Deterministic
    deterministic/Fiedler
    deterministic/Forsythe
    deterministic/Fourier
+   deterministic/FourierIdentity
    deterministic/GCDMatrix
    deterministic/Gear
    deterministic/GEPPGrowth

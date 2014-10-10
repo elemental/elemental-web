@@ -29,3 +29,8 @@ C API
 .. c:function:: ElError ElGaussianDist_d( ElDistMatrix_d A, ElInt m, ElInt n, double mean, double stddev )
 .. c:function:: ElError ElGaussianDist_c( ElDistMatrix_c A, ElInt m, ElInt n, complex_float mean, float stddev )
 .. c:function:: ElError ElGaussianDist_z( ElDistMatrix_z A, ElInt m, ElInt n, complex_double mean, double stddev )
+
+Python API
+----------
+
+.. py:function:: Gaussian(A,m,n,mean=0,stddev=1)

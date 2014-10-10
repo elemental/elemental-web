@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElGrcarDist_d( ElDistMatrix_d A, ElInt n, ElInt k )
 .. c:function:: ElError ElGrcarDist_c( ElDistMatrix_c A, ElInt n, ElInt k )
 .. c:function:: ElError ElGrcarDist_z( ElDistMatrix_z A, ElInt n, ElInt k )
+
+Python API
+----------
+
+.. py:function:: Grcar(A,n,k=3)

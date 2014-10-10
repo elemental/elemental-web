@@ -31,3 +31,8 @@ C API
 .. c:function:: ElError ElIdentityDist_d( ElDistMatrix_d A, ElInt m, ElInt n )
 .. c:function:: ElError ElIdentityDist_c( ElDistMatrix_c A, ElInt m, ElInt n )
 .. c:function:: ElError ElIdentityDist_z( ElDistMatrix_z A, ElInt m, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Identity(A,m,n)

@@ -21,3 +21,8 @@ C API
 .. c:function:: ElError ElOnesDist_d( ElDistMatrix_d A, ElInt m, ElInt n )
 .. c:function:: ElError ElOnesDist_c( ElDistMatrix_c A, ElInt m, ElInt n )
 .. c:function:: ElError ElOnesDist_z( ElDistMatrix_z A, ElInt m, ElInt n )
+
+Python API
+----------
+
+.. py:function:: Ones(A,m,n)

@@ -67,3 +67,10 @@ C API
 
    Return the transition matrix with its stationary distribution subtracted
    from each row.
+
+Python API
+----------
+
+.. py:function:: Riffle(P,n)
+.. py:function:: RiffleStationary(PInf,n)
+.. py:function:: RiffleDecay(A,n)

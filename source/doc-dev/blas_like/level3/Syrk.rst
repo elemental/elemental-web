@@ -18,8 +18,8 @@ section for information on tuning the distributed :cpp:func:`Syrk`.
 C++ API
 -------
 
-.. cpp:function:: void Syrk( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, T beta, Matrix<T>& C )
-.. cpp:function:: void Syrk( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, T beta, AbstractDistMatrix<T>& C )
+.. cpp:function:: void Syrk( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, T beta, Matrix<T>& C, bool conjugate=false )
+.. cpp:function:: void Syrk( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, T beta, AbstractDistMatrix<T>& C, bool conjugate=false )
 
 C API
 -----
@@ -32,3 +32,8 @@ C API
 .. c:function:: ElError ElSyrkDist_d( ElUpperOrLower uplo, ElOrientation orientation, double alpha, ElConstDistMatrix_d A, double beta, ElDistMatrix_d C )
 .. c:function:: ElError ElSyrkDist_c( ElUpperOrLower uplo, ElOrientation orientation, complex_float alpha, ElConstDistMatrix_c A, complex_float beta, ElDistMatrix_c C )
 .. c:function:: ElError ElSyrkDist_z( ElUpperOrLower uplo, ElOrientation orientation, complex_double alpha, ElConstDistMatrix_z A, complex_double beta, ElDistMatrix_z C )
+
+Python API
+----------
+
+.. py:function:: Syrk(uplo,orient,alpha,A,beta,C,conjugate=False)

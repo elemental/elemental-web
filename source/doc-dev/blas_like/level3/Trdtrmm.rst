@@ -43,3 +43,9 @@ C API
 .. c:function:: ElError ElTrdtrmmQuasiDist_d( ElUpperOrLower uplo, ElDistMatrix_d A, ElConstDistMatrix_d dOff )
 .. c:function:: ElError ElTrdtrmmQuasiDist_c( ElUpperOrLower uplo, ElDistMatrix_c A, ElConstDistMatrix_c dOff, bool conjugate )
 .. c:function:: ElError ElTrdtrmmQuasiDist_z( ElUpperOrLower uplo, ElDistMatrix_z A, ElConstDistMatrix_z dOff, bool conjugate )
+
+Python API
+----------
+
+.. py:function:: Trdtrmm(uplo,A,conjugate=False)
+.. py:function:: TrdtrmmQuasi(uplo,A,dSub,conjugate=False)

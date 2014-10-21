@@ -52,3 +52,8 @@ C API
 .. c:function:: ElError ElMultiShiftQuasiTrsmDist_d( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, double alpha, ElConstDistMatrix_d A, ElConstDistMatrix_d shifts, ElDistMatrix_d B )
 .. c:function:: ElError ElMultiShiftQuasiTrsmDist_c( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, complex_float alpha, ElConstDistMatrix_c A, ElConstDistMatrix_c shifts, ElDistMatrix_c B )
 .. c:function:: ElError ElMultiShiftQuasiTrsmDist_z( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, complex_double alpha, ElConstDistMatrix_z A, ElConstDistMatrix_z shifts, ElDistMatrix_z B )
+
+Python API
+----------
+
+.. py:function:: MultiShiftQuasiTrsm(side,uplo,orient,alpha,A,shifts,B)

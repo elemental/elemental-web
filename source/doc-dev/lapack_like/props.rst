@@ -8,6 +8,5 @@ Matrix properties
    props/Determinant
    props/Inertia
    props/Norm 
-   props/Pseudospectra
    props/Trace
 

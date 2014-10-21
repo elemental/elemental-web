@@ -1,7 +1,7 @@
 Her2
 ====
 Hermitian rank-two update: implicitly performs 
-:math:`A := \alpha ( x y^H + y x^H ) + A`,
+:math:`A := \alpha x y^H + \bar \alpha y x^H + A`,
 where only the triangle of :math:`A` specified by `uplo` is updated.
 
 C++ API

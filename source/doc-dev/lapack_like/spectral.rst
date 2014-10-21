@@ -4,6 +4,8 @@ Spectral decompositions
 
 `C Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.h>`__
 
+`Python Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.py>`__
+
 .. toctree::
    :maxdepth: 1
 
@@ -19,3 +21,5 @@ Spectral decompositions
    spectral/Schur
 
    spectral/specialized
+
+   spectral/Pseudospectra

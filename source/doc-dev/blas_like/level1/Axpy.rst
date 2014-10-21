@@ -23,3 +23,8 @@ C API
 .. c:function:: ElError ElAxpyDist_d( double alpha, ElConstMatrix_d X, ElMatrix_d Y )
 .. c:function:: ElError ElAxpyDist_c( complex_float alpha, ElConstMatrix_c X, ElMatrix_c Y )
 .. c:function:: ElError ElAxpyDist_z( complex_double alpha, ElConstMatrix_z X, ElMatrix_z Y )
+
+Python API
+----------
+
+.. py:function:: Axpy(alpha,X,Y)

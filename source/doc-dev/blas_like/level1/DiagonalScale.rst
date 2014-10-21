@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElDiagonalScale_d( ElLeftOrRight side, ElConstMatrix_d d, ElMatrix_d X )
 .. c:function:: ElError ElDiagonalScale_c( ElLeftOrRight side, ElOrientation orientation, ElConstMatrix_c d, ElMatrix_c X )
 .. c:function:: ElError ElDiagonalScale_z( ElLeftOrRight side, ElOrientation orientation, ElConstMatrix_z d, ElMatrix_z X )
+
+Python API
+----------
+
+.. py:function:: DiagonalScale(side,d,X)

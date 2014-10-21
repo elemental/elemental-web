@@ -24,3 +24,8 @@ C API
 .. c:function:: ElError ElConjugate_z( ElMatrix_z A )
 .. c:function:: ElError ElConjugateDist_c( ElDistMatrix_c A )
 .. c:function:: ElError ElConjugateDist_z( ElDistMatrix_z A )
+
+Python API
+----------
+
+.. py:function:: Conjugate(A)

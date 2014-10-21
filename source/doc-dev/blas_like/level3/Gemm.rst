@@ -57,3 +57,12 @@ C API
 .. c:function:: ElError ElGemmXDist_d( ElOrientation orientationOfA, ElOrientation orientationOfB, double alpha, ElConstDistMatrix_d A, ElConstDistMatrix_d B, double beta, ElDistMatrix_d C, ElGemmAlgorithm alg )
 .. c:function:: ElError ElGemmXDist_c( ElOrientation orientationOfA, ElOrientation orientationOfB, complex_float alpha, ElConstDistMatrix_c A, ElConstDistMatrix_c B, complex_float beta, ElDistMatrix_c C, ElGemmAlgorithm alg )
 .. c:function:: ElError ElGemmXDist_z( ElOrientation orientationOfA, ElOrientation orientationOfB, complex_double alpha, ElConstDistMatrix_z A, ElConstDistMatrix_z B, complex_double beta, ElDistMatrix_z C, ElGemmAlgorithm alg )
+
+Python API
+----------
+
+.. py:data:: GemmAlgorithm
+
+   An enum which can take the values...**TODO**
+
+.. py:function:: Gemm(orientA,orientB,alpha,A,B,beta,C,alg=GEMM_DEFAULT)

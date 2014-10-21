@@ -10,6 +10,7 @@ Deterministic
    deterministic/Circulant
    deterministic/Demmel
    deterministic/Diagonal
+   deterministic/DruinskyToledo
    deterministic/Egorov
    deterministic/Ehrenfest
    deterministic/ExtendedKahan

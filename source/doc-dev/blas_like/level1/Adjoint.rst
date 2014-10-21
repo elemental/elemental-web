@@ -19,3 +19,8 @@ C API
 .. c:function:: ElError ElAdjoint_z( ElConstMatrix_z A, ElMatrix_z B )
 .. c:function:: ElError ElAdjointDist_c( ElConstDistMatrix_c A, ElDistMatrix_c B )
 .. c:function:: ElError ElAdjointDist_z( ElConstDistMatrix_z A, ElDistMatrix_z B )
+
+Python API
+----------
+
+.. py:function:: Adjoint(A,B)

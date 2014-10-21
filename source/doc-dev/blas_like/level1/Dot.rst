@@ -22,3 +22,8 @@ C API
 .. c:function:: ElError ElDotDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, double* prod )
 .. c:function:: ElError ElDotDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, complex_float* prod )
 .. c:function:: ElError ElDotDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, complex_double* prod )
+
+Python API
+----------
+
+.. py:function:: Dot(A,B)

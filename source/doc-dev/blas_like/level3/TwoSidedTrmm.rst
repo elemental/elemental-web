@@ -26,3 +26,8 @@ C API
 .. c:function:: ElError ElTwoSidedTrmmDist_d( ElUpperOrLower uplo, ElUnitOrNonUnit diag, ElDistMatrix_d A, ElConstDistMatrix_d B )
 .. c:function:: ElError ElTwoSidedTrmmDist_c( ElUpperOrLower uplo, ElUnitOrNonUnit diag, ElDistMatrix_c A, ElConstDistMatrix_c B )
 .. c:function:: ElError ElTwoSidedTrmmDist_z( ElUpperOrLower uplo, ElUnitOrNonUnit diag, ElDistMatrix_z A, ElConstDistMatrix_z B )
+
+Python API
+----------
+
+.. py:function:: TwoSidedTrmm(uplo,diag,A,B)

@@ -34,6 +34,11 @@ C API
 
 .. c:function:: ElError ElPrintVersion( FILE* stream )
 
+Python API
+""""""""""
+
+**TODO**
+
 Configuration
 ^^^^^^^^^^^^^
 The following routines print several relevant configuration details. 
@@ -273,7 +278,7 @@ Error handling
 C++ API
 ^^^^^^^
 
-.. cpp:type:: class SingularMatrixException
+.. cpp:type:: SingularMatrixException
 
    An extension of ``std::runtime_error`` which is meant to be thrown when 
    a singular matrix is unexpectedly encountered.
@@ -287,7 +292,7 @@ C++ API
 
       throw El::SingularMatrixException();
 
-.. cpp:type:: class NonHPDMatrixException 
+.. cpp:type:: NonHPDMatrixException 
 
    An extension of ``std::runtime_error`` which is meant to be thrown when
    a non positive-definite Hermitian matrix is unexpectedly encountered
@@ -302,7 +307,7 @@ C++ API
 
       throw El::NonHPDMatrixException();
 
-.. cpp:type:: class NonHPSDMatrixException 
+.. cpp:type:: NonHPSDMatrixException 
 
    An extension of ``std::runtime_error`` which is meant to be thrown when
    a non positive semi-definite Hermitian matrix is unexpectedly encountered

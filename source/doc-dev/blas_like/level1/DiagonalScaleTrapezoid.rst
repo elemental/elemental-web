@@ -23,3 +23,8 @@ C API
 .. c:function:: ElError ElDiagonalScaleTrapezoid_d( ElLeftOrRight side, ElUpperOrLower uplo, ElConstMatrix_d d, ElMatrix_d X, ElInt offset )
 .. c:function:: ElError ElDiagonalScaleTrapezoid_c( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, ElConstMatrix_c d, ElMatrix_c X, ElInt offset )
 .. c:function:: ElError ElDiagonalScaleTrapezoid_z( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, ElConstMatrix_z d, ElMatrix_z X, ElInt offset )
+
+Python API
+----------
+
+.. py:function:: DiagonalScaleTrapezoid(side,uplo,d,X,offset=0)

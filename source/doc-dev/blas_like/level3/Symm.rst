@@ -29,3 +29,8 @@ C API
 .. c:function:: ElError ElSymmDist_d( ElLeftOrRight side, ElUpperOrLower uplo, double alpha, ElConstDistMatrix_d A, ElConstDistMatrix_d B, double beta, ElDistMatrix_d C )
 .. c:function:: ElError ElSymmDist_c( ElLeftOrRight side, ElUpperOrLower uplo, complex_float alpha, ElConstDistMatrix_c A, ElConstDistMatrix_c B, complex_float beta, ElDistMatrix_c C )
 .. c:function:: ElError ElSymmDist_z( ElLeftOrRight side, ElUpperOrLower uplo, complex_double alpha, ElConstDistMatrix_z A, ElConstDistMatrix_z B, complex_double beta, ElDistMatrix_z C )
+
+Python API
+----------
+
+.. py:function:: Symm(side,uplo,alpha,A,B,beta,C,conjugate=False)

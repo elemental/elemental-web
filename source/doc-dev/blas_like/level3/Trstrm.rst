@@ -25,3 +25,8 @@ C API
 .. c:function:: ElError ElTrstrmDist_d( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, ElUnitOrNonUnit diag, double alpha, ElConstDistMatrix_d A, ElDistMatrix_d B )
 .. c:function:: ElError ElTrstrmDist_c( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, ElUnitOrNonUnit diag, complex_float alpha, ElConstDistMatrix_c A, ElDistMatrix_c B )
 .. c:function:: ElError ElTrstrmDist_z( ElLeftOrRight side, ElUpperOrLower uplo, ElOrientation orientation, ElUnitOrNonUnit diag, complex_double alpha, ElConstDistMatrix_z A, ElDistMatrix_z B )
+
+Python API
+----------
+
+.. py:function:: Trstrm(side,uplo,orient,diag,alpha,A,X)

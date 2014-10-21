@@ -35,3 +35,8 @@ C API
 .. c:function:: ElError ElTrrkDist_d( ElUpperOrLower uplo, ElOrientation orientA, ElOrientation orientB, double alpha, ElConstDistMatrix_d A, ElConstDistMatrix_d B, double beta, ElDistMatrix_d C )
 .. c:function:: ElError ElTrrkDist_c( ElUpperOrLower uplo, ElOrientation orientA, ElOrientation orientB, complex_float alpha, ElConstDistMatrix_c A, ElConstDistMatrix_c B, complex_float beta, ElDistMatrix_c C )
 .. c:function:: ElError ElTrrkDist_z( ElUpperOrLower uplo, ElOrientation orientA, ElOrientation orientB, complex_double alpha, ElConstDistMatrix_z A, ElConstDistMatrix_z B, complex_double beta, ElDistMatrix_z C )
+
+Python API
+----------
+
+.. py:function:: Trrk(uplo,orientA,orientB,alpha,A,B,beta,C)

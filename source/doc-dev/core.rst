@@ -12,5 +12,5 @@ Core functionality
    core/dist_matrix
    core/View
    core/proxies
-   core/flame-part
+   core/flame_part
    core/axpy_interface

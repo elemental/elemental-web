@@ -26,3 +26,7 @@ C API
 .. c:function:: ElError ElHemmDist_c( ElLeftOrRight side, ElUpperOrLower uplo, complex_float alpha, ElConstDistMatrix_c A, ElConstDistMatrix_c B, complex_float beta, ElDistMatrix_c C )
 .. c:function:: ElError ElHemmDist_z( ElLeftOrRight side, ElUpperOrLower uplo, complex_double alpha, ElConstDistMatrix_z A, ElConstDistMatrix_z B, complex_double beta, ElDistMatrix_z C )
 
+Python API
+----------
+
+.. py:function:: Hemm(side,uplo,alpha,A,B,beta,C)

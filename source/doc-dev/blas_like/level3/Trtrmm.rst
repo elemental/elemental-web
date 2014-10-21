@@ -30,3 +30,8 @@ C API
 .. c:function:: ElError ElTrtrmmDist_d( ElUpperOrLower uplo, ElDistMatrix_d A )
 .. c:function:: ElError ElTrtrmmDist_c( ElUpperOrLower uplo, ElDistMatrix_c A, bool conjugate )
 .. c:function:: ElError ElTrtrmmDist_z( ElUpperOrLower uplo, ElDistMatrix_z A, bool conjugate )
+
+Python API
+----------
+
+.. py:function:: Trtrmm(uplo,A,conjugate=False)

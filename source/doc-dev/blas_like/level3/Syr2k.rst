@@ -19,8 +19,8 @@ and :cpp:func:`LocalTrr2kBlocksize\<T>` in the
 C++ API
 -------
 
-.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
-.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C )
+.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C, bool conjugate=false )
+.. cpp:function:: void Syr2k( UpperOrLower uplo, Orientation orientation, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C, bool conjugate=false )
 
 C API
 -----
@@ -33,3 +33,8 @@ C API
 .. c:function:: ElError ElSyr2kDist_d( ElUpperOrLower uplo, ElOrientation orientation, double alpha, ElConstDistMatrix_d A, ElConstDistMatrix_d B, double beta, ElDistMatrix_d C )
 .. c:function:: ElError ElSyr2kDist_c( ElUpperOrLower uplo, ElOrientation orientation, complex_float alpha, ElConstDistMatrix_c A, ElConstDistMatrix_c B, complex_float beta, ElDistMatrix_c C )
 .. c:function:: ElError ElSyr2kDist_z( ElUpperOrLower uplo, ElOrientation orientation, complex_double alpha, ElConstDistMatrix_z A, ElConstDistMatrix_z B, complex_double beta, ElDistMatrix_z C )
+
+Python API
+----------
+
+.. py:function:: Syr2k(uplo,orient,alpha,A,B,beta,C,conjugate=False)

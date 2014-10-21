@@ -25,7 +25,7 @@ Factorization
 C++ API
 """""""
 
-.. cpp:type:: enum LDLPivotType
+.. cpp:type:: LDLPivotType
 
    An enum for specifying the symmetric pivoting strategy. The current
    (not yet all supported) options include:
@@ -35,6 +35,23 @@ C++ API
    * ``BUNCH_KAUFMAN_D``
    * ``BUNCH_KAUFMAN_BOUNDED`` (not yet supported)
    * ``BUNCH_PARLETT``
+   * ``LDL_WITHOUT_PIVOTING``
+
+.. cpp:function:: Real LDLPivotConstant<Real>(LDLPivotType pivotType)
+
+   Maps various LDL pivotings schemes to their optimal threshold constant.
+
+.. cpp:type:: LDLPivotCtrl<Real>
+
+   .. cpp:member:: LDLPivotType pivotType
+
+      The type of pivoting to perform (by default, ``BUNCH_KAUFMAN_A``)
+
+   .. cpp:member:: Real gamma
+
+      Pivot tolerance (by default, set to ``LDLPivotConstant<Real>(pivotType)``)
+
+   .. cpp:function:: LDLPivotCtrl(LDLPivotType piv=BUNCH_KAUFMAN_A)
 
 .. cpp:type:: LDLPivot
 
@@ -47,16 +64,13 @@ C++ API
       The source indices of the row or rows to swap with for the 1x1 or 2x2
       pivot.
 
-.. cpp:function:: void LDLT( Matrix<F>& A, Matrix<F>& dSub, Matrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void LDLT( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& dSub, AbstractDistMatrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-
-.. cpp:function:: void LDLH( Matrix<F>& A, Matrix<F>& dSub, Matrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
-.. cpp:function:: void LDLH( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& dSub, AbstractDistMatrix<int>& p, LDLPivotType pivotType=BUNCH_KAUFMAN_A )
+.. cpp:function:: void LDL( Matrix<F>& A, Matrix<F>& dSub, Matrix<int>& p, bool conjugate=false, const LDLPivotCtrl<Base<F>>& ctrl=LDLPivotCtrl<Base<F>>() )
+.. cpp:function:: void LDL( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& dSub, AbstractDistMatrix<int>& p, bool conjugate=false, const LDLPivotCtrl<Base<F>>& ctrl=LDLPivotCtrl<Base<F>>() )
 
 C API
 """""
 
-.. c:type:: enum ElLDLPivotType
+.. c:type:: ElLDLPivotType
 
    An enum for specifying the symmetric pivoting strategy. The current
    (not yet all supported) options include:
@@ -67,32 +81,45 @@ C API
    * ``EL_BUNCH_KAUFMAN_BOUNDED`` (not yet supported)
    * ``EL_BUNCH_PARLETT``
 
-.. cpp:type:: ElLDLPivot
+.. c:type:: ElLDLPivotCtrl_s
 
-   .. cpp:member:: Int nb
+   .. c:member:: ElLDLPivotType pivotType
+
+   .. c:member:: float gamma
+
+.. c:type:: ElLDLPivotCtrl_d
+
+   .. c:member:: ElLDLPivotType pivotType
+
+   .. c:member:: double gamma
+
+.. c:type:: ElLDLPivot
+
+   .. c:member:: Int nb
 
       Whether the pivot is 1x1 or 2x2.
 
-   .. cpp:member:: Int from[2]
+   .. c:member:: Int from[2]
 
       The source indices of the row or rows to swap with for the 1x1 or 2x2
       pivot.
 
-.. c:function:: ElError ElLDLTPiv_s( ElMatrix_s A, ElMatrix_s dSub, ElMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLTPiv_d( ElMatrix_d A, ElMatrix_d dSub, ElMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLTPiv_c( ElMatrix_c A, ElMatrix_c dSub, ElMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLTPiv_z( ElMatrix_z A, ElMatrix_z dSub, ElMatrix_i p, ElLDLPivotType pivotType )
+.. c:function:: ElError ElLDLPiv_s( ElMatrix_s A, ElMatrix_s dSub, ElMatrix_i p )
+.. c:function:: ElError ElLDLPiv_d( ElMatrix_d A, ElMatrix_d dSub, ElMatrix_i p )
+.. c:function:: ElError ElLDLPiv_c( ElMatrix_c A, ElMatrix_c dSub, ElMatrix_i p, bool conjugate )
+.. c:function:: ElError ElLDLPiv_z( ElMatrix_z A, ElMatrix_z dSub, ElMatrix_i p, bool conjugate )
 
-.. c:function:: ElError ElLDLTPivDist_s( ElDistMatrix_s A, ElDistMatrix_s dSub, ElDistMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLTPivDist_d( ElDistMatrix_d A, ElDistMatrix_d dSub, ElDistMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLTPivDist_c( ElDistMatrix_c A, ElDistMatrix_c dSub, ElDistMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLTPivDist_z( ElDistMatrix_z A, ElDistMatrix_z dSub, ElDistMatrix_i p, ElLDLPivotType pivotType )
+.. c:function:: ElError ElLDLPivDist_s( ElDistMatrix_s A, ElDistMatrix_s dSub, ElDistMatrix_i p )
+.. c:function:: ElError ElLDLPivDist_d( ElDistMatrix_d A, ElDistMatrix_d dSub, ElDistMatrix_i p )
+.. c:function:: ElError ElLDLPivDist_c( ElDistMatrix_c A, ElDistMatrix_c dSub, ElDistMatrix_i p, bool conjugate )
+.. c:function:: ElError ElLDLPivDist_z( ElDistMatrix_z A, ElDistMatrix_z dSub, ElDistMatrix_i p, bool conjugate )
 
-.. c:function:: ElError ElLDLHPiv_c( ElMatrix_c A, ElMatrix_c dSub, ElMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLHPiv_z( ElMatrix_z A, ElMatrix_z dSub, ElMatrix_i p, ElLDLPivotType pivotType )
+**TODO:: Document expert versions**
 
-.. c:function:: ElError ElLDLHPivDist_c( ElDistMatrix_c A, ElDistMatrix_c dSub, ElDistMatrix_i p, ElLDLPivotType pivotType )
-.. c:function:: ElError ElLDLHPivDist_z( ElDistMatrix_z A, ElDistMatrix_z dSub, ElDistMatrix_i p, ElLDLPivotType pivotType )
+Python API
+""""""""""
+
+**TODO: Document**
 
 Solving linear systems after factorization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -115,6 +142,11 @@ C API
 .. c:function:: ElError ElSolveAfterLDLPivDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d dSub, ElConstDistMatrix_i p, ElDistMatrix_d B )
 .. c:function:: ElError ElSolveAfterLDLPivDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c dSub, ElConstDistMatrix_i p, ElDistMatrix_c B, bool conjugate )
 .. c:function:: ElError ElSolveAfterLDLPivDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z dSub, ElConstDistMatrix_i p, ElDistMatrix_z B, bool conjugate )
+
+Python API
+""""""""""
+
+**TODO: Document**
 
 Multiply vectors after factorization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -28,3 +28,8 @@ C API
 .. c:function:: ElError ElHerk_z( ElUpperOrLower uplo, ElOrientation orientation, complex_double alpha, ElConstMatrix_z A, complex_double beta, ElMatrix_z C )
 .. c:function:: ElError ElHerkDist_c( ElUpperOrLower uplo, ElOrientation orientation, complex_float alpha, ElConstDistMatrix_c A, complex_float beta, ElDistMatrix_c C )
 .. c:function:: ElError ElHerkDist_z( ElUpperOrLower uplo, ElOrientation orientation, complex_double alpha, ElConstDistMatrix_z A, complex_double beta, ElDistMatrix_z C )
+
+Python API
+----------
+
+.. py:function:: Herk(uplo,orient,alpha,A,beta,C)

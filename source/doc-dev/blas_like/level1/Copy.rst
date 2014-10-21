@@ -22,3 +22,7 @@ C API
 .. c:function:: ElError ElCopyDist_c( ElConstDistMatrix_c X, ElDistMatrix_c Y )
 .. c:function:: ElError ElCopyDist_z( ElConstDistMatrix_z X, ElDistMatrix_z Y )
 
+Python API
+----------
+
+.. py:function:: Copy(X,Y)

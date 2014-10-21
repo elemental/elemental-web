@@ -4,6 +4,7 @@ Random
 .. toctree::
    :maxdepth: 1
 
+   random/Bernoulli
    random/Gaussian
    random/Haar
    random/HatanoNelson

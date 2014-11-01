@@ -59,7 +59,7 @@
       <p style="text-align:center;">
         <a href="/download/">
           <img style="margin-left:auto; margin-right:auto; margin-top:10px;"
-             src="/_static/download-button-0.84.png" alt="Download button" />
+             src="/_static/download-button-0.85-RC1.png" alt="Download button" />
         </a>
       </p>
 
@@ -98,7 +98,7 @@
         </div><!-- #front-block-1 .front-block .block-->
 
         <div id="front-block-2" class="front-block block">
-          <h3>Recent GitHub commits <a href="/_static/news/feed.xml" title="Elemental News RSS feed" rel="alternate nofollow" type="application/rss+xml"><img src="/_static/feed-icon-14x14.gif" alt="RSS"/></a></h3>
+          <h3>Recent tweets and commits <a href="/_static/news/feed.xml" title="Elemental News RSS feed" rel="alternate nofollow" type="application/rss+xml"><img src="/_static/feed-icon-14x14.gif" alt="RSS"/></a></h3>
         <!--#include virtual="_static/news/include.html"-->
         </div><!-- #front-block-2 .front-block .block-->
 

@@ -6,22 +6,24 @@ About Elemental
 ###############
 
 Elemental is an open-source library for distributed-memory dense 
-linear algebra which attempts to strike a careful balance between 
-ease of use and high performance.
+and sparse-direct linear algebra and optimization which builds on top of 
+BLAS, LAPACK, and MPI using modern C++ and additionally exposes interfaces to
+C and Python (with a Julia interface beginning development).
 
 The development of Elemental has led to a number of 
 :doc:`research articles<../citing/index>` and 
-a number of related projects, such as the sparse-direct solver, 
-`Clique <http://github.com/poulson/Clique>`__, the parallel sweeping 
+a number of related projects, such as the parallel sweeping 
 preconditioner, `PSP <http://github.com/poulson/PSP>`__, and a parallel 
 algorithm for Low-rank Plus Sparse MRI, `RT-LPS-MRI <http://github.com/poulson/rt-lps-mri>`__.
-Additionally, a number of routines in Elemental, such as pivoted QR, 
-interpolative, and skeleton decompositions, were implemented as a result of 
-work on `a parallel butterfly algorithm <http://github.com/poulson/dist-butterfly.git/>`__.
 
 Unique Features
 ***************
 
+Elemental supports a wide collection of distributed-memory operations, 
+including:
+
+* Dense and sparse Interior Point Methods for linear and quadratic programs
+* Support for dense and sparse basis pursuit, Lasso, SVM, etc.
 * High-performance pseudospectral computation and visualization
 * Quadratic-time low-rank Cholesky and LU modifications
 * Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
@@ -45,8 +47,11 @@ License
 *******
 
 All of Elemental is licensed under the 
-`New BSD License <http://opensource.org/licenses/BSD-3-Clause>`__ as
-published by the `Open Source Initiative <http://opensource.org>`__.
+`New BSD License <http://opensource.org/licenses/BSD-3-Clause>`__,
+with the exception of 
+`METIS 5.1.0 <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
+which is distributed under the (equally permissive)
+`Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>`__.
 
 About these pages
 *****************

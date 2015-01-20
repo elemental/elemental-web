@@ -12,6 +12,11 @@ Supporting institutions
 A number of research institutions have either directly or indirectly helped 
 support the development of Elemental since its development began in 2009.
 
+.. image:: stanford.png
+   :scale: 75 %
+
+* Jack Poulson was supported as an Acting Assistant Professor from October to December 2014 and, starting in January 2015, is now an Assistant Professor in Stanford's Department of Mathematics.
+
 .. image:: gt-cse.jpeg
    :scale: 90 %
 

@@ -12,7 +12,6 @@
 # serve to show the default.
 
 import sys, os
-import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -29,8 +28,7 @@ sys.path.append(os.path.abspath('.'))
 #              'sphinx.ext.pngmath', 'sphinx.ext.autodoc', 'sphinx.ext.todo']
 extensions = ['sphinx.ext.doctest', 'sphinx.ext.coverage',
               'sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinx.ext.todo']
-mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
-#mathjax_path = 'MathJax-2.4-latest/MathJax.js'
+
 
 # Add the docstring from class.__init__ to class.__doc__ when documenting the
 # PyDolfin interface.
@@ -63,7 +61,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Elemental'
-copyright = u'2009-2015, Jack Poulson'
+copyright = u'2009-2014, Jack Poulson'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -126,8 +124,7 @@ pygments_style = 'sphinx'
 #html_theme = 'slim-agogo'
 #html_theme = 'classy'
 #html_theme = 'traditional'
-#html_theme = 'elemental'
-html_theme = "sphinx_rtd_theme"
+html_theme = 'elemental'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -135,8 +132,7 @@ html_theme = "sphinx_rtd_theme"
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = ["../_themes"]
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme_path = ["../_themes"]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".

@@ -19,6 +19,8 @@ memory dense matrix computations*, for a detailed discussion of this design
 choice).
 Some of the unique features of Elemental include distributed implementations of:
 
+* Dense and sparse Interior Point Methods for linear and quadratic programs
+* Support for dense and sparse basis pursuit, Lasso, SVM, etc.
 * High-performance pseudospectral computation and visualization
 * Quadratic-time low-rank Cholesky and LU modifications
 * Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
@@ -31,23 +33,15 @@ Some of the unique features of Elemental include distributed implementations of:
 * Hermitian matrix functions
 * Sign-based Lyapunov/Ricatti/Sylvester solvers
 
-For the sake of objectivity: Elemental is primarily intended to be used from 
-C++11 or C, though interfaces to other languages, Fortran 90, Python, and R
-are in various stages of development. ScaLAPACK and PLAPACK routines are 
-currently significantly more straightforward to call from Fortran.
-
-.. note::
-
-   Though Elemental does not yet fully support computation over arbitrary 
-   fields, the vast majority of its pieces do. Moving templated 
-   implementations into header files is a necessary step in the process and 
-   also allowed for certain templating techniques to exploited in order to 
-   simplify the class hierarchy.
+Elemental currently supports C++11, C, and Python interfaces, `an R interface is being maintained by Rodrigo Canales <https://github.com/rocanale/R-Elemental>`__
+and a Julia interface is under development.
+Interfaces to other languages, such as Fortran 90, can be built on top of
+the C interface in a straightforward, if not tedious, manner.
 
 Dependencies
 ============
 * Functioning C++11 and ANSI C compilers.
-* A working MPI2 implementation.
+* A working MPI2 implementation
 * BLAS and LAPACK (ideally version 3.3 or greater) implementations. 
 * `CMake <http://www.cmake.org>`_ (version 2.8.8 or later).
 
@@ -58,7 +52,8 @@ possible with minor effort.
 
 License and copyright
 =====================
-All files distributed with Elemental, with the exception of METIS 5.1.0, are 
+All files distributed with Elemental, with the exception of 
+`METIS 5.1.0 <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, are 
 made available under the 
 `New BSD license <http://www.opensource.org/licenses/bsd-license.php>`_,
 which states::
@@ -89,12 +84,14 @@ which states::
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
 
-Note that METIS 5.1.0 is distributed under the (equally permissive) 
+Note that 
+`METIS 5.1.0 <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__ 
+is distributed under the (equally permissive) 
 `Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>`__.
 
 Most source files contain the copyright notice::
 
-    Copyright (c) 2009-2014, Jack Poulson
+    Copyright (c) 2009-2015, Jack Poulson
     All rights reserved.
 
 For an up-to-date list of contributing authors, please see the 

@@ -44,7 +44,7 @@
 
       <div id="feature-info">
         <p>Elemental is open-source software for distributed-memory dense
-           and sparse-direct linear algebra.
+           and sparse-direct linear algebra and optimization.
         </p>
 
       <p>Through this web site, you can <a href="/about/">learn more
@@ -59,7 +59,7 @@
       <p style="text-align:center;">
         <a href="/download/">
           <img style="margin-left:auto; margin-right:auto; margin-top:10px;"
-             src="/_static/download-button-0.85-RC1.png" alt="Download button" />
+             src="/_static/download-button-0.85.png" alt="Download button" />
         </a>
       </p>
 

@@ -9,9 +9,16 @@ Project leader
 .. raw:: html
     :file: dictator.inc
 
-Contributors (alphabetical)
-===========================
+Active contributors (alphabetical)
+==================================
+The following people have actively contributed to Elemental within roughly the last year.
 
 .. raw:: html
-    :file: team.inc
+    :file: active.inc
 
+Past contributors (alphabetical)
+================================
+The following people have actively contributed to Elemental in the past.
+
+.. raw:: html
+    :file: past.inc

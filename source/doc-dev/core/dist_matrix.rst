@@ -28,16 +28,12 @@ attempts to expose as many symmetries within the various member functions and
 redistributions as possible. In particular, there are there is a hierarchy of
 three increasingly-specific distributed matrix classes:
 :cpp:type:`AbstractDistMatrix\<T>`, which contains every member function which
-whose prototype does not depend upon the exact matrix distribution, 
-:cpp:type:`GeneralDistMatrix\<T,U,V>`, which contains every member function 
-whose prototype depends upon the particular matrix distribution but can still 
-be implemented in a generic way, and :cpp:type:`DistMatrix\<T,U,V>`, which 
-contains implementations of member functions which are specific to a 
-particular matrix distribution.
+whose prototype does not depend upon the exact matrix distribution, and 
+:cpp:type:`DistMatrix\<T,U,V>`, which contains implementations of member 
+functions which are specific to a particular matrix distribution.
 
 .. toctree::
    :maxdepth: 1
 
    dist_matrix/ADM
-   dist_matrix/GDM
    dist_matrix/DM

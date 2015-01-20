@@ -39,7 +39,11 @@ including:
 Contributors
 ************
 
-Please see `the list of contributors <./team.html>`__ for now.
+Project leader: `Jack Poulson <http://www.stanford.edu/~poulson>`__
+
+Active contributors (roughly, within the last year): `Paolo Bientinesi <http://hpac.rwth-aachen.de/~pauldj/>`__, `Jed Brown <http://59a2.org/research/>`__, `Rodrigo Canales <https://github.com/rocanale>`__, `Jeff Hammond <http://pcl.intel-research.net/people/jeff.htm>`__, and `Matthias Petschow <http://hpac.rwth-aachen.de/~petschow/>`__. 
+
+Please see `the list of contributors <./team.html>`__ for more details and past contributors.
 
 .. _about_license:
 

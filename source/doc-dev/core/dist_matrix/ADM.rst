@@ -3,9 +3,7 @@ AbstractDistMatrix
 
 This abstract class defines the list of member functions that are guaranteed 
 to be available for all matrix distributions and whose prototype does not 
-depend upon the particular matrix distribution; the 
-:cpp:type:`GeneralDistMatrix\<T,U,V>` class exists for general routines whose 
-prototype *does* depend upon the particular matrix distribution.
+depend upon the particular matrix distribution
 
 .. cpp:type:: AbstractDistMatrix<T>
 
@@ -557,8 +555,8 @@ prototype *does* depend upon the particular matrix distribution.
       An immutable pointer to the underlying process grid of the distributed
       matrix.
 
-   .. cpp:function:: DistData( const GeneralDistMatrix<T,U,V>& A )
+   .. cpp:function:: DistData( const AbstractDistMatrix<T>& A )
 
       Construct the distribution data of any instance of 
-      :cpp:type:`GeneralDistMatrix\<T,U,V>`.
+      :cpp:type:`AbstractDistMatrix\<T>`.
 

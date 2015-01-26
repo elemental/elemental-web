@@ -14,6 +14,9 @@ In particular, we may solve
   
    \min_{x,u,v} \{\; 1^T \begin{pmatrix} u \\ v \end{pmatrix} \; | \; \begin{pmatrix} A & I & -I \end{pmatrix} \begin{pmatrix} x \\ u \\ v \end{pmatrix} = b \; \wedge \; u,v \ge 0 \; \}.
 
+By default, Elemental solves this linear program via a Mehrotra 
+Predictor-Corrector primal-dual Interior Point Method.
+
 C++ API
 -------
 .. cpp:function:: void LAV( const Matrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )

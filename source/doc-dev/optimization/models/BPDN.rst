@@ -16,12 +16,15 @@ Real instances of the problem are `expressable as a Quadratic Program <http://dx
 
    \min_{u,v,r} \{\; \frac{1}{2} r^T r + \lambda^T \begin{pmatrix} u \\ v \end{pmatrix} \; | \; \begin{pmatrix} A & -A \end{pmatrix} \begin{pmatrix} u \\ v \end{pmatrix} + r = b \; \wedge \; \begin{pmatrix} u \\ v \end{pmatrix} \ge 0 \; \}.
 
+By default, Elemental solves this quadratic program via a Mehrotra 
+Predictor-Corrector primal-dual Interior Point Method.
+
 C++ API
 -------
-.. cpp:function:: void BPDN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
-.. cpp:function:: void BPDN( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, Real lambda, AbstractDistMatrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
-.. cpp:function:: void BPDN( const SparseMatrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
-.. cpp:function:: void BPDN( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, Real lambda, DistMultiVec<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
+.. cpp:function:: void BPDN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
+.. cpp:function:: void BPDN( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, Real lambda, AbstractDistMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
+.. cpp:function:: void BPDN( const SparseMatrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
+.. cpp:function:: void BPDN( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, Real lambda, DistMultiVec<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 
 C API
 -----
@@ -36,14 +39,14 @@ C API
 
 Expert interface
 ^^^^^^^^^^^^^^^^
-.. c:function:: ElError ElBPDNX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElBPDNX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElBPDNXDist_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElBPDNXDist_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElBPDNXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElBPDNXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElBPDNXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElBPDNXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElBPDNX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElBPDNX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElBPDNXDist_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElBPDNXDist_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElBPDNXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElBPDNXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElBPDNXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElBPDNXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
 
 Python API
 ----------

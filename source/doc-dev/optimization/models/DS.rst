@@ -1,9 +1,9 @@
 Dantzig selector
 ================
 The `Dantzig selector (DS) <http://projecteuclid.org/euclid.aos/1201012958>`__ 
-seeks to find a balance between minimizing the residual :math:`b - A x` and 
-promoting sparsity in :math:`x` by solving a linear, rather than quadratic,
-program:
+attempts to balance the approximate satisfaction of a highly underdetermined
+system of equations with a sparsity-promoting :math:`\ell_1` penalty on the 
+solution using only linear programming:
 
 .. math::
 
@@ -25,7 +25,9 @@ Friedlander and Saunders
    \min_{u,v,r,t} \{\; 1^T (u+v) \; | \; \begin{pmatrix} A & -A & I & 0 \\ 0 & 0 & A^T & I \end{pmatrix} \begin{pmatrix} u \\ v \\ r \\ t \end{pmatrix} = \begin{pmatrix} b \\ 0 \end{pmatrix} \; \wedge \; u,v \ge 0 \; \wedge \; \| t \|_{\infty} \le \lambda \;\},
 
 which they argued to be superior in performance and 
-conditioning. Elemental defaults to (DS1) for dense matrices and (DS2) for sparse matrices.
+conditioning. Elemental defaults to (DS1) for dense matrices and (DS2) for 
+sparse matrices and applies a Mehrotra Predictor-Corrector primal-dual 
+Interior Point Method.
 
 C++ API
 -------

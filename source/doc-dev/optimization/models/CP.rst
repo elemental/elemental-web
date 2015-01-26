@@ -19,6 +19,9 @@ which, in affine conic form, becomes
 
    \min_{x,t} \{\; \begin{pmatrix} 0 \\ 1 \end{pmatrix}^T \begin{pmatrix} x \\ t \end{pmatrix} \; | \; \begin{pmatrix} A & -1 \\ -A & -1 \end{pmatrix} \begin{pmatrix} x \\ t \end{pmatrix} \le \begin{pmatrix} b \\ -b \end{pmatrix} \; \}.
 
+By default, Elemental solves this linear program via a Mehrotra 
+Predictor-Corrector primal-dual Interior Point Method.
+
 C++ API
 -------
 .. cpp:function:: void CP( const Matrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )

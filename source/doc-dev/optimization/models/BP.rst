@@ -14,6 +14,9 @@ Real instances of the problem are `expressible as a Linear Program <http://dx.do
 
    \min_{u,v} \{\; 1^T \begin{pmatrix} u \\ v \end{pmatrix} \; | \; \begin{pmatrix} A & -A \end{pmatrix} \begin{pmatrix} u \\ v \end{pmatrix} = b \; \wedge \; \begin{pmatrix} u \\ v \end{pmatrix} \ge 0 \; \}.
 
+By default, Elemental solves this linear program via a Mehrotra 
+Predictor-Corrector primal-dual Interior Point Method.
+
 C++ API
 -------
 .. cpp:function:: void BP( const Matrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )

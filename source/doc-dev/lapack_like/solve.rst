@@ -10,8 +10,8 @@ Solvers
    solve/HPD
    solve/Symmetric
    solve/Hermitian
-   solve/GaussianElimination
    solve/LeastSquares
+   solve/LinearSolve
    solve/Ridge
    solve/Tikhonov
    solve/GLM

@@ -4,7 +4,7 @@
       <div id="sub-feature">
 
       	<div class="front-block block">
-  	  <h2><a href="http://cvxr.com/bio/">Michael Grant</a></h2>
+  	  <h3><a href="http://cvxr.com/bio/">Michael Grant</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Michael Grant'
 		 src='/_static/images/mugshots/michael-grant.png' />
@@ -20,7 +20,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://www.mit.edu/~mlubin/">Miles Lubin</a></h2>
+  	  <h3><a href="http://www.mit.edu/~mlubin/">Miles Lubin</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Miles Lubin'
 		 src='/_static/images/mugshots/miles-lubin.jpeg' />
@@ -38,7 +38,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://www.cs.utexas.edu/~bamarker/">Bryan Marker</a></h2>
+  	  <h3><a href="http://www.cs.utexas.edu/~bamarker/">Bryan Marker</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Bryan Marker'
 		 src='/_static/images/mugshots/bryan-marker.png' />
@@ -53,7 +53,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://www.opt.mist.i.u-tokyo.ac.jp/~nakatsukasa/">Yuji Nakatsukasa</a></h2>
+  	  <h3><a href="http://www.opt.mist.i.u-tokyo.ac.jp/~nakatsukasa/">Yuji Nakatsukasa</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Yuji Nakatsukasa'
 		 src='/_static/images/mugshots/yuji-nakatsukasa.jpg' />
@@ -69,7 +69,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://www3.uji.es/~gquintan/">Gregorio Quintana Orti</a></h2>
+  	  <h3><a href="http://www3.uji.es/~gquintan/">Gregorio Quintana Orti</a></h3>
           <!---
           <div class="avatar mugshot">
 	    <img alt='Gregorio Quintana Orti'
@@ -88,7 +88,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="https://www.alcf.anl.gov/staff-directory/nichols-romero">Nichols Romero</a></h2>
+  	  <h3><a href="https://www.alcf.anl.gov/staff-directory/nichols-romero">Nichols Romero</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Nichols Romero'
 		 src='/_static/images/mugshots/nichols-romero.jpg' />
@@ -104,7 +104,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2>Martin Schatz</h2>
+  	  <h3>Martin Schatz</h3>
           <!---
           <div class="avatar mugshot">
 	    <img alt='Martin Schatz'
@@ -121,7 +121,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://folk.uio.no/dagss">Dag Sverre Seljebotn</a></h2>
+  	  <h3><a href="http://folk.uio.no/dagss">Dag Sverre Seljebotn</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Dag Sverre Seljebotn'
 		 src='/_static/images/mugshots/dag-seljebotn.jpeg' />
@@ -139,25 +139,21 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://andy.terrel.us">Andy Terrel</a></h2>
+  	  <h3><a href="http://andy.terrel.us">Andy Terrel</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Andy Terrel'
 		 src='/_static/images/mugshots/andy-terrel.jpeg' />
 	  </div>
 
-          <p><a href="http://andy.terrel.us">Dr. Andy R. Terrel</a> is a 
-          Research Associate for the <a href="http://chg.ices.utexas.edu/index.html">Computational Hydraulics Group</a> at the 
-          <a href="http://www.ices.utexas.edu">Institute for Computational 
-          Engineering and Sciences</a> which is at 
-          <a href="http://www.utexas.edu">The Universiy of Texas at Austin</a>. 
-          Andy's research includes utilizing supercomputers with Python and 
-          studying methods for speeding up computational fluid dynamics. He 
-          graduated from <a href="http://www.uchicago.edu">The University of 
-          Chicago</a> with a PhD in Computer Science in 2010.</p>
+          <p><a href="http://andy.terrel.us">Andy Terrel</a> is the
+          Chief Science Officer for <a href="http://continuum.io/our-team/index">Continuum Analytics</a> and recieved his PhD in Computer Science from 
+          <a href="http://www.uchicago.edu">The University of 
+          Chicago</a> in  2010. He helped provide very early advice on various
+          approached to a Python interface to Elemental.</p>
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://www.cs.utexas.edu/~rvdg/">Robert van de Geijn</a></h2>
+  	  <h3><a href="http://www.cs.utexas.edu/~rvdg/">Robert van de Geijn</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Robert van de Geijn'
 		 src='/_static/images/mugshots/robert-vdg.jpg' />
@@ -174,7 +170,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://www.cs.utexas.edu/~field/">Field Van Zee</a></h2>
+  	  <h3><a href="http://www.cs.utexas.edu/~field/">Field Van Zee</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Field Van Zee'
 		 src='/_static/images/mugshots/field-vanzee.jpg' />
@@ -192,7 +188,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2><a href="http://www.mcs.anl.gov/~hzhang">Hong Zhang</a></h2>
+  	  <h3><a href="http://www.mcs.anl.gov/~hzhang">Hong Zhang</a></h3>
           <div class="avatar mugshot">
 	    <img alt='Hong Zhang'
 		 src='/_static/images/mugshots/hong-zhang.jpg' />
@@ -204,7 +200,7 @@
         </div>
 
       	<div class="front-block block">
-  	  <h2>Xuan Zhou</h2>
+  	  <h3>Xuan Zhou</h3>
           <div class="avatar mugshot">
 	    <img alt='Xuan Zhou'
 		 src='/_static/images/mugshots/xuan-zhou.jpg' />

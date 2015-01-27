@@ -92,6 +92,7 @@
   <h3>Intranodal graph partitioning</h3>
   <ul>
     <li><a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">METIS</a></li>
+    <li><a href="http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview">ParMETIS</a> (NOTE: support is currently **NOT** enabled due to the restrictive license)</li>
   </ul>
 
   <h3>Internodal linear algebra</h3>
@@ -103,5 +104,22 @@
   <h3>Internodal communication</h3>
   <ul>
     <li>MPI2: typically <a href="http://www.mpich.org">MPICH</a>, <a href="http://mvapich.cse.ohio-state.edu/">MVAPICH</a>, or <a href="http://www.open-mpi.org">OpenMPI</a></li>
+  </ul>
+
+  <h3>Python interface</h3>
+  <ul>
+    <li><a href="http://matplotlib.org/">matplotlib</a> (optional for python matrix visualization)</li>
+    <li><a href="https://networkx.github.io/">NetworkX</a> (optional for python graph visualization)</li>
+    <li><a href="http://www.numpy.org/">NumPy</a></li>
+  </ul>
+
+  <h3>C++ visualization</h3>
+  <ul>
+    <li><a href="http://qt-project.org/qt5">Qt 5</a> (optional for visualization from C++</li>
+  </ul>
+
+  <h3>Build system</h3>
+  <ul>
+    <li><a href="http://www.cmake.org/">CMake >= 2.8.8</a></li>
   </ul>
 </div>

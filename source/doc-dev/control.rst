@@ -1,9 +1,12 @@
 Control theory
 **************
 
-The following algorithms draw heavily from the second chapter of 
+The following rudimentary algorithms draw heavily from the second chapter of 
 Nicholas J. Higham's "Functions of Matrices: Theory and Computation" and depend
-heavily on the matrix sign function. They have only undergone cursory testing.
+heavily on the matrix sign function. They have only undergone cursory testing
+and primarily exist due to the simplicity of their implementation. Ideally,
+there will eventually be high-performance implementations based upon Schur 
+decompositions.
 
 Sylvester
 ---------

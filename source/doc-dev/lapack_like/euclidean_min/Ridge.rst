@@ -43,3 +43,7 @@ C API
 .. c:function:: ElError ElRidgeDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, double alpha, ElDistMatrix_d X, ElRidgeAlg alg )
 .. c:function:: ElError ElRidgeDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, float alpha, ElDistMatrix_c X, ElRidgeAlg alg )
 .. c:function:: ElError ElRidgeDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, double alpha, ElDistMatrix_z X, ElRidgeAlg alg )
+
+Python API
+----------
+.. py:function:: Ridge(A,B,alpha,alg=RIDGE_CHOLESKY)

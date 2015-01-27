@@ -38,3 +38,7 @@ C API
 .. c:function:: ElError ElTikhonovDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElConstDistMatrix_d Gamma, ElDistMatrix_d X, ElTikhonovAlg alg )
 .. c:function:: ElError ElTikhonovDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, ElConstDistMatrix_c Gamma, ElDistMatrix_c X, ElTikhonovAlg alg )
 .. c:function:: ElError ElTikhonovDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, ElConstDistMatrix_z Gamma, ElDistMatrix_z X, ElTikhonovAlg alg )
+
+Python API
+----------
+.. py:function:: Tikhonov(A,B,Gamma,alg=TIKHONOV_CHOLESKY)

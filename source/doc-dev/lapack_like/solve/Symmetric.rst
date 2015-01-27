@@ -29,3 +29,7 @@ C API
 .. c:function:: ElError ElSymmetricSolveDist_d( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_d A, ElDistMatrix_d B )
 .. c:function:: ElError ElSymmetricSolveDist_c( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_c A, ElDistMatrix_c B )
 .. c:function:: ElError ElSymmetricSolveDist_z( ElUpperOrLower uplo, ElOrientation orientation, ElDistMatrix_z A, ElDistMatrix_z B )
+
+Python API
+----------
+.. py:function:: SymmetricSolve(A,B,conjugate=False,uplo=LOWER,orient=NORMAL)

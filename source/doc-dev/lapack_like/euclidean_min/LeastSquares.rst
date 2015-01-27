@@ -1,7 +1,7 @@
 Least Squares
 =============
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/solve/LeastSquares.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/euclidean_min/LeastSquares.cpp>`__
 
 Given :math:`A \in \mathbb{F}^{m \times n}` and a right-hand side 
 :math:`b \in \mathbb{F}^m`, a *least-squares* method solves
@@ -38,13 +38,11 @@ right-hand sides by switching to Frobenius norms.
 
 C++ API
 -------
-
 .. cpp:function:: void LeastSquares( Orientation orientation, Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
 .. cpp:function:: void LeastSquares( Orientation orientation, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
 
 C API
 -----
-
 .. c:function:: ElError ElLeastSquares_s( ElOrientation orientation, ElMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
 .. c:function:: ElError ElLeastSquares_d( ElOrientation orientation, ElMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
 .. c:function:: ElError ElLeastSquares_c( ElOrientation orientation, ElMatrix_c A, ElConstMatrix_c B, ElMatrix_c X )
@@ -53,3 +51,7 @@ C API
 .. c:function:: ElError ElLeastSquaresDist_d( ElOrientation orientation, ElDistMatrix_d A, ElConstDistMatrix_d B, ElDistMatrix_d X )
 .. c:function:: ElError ElLeastSquaresDist_c( ElOrientation orientation, ElDistMatrix_c A, ElConstDistMatrix_c B, ElDistMatrix_c X )
 .. c:function:: ElError ElLeastSquaresDist_z( ElOrientation orientation, ElDistMatrix_z A, ElConstDistMatrix_z B, ElDistMatrix_z X )
+
+Python API
+----------
+.. py:function:: LeastSquares(A,B,orient=NORMAL)

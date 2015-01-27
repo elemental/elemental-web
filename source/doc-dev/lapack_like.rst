@@ -19,6 +19,7 @@ matrix decompositions, are placed here.
 
    lapack_like/props
    lapack_like/solve
+   lapack_like/euclidean_min
 
    lapack_like/perm
 

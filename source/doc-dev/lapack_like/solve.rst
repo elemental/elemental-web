@@ -1,19 +1,16 @@
-Solvers
-=======
+Linear solvers
+==============
 `C++ Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/solve.hpp>`__
 
 `C Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/solve.h>`__
 
+`Python implementation <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/solve.py>`__
+
 .. toctree::
    :maxdepth: 1
 
-   solve/HPD
+   solve/LinearSolve
    solve/Symmetric
    solve/Hermitian
-   solve/LeastSquares
-   solve/LinearSolve
-   solve/Ridge
-   solve/Tikhonov
-   solve/GLM
-   solve/LSE
+   solve/HPD
    solve/MultiShiftHess

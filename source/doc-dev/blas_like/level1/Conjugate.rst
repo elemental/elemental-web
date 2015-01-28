@@ -8,7 +8,6 @@ Conjugate
 
 C++ API
 -------
-
 .. cpp:function:: void Conjugate( Matrix<T>& A )
 .. cpp:function:: void Conjugate( AbstractDistMatrix<T>& A )
 
@@ -19,7 +18,6 @@ C++ API
 
 C API
 -----
-
 .. c:function:: ElError ElConjugate_c( ElMatrix_c A )
 .. c:function:: ElError ElConjugate_z( ElMatrix_z A )
 .. c:function:: ElError ElConjugateDist_c( ElDistMatrix_c A )
@@ -27,5 +25,4 @@ C API
 
 Python API
 ----------
-
 .. py:function:: Conjugate(A)

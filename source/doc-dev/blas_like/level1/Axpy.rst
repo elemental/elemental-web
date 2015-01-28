@@ -4,17 +4,18 @@ Performs :math:`Y := \alpha X + Y` (hence the name *axpy*).
 
 C++ API
 -------
-
 .. cpp:function:: void Axpy( S alpha, const Matrix<T>& X, Matrix<T>& Y )
 .. cpp:function:: void Axpy( S alpha, const AbstractDistMatrix<T>& X, AbstractDistMatrix<T>& Y )
 .. cpp:function:: void Axpy( S alpha, const SparseMatrix<T>& X, SparseMatrix<T>& Y )
 .. cpp:function:: void Axpy( S alpha, const DistSparseMatrix<T>& X, DistSparseMatrix<T>& Y )
-.. cpp:function:: void Axpy( T alpha, const MultiVec<T>& X, MultiVec<T>& Y )
 .. cpp:function:: void Axpy( T alpha, const DistMultiVec<T>& X, DistMultiVec<T>& Y )
+
+axpy namespace
+^^^^^^^^^^^^^^
+**TODO**
 
 C API
 -----
-
 .. c:function:: ElError ElAxpy_i( ElInt alpha, ElConstMatrix_i X, ElMatrix_i Y )
 .. c:function:: ElError ElAxpy_s( float alpha, ElConstMatrix_s X, ElMatrix_s Y )
 .. c:function:: ElError ElAxpy_d( double alpha, ElConstMatrix_d X, ElMatrix_d Y )
@@ -43,5 +44,4 @@ C API
 
 Python API
 ----------
-
 .. py:function:: Axpy(alpha,X,Y)

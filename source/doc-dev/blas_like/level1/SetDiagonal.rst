@@ -4,27 +4,23 @@ SetDiagonal
    
    This is not a standard BLAS routine.
 
-Sets all of the diagonal entries of a matrix to a given value.
+Sets a diagonal of a matrix equal to a particular vector.
 
 C++ API
 -------
+.. cpp:function:: void SetDiagonal( Matrix<T>& A, const Matrix<T>& d, Int offset=0 )
+.. cpp:function:: void SetDiagonal( DistMatrix<T,U,V>& A, const AbstractDistMatrix<T>& d, Int offset=0 )
 
-.. cpp:function:: void SetDiagonal( Matrix<T>& A, T alpha )
-.. cpp:function:: void SetDiagonal( AbstractDistMatrix<T>& A, T alpha )
+.. cpp:function:: void SetRealPartOfDiagonal( Matrix<T>& A, const Matrix<Base<T>>& d, Int offset=0 )
+.. cpp:function:: void SetRealPartOfDiagonal( DistMatrix<T,U,V>& A, const AbstractDistMatrix<Base<T>>& d, Int offset=0 )
 
-.. cpp:function:: void SetDiagonal( Matrix<T>& A, T alpha, Int offset=0, LeftOrRight side=LEFT )
-.. cpp:function:: void SetDiagonal( AbstractDistMatrix<T>& A, T alpha, Int offset=0, LeftOrRight side=LEFT )
+.. cpp:function:: void SetImagPartOfDiagonal( Matrix<T>& A, const Matrix<Base<T>>& d, Int offset=0 )
+.. cpp:function:: void SetImagPartOfDiagonal( DistMatrix<T,U,V>& A, const AbstractDistMatrix<Base<T>>& d, Int offset=0 )
 
 C API
 -----
+**TODO**
 
-.. c:function:: ElError ElSetDiagonal_i( ElMatrix_i A, ElInt alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonal_s( ElMatrix_s A, float alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonal_d( ElMatrix_d A, double alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonal_c( ElMatrix_c A, complex_float alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonal_z( ElMatrix_z A, complex_double alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonalDist_i( ElDistMatrix_i A, ElInt alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonalDist_s( ElDistMatrix_s A, float alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonalDist_d( ElDistMatrix_d A, double alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonalDist_c( ElDistMatrix_c A, complex_float alpha, ElInt offset )
-.. c:function:: ElError ElSetDiagonalDist_z( ElDistMatrix_z A, complex_double alpha, ElInt offset )
+Python API
+----------
+**TODO**

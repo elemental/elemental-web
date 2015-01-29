@@ -1,6 +1,6 @@
 Dotu
 ====
-Returns :math:`(A,B) = A^T B`. :math:`A` and :math:`B`.
+Returns a `\text{vec}(A)^T \text{vec}(B)`.
 
 C++ API
 -------

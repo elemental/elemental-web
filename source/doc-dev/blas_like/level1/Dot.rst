@@ -1,6 +1,7 @@
 Dot
 ===
-Returns :math:`(A,B) = A^H B`. :math:`A` and :math:`B`.
+Returns :math:`\langle A,B \rangle = \text{vec}(A)^H \text{vec}(B)`. Note that
+this is precisely a Hilbert-Schmidt inner product.
 
 C++ API
 -------

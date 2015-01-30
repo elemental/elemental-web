@@ -1,9 +1,5 @@
 ShiftDiagonal
 =============
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Adds a given value to a diagonal of a matrix.
 
 C++ API

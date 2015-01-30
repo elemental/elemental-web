@@ -1,9 +1,5 @@
 SetDiagonal
 ===========
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Sets a diagonal of a matrix equal to a particular vector.
 
 C++ API

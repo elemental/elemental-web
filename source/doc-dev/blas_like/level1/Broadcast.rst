@@ -1,6 +1,7 @@
 Broadcast
 =========
-Perform an (MPI) Broadcast on the contents of a matrix from a specified process.
+Give every process in the specified communicator a copy of the matrix 
+stored on the process with the given rank.
 
 C++ API
 -------

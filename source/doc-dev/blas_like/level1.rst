@@ -9,7 +9,9 @@ implementations are in `src/blas_like/level1/ <https://github.com/elemental/Elem
    :maxdepth: 1
 
    level1/Adjoint
+   level1/AdjointContract
    level1/AdjointAxpy
+   level1/AdjointAxpyContract
    level1/AllReduce
    level1/Axpy
    level1/AxpyTrapezoid
@@ -51,6 +53,8 @@ implementations are in `src/blas_like/level1/ <https://github.com/elemental/Elem
    level1/Symmetric2x2Scale
    level1/Symmetric2x2Solve
    level1/Transpose
+   level1/TransposeAxpyContract
+   level1/TransposeContract
    level1/UpdateDiagonal
    level1/UpdateSubmatrix
    level1/Zero

@@ -1,9 +1,5 @@
 SetSubmatrix
 ============
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Sets a (possibly non-contiguous) submatrix to a given matrix.
 another matrix.
 

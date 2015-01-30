@@ -1,9 +1,5 @@
 DiagonalScaleTrapezoid
 ======================
-.. note::
-
-   This is not a standard BLAS routine, but it is BLAS-like.
-
 Performs either :math:`A := \mbox{op}(D) A` or :math:`A := A \mbox{op}(D)`, 
 where :math:`A` is trapezoidal (upper or lower with the boundary diagonal 
 of given offset), :math:`op(D)` equals :math:`D=D^T`, or :math:`D^H=\bar D`, 

@@ -1,15 +1,10 @@
 UpdateSubmatrix
 ===============
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Adds a multiple of a matrix to a (possibly non-contiguous) submatrix of 
 another matrix.
 
 C++ API
 -------
-
 .. cpp:function:: void UpdateSubmatrix( Matrix<T>& A, const std::vector<Int>& I, const std::vector<Int>& J, T alpha, const Matrix<T>& ASub )
 .. cpp:function:: void UpdateSubmatrix( AbstractDistMatrix<T>& A, const std::vector<Int>& I, const std::vector<Int>& J, T alpha, const AbstractDistMatrix<T>& ASub )
 

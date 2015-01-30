@@ -1,9 +1,5 @@
 UpdateDiagonal
 ==============
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Adds a multiple of a given vector to a diagonal of a matrix.
 
 C++ API

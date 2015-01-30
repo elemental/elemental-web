@@ -1,9 +1,5 @@
 Adjoint
 =======
-.. note:: 
-
-   This is not a standard BLAS routine, but it is BLAS-like.
-
 :math:`B := A^H`. 
 
 C++ API
@@ -13,10 +9,6 @@ C++ API
 .. cpp:function:: void Adjoint( const AbstractBlockDistMatrix<T>& A, AbstractBlockDistMatrix<T>& B )
 .. cpp:function:: void Adjoint( const SparseMatrix<T>& A, SparseMatrix<T>& B )
 .. cpp:function:: void Adjoint( const DistSparseMatrix<T>& A, DistSparseMatrix<T>& B )
-
-adjoint namespace
-^^^^^^^^^^^^^^^^^
-**TODO**
 
 C API
 -----

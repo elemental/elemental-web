@@ -3,7 +3,11 @@ AxpyTrapezoid
 Performs the trapezoidal portion of an axpy :math:`Y := \alpha X + Y`;
 the trapezoid is defined by the ``uplo`` and ``offset`` parameters, where 
 ``offset`` determines which sub or superdiagonal to use as the cutoff for the
-upper or lower-trapezoidal portion of the update.
+upper or lower-trapezoidal portion of the update. Elemental uses the same 
+convention as MATLAB and Octave for labeling the diagonals: an offset of zero
+corresponds to the main diagonal and will produce a triangular matrix, and an 
+offset of :math:`1` corresponds to the superdiagonal which, combined with 
+``uplo=LOWER``, would produce a lower-Hessenberg matrix.
 
 C++ API
 -------

@@ -1,9 +1,5 @@
 GetSubmatrix
 ============
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Gets a (possibly non-contiguous) submatrix of a given matrix.
 
 C++ API

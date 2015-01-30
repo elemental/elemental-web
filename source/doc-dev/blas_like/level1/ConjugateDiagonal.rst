@@ -1,9 +1,5 @@
 ConjugateDiagonal
 =================
-.. note:: 
-
-   This is not a standard BLAS routine, but it is BLAS-like.
-
 Conjugate a specified diagonal of a matrix.
 
 C++ API

@@ -1,9 +1,5 @@
 ScaleTrapezoid
 ==============
-.. note::
-
-   This is not a standard BLAS routine, but it is BLAS-like.
-
 Scales the entries within the specified trapezoid of a general matrix.
 The parameter conventions follow those of ``MakeTrapezoidal`` described above.
 

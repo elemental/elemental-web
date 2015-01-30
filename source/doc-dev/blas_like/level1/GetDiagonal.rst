@@ -1,9 +1,5 @@
 GetDiagonal
 ===========
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Return a diagonal of a matrix as a vector.
 
 C++ API

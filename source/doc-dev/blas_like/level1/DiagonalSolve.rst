@@ -1,9 +1,5 @@
 DiagonalSolve
 =============
-.. note::
-
-   This is not a standard BLAS routine, but it is BLAS-like.
-
 Performs either :math:`X := \mbox{op}(D)^{-1} X` or 
 :math:`X := X \mbox{op}(D)^{-1}`, where :math:`D = \mbox{diag}(d)` and :math:`d`
 is a column vector.

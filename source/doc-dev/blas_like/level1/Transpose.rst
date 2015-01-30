@@ -1,14 +1,9 @@
 Transpose
 =========
-.. note:: 
-
-   This is not a standard BLAS routine, but it is BLAS-like.
-
 :math:`B := A^T` or :math:`B := A^H`. 
 
 C++ API
 -------
-
 .. cpp:function:: void Transpose( const Matrix<T>& A, Matrix<T>& B, bool conjugate=false )
 .. cpp:function:: void Transpose( const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B )
 .. cpp:function:: void Transpose( const SparseMatrix<T>& A, SparseMatrix<T>& B, bool conjugate=false )
@@ -16,7 +11,6 @@ C++ API
 
 C API
 -----
-
 .. c:function:: ElError ElTranspose_i( ElConstMatrix_i A, ElMatrix_i B )
 .. c:function:: ElError ElTranspose_s( ElConstMatrix_s A, ElMatrix_s B )
 .. c:function:: ElError ElTranspose_d( ElConstMatrix_d A, ElMatrix_d B )
@@ -40,5 +34,4 @@ C API
 
 Python API
 ----------
-
 .. py:function:: Transpose(A,B,conjugate=False)

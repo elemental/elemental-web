@@ -1,9 +1,5 @@
 FillDiagonal
 ============
-.. note::
-   
-   This is not a standard BLAS routine.
-
 Fills all of the diagonal entries of a matrix to a given value.
 
 C++ API

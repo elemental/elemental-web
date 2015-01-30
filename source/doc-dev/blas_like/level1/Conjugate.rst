@@ -1,17 +1,19 @@
 Conjugate
 =========
-.. note:: 
-
-   This is not a standard BLAS routine, but it is BLAS-like.
-
-:math:`A := \bar A`. For real datatypes, this is a no-op.
+Depending upon whether one or two matrices are given, either conjugate the 
+single matrix or set the second matrix equal to the conjugate of the first, 
+i.e., either :math:`A := \bar A` or :math:`B := \bar A`. 
+For real datatypes, this is a no-op.
 
 C++ API
 -------
+
+:math:`A := \bar A`
+
 .. cpp:function:: void Conjugate( Matrix<T>& A )
 .. cpp:function:: void Conjugate( AbstractDistMatrix<T>& A )
 
-:math:`B := \bar A`.
+:math:`B := \bar A`
 
 .. cpp:function:: void Conjugate( const Matrix<T>& A, Matrix<T>& B )
 .. cpp:function:: void Conjugate( const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B )

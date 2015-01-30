@@ -1,6 +1,12 @@
 Axpy
 ====
-Performs :math:`Y := \alpha X + Y` (hence the name *axpy*).
+Update a matrix :math:`Y` with :math:`\alpha X`, i.e.,
+
+.. math::
+
+   Y := \alpha X + Y,
+
+which is the reason for the name *axpy*: "alpha X plus Y".
 
 C++ API
 -------
@@ -9,10 +15,6 @@ C++ API
 .. cpp:function:: void Axpy( S alpha, const SparseMatrix<T>& X, SparseMatrix<T>& Y )
 .. cpp:function:: void Axpy( S alpha, const DistSparseMatrix<T>& X, DistSparseMatrix<T>& Y )
 .. cpp:function:: void Axpy( T alpha, const DistMultiVec<T>& X, DistMultiVec<T>& Y )
-
-axpy namespace
-^^^^^^^^^^^^^^
-**TODO**
 
 C API
 -----

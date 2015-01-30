@@ -1,9 +1,5 @@
 Zero
 ====
-.. note::
-   
-   This is not a standard BLAS routine, but it is BLAS-like.
-
 Sets all of the entries of the input matrix to zero.
 
 C++ API

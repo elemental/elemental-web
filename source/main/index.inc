@@ -18,10 +18,11 @@
     <h2><a href="/download/">Elemental releases</a></h2>
 
     <p>
-    Please note that Elemental 0.86 will be released soon and will contain
-    support for dense and sparse Interior Point Methods for linear and 
-    quadratic programs. Interested users should, in the mean time, check out a 
-    copy of the <a href="https://github.com/elemental/Elemental">development version of the library</a> and <a href="http://libelemental.org/documentation/dev/index.html">browse its (in-progress) documentation</a>.
+    Please note that the <a href="https://github.com/elemental/Elemental/releases/tag/0.86-rc1">release candidate for Elemental 0.86</a> is now available and
+    contains support for dense and sparse Interior Point Methods for linear and 
+    quadratic programs. The official release will follow when 
+    <a href="http://libelemental.org/documentation/dev/index.html">the documentation</a>
+    is reasonably updated to reflect the recent rapid increase in functionality.
     </p>
 
     <p>The previous release, from November 2014, is also available:</p>

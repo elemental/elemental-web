@@ -24,6 +24,7 @@ including:
 
 * Dense and sparse Interior Point Methods for linear and quadratic programs
 * Support for dense and sparse basis pursuit, Lasso, SVM, etc.
+* Dense and sparse-direct Least Squares and Minimum Length problems
 * High-performance pseudospectral computation and visualization
 * Quadratic-time low-rank Cholesky and LU modifications
 * Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
@@ -39,7 +40,7 @@ including:
 Contributors
 ************
 
-Project leader: `Jack Poulson <http://www.stanford.edu/~poulson>`__
+Project leader: `Jack Poulson <http://web.stanford.edu/~poulson>`__
 
 Active contributors (roughly, within the last year): `Paolo Bientinesi <http://hpac.rwth-aachen.de/~pauldj/>`__, `Jed Brown <http://59a2.org/research/>`__, `Rodrigo Canales <https://github.com/rocanale>`__, `AJ Friend <http://stanford.edu/~ajfriend/>`__, `Jeff Hammond <http://pcl.intel-research.net/people/jeff.htm>`__, and `Matthias Petschow <http://hpac.rwth-aachen.de/~petschow/>`__. 
 
@@ -61,7 +62,7 @@ About these pages
 *****************
 
 `This website <http://github.com/elemental/elemental-web.git>`__  was 
-created by `Jack Poulson <http://www.cc.gatech.edu/~jpoulson>`__ by 
+created by `Jack Poulson <http://web.stanford.edu/~poulson>`__ by 
 checking out a copy of 
 `fenics-web <https://bitbucket.org/fenics-project/fenics-web>`__ and slowly 
 replacing FEniCS-specific content with the appropriate Elemental content.

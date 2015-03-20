@@ -23,7 +23,7 @@ At this point in time, Elemental is led in a manner which closely resembles
 that of Python or the Linux kernel: community and developer feedback and 
 changesets are actively encouraged, but decisions are ultimately decided by 
 the main developer of the project (in this case, 
-`Jack Poulson <http://www.cc.gatech.edu/~jpoulson>`__). 
+`Jack Poulson <http://web.stanford.edu/~poulson>`__). 
 This role is traditionally referred to as the Benevolent Dictator.
 As more developers begin to more frequently contribute high-quality changesets
 to the library, Elemental will move towards a more distributed decision-making 

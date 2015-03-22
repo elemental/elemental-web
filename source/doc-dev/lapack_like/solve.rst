@@ -9,7 +9,7 @@ Linear solvers
 .. toctree::
    :maxdepth: 1
 
-   solve/LinearSolve
+   solve/Linear
    solve/Symmetric
    solve/Hermitian
    solve/HPD

@@ -1,7 +1,7 @@
 Multi-shift Hessenberg solves
 =============================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/solve/MultiShiftHessSolve.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/solve/MultiShiftHess.cpp>`__
 
 Solve for :math:`X` in the system
 

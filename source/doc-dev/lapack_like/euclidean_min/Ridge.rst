@@ -1,14 +1,27 @@
 Ridge regression
 ================
-*Ridge regression* is a modification of the standard least-squares
-problem which instead solves
+*Ridge regression* is a special case of *Tikhonov regularization*
+where the regularization matrix, :math:`G`, is of the form :math:`G= \gamma I`.
+When the linear system is either square or overdetermined, one solves the
+*Regularized Least Squares* problem
 
 .. math::
 
-   \min_X \| \text{op}(A) X - B \|_2^2 + \| \alpha X \|_2^2,
+   \min_X \| A X - B \|_F^2 + \| \gamma X \|_F^2,
 
-which is a special case of *Tikhonov regularization* where the weighting matrix
-is a multiple of the identity.
+whereas, when the system is underdetermined, one solves a *Regularized 
+Minimum Length* problem
+
+.. math::
+   :nowrap:
+
+   \begin{eqnarray*}
+   && \min_{X,S} \| X \|_F^2 + \| S \|_F^2 \\
+   && \text{s.t. } A X + \gamma S = B.
+   \end{eqnarray*}
+
+Just as with Tikhonov regularization, Elemental in fact supports replacing 
+:math:`A` in the above equations with :math:`A`, :math:`A^T`, or :math:`A^H`.
 
 C++ API
 -------
@@ -21,8 +34,13 @@ C++ API
    * ``RIDGE_QR``: Run a QR-based algorithm
    * ``RIDGE_SVD``: Run an SVD-based algorithm
 
-.. cpp:function:: void Ridge( const Matrix<F>& A, const Matrix<F>& B, Base<F> alpha, Matrix<F>& X, RidgeAlg alg=RIDGE_CHOLESKY )
-.. cpp:function:: void Ridge( const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, Base<F> alpha, AbstractDistMatrix<F>& X, RidgeAlg alg=RIDGE_CHOLESKY )
+.. cpp:function:: void Ridge( Orientation orientation, const Matrix<F>& A, const Matrix<F>& B, Base<F> gamma, Matrix<F>& X, RidgeAlg alg=RIDGE_CHOLESKY )
+
+.. cpp:function:: void Ridge( Orientation orientation, const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, Base<F> gamma, AbstractDistMatrix<F>& X, RidgeAlg alg=RIDGE_CHOLESKY )
+
+.. cpp:function:: void Ridge( Orientation orientation, const SparseMatrix<F>& A, const Matrix<F>& B, Base<F> gamma, Matrix<F>& X, const LeastSquaresCtrl<Base<F>>& ctrl=LeastSquaresCtrl<Base<F>>() )
+
+.. cpp:function:: void Ridge( Orientation orientation, const DistSparseMatrix<F>& A, const DistMultiVec<F>& B, Base<F> gamma, DistMultiVec<F>& X, const LeastSquaresCtrl<Base<F>>& ctrl=LeastSquaresCtrl<Base<F>>() )
 
 C API
 -----
@@ -35,14 +53,25 @@ C API
    * ``EL_RIDGE_QR``: Run a QR-based algorithm
    * ``EL_RIDGE_SVD``: Run an SVD-based algorithm
 
-.. c:function:: ElError ElRidge_s( ElConstMatrix_s A, ElConstMatrix_s B, float alpha, ElMatrix_s X, ElRidgeAlg alg )
-.. c:function:: ElError ElRidge_d( ElConstMatrix_d A, ElConstMatrix_d B, double alpha, ElMatrix_d X, ElRidgeAlg alg )
-.. c:function:: ElError ElRidge_c( ElConstMatrix_c A, ElConstMatrix_c B, float alpha, ElMatrix_c X, ElRidgeAlg alg )
-.. c:function:: ElError ElRidge_z( ElConstMatrix_z A, ElConstMatrix_z B, double alpha, ElMatrix_z X, ElRidgeAlg alg )
-.. c:function:: ElError ElRidgeDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s B, float alpha, ElDistMatrix_s X, ElRidgeAlg alg )
-.. c:function:: ElError ElRidgeDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, double alpha, ElDistMatrix_d X, ElRidgeAlg alg )
-.. c:function:: ElError ElRidgeDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, float alpha, ElDistMatrix_c X, ElRidgeAlg alg )
-.. c:function:: ElError ElRidgeDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, double alpha, ElDistMatrix_z X, ElRidgeAlg alg )
+.. c:function:: ElError ElRidge_s( ElOrientation orientation, ElConstMatrix_s A, ElConstMatrix_s B, float gamma, ElMatrix_s X, ElRidgeAlg alg )
+.. c:function:: ElError ElRidge_d( ElOrientation orientation, ElConstMatrix_d A, ElConstMatrix_d B, double gamma, ElMatrix_d X, ElRidgeAlg alg )
+.. c:function:: ElError ElRidge_c( ElOrientation orientation, ElConstMatrix_c A, ElConstMatrix_c B, float gamma, ElMatrix_c X, ElRidgeAlg alg )
+.. c:function:: ElError ElRidge_z( ElOrientation orientation, ElConstMatrix_z A, ElConstMatrix_z B, double gamma, ElMatrix_z X, ElRidgeAlg alg )
+
+.. c:function:: ElError ElRidgeDist_s( ElOrientation orientation, ElConstDistMatrix_s A, ElConstDistMatrix_s B, float gamma, ElDistMatrix_s X, ElRidgeAlg alg )
+.. c:function:: ElError ElRidgeDist_d( ElOrientation orientation, ElConstDistMatrix_d A, ElConstDistMatrix_d B, double gamma, ElDistMatrix_d X, ElRidgeAlg alg )
+.. c:function:: ElError ElRidgeDist_c( ElOrientation orientation, ElConstDistMatrix_c A, ElConstDistMatrix_c B, float gamma, ElDistMatrix_c X, ElRidgeAlg alg )
+.. c:function:: ElError ElRidgeDist_z( ElOrientation orientation, ElConstDistMatrix_z A, ElConstDistMatrix_z B, double gamma, ElDistMatrix_z X, ElRidgeAlg alg )
+
+.. c:function:: ElError ElRidgeSparse_s( ElOrientation orientation, ElConstSparseMatrix_s A, ElConstMatrix_s B, float gamma, ElMatrix_s X )
+.. c:function:: ElError ElRidgeSparse_d( ElOrientation orientation, ElConstSparseMatrix_d A, ElConstMatrix_d B, double gamma, ElMatrix_d X )
+.. c:function:: ElError ElRidgeSparse_c( ElOrientation orientation, ElConstSparseMatrix_c A, ElConstMatrix_c B, float gamma, ElMatrix_c X )
+.. c:function:: ElError ElRidgeSparse_z( ElOrientation orientation, ElConstSparseMatrix_z A, ElConstMatrix_z B, double gamma, ElMatrix_z X )
+
+.. c:function:: ElError ElRidgeDistSparse_s( ElOrientation orientation, ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s B, float gamma, ElDistMultiVec_s X )
+.. c:function:: ElError ElRidgeDistSparse_d( ElOrientation orientation, ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d B, double gamma, ElDistMultiVec_d X )
+.. c:function:: ElError ElRidgeDistSparse_c( ElOrientation orientation, ElConstDistSparseMatrix_c A, ElConstDistMultiVec_c B, float gamma, ElDistMultiVec_c X )
+.. c:function:: ElError ElRidgeDistSparse_z( ElOrientation orientation, ElConstDistSparseMatrix_z A, ElConstDistMultiVec_z B, double gamma, ElDistMultiVec_z X )
 
 Python API
 ----------

@@ -48,53 +48,59 @@ rather than only :math:`A`.
 C++ API
 -------
 
-.. cpp:function:: void LeastSquares( Orientation orientation, Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
+.. cpp:function:: void LeastSquares( Orientation orientation, const Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
 
-.. cpp:function:: void LeastSquares( Orientation orientation, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
+.. cpp:function:: void LeastSquares( Orientation orientation, const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
 
 .. cpp:function:: void LeastSquares( Orientation orientation, const SparseMatrix<F>& A, const Matrix<F>& B, Matrix<F>& X, const LeastSquaresCtrl<Base<F>>& ctrl=LeastSquaresCtrl<Base<F>>() )
 
 .. cpp:function:: void LeastSquares( Orientation orientation, const DistSparseMatrix<F>& A, const DistMultiVec<F>& B, DistMultiVec<F>& X, const LeastSquaresCtrl<Base<F>>& ctrl=LeastSquaresCtrl<Base<F>>() )
 
+Dense versions which overwrite some of the input
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. cpp:function:: void ls::Overwrite( Orientation orientation, Matrix<F>& A, const Matrix<F>& B, Matrix<F>& X )
+
+.. cpp:function:: void ls::Overwrite( Orientation orientation, AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
+
 C API
 -----
 
-.. c:function:: ElError ElLeastSquares_s( ElOrientation orientation, ElMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
-.. c:function:: ElError ElLeastSquares_d( ElOrientation orientation, ElMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
-.. c:function:: ElError ElLeastSquares_c( ElOrientation orientation, ElMatrix_c A, ElConstMatrix_c B, ElMatrix_c X )
-.. c:function:: ElError ElLeastSquares_z( ElOrientation orientation, ElMatrix_z A, ElConstMatrix_z B, ElMatrix_z X )
+.. c:function:: ElError ElLeastSquares_s( ElOrientation orientation, ElConstMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
+.. c:function:: ElError ElLeastSquares_d( ElOrientation orientation, ElConstMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
+.. c:function:: ElError ElLeastSquares_c( ElOrientation orientation, ElConstMatrix_c A, ElConstMatrix_c B, ElMatrix_c X )
+.. c:function:: ElError ElLeastSquares_z( ElOrientation orientation, ElConstMatrix_z A, ElConstMatrix_z B, ElMatrix_z X )
 
-.. c:function:: ElError ElLeastSquaresDist_s( ElOrientation orientation, ElDistMatrix_s A, ElConstDistMatrix_s B, ElDistMatrix_s X )
-.. c:function:: ElError ElLeastSquaresDist_d( ElOrientation orientation, ElDistMatrix_d A, ElConstDistMatrix_d B, ElDistMatrix_d X )
-.. c:function:: ElError ElLeastSquaresDist_c( ElOrientation orientation, ElDistMatrix_c A, ElConstDistMatrix_c B, ElDistMatrix_c X )
-.. c:function:: ElError ElLeastSquaresDist_z( ElOrientation orientation, ElDistMatrix_z A, ElConstDistMatrix_z B, ElDistMatrix_z X )
+.. c:function:: ElError ElLeastSquaresDist_s( ElOrientation orientation, ElConstDistMatrix_s A, ElConstDistMatrix_s B, ElDistMatrix_s X )
+.. c:function:: ElError ElLeastSquaresDist_d( ElOrientation orientation, ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElDistMatrix_d X )
+.. c:function:: ElError ElLeastSquaresDist_c( ElOrientation orientation, ElConstDistMatrix_c A, ElConstDistMatrix_c B, ElDistMatrix_c X )
+.. c:function:: ElError ElLeastSquaresDist_z( ElOrientation orientation, ElConstDistMatrix_z A, ElConstDistMatrix_z B, ElDistMatrix_z X )
 
-.. c:function:: ElError ElLeastSquaresSparse_s( ElOrientation orientation, ElSparseMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
-.. c:function:: ElError ElLeastSquaresSparse_d( ElOrientation orientation, ElSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
-.. c:function:: ElError ElLeastSquaresSparse_c( ElOrientation orientation, ElSparseMatrix_c A, ElConstMatrix_c B, ElMatrix_c X )
-.. c:function:: ElError ElLeastSquaresSparse_z( ElOrientation orientation, ElSparseMatrix_z A, ElConstMatrix_z B, ElMatrix_z X )
+.. c:function:: ElError ElLeastSquaresSparse_s( ElOrientation orientation, ElConstSparseMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
+.. c:function:: ElError ElLeastSquaresSparse_d( ElOrientation orientation, ElConstSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
+.. c:function:: ElError ElLeastSquaresSparse_c( ElOrientation orientation, ElConstSparseMatrix_c A, ElConstMatrix_c B, ElMatrix_c X )
+.. c:function:: ElError ElLeastSquaresSparse_z( ElOrientation orientation, ElConstSparseMatrix_z A, ElConstMatrix_z B, ElMatrix_z X )
 
-.. c:function:: ElError ElLeastSquaresDistSparse_s( ElOrientation orientation, ElDistSparseMatrix_s A, ElConstDistMultiVec_s B, ElDistMultiVec_s X )
-.. c:function:: ElError ElLeastSquaresDistSparse_d( ElOrientation orientation, ElDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X )
-.. c:function:: ElError ElLeastSquaresDistSparse_c( ElOrientation orientation, ElDistSparseMatrix_c A, ElConstDistMultiVec_c B, ElDistMultiVec_c X )
-.. c:function:: ElError ElLeastSquaresDistSparse_z( ElOrientation orientation, ElDistSparseMatrix_z A, ElConstDistMultiVec_z B, ElDistMultiVec_z X )
+.. c:function:: ElError ElLeastSquaresDistSparse_s( ElOrientation orientation, ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s B, ElDistMultiVec_s X )
+.. c:function:: ElError ElLeastSquaresDistSparse_d( ElOrientation orientation, ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X )
+.. c:function:: ElError ElLeastSquaresDistSparse_c( ElOrientation orientation, ElConstDistSparseMatrix_c A, ElConstDistMultiVec_c B, ElDistMultiVec_c X )
+.. c:function:: ElError ElLeastSquaresDistSparse_z( ElOrientation orientation, ElConstDistSparseMatrix_z A, ElConstDistMultiVec_z B, ElDistMultiVec_z X )
 
 Expert versions
 ^^^^^^^^^^^^^^^
 
-.. c:function:: ElError ElLeastSquaresXSparse_s( ElOrientation orientation, ElSparseMatrix_s A, ElConstMatrix_s B, ElMatrix_s X, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElLeastSquaresXSparse_d( ElOrientation orientation, ElSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X, ElLeastSquaresCtrl_d ctrl )
-.. c:function:: ElError ElLeastSquaresXSparse_c( ElOrientation orientation, ElSparseMatrix_c A, ElConstMatrix_c B, ElMatrix_c X, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElLeastSquaresXSparse_z( ElOrientation orientation, ElSparseMatrix_z A, ElConstMatrix_z B, ElMatrix_z X, ElLeastSquaresCtrl_d ctrl )
+.. c:function:: ElError ElLeastSquaresXSparse_s( ElOrientation orientation, ElConstSparseMatrix_s A, ElConstMatrix_s B, ElMatrix_s X, ElLeastSquaresCtrl_s ctrl )
+.. c:function:: ElError ElLeastSquaresXSparse_d( ElOrientation orientation, ElConstSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X, ElLeastSquaresCtrl_d ctrl )
+.. c:function:: ElError ElLeastSquaresXSparse_c( ElOrientation orientation, ElConstSparseMatrix_c A, ElConstMatrix_c B, ElMatrix_c X, ElLeastSquaresCtrl_s ctrl )
+.. c:function:: ElError ElLeastSquaresXSparse_z( ElOrientation orientation, ElConstSparseMatrix_z A, ElConstMatrix_z B, ElMatrix_z X, ElLeastSquaresCtrl_d ctrl )
 
-.. c:function:: ElError ElLeastSquaresXDistSparse_s( ElOrientation orientation, ElDistSparseMatrix_s A, ElConstDistMultiVec_s B, ElDistMultiVec_s X, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElLeastSquaresXDistSparse_d( ElOrientation orientation, ElDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X, ElLeastSquaresCtrl_d ctrl )
-.. c:function:: ElError ElLeastSquaresXDistSparse_c( ElOrientation orientation, ElDistSparseMatrix_c A, ElConstDistMultiVec_c B, ElDistMultiVec_c X, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElLeastSquaresXDistSparse_z( ElOrientation orientation, ElDistSparseMatrix_z A, ElConstDistMultiVec_z B, ElDistMultiVec_z X, ElLeastSquaresCtrl_d ctrl )
+.. c:function:: ElError ElLeastSquaresXDistSparse_s( ElOrientation orientation, ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s B, ElDistMultiVec_s X, ElLeastSquaresCtrl_s ctrl )
+.. c:function:: ElError ElLeastSquaresXDistSparse_d( ElOrientation orientation, ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X, ElLeastSquaresCtrl_d ctrl )
+.. c:function:: ElError ElLeastSquaresXDistSparse_c( ElOrientation orientation, ElConstDistSparseMatrix_c A, ElConstDistMultiVec_c B, ElDistMultiVec_c X, ElLeastSquaresCtrl_s ctrl )
+.. c:function:: ElError ElLeastSquaresXDistSparse_z( ElOrientation orientation, ElConstDistSparseMatrix_z A, ElConstDistMultiVec_z B, ElDistMultiVec_z X, ElLeastSquaresCtrl_d ctrl )
 
 Python API
 ----------
-.. py:function:: LeastSquares(A,B,orient=NORMAL,ctrl=None)
+.. py:function:: LeastSquares(A,B,ctrl=None,orient=NORMAL)
 
 .. [Bjorck92] Ake Bjorck, *Pivoting and stability in the augmented system method*. In D.F. Griffiths and G.A. Watson (eds.), Proc. 14th Dundee Conf., Pitman Research Notes in Math., pp. 1--16, 1992.
 

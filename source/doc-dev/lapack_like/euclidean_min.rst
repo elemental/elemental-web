@@ -10,7 +10,7 @@ Euclidean minimization
    :maxdepth: 1
 
    euclidean_min/LeastSquares
-   euclidean_min/GLM
-   euclidean_min/LSE
    euclidean_min/Tikhonov
    euclidean_min/Ridge
+   euclidean_min/GLM
+   euclidean_min/LSE

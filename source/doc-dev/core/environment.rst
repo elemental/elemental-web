@@ -21,8 +21,8 @@ build type. For example::
 
     Elemental version information:
       Git revision: 3c6fbdaad901a554fc27a83378d63dab55af0dd3
-      Version:      0.85-dev
-      Build type:   PureDebug
+      Version:      0.86-dev
+      Build type:   Debug
 
 C++ API
 """""""
@@ -271,7 +271,7 @@ Call stack manipulation
 .. note::
 
    The following call stack manipulation routines are only available in 
-   non-release builds (i.e., PureDebug and HybridDebug) and are meant to allow 
+   non-release builds (i.e., Debug) and are meant to allow 
    for the call stack to be printed (via :cpp:func:`DumpCallStack`) when an 
    exception is caught.
 

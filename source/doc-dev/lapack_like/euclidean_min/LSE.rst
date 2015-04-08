@@ -12,6 +12,9 @@ instances of the *Equality-constrained Least Squares* problem
 
    \min_X \| A X - C \|_F \;\;\; \text{subject to } B X = D.
 
+
+Dense algorithm
+---------------
 For dense instances of the problem, a Generalized RQ factorization can be
 employed as long as :math:`A` is :math:`m \times n`, :math:`B` is 
 :math:`p \times n`, and :math:`p \le n \le m+p`. It is assumed that :math:`B` 
@@ -74,6 +77,8 @@ optionally, :math:`C` is overwritten with the rotated residual matrix
 where :math:`R_{2,2}` is an upper-trapezoidal (not necessarily triangular) 
 matrix. *Note that essentially the same scheme is used in LAPACK's {S,D,C,Z}GGLSE*.
 
+Sparse-direct algorithm
+-----------------------
 For sparse instances of the LSE problem, the symmetric quasi-semidefinite
 augmented system
 
@@ -84,6 +89,10 @@ augmented system
 is formed, equilibrated, and then a priori regularization is added in order
 to make the system sufficiently quasi-definite. A Cholesky-like factorization
 of this regularized system is then used as a preconditioner for FGMRES(k).
+
+Python API
+----------
+.. py:function:: LSE(A,B,C,D[,ctrl=None])
 
 C++ API
 -------
@@ -103,41 +112,60 @@ Dense versions which overwrite their input
 
 .. cpp:function:: void lse::Overwrite( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& C, AbstractDistMatrix<F>& D, AbstractDistMatrix<F>& X, bool computeResidual=false )
 
-
 C API
 -----
+
+Standard interface
+^^^^^^^^^^^^^^^^^^
+
+Single-precision
+""""""""""""""""
 .. c:function:: ElError ElLSE_s( ElConstMatrix_s A, ElConstMatrix_s B, ElConstMatrix_s C, ElConstMatrix_s D, ElMatrix_s X )
-.. c:function:: ElError ElLSE_d( ElConstMatrix_d A, ElConstMatrix_d B, ElConstMatrix_d C, ElConstMatrix_d D, ElMatrix_d X )
-.. c:function:: ElError ElLSE_c( ElConstMatrix_c A, ElConstMatrix_c B, ElConstMatrix_c C, ElConstMatrix_c D, ElMatrix_c X )
-.. c:function:: ElError ElLSE_z( ElConstMatrix_z A, ElConstMatrix_z B, ElConstMatrix_z C, ElConstMatrix_z D, ElMatrix_z X )
-
 .. c:function:: ElError ElLSEDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s B, ElConstDistMatrix_s C, ElConstDistMatrix_s D, ElDistMatrix_s X )
-.. c:function:: ElError ElLSEDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElConstDistMatrix_d C, ElConstDistMatrix_d D, ElDistMatrix_d X )
-.. c:function:: ElError ElLSEDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, ElConstDistMatrix_c C, ElConstDistMatrix_c D, ElDistMatrix_c X )
-.. c:function:: ElError ElLSEDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, ElConstDistMatrix_z C, ElConstDistMatrix_z D, ElDistMatrix_z X )
-
 .. c:function:: ElError ElLSESparse_s( ElConstSparseMatrix_s A, ElConstSparseMatrix_s B, ElConstMatrix_s C, ElConstMatrix_s D, ElMatrix_s X )
-.. c:function:: ElError ElLSESparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d C, ElConstMatrix_d D, ElMatrix_d X )
-.. c:function:: ElError ElLSESparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c C, ElConstMatrix_c D, ElMatrix_c X )
-.. c:function:: ElError ElLSESparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z C, ElConstMatrix_z D, ElMatrix_z X )
-
 .. c:function:: ElError ElLSEDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistSparseMatrix_s B, ElConstDistMultiVec_s C, ElConstDistMultiVec_s D, ElDistMultiVec_s X )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElLSE_d( ElConstMatrix_d A, ElConstMatrix_d B, ElConstMatrix_d C, ElConstMatrix_d D, ElMatrix_d X )
+.. c:function:: ElError ElLSEDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElConstDistMatrix_d C, ElConstDistMatrix_d D, ElDistMatrix_d X )
+.. c:function:: ElError ElLSESparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d C, ElConstMatrix_d D, ElMatrix_d X )
 .. c:function:: ElError ElLSEDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistSparseMatrix_d B, ElConstDistMultiVec_d C, ElConstDistMultiVec_d D, ElDistMultiVec_d X )
+
+Single-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElLSE_c( ElConstMatrix_c A, ElConstMatrix_c B, ElConstMatrix_c C, ElConstMatrix_c D, ElMatrix_c X )
+.. c:function:: ElError ElLSEDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, ElConstDistMatrix_c C, ElConstDistMatrix_c D, ElDistMatrix_c X )
+.. c:function:: ElError ElLSESparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c C, ElConstMatrix_c D, ElMatrix_c X )
 .. c:function:: ElError ElLSEDistSparse_c( ElConstDistSparseMatrix_c A, ElConstDistSparseMatrix_c B, ElConstDistMultiVec_c C, ElConstDistMultiVec_c D, ElDistMultiVec_c X )
+
+Double-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElLSE_z( ElConstMatrix_z A, ElConstMatrix_z B, ElConstMatrix_z C, ElConstMatrix_z D, ElMatrix_z X )
+.. c:function:: ElError ElLSEDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, ElConstDistMatrix_z C, ElConstDistMatrix_z D, ElDistMatrix_z X )
+.. c:function:: ElError ElLSESparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z C, ElConstMatrix_z D, ElMatrix_z X )
 .. c:function:: ElError ElLSEDistSparse_z( ElConstDistSparseMatrix_z A, ElConstDistSparseMatrix_z B, ElConstDistMultiVec_z C, ElConstDistMultiVec_z D, ElDistMultiVec_z X )
 
 Expert versions
 ^^^^^^^^^^^^^^^
-.. c:function:: ElError ElLSEXSparse_s( ElConstSparseMatrix_s A, ElConstSparseMatrix_s B, ElConstMatrix_s C, ElConstMatrix_s D, ElMatrix_s X, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElLSEXSparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d C, ElConstMatrix_d D, ElMatrix_d X, ElLeastSquaresCtrl_d ctrl )
-.. c:function:: ElError ElLSEXSparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c C, ElConstMatrix_c D, ElMatrix_c X, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElLSEXSparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z C, ElConstMatrix_z D, ElMatrix_z X, ElLeastSquaresCtrl_d ctrl )
 
+Single-precision
+""""""""""""""""
+.. c:function:: ElError ElLSEXSparse_s( ElConstSparseMatrix_s A, ElConstSparseMatrix_s B, ElConstMatrix_s C, ElConstMatrix_s D, ElMatrix_s X, ElLeastSquaresCtrl_s ctrl )
 .. c:function:: ElError ElLSEXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistSparseMatrix_s B, ElConstDistMultiVec_s C, ElConstDistMultiVec_s D, ElDistMultiVec_s X, ElLeastSquaresCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElLSEXSparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d C, ElConstMatrix_d D, ElMatrix_d X, ElLeastSquaresCtrl_d ctrl )
 .. c:function:: ElError ElLSEXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistSparseMatrix_d B, ElConstDistMultiVec_d C, ElConstDistMultiVec_d D, ElDistMultiVec_d X, ElLeastSquaresCtrl_d ctrl )
+
+Single-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElLSEXSparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c C, ElConstMatrix_c D, ElMatrix_c X, ElLeastSquaresCtrl_s ctrl )
 .. c:function:: ElError ElLSEXDistSparse_c( ElConstDistSparseMatrix_c A, ElConstDistSparseMatrix_c B, ElConstDistMultiVec_c C, ElConstDistMultiVec_c D, ElDistMultiVec_c X, ElLeastSquaresCtrl_s ctrl )
+
+Double-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElLSEXSparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z C, ElConstMatrix_z D, ElMatrix_z X, ElLeastSquaresCtrl_d ctrl )
 .. c:function:: ElError ElLSEXDistSparse_z( ElConstDistSparseMatrix_z A, ElConstDistSparseMatrix_z B, ElConstDistMultiVec_z C, ElConstDistMultiVec_z D, ElDistMultiVec_z X, ElLeastSquaresCtrl_d ctrl )
 
-Python API
-----------
-.. py:function:: LSE(A,B,C,D,ctrl=None)

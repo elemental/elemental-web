@@ -12,6 +12,8 @@ of the *General Linear Model*,
 
    \min_{X,Y} \| Y \|_F \;\;\; \text{subject to } A X + B Y = D.
 
+Dense algorithm
+---------------
 For dense instances of the problem, where :math:`A` is :math:`m \times n` and 
 :math:`B` is :math:`m \times p`, we assume that :math:`n \le m \le n+p` as well
 as that :math:`A` has full column rank, :math:`n`, and 
@@ -46,6 +48,8 @@ we set to zero. Then all that is left is to solve
 
 for :math:`x`. *Note that essentially the same scheme is used in LAPACK's {S,D,C,Z}GGGLM*.
 
+Sparse-direct algorithm
+-----------------------
 For sparse instances of the GLM problem, the symmetric quasi-semidefinite
 augmented system
 
@@ -56,6 +60,10 @@ augmented system
 is formed, equilibrated, and then a priori regularization is added in order
 to make the system sufficiently quasi-definite. A Cholesky-like factorization
 of this regularized system is then used as a preconditioner for FGMRES(k).
+
+Python API
+----------
+.. py:function:: GLM(A,B,D[,ctrl=None])
 
 C++ API
 -------
@@ -77,38 +85,58 @@ Dense versions which overwrite their input
 
 C API
 -----
+
+Standard interface
+^^^^^^^^^^^^^^^^^^
+
+Single-precision
+""""""""""""""""
 .. c:function:: ElError ElGLM_s( ElConstMatrix_s A, ElConstMatrix_s B, ElConstMatrix_s D, ElMatrix_s X, ElMatrix_s Y )
-.. c:function:: ElError ElGLM_d( ElConstMatrix_d A, ElConstMatrix_d B, ElConstMatrix_d D, ElMatrix_d X, ElMatrix_d Y )
-.. c:function:: ElError ElGLM_c( ElConstMatrix_c A, ElConstMatrix_c B, ElConstMatrix_c D, ElMatrix_c X, ElMatrix_c Y )
-.. c:function:: ElError ElGLM_z( ElConstMatrix_z A, ElConstMatrix_z B, ElConstMatrix_z D, ElMatrix_z X, ElMatrix_z Y )
-
 .. c:function:: ElError ElGLMDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s B, ElConstDistMatrix_s D, ElDistMatrix_s X, ElDistMatrix_s Y )
-.. c:function:: ElError ElGLMDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElConstDistMatrix_d D, ElDistMatrix_d X, ElDistMatrix_d Y )
-.. c:function:: ElError ElGLMDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, ElConstDistMatrix_c D, ElDistMatrix_c X, ElDistMatrix_c Y )
-.. c:function:: ElError ElGLMDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, ElConstDistMatrix_z D, ElDistMatrix_z X, ElDistMatrix_z Y )
-
 .. c:function:: ElError ElGLMSparse_s( ElConstSparseMatrix_s A, ElConstSparseMatrix_s B, ElConstMatrix_s D, ElMatrix_s X, ElMatrix_s Y )
-.. c:function:: ElError ElGLMSparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d D, ElMatrix_d X, ElMatrix_d Y )
-.. c:function:: ElError ElGLMSparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c D, ElMatrix_c X, ElMatrix_c Y )
-.. c:function:: ElError ElGLMSparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z D, ElMatrix_z X, ElMatrix_z Y )
-
 .. c:function:: ElError ElGLMDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistSparseMatrix_s B, ElConstDistMultiVec_s D, ElDistMultiVec_s X, ElDistMultiVec_s Y )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElGLM_d( ElConstMatrix_d A, ElConstMatrix_d B, ElConstMatrix_d D, ElMatrix_d X, ElMatrix_d Y )
+.. c:function:: ElError ElGLMDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElConstDistMatrix_d D, ElDistMatrix_d X, ElDistMatrix_d Y )
+.. c:function:: ElError ElGLMSparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d D, ElMatrix_d X, ElMatrix_d Y )
 .. c:function:: ElError ElGLMDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistSparseMatrix_d B, ElConstDistMultiVec_d D, ElDistMultiVec_d X, ElDistMultiVec_d Y )
+
+Single-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElGLM_c( ElConstMatrix_c A, ElConstMatrix_c B, ElConstMatrix_c D, ElMatrix_c X, ElMatrix_c Y )
+.. c:function:: ElError ElGLMDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c B, ElConstDistMatrix_c D, ElDistMatrix_c X, ElDistMatrix_c Y )
+.. c:function:: ElError ElGLMSparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c D, ElMatrix_c X, ElMatrix_c Y )
 .. c:function:: ElError ElGLMDistSparse_c( ElConstDistSparseMatrix_c A, ElConstDistSparseMatrix_c B, ElConstDistMultiVec_c D, ElDistMultiVec_c X, ElDistMultiVec_c Y )
+
+Double-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElGLM_z( ElConstMatrix_z A, ElConstMatrix_z B, ElConstMatrix_z D, ElMatrix_z X, ElMatrix_z Y )
+.. c:function:: ElError ElGLMDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z B, ElConstDistMatrix_z D, ElDistMatrix_z X, ElDistMatrix_z Y )
+.. c:function:: ElError ElGLMSparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z D, ElMatrix_z X, ElMatrix_z Y )
 .. c:function:: ElError ElGLMDistSparse_z( ElConstDistSparseMatrix_z A, ElConstDistSparseMatrix_z B, ElConstDistMultiVec_z D, ElDistMultiVec_z X, ElDistMultiVec_z Y )
 
 Expert versions
 ^^^^^^^^^^^^^^^
-.. c:function:: ElError ElGLMXSparse_s( ElConstSparseMatrix_s A, ElConstSparseMatrix_s B, ElConstMatrix_s D, ElMatrix_s X, ElMatrix_s Y, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElGLMXSparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d D, ElMatrix_d X, ElMatrix_d Y, ElLeastSquaresCtrl_d ctrl )
-.. c:function:: ElError ElGLMXSparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c D, ElMatrix_c X, ElMatrix_c Y, ElLeastSquaresCtrl_s ctrl )
-.. c:function:: ElError ElGLMXSparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z D, ElMatrix_z X, ElMatrix_z Y, ElLeastSquaresCtrl_d ctrl )
 
+Single-precision
+""""""""""""""""
+.. c:function:: ElError ElGLMXSparse_s( ElConstSparseMatrix_s A, ElConstSparseMatrix_s B, ElConstMatrix_s D, ElMatrix_s X, ElMatrix_s Y, ElLeastSquaresCtrl_s ctrl )
 .. c:function:: ElError ElGLMXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistSparseMatrix_s B, ElConstDistMultiVec_s D, ElDistMultiVec_s X, ElDistMultiVec_s Y, ElLeastSquaresCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElGLMXSparse_d( ElConstSparseMatrix_d A, ElConstSparseMatrix_d B, ElConstMatrix_d D, ElMatrix_d X, ElMatrix_d Y, ElLeastSquaresCtrl_d ctrl )
 .. c:function:: ElError ElGLMXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistSparseMatrix_d B, ElConstDistMultiVec_d D, ElDistMultiVec_d X, ElDistMultiVec_d Y, ElLeastSquaresCtrl_d ctrl )
+
+Single-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElGLMXSparse_c( ElConstSparseMatrix_c A, ElConstSparseMatrix_c B, ElConstMatrix_c D, ElMatrix_c X, ElMatrix_c Y, ElLeastSquaresCtrl_s ctrl )
 .. c:function:: ElError ElGLMXDistSparse_c( ElConstDistSparseMatrix_c A, ElConstDistSparseMatrix_c B, ElConstDistMultiVec_c D, ElDistMultiVec_c X, ElDistMultiVec_c Y, ElLeastSquaresCtrl_s ctrl )
+
+Double-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElGLMXSparse_z( ElConstSparseMatrix_z A, ElConstSparseMatrix_z B, ElConstMatrix_z D, ElMatrix_z X, ElMatrix_z Y, ElLeastSquaresCtrl_d ctrl )
 .. c:function:: ElError ElGLMXDistSparse_z( ElConstDistSparseMatrix_z A, ElConstDistSparseMatrix_z B, ElConstDistMultiVec_z D, ElDistMultiVec_z X, ElDistMultiVec_z Y, ElLeastSquaresCtrl_d ctrl )
 
-Python API
-----------
-.. py:function:: GLM(A,B,D,ctrl=None)

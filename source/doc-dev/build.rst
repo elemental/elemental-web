@@ -275,22 +275,23 @@ greatly improved on many architectures when libFLAME is linked.
 
 Build modes
 -----------
-Elemental currently has four different build modes:
+Elemental currently has two different build modes:
 
-* **PureDebug** - An MPI-only build that maintains a call stack and provides 
-  more error checking.
-* **PureRelease** - An optimized MPI-only build suitable for production use.
-* **HybridDebug** - An MPI+OpenMP build that maintains a call stack and provides
-  more error checking.
-* **HybridRelease** - An optimized MPI+OpenMP build suitable for production use.
+* **Debug** - Maintains a call stack and provides significant error-checking.
+* **Release** - An optimized build suitable for production usage (assuming high-performance BLAS and MPI implementations were used)
 
 The build mode can be specified with the ``CMAKE_BUILD_TYPE`` option, e.g., 
-``-D CMAKE_BUILD_TYPE=PureDebug``. If this option is not specified, Elemental
-defaults to the **PureRelease** build mode.
+``-D CMAKE_BUILD_TYPE=Debug``. If this option is not specified, Elemental
+defaults to the **Release** build mode.
 
 Once the build mode is selected, one might also want to manually set the 
 optimization level of the compiler, e.g., via the CMake option 
 ``-D CXX_FLAGS="-O3"``.
+
+Furthermore, there is also an option to attempt to make use of OpenMP 
+parallelization when packing and unpacking MPI buffers that is enabled when
+the ``-D EL_HYBRID=TRUE`` CMake option is set. If this option is used, the user
+should ensure that a threaded BLAS implementation is used.
 
 Testing the installation
 ========================

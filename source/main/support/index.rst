@@ -3,6 +3,11 @@
 Supporting grants
 #################
 
+.. image:: darpa.jpg
+
+* AFRL Contract FA8750-12-2-0306 (2015)
+* AFRL Contract FA8750-13-C-0002 (2014)
+
 .. image:: nsf.jpg
 
 * Award ACI-1148125/1340293 (supplement): Collaborative Research: SI2-SSI: A Linear Algebra Software Infrastructure for Sustained Innovation in Computational Chemistry and other Sciences.
@@ -15,7 +20,8 @@ support the development of Elemental since its development began in 2009.
 .. image:: stanford.png
    :scale: 75 %
 
-* Jack Poulson was supported as an Acting Assistant Professor from October to December 2014 and, starting in January 2015, is now an Assistant Professor in Stanford's Department of Mathematics.
+* Jack Poulson is an Assistant Professor in the Department of Mathematics at 
+Stanford as of January 2015 (having been an Acting Assistant Professor from October to December 2014) and is also a Member of the Institute for Computational and Mathematical Engineering.
 
 .. image:: gt-cse.jpeg
    :scale: 90 %

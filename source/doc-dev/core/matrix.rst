@@ -1,5 +1,5 @@
-Sequential matrices
-===================
+Matrix
+======
 The :cpp:type:`Matrix\<T>` class is the building of the library:
 its purpose is to provide convenient mechanisms for performing basic matrix 
 manipulations, such as setting and querying individual matrix entries, 
@@ -126,7 +126,7 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
 
    .. rubric:: Assignment and reconfiguration
 
-   .. cpp:function:: Matrix<T>& operator=( const Matrix<T>& A )
+   .. cpp:function:: const Matrix<T>& operator=( const Matrix<T>& A )
 
       Create a full copy of the specified matrix.
 
@@ -234,85 +234,6 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
    .. cpp:function:: void Conjugate( Int i, Int j )
 
       Conjugate the :math:`(i,j)` entry of the matrix.
-
-   .. rubric:: Diagonal manipulation
-
-   .. cpp:function:: void GetDiagonal( Matrix<T>& d, Int offset=0 ) const
-   .. cpp:function:: void GetRealPartOfDiagonal( Matrix<Base<T>>& d, Int offset=0 ) const
-   .. cpp:function:: void GetImagPartOfDiagonal( Matrix<Base<T>>& d, Int offset=0 ) const
-
-      Modify :math:`d` into a column-vector containing the entries (or their 
-      real or imaginary parts) lying on the `offset` diagonal of our matrix 
-      (for instance, the main diagonal has offset :math:`0`, the subdiagonal 
-      has offset :math:`-1`, and the superdiagonal has offset :math:`+1`).
-
-   .. cpp:function:: Matrix<T> GetDiagonal( Int offset=0 ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( Int offset=0 ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( Int offset=0 ) const
-
-      Efficiently construct and return the particular diagonal 
-      (or its real or imaginary part) via C++11 move semantics.
-
-   .. cpp:function:: void SetDiagonal( const Matrix<T>& d, Int offset=0 )
-   .. cpp:function:: void SetRealPartOfDiagonal( const Matrix<Base<T>>& d, Int offset=0 )
-   .. cpp:function:: void SetImagPartOfDiagonal( const Matrix<Base<T>>& d, Int offset=0 )
-
-      Set the entries (or their real or imaginary parts) in the `offset` 
-      diagonal entries from the contents of the column-vector :math:`d`.
-
-   .. cpp:function:: void UpdateDiagonal( T alpha, const Matrix<T>& d, Int offset=0 )
-   .. cpp:function:: void UpdateRealPartOfDiagonal( Base<T> alpha, const Matrix<Base<T>>& d, Int offset=0 )
-   .. cpp:function:: void UpdateImagPartOfDiagonal( Base<T> alpha, const Matrix<Base<T>>& d, Int offset=0 )
-
-      Add the contents of :math:`\alpha d` onto the entries 
-      (or the real or imaginary parts) in the `offset` diagonal.
-
-   .. cpp:function:: void MakeDiagonalReal( Int offset=0 )
-
-      Force the specified diagonal of the matrix to be real.
-
-   .. cpp:function:: void ConjugateDiagonal( nt offset=0 )
-
-      Conjugate the specified diagonal of the matrix. 
-
-   .. rubric:: Arbitrary-submatrix manipulation
-
-   .. cpp:function:: void GetSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, Matrix<T>& ASub ) const
-   .. cpp:function:: void GetRealPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, Matrix<Base<T>>& ASub ) const
-   .. cpp:function:: void GetImagPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, Matrix<Base<T>>& ASub ) const
-
-      Return the submatrix (or its real or imaginary part) with the specified 
-      row and column indices via `ASub`.
-
-   .. cpp:function:: Matrix<T> GetSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
-   .. cpp:function:: Matrix<Base<T>> GetImagPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
-
-      Return the submatrix (or its real or imaginary part) with the specified
-      row and column indices via C++11 move semantics.
-
-   .. cpp:function:: void SetSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, const Matrix<T>& ASub )
-   .. cpp:function:: void SetRealPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void SetImagPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, const Matrix<Base<T>>& ASub )
-
-      Set the submatrix (or its real or imaginary part) with the specified 
-      row and column indices equal to the matrix `ASub`.
-
-   .. cpp:function:: void UpdateSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, T alpha, const Matrix<T>& ASub )
-   .. cpp:function:: void UpdateRealPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, Base<T> alpha, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void UpdateImagPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J, Base<T> alpha, const Matrix<Base<T>>& ASub )
-
-      Update the submatrix (or its real or imaginary part) with the specified
-      row and column indices with `alpha` times `ASub`.
-
-   .. cpp:function:: void MakeSubmatrixReal( const std::vector<Int>& I, const std::vector<Int>& J )
-
-      Force the submatrix with the specified row and column indices to be real.
-
-   .. cpp:function:: void ConjugateSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J )
-
-      Conjugate the entries in the submatrix with the specified row and column
-      indices.
 
 Special cases used in Elemental
 -------------------------------

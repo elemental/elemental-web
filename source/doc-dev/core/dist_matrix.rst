@@ -1,5 +1,5 @@
-Distributed matrices
-====================
+DistMatrix
+==========
 The :cpp:type:`DistMatrix\<T,U,V>` class is meant to provide a 
 distributed-memory analogue of the :cpp:type:`Matrix\<T>` class. 
 In a manner similar to PLAPACK, roughly ten different matrix 

@@ -1,5 +1,5 @@
-Process grids
-=============
+Grid
+====
 
 Th :cpp:type:`Grid` class is responsible for converting MPI communicators into 
 a two-dimensional process grid meant for distributing matrices (ala the 

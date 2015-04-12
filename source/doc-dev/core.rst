@@ -8,9 +8,12 @@ Core functionality
    core/environment
    core/element
    core/matrix
-   core/sparse_matrix
    core/grid
    core/dist_matrix
+   core/graph
+   core/sparse_matrix
+   core/dist_graph
+   core/dist_sparse_matrix
    core/View
    core/proxies
    core/flame_part

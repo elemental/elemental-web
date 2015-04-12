@@ -1,7 +1,7 @@
 SparseMatrix
 ============
 
-.. cpp:type:: class SparseMatrix<T>
+.. cpp:class:: SparseMatrix<T>
 
    .. rubric:: Constructors and destructors
 
@@ -20,6 +20,10 @@ SparseMatrix
    .. cpp:function:: const SparseMatrix<T>& operator=( const SparseMatrix<T>& A )
 
    .. cpp:function:: const SparseMatrix<T>& operator=( const DistSparseMatrix<T>& A )
+
+   .. cpp:function:: SparseMatrix<T> operator()( Range<Int> I, Range<Int> J ) const
+
+      Make a copy of a contiguous submatrix
 
    .. cpp:function:: void Empty( bool clearMemory=true )
 

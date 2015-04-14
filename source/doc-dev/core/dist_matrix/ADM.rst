@@ -5,7 +5,7 @@ This abstract class defines the list of member functions that are guaranteed
 to be available for all matrix distributions and whose prototype does not 
 depend upon the particular matrix distribution
 
-.. cpp:type:: AbstractDistMatrix<T>
+.. cpp:class:: AbstractDistMatrix<T>
 
    .. rubric:: Constructors and destructors
 
@@ -384,35 +384,35 @@ depend upon the particular matrix distribution
    .. cpp:function:: void AssertSameGrid( const Grid& grid ) const
    .. cpp:function:: void AssertSameSize( Int height, Int width ) const
 
-.. cpp:type:: AbstractDistMatrix<F>
+.. cpp:class:: AbstractDistMatrix<F>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is 
    assumed to be a field.
 
-.. cpp:type:: AbstractDistMatrix<Real>
+.. cpp:class:: AbstractDistMatrix<Real>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is real
    (e.g., ``float`` or ``double``).
 
-.. cpp:type:: AbstractDistMatrix<Base<F>>
+.. cpp:class:: AbstractDistMatrix<Base<F>>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is the
    underlying real datatype from a field (e.g., ``double`` is the base type
    of ``Complex<double>``).
 
-.. cpp:type:: AbstractDistMatrix<Complex<Base<F>>>
+.. cpp:class:: AbstractDistMatrix<Complex<Base<F>>>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is the
    complex extension of the base type of the field `F` (
    (e.g., ``Complex<double>`` is the complex extension of both ``double``
    and ``Complex<double>``).
 
-.. cpp:type:: AbstractDistMatrix<Int>
+.. cpp:class:: AbstractDistMatrix<Int>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is 
    an ``int``.
 
-.. cpp:type:: DistData
+.. cpp:class:: DistData
 
    .. cpp:member:: Distribution colDist
 

@@ -18,7 +18,9 @@ column and row alignments are both 0):
      0 & 1 & 0 & 1 & 0 & 1 & 0 
    \end{array}\right)
 
-.. cpp:type:: DistMatrix<T,MR,MC>
+.. cpp:class:: DistMatrix<T,MR,MC>
 
-   All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+   .. cpp:function:: DistMatrix<T,MR,MC> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,MR,MC> operator()( Range<Int> I, Range<Int> J ) const
+

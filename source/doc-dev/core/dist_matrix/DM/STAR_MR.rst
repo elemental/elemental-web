@@ -17,7 +17,10 @@ the row alignment is 0):
      \{0,1\} & \{2,3\} & \{4,5\} & \{0,1\} & \{2,3\} & \{4,5\} & \{0,1\} 
    \end{array}\right)
 
-.. cpp:type:: DistMatrix<T,STAR,MR>
+.. cpp:class:: DistMatrix<T,STAR,MR>
 
-   All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+
+   .. cpp:function:: DistMatrix<T,STAR,MR> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,STAR,MR> operator()( Range<Int> I, Range<Int> J ) const
+

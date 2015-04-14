@@ -32,6 +32,10 @@ The problem can be placed in affine quadratic form by building an
 which Elemental then defaults to solving with a Mehrotra Predictor-Corrector
 primal-dual Interior Point Method.
 
+Python API
+----------
+.. py:function:: SVM(A,d,lambd[,ctrl=None])
+
 C++ API
 -------
 
@@ -43,33 +47,38 @@ C++ API
 C API
 -----
 
+Single-precision
+""""""""""""""""
+
 .. c:function:: ElError ElSVM_s( ElConstMatrix_s A, ElConstMatrix_s d, float lambda, ElMatrix_s x )
-.. c:function:: ElError ElSVM_d( ElConstMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x )
-
 .. c:function:: ElError ElSVMDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s d, float lambda, ElDistMatrix_s x )
-.. c:function:: ElError ElSVMDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d d, double lambda, ElDistMatrix_d x )
-
 .. c:function:: ElError ElSVMSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s d, float lambda, ElMatrix_s x )
-.. c:function:: ElError ElSVMSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x )
-
 .. c:function:: ElError ElSVMDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s d, float lambda, ElDistMultiVec_s x )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElSVM_d( ElConstMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x )
+.. c:function:: ElError ElSVMDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d d, double lambda, ElDistMatrix_d x )
+.. c:function:: ElError ElSVMSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x )
 .. c:function:: ElError ElSVMDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d d, double lambda, ElDistMultiVec_d x )
 
 Expert interface
 ^^^^^^^^^^^^^^^^
 
+Single-precision
+""""""""""""""""
+
 .. c:function:: ElError ElSVMX_s( ElConstMatrix_s A, ElConstMatrix_s d, float lambda, ElMatrix_s x, ElQPAffine_s ctrl )
-.. c:function:: ElError ElSVMX_d( ElConstMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x, ElQPAffine_d ctrl )
-
 .. c:function:: ElError ElSVMXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s d, float lambda, ElDistMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElSVMXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d d, double lambda, ElDistMatrix_d x, ElQPAffineCtrl_d ctrl )
-
 .. c:function:: ElError ElSVMXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s d, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElSVMXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-
 .. c:function:: ElError ElSVMXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s d, float lambda, ElDistMultiVec_s x, ElQPAffineCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElSVMX_d( ElConstMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x, ElQPAffine_d ctrl )
+.. c:function:: ElError ElSVMXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d d, double lambda, ElDistMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElSVMXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d d, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
 .. c:function:: ElError ElSVMXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d d, double lambda, ElDistMultiVec_d x, ElQPAffineCtrl_d ctrl )
 
-Python API
-----------
-.. py:function:: SVM(A,d,lambd,ctrl=None)

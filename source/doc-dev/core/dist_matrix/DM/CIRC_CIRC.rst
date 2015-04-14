@@ -17,10 +17,14 @@ process grid, then the corresponding overlay for the owners of each entry of our
      0 & 0 & 0 & 0 & 0 & 0 & 0 
    \end{array}\right)
 
-.. cpp:type:: DistMatrix<T,CIRC,CIRC>
+.. cpp:class:: DistMatrix<T,CIRC,CIRC>
 
-   Only two public member functions were not described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+   Only the following public member functions are new relative to 
+   :cpp:type:`AbstractDistMatrix\<T>`
+
+   .. cpp:function:: DistMatrix<T,CIRC,CIRC> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,CIRC,CIRC> operator()( Range<Int> I, Range<Int> J ) const
 
    .. cpp:function:: void CopyFromRoot( const Matrix<T>& A )
 

@@ -14,6 +14,7 @@ Core functionality
    core/sparse_matrix
    core/dist_graph
    core/dist_sparse_matrix
+   core/dist_multi_vec
    core/View
    core/proxies
    core/flame_part

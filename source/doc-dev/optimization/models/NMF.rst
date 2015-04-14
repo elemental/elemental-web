@@ -11,6 +11,11 @@ where :math:`X` is :math:`m \times k` and :math:`Y` is :math:`k \times n`.
 
 The following routines employ alternating non-negative least squares algorithms.
 
+.. note:: 
+
+   The following routines are still just prototypes and do not employ proper 
+   stopping criteria
+
 C++ API
 -------
 

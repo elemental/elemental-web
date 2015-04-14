@@ -20,7 +20,9 @@ owning processes of the entries of our :math:`7 \times 7` matrix example:
 Notice that each *row* of this matrix is distributed like a diagonal of a 
 ``[MC,MR]`` distribution.
 
-.. cpp:type:: DistMatrix<T,STAR,MD>
+.. cpp:class:: DistMatrix<T,STAR,MD>
 
-   All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+   .. cpp:function:: DistMatrix<T,STAR,MD> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,STAR,MD> operator()( Range<Int> I, Range<Int> J ) const
+

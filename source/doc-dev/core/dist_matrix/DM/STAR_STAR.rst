@@ -24,7 +24,10 @@ sets of processes:
    \{0,1,...,5\} & \{0,1,...,5\} & \{0,1,...,5\} 
    \end{array}\right)
 
-.. cpp:type:: DistMatrix<T,STAR,STAR>
+.. cpp:class:: DistMatrix<T,STAR,STAR>
 
-   All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+
+   .. cpp:function:: DistMatrix<T,STAR,STAR> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,STAR,STAR> operator()( Range<Int> I, Range<Int> J ) const
+

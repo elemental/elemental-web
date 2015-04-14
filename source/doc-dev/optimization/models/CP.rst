@@ -22,6 +22,10 @@ which, in affine conic form, becomes
 By default, Elemental solves this linear program via a Mehrotra 
 Predictor-Corrector primal-dual Interior Point Method.
 
+Python API
+----------
+.. py:function:: CP(A,b[,ctrl=None])
+
 C++ API
 -------
 .. cpp:function:: void CP( const Matrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
@@ -31,26 +35,40 @@ C++ API
 
 C API
 -----
+
+Single-precision
+""""""""""""""""
+
 .. c:function:: ElError ElCP_s( ElConstMatrix_s A, ElConstMatrix_s b, ElMatrix_s x )
-.. c:function:: ElError ElCP_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
-.. c:function:: ElError ElCPDist_s( ElConstMatrix_s A, ElConstMatrix_s b, ElMatrix_s x )
-.. c:function:: ElError ElCPDist_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
+.. c:function:: ElError ElCPDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, ElDistMatrix_s x )
 .. c:function:: ElError ElCPSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, ElMatrix_s x )
+.. c:function:: ElError ElCPDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, ElDistMultiVec_s x )
+
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElCP_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
+.. c:function:: ElError ElCPDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, ElDistMatrix_d x )
 .. c:function:: ElError ElCPSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
-.. c:function:: ElError ElCPDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, ElMatrix_s x )
-.. c:function:: ElError ElCPDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
+.. c:function:: ElError ElCPDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, ElDistMultiVec_d x )
 
 Expert interface
 ^^^^^^^^^^^^^^^^
-.. c:function:: ElError ElCPX_s( ElConstMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElCPX_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElCPXDist_s( ElConstMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElCPXDist_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElCPXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElCPXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElCPXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElCPXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
 
-Python API
-----------
-.. py:function:: CP(A,b,ctrl=None)
+Single-precision
+""""""""""""""""
+
+.. c:function:: ElError ElCPX_s( ElConstMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElCPXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, ElDistMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElCPXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElCPXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, ElDistMultiVec_s x, ElLPAffineCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElCPX_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElCPXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, ElDistMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElCPXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElCPXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, ElDistMultiVec_d x, ElLPAffineCtrl_d ctrl )
+

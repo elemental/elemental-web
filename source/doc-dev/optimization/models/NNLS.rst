@@ -25,6 +25,10 @@ which share the same coefficient matrix by forming :math:`A^T A` once and
 sequentially solving a sequence of quadratic programs (with each QP 
 individually parallelized).
 
+Python API
+^^^^^^^^^^
+.. py:function:: NNLS(A,B)
+
 C++ API
 ^^^^^^^
 .. cpp:function:: void NNLS( const Matrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
@@ -34,21 +38,20 @@ C++ API
 
 C API
 ^^^^^
+
+Single-precision
+""""""""""""""""
 .. c:function:: ElError ElNNLS_s( ElConstMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
-.. c:function:: ElError ElNNLS_d( ElConstMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
-
 .. c:function:: ElError ElNNLSDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s B, ElDistMatrix_s X )
-.. c:function:: ElError ElNNLSDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElDistMatrix_d X )
-
 .. c:function:: ElError ElNNLSSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s B, ElMatrix_s X )
-.. c:function:: ElError ElNNLSSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
-
 .. c:function:: ElError ElNNLSDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s B, ElDistMultiVec_s X )
-.. c:function:: ElError ElNNLSDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X )
 
-Python API
-^^^^^^^^^^
-.. py:function:: NNLS(A,B)
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElNNLS_d( ElConstMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
+.. c:function:: ElError ElNNLSDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElDistMatrix_d X )
+.. c:function:: ElError ElNNLSSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
+.. c:function:: ElError ElNNLSDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X )
 
 ADMM
 ----
@@ -65,7 +68,12 @@ C++ API
 C API
 ^^^^^
 
+Single-precision
+""""""""""""""""
 .. c:function:: ElError ElNNLSADMM_s( ElConstMatrix_s A, ElConstMatrix_s Y, ElMatrix_s Z, ElInt* numIts )
-.. c:function:: ElError ElNNLSADMM_d( ElConstMatrix_d A, ElConstMatrix_d Y, ElMatrix_d Z, ElInt* numIts )
 .. c:function:: ElError ElNNLSADMMDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s Y, ElDistMatrix_s Z, ElInt* numIts )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElNNLSADMM_d( ElConstMatrix_d A, ElConstMatrix_d Y, ElMatrix_d Z, ElInt* numIts )
 .. c:function:: ElError ElNNLSADMMDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d Y, ElDistMatrix_d Z, ElInt* numIts )

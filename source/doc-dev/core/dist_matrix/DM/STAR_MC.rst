@@ -25,7 +25,9 @@ the column alignment is 0):
      \{0,2,4\} 
    \end{array}\right)
 
-.. cpp:type:: DistMatrix<T,STAR,MC>
+.. cpp:class:: DistMatrix<T,STAR,MC>
 
-   All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+   .. cpp:function:: DistMatrix<T,STAR,MC> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,STAR,MC> operator()( Range<Int> I, Range<Int> J ) const
+

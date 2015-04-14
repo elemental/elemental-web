@@ -29,6 +29,10 @@ conditioning. Elemental defaults to (DS1) for dense matrices and (DS2) for
 sparse matrices and applies a Mehrotra Predictor-Corrector primal-dual 
 Interior Point Method.
 
+Python API
+----------
+.. py:function:: DS(A,b,lambd[,ctrl=None])
+
 C++ API
 -------
 
@@ -39,26 +43,39 @@ C++ API
 
 C API
 -----
+
+Single-precision
+""""""""""""""""
+
 .. c:function:: ElError ElDS_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x )
-.. c:function:: ElError ElDS_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x )
-.. c:function:: ElError ElDSDist_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x )
-.. c:function:: ElError ElDSDist_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x )
+.. c:function:: ElError ElDSDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, float lambda, ElDistMatrix_s x )
 .. c:function:: ElError ElDSSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x )
+.. c:function:: ElError ElDSDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, float lambda, ElDistMultiVec_s x )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElDS_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x )
+.. c:function:: ElError ElDSDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, double lambda, ElDistMatrix_d x )
 .. c:function:: ElError ElDSSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x )
-.. c:function:: ElError ElDSDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x )
-.. c:function:: ElError ElDSDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x )
+.. c:function:: ElError ElDSDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, double lambda, ElDistMultiVec_d x )
 
 Expert interface
 ^^^^^^^^^^^^^^^^
-.. c:function:: ElError ElDSX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElDSX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElDSXDist_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElDSXDist_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElDSXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElDSXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
-.. c:function:: ElError ElDSXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
-.. c:function:: ElError ElDSXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
 
-Python API
-----------
-.. py:function:: DS(A,b,lambd,ctrl=None)
+Single-precision
+""""""""""""""""
+
+.. c:function:: ElError ElDSX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElDSXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, float lambda, ElDistMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElDSXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElDSXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, float lambda, ElDistMultiVec_s x, ElLPAffineCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElDSX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElDSXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, double lambda, ElDistMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElDSXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElDSXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, double lambda, ElDistMultiVec_d x, ElLPAffineCtrl_d ctrl )
+

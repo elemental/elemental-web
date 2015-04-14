@@ -19,7 +19,9 @@ would be owned by the following sets of processes:
      0 & 0 & 0 & 0 & 0 & 0 & 0
    \end{array}\right)
 
-.. cpp:type:: DistMatrix<T,VR,STAR>
+.. cpp:class:: DistMatrix<T,VR,STAR>
 
-   All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+   .. cpp:function:: DistMatrix<T,VR,STAR> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,VR,STAR> operator()( Range<Int> I, Range<Int> J ) const
+

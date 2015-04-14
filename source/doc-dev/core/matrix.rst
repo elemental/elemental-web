@@ -62,7 +62,7 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
      ...
      auto ASub = A( IR(iBeg,iEnd), IR(jBeg,jEnd) );
 
-.. cpp:type:: class Matrix<T>
+.. cpp:class:: Matrix<T>
 
    The goal is for the `Matrix` class to support any datatype `T` which 
    supports both addition and multiplication and has the associated identities
@@ -125,6 +125,9 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
       Frees all resources owned by the matrix upon destruction.
 
    .. rubric:: Assignment and reconfiguration
+
+   .. cpp:function:: Matrix<T> operator()( Range<Int> I, Range<Int> J )
+   .. cpp:function:: const Matrix<T> operator()( Range<Int> I, Range<Int> J ) const
 
    .. cpp:function:: const Matrix<T>& operator=( const Matrix<T>& A )
 

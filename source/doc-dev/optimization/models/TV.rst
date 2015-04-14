@@ -26,6 +26,10 @@ Elemental follows the formulation used within `CVXOPT <http://cvxopt.org/>`__:
 By default, Elemental solves this quadratic program via a Mehrotra 
 Predictor-Corrector primal-dual Interior Point Method.
 
+Python API
+----------
+.. py:function:: TV(b,lambd[,ctrl=None])
+
 C++ API
 -------
 .. cpp:function:: void TV( const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
@@ -34,22 +38,43 @@ C++ API
 
 C API
 -----
+
+Single-precision
+""""""""""""""""
+
 .. c:function:: ElError ElTV_s( ElConstMatrix_s b, float lambda, ElMatrix_s x )
+.. c:function:: ElError ElTVDist_s( ElConstDistMatrix_s b, float lambda, ElDistMatrix_s x )
+.. c:function:: ElError ElTVSparse_s( ElConstMatrix_s b, float lambda, ElMatrix_s x )
+.. c:function:: ElError ElTVDistSparse_s( ElConstDistMultiVec_s b, float lambda, ElDistMultiVec_s x )
+
+
+Double-precision
+""""""""""""""""
+
 .. c:function:: ElError ElTV_d( ElConstMatrix_d b, double lambda, ElMatrix_d x )
-.. c:function:: ElError ElTVDist_s( ElConstMatrix_s b, float lambda, ElMatrix_s x )
-.. c:function:: ElError ElTVDist_d( ElConstMatrix_d b, double lambda, ElMatrix_d x )
-.. c:function:: ElError ElTVDistSparse_s( ElConstMatrix_s b, float lambda, ElMatrix_s x )
-.. c:function:: ElError ElTVDistSparse_d( ElConstMatrix_d b, double lambda, ElMatrix_d x )
+.. c:function:: ElError ElTVDist_d( ElConstDistMatrix_d b, double lambda, ElDistMatrix_d x )
+.. c:function:: ElError ElTVSparse_d( ElConstMatrix_d b, double lambda, ElMatrix_d x )
+.. c:function:: ElError ElTVDistSparse_d( ElConstDistMultiVec_d b, double lambda, ElDistMultiVec_d x )
+
 
 Expert interface
 ^^^^^^^^^^^^^^^^
-.. c:function:: ElError ElTVX_s( ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElTVX_d( ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElTVXDist_s( ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElTVXDist_d( ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElTVXDistSparse_s( ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElTVXDistSparse_d( ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
 
-Python API
-----------
-.. py:function:: TV(b,lambd,ctrl=None)
+Single-precision
+""""""""""""""""
+
+.. c:function:: ElError ElTVX_s( ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElTVXDist_s( ElConstDistMatrix_s b, float lambda, ElDistMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElTVXSparse_s( ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElTVXDistSparse_s( ElConstDistMultiVec_s b, float lambda, ElDistMultiVec_s x, ElQPAffineCtrl_s ctrl )
+
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElTVX_d( ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElTVXDist_d( ElConstDistMatrix_d b, double lambda, ElDistMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElTVXSparse_d( ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElTVXDistSparse_d( ElConstDistMultiVec_d b, double lambda, ElDistMultiVec_d x, ElQPAffineCtrl_d ctrl )
+
+

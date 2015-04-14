@@ -30,6 +30,10 @@ splitting :math:`x` into its positive and negative components, say :math:`x = u 
 By default, Elemental solves this equation using a Mehrotra Predictor-Corrector
 primal-dual Interior Point Method.
 
+Python API
+----------
+.. py:function:: EN(A,b,lambda1,lambda2[,ctrl=None])
+
 C++ API
 -------
 .. cpp:function:: void EN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda1, Real lambda2, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
@@ -39,26 +43,39 @@ C++ API
 
 C API
 -----
+
+Single-precision
+""""""""""""""""
+
 .. c:function:: ElError ElEN_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x )
-.. c:function:: ElError ElEN_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x )
-.. c:function:: ElError ElENDist_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x )
-.. c:function:: ElError ElENDist_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x )
+.. c:function:: ElError ElENDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, float lambda1, float lambda2, ElDistMatrix_s x )
 .. c:function:: ElError ElENSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x )
+.. c:function:: ElError ElENDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, float lambda1, float lambda2, ElDistMultiVec_s x )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElEN_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x )
+.. c:function:: ElError ElENDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, double lambda1, double lambda2, ElDistMatrix_d x )
 .. c:function:: ElError ElENSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x )
-.. c:function:: ElError ElENDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x )
-.. c:function:: ElError ElENDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x )
+.. c:function:: ElError ElENDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, double lambda1, double lambda2, ElDistMultiVec_d x )
 
 Expert interface
 ^^^^^^^^^^^^^^^^
-.. c:function:: ElError ElENX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElENX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElENXDist_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElENXDist_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElENXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElENXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElENXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElENXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
 
-Python API
-----------
-.. py:function:: EN(A,b,lambda1,lambda2,ctrl=None)
+Single-precision
+""""""""""""""""
+
+.. c:function:: ElError ElENX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElENXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, float lambda1, float lambda2, ElDistMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElENXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda1, float lambda2, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElENXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, float lambda1, float lambda2, ElDistMultiVec_s x, ElQPAffineCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElENX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElENXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, double lambda1, double lambda2, ElDistMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElENXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda1, double lambda2, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElENXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, double lambda1, double lambda2, ElDistMultiVec_d x, ElQPAffineCtrl_d ctrl )
+

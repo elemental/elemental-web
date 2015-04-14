@@ -38,8 +38,10 @@ It should also be noted that this is the default distribution format for the
 :cpp:type:`DistMatrix\<T,U,V>` class, as :cpp:type:`DistMatrix\<T>` defaults to
 :cpp:type:`DistMatrix\<T,MC,MR>`.
 
-.. cpp:type:: DistMatrix<T>
-.. cpp:type:: DistMatrix<T,MC,MR>
+.. cpp:class:: DistMatrix<T>
+.. cpp:class:: DistMatrix<T,MC,MR>
 
-   All public member functions have been described as part of 
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+   .. cpp:function:: DistMatrix<T,MC,MR> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,MC,MR> operator()( Range<Int> I, Range<Int> J ) const
+

@@ -16,7 +16,9 @@ This is the transpose of the above ``[VC,* ]`` distribution. On the standard
    0 & 1 & 2 & 3 & 4 & 5 & 0 
    \end{array}\right)
 
-.. cpp:type:: DistMatrix<T,STAR,VC>
+.. cpp:class:: DistMatrix<T,STAR,VC>
 
-   All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>` and :cpp:type:`DistMatrix\<T,U,V>`.
+   .. cpp:function:: DistMatrix<T,STAR,VC> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,STAR,VC> operator()( Range<Int> I, Range<Int> J ) const
+

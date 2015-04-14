@@ -20,6 +20,11 @@ a solution is sought for the problem
 where :math:`\| \cdot \|_*` denotes the nuclear norm and 
 :math:`\| \text{vec}(\cdot) \|_1` denotes the entrywise one-norm.
 
+Python API
+----------
+
+.. py:function:: RPCA(M[,ctrl=None])
+
 C++ API
 -------
 

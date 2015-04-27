@@ -33,6 +33,12 @@ Python API
 ----------
 .. py:function:: DS(A,b,lambd[,ctrl=None])
 
+   :param A: dense or sparse, sequential or distributed matrix
+   :param b: dense right-hand side vector (with type compatible to ``A``)
+   :param lambd: bound on the maximum absolute value of :math:`A^T (b-Ax)`
+   :param ctrl: (optional) :py:class:`LPAffineCtrl` instance
+   :rtype: dense solution vector (with type matching that of ``b``)
+
 C++ API
 -------
 

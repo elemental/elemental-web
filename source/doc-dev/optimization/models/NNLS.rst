@@ -16,28 +16,28 @@ quadratic program
    & \text{s.t. } x \ge 0.
 
 Elemental defaults to solving this QP via a Mehrotra Predictor-Corrector
-primal-dual Interior Point Method.
-
-Standard interface
-------------------
-The following routines solve a sequence of non-negative least squares problems
-which share the same coefficient matrix by forming :math:`A^T A` once and 
-sequentially solving a sequence of quadratic programs (with each QP 
-individually parallelized).
+primal-dual Interior Point Method, but a (prototype) batched version of QP 
+ADMM is also available.
 
 Python API
-^^^^^^^^^^
-.. py:function:: NNLS(A,B)
+----------
+
+.. py:function:: NNLS(A,B[,ctrl=None])
+
+   :param A: dense or sparse, sequential or distributed matrix
+   :param B: dense right-hand side matrix (with type compatible to ``A``)
+   :param ctrl: (optional) :py:class:`NNLSCtrl_s` or :py:class:`NNLSCtrl_d` instance, depending upon whether data is single-precision or double-precision
+   :rtype: dense solution vector (with type matching that of ``b``)
 
 C++ API
-^^^^^^^
-.. cpp:function:: void NNLS( const Matrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
-.. cpp:function:: void NNLS( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& B, AbstractDistMatrix<Real>& X, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
-.. cpp:function:: void NNLS( const SparseMatrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
-.. cpp:function:: void NNLS( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& B, DistMultiVec<Real>& X, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
+-------
+.. cpp:function:: void NNLS( const Matrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
+.. cpp:function:: void NNLS( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& B, AbstractDistMatrix<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
+.. cpp:function:: void NNLS( const SparseMatrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
+.. cpp:function:: void NNLS( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& B, DistMultiVec<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
 
 C API
-^^^^^
+-----
 
 Single-precision
 """"""""""""""""
@@ -53,27 +53,19 @@ Double-precision
 .. c:function:: ElError ElNNLSSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X )
 .. c:function:: ElError ElNNLSDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X )
 
-ADMM
-----
-An Alternating Direction Method of Multipliers implementation which 
-simultaneously solves many instances of the QP in box form is also available
-for dense matrices.
-
-C++ API
-^^^^^^^
-
-.. cpp:function:: Int nnls::ADMM( const Matrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const qp::box::ADMMCtrl<Real>& ctrl=qp::box::ADMMCtrl<Real>() )
-.. cpp:function:: Int nnls::ADMM( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& B, AbstractDistMatrix<Real>& X, const qp::box::ADMMCtrl<Real>& ctrl=qp::box::ADMMCtrl<Real>() )
-
-C API
-^^^^^
+Expert interface
+^^^^^^^^^^^^^^^^
 
 Single-precision
 """"""""""""""""
-.. c:function:: ElError ElNNLSADMM_s( ElConstMatrix_s A, ElConstMatrix_s Y, ElMatrix_s Z, ElInt* numIts )
-.. c:function:: ElError ElNNLSADMMDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s Y, ElDistMatrix_s Z, ElInt* numIts )
+.. c:function:: ElError ElNNLSX_s( ElConstMatrix_s A, ElConstMatrix_s B, ElMatrix_s X, ElNNLSCtrl_s ctrl )
+.. c:function:: ElError ElNNLSXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s B, ElDistMatrix_s X, ElNNLSCtrl_s ctrl )
+.. c:function:: ElError ElNNLSXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s B, ElMatrix_s X, ElNNLSCtrl_s ctrl )
+.. c:function:: ElError ElNNLSXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s B, ElDistMultiVec_s X, ElNNLSCtrl_s ctrl )
 
 Double-precision
 """"""""""""""""
-.. c:function:: ElError ElNNLSADMM_d( ElConstMatrix_d A, ElConstMatrix_d Y, ElMatrix_d Z, ElInt* numIts )
-.. c:function:: ElError ElNNLSADMMDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d Y, ElDistMatrix_d Z, ElInt* numIts )
+.. c:function:: ElError ElNNLSX_d( ElConstMatrix_d A, ElConstMatrix_d B, ElMatrix_d X, ElNNLSCtrl_d ctrl )
+.. c:function:: ElError ElNNLSXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d B, ElDistMatrix_d X, ElNNLSCtrl_d ctrl )
+.. c:function:: ElError ElNNLSXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d B, ElMatrix_d X, ElNNLSCtrl_d ctrl )
+.. c:function:: ElError ElNNLSXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d B, ElDistMultiVec_d X, ElNNLSCtrl_d ctrl )

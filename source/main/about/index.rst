@@ -77,9 +77,10 @@ Contributors
 
 Project leader: `Jack Poulson <http://web.stanford.edu/~poulson>`__
 
-Active contributors (roughly, within the last year): `Paolo Bientinesi <http://hpac.rwth-aachen.de/~pauldj/>`__, `Jed Brown <http://59a2.org/research/>`__, `Rodrigo Canales <https://github.com/rocanale>`__, `AJ Friend <http://stanford.edu/~ajfriend/>`__, `Jeff Hammond <http://pcl.intel-research.net/people/jeff.htm>`__, and `Matthias Petschow <http://hpac.rwth-aachen.de/~petschow/>`__. 
+Active contributors (roughly, within the last year): `Paolo Bientinesi <http://hpac.rwth-aachen.de/~pauldj/>`__, `Jake Bolewski <https://github.com/jakebolewski>`__, `Rodrigo Canales <https://github.com/rocanale>`__, `Jiahao Chen <https://jiahao.github.io>`__, `AJ Friend <http://stanford.edu/~ajfriend/>`__, `Jeff Hammond <http://pcl.intel-research.net/people/jeff.htm>`__, and `Matthias Petschow <http://hpac.rwth-aachen.de/~petschow/>`__. 
 
-Please see `the list of contributors <./team.html>`__ for more details and past contributors.
+Please see `the list of contributors <./contributors.html>`__ for more details 
+on current and past contributors.
 
 .. _about_license:
 
@@ -107,4 +108,4 @@ The modified source code
 .. toctree::
    :hidden:
 
-   team
+   contributors

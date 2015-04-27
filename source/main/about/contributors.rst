@@ -1,7 +1,7 @@
-.. _team:
+.. _contributors:
 
-The team
-########
+Contributors
+############
 
 **Project leader**
 

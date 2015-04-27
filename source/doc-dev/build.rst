@@ -14,21 +14,29 @@ Elemental's main external dependencies are
 3. `BLAS <http://netlib.org/blas>`__ 
 4. `LAPACK <http://netlib.org/lapack>`__.
 
-Included within the project are
+Included within the project is `PMRRR <http://code.google.com/p/pmrrr>`__, 
+which Elemental depends upon for parallel symmetric tridiagonal eigensolvers, 
+which is included within the external/pmrrr` folder. In addition, several 
+libraries can be automatically downloaded/built/installed via 
+CMake's `ExternalProject <http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html>`__ 
+functionality:
 
-1. `PMRRR <http://code.google.com/p/pmrrr>`__, which Elemental depends upon for
-   parallel symmetric tridiagonal eigensolvers, which is included within the 
-   `external/pmrrr` folder, and
-2. `METIS 5.1.0 <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
-   which is used for graph partitioning and is included within the 
-   `external/metis` folder.
+1. `OpenBLAS <http://www.openblas.net/>`__
+2. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, and
+3. `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__.
 
 Furthermore, there are several optional external dependencies:
 
 1. `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
 for faster SVD's due to its high-performance bidiagonal QR algorithm 
-implementation, and 
-2. `Qt5 <http://qt-project.org>`_ is required for matrix visualization.
+implementation, 
+2. `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`_ for 
+   quad-precision support (and more robust sparse-direct solvers),
+3. `Qt5 <http://qt-project.org>`_ for C++11 matrix visualization,
+4. `matplotlib <http://matplotlib.org/>`_ for Python matrix visualization,
+5. `NetworkX <https://networkx.github.io/>`_ for Python graph visualization, and
+6. `NumPy <http://www.numpy.org/>`_ for supporting the Python interface in 
+   general.
 
 Dependencies
 ============
@@ -36,7 +44,7 @@ Dependencies
 CMake
 -----
 Elemental uses several new CMake modules, so it is important to ensure that 
-version 2.8.8 or later is installed. Thankfully the 
+version 2.8.12 or later is installed. Thankfully the 
 `installation process <http://www.cmake.org/cmake/help/install.html>`_
 is extremely straightforward: either download a platform-specific binary from
 the `downloads page <http://www.cmake.org/cmake/resources/software.html>`_,
@@ -133,8 +141,9 @@ and OpenMPI can be installed with ::
 BLAS and LAPACK
 ---------------
 The Basic Linear Algebra Subprograms (BLAS) and Linear Algebra PACKage (LAPACK) 
-are both used heavily within Elemental. On most installations of `Ubuntu <http://www.ubuntu.com>`__, the following command should suffice for their installation::
+are both used heavily within Elemental. On most installations of `Ubuntu <http://www.ubuntu.com>`__, either of the following command should suffice for their installation::
 
+    sudo apt-get install libopenblas-dev
     sudo apt-get install libatlas-dev liblapack-dev
 
 The reference implementation of LAPACK can be found at
@@ -147,8 +156,10 @@ and the reference implementation of BLAS can be found at
 
 However, it is better to install an optimized version of these libraries,
 especialy for the BLAS. The most commonly used open source versions are 
-`ATLAS <http://math-atlas.sourceforge.net/>`__ and `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__. Support for `BLIS <http://code.google.com/p/blis>`__ is
-planned in the near future.
+`ATLAS <http://math-atlas.sourceforge.net/>`__ and `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__, and `BLIS <http://code.google.com/p/blis>`__.
+
+If no version of BLAS+LAPACK is detected, Elemental attempts to download and
+install OpenBLAS.
 
 PMRRR
 -----
@@ -218,7 +229,7 @@ There are two basic approaches:
 2. Install `git <http://git-scm.com/>`_ and check out a copy of 
    the repository by running ::
 
-    git clone --recursive git://github.com/elemental/Elemental.git
+    git clone git://github.com/elemental/Elemental.git
 
 Building Elemental
 ==================

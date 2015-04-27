@@ -211,14 +211,14 @@ Getting Elemental's source
 ==========================
 There are two basic approaches:
 
-1. Download a tarball of the most recent version from 
+1. Download a tarball of a recent version from 
    `libelemental.org/releases <http://libelemental.org/releases/>`_. 
    A new version is typically released every one to two months.
 
 2. Install `git <http://git-scm.com/>`_ and check out a copy of 
-   the repository by running ::
+   the development repository by running ::
 
-    git clone --recursive git://github.com/elemental/Elemental.git
+    git clone git://github.com/elemental/Elemental.git
 
 Building Elemental
 ==================

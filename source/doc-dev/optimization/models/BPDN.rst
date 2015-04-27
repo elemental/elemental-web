@@ -21,14 +21,21 @@ Predictor-Corrector primal-dual Interior Point Method.
 
 Python API
 ----------
+
 .. py:function:: BPDN(A,b,lambd[,ctrl=None])
+
+   :param A: dense or sparse, sequential or distributed matrix
+   :param b: dense right-hand side vector (with type compatible to ``A``)
+   :param lambd: penalty on the one-norm of the solution vector 
+   :param ctrl: (optional) :py:class:`BPDNCtrl_s` or :py:class:`BPDNCtrl_d` instance, depending upon whether the data is single-precision or double-precision
+   :rtype: dense solution vector (with type matching that of ``b``)
 
 C++ API
 -------
-.. cpp:function:: void BPDN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
-.. cpp:function:: void BPDN( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, Real lambda, AbstractDistMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
-.. cpp:function:: void BPDN( const SparseMatrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
-.. cpp:function:: void BPDN( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, Real lambda, DistMultiVec<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
+.. cpp:function:: void BPDN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
+.. cpp:function:: void BPDN( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, Real lambda, AbstractDistMatrix<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
+.. cpp:function:: void BPDN( const SparseMatrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
+.. cpp:function:: void BPDN( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, Real lambda, DistMultiVec<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
 
 C API
 -----
@@ -55,15 +62,15 @@ Expert interface
 Single-precision
 """"""""""""""""
 
-.. c:function:: ElError ElBPDNX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElBPDNXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, float lambda, ElDistMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElBPDNXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElQPAffineCtrl_s ctrl )
-.. c:function:: ElError ElBPDNXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, float lambda, ElDistMultiVec_s x, ElQPAffineCtrl_s ctrl )
+.. c:function:: ElError ElBPDNX_s( ElConstMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElBPDNCtrl_s ctrl )
+.. c:function:: ElError ElBPDNXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, float lambda, ElDistMatrix_s x, ElBPDNCtrl_s ctrl )
+.. c:function:: ElError ElBPDNXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, float lambda, ElMatrix_s x, ElBPDNCtrl_s ctrl )
+.. c:function:: ElError ElBPDNXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, float lambda, ElDistMultiVec_s x, ElBPDNCtrl_s ctrl )
 
 Double-precision
 """"""""""""""""
 
-.. c:function:: ElError ElBPDNX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElBPDNXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, double lambda, ElDistMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElBPDNXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElQPAffineCtrl_d ctrl )
-.. c:function:: ElError ElBPDNXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, double lambda, ElDistMultiVec_d x, ElQPAffineCtrl_d ctrl )
+.. c:function:: ElError ElBPDNX_d( ElConstMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElBPDNCtrl_d ctrl )
+.. c:function:: ElError ElBPDNXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, double lambda, ElDistMatrix_d x, ElBPDNCtrl_d ctrl )
+.. c:function:: ElError ElBPDNXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, double lambda, ElMatrix_d x, ElBPDNCtrl_d ctrl )
+.. c:function:: ElError ElBPDNXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, double lambda, ElDistMultiVec_d x, ElBPDNCtrl_d ctrl )

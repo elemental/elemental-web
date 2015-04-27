@@ -17,24 +17,22 @@
           led the effort behind 
           <a href="http://arxiv.org/abs/1205.2107">Parallel Multiple Relatively Robust Representations (PMRRR)</a>, which is the 
           high-performance symmetric-tridiagonal eigensolver at the core of 
-          Elemental's Hermitian eigensolver.</p>
+          Elemental's Hermitian eigensolver.
+          </p>
         </div>
 
-      	<div class="front-block block">
-  	  <h3><a href="http://59a2.org/research/">Jed Brown</a></h3>
-          <div class="avatar mugshot">
-	    <img alt='Jed Brown'
-		 src='/_static/images/mugshots/jed-brown.jpg' />
-	  </div>
-
-          <p><a href="http://59a2.org/research/">Jed</a> is an 
-          Assistant Computational Mathematician in the 
-          <a href="https://www.mcs.anl.gov/research/LANS/">Laboratory for 
-          Advanced Numerical Simulation</a> and an adjoint Assistant Prof.
-          of CS at UC Boulder. He is a prolific contributor to 
-          <a href="https://www.mcs.anl.gov/petsc/">PETSc</a>, helped lead the 
-          development of its interface to Elemental,
-          and contributed a large number of patches to Elemental along the way.
+        <div class="front-block block">
+          <h3><a href="https://github.com/jakebolewski">Jake Bolewski</a></h3>
+          <p>
+          <a href="https://github.com/jakebolewski">Jake</a> is currently
+          a Research Assistant at MIT working with Alan Edelman working on 
+          the development of <a href="http://julialang.org/">Julia</a> and 
+          is also working towards the creation of a Julia interface to 
+          Elemental, 
+          <a href="https://github.com/JuliaParallel/Elemental.jl">Elemental.jl</a>. 
+          Along the way, he contributed several improvements and bug fixes to
+          Elemental's CMake build system, as well as several bug fixes to the
+          library itself.
           </p>
         </div>
 
@@ -51,6 +49,24 @@
           </p>
         </div>
 
+        <div class="front-block block">
+          <h3><a href="https://jiahao.github.io/">Jiahao Chen</a></h3>
+          <div class="avatar mugshot">
+            <img alt='Jiahao Chen' 
+                 src='/_static/images/mugshots/jiahao-chen.jpeg' />
+          </div>
+ 
+          <p>
+          <a href="https://jiahao.github.io/">Jiahao</a> is currently a 
+          Research Scientist in <a href="http://csail.mit.edu/">MIT's CSAIL</a>
+          and is currently focused on numerical linear algebra, random matrix 
+          theory, and parallel computing within 
+          <a href="http://julialang.org/">Julia</a>.
+          In addition to being one of the authors of <a href="https://github.com/JuliaSparse/Elemental.jl">Elemental.jl</a>, he helped greatly improve 
+          Elemental's build and testing infrastructure.
+          </p>
+        </div>
+
       	<div class="front-block block">
   	  <h3><a href="http://stanford.edu/~ajfriend/">AJ Friend</a></h3>
           <div class="avatar mugshot">
@@ -58,13 +74,14 @@
 		 src='/_static/images/mugshots/aj-friend.jpg' />
 	  </div>
 
-          <p><a href="http://stanford.edu/~ajfriend/">AJ</a> 
-          is a Ph.D. student in 
+          <p>
+          <a href="http://stanford.edu/~ajfriend/">AJ</a> is a Ph.D. student in 
           <a href="http://web.stanford.edu/~boyd/">Stephen Boyd's</a> 
           Information Systems Laboratory at Stanford University.
           He has helped to usher in Elemental's support for convex optimization
           and wrote the original drafts of several of the ADMM routines and 
           proximal maps.
+          </p>
         </div>
 
       	<div class="front-block block">
@@ -74,13 +91,15 @@
 		 src='/_static/images/mugshots/jeff-hammond.jpg' />
 	  </div>
 
-          <p><a href="http://pcl.intel-research.net/people/jeff.htm">Jeff</a> 
+          <p>
+          <a href="http://pcl.intel-research.net/people/jeff.htm">Jeff</a> 
           is a Research Scientist in the Parallel Computing Lab at Intel Labs
           and was previously an Assistant Computational Scientist at the
           <a href="https://www.alcf.anl.gov/">Argonne National 
           Laboratory Leadership Computing Facility</a>.
           He has continually helped with efforts to port/tune Elemental 
           on various machines.
+          </p>
         </div>
 
       	<div class="front-block block">
@@ -90,16 +109,18 @@
 		 src='/_static/images/mugshots/matthias-petschow.jpg' />
 	  </div>
 
-          <p><a href="http://hpac.rwth-aachen.de/~petschow/">Matthias</a> 
-             recently completed his Ph.D. at 
-             <a href="http://www.rwth-aachen.de/">RWTH Aachen</a> and is 
-             interested in
-             developing and applying high-performance eigensolvers to 
-             large-scale quantum-mechanical problems. He co-developed
-             <a href="http://arxiv.org/abs/1205.2107">PMRRR</a> 
-             and <a href="http://code.google.com/p/mr3smp/">MR3-SMP</a> with
-             Paolo, and the former is an integral part of Elemental's Hermitian 
-             eigensolvers.</p>
+          <p>
+          <a href="http://hpac.rwth-aachen.de/~petschow/">Matthias</a> 
+          recently completed his Ph.D. at 
+          <a href="http://www.rwth-aachen.de/">RWTH Aachen</a> and is 
+          interested in
+          developing and applying high-performance eigensolvers to 
+          large-scale quantum-mechanical problems. He co-developed
+          <a href="http://arxiv.org/abs/1205.2107">PMRRR</a> 
+          and <a href="http://code.google.com/p/mr3smp/">MR3-SMP</a> with
+          Paolo, and the former is an integral part of Elemental's Hermitian 
+          eigensolvers.
+          </p>
         </div>
       </div><!-- #sub-feature -->
     </div><!-- #content -->

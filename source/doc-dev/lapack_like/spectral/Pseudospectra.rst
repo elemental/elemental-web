@@ -1,5 +1,5 @@
 Pseudospectra
--------------
+=============
 
 `C++ Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.hpp>`__
 
@@ -45,15 +45,20 @@ Elemental, but should be preferred in massively-parallel situations where the
 Schur decomposition is considered infeasible.
 
 Spectral portrait
-^^^^^^^^^^^^^^^^^
+-----------------
 The following routines return the norms of the shifted inverses over an 
 *automatically-determined* 2D window in the complex plane 
 (in the matrix ``invNormMap``) with the specified x and y resolutions.
 The returned integer matrix corresponds to the number of iterations required
 for convergence at each shift in the 2D grid.
 
+Python API
+^^^^^^^^^^
+
+.. py:function:: SpectralPortrait(A[,realSize=100,imagSize=100,ctrl=None])
+
 C++ API
-"""""""
+^^^^^^^
 
 .. cpp:function:: Matrix<int> SpectralPortrait( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Int realSize, Int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: DistMatrix<int> SpectralPortrait( const AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& invNormMap, Int realSize, Int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
@@ -65,41 +70,55 @@ C++ API
 .. cpp:function:: DistMatrix<int> HessenbergSpectralPortrait( const AbstractDistMatrix<F>& H, AbstractDistMatrix<Base<F>>& invNormMap, Int realSize, Int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
 C API
-"""""
+^^^^^
 
+Single-precision
+""""""""""""""""
 .. c:function:: ElError ElSpectralPortrait_s( ElConstMatrix_s A, ElMatrix_s invNormMap, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralPortrait_d( ElConstMatrix_d A, ElMatrix_d invNormMap, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralPortrait_c( ElConstMatrix_c A, ElMatrix_c invNormMap, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralPortrait_z( ElConstMatrix_z A, ElMatrix_z invNormMap, ElInt realSize, ElInt imagSize )
 .. c:function:: ElError ElSpectralPortraitDist_s( ElConstDistMatrix_s A, ElDistMatrix_s invNormMap, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralPortraitDist_d( ElConstDistMatrix_d A, ElDistMatrix_d invNormMap, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralPortraitDist_c( ElConstDistMatrix_c A, ElDistMatrix_c invNormMap, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralPortraitDist_z( ElConstDistMatrix_z A, ElDistMatrix_z invNormMap, ElInt realSize, ElInt imagSize )
 
 .. c:function:: ElError ElSpectralPortraitX_s( ElConstMatrix_s A, ElMatrix_s invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
-.. c:function:: ElError ElSpectralPortraitX_d( ElConstMatrix_d A, ElMatrix_d invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
-.. c:function:: ElError ElSpectralPortraitX_c( ElConstMatrix_c A, ElMatrix_c invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
-.. c:function:: ElError ElSpectralPortraitX_z( ElConstMatrix_z A, ElMatrix_z invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralPortraitXDist_s( ElConstDistMatrix_s A, ElDistMatrix_s invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElSpectralPortrait_d( ElConstMatrix_d A, ElMatrix_d invNormMap, ElInt realSize, ElInt imagSize )
+.. c:function:: ElError ElSpectralPortraitDist_d( ElConstDistMatrix_d A, ElDistMatrix_d invNormMap, ElInt realSize, ElInt imagSize )
+
+.. c:function:: ElError ElSpectralPortraitX_d( ElConstMatrix_d A, ElMatrix_d invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralPortraitXDist_d( ElConstDistMatrix_d A, ElDistMatrix_d invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
+
+Single-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElSpectralPortrait_c( ElConstMatrix_c A, ElMatrix_c invNormMap, ElInt realSize, ElInt imagSize )
+.. c:function:: ElError ElSpectralPortraitDist_c( ElConstDistMatrix_c A, ElDistMatrix_c invNormMap, ElInt realSize, ElInt imagSize )
+
+.. c:function:: ElError ElSpectralPortraitX_c( ElConstMatrix_c A, ElMatrix_c invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
 .. c:function:: ElError ElSpectralPortraitXDist_c( ElConstDistMatrix_c A, ElDistMatrix_c invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
+
+Double-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElSpectralPortrait_z( ElConstMatrix_z A, ElMatrix_z invNormMap, ElInt realSize, ElInt imagSize )
+.. c:function:: ElError ElSpectralPortraitDist_z( ElConstDistMatrix_z A, ElDistMatrix_z invNormMap, ElInt realSize, ElInt imagSize )
+
+.. c:function:: ElError ElSpectralPortraitX_z( ElConstMatrix_z A, ElMatrix_z invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralPortraitXDist_z( ElConstDistMatrix_z A, ElDistMatrix_z invNormMap, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 
-Python API
-""""""""""
-
-.. py:function:: SpectralPortrait(A,realSize=100,imagSize=100,ctrl=None)
-
 Spectral window
-^^^^^^^^^^^^^^^
+---------------
 The following routines return the norms of the shifted inverses over a
 *user-specified* 2D window in the complex plane (in the matrix ``invNormMap``) 
 with the specified x and y resolutions.
 The returned integer matrix corresponds to the number of iterations required
 for convergence at each shift in the 2D grid.
 
+Python API
+^^^^^^^^^^
+
+.. py:function:: SpectralWindow(A[,center=0,realWidth=1,imagWidth=1,realSize=100,imagSize=100,ctrl=None])
+
 C++ API
-"""""""
+^^^^^^^
 
 .. cpp:function:: Matrix<int> SpectralWindow( const Matrix<F>& A, Matrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, Int realSize, Int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: DistMatrix<int> SpectralWindow( const AbstractDistMatrix<F>& A, AbstractDistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, Int realSize, Int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
@@ -111,39 +130,53 @@ C++ API
 .. cpp:function:: DistMatrix<int> HessenbergSpectralWindow( const AbstractDistMatrix<F>& H, AbstractDistMatrix<Base<F>>& invNormMap, Complex<Base<F>> center, Base<F> realWidth, Base<F> imagWidth, Int realSize, Int imagSize, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
 C API
-"""""
+^^^^^
 
+Single-precision
+""""""""""""""""
 .. c:function:: ElError ElSpectralWindow_s( ElConstMatrix_s A, ElMatrix_s invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralWindow_d( ElConstMatrix_d A, ElMatrix_d invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralWindow_c( ElConstMatrix_c A, ElMatrix_c invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralWindow_z( ElConstMatrix_z A, ElMatrix_z invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
 .. c:function:: ElError ElSpectralWindowDist_s( ElConstDistMatrix_s A, ElDistMatrix_s invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralWindowDist_d( ElConstDistMatrix_d A, ElDistMatrix_d invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralWindowDist_c( ElConstDistMatrix_c A, ElDistMatrix_c invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize )
-.. c:function:: ElError ElSpectralWindowDist_z( ElConstDistMatrix_z A, ElDistMatrix_z invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
 
 .. c:function:: ElError ElSpectralWindowX_s( ElConstMatrix_s A, ElMatrix_s invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
-.. c:function:: ElError ElSpectralWindowX_d( ElConstMatrix_d A, ElMatrix_d invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
-.. c:function:: ElError ElSpectralWindowX_c( ElConstMatrix_c A, ElMatrix_c invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
-.. c:function:: ElError ElSpectralWindowX_z( ElConstMatrix_z A, ElMatrix_z invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralWindowXDist_s( ElConstDistMatrix_s A, ElDistMatrix_s invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElSpectralWindow_d( ElConstMatrix_d A, ElMatrix_d invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
+.. c:function:: ElError ElSpectralWindowDist_d( ElConstDistMatrix_d A, ElDistMatrix_d invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
+
+.. c:function:: ElError ElSpectralWindowX_d( ElConstMatrix_d A, ElMatrix_d invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralWindowXDist_d( ElConstDistMatrix_d A, ElDistMatrix_d invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
+
+Single-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElSpectralWindow_c( ElConstMatrix_c A, ElMatrix_c invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize )
+.. c:function:: ElError ElSpectralWindowDist_c( ElConstDistMatrix_c A, ElDistMatrix_c invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize )
+
+.. c:function:: ElError ElSpectralWindowX_c( ElConstMatrix_c A, ElMatrix_c invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
 .. c:function:: ElError ElSpectralWindowXDist_c( ElConstDistMatrix_c A, ElDistMatrix_c invNormMap, complex_float center, float realWidth, float imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_s ctrl )
+
+Double-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElSpectralWindow_z( ElConstMatrix_z A, ElMatrix_z invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
+.. c:function:: ElError ElSpectralWindowDist_z( ElConstDistMatrix_z A, ElDistMatrix_z invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize )
+
+.. c:function:: ElError ElSpectralWindowX_z( ElConstMatrix_z A, ElMatrix_z invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralWindowXDist_z( ElConstDistMatrix_z A, ElDistMatrix_z invNormMap, complex_double center, double realWidth, double imagWidth, ElInt realSize, ElInt imagSize, ElPseudospecCtrl_d ctrl )
 
-Python API
-""""""""""
-
-.. py:function:: SpectralWindow(A,center=0,realWidth=1,imagWidth=1,realSize=100,imagSize=100,ctrl=None)
-
 Spectral cloud
-^^^^^^^^^^^^^^
+--------------
 The following routines return the norms of the shifted inverses in the vector 
 ``invNorms`` for a given set of shifts. The returned integer vector is a list 
 of the number of iterations required for convergence of each shift.
 
+Python API
+^^^^^^^^^^
+
+.. py:function:: SpectralCloud(A,shifts[,ctrl=None])
+
 C++ API
-"""""""
+^^^^^^^
 
 .. cpp:function:: Matrix<int> SpectralCloud( const Matrix<F>& A, const Matrix<Complex<Base<F>>>& shifts, Matrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 .. cpp:function:: DistMatrix<int,VR,STAR> SpectralCloud( const AbstractDistMatrix<F>& A, const AbstractDistMatrix<Complex<Base<F>>>& shifts, AbstractDistMatrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
@@ -154,36 +187,50 @@ C++ API
 .. cpp:function:: DistMatrix<int,VR,STAR> HessenbergSpectralCloud( const AbstractDistMatrix<F>& H, const AbstractDistMatrix<Complex<Base<F>>>& shifts, AbstractDistMatrix<Base<F>>& invNorms, PseudospecCtrl<Base<F>> psCtrl=PseudospecCtrl<Base<F>>() )
 
 C API
-"""""
+^^^^^
 
+Single-precision
+""""""""""""""""
 .. c:function:: ElError ElSpectralCloud_s( ElConstMatrix_s A, ElConstMatrix_c shifts, ElMatrix_s invNormMap )
-.. c:function:: ElError ElSpectralCloud_d( ElConstMatrix_d A, ElConstMatrix_z shifts, ElMatrix_d invNormMap )
-.. c:function:: ElError ElSpectralCloud_c( ElConstMatrix_c A, ElConstMatrix_c shifts, ElMatrix_s invNormMap )
-.. c:function:: ElError ElSpectralCloud_z( ElConstMatrix_z A, ElConstMatrix_z shifts, ElMatrix_d invNormMap )
 .. c:function:: ElError ElSpectralCloudDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_c shifts, ElDistMatrix_s invNormMap )
-.. c:function:: ElError ElSpectralCloudDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_z shifts, ElDistMatrix_d invNormMap )
-.. c:function:: ElError ElSpectralCloudDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c shifts, ElDistMatrix_s invNormMap )
-.. c:function:: ElError ElSpectralCloudDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z shifts, ElDistMatrix_d invNormMap )
 
 .. c:function:: ElError ElSpectralCloudX_s( ElConstMatrix_s A, ElConstMatrix_c shifts, ElMatrix_s invNormMap, ElPseudospecCtrl_s ctrl )
-.. c:function:: ElError ElSpectralCloudX_d( ElConstMatrix_d A, ElConstMatrix_z shifts, ElMatrix_d invNormMap, ElPseudospecCtrl_d ctrl )
-.. c:function:: ElError ElSpectralCloudX_c( ElConstMatrix_c A, ElConstMatrix_c shifts, ElMatrix_s invNormMap, ElPseudospecCtrl_s ctrl )
-.. c:function:: ElError ElSpectralCloudX_z( ElConstMatrix_z A, ElConstMatrix_z shifts, ElMatrix_d invNormMap, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralCloudXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_c shifts, ElDistMatrix_s invNormMap, ElPseudospecCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+.. c:function:: ElError ElSpectralCloud_d( ElConstMatrix_d A, ElConstMatrix_z shifts, ElMatrix_d invNormMap )
+.. c:function:: ElError ElSpectralCloudDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_z shifts, ElDistMatrix_d invNormMap )
+
+.. c:function:: ElError ElSpectralCloudX_d( ElConstMatrix_d A, ElConstMatrix_z shifts, ElMatrix_d invNormMap, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralCloudXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_z shifts, ElDistMatrix_d invNormMap, ElPseudospecCtrl_d ctrl )
+
+Single-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElSpectralCloud_c( ElConstMatrix_c A, ElConstMatrix_c shifts, ElMatrix_s invNormMap )
+.. c:function:: ElError ElSpectralCloudDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c shifts, ElDistMatrix_s invNormMap )
+
+.. c:function:: ElError ElSpectralCloudX_c( ElConstMatrix_c A, ElConstMatrix_c shifts, ElMatrix_s invNormMap, ElPseudospecCtrl_s ctrl )
 .. c:function:: ElError ElSpectralCloudXDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c shifts, ElDistMatrix_s invNormMap, ElPseudospecCtrl_s ctrl )
+
+Double-precision complex
+""""""""""""""""""""""""
+.. c:function:: ElError ElSpectralCloud_z( ElConstMatrix_z A, ElConstMatrix_z shifts, ElMatrix_d invNormMap )
+.. c:function:: ElError ElSpectralCloudDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z shifts, ElDistMatrix_d invNormMap )
+
+.. c:function:: ElError ElSpectralCloudX_z( ElConstMatrix_z A, ElConstMatrix_z shifts, ElMatrix_d invNormMap, ElPseudospecCtrl_d ctrl )
 .. c:function:: ElError ElSpectralCloudXDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z shifts, ElDistMatrix_d invNormMap, ElPseudospecCtrl_d ctrl )
 
-Python API
-""""""""""
-
-.. py:function:: SpectralCloud(A,shifts,ctrl=None)
-
 Control structures
-^^^^^^^^^^^^^^^^^^
+------------------
+
+Python API
+^^^^^^^^^^
+
+**TODO**
 
 C++ API
-"""""""
+^^^^^^^
 
 .. cpp:type:: SnapshotCtrl
 
@@ -257,7 +304,7 @@ C++ API
    type ``F``.
 
 C API
-"""""
+^^^^^
 
 .. c:type:: ElSnapshotCtrl
 
@@ -344,7 +391,4 @@ C API
 .. c:function:: ElError ElPseudospecCtrlDestroy_s( ElPseudospecCtrl_s* ctrl )
 .. c:function:: ElError ElPseudospecCtrlDestroy_d( ElPseudospecCtrl_d* ctrl )
 
-Python API
-""""""""""
 
-**TODO**

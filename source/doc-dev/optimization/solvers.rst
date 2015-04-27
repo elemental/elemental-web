@@ -2,7 +2,7 @@ Solvers
 =======
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    solvers/LP
    solvers/QP

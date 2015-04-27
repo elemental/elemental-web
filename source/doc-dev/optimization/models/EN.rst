@@ -34,6 +34,13 @@ Python API
 ----------
 .. py:function:: EN(A,b,lambda1,lambda2[,ctrl=None])
 
+   :param A: dense or sparse, sequential or distributed matrix
+   :param b: dense right-hand side vector (with type compatible to ``A``)
+   :param lambda1: penalty on the one-norm of the solution
+   :param lambda2: penalty on the square of the two-norm of the solution
+   :param ctrl: (optional) :py:class:`QPAffineCtrl` instance
+   :rtype: dense solution vector (with type matching that of ``b``)
+
 C++ API
 -------
 .. cpp:function:: void EN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda1, Real lambda2, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )

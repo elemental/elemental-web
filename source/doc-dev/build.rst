@@ -251,11 +251,7 @@ project. Its stated objective is to
 
 Elemental's current implementation of parallel SVD is dependent upon a serial 
 kernel for the bidiagonal SVD. A high-performance implementation of this 
-kernel was recently introduced in 
-"Restructuring the QR Algorithm for Performance", by Field G. van Zee, Robert 
-A. van de Geijn, and Gregorio Quintana-Orti. It can be found at
-
-    http://www.cs.utexas.edu/users/flame/pubs/RestructuredQRTOMS.pdf
+kernel was recently introduced in [vZvdGQ2014]_.
 
 Installation of `libFLAME` is fairly straightforward. It is recommended that 
 you download the latest nightly snapshot from
@@ -267,6 +263,16 @@ and then installation should simply be a matter of running::
     ./configure
     make
     sudo make install
+
+libquadmath
+-----------
+If a GNU compiler is being used to compile Elemental, then it is likely that
+support for `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`_ was
+detected, and, by default, this would lead to both more robust Interior Point
+Methods and your copy of Elemental transitioning from the terms of the New 
+BSD License to the GNU General Public License. If you prefer not to use 
+Elemental under the terms of the GPL, then ``libquadmath`` must be disabled
+via the CMake option ``-D EL_DISABLE_QUAD=TRUE``.
 
 Qt5
 ---
@@ -460,3 +466,5 @@ and development questions to
 .. [Fahey2003] Mark R. Fahey, *Algorithm 826: A parallel eigenvalue routine for complex Hessenberg matrices*, ACM Transactions on Mathematical Software, Vol. 29, Issue 3, pp. 326--336, 2003.
 
 .. [GKK2010] Robert Granat, Bo Kagstrom, and Daniel Kressner, *A novel parallel QR algorithm for hybrid distributed memory HPC systems*, SIAM Journal on Scientific Computing, Vol. 32, No. 4, pp. 2345--2378, 2010.
+
+.. [vZvdGQ2014] `Field G. van Zee, Robert A. van de Geijn, and Gregorio Quintana-Orti, *Restructuring the tridiagonal and bidiagonal QR algorithms for performance*, ACM Transactions on Mathematical Software, Vol. 40, Issue 3, Article No. 18, 2014. <http://dl.acm.org/citation.cfm?doid=2610268.2535371>`__

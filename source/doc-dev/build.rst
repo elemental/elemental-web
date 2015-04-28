@@ -12,24 +12,26 @@ Elemental's main external dependencies are
 1. `CMake <http://www.cmake.org/>`__ 
 2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`__ 
 3. `BLAS <http://netlib.org/blas>`__ 
-4. `LAPACK <http://netlib.org/lapack>`__.
+4. `LAPACK <http://netlib.org/lapack>`__, and
+5. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__.
 
 Included within the project is `PMRRR <http://code.google.com/p/pmrrr>`__, 
 which Elemental depends upon for parallel symmetric tridiagonal eigensolvers, 
-which is included within the external/pmrrr` folder. In addition, several 
+which is included within the ``external/pmrrr/`` folder. In addition, several 
 libraries can be automatically downloaded/built/installed via 
 CMake's `ExternalProject <http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html>`__ 
 functionality:
 
 1. `OpenBLAS <http://www.openblas.net/>`__
-2. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, and
-3. `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__.
+2. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
+3. `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__, and
+4. `ScaLAPACK <http://netlib.org/scalapack>`__.
 
-Furthermore, there are several optional external dependencies:
+Furthermore, there are several further (optional) external dependencies:
 
 1. `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
-for faster SVD's due to its high-performance bidiagonal QR algorithm 
-implementation, 
+   for faster SVD's due to its high-performance bidiagonal QR algorithm 
+   implementation, 
 2. `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`_ for 
    quad-precision support (and more robust sparse-direct solvers),
 3. `Qt5 <http://qt-project.org>`_ for C++11 matrix visualization,
@@ -54,7 +56,7 @@ following commands::
 
     ./bootstrap
     make
-    make install
+    sudo make install
 
 Note that recent versions of `Ubuntu <http://www.ubuntu.com/>`__ (e.g., version 13.10) have sufficiently up-to-date
 versions of CMake, and so the following command is sufficient for installation::
@@ -85,7 +87,7 @@ Basic usage
 ^^^^^^^^^^^
 Though many configuration utilities, like 
 `autoconf <http://www.gnu.org/software/autoconf/>`_, are designed such that
-the user need only invoke ``./configure && make && make install`` from the
+the user need only invoke ``./configure && make && sudo make install`` from the
 top-level source directory, CMake targets *out-of-source* builds, which is 
 to say that the build process occurs away from the source code. The 
 out-of-source build approach is ideal for projects that offer several 
@@ -176,6 +178,67 @@ while it is included within Elemental, it is also available at:
 
 Note that PMRRR currently requires support for pthreads.
 
+OpenBLAS
+--------
+`OpenBLAS <http://www.openblas.net>`__ is a high-performance implementation of 
+the BLAS (and, to a somewhat lesser degree, LAPACK) which Elemental defaults
+to downloading and installing if no other high-performance implementation
+was detected . For example, by default, on Mac OS X, either Accelerate or 
+vecLib is used, but this behavior may be overridden via the CMake option 
+``-D EL_PREFER_OPENBLAS=TRUE``. Furthermore, Elemental may be requested not to
+use OpenBLAS via the option ``-D EL_AVOID_OPENBLAS=TRUE``.
+Lastly, while Elemental will, by default, search for a previous installation of
+OpenBLAS before attempting to download and install the library, this search can
+be prevented via the ``-D EL_BUILD_OPENBLAS=TRUE`` option.
+
+METIS
+-----
+`METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__ is perhaps the
+most widely-used library for (hyper)graph partitioning and is the default 
+tool used within Elemental in order to construct vertex separators for the 
+Nested Dissection approach to sparse-direct factorization. In particular, 
+Elemental makes use of the routine ``METIS_ComputeVertexSeparator``, which is
+somewhat undocumented but used by ParMETIS. METIS, unlike ParMETIS, is released
+under the terms of the Apache License Version 2.0 (which is similar in spirit 
+to Elemental's New BSD License).
+
+Support for METIS can be disabled via the CMake option 
+``-D EL_DISABLE_METIS=TRUE``, or Elemental can be requested to avoid 
+detecting a previous installation and instead immediately decide to 
+download/install the library via the ``-D EL_BUILD_METIS=TRUE`` option.
+
+ParMETIS
+--------
+`ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__ is a 
+parallel version of METIS that is unfortunately released under a more 
+restrictive license that does not allow for commercial usage, and so commercial
+users should add the CMake option ``-D EL_DISABLE_PARMETIS=TRUE`` when 
+configuring Elemental. Furthermore, since ParMETIS, unlike METIS, does not 
+provide a routine for computing a vertex separator of a graph, Elemental 
+makes use of ParMETIS's internal APIs in order to construct such a routine
+(which can be viewed as a parallel analogue of 
+``METIS_ComputeVertexSeparator``).
+
+Also, Elemental can be requested to avoid 
+detecting a previous installation (which is extremely unlikely to be sufficient due to Elemental's usage of ParMETIS's internal API, which is not typically 
+installed) and instead immediately decide to download and install the library 
+via the ``-D EL_BUILD_PARMETIS=TRUE`` option.
+
+ScaLAPACK
+---------
+`ScaLAPACK <http://netlib.org/scalapack>`__ is the most widely-used library for
+distributed-memory dense linear algebra and contains a number of routines not
+implemented elsewhere. In particular, its distributed Hessenberg Schur 
+decomposition support can be optionally used within Elemental for computing
+Schur decompositions (which is the preprocessing step for Elemental's 
+high-performance pseudospectral calculations).
+The routines resulting from the work of [HWD2002]_ (and the corresponding 
+complex implementation from [Fahey2003]_), as well as the later AED versions from [GKK2010]_, are all used in different instances.
+
+Support for ScaLAPACK can be disabled via the CMake option ``-D EL_DISABLE_SCALAPACK=TRUE``, or Elemental can be requested to avoid detecting previous 
+installations and to download/install the library via 
+``-D EL_BUILD_SCALAPACK=TRUE``.
+
 libFLAME
 --------
 `libFLAME` is an open source library made available as part of the FLAME 
@@ -203,7 +266,7 @@ and then installation should simply be a matter of running::
 
     ./configure
     make
-    make install
+    sudo make install
 
 Qt5
 ---
@@ -242,8 +305,11 @@ standard locations, building Elemental can be as simple as::
     mkdir build
     cd build
     cmake ..
-    make
-    make install
+    sudo make
+    sudo make install
+
+Note that super-user privileges may be required for the ``make`` phase due to 
+the installation of external packages.
 
 As with the installation of CMake, the default install location is 
 system-wide, e.g., ``/usr/local``. The installation directory can be changed
@@ -388,3 +454,9 @@ Please only direct usage questions to
 `users@libelemental.org <mailto:users@libelemental.org>`_, 
 and development questions to 
 `dev@libelemental.org <mailto:dev@libelemental.org>`_.
+
+.. [HWD2002] Greg Henry, David Watkins, and Jack Dongarra, *A parallel implementation of the nonsymmetric QR algorithm for distributed memory architectures*, SIAM Journal on Scientific Computing, Vol. 24, No. 1, pp. 284--311, 2002.
+
+.. [Fahey2003] Mark R. Fahey, *Algorithm 826: A parallel eigenvalue routine for complex Hessenberg matrices*, ACM Transactions on Mathematical Software, Vol. 29, Issue 3, pp. 326--336, 2003.
+
+.. [GKK2010] Robert Granat, Bo Kagstrom, and Daniel Kressner, *A novel parallel QR algorithm for hybrid distributed memory HPC systems*, SIAM Journal on Scientific Computing, Vol. 32, No. 4, pp. 2345--2378, 2010.

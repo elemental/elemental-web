@@ -73,6 +73,9 @@
     <li><a href="https://code.google.com/p/pmrrr/">PMRRR</a> (packaged with Elemental)</li>
     <li><a href="http://netlib.org/scalapack">ScaLAPACK</a> (optional for Hessenberg QR algorithm)</li>
   </ul>
+  If <a href="http://www.netlib.org/scalapack">ScaLAPACK</a> support is not 
+  explicitly disabled, then Elemental looks for a previous installation and, 
+  failing that, attempts to automatically download and install the library.
 
   <h3>Internodal communication</h3>
   <ul>
@@ -109,7 +112,7 @@
   project, two external interfaces are currently being externally developed:
   </p>
   <ul>
-  <li><a href="https://github.com/roconale/R-Elemental">R-El</a> <a href="http://www.r-project.org">R</a> interface to Elemental developed by <a href="https://github.com/roconale">Rodrigo Canales</a> <a href="http://hpac.rwth-aachen.de/~pauldj/">Paolo Bientinesi</a></li>
+  <li><a href="https://github.com/rocanale/R-Elemental">R-El</a> <a href="http://www.r-project.org">R</a> interface to Elemental developed by <a href="https://github.com/rocanale">Rodrigo Canales</a> <a href="http://hpac.rwth-aachen.de/~pauldj/">Paolo Bientinesi</a></li>
   <li><a href="https://github.com/JuliaParallel/Elemental.jl">Elemental.jl</a> 
     is an (in-progress) <a href="http://julialang.org">Julia</a> interface to 
     Elemental being developed by <a href="https://github.com/jakebolewski">Jake Bolewski</a>, <a href="https://jiahao.github.io">Jiahao Chen</a>, and <a href="http://andreasnoack.github.io/academiccv.html">Andreas Noack</a></li.

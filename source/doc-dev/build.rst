@@ -186,7 +186,7 @@ to downloading and installing if no other high-performance implementation
 was detected . For example, by default, on Mac OS X, either Accelerate or 
 vecLib is used, but this behavior may be overridden via the CMake option 
 ``-D EL_PREFER_OPENBLAS=TRUE``. Furthermore, Elemental may be requested not to
-use OpenBLAS via the option ``-D EL_AVOID_OPENBLAS=TRUE``.
+use OpenBLAS via the option ``-D EL_DISABLE_OPENBLAS=TRUE``.
 Lastly, while Elemental will, by default, search for a previous installation of
 OpenBLAS before attempting to download and install the library, this search can
 be prevented via the ``-D EL_BUILD_OPENBLAS=TRUE`` option.

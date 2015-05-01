@@ -44,6 +44,7 @@ implementations are in `src/blas_like/level1/ <https://github.com/elemental/Elem
    level1/Nrm2
    level1/QuasiDiagonalScale
    level1/QuasiDiagonalSolve
+   level1/Reshape
    level1/Scale
    level1/ScaleTrapezoid
    level1/SetDiagonal

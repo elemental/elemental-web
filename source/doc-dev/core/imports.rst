@@ -18,3 +18,4 @@ works.
    imports/pmrrr
    imports/flame
    imports/scalapack
+   imports/metis_parmetis

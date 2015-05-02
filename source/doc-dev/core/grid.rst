@@ -5,7 +5,7 @@ Th :cpp:type:`Grid` class is responsible for converting MPI communicators into
 a two-dimensional process grid meant for distributing matrices (ala the 
 soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
 
-.. cpp:type:: class Grid
+.. cpp:class:: Grid
 
    .. cpp:function:: Grid( mpi::Comm comm=mpi::COMM_WORLD, GridOrder order=COLUMN_MAJOR )
 
@@ -178,7 +178,15 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
       Return our process's rank within the entire set of processes that 
       constructed this grid.
 
-   .. cpp:function:: int VCToViewingMap() const
+   .. cpp:function:: int VCToVR( int vcRank ) const
+
+      Map the given column-major grid rank to the equivalent row-major rank.
+
+   .. cpp:function:: int VRToVC( int vrRank ) const
+
+      Map the given row-major grid rank to the equivalent column-major rank.
+
+   .. cpp:function:: int VCToViewing( int vcRank ) const
 
       Map the given column-major grid rank to the rank in the (potentially)
       larger set of processes which constructed the grid.
@@ -199,21 +207,21 @@ soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
       Return the communicator for the entire set of processes which constructed
       the grid.
 
-   .. cpp:function:: int DiagPath() const
+   .. cpp:function:: int Diag() const
 
       Return our unique diagonal index in an tesselation of the process grid.
 
-   .. cpp:function:: int DiagPath( int vectorColRank ) const
+   .. cpp:function:: int Diag( int vectorColRank ) const
 
       Return the unique diagonal index of the process with the given 
       column-major vector rank in an tesselation of the process grid.
 
-   .. cpp:function:: int DiagPathRank() const
+   .. cpp:function:: int DiagRank() const
 
       Return our process's rank out of the set of processes lying in our 
       diagonal of the tesselation of the process grid.
 
-   .. cpp:function:: int DiagPathRank( int vectorColRank ) const
+   .. cpp:function:: int DiagRank( int vectorColRank ) const
 
       Return the rank of the given process out of the set of processes in its
       diagonal of the tesselation of the process grid.

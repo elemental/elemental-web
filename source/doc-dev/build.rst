@@ -379,7 +379,11 @@ should ensure that a threaded BLAS implementation is used.
 Testing the installation
 ========================
 Once Elemental has been installed, it is a good idea to verify that it is 
-functioning properly. An example of generating a random distributed matrix, 
+functioning properly. This can be accomplished by simply running::
+
+    make test
+
+Alternatively, an example of generating a random distributed matrix, 
 computing its Singular Value Decomposition (SVD), and checking for numerical 
 error is available in `examples/lapack_like/SVD.cpp <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/SVD.cpp>`__.
 

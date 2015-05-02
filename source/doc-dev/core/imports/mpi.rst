@@ -1,5 +1,5 @@
 MPI
----
+===
 All communication within Elemental is built on top of the Message Passing 
 Interface (MPI). Just like with BLAS and LAPACK, a minimal set of datatype 
 independent abstractions has been built directly on top of the standard 
@@ -13,7 +13,7 @@ while the implementations are in
 `src/imports/mpi.cpp <https://github.com/elemental/Elemental/tree/master/src/imports/mpi.cpp>`_.
 
 Datatypes
-^^^^^^^^^
+---------
 
 .. cpp:type:: mpi::Comm
 
@@ -63,7 +63,7 @@ Datatypes
    Equivalent to ``MPI_User_function``.
 
 Constants
-^^^^^^^^^
+---------
 
 .. cpp:member:: const int mpi::ANY_SOURCE
 
@@ -173,7 +173,7 @@ Constants
    MPI implementations that do not support the `0` corner case.
 
 Routines
-^^^^^^^^
+--------
 
 .. rubric:: Environmental
 

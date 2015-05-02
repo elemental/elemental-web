@@ -9,7 +9,7 @@ A special case of the Sylvester solver, where :math:`B = A^H`.
 
 Python API
 ----------
-**TODO**
+.. py:function:: Lyapunov(A,C)
 
 C++ API
 -------

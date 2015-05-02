@@ -27,7 +27,6 @@ Unpolished alternating direction methods for solving the box-constrained QP
 are also available.
 
 .. toctree::
-
    :maxdepth: 1
 
    QP/direct

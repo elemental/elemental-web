@@ -1,5 +1,5 @@
 PMRRR
------
+=====
 Rather than directly using Petschow and Bientinesi's parallel implementation of 
 the Multiple Relatively Robust Representations (MRRR) algorithm, several 
 simplified interfaces have been exposed.
@@ -10,7 +10,7 @@ while the implementations are in the folder
 `external/pmrrr/ <https://github.com/elemental/Elemental/tree/master/external/pmrrr/>`_.
 
 Data structures
-^^^^^^^^^^^^^^^
+---------------
 
 .. cpp:type:: herm_tridiag_eig::Estimate
 
@@ -43,7 +43,7 @@ Data structures
       The index of the first eigenvalue stored locally on our process.
 
 Compute all eigenvalues
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 .. cpp:function:: herm_tridiag_eig::Info herm_tridiag_eig::Eig( int n, double* d, double* e, double* w, mpi::Comm comm )
 
@@ -56,7 +56,7 @@ Compute all eigenvalues
    Same as above, but also compute the corresponding eigenvectors.
 
 Compute eigenvalues within interval
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------
 
 .. cpp:function:: herm_tridiag_eig::Info herm_tridiag_eig::Eig( int n, double* d, double* e, double* w, mpi::Comm comm, double a, double b )
 
@@ -72,7 +72,7 @@ Compute eigenvalues within interval
    within the specified interval.
 
 Compute eigenvalues in index range
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------
 
 .. cpp:function:: herm_tridiag_eig::Info herm_tridiag_eig::Eig( int n, double* d, double* e, double* w, mpi::Comm comm, int a, int b )
 

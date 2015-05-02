@@ -19,7 +19,6 @@ By default a Mehrotra Predictor-Corrector primal-dual
 Interior Point Method is used.
 
 .. toctree::
-
    :maxdepth: 1
 
    LP/direct

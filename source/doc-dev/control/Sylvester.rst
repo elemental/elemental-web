@@ -16,7 +16,9 @@ via computing :math:`\text{sgn}(W)`, where
 
 Python API
 ----------
-**TODO**
+.. py:function:: Sylvester(A,B,C)
+
+.. py:function:: SylvesterPreformed(m,W)
 
 C++ API
 -------

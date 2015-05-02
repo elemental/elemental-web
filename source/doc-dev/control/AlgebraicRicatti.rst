@@ -7,11 +7,18 @@ Under suitable conditions, the following routines solve for :math:`X` in the
 
    X K X - A^H X - X A = L,
 
-where both :math:`K` and :math:`L` are Hermitian. 
+where both :math:`K` and :math:`L` are Hermitian, via computing the matrix sign
+of 
+
+.. math::
+
+   W = \begin{pmatrix} A^H & L \\ K & -A \end{pmatrix}.
 
 Python API
 ----------
-**TODO**
+.. py:function:: Ricatti(uplo,A,K,L)
+
+.. py:function:: RicattiPreformed(W)
 
 C++ API
 -------

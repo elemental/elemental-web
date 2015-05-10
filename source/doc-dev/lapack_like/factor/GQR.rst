@@ -42,14 +42,10 @@ C++ API
 C API
 -----
 
+Single-precision
+^^^^^^^^^^^^^^^^
 .. c:function:: ElError ElGQR_s( ElMatrix_s A, ElMatrix_s tA, ElMatrix_s dA, ElMatrix_s B, ElMatrix_s tB, ElMatrix_s dB )
-.. c:function:: ElError ElGQR_d( ElMatrix_d A, ElMatrix_d tA, ElMatrix_d dA, ElMatrix_d B, ElMatrix_d tB, ElMatrix_d dB )
-.. c:function:: ElError ElGQR_c( ElMatrix_c A, ElMatrix_c tA, ElMatrix_s dA, ElMatrix_c B, ElMatrix_c tB, ElMatrix_s dB )
-.. c:function:: ElError ElGQR_z( ElMatrix_z A, ElMatrix_z tA, ElMatrix_d dA, ElMatrix_z B, ElMatrix_z tB, ElMatrix_d dB )
 .. c:function:: ElError ElGQRDist_s( ElDistMatrix_s A, ElDistMatrix_s tA, ElDistMatrix_s dA, ElDistMatrix_s B, ElDistMatrix_s tB, ElDistMatrix_s dB )
-.. c:function:: ElError ElGQRDist_d( ElDistMatrix_d A, ElDistMatrix_d tA, ElDistMatrix_d dA, ElDistMatrix_d B, ElDistMatrix_d tB, ElDistMatrix_d dB )
-.. c:function:: ElError ElGQRDist_c( ElDistMatrix_c A, ElDistMatrix_c tA, ElDistMatrix_s dA, ElDistMatrix_c B, ElDistMatrix_c tB, ElDistMatrix_s dB )
-.. c:function:: ElError ElGQRDist_z( ElDistMatrix_z A, ElDistMatrix_z tA, ElDistMatrix_d dA, ElDistMatrix_z B, ElDistMatrix_z tB, ElDistMatrix_d dB )
 
    Overwrite `A` with both `R` and the (scaled) Householder vectors 
    which, along with the scalings `tA` and sign changes `dA`, define
@@ -57,12 +53,51 @@ C API
    vectors which define `Z`.
 
 .. c:function:: ElError ElGQRExplicitTriang_s( ElMatrix_s A, ElMatrix_s B )
-.. c:function:: ElError ElGQRExplicitTriang_d( ElMatrix_d A, ElMatrix_d B )
-.. c:function:: ElError ElGQRExplicitTriang_c( ElMatrix_c A, ElMatrix_c B )
-.. c:function:: ElError ElGQRExplicitTriang_z( ElMatrix_z A, ElMatrix_z B )
 .. c:function:: ElError ElGQRExplicitTriangDist_s( ElDistMatrix_s A, ElDistMatrix_s B )
+
+   Overwrite `A` with `R` and `B` with `T`.
+
+Double-precision
+^^^^^^^^^^^^^^^^
+.. c:function:: ElError ElGQR_d( ElMatrix_d A, ElMatrix_d tA, ElMatrix_d dA, ElMatrix_d B, ElMatrix_d tB, ElMatrix_d dB )
+.. c:function:: ElError ElGQRDist_d( ElDistMatrix_d A, ElDistMatrix_d tA, ElDistMatrix_d dA, ElDistMatrix_d B, ElDistMatrix_d tB, ElDistMatrix_d dB )
+
+   Overwrite `A` with both `R` and the (scaled) Householder vectors 
+   which, along with the scalings `tA` and sign changes `dA`, define
+   `Q`. Likewise, `B` is overwritten with both `T` and the (scaled) Householder 
+   vectors which define `Z`.
+
+.. c:function:: ElError ElGQRExplicitTriang_d( ElMatrix_d A, ElMatrix_d B )
 .. c:function:: ElError ElGQRExplicitTriangDist_d( ElDistMatrix_d A, ElDistMatrix_d B )
+
+   Overwrite `A` with `R` and `B` with `T`.
+
+Single-precision complex
+^^^^^^^^^^^^^^^^^^^^^^^^
+.. c:function:: ElError ElGQR_c( ElMatrix_c A, ElMatrix_c tA, ElMatrix_s dA, ElMatrix_c B, ElMatrix_c tB, ElMatrix_s dB )
+.. c:function:: ElError ElGQRDist_c( ElDistMatrix_c A, ElDistMatrix_c tA, ElDistMatrix_s dA, ElDistMatrix_c B, ElDistMatrix_c tB, ElDistMatrix_s dB )
+
+   Overwrite `A` with both `R` and the (scaled) Householder vectors 
+   which, along with the scalings `tA` and sign changes `dA`, define
+   `Q`. Likewise, `B` is overwritten with both `T` and the (scaled) Householder 
+   vectors which define `Z`.
+
+.. c:function:: ElError ElGQRExplicitTriang_c( ElMatrix_c A, ElMatrix_c B )
 .. c:function:: ElError ElGQRExplicitTriangDist_c( ElDistMatrix_c A, ElDistMatrix_c B )
+
+   Overwrite `A` with `R` and `B` with `T`.
+
+Double-precision complex
+^^^^^^^^^^^^^^^^^^^^^^^^
+.. c:function:: ElError ElGQR_z( ElMatrix_z A, ElMatrix_z tA, ElMatrix_d dA, ElMatrix_z B, ElMatrix_z tB, ElMatrix_d dB )
+.. c:function:: ElError ElGQRDist_z( ElDistMatrix_z A, ElDistMatrix_z tA, ElDistMatrix_d dA, ElDistMatrix_z B, ElDistMatrix_z tB, ElDistMatrix_d dB )
+
+   Overwrite `A` with both `R` and the (scaled) Householder vectors 
+   which, along with the scalings `tA` and sign changes `dA`, define
+   `Q`. Likewise, `B` is overwritten with both `T` and the (scaled) Householder 
+   vectors which define `Z`.
+
+.. c:function:: ElError ElGQRExplicitTriang_z( ElMatrix_z A, ElMatrix_z B )
 .. c:function:: ElError ElGQRExplicitTriangDist_z( ElDistMatrix_z A, ElDistMatrix_z B )
 
    Overwrite `A` with `R` and `B` with `T`.

@@ -9,44 +9,26 @@ of Microsoft Windows. A relatively up-to-date C++11 compiler
 
 Elemental's main external dependencies are
 
-1. `CMake <http://www.cmake.org/>`__ 
-2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`__ 
-3. `BLAS <http://netlib.org/blas>`__ 
-4. `LAPACK <http://netlib.org/lapack>`__, and
-5. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__.
+1. `CMake <http://www.cmake.org/>`__ ,
+2. `MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`__ ,
+3. `BLAS <http://netlib.org/blas>`__ ,
+4. `LAPACK <http://netlib.org/lapack>`__, 
+5. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, and
+6. `PMRRR <http://code.google.com/p/pmrrr>`__,
 
-Included within the project is `PMRRR <http://code.google.com/p/pmrrr>`__, 
-which Elemental depends upon for parallel symmetric tridiagonal eigensolvers, 
-which is included within the ``external/pmrrr/`` folder. In addition, several 
-libraries can be automatically downloaded/built/installed via 
-CMake's `ExternalProject <http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html>`__ 
-functionality:
+and the dependencies which can **not** currently be automatically handled by 
+Elemental's build system are
 
-1. `OpenBLAS <http://www.openblas.net/>`__
-2. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
-3. `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__, and
-4. `ScaLAPACK <http://netlib.org/scalapack>`__.
+1. CMake, and
+2. MPI.
 
-Furthermore, there are several further (optional) external dependencies:
+Handling mandatory external dependencies
+========================================
 
-1. `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
-   for faster SVD's due to its high-performance bidiagonal QR algorithm 
-   implementation, 
-2. `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`_ for 
-   quad-precision support (and more robust sparse-direct solvers),
-3. `Qt5 <http://qt-project.org>`_ for C++11 matrix visualization,
-4. `matplotlib <http://matplotlib.org/>`_ for Python matrix visualization,
-5. `NetworkX <https://networkx.github.io/>`_ for Python graph visualization, and
-6. `NumPy <http://www.numpy.org/>`_ for supporting the Python interface in 
-   general.
-
-Dependencies
-============
-
-CMake
------
-Elemental uses several new CMake modules, so it is important to ensure that 
-version 2.8.12 or later is installed. Thankfully the 
+Installing CMake
+----------------
+Elemental uses several relatively new CMake modules, so it is important to 
+ensure that CMake version 2.8.12 or later is available. Thankfully, the 
 `installation process <http://www.cmake.org/cmake/help/install.html>`_
 is extremely straightforward: either download a platform-specific binary from
 the `downloads page <http://www.cmake.org/cmake/resources/software.html>`_,
@@ -115,23 +97,25 @@ completely cleaning a build is to remove the entire build folder. On \*nix
 machines, this is most easily accomplished with::
 
     cd .. 
-    rm -rf build
+    rm -rf build/
 
-This is a better habit than simply running ``rm -rf *`` since, 
-if accidentally run from the wrong directory, the former will most likely fail.
+This is perhaps a safer habit than simply running ``rm -rf *`` since, 
+if accidentally run from the wrong directory, deleting ``build/`` would be 
+unlikely to have any effect.
 
-MPI
----
+Installing MPI
+--------------
 An implementation of the Message Passing Interface (MPI) is required for 
 building Elemental. The two most commonly used implementations are
 
-1. `MPICH2 <http://www.mcs.anl.gov/research/projects/mpich2/>`_
-2. `OpenMPI <http://www.open-mpi.org/>`_
+1. `MPICH <https://www.mpich.org>`_,
+2. `OpenMPI <http://www.open-mpi.org/>`_, and
+3. `MVAPICH <http://mvapich.cse.ohio-state.edu>`_,
 
-If your cluster uses `InfiniBand <http://en.wikipedia.org/wiki/InfiniBand>`_ as its interconnect, you may want to look into 
-`MVAPICH2 <http://mvapich.cse.ohio-state.edu/overview/mvapich2/>`_.
+where MVAPICH is primarily focused on systems with 
+`InfiniBand <http://en.wikipedia.org/wiki/InfiniBand>`_  and/or GPUs.
 
-Each of the respective websites contains installation instructions, but, on recent versions of `Ubuntu <http://www.ubuntu.com/>`__ (such as version 12.04), 
+Each of the respective websites contains installation instructions, but, on recent versions of `Ubuntu <http://www.ubuntu.com/>`__, 
 MPICH2 can be installed with ::
 
     sudo apt-get install libmpich2-dev
@@ -140,8 +124,63 @@ and OpenMPI can be installed with ::
 
     sudo apt-get install libopenmpi-dev
 
-BLAS and LAPACK
----------------
+Alternatively, one could manually download and install a recent stable release
+of MPICH, typically available from `http://www.mpich.org/downloads/ <http://www.mpich.org/downloads/>`__. For example, to download and install `mpich-3.1.4 <http://www.mpich.org/static/downloads/3.1.4/mpich-3.1.4.tar.gz>`__, one might run::
+
+    wget http://www.mpich.org/static/downloads/3.1.4/mpich-3.1.4.tar.gz
+    tar -xzf mpich-3.1.4.tar.gz
+    cd mpich-3.1.4/
+    ./configure --prefix=/where/to/install/mpich --CC=YourCCompiler --CXX=YourC++Compiler --FC=YourFortranCompiler
+    make
+    sudo make install 
+
+where the ``sudo`` is obviously not needed if you have permission to install
+files into the directory specified with ``--prefix``. Lastly, these instructions
+assumed the existence of a Fortran compiler, and so, if one is not available,
+you should instead run the commands::
+
+    wget http://www.mpich.org/static/downloads/3.1.4/mpich-3.1.4.tar.gz
+    tar -xzf mpich-3.1.4.tar.gz
+    cd mpich-3.1.4/
+    ./configure --prefix=/where/to/install/mpich --CC=YourCCompiler --CXX=YourC++Compiler --disable-fortran
+    make
+    sudo make install 
+
+Soft dependencies
+=================
+As was already mentioned, Elemental has several external dependencies which
+can be optionally be handled by the build process, and one 
+(`PMRRR <http://code.google.com/p/pmrrr>`__), which is always built by 
+Elemental. For the optionally-specified dependencies 
+(i.e., BLAS, LAPACK, METIS, ParMETIS, and ScaLAPACK), if custom implementations
+were not specified during the CMake configuration phase, then appropriate 
+libraries will be automatically downloaded/built/installed via CMake's 
+`ExternalProject <http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html>`__ functionality. In particular, Elemental can automatically fulfill 
+dependencies using
+
+1. `OpenBLAS <http://www.openblas.net/>`__ (to provide BLAS+LAPACK)
+2. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
+3. `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__, and
+4. `ScaLAPACK <http://netlib.org/scalapack>`__.
+
+Furthermore, there are several further (optional) external dependencies:
+
+1. `libFLAME <http://www.cs.utexas.edu/users/flame/>`_ is recommended 
+   for faster SVD's due to its high-performance bidiagonal QR algorithm 
+   implementation, 
+2. `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`_ for 
+   quad-precision support (and more robust sparse-direct solvers),
+3. `Qt5 <http://qt-project.org>`_ for C++11 matrix visualization,
+4. `matplotlib <http://matplotlib.org/>`_ for Python matrix visualization,
+5. `NetworkX <https://networkx.github.io/>`_ for Python graph visualization, and
+6. `NumPy <http://www.numpy.org/>`_ for supporting the Python interface in 
+   general.
+
+Support is not required for any of these libraries, but each is helpful for 
+particular components of Elemental's functionality.
+
+Installing BLAS and LAPACK
+--------------------------
 The Basic Linear Algebra Subprograms (BLAS) and Linear Algebra PACKage (LAPACK) 
 are both used heavily within Elemental. On most installations of `Ubuntu <http://www.ubuntu.com>`__, either of the following command should suffice for their installation::
 
@@ -157,11 +196,48 @@ and the reference implementation of BLAS can be found at
     http://www.netlib.org/blas/
 
 However, it is better to install an optimized version of these libraries,
-especialy for the BLAS. The most commonly used open source versions are 
-`ATLAS <http://math-atlas.sourceforge.net/>`__ and `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__, and `BLIS <http://code.google.com/p/blis>`__.
-
+especialy for the BLAS. The most commonly used open-source versions the BLAS are
+`ATLAS <http://math-atlas.sourceforge.net/>`__, `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__, and `BLIS <http://code.google.com/p/blis>`__.
 If no version of BLAS+LAPACK is detected, Elemental attempts to download and
 install OpenBLAS.
+
+OpenBLAS
+^^^^^^^^
+`OpenBLAS <http://www.openblas.net>`__ is a high-performance implementation of 
+the BLAS (and, to a somewhat lesser degree, LAPACK) which Elemental defaults
+to downloading and installing if no other high-performance implementation
+was detected . For example, by default, on Mac OS X, either Accelerate or 
+vecLib is used, but this behavior may be overridden via the CMake option 
+``-D EL_PREFER_OPENBLAS=TRUE``. Furthermore, Elemental may be requested not to
+use OpenBLAS via the option ``-D EL_DISABLE_OPENBLAS=TRUE``.
+Lastly, while Elemental will, by default, search for a previous installation of
+OpenBLAS before attempting to download and install the library, this search can
+be prevented via the ``-D EL_BUILD_OPENBLAS=TRUE`` option.
+
+libFLAME
+^^^^^^^^
+`libFLAME` is an open source library made available as part of the FLAME 
+project. Its stated objective is to
+
+.. epigraph::
+   ...transform the development of dense linear algebra libraries from an art 
+   reserved for experts to a science that can be understood by novice and 
+   expert alike.
+
+Elemental's current implementation of parallel SVD is dependent upon a serial 
+kernel for the bidiagonal SVD. A high-performance implementation of this 
+kernel was recently introduced in [vZvdGQ2014]_.
+
+Installation of `libFLAME` is fairly straightforward. It is recommended that 
+you download the latest nightly snapshot from
+
+    http://www.cs.utexas.edu/users/flame/snapshots/
+
+and then installation should simply be a matter of running::
+
+    ./configure
+    make
+    sudo make install
 
 PMRRR
 -----
@@ -177,19 +253,6 @@ while it is included within Elemental, it is also available at:
     http://code.google.com/p/pmrrr
 
 Note that PMRRR currently requires support for pthreads.
-
-OpenBLAS
---------
-`OpenBLAS <http://www.openblas.net>`__ is a high-performance implementation of 
-the BLAS (and, to a somewhat lesser degree, LAPACK) which Elemental defaults
-to downloading and installing if no other high-performance implementation
-was detected . For example, by default, on Mac OS X, either Accelerate or 
-vecLib is used, but this behavior may be overridden via the CMake option 
-``-D EL_PREFER_OPENBLAS=TRUE``. Furthermore, Elemental may be requested not to
-use OpenBLAS via the option ``-D EL_DISABLE_OPENBLAS=TRUE``.
-Lastly, while Elemental will, by default, search for a previous installation of
-OpenBLAS before attempting to download and install the library, this search can
-be prevented via the ``-D EL_BUILD_OPENBLAS=TRUE`` option.
 
 METIS
 -----
@@ -239,31 +302,6 @@ Support for ScaLAPACK can be disabled via the CMake option ``-D EL_DISABLE_SCALA
 installations and to download/install the library via 
 ``-D EL_BUILD_SCALAPACK=TRUE``.
 
-libFLAME
---------
-`libFLAME` is an open source library made available as part of the FLAME 
-project. Its stated objective is to
-
-.. epigraph::
-   ...transform the development of dense linear algebra libraries from an art 
-   reserved for experts to a science that can be understood by novice and 
-   expert alike.
-
-Elemental's current implementation of parallel SVD is dependent upon a serial 
-kernel for the bidiagonal SVD. A high-performance implementation of this 
-kernel was recently introduced in [vZvdGQ2014]_.
-
-Installation of `libFLAME` is fairly straightforward. It is recommended that 
-you download the latest nightly snapshot from
-
-    http://www.cs.utexas.edu/users/flame/snapshots/
-
-and then installation should simply be a matter of running::
-
-    ./configure
-    make
-    sudo make install
-
 libquadmath
 -----------
 If a GNU compiler is being used to compile Elemental, then it is likely that
@@ -302,12 +340,11 @@ There are two basic approaches:
 
 Building Elemental
 ==================
-On \*nix machines with `BLAS <http://www.netlib.org/blas/>`__, 
-`LAPACK <http://www.netlib.org/lapack/>`__, and 
-`MPI <http://en.wikipedia.org/wiki/Message_Passing_Interface>`__ installed in 
-standard locations, building Elemental can be as simple as::
+On Unix-like machines with MPI and CMake installed in standard locations,
+Elemental can often be built and installed using the commands::
 
-    cd elemental
+    git clone https://github.com/elemental/Elemental
+    cd Elemental
     mkdir build
     cd build
     cmake ..
@@ -318,12 +355,15 @@ Note that super-user privileges may be required for the ``make`` phase due to
 the installation of external packages.
 
 As with the installation of CMake, the default install location is 
-system-wide, e.g., ``/usr/local``. The installation directory can be changed
-at any time by running::
+system-wide, e.g., ``/usr/local``. The installation directory of the main 
+library can be changed at any time by invoking CMake with the option::
 
-    cmake -D CMAKE_INSTALL_PREFIX=/your/desired/install/path ..
-    make install
+    -D CMAKE_INSTALL_PREFIX=/your/desired/install/path
 
+and the installation of the Python interface can be switched from the default
+system-wide location to the user's home directory via the option::
+
+    -D INSTALL_PYTHON_INTO_USER_SITE=ON ..
 
 Though the above instructions will work on many systems, it is common to need
 to manually specify several build options, especially when multiple versions of
@@ -332,32 +372,49 @@ instance, any C++, C, or Fortran compiler can respectively be set with the
 ``CMAKE_CXX_COMPILER``, ``CMAKE_C_COMPILER``, and ``CMAKE_Fortran_COMPILER`` 
 variables, e.g., ::
 
-    cmake -D CMAKE_CXX_COMPILER=/usr/bin/g++ \
-          -D CMAKE_C_COMPILER=/usr/bin/gcc   \
-          -D CMAKE_Fortran_COMPILER=/usr/bin/gfortran ..
-    
+    -D CMAKE_CXX_COMPILER=/usr/bin/g++ \
+    -D CMAKE_C_COMPILER=/usr/bin/gcc   \
+    -D CMAKE_Fortran_COMPILER=/usr/bin/gfortran 
+
+and it may be necessary to manually specify the paths to the MPI compilers as  
+well using, for example, the options::
+
+    -D MPI_CXX_COMPILER=/usr/bin/mpicxx \
+    -D MPI_C_COMPILER=/usr/bin/mpicc \
+    -D MPI_Fortran_COMPILER=/usr/bin/mpif90
+
 It is also common to need to specify which libraries need to be linked in order
 to provide serial BLAS and LAPACK routines (and, if SVD is important, libFLAME).
-The ``MATH_LIBS`` variable was introduced for this purpose and an example 
-usage for configuring with BLAS and LAPACK libraries in ``/usr/lib`` would be ::
+The ``MATH_LIBS`` variable was introduced for this purpose and an 
+(unrecommended for performance reasons) example for specifying BLAS and LAPACK 
+libraries in ``/usr/lib`` might be ::
 
-    cmake -D MATH_LIBS="-L/usr/lib -llapack -lblas -lm" ..
+    -D MATH_LIBS="-L/usr/lib -llapack -lblas -lm"
+
+whereas specifying Intel's MKL libraries when using the Intel compilers is often
+as simple as::
+
+    -D MATH_LIBS="-mkl"
 
 It is important to ensure that if library A depends upon library B, A should 
 be specified to the left of B; in this case, LAPACK depends upon BLAS, so 
 ``-llapack`` is specified to the left of ``-lblas``.
 
 If `libFLAME <http://www.cs.utexas.edu/users/flame/>`__ is 
-available at ``/path/to/libflame.a``, then the above link line should be changed
-to ::
+available at ``/path/to/libflame.a``, then the above link lines should 
+respectively be changed to::
 
-    cmake -D MATH_LIBS="/path/to/libflame.a;-L/usr/lib -llapack -lblas -lm" ..
+    -D MATH_LIBS="/path/to/libflame.a;-L/usr/lib -llapack -lblas -lm"
 
-Elemental's performance in Singular Value Decompositions (SVD's) is 
-greatly improved on many architectures when libFLAME is linked.
+and::
+
+    -D MATH_LBIS="/path/to/libflame.a;-mkl"
+
+which should significantly improve Elemental's performance for Singular
+Value Decompositions.
 
 Build modes
------------
+===========
 Elemental currently has two different build modes:
 
 * **Debug** - Maintains a call stack and provides significant error-checking.
@@ -434,10 +491,18 @@ and/or ::
 
     -D EL_TESTS=ON  
 
-Elemental as a subproject
-=========================
+Elemental as a CMake subproject
+===============================
+
+.. note::
+
+   These instructions are somewhat out of date and so an email to 
+   `users@libelemental.org <mailto:users@libelemental.org>`_ might be 
+   more appropriate for now in order to help with using Elemental as a
+   subproject of another CMake build system.
+
 Adding Elemental as a dependency into a project which uses CMake for its build 
-system is relatively straightforward: simply put an entire copy of the 
+system can be relatively straightforward: simply put an entire copy of the 
 Elemental source tree in a subdirectory of your main project folder, say 
 ``external/elemental``, and then create a ``CMakeLists.txt`` file in your main 
 project folder that builds off of the following snippet::
@@ -465,10 +530,13 @@ Please only direct usage questions to
 and development questions to 
 `dev@libelemental.org <mailto:dev@libelemental.org>`_.
 
-.. [HWD2002] Greg Henry, David Watkins, and Jack Dongarra, *A parallel implementation of the nonsymmetric QR algorithm for distributed memory architectures*, SIAM Journal on Scientific Computing, Vol. 24, No. 1, pp. 284--311, 2002.
+References
+==========
 
-.. [Fahey2003] Mark R. Fahey, *Algorithm 826: A parallel eigenvalue routine for complex Hessenberg matrices*, ACM Transactions on Mathematical Software, Vol. 29, Issue 3, pp. 326--336, 2003.
+.. [HWD2002] Greg Henry, David Watkins, and Jack Dongarra, *A parallel implementation of the nonsymmetric QR algorithm for distributed memory architectures*, SIAM Journal on Scientific Computing, Vol. 24, No. 1, pp. 284--311, 2002. DOI: `http://dx.doi.org/10.1137/S1064827597325165 <http://dx.doi.org/10.1137/S1064827597325165>`__
 
-.. [GKK2010] Robert Granat, Bo Kagstrom, and Daniel Kressner, *A novel parallel QR algorithm for hybrid distributed memory HPC systems*, SIAM Journal on Scientific Computing, Vol. 32, No. 4, pp. 2345--2378, 2010.
+.. [Fahey2003] Mark R. Fahey, *Algorithm 826: A parallel eigenvalue routine for complex Hessenberg matrices*, ACM Transactions on Mathematical Software, Vol. 29, Issue 3, pp. 326--336, 2003. DOI: `http://dx.doi.org/10.1145/838250.838256 <http://dx.doi.org/10.1145/838250.838256>`__
 
-.. [vZvdGQ2014] `Field G. van Zee, Robert A. van de Geijn, and Gregorio Quintana-Orti, *Restructuring the tridiagonal and bidiagonal QR algorithms for performance*, ACM Transactions on Mathematical Software, Vol. 40, Issue 3, Article No. 18, 2014. <http://dl.acm.org/citation.cfm?doid=2610268.2535371>`__
+.. [GKK2010] Robert Granat, Bo Kagstrom, and Daniel Kressner, *A novel parallel QR algorithm for hybrid distributed memory HPC systems*, SIAM Journal on Scientific Computing, Vol. 32, No. 4, pp. 2345--2378, 2010. DOI: `http://dx.doi.org/10.1137/090756934 <http://dx.doi.org/10.1137/090756934>`__
+
+.. [vZvdGQ2014] Field G. van Zee, Robert A. van de Geijn, and Gregorio Quintana-Orti, *Restructuring the tridiagonal and bidiagonal QR algorithms for performance*, ACM Transactions on Mathematical Software, Vol. 40, Issue 3, Article No. 18, 2014. DOI: `http://dx.doi.org/10.1145/2535371 <http://dx.doi.org/10.1145/2535371>`__

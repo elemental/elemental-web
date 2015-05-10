@@ -118,10 +118,10 @@ Most source files contain the copyright notice::
 For an up-to-date list of contributing authors, please see the 
 `AUTHORS file <https://github.com/elemental/Elemental/blob/master/AUTHORS>`__.
 
-.. [PEtAl2013] `Jack Poulson, Bryan Marker, Robert A. van de Geijn, Jeff R. Hammond, and Nichols A. Romero, *Elemental: A new framework for distributed memory dense matrix computations*, ACM Transactions on Mathematical Software, Vol. 39, Issue 2, Article No. 13, 2013. <http://dl.acm.org/citation.cfm?id=2427030>`__
+.. [PEtAl2013] Jack Poulson, Bryan Marker, Robert A. van de Geijn, Jeff R. Hammond, and Nichols A. Romero, *Elemental: A new framework for distributed memory dense matrix computations*, ACM Transactions on Mathematical Software, Vol. 39, Issue 2, Article No. 13, 2013. DOI: `http://dx.doi.org/10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`__
 
-.. [LAPACK] `E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen, *LAPACK Users' Guide: Third Edition*, Society for Industrial and Applied Mathematics, Philadelphia, PA, 1999 <http://www.netlib.org/lapack/lug>`_
+.. [LAPACK] E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen, *LAPACK Users' Guide: Third Edition*, Society for Industrial and Applied Mathematics, Philadelphia, PA, 1999. Last accessed from: `http://www.netlib.org/lapack/lug/ <http://www.netlib.org/lapack/lug/>`__
 
-.. [PLAPACK] `Robert A. van de Geijn, *Using PLAPACK*, The MIT Press, Cambridge, MA, 1997 <https://mitpress.mit.edu/books/using-plapack>`__
+.. [PLAPACK] Robert A. van de Geijn, *Using PLAPACK*, The MIT Press, Cambridge, MA, 1997. Currently available from: `https://mitpress.mit.edu/books/using-plapack <https://mitpress.mit.edu/books/using-plapack>`__
 
-.. [ScaLAPACK] `L.S. Blackford, J. Choi, A. Cleary, E. D'Azevedo, J. Demmel, I. Dhillon, J. Dongarra, S. Hammarling, G. Henry, A. Petitet, K. Stanley, D. Walker, and C.R. Whaley, *ScaLAPACK Users' Guide*, Society for Industrial and Applied Mathematics, Philadelphia, PA, 1997 <http://www.netlib.org/scalapack/slug/>`__
+.. [ScaLAPACK] L.S. Blackford, J. Choi, A. Cleary, E. D'Azevedo, J. Demmel, I. Dhillon, J. Dongarra, S. Hammarling, G. Henry, A. Petitet, K. Stanley, D. Walker, and C.R. Whaley, *ScaLAPACK Users' Guide*, Society for Industrial and Applied Mathematics, Philadelphia, PA, 1997. Last accessed from: `http://www.netlib.org/scalapack/slug/ <http://www.netlib.org/scalapack/slug/>`__

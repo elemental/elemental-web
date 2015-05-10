@@ -26,4 +26,3 @@ matrix decompositions, are placed here.
    lapack_like/reflect
 
    lapack_like/util 
-   lapack_like/tuning

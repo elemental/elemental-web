@@ -1,22 +1,6 @@
 Pseudospectra
 =============
 
-`C++ Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.hpp>`__
-
-`C Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.h>`__
-
-`Python Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.py>`__
-
-`C++ implementation <https://github.com/elemental/Elemental/tree/master/src/lapack_like/spectral/Pseudospectra.cpp>`__
-
-`C++ pseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Pseudospectra.cpp>`__
-
-`C++ ChunkedPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedPseudospectra.cpp>`__
-
-`C++ TriangularPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/TriangularPseudospectra.cpp>`__
-
-`C++ ChunkedTriangularPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedTriangularPseudospectra.cpp>`__
-
 The :math:`\epsilon`-*pseudospectrum* of a square matrix :math:`A` is the set
 of all shifts :math:`z` such that :math:`\hat A - z` is singular for some
 :math:`\hat A` such that :math:`\| \hat A - A \|_2 < \epsilon`. In other
@@ -391,4 +375,14 @@ C API
 .. c:function:: ElError ElPseudospecCtrlDestroy_s( ElPseudospecCtrl_s* ctrl )
 .. c:function:: ElError ElPseudospecCtrlDestroy_d( ElPseudospecCtrl_d* ctrl )
 
+References
+----------
+`C++ implementation <https://github.com/elemental/Elemental/tree/master/src/lapack_like/spectral/Pseudospectra.cpp>`__
 
+`C++ pseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Pseudospectra.cpp>`__
+
+`C++ ChunkedPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedPseudospectra.cpp>`__
+
+`C++ TriangularPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/TriangularPseudospectra.cpp>`__
+
+`C++ ChunkedTriangularPseudospectra example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedTriangularPseudospectra.cpp>`__

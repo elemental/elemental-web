@@ -30,6 +30,6 @@ References
 
 `C Header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/condense.h>`__
 
-`Python wrappers <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/condense.py>`__
+`Python wrappers <https://github.com/elemental/Elemental/blob/master/python/lapack_like/condense.py>`__
 
 .. [DSH1989] Jack J. Dongarra, Danny C. Sorensen, and Sven J. Hammarling, *Block reduction of matrices to condensed forms for eigenvalue computations*, Journal of Computational and Applied Mathematics, Vol. 27, Issues 1--2, pp. 215--227, 1989. DOI: `http://dx.doi.org/10.1016/0377-0427(89)90367-1 <http://dx.doi.org/10.1016/0377-0427(89)90367-1>`__

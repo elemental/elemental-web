@@ -118,6 +118,9 @@ Most source files contain the copyright notice::
 For an up-to-date list of contributing authors, please see the 
 `AUTHORS file <https://github.com/elemental/Elemental/blob/master/AUTHORS>`__.
 
+References
+==========
+
 .. [PEtAl2013] Jack Poulson, Bryan Marker, Robert A. van de Geijn, Jeff R. Hammond, and Nichols A. Romero, *Elemental: A new framework for distributed memory dense matrix computations*, ACM Transactions on Mathematical Software, Vol. 39, Issue 2, Article No. 13, 2013. DOI: `http://dx.doi.org/10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`__
 
 .. [LAPACK] E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen, *LAPACK Users' Guide: Third Edition*, Society for Industrial and Applied Mathematics, Philadelphia, PA, 1999. Last accessed from: `http://www.netlib.org/lapack/lug/ <http://www.netlib.org/lapack/lug/>`__

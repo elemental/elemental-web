@@ -67,22 +67,22 @@ Special cases used in Elemental
 -------------------------------
 This list of special cases is here to help clarify the notation used throughout
 Elemental's source (as well as this documentation). These are all special
-cases of :cpp:type:`SparseMatrix\<T>`.
+cases of :cpp:class:`SparseMatrix\<T>`.
 
-.. cpp:type:: class SparseMatrix<Real>
+.. cpp:class:: SparseMatrix<Real>
 
    Used to denote that the underlying datatype `Real` is real.
 
-.. cpp:type:: class SparseMatrix<Complex<Real> >
+.. cpp:class:: SparseMatrix<Complex<Real> >
 
    Used to denote that the underlying datatype :cpp:type:`Complex\<Real>` is
    complex with base type `Real`.
 
-.. cpp:type:: class SparseMatrix<F>
+.. cpp:class:: SparseMatrix<F>
 
    Used to denote that the underlying datatype `F` is a field.
 
-.. cpp:type:: class SparseMatrix<Int>
+.. cpp:class:: SparseMatrix<Int>
 
    When the underlying datatype is a signed integer.
 

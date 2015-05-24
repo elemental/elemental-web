@@ -36,8 +36,8 @@ DistGraph
 
    .. cpp:function:: void Reserve( Int numLocalEdges, Int numRemoteEdges=0 )
 
-   .. cpp:function:: void Connect( Int source, Int target, bool passive=true )
-   .. cpp:function:: void Disconnect( Int source, Int target, bool passive=true )
+   .. cpp:function:: void Connect( Int source, Int target )
+   .. cpp:function:: void Disconnect( Int source, Int target )
 
    .. cpp:function:: void ConnectLocal( Int localSource, Int target )
    .. cpp:function:: void DisconnectLocal( Int localSource, Int target )
@@ -49,6 +49,7 @@ DistGraph
    .. cpp:function:: void QueueLocalDisconnection( Int localSource, Int target )
 
    .. cpp:function:: void ProcessQueues()
+   .. cpp:function:: void ProcessLocalQueues()
 
    .. rubric:: Basic queries
 
@@ -58,7 +59,7 @@ DistGraph
    .. cpp:function:: Int NumLocalSources() const
    .. cpp:function:: Int NumLocalEdges() const
    .. cpp:function:: Int Capacity() const
-   .. cpp:function:: bool Consistent() const
+   .. cpp:function:: bool LocallyConsistent() const
 
    .. cpp:function:: mpi::Comm Comm() const
    .. cpp:function:: Int Blocksize() const

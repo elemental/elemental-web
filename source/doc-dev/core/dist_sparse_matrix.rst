@@ -21,9 +21,9 @@ DistSparseMatrix
 
    .. cpp:function:: void Reserve( Int numLocalEntries, Int numRemoteEntries=0 )
 
-   .. cpp:function:: void Update( const Entry<T>& entry, bool passive=true )
-   .. cpp:function:: void Update( Int row, Int col, T value, bool passive=true )
-   .. cpp:function:: void Zero( Int row, Int col, bool passive=true )
+   .. cpp:function:: void Update( const Entry<T>& entry )
+   .. cpp:function:: void Update( Int row, Int col, T value )
+   .. cpp:function:: void Zero( Int row, Int col )
 
    .. cpp:function:: void UpdateLocal( const Entry<T>& localEntry )
    .. cpp:function:: void UpdateLocal( Int localRow, Int col, T value )
@@ -38,6 +38,7 @@ DistSparseMatrix
    .. cpp:function:: void QueueLocalZero( Int localRow, Int col )
 
    .. cpp:function:: void ProcessQueues()
+   .. cpp:function:: void ProcessLocalQueues()
 
    .. rubric:: Basic queries
 
@@ -47,7 +48,7 @@ DistSparseMatrix
    .. cpp:function:: Int LocalHeight() const
    .. cpp:function:: Int NumLocalEntries() const
    .. cpp:function:: Int Capacity() const
-   .. cpp:function:: bool Consistent() const
+   .. cpp:function:: bool LocallyConsistent() const
    .. cpp:function:: El::DistGraph& DistGraph()
    .. cpp:function:: const El::DistGraph& LockedDistGraph() const
 
@@ -71,20 +72,20 @@ This list of special cases is here to help clarify the notation used throughout
 Elemental's source (as well as this documentation). These are all special
 cases of :cpp:type:`DistSparseMatrix\<T>`.
 
-.. cpp:type:: class DistSparseMatrix<Real>
+.. cpp:class:: DistSparseMatrix<Real>
 
    Used to denote that the underlying datatype `Real` is real.
 
-.. cpp:type:: class DistSparseMatrix<Complex<Real> >
+.. cpp:class:: DistSparseMatrix<Complex<Real> >
 
    Used to denote that the underlying datatype :cpp:type:`Complex\<Real>` is
    complex with base type `Real`.
 
-.. cpp:type:: class DistSparseMatrix<F>
+.. cpp:class:: DistSparseMatrix<F>
 
    Used to denote that the underlying datatype `F` is a field.
 
-.. cpp:type:: class DistSparseMatrix<Int>
+.. cpp:class:: DistSparseMatrix<Int>
 
    When the underlying datatype is a signed integer.
 

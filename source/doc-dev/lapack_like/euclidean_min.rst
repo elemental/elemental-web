@@ -8,7 +8,7 @@ Euclidean minimization
    euclidean_min/Tikhonov
    euclidean_min/Ridge
    euclidean_min/GLM
-   euclidean_min/LS
+   euclidean_min/LSE
 
 References
 ----------

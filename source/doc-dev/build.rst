@@ -415,7 +415,7 @@ respectively be changed to::
 
 and::
 
-    -D MATH_LBIS="/path/to/libflame.a;-mkl"
+    -D MATH_LIBS="/path/to/libflame.a;-mkl"
 
 which should significantly improve Elemental's performance for Singular
 Value Decompositions.

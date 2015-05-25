@@ -156,12 +156,11 @@ Elemental. For the optionally-specified dependencies
 were not specified during the CMake configuration phase, then appropriate 
 libraries will be automatically downloaded/built/installed via CMake's 
 `ExternalProject <http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html>`__ functionality. In particular, Elemental can automatically fulfill 
-dependencies using
+dependencies using:
 
-1. `OpenBLAS <http://www.openblas.net/>`__ (to provide BLAS+LAPACK)
-2. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
-3. `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__, and
-4. `ScaLAPACK <http://netlib.org/scalapack>`__.
+1. `OpenBLAS <http://www.openblas.net/>`__ or `BLIS <https://code.google.com/p/blis>`__ (to provide BLAS+LAPACK)
+2. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__ and/or `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__ (for computing a vertex separator of a graph), and
+3. `ScaLAPACK <http://netlib.org/scalapack>`__ (for implementations of distributed Hessenberg QR algorithms).
 
 Furthermore, there are several further (optional) external dependencies:
 
@@ -197,9 +196,9 @@ and the reference implementation of BLAS can be found at
 
 However, it is better to install an optimized version of these libraries,
 especialy for the BLAS. The most commonly used open-source versions the BLAS are
-`ATLAS <http://math-atlas.sourceforge.net/>`__, `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__, and `BLIS <http://code.google.com/p/blis>`__.
+`ATLAS <http://math-atlas.sourceforge.net/>`__, `OpenBLAS <https://github.com/xianyi/OpenBLAS>`__, and `BLIS <https://code.google.com/p/blis>`__.
 If no version of BLAS+LAPACK is detected, Elemental attempts to download and
-install OpenBLAS.
+install OpenBLAS (or BLIS).
 
 OpenBLAS
 ^^^^^^^^
@@ -214,16 +213,21 @@ Lastly, while Elemental will, by default, search for a previous installation of
 OpenBLAS before attempting to download and install the library, this search can
 be prevented via the ``-D EL_BUILD_OPENBLAS=TRUE`` option.
 
+BLIS
+^^^^
+`BLIS <https://code.google.com/p/blis>`__ is "a software framework for 
+instantiating high-performance BLAS-like dense linear algebra libraries" and
+can optionally be downloaded and installed as part of Elemental's build 
+process. In order to do so on non-Apple architectures, the flag 
+``-D EL_DISABLE_OPENBLAS=TRUE`` should be enabled to avoid the OpenBLAS
+default, and, on Apple-architectures, the flag 
+``-D EL_PREFER_BLIS_LAPACK=TRUE`` should be specified to avoid the 
+``vecLib``/``Accelerate`` frameworks.
+
 libFLAME
 ^^^^^^^^
 `libFLAME` is an open source library made available as part of the FLAME 
-project. Its stated objective is to
-
-.. epigraph::
-   ...transform the development of dense linear algebra libraries from an art 
-   reserved for experts to a science that can be understood by novice and 
-   expert alike.
-
+project. 
 Elemental's current implementation of parallel SVD is dependent upon a serial 
 kernel for the bidiagonal SVD. A high-performance implementation of this 
 kernel was recently introduced in [vZvdGQ2014]_.
@@ -238,6 +242,9 @@ and then installation should simply be a matter of running::
     ./configure
     make
     sudo make install
+
+Automatic installation of libflame will hopefully be added into Elemental's 
+build system soon.
 
 PMRRR
 -----

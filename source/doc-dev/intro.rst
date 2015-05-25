@@ -105,8 +105,9 @@ such as:
    CMake option ``-D EL_DISABLE_QUAD=TRUE``), 
 4. `OpenBLAS <http://www.openblas.net/>`__, which is available under the 
    New BSD License (it can be disabled with ``-D EL_DISABLE_OPENBLAS=TRUE``), 
-   and
-5. `ScaLAPACK <http://www.netlib.org/scalapack>`__, which is also available 
+5. `BLIS <https://code.google.com/p/blis>`__, which is available under the
+   New BSD License (it can be disabled with ``-D EL_DISABLE_BLIS=TRUE``), and
+6. `ScaLAPACK <http://www.netlib.org/scalapack>`__, which is also available 
    under the New BSD License (and can be disabled with 
    ``-D EL_DISABLE_SCALAPACK=TRUE``).
 

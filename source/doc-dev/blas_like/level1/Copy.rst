@@ -7,6 +7,10 @@ C++ API
 .. cpp:function:: void Copy( const Matrix<S>& X, Matrix<T>& Y )
 .. cpp:function:: void Copy( const AbstractDistMatrix<S>& A, AbstractDistMatrix<T>& B )
 .. cpp:function:: void Copy( const AbstractBlockDistMatrix<S>& A, AbstractBlockDistMatrix<T>& B )
+
+.. cpp:function:: void CopyFromRoot( const Matrix<T>& A, DistMatrix<T,CIRC,CIRC>& B, bool includingViewers=false )
+.. cpp:function:: void CopyFromNonRoot( DistMatrix<T,CIRC,CIRC>& B, bool includingViewers=false )
+
 .. cpp:function:: void Copy( const SparseMatrix<S>& A, SparseMatrix<T>& B )
 .. cpp:function:: void Copy( const SparseMatrix<S>& A, Matrix<T>& B )
 .. cpp:function:: void Copy( const DistSparseMatrix<S>& A, DistSparseMatrix<T>& B )

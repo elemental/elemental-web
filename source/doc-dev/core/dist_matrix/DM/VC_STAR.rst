@@ -20,9 +20,3 @@ would be owned by the following sets of processes:
    \end{array}\right)
 
 .. cpp:class:: DistMatrix<T,VC,STAR>
-
-
-   .. cpp:function:: DistMatrix<T,VC,STAR> operator()( Range<Int> I, Range<Int> J )
-
-   .. cpp:function:: const DistMatrix<T,VC,STAR> operator()( Range<Int> I, Range<Int> J ) const
-

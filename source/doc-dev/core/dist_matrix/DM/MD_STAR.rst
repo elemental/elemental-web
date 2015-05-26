@@ -21,8 +21,3 @@ Notice that each column of this matrix is distributed like a diagonal of a
 ``[MC,MR]`` distribution.
 
 .. cpp:class:: DistMatrix<T,MD,STAR>
-
-   .. cpp:function:: DistMatrix<T,MD,STAR> operator()( Range<Int> I, Range<Int> J )
-
-   .. cpp:function:: const DistMatrix<T,MD,STAR> operator()( Range<Int> I, Range<Int> J ) const
-

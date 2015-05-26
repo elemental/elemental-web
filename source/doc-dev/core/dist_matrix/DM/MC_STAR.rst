@@ -26,8 +26,3 @@ column alignment is 0):
    \end{array}\right)
 
 .. cpp:class:: DistMatrix<T,MC,STAR>
-
-   .. cpp:function:: DistMatrix<T,MC,STAR> operator()( Range<Int> I, Range<Int> J )
-
-   .. cpp:function:: const DistMatrix<T,MC,STAR> operator()( Range<Int> I, Range<Int> J ) const
-

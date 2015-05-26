@@ -25,9 +25,3 @@ sets of processes:
    \end{array}\right)
 
 .. cpp:class:: DistMatrix<T,STAR,STAR>
-
-
-   .. cpp:function:: DistMatrix<T,STAR,STAR> operator()( Range<Int> I, Range<Int> J )
-
-   .. cpp:function:: const DistMatrix<T,STAR,STAR> operator()( Range<Int> I, Range<Int> J ) const
-

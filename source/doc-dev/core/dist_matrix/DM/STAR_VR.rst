@@ -17,8 +17,3 @@ This is the transpose of the above ``[VR,* ]`` distribution. On the standard
    \end{array}\right)
 
 .. cpp:class:: DistMatrix<T,STAR,VR>
-
-   .. cpp:function:: DistMatrix<T,STAR,VR> operator()( Range<Int> I, Range<Int> J )
-
-   .. cpp:function:: const DistMatrix<T,STAR,VR> operator()( Range<Int> I, Range<Int> J ) const
-

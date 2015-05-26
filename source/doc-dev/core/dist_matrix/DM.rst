@@ -1,8 +1,7 @@
 DistMatrix
 ==========
-
-The :cpp:type:`DistMatrix\<T,U,V>` class, which is a derivation from
-:cpp:type:`AbstractDistMatrix\<T>`,
+The :cpp:class:`DistMatrix\<T,U,V>` class, which is a derivation from
+:cpp:class:`AbstractDistMatrix\<T>`,
 is specialized for each of the thirteen different legal distribution pairs.
 Each specialization involves choosing a
 sensical pairing of distributions for the rows and columns of the matrix:
@@ -63,7 +62,7 @@ To make this discussion more precise, each valid matrix distribution for
 `DistMatrix` logically arranges the set of `p` processes of the `r` by `c`
 process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossComm`, where `DistComm` is equal to `ColComm` x `RowComm`.
 
-.. cpp:type:: DistMatrix<T,U,V>
+.. cpp:class:: DistMatrix<T,U,V>
 
    The following routines are available for each legal pairing of row and column
    distributions.
@@ -103,6 +102,13 @@ process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossCom
 
       A C++11 move assignment which cheaply transfers the resources from `A`
       to the current matrix by swapping metadata.
+
+   .. rubric:: Viewing
+
+   .. cpp:function:: DistMatrix<T,U,V> operator()( Range<Int> I, Range<Int> J )
+
+   .. cpp:function:: const DistMatrix<T,U,V> operator()( Range<Int> I, Range<Int> J ) const
+
 
 .. toctree::
    :maxdepth: 1

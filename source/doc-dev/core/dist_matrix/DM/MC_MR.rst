@@ -40,8 +40,3 @@ It should also be noted that this is the default distribution format for the
 
 .. cpp:class:: DistMatrix<T>
 .. cpp:class:: DistMatrix<T,MC,MR>
-
-   .. cpp:function:: DistMatrix<T,MC,MR> operator()( Range<Int> I, Range<Int> J )
-
-   .. cpp:function:: const DistMatrix<T,MC,MR> operator()( Range<Int> I, Range<Int> J ) const
-

@@ -3,7 +3,34 @@ AbstractDistMatrix
 
 This abstract class defines the list of member functions that are guaranteed 
 to be available for all matrix distributions and whose prototype does not 
-depend upon the particular matrix distribution
+depend upon the particular matrix distribution.
+
+One of the many conveniences provided by :cpp:class::`AbstractDistMatrix\<T>` 
+is the ability for individual processes to easily modify arbitrary 
+(possibly non-local) entries of the distribute matrix using a combination of
+``Reserve``, ``QueueUpdate``, and ``ProcessQueues``. For example:
+
+.. code-block:: cpp
+
+   #include "El.hpp"
+   using namespace El;
+   ...
+   DistMatrix<double> A;
+   Zeros( A, 100, 100 );
+   if( A.DistRank() == 0 )
+   {
+       A.Reserve( 3 );
+       A.QueueUpdate( 50, 50, 1. );
+       A.QueueUpdate( 51, 51, 2. );
+       A.QueueUpdate( 52, 52, 3. );
+   }
+   else if( A.DistRank() == 1 )
+   {
+       A.Reserve( 2 );
+       A.QueueUpdate( 0, 0, 17. );
+       A.QueueUpdate( 1, 0, 18. );
+   }
+   A.ProcessQueues();
 
 .. cpp:class:: AbstractDistMatrix<T>
 
@@ -342,6 +369,22 @@ depend upon the particular matrix distribution
    .. cpp:function:: void Conjugate( Int i, Int j )
 
       Conjugate the :math:`(i,j)` entry of the global matrix.
+
+   .. rubric:: Batch remote entry updates
+
+   The following set of routines provide a convenient mechanism for allowing
+   all processes to contribute updates to arbitrary entries of the 
+   distributed matrix. Each process should begin by calling ``Reserve`` with
+   an upper bound on the number of remote entries to contribute, followed
+   by calling ``QueueUpdate`` for each (potentially remote) update, and then
+   all processes must collectively call ``ProcessQueues``.
+   
+   .. cpp:function:: void Reserve( Int numRemoteEntries )
+
+   .. cpp:function:: void QueueUpdate( const Entry<T>& entry )
+   .. cpp:function:: void QueueUpdate( Int i, Int j, T value )
+
+   .. cpp:function:: void ProcessQueues()
 
    .. rubric:: Single-entry manipulation (local)
 

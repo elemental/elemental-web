@@ -41,7 +41,7 @@ is returned and, when the object goes out of scope, the matrix is copied into
 Configuring the proxy
 ---------------------
 
-.. cpp:type:: ProxyCtrl
+.. cpp:class:: ProxyCtrl
 
    .. cpp:member:: bool colConstrain
    .. cpp:member:: bool rowConstrain

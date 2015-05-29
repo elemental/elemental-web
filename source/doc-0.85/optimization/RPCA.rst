@@ -23,7 +23,7 @@ where :math:`\| \cdot \|_*` denotes the nuclear norm and
 C++ API
 -------
 
-.. cpp:type:: RPCACtrl
+.. cpp:class:: RPCACtrl
 
    .. cpp:member:: bool useALM
    .. cpp:member:: bool usePivQR
@@ -34,7 +34,7 @@ C++ API
    .. cpp:member:: Real beta
    .. cpp:member:: Real rho
    .. cpp:member:: Real tol
-   .. cpp:member:: RPCACtrl()
+   .. cpp:function:: RPCACtrl()
 
 .. cpp:function:: void RPCA( const AbstractDistMatrix<F>& M, AbstractDistMatrix<F>& L, AbstractDistMatrix<F>& S, const RPCACtrl<Base<F>>& ctrl=RPCACtrl<Base<F>>() )
 

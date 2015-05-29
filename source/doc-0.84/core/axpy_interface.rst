@@ -97,12 +97,13 @@ The output would be ::
     0 0 0 0 0 0 2 0
     0 0 0 0 0 0 0 2
 
-.. cpp:type:: AxpyType
+.. cpp:enum:: AxpyType
 
-   An enum that can take on the value of either 
-   ``LOCAL_TO_GLOBAL`` or ``GLOBAL_TO_LOCAL``, with the meanings described above.
+   .. cpp:enumerator:: LOCAL_TO_GLOBAL
 
-.. cpp:type:: class AxpyInterface<T>
+   .. cpp:enumerator:: GLOBAL_TO_LOCAL
+
+.. cpp:class:: AxpyInterface<T>
 
    .. cpp:function:: AxpyInterface()
 

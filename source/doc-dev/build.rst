@@ -3,9 +3,11 @@ Build system
 Elemental's build system relies on `CMake <http://www.cmake.org>`__ 
 in order to manage a large number of configuration options in a 
 platform-independent manner; it can be easily configured to build on Linux and 
-Unix environments (including Darwin), and, at least in theory, various versions
-of Microsoft Windows. A relatively up-to-date C++11 compiler 
-(e.g., gcc >= 4.7) is required in all cases.
+Unix environments (including Darwin), as well as via Cygwin in a Windows 
+environment (Visual Studio's is expected to begin supporting ``constexpr``, 
+which is heavily used by Elemental, with the official VS 2015 release in 
+July 2015). A relatively recent C++11 compiler (e.g., gcc >= 4.7) is 
+required in all cases.
 
 Elemental's main external dependencies are
 
@@ -244,7 +246,17 @@ and then installation should simply be a matter of running::
     sudo make install
 
 Automatic installation of libflame will hopefully be added into Elemental's 
-build system soon.
+build system soon (pending the resolution of issues in the current ``libflame``
+build system). Until that time, it is necessary to manually specify ``libflame``
+as part of the ``MATH_LIBS`` variable. For example, if libflame is available at
+``/path/to/libflame.a``, then this library needs to be prepended to the 
+list of BLAS and LAPACK libraries, e.g., via::
+
+    -D MATH_LIBS="/path/to/libflame.a;-L/usr/lib -llapack -lblas -lm"
+
+or::
+
+    -D MATH_LIBS="/path/to/libflame.a;-mkl"
 
 PMRRR
 -----
@@ -370,7 +382,11 @@ library can be changed at any time by invoking CMake with the option::
 and the installation of the Python interface can be switched from the default
 system-wide location to the user's home directory via the option::
 
-    -D INSTALL_PYTHON_INTO_USER_SITE=ON ..
+    -D INSTALL_PYTHON_INTO_USER_SITE=ON
+
+or instead installed into ``${CMAKE_INSTALL_PREFIX}/python/`` via the option::
+
+    -D INSTALL_PYTHON_PACKAGE=OFF
 
 Though the above instructions will work on many systems, it is common to need
 to manually specify several build options, especially when multiple versions of
@@ -390,8 +406,8 @@ well using, for example, the options::
     -D MPI_C_COMPILER=/usr/bin/mpicc \
     -D MPI_Fortran_COMPILER=/usr/bin/mpif90
 
-It is also common to need to specify which libraries need to be linked in order
-to provide serial BLAS and LAPACK routines (and, if SVD is important, libFLAME).
+It is also occasionally necessary to specify which libraries need to be linked 
+in order to link to BLAS and LAPACK (and, if SVD is important, libFLAME).
 The ``MATH_LIBS`` variable was introduced for this purpose and an 
 (unrecommended for performance reasons) example for specifying BLAS and LAPACK 
 libraries in ``/usr/lib`` might be ::
@@ -405,20 +421,10 @@ as simple as::
 
 It is important to ensure that if library A depends upon library B, A should 
 be specified to the left of B; in this case, LAPACK depends upon BLAS, so 
-``-llapack`` is specified to the left of ``-lblas``.
-
-If `libFLAME <http://www.cs.utexas.edu/users/flame/>`__ is 
-available at ``/path/to/libflame.a``, then the above link lines should 
-respectively be changed to::
-
-    -D MATH_LIBS="/path/to/libflame.a;-L/usr/lib -llapack -lblas -lm"
-
-and::
-
-    -D MATH_LIBS="/path/to/libflame.a;-mkl"
-
-which should significantly improve Elemental's performance for Singular
-Value Decompositions.
+``-llapack`` is specified to the left of ``-lblas``. If ``MATH_LIBS`` is not
+specified, then Elemental will attempt to download and install either 
+OpenBLAS or BLIS, or, failing that, search for an installed reference 
+implementation.
 
 Build modes
 ===========

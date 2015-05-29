@@ -7,7 +7,7 @@ simplified interfaces have been exposed.
 Data structures
 ^^^^^^^^^^^^^^^
 
-.. cpp:type:: struct pmrrr::Estimate
+.. cpp:class:: pmrrr::Estimate
 
    For returning upper bounds on the number of local and global eigenvalues
    with eigenvalues lying in the specified interval, :math:`(a,b]`.
@@ -21,7 +21,7 @@ Data structures
 
       The upper bound on the number of eigenvalues in the specified interval.
 
-.. cpp:type:: struct pmrrr::Info
+.. cpp:class:: pmrrr::Info
 
    For returning information about the computed eigenvalues.
 

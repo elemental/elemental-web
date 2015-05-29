@@ -99,7 +99,7 @@ Special cases used in Elemental
 -------------------------------
 This list of special cases is here to help clarify the notation used throughout
 Elemental's source (as well as this documentation). These are all special
-cases of :cpp:type:`DistSparseMatrix\<T>`.
+cases of :cpp:class:`DistSparseMatrix\<T>`.
 
 .. cpp:class:: DistSparseMatrix<Real>
 

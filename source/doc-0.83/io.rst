@@ -11,7 +11,7 @@ Input/output
 
       Simple ASCII text file
 
-   .. cpp:enumerator:: MATLAB_ASCII
+   .. cpp:enumerator:: ASCII_MATLAB
 
       MATLAB-ready ASCII text file
 

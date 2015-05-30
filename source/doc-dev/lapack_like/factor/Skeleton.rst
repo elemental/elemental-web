@@ -1,7 +1,7 @@
 Skeleton decomposition
 ======================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/Skeleton.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/Skeleton.cpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Skeleton.cpp>`__
 

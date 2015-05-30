@@ -20,8 +20,7 @@ support the development of Elemental since its development began in 2009.
 .. image:: stanford.png
    :scale: 75 %
 
-* Jack Poulson is an Assistant Professor in the Department of Mathematics at 
-Stanford as of January 2015 (having been an Acting Assistant Professor from October to December 2014) and is also a Member of the Institute for Computational and Mathematical Engineering.
+* Jack Poulson is an Assistant Professor in the Department of Mathematics at Stanford as of January 2015 (having been an Acting Assistant Professor from October to December 2014) and is also a Member of the Institute for Computational and Mathematical Engineering.
 
 .. image:: gt-cse.jpeg
    :scale: 90 %

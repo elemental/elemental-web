@@ -132,22 +132,22 @@ Blocksize manipulation
 .. cpp:function:: int DefaultBlockWidth()
 
    Returns the default block height (width) for 
-   :cpp:type:`BlockDistMatrix\<T,U,V>`.
+   :cpp:class:`BlockDistMatrix\<T,U,V>`.
 
 .. cpp:function:: void SetDefaultBlockHeight( int mb )
 .. cpp:function:: void SetDefaultBlockWidth( int nb )
 
    Change the default block height (width) for 
-   :cpp:type:`BlockDistMatrix\<T,U,V>`.
+   :cpp:class:`BlockDistMatrix\<T,U,V>`.
 
 Default process grid
 --------------------
 
 .. cpp:function:: Grid& DefaultGrid()
 
-   Return a process grid built over :cpp:type:`mpi::COMM_WORLD`. This is 
+   Return a process grid built over :cpp:var:`mpi::COMM_WORLD`. This is 
    typically used as a means of allowing instances of the 
-   :cpp:type:`DistMatrix\<T,MC,MR>` class to be constructed without having to 
+   :cpp:class:`DistMatrix\<T,MC,MR>` class to be constructed without having to 
    manually specify a process grid, e.g., 
 
    .. code-block:: cpp
@@ -180,7 +180,7 @@ Call stack manipulation
 Custom exceptions
 -----------------
 
-.. cpp:type:: class SingularMatrixException
+.. cpp:class:: SingularMatrixException
 
    An extension of ``std::runtime_error`` which is meant to be thrown when 
    a singular matrix is unexpectedly encountered.
@@ -194,7 +194,7 @@ Custom exceptions
 
       throw elem::SingularMatrixException();
 
-.. cpp:type:: class NonHPDMatrixException 
+.. cpp:class:: NonHPDMatrixException 
 
    An extension of ``std::runtime_error`` which is meant to be thrown when
    a non positive-definite Hermitian matrix is unexpectedly encountered
@@ -209,7 +209,7 @@ Custom exceptions
 
       throw elem::NonHPDMatrixException();
 
-.. cpp:type:: class NonHPSDMatrixException 
+.. cpp:class:: NonHPSDMatrixException 
 
    An extension of ``std::runtime_error`` which is meant to be thrown when
    a non positive semi-definite Hermitian matrix is unexpectedly encountered
@@ -346,116 +346,163 @@ Other typedefs and enums
 
    ``typedef unsigned char byte;``
 
-.. cpp:type:: enum Conjugation
+.. cpp:enum:: Conjugation
 
-   An enum which can be set to either ``CONJUGATED`` or ``UNCONJUGATED``.
+   .. cpp:enumerator:: CONJUGATED
 
-.. cpp:type:: enum Distribution
+   .. cpp:enumerator:: UNCONJUGATED
 
-   An enum for specifying the distribution of a row or column of a distributed
-   matrix:
+.. cpp:enum:: Distribution
 
-   * ``MC``: Column of a standard matrix distribution
-   * ``MD``: Diagonal of a standard matrix distribution
-   * ``MR``: Row of a standard matrix distribution
-   * ``VC``: Column-major vector distribution
-   * ``VR``: Row-major vector distribution
-   * ``STAR``: Redundantly stored on every process
-   * ``CIRC``: Stored on a single process
+   For specifying the distribution of a row or column of a distributed matrix:
 
-.. cpp:type:: enum ForwardOrBackward
+   .. cpp:enumerator:: MC
 
-   An enum for specifying ``FORWARD`` or ``BACKWARD``.
+      Column of a standard matrix distribution
 
-.. cpp:type:: enum GridOrder
+   .. cpp:enumerator:: MD
 
-   An enum for specifying either a ``ROW_MAJOR`` or ``COLUMN_MAJOR`` ordering;
+      Diagonal of a standard matrix distribution
+
+   .. cpp:enumerator:: MR
+   
+      Row of a standard matrix distribution
+
+   .. cpp:enumerator:: VC
+
+      Column-major vector distribution
+
+   .. cpp:enumerator:: VR
+
+      Row-major vector distribution
+
+   .. cpp:enumerator:: STAR
+
+      Redundantly stored on every process
+  
+   .. cpp:enumerator:: CIRC
+
+      Stored on a single process
+
+.. cpp:enum:: ForwardOrBackward
+
+   .. cpp:enumerator:: FORWARD
+
+   .. cpp:enumerator:: BACKWARD
+
+.. cpp:enum:: GridOrder
+
+   For specifying either a ``ROW_MAJOR`` or ``COLUMN_MAJOR`` ordering;
    it is used to decide how to construct process grids and is also useful for 
    tuning one of the algorithms in :cpp:func:`HermitianTridiag`
    which requires building a smaller square process grid from a rectangular 
    process grid, as the ordering of the processes can greatly impact 
    performance. See :cpp:func:`SetHermitianTridiagGridOrder`.
 
-.. cpp:type:: enum LeftOrRight
+   .. cpp:enumerator:: ROW_MAJOR
 
-   An enum for specifying ``LEFT`` or ``RIGHT``.
+   .. cpp:enumerator:: COLUMN_MAJOR
 
-.. cpp:type:: enum SortType
+.. cpp:enum:: LeftOrRight
 
-   An enum for specifying a sorting strategy:
+   .. cpp:enumerator:: LEFT
 
-   * ``UNSORTED``: do not sort
-   * ``DESCENDING``: smallest values first
-   * ``ASCENDING``: largest values first
+   .. cpp:enumerator:: RIGHT
 
-.. cpp:type:: enum NormType
+.. cpp:enum:: SortType
 
-   An enum that can be set to either
+   For specifying a sorting strategy:
 
-   * ``ONE_NORM``:
+   .. cpp:enumerator:: UNSORTED
 
-     .. math:: 
+      Do not sort
 
-        \|A\|_1 = \max_{\|x\|_1=1} \|Ax\|_1 
-                = \max_j \sum_{i=0}^{m-1} |\alpha_{i,j}|
+   .. cpp:enumerator:: DESCENDING
 
-   * ``INFINITY_NORM``:
+      Largest values first
 
-     .. math:: 
+   .. cpp:enumerator:: ASCENDING
 
-        \|A\|_{\infty} = \max_{\|x\|_{\infty}=1} \|Ax\|_{\infty} 
-                       = \max_i \sum_{j=0}^{n-1} |\alpha_{i,j}|
+      Smallest values first 
 
-   * ``ENTRYWISE_ONE_NORM``:
+.. cpp:enum:: NormType
 
-     .. math::
+   .. cpp:enumerator:: ONE_NORM
 
-       \|\text{vec}(A)\|_1 = \sum_{i,j} |\alpha_{i,j}|
+      .. math:: 
 
-   * ``MAX_NORM``:
+         \|A\|_1 = \max_{\|x\|_1=1} \|Ax\|_1 
+                 = \max_j \sum_{i=0}^{m-1} |\alpha_{i,j}|
 
-     .. math::
+   .. cpp:enumerator:: INFINITY_NORM
+
+      .. math:: 
+
+         \|A\|_{\infty} = \max_{\|x\|_{\infty}=1} \|Ax\|_{\infty} 
+                        = \max_i \sum_{j=0}^{n-1} |\alpha_{i,j}|
+
+   .. cpp:enumerator:: ENTRYWISE_ONE_NORM
+
+      .. math::
+
+        \|\text{vec}(A)\|_1 = \sum_{i,j} |\alpha_{i,j}|
+
+   .. cpp:enumerator:: MAX_NORM
+
+      .. math::
      
-        \|A\|_{\mbox{max}} = \max_{i,j} |\alpha_{i,j}|
+         \|A\|_{\mbox{max}} = \max_{i,j} |\alpha_{i,j}|
 
-   * ``NUCLEAR_NORM``:
+   .. cpp:enumerator:: NUCLEAR_NORM
 
-     .. math::
+      .. math::
 
-        \|A\|_* = \sum_{i=0}^{\min(m,n)} \sigma_i(A)
+         \|A\|_* = \sum_{i=0}^{\min(m,n)} \sigma_i(A)
 
-   * ``FROBENIUS_NORM``:
+   .. cpp:enumerator:: FROBENIUS_NORM
 
-     .. math::
+      .. math::
 
-        \|A\|_F = \sqrt{\sum_{i=0}^{m-1} \sum_{j=0}^{n-1} |\alpha_{i,j}|^2}
-                = \sum_{i=0}^{\min(m,n)} \sigma_i(A)^2
+         \|A\|_F = \sqrt{\sum_{i=0}^{m-1} \sum_{j=0}^{n-1} |\alpha_{i,j}|^2}
+                 = \sum_{i=0}^{\min(m,n)} \sigma_i(A)^2
 
-   * ``TWO_NORM``:
+   .. cpp:enumerator:: TWO_NORM
 
-     .. math::
+      .. math::
 
-        \|A\|_2 = \max_i \sigma_i(A)
+         \|A\|_2 = \max_i \sigma_i(A)
   
-.. cpp:type:: enum Orientation
+.. cpp:enum:: Orientation
 
-   An enum for specifying whether a matrix, say :math:`A`, should be implicitly 
-   treated as :math:`A` (``NORMAL``), :math:`A^H` (``ADJOINT``), or :math:`A^T`
-   (``TRANSPOSE``).
+   .. cpp:enumerator:: NORMAL
 
-.. cpp:type:: enum UnitOrNonUnit
+      Do not transpose or conjugate
 
-   An enum for specifying either ``UNIT`` or ``NON_UNIT``; typically used for 
-   stating whether or not a triangular matrix's diagonal is explicitly stored
-   (``NON_UNIT``) or is implicitly unit-diagonal (``UNIT``).
+   .. cpp:enumerator:: TRANSPOSE
 
-.. cpp:type:: enum UpperOrLower
+      Transpose without conjugation
 
-   An enum for specifying ``LOWER`` or ``UPPER`` (triangular).
+   .. cpp:enumerator:: ADJOINT
 
-.. cpp:type:: enum VerticalOrHorizontal
+      Transpose with conjugation
 
-   An enum for specifying ``VERTICAL`` or ``HORIZONTAL``.
+.. cpp:enum:: UnitOrNonUnit
+
+   .. cpp:enumerator:: UNIT
+
+   .. cpp:enumerator:: NON_UNIT
+
+.. cpp:enum:: UpperOrLower
+
+   .. cpp:enumerator:: LOWER
+
+   .. cpp:enumerator:: UPPER
+
+.. cpp:enum:: VerticalOrHorizontal
+
+   .. cpp:enumerator:: VERTICAL
+
+   .. cpp:enumerator:: HORIZONTAL
 
 Indexing utilities
 ------------------

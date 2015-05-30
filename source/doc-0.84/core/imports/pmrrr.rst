@@ -12,7 +12,7 @@ while the implementations are in the folder
 Data structures
 ^^^^^^^^^^^^^^^
 
-.. cpp:type:: herm_tridiag_eig::Estimate
+.. cpp:class:: herm_tridiag_eig::Estimate
 
    For returning upper bounds on the number of local and global eigenvalues
    with eigenvalues lying in the specified interval, :math:`(a,b]`.
@@ -26,7 +26,7 @@ Data structures
 
       The upper bound on the number of eigenvalues in the specified interval.
 
-.. cpp:type:: herm_tridiag_eig::Info
+.. cpp:class:: herm_tridiag_eig::Info
 
    For returning information about the computed eigenvalues.
 

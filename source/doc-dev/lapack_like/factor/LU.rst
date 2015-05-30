@@ -1,13 +1,13 @@
 LU factorization
 ================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LU.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/LU.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/LU>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/LU>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LU.cpp>`__
 
-`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/GaussianElimination.cpp>`__
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/LinearSolve.cpp>`__
 
 Partial pivoting
 ----------------

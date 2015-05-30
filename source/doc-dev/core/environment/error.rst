@@ -4,7 +4,7 @@ Error handling
 C++ API
 -------
 
-.. cpp:type:: SingularMatrixException
+.. cpp:class:: SingularMatrixException
 
    An extension of ``std::runtime_error`` which is meant to be thrown when 
    a singular matrix is unexpectedly encountered.
@@ -18,7 +18,7 @@ C++ API
 
       throw El::SingularMatrixException();
 
-.. cpp:type:: NonHPDMatrixException 
+.. cpp:class:: NonHPDMatrixException 
 
    An extension of ``std::runtime_error`` which is meant to be thrown when
    a non positive-definite Hermitian matrix is unexpectedly encountered
@@ -33,7 +33,7 @@ C++ API
 
       throw El::NonHPDMatrixException();
 
-.. cpp:type:: NonHPSDMatrixException 
+.. cpp:class:: NonHPSDMatrixException 
 
    An extension of ``std::runtime_error`` which is meant to be thrown when
    a non positive semi-definite Hermitian matrix is unexpectedly encountered

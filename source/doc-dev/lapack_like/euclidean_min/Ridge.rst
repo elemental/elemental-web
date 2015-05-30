@@ -30,13 +30,19 @@ Python API
 C++ API
 -------
 
-.. cpp:type:: RidgeAlg
+.. cpp:enum:: RidgeAlg
 
-   An enum that can take on the values:
+   .. cpp:enumerator:: RIDGE_CHOLESKY
 
-   * ``RIDGE_CHOLESKY``: Run a less accurate, but often faster, Cholesky-based algorithm
-   * ``RIDGE_QR``: Run a QR-based algorithm
-   * ``RIDGE_SVD``: Run an SVD-based algorithm
+      Run a less accurate, but often faster, Cholesky-based algorithm
+
+   .. cpp:enumerator:: RIDGE_QR
+
+      Run a QR-based algorithm
+
+   .. cpp:enumerator:: RIDGE_SVD
+
+      Run an SVD-based algorithm
 
 .. cpp:function:: void Ridge( Orientation orientation, const Matrix<F>& A, const Matrix<F>& B, Base<F> gamma, Matrix<F>& X, RidgeAlg alg=RIDGE_CHOLESKY )
 

@@ -254,7 +254,7 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
    .. cpp:function:: Matrix<T> GetDiagonal( int offset=0 ) const
    .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
+   .. cpp:function:: Matrix<Base<T>> GetImagPartOfDiagonal( int offset=0 ) const
 
       Efficiently construct and return the particular diagonal 
       (or its real or imaginary part) via C++11 move semantics.

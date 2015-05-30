@@ -1,8 +1,8 @@
 Cholesky factorization
 ======================
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/Cholesky.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/Cholesky.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/Cholesky>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/Cholesky>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/Cholesky.cpp>`__
 

@@ -221,7 +221,7 @@ is the ability for individual processes to easily modify arbitrary
       can be reached by unioning the local data from a distribution over the
       :cpp:func:`ColComm` (via an ``AllGather``) over the 
       :cpp:func:`PartialUnionColComm`. One nontrivial example is for 
-      :cpp:type:`DistMatrix\<T,VC,STAR>`, where the column communicator is 
+      :cpp:class:`DistMatrix\<T,VC,STAR>`, where the column communicator is 
       :cpp:func:`Grid::VCComm`, the partial column communicator is 
       :cpp:func:`Grid::MCComm`, and the partial union column communicator is
       :cpp:func:`Grid::MRComm`.
@@ -243,13 +243,14 @@ is the ability for individual processes to easily modify arbitrary
 
       The orthogonal complement of the product of :cpp:func:`DistComm` and 
       :cpp:func:`RedundantComm` with respect to the process grid. For instance,
-      for :cpp:type:`DistMatrix\<T,CIRC,CIRC>`, this is 
+      for :cpp:class:`DistMatrix\<T,CIRC,CIRC>`, this is 
       :cpp:func:`Grid::VCComm`.
 
    .. cpp:function:: mpi::Comm RedundantComm() const
 
       The communicator over which data is redundantly stored. For instance,
-      for :cpp:type:`DistMatrix\<T,MC,STAR>`, this is :cpp:func:`Grid::RowComm`.
+      for :cpp:class:`DistMatrix\<T,MC,STAR>`, this is 
+      :cpp:func:`Grid::RowComm`.
 
    .. cpp:function:: Int ColRank() const
    .. cpp:function:: Int RowRank() const
@@ -459,11 +460,11 @@ is the ability for individual processes to easily modify arbitrary
 
    .. cpp:member:: Distribution colDist
 
-      The :cpp:type:`Distribution` scheme used within each column of the matrix.
+      The :cpp:enum:`Distribution` scheme used within each column of the matrix.
    
    .. cpp:member:: Distribution rowDist
 
-      The :cpp:type:`Distribution` scheme used within each row of the matrix.
+      The :cpp:enum:`Distribution` scheme used within each row of the matrix.
 
    .. cpp:member:: Int colAlign
 
@@ -488,5 +489,5 @@ is the ability for individual processes to easily modify arbitrary
    .. cpp:function:: DistData( const AbstractDistMatrix<T>& A )
 
       Construct the distribution data of any instance of 
-      :cpp:type:`AbstractDistMatrix\<T>`.
+      :cpp:class:`AbstractDistMatrix\<T>`.
 

@@ -1,9 +1,9 @@
 LDL factorization
 =================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/LDL.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/LDL>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/LDL>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LDL.cpp>`__
 
@@ -25,23 +25,32 @@ Factorization
 C++ API
 """""""
 
-.. cpp:type:: LDLPivotType
+.. cpp:enum:: LDLPivotType
 
-   An enum for specifying the symmetric pivoting strategy. The current
+   For specifying the symmetric pivoting strategy. The current
    (not yet all supported) options include:
 
-   * ``BUNCH_KAUFMAN_A`` 
-   * ``BUNCH_KAUFMAN_C`` (not yet supported)
-   * ``BUNCH_KAUFMAN_D``
-   * ``BUNCH_KAUFMAN_BOUNDED`` (not yet supported)
-   * ``BUNCH_PARLETT``
-   * ``LDL_WITHOUT_PIVOTING``
+   .. cpp:enumerator:: BUNCH_KAUFMAN_A
+
+   .. cpp:enumerator:: BUNCH_KAUFMAN_C
+
+      Not yet supported
+
+   .. cpp:enumerator:: BUNCH_KAUFMAN_D
+
+   .. cpp:enumerator:: BUNCH_KAUFMAN_BOUNDED
+
+      Not yet supported
+
+   .. cpp:enumerator:: BUNCH_PARLETT
+
+   .. cpp:enumerator:: LDL_WITHOUT_PIVOTING
 
 .. cpp:function:: Real LDLPivotConstant<Real>(LDLPivotType pivotType)
 
    Maps various LDL pivotings schemes to their optimal threshold constant.
 
-.. cpp:type:: LDLPivotCtrl<Real>
+.. cpp:class:: LDLPivotCtrl<Real>
 
    .. cpp:member:: LDLPivotType pivotType
 
@@ -53,7 +62,7 @@ C++ API
 
    .. cpp:function:: LDLPivotCtrl(LDLPivotType piv=BUNCH_KAUFMAN_A)
 
-.. cpp:type:: LDLPivot
+.. cpp:class:: LDLPivot
 
    .. cpp:member:: Int nb
 

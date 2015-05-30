@@ -327,7 +327,7 @@ Sylvester-Observer Equation*. This algorithm is not yet performance-tuned in
 Elemental, but should be preferred in massively-parallel situations where the
 Schur decomposition is considered infeasible.
 
-.. cpp:type:: SnapshotCtrl
+.. cpp:class:: SnapshotCtrl
 
    .. cpp:member:: int realSize
    .. cpp:member:: int imagSize
@@ -365,7 +365,7 @@ Schur decomposition is considered infeasible.
 
       Increments all counters by one
 
-.. cpp:type:: PseudospecCtrl<Real>
+.. cpp:class:: PseudospecCtrl<Real>
 
    .. cpp:member::bool schur
 
@@ -391,7 +391,7 @@ Schur decomposition is considered infeasible.
 
    .. cpp:member:: SnapshotCtrl snapCtrl
 
-.. cpp:type:: PseudospecCtrl<Base<F>>
+.. cpp:class:: PseudospecCtrl<Base<F>>
 
    A particular case where the datatype is the base of the potentially complex
    type ``F``.

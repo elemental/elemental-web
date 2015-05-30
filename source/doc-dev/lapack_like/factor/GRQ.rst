@@ -1,7 +1,7 @@
 Generalized RQ factorization
 ============================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/GRQ.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/GRQ.cpp>`__
 
 The *generalized RQ factorization* of a pair of matrices :math:`(A,B)` is 
 analogous to an RQ factorization of :math:`A B^{-1}` but does not require that

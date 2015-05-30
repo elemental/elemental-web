@@ -1,9 +1,9 @@
 DistMatrix
 ----------
 
-The :cpp:type:`DistMatrix\<T,U,V>` class, which is the final product from the
-succession from :cpp:type:`AbstractDistMatrix\<T>` and 
-:cpp:type:`GeneralDistMatrix\<T,U,V>`, is specialized for each
+The :cpp:class:`DistMatrix\<T,U,V>` class, which is the final product from the
+succession from :cpp:class:`AbstractDistMatrix\<T>` and 
+:cpp:class:`GeneralDistMatrix\<T,U,V>`, is specialized for each
 of the thirteen different legal distribution pairs.
 Each specialization involves choosing a
 sensical pairing of distributions for the rows and columns of the matrix:
@@ -64,7 +64,7 @@ To make this discussion more precise, each valid matrix distribution for
 `DistMatrix` logically arranges the set of `p` processes of the `r` by `c`
 process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossComm`, where `DistComm` is equal to `ColComm` x `RowComm`.
 
-.. cpp:type:: class DistMatrix<T,U,V>
+.. cpp:class:: DistMatrix<T,U,V>
 
    The following routines are available for each legal pairing of row and column
    distributions.
@@ -144,15 +144,15 @@ matrix), the individual entries would be owned as follows:
    \end{array}\right)
 
 It should also be noted that this is the default distribution format for the 
-:cpp:type:`DistMatrix\<T,U,V>` class, as :cpp:type:`DistMatrix\<T>` defaults to
-:cpp:type:`DistMatrix\<T,MC,MR>`.
+:cpp:class:`DistMatrix\<T,U,V>` class, as :cpp:class:`DistMatrix\<T>` defaults 
+to :cpp:class:`DistMatrix\<T,MC,MR>`.
 
-.. cpp:type:: class DistMatrix<T>
-.. cpp:type:: class DistMatrix<T,MC,MR>
+.. cpp:class:: DistMatrix<T>
+.. cpp:class:: DistMatrix<T,MC,MR>
 
    All public member functions have been described as part of 
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and 
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[MC,STAR]``
 ^^^^^^^^^^^^^
@@ -181,11 +181,11 @@ column alignment is 0):
      \{0,2,4\} & \{0,2,4\} 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,MC,STAR>
+.. cpp:class:: DistMatrix<T,MC,STAR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[STAR,MR]``
 ^^^^^^^^^^^^^
@@ -206,11 +206,11 @@ the row alignment is 0):
      \{0,1\} & \{2,3\} & \{4,5\} & \{0,1\} & \{2,3\} & \{4,5\} & \{0,1\} 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,STAR,MR>
+.. cpp:class:: DistMatrix<T,STAR,MR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[MR,MC]``
 ^^^^^^^^^^^
@@ -232,11 +232,11 @@ column and row alignments are both 0):
      0 & 1 & 0 & 1 & 0 & 1 & 0 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,MR,MC>
+.. cpp:class:: DistMatrix<T,MR,MC>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[MR,STAR]``
 ^^^^^^^^^^^^^
@@ -258,11 +258,11 @@ the column alignment is 0):
      \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,MR,STAR>
+.. cpp:class:: DistMatrix<T,MR,STAR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[STAR,MC]``
 ^^^^^^^^^^^^^
@@ -291,11 +291,11 @@ the column alignment is 0):
      \{0,2,4\} 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,STAR,MC>
+.. cpp:class:: DistMatrix<T,STAR,MC>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[MD,STAR]``
 ^^^^^^^^^^^^^
@@ -319,18 +319,19 @@ owning processes of the entries of our :math:`7 \times 7` matrix example:
 Notice that each column of this matrix is distributed like a diagonal of a 
 ``[MC,MR]`` distribution.
 
-.. cpp:type:: class DistMatrix<T,MD,STAR>
+.. cpp:class:: DistMatrix<T,MD,STAR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[STAR,MD]``
 ^^^^^^^^^^^^^
-In the case of our :math:`2 \times 3` process grid, each diagonal of the tesselation
-of the process grid will contain the entire set of processes, for instance, in the
-order :math:`0,3,4,1,2,5`. This would result in the following overlay for the
-owning processes of the entries of our :math:`7 \times 7` matrix example:
+In the case of our :math:`2 \times 3` process grid, each diagonal of the 
+tesselation of the process grid will contain the entire set of processes, for 
+instance, in the order :math:`0,3,4,1,2,5`. This would result in the following 
+overlay for the owning processes of the entries of our :math:`7 \times 7` 
+matrix example:
 
 .. math::
 
@@ -347,11 +348,11 @@ owning processes of the entries of our :math:`7 \times 7` matrix example:
 Notice that each *row* of this matrix is distributed like a diagonal of a 
 ``[MC,MR]`` distribution.
 
-.. cpp:type:: class DistMatrix<T,STAR,MD>
+.. cpp:class:: DistMatrix<T,STAR,MD>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[VC,STAR]``
 ^^^^^^^^^^^^^
@@ -374,11 +375,11 @@ would be owned by the following sets of processes:
      0 & 0 & 0 & 0 & 0 & 0 & 0
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,VC,STAR>
+.. cpp:class:: DistMatrix<T,VC,STAR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[STAR,VC]``
 ^^^^^^^^^^^^^
@@ -398,11 +399,11 @@ This is the transpose of the above ``[VC,* ]`` distribution. On the standard
    0 & 1 & 2 & 3 & 4 & 5 & 0 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,STAR,VC>
+.. cpp:class:: DistMatrix<T,STAR,VC>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[VR,STAR]``
 ^^^^^^^^^^^^^
@@ -425,11 +426,11 @@ would be owned by the following sets of processes:
      0 & 0 & 0 & 0 & 0 & 0 & 0
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,VR,STAR>
+.. cpp:class:: DistMatrix<T,VR,STAR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[STAR,VR]``
 ^^^^^^^^^^^^^
@@ -449,11 +450,11 @@ This is the transpose of the above ``[VR,* ]`` distribution. On the standard
    0 & 2 & 4 & 1 & 3 & 5 & 0 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,STAR,VR>
+.. cpp:class:: DistMatrix<T,STAR,VR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[STAR,STAR]``
 ^^^^^^^^^^^^^^^
@@ -481,11 +482,11 @@ sets of processes:
    \{0,1,...,5\} & \{0,1,...,5\} & \{0,1,...,5\} 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,STAR,STAR>
+.. cpp:class:: DistMatrix<T,STAR,STAR>
 
    All public member functions have been described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
 ``[CIRC,CIRC]``
 ^^^^^^^^^^^^^^^
@@ -506,140 +507,140 @@ process grid, then the corresponding overlay for the owners of each entry of our
      0 & 0 & 0 & 0 & 0 & 0 & 0 
    \end{array}\right)
 
-.. cpp:type:: class DistMatrix<T,CIRC,CIRC>
+.. cpp:class:: DistMatrix<T,CIRC,CIRC>
 
    Only two public member functions were not described as part of
-   :cpp:type:`AbstractDistMatrix\<T>`, :cpp:type:`GeneralDistMatrix\<T,U,V>`, and
-   :cpp:type:`DistMatrix\<T,U,V>`.
+   :cpp:class:`AbstractDistMatrix\<T>`, :cpp:class:`GeneralDistMatrix\<T,U,V>`,
+   and :cpp:class:`DistMatrix\<T,U,V>`.
 
    .. cpp:function:: void CopyFromRoot( const Matrix<T>& A )
 
-      To be called from the root process in order to assign a sequential matrix to
-      a ``[CIRC,CIRC]`` "distributed" matrix.
+      To be called from the root process in order to assign a sequential matrix
+      to a ``[CIRC,CIRC]`` "distributed" matrix.
 
    .. cpp:function:: void CopyFromNonRoot()
 
-      To be called from non-root processes at the same time that the root process
-      is calling :cpp:func:`CopyFromRoot`.
+      To be called from non-root processes at the same time that the root 
+      process is calling :cpp:func:`CopyFromRoot`.
 
 Some special cases used in Elemental
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 This list of special cases is here to help clarify the notation used throughout
 Elemental's source (as well as this documentation). These are all special 
-cases of :cpp:type:`DistMatrix\<T,U,V>`.
+cases of :cpp:class:`DistMatrix\<T,U,V>`.
 
-.. cpp:type:: class DistMatrix<double,U,V>
-.. cpp:type:: class DistMatrix<double>
-.. cpp:type:: class DistMatrix<double,CIRC,CIRC>
-.. cpp:type:: class DistMatrix<double,MC,MR>
-.. cpp:type:: class DistMatrix<double,MC,STAR>
-.. cpp:type:: class DistMatrix<double,MD,STAR>
-.. cpp:type:: class DistMatrix<double,MR,MC>
-.. cpp:type:: class DistMatrix<double,MR,STAR>
-.. cpp:type:: class DistMatrix<double,STAR,MC>
-.. cpp:type:: class DistMatrix<double,STAR,MD>
-.. cpp:type:: class DistMatrix<double,STAR,MR>
-.. cpp:type:: class DistMatrix<double,STAR,STAR>
-.. cpp:type:: class DistMatrix<double,STAR,VC>
-.. cpp:type:: class DistMatrix<double,STAR,VR>
-.. cpp:type:: class DistMatrix<double,VC,STAR>
-.. cpp:type:: class DistMatrix<double,VR,STAR>
+.. cpp:class:: DistMatrix<double,U,V>
+.. cpp:class:: DistMatrix<double>
+.. cpp:class:: DistMatrix<double,CIRC,CIRC>
+.. cpp:class:: DistMatrix<double,MC,MR>
+.. cpp:class:: DistMatrix<double,MC,STAR>
+.. cpp:class:: DistMatrix<double,MD,STAR>
+.. cpp:class:: DistMatrix<double,MR,MC>
+.. cpp:class:: DistMatrix<double,MR,STAR>
+.. cpp:class:: DistMatrix<double,STAR,MC>
+.. cpp:class:: DistMatrix<double,STAR,MD>
+.. cpp:class:: DistMatrix<double,STAR,MR>
+.. cpp:class:: DistMatrix<double,STAR,STAR>
+.. cpp:class:: DistMatrix<double,STAR,VC>
+.. cpp:class:: DistMatrix<double,STAR,VR>
+.. cpp:class:: DistMatrix<double,VC,STAR>
+.. cpp:class:: DistMatrix<double,VR,STAR>
 
    The underlying datatype is the set of double-precision real numbers.
 
-.. cpp:type:: class DistMatrix<Complex<double>,U,V>
-.. cpp:type:: class DistMatrix<Complex<double>>
-.. cpp:type:: class DistMatrix<Complex<double>,CIRC,CIRC>
-.. cpp:type:: class DistMatrix<Complex<double>,MC,MR>
-.. cpp:type:: class DistMatrix<Complex<double>,MC,STAR>
-.. cpp:type:: class DistMatrix<Complex<double>,MD,STAR>
-.. cpp:type:: class DistMatrix<Complex<double>,MR,MC>
-.. cpp:type:: class DistMatrix<Complex<double>,MR,STAR>
-.. cpp:type:: class DistMatrix<Complex<double>,STAR,MC>
-.. cpp:type:: class DistMatrix<Complex<double>,STAR,MD>
-.. cpp:type:: class DistMatrix<Complex<double>,STAR,MR>
-.. cpp:type:: class DistMatrix<Complex<double>,STAR,STAR>
-.. cpp:type:: class DistMatrix<Complex<double>,STAR,VC>
-.. cpp:type:: class DistMatrix<Complex<double>,STAR,VR>
-.. cpp:type:: class DistMatrix<Complex<double>,VC,STAR>
-.. cpp:type:: class DistMatrix<Complex<double>,VR,STAR>
+.. cpp:class:: DistMatrix<Complex<double>,U,V>
+.. cpp:class:: DistMatrix<Complex<double>>
+.. cpp:class:: DistMatrix<Complex<double>,CIRC,CIRC>
+.. cpp:class:: DistMatrix<Complex<double>,MC,MR>
+.. cpp:class:: DistMatrix<Complex<double>,MC,STAR>
+.. cpp:class:: DistMatrix<Complex<double>,MD,STAR>
+.. cpp:class:: DistMatrix<Complex<double>,MR,MC>
+.. cpp:class:: DistMatrix<Complex<double>,MR,STAR>
+.. cpp:class:: DistMatrix<Complex<double>,STAR,MC>
+.. cpp:class:: DistMatrix<Complex<double>,STAR,MD>
+.. cpp:class:: DistMatrix<Complex<double>,STAR,MR>
+.. cpp:class:: DistMatrix<Complex<double>,STAR,STAR>
+.. cpp:class:: DistMatrix<Complex<double>,STAR,VC>
+.. cpp:class:: DistMatrix<Complex<double>,STAR,VR>
+.. cpp:class:: DistMatrix<Complex<double>,VC,STAR>
+.. cpp:class:: DistMatrix<Complex<double>,VR,STAR>
 
    The underlying datatype is the set of double-precision complex numbers.
 
-.. cpp:type:: class DistMatrix<Real,U,V>
-.. cpp:type:: class DistMatrix<Real>
-.. cpp:type:: class DistMatrix<Real,CIRC,CIRC>
-.. cpp:type:: class DistMatrix<Real,MC,MR>
-.. cpp:type:: class DistMatrix<Real,MC,STAR>
-.. cpp:type:: class DistMatrix<Real,MD,STAR>
-.. cpp:type:: class DistMatrix<Real,MR,MC>
-.. cpp:type:: class DistMatrix<Real,MR,STAR>
-.. cpp:type:: class DistMatrix<Real,STAR,MC>
-.. cpp:type:: class DistMatrix<Real,STAR,MD>
-.. cpp:type:: class DistMatrix<Real,STAR,MR>
-.. cpp:type:: class DistMatrix<Real,STAR,STAR>
-.. cpp:type:: class DistMatrix<Real,STAR,VC>
-.. cpp:type:: class DistMatrix<Real,STAR,VR>
-.. cpp:type:: class DistMatrix<Real,VC,STAR>
-.. cpp:type:: class DistMatrix<Real,VR,STAR>
+.. cpp:class:: DistMatrix<Real,U,V>
+.. cpp:class:: DistMatrix<Real>
+.. cpp:class:: DistMatrix<Real,CIRC,CIRC>
+.. cpp:class:: DistMatrix<Real,MC,MR>
+.. cpp:class:: DistMatrix<Real,MC,STAR>
+.. cpp:class:: DistMatrix<Real,MD,STAR>
+.. cpp:class:: DistMatrix<Real,MR,MC>
+.. cpp:class:: DistMatrix<Real,MR,STAR>
+.. cpp:class:: DistMatrix<Real,STAR,MC>
+.. cpp:class:: DistMatrix<Real,STAR,MD>
+.. cpp:class:: DistMatrix<Real,STAR,MR>
+.. cpp:class:: DistMatrix<Real,STAR,STAR>
+.. cpp:class:: DistMatrix<Real,STAR,VC>
+.. cpp:class:: DistMatrix<Real,STAR,VR>
+.. cpp:class:: DistMatrix<Real,VC,STAR>
+.. cpp:class:: DistMatrix<Real,VR,STAR>
 
    The underlying datatype, `Real`, is real (as opposed to complex).
 
-.. cpp:type:: class DistMatrix<Complex<Real>,U,V>
-.. cpp:type:: class DistMatrix<Complex<Real>>
-.. cpp:type:: class DistMatrix<Complex<Real>,CIRC,CIRC>
-.. cpp:type:: class DistMatrix<Complex<Real>,MC,MR>
-.. cpp:type:: class DistMatrix<Complex<Real>,MC,STAR>
-.. cpp:type:: class DistMatrix<Complex<Real>,MD,STAR>
-.. cpp:type:: class DistMatrix<Complex<Real>,MR,MC>
-.. cpp:type:: class DistMatrix<Complex<Real>,MR,STAR>
-.. cpp:type:: class DistMatrix<Complex<Real>,STAR,MC>
-.. cpp:type:: class DistMatrix<Complex<Real>,STAR,MD>
-.. cpp:type:: class DistMatrix<Complex<Real>,STAR,MR>
-.. cpp:type:: class DistMatrix<Complex<Real>,STAR,STAR>
-.. cpp:type:: class DistMatrix<Complex<Real>,STAR,VC>
-.. cpp:type:: class DistMatrix<Complex<Real>,STAR,VR>
-.. cpp:type:: class DistMatrix<Complex<Real>,VC,STAR>
-.. cpp:type:: class DistMatrix<Complex<Real>,VR,STAR>
+.. cpp:class:: DistMatrix<Complex<Real>,U,V>
+.. cpp:class:: DistMatrix<Complex<Real>>
+.. cpp:class:: DistMatrix<Complex<Real>,CIRC,CIRC>
+.. cpp:class:: DistMatrix<Complex<Real>,MC,MR>
+.. cpp:class:: DistMatrix<Complex<Real>,MC,STAR>
+.. cpp:class:: DistMatrix<Complex<Real>,MD,STAR>
+.. cpp:class:: DistMatrix<Complex<Real>,MR,MC>
+.. cpp:class:: DistMatrix<Complex<Real>,MR,STAR>
+.. cpp:class:: DistMatrix<Complex<Real>,STAR,MC>
+.. cpp:class:: DistMatrix<Complex<Real>,STAR,MD>
+.. cpp:class:: DistMatrix<Complex<Real>,STAR,MR>
+.. cpp:class:: DistMatrix<Complex<Real>,STAR,STAR>
+.. cpp:class:: DistMatrix<Complex<Real>,STAR,VC>
+.. cpp:class:: DistMatrix<Complex<Real>,STAR,VR>
+.. cpp:class:: DistMatrix<Complex<Real>,VC,STAR>
+.. cpp:class:: DistMatrix<Complex<Real>,VR,STAR>
 
-   The underlying datatype, :cpp:type:`Complex\<Real>`, is complex with base type 
-   `Real`. 
+   The underlying datatype, :cpp:type:`Complex\<Real>`, is complex with base 
+   type `Real`. 
 
-.. cpp:type:: class DistMatrix<F,U,V>
-.. cpp:type:: class DistMatrix<F>
-.. cpp:type:: class DistMatrix<F,CIRC,CIRC>
-.. cpp:type:: class DistMatrix<F,MC,MR>
-.. cpp:type:: class DistMatrix<F,MC,STAR>
-.. cpp:type:: class DistMatrix<F,MD,STAR>
-.. cpp:type:: class DistMatrix<F,MR,MC>
-.. cpp:type:: class DistMatrix<F,MR,STAR>
-.. cpp:type:: class DistMatrix<F,STAR,MC>
-.. cpp:type:: class DistMatrix<F,STAR,MD>
-.. cpp:type:: class DistMatrix<F,STAR,MR>
-.. cpp:type:: class DistMatrix<F,STAR,STAR>
-.. cpp:type:: class DistMatrix<F,STAR,VC>
-.. cpp:type:: class DistMatrix<F,STAR,VR>
-.. cpp:type:: class DistMatrix<F,VC,STAR>
-.. cpp:type:: class DistMatrix<F,VR,STAR>
+.. cpp:class:: DistMatrix<F,U,V>
+.. cpp:class:: DistMatrix<F>
+.. cpp:class:: DistMatrix<F,CIRC,CIRC>
+.. cpp:class:: DistMatrix<F,MC,MR>
+.. cpp:class:: DistMatrix<F,MC,STAR>
+.. cpp:class:: DistMatrix<F,MD,STAR>
+.. cpp:class:: DistMatrix<F,MR,MC>
+.. cpp:class:: DistMatrix<F,MR,STAR>
+.. cpp:class:: DistMatrix<F,STAR,MC>
+.. cpp:class:: DistMatrix<F,STAR,MD>
+.. cpp:class:: DistMatrix<F,STAR,MR>
+.. cpp:class:: DistMatrix<F,STAR,STAR>
+.. cpp:class:: DistMatrix<F,STAR,VC>
+.. cpp:class:: DistMatrix<F,STAR,VR>
+.. cpp:class:: DistMatrix<F,VC,STAR>
+.. cpp:class:: DistMatrix<F,VR,STAR>
 
    The underlying datatype, `F`, is a field.
 
-.. cpp:type:: class DistMatrix<int,U,V>
-.. cpp:type:: class DistMatrix<int>
-.. cpp:type:: class DistMatrix<int,CIRC,CIRC>
-.. cpp:type:: class DistMatrix<int,MC,MR>
-.. cpp:type:: class DistMatrix<int,MC,STAR>
-.. cpp:type:: class DistMatrix<int,MD,STAR>
-.. cpp:type:: class DistMatrix<int,MR,MC>
-.. cpp:type:: class DistMatrix<int,MR,STAR>
-.. cpp:type:: class DistMatrix<int,STAR,MC>
-.. cpp:type:: class DistMatrix<int,STAR,MD>
-.. cpp:type:: class DistMatrix<int,STAR,MR>
-.. cpp:type:: class DistMatrix<int,STAR,STAR>
-.. cpp:type:: class DistMatrix<int,STAR,VC>
-.. cpp:type:: class DistMatrix<int,STAR,VR>
-.. cpp:type:: class DistMatrix<int,VC,STAR>
-.. cpp:type:: class DistMatrix<int,VR,STAR>
+.. cpp:class:: DistMatrix<int,U,V>
+.. cpp:class:: DistMatrix<int>
+.. cpp:class:: DistMatrix<int,CIRC,CIRC>
+.. cpp:class:: DistMatrix<int,MC,MR>
+.. cpp:class:: DistMatrix<int,MC,STAR>
+.. cpp:class:: DistMatrix<int,MD,STAR>
+.. cpp:class:: DistMatrix<int,MR,MC>
+.. cpp:class:: DistMatrix<int,MR,STAR>
+.. cpp:class:: DistMatrix<int,STAR,MC>
+.. cpp:class:: DistMatrix<int,STAR,MD>
+.. cpp:class:: DistMatrix<int,STAR,MR>
+.. cpp:class:: DistMatrix<int,STAR,STAR>
+.. cpp:class:: DistMatrix<int,STAR,VC>
+.. cpp:class:: DistMatrix<int,STAR,VR>
+.. cpp:class:: DistMatrix<int,VC,STAR>
+.. cpp:class:: DistMatrix<int,VR,STAR>
 
    The underlying datatype is a signed integer (of standard size).
 

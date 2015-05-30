@@ -10,7 +10,7 @@ quasi-diagonal matrix resulting from a pivoted LDLH factorization.
 C++ API
 ^^^^^^^
 
-.. cpp:type:: InertiaType
+.. cpp:class:: InertiaType
 
    .. cpp:member:: Int numPositive
    .. cpp:member:: Int numNegative

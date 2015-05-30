@@ -216,7 +216,7 @@ Python API
 C++ API
 ^^^^^^^
 
-.. cpp:type:: SnapshotCtrl
+.. cpp:class:: SnapshotCtrl
 
    .. cpp:member:: Int realSize
    .. cpp:member:: Int imagSize
@@ -256,7 +256,7 @@ C++ API
 
       Increments all counters by one
 
-.. cpp:type:: PseudospecCtrl<Real>
+.. cpp:class:: PseudospecCtrl<Real>
 
    .. cpp:member::bool schur
 
@@ -282,7 +282,7 @@ C++ API
 
    .. cpp:member:: SnapshotCtrl snapCtrl
 
-.. cpp:type:: PseudospecCtrl<Base<F>>
+.. cpp:class:: PseudospecCtrl<Base<F>>
 
    A particular case where the datatype is the base of the potentially complex
    type ``F``.

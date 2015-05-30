@@ -36,21 +36,26 @@ though usually either a row-major or column-major ordering of the first
 :math:`\hat p^2` processes suffices.
 
 
-.. cpp:type:: HermitianTridiagApproach
+.. cpp:enum:: HermitianTridiagApproach
 
-   * ``HERMITIAN_TRIDIAG_NORMAL``: Run the pipelined rectangular algorithm.
-   * ``HERMITIAN_TRIDIAG_SQUARE``: Run the square grid algorithm on the largest
-     possible square process grid.
-   * ``HERMITIAN_TRIDIAG_DEFAULT``: If the given process grid is already square,
-     run the square grid algorithm, otherwise use the pipelined non-square
-     approach.
+   .. cpp:enumerator:: HERMITIAN_TRIDIAG_NORMAL
+
+      Run the pipelined rectangular algorithm.
+
+   .. cpp:enumerator:: HERMITIAN_TRIDIAG_SQUARE
+
+      Run the square grid algorithm on the largest possible square process grid.
+
+   .. cpp:enumerator:: HERMITIAN_TRIDIAG_DEFAULT
+
+      If the given process grid is already square, run the square grid 
+      algorithm, otherwise use the pipelined non-square approach.
 
    .. note::
 
       A properly tuned ``HERMITIAN_TRIDIAG_SQUARE`` approach is almost always 
       fastest, so it is worthwhile to test it with both the ``COLUMN_MAJOR`` and
       ``ROW_MAJOR`` subgrid orderings, as described below.
-
 
    .. note::
    
@@ -85,7 +90,7 @@ C++ API
 
    Returns just the (appropriate triangle of the) resulting tridiagonal matrix.
 
-.. cpp:type:: HermitianTridiagCtrl
+.. cpp:class:: HermitianTridiagCtrl
 
    .. cpp:member:: HermitianTridiagApproach approach
    .. cpp:member:: GridOrder order
@@ -94,11 +99,6 @@ C++ API
 
       Sets `approach` to ``HERMITIAN_TRIDIAG_SQUARE`` and `order` to 
       ``ROW_MAJOR``.
-
-.. note::
-
-   Please see the :ref:`lapack-tuning` section for extensive information on 
-   maximizing the performance of Householder tridiagonalization.
 
 C API
 ^^^^^

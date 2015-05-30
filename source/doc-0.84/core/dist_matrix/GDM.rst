@@ -1,41 +1,42 @@
 GeneralDistMatrix
 -----------------
-The :cpp:type:`GeneralDistMatrix\<T,U,V>` class, which inherits from 
-:cpp:type:`AbstractDistMatrix\<T>`, provides a mechanism for 
-defining member functions of the :cpp:type:`DistMatrix\<T,U,V>` class which
+The :cpp:class:`GeneralDistMatrix\<T,U,V>` class, which inherits from 
+:cpp:class:`AbstractDistMatrix\<T>`, provides a mechanism for 
+defining member functions of the :cpp:class:`DistMatrix\<T,U,V>` class which
 can be implemented in a templated way over the matrix distribution. Since
-a small number of member functions of :cpp:type:`DistMatrix\<T,U,V>` must be
+a small number of member functions of :cpp:class:`DistMatrix\<T,U,V>` must be
 specialized for each particular distribution (choice of the pair `U` and `V`),
 a parent class is required in order to support both general and specialized
 implementations of member functions whose prototype depends upon the matrix 
 distribution.
 
-.. cpp:type:: class GeneralDistMatrix<T,U,V>
+.. cpp:class:: GeneralDistMatrix<T,U,V>
 
    .. rubric:: Related row and column distributions
 
    .. cpp:member:: Distribution UDiag
    .. cpp:member:: Distribution VDiag
 
-      The column and row :cpp:type:`Distribution`'s of the diagonal of the 
+      The column and row :cpp:enum:`Distribution`'s of the diagonal of the 
       matrix if it is stored as a column vector.
 
    .. cpp:member:: Distribution UGath
 
-      The resulting :cpp:type:`Distribution` from unioning distribution `U` over
+      The resulting :cpp:enum:`Distribution` from unioning distribution `U` over
       :cpp:func:`AbstractDistMatrix\<T>::ColComm`. For most matrix distributions
-      this will be ``STAR``, but for :cpp:type:`GeneralDistMatrix\<T,CIRC,CIRC>`
+      this will be ``STAR``, but for 
+      :cpp:class:`GeneralDistMatrix\<T,CIRC,CIRC>`
       it will be ``CIRC``.
 
    .. cpp:member:: Distribution VGath
 
-      The resulting :cpp:type:`Distribution` from unioning distribution `V` over
+      The resulting :cpp:enum:`Distribution` from unioning distribution `V` over
       :cpp:func:`AbstractDistMatrix\<T>::RowComm`. 
 
    .. cpp:member:: Distribution UPart
    .. cpp:member:: Distribution VPart
 
-      The resulting :cpp:type:`Distribution` from unioning distribution `U` over
+      The resulting :cpp:enum:`Distribution` from unioning distribution `U` over
       :cpp:func:`AbstractDistMatrix\<T>::PartialUnionColComm`, or 
       `V` over :cpp:func:`AbstractDistMatrix\<T>::PartialUnionRowComm`,
       respectively.
@@ -43,7 +44,7 @@ distribution.
    .. cpp:member:: Distribution UScat
    .. cpp:member:: Distribution VScat
 
-      The result of scattering :cpp:type:`Distribution` `U` over 
+      The result of scattering :cpp:enum:`Distribution` `U` over 
       :cpp:func:`AbstractDistMatrix\<T>::PartialUnionRowComm`, or 
       `V` over :cpp:func:`AbstractDistMatrix\<T>::PartialUnionColComm`,
       respectively.
@@ -111,16 +112,16 @@ distribution.
  
       Set this matrix to the result of scattering columns (rows) and unioning
       rows (columns) of `A` over 
-      :cpp:type:`AbstractDistMatrix\<T>::PartialUnionColComm` 
-      (:cpp:type:`AbstractDistMatrix\<T>::PartialUnionRowComm`).
+      :cpp:func:`AbstractDistMatrix\<T>::PartialUnionColComm` 
+      (:cpp:func:`AbstractDistMatrix\<T>::PartialUnionRowComm`).
 
    .. cpp:function:: void PartialColAllToAll( DistMatrix<T,UPart,VScat>& A ) const
    .. cpp:function:: void PartialRowAllToAll( DistMatrix<T,UScat,VPart>& A ) const
 
       Set `A` to the result of unioning columns (rows) and scattering
       rows (columns) of this matrix over 
-      :cpp:type:`AbstractDistMatrix\<T>::PartialUnionColComm`
-      (:cpp:type:`AbstractDistMatrix\<T>::PartialUnionRowComm`).
+      :cpp:func:`AbstractDistMatrix\<T>::PartialUnionColComm`
+      (:cpp:func:`AbstractDistMatrix\<T>::PartialUnionRowComm`).
 
    .. cpp:function:: void SumScatterFrom( const DistMatrix<T,UGath,VGath>& A )
    .. cpp:function:: void RowSumScatterFrom( const DistMatrix<T,U,VGath>& A )

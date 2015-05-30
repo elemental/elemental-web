@@ -1,21 +1,59 @@
 Input/output
 ************
 
-.. cpp:type:: enum FileFormat
+.. cpp:enum:: FileFormat
 
-   * ``AUTO``: attempt to detect format from filename extension
-   * ``ASCII``: simple ASCII text file
-   * ``ASCII_ASCII``: MATLAB-ready ASCII text file
-   * ``BINARY``: column-major binary file with integer height and width header
-   * ``BINARY_FLAT``: column-major binary file with no header data
-   * ``BMP``: bitmap image format (requires Qt5)
-   * ``MATRIX_MARKET``: Matrix Market format
-   * ``JPG``: JPG image format (requires Qt5)
-   * ``JPEG``: JPEG image format (requires Qt5)
-   * ``PNG``: PNG image format (requires Qt5)
-   * ``PPM``: PPM image format (requires Qt5)
-   * ``XBM``: XBM image format (requires Qt5)
-   * ``XPM``: XPM image format (requires Qt5)
+   .. cpp:enumerator:: AUTO
+
+      Attempt to detect format from filename extension
+
+   .. cpp:enumerator:: ASCII
+
+      Simple ASCII text file
+
+   .. cpp:enumerator:: ASCII_MATLAB
+
+      MATLAB-ready ASCII text file
+
+   .. cpp:enumerator:: BINARY
+
+      Column-major binary file with integer height and width header
+
+   .. cpp:enumerator:: BINARY_FLAT
+
+      Column-major binary file with no header data
+
+   .. cpp:enumerator:: BMP
+
+      Bitmap image format (requires Qt5)
+
+   .. cpp:enumerator:: MATRIX_MARKET
+
+      Matrix Market format
+
+   .. cpp:enumerator:: JPG
+
+      JPG image format (requires Qt5)
+
+   .. cpp:enumerator:: JPEG
+
+      JPEG image format (requires Qt5)
+
+   .. cpp:enumerator:: PNG
+
+      PNG image format (requires Qt5)
+
+   .. cpp:enumerator:: PPM
+
+      PPM image format (requires Qt5)
+
+   .. cpp:enumerator:: XBM
+
+      XBM image format (requires Qt5)
+
+   .. cpp:enumerator:: XPM
+
+      XPM image format (requires Qt5)
 
 Display
 -------

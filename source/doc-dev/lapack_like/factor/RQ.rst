@@ -1,9 +1,9 @@
 RQ factorization
 ================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/RQ.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/RQ.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/RQ>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/RQ>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/RQ.cpp>`__
 

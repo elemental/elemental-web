@@ -1,7 +1,7 @@
 Interpolative Decomposition (ID)
 ================================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/ID.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/ID.cpp>`__
 
 `Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ID.cpp>`__
 

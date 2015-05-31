@@ -1,9 +1,9 @@
 LQ factorization
 ================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/LQ.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LQ.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/LQ>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/LQ>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LQ.cpp>`__
 

@@ -1,9 +1,9 @@
 QR factorization
 ================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/QR.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/QR.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/QR>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/QR>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/QR.cpp>`__
 

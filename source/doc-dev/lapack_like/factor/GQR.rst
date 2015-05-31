@@ -1,7 +1,7 @@
 Generalized QR factorization
 ============================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/GQR.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/GQR.cpp>`__
 
 The *generalized QR factorization* of a pair of matrices :math:`(A,B)` is 
 analogous to a QR factorization of :math:`B^{-1} A` but does not require that

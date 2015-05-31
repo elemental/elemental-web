@@ -1,9 +1,5 @@
 Determinant
------------
-
-`Main header file <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/props/Determinant.hpp>`__
-
-`Subroutines <https://github.com/elemental/Elemental/tree/master/include/El/lapack_like/props/Determinant>`__
+===========
 
 Though there are many different possible definitions of the determinant of a 
 matrix :math:`A \in \mathbb{F}^{n \times n}`, the simplest one is in terms of 
@@ -14,7 +10,7 @@ the product of the eigenvalues (including multiplicity):
    \mbox{det}(A) = \prod_{i=0}^{n-1} \lambda_i.
 
 General
-^^^^^^^
+-------
 
 Since :math:`\mbox{det}(AB)=\mbox{det}(A)\mbox{det}(B)`, we can compute the 
 determinant of an arbitrary matrix in :math:`\mathcal{O}(n^3)` work by 
@@ -30,8 +26,12 @@ recognizing that :math:`\mbox{det}(P)=\pm 1`
 
 where :math:`\upsilon_{i,i}` is the i'th diagonal entry of :math:`U`.
 
+Python API
+^^^^^^^^^^
+**TODO**
+
 C++ API
-"""""""
+^^^^^^^
 
 .. cpp:function:: F Determinant( const Matrix<F>& A )
 .. cpp:function:: F Determinant( const AbstractDistMatrix<F>& A )
@@ -70,7 +70,7 @@ C++ API
       The number of values in the product.
 
 C API
-"""""
+^^^^^
 
 .. c:function:: ElError ElDeterminant_s( ElConstMatrix_s A, float* det )
 .. c:function:: ElError ElDeterminant_d( ElConstMatrix_d A, double* det )
@@ -96,13 +96,17 @@ C API
    expanded form which helps prevent under/overflow.
 
 HPD
-^^^
+---
 A version of the above determinant specialized for Hermitian positive-definite
 matrices (which will therefore have all positive eigenvalues and a positive 
 determinant).
 
+Python API
+^^^^^^^^^^
+**TODO**
+
 C++ API
-"""""""
+^^^^^^^
 
 .. cpp:function:: Base<F> HPDDeterminant( UpperOrLower uplo, const Matrix<F>& A )
 .. cpp:function:: Base<F> HPDDeterminant( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
@@ -123,7 +127,7 @@ C++ API
    expanded form which is less likely to over/under-flow.
 
 C API
-"""""
+^^^^^
 
 .. c:function:: ElError ElHPDDeterminant_s( ElUpperOrLower uplo, ElConstMatrix_s A, float* det )
 .. c:function:: ElError ElHPDDeterminant_d( ElUpperOrLower uplo, ElConstMatrix_d A, double* det )
@@ -149,3 +153,11 @@ C API
    Return the determinant of the Hermitian positive-definite matrix `A` in an 
    expanded form which is less likely to over/under-flow.
 
+
+References
+----------
+`C++11 implementation <https://github.com/elemental/Elemental/tree/master/src/lapack_like/props/Determinant.cpp>`__
+
+`C++11 subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/props/Determinant>`__
+
+`C++11 header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/props/Determinant.hpp>`__

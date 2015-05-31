@@ -1,10 +1,5 @@
 Cholesky factorization
 ======================
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/Cholesky.cpp>`__
-
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/Cholesky>`__
-
-`Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/Cholesky.cpp>`__
 
 Factorization
 -------------
@@ -250,3 +245,12 @@ Double-precision complex
 """"""""""""""""""""""""
 .. c:function:: ElError ElCholeskyMod_z( ElUpperOrLower uplo, ElMatrix_z T, double alpha, ElMatrix_z V )
 .. c:function:: ElError ElCholeskyModDist_z( ElUpperOrLower uplo, ElDistMatrix_z T, double alpha, ElDistMatrix_z V )
+
+References
+----------
+`C++11 implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/Cholesky.cpp>`__
+
+`C++11 subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/Cholesky>`__
+
+`C++11 test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/Cholesky.cpp>`__
+

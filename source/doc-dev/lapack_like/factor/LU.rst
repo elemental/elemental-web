@@ -1,9 +1,9 @@
 LU factorization
 ================
 
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/dense/LU.cpp>`__
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LU.cpp>`__
 
-`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/dense/LU>`__
+`Subroutines <https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/LU>`__
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LU.cpp>`__
 

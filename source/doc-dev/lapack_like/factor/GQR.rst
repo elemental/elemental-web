@@ -1,8 +1,5 @@
 Generalized QR factorization
 ============================
-
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/GQR.cpp>`__
-
 The *generalized QR factorization* of a pair of matrices :math:`(A,B)` is 
 analogous to a QR factorization of :math:`B^{-1} A` but does not require that
 :math:`B` is square or invertible: 
@@ -23,9 +20,36 @@ and
 Thus, if :math:`B` was square and invertible, then the QR factorization of 
 :math:`B^{-1} A` would be given by :math:`Z^H (T^{-1} R)`.
 
+Python API
+----------
+The style of factorization is encoded within a pseudo-enum which takes on one of four values:
+
+.. py:data:: GQR_IMPLICIT=0
+
+   Form the implicit, packed factorization
+
+.. py:data:: GQR_EXPLICIT=1
+
+   Explicitly return the individual factors (not yet supported)
+
+.. py:data:: GQR_EXPLICIT_TRIANG=2
+
+   Explicitly return the triangular factors, :math:`R` and :math:`T`
+
+.. py:data:: GQR_EXPLICIT_UNITARY=3
+
+   Explicitly return the unitary factors, :math:`Q` and :math:`Z` 
+   (not yet supported)
+
+.. py:function:: GQR(A,B[,factType=GQR_IMPLICIT])
+
+   :param A:
+   :param B:
+   :param factType: (optional)
+   :rtype: If ``factType`` is :py:data:`GQR_IMPLICIT`, :math:`(t_A,d_A,t_B,d_b)`, ...
+
 C++ API
 -------
-
 .. cpp:function:: void GQR( Matrix<F>& A, Matrix<F>& tA, Matrix<Base<F>>& dA, Matrix<F>& B, Matrix<F>& tB, Matrix<Base<F>>& dB )
 .. cpp:function:: void GQR( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& tA, AbstractDistMatrix<Base<F>>& dA, AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& tB, AbstractDistMatrix<Base<F>>& dB )
 
@@ -100,4 +124,16 @@ Double-precision complex
 .. c:function:: ElError ElGQRExplicitTriang_z( ElMatrix_z A, ElMatrix_z B )
 .. c:function:: ElError ElGQRExplicitTriangDist_z( ElDistMatrix_z A, ElDistMatrix_z B )
 
-   Overwrite `A` with `R` and `B` with `T`.
+   Overwrite `A` with `R` and `B` with `T`
+
+References
+----------
+`C++11 implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/GQR.cpp>`__
+
+`C++11 header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.hpp>`__
+
+`C99 wrappers <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor-C.cpp>`__
+
+`C99 header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.h>`__
+
+`Python wrappers <https://github.com/elemental/Elemental/blob/master/python/lapack_like/factor.py>`__

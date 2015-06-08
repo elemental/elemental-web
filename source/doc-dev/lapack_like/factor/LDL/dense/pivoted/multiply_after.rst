@@ -30,7 +30,7 @@ C API
 
 References
 ----------
-`C++11 implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL/dense/MultiplyAfter.cpp>`__
+`C++11 implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL/dense/MultiplyAfter.hpp>`__
 
 `C++11 header <https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.hpp>`__
 

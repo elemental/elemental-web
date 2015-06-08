@@ -8,23 +8,34 @@ Python API
    :param A: The (sequential or distributed) dense input/output matrix
    :param conjugate: (optional) boolean for whether to perform LDLT or LDLH
    :param pivType: (optional) the preferred pivoting strategy
-   :rtype: Nothing is returned if ``pivType`` is :py:data:`LDL_WITHOUT_PIVOTING``, but, otherwise, the subdiagonal of :math:`D`, ``dSub``, and the permutation vector, ``p``, are returned
+   :rtype: Nothing is returned if ``pivType`` is :py:data:`LDL_WITHOUT_PIVOTING`, but, otherwise, the subdiagonal of :math:`D`, ``dSub``, and the permutation vector, ``p``, are returned
 
 The following Python pseudo-enum contains the list of allowable pivoting 
 approaches for dense LDL factorization:
 
-.. py:data:: BUNCH_KAUFMAN_A=0
-.. py:data:: BUNCH_KAUFMAN_C=1
+.. py:data:: BUNCH_KAUFMAN_A
 
-      Not yet supported
+   Hardcoded to the value 0
 
-.. py:data:: BUNCH_KAUFMAN_D=2
-.. py:data:: BUNCH_KAUFMAN_BOUNDED=3
+.. py:data:: BUNCH_KAUFMAN_C
 
-      Not yet supported
+   Not yet supported (and hardcoded to the value 1)
 
-.. py:data:: BUNCH_PARLETT=3
-.. py:data:: LDL_WITHOUT_PIVOTING=5
+.. py:data:: BUNCH_KAUFMAN_D
+
+   Hardcoded to the value 2
+
+.. py:data:: BUNCH_KAUFMAN_BOUNDED
+
+   Not yet supported (and hardcoded to the value 3)
+
+.. py:data:: BUNCH_PARLETT
+
+   Hardcoded to the value 4
+
+.. py:data:: LDL_WITHOUT_PIVOTING
+
+   Hardcoded to the value 5
 
 C++ API
 -------

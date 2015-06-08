@@ -1,5 +1,10 @@
 Factorization
 =============
+Upon successful completion of the factorization, a lower-triangular (with unit diagonal) :math:`L` and diagonal matrix :math:`D`,
+such that :math:`A = L D L^H` or :math:`A = L D L^T`, will be returned in the
+lower triangle of :math:`A`.
+If a zero pivot is attempted, then a :cpp:type:`ZeroPivotException` will
+be thrown.
 
 Python API
 ----------

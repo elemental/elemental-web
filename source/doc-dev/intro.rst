@@ -27,6 +27,7 @@ Some of the unique features of Elemental include distributed implementations of:
 
 * Dense and sparse Interior Point Methods for linear and quadratic programs
 * Support for dense and sparse basis pursuit, Lasso, SVM, etc.
+* Distributed Jordan algebras over products of Second-order Cones
 * High-performance pseudospectral computation and visualization
 * Quadratic-time low-rank Cholesky and LU modifications
 * Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization

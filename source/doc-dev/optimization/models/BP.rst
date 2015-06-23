@@ -17,6 +17,9 @@ Real instances of the problem are `expressible as a Linear Program <http://dx.do
 By default, Elemental solves this linear program via a Mehrotra 
 Predictor-Corrector primal-dual Interior Point Method.
 
+Complex instances of Basis Pursuit are currently supported through 
+Second-Order Cone Programs. **TODO**: Describe this embedding.
+
 Python API
 ----------
 .. py:function:: BP(A,b[,ctrl=None])
@@ -32,6 +35,11 @@ C++ API
 .. cpp:function:: void BP( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, AbstractDistMatrix<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )
 .. cpp:function:: void BP( const SparseMatrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(true) )
 .. cpp:function:: void BP( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, DistMultiVec<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(true) )
+
+.. cpp:function:: void BP( const Matrix<Complex<Real>>& A, const Matrix<Complex<Real>>& b, Matrix<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
+.. cpp:function:: void BP( const AbstractDistMatrix<Complex<Real>>& A, const AbstractDistMatrix<Complex<Real>>& b, AbstractDistMatrix<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
+.. cpp:function:: void BP( const SparseMatrix<Complex<Real>>& A, const Matrix<Complex<Real>>& b, Matrix<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(true) )
+.. cpp:function:: void BP( const DistSparseMatrix<Complex<Real>>& A, const DistMultiVec<Complex<Real>>& b, DistMultiVec<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(true) )
 
 C API
 -----
@@ -53,6 +61,22 @@ Double-precision
 .. c:function:: ElError ElBPSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
 .. c:function:: ElError ElBPDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, ElDistMultiVec_d x )
 
+Single-precision complex
+""""""""""""""""""""""""
+
+.. c:function:: ElError ElBP_c( ElConstMatrix_c A, ElConstMatrix_c b, ElMatrix_c x )
+.. c:function:: ElError ElBPDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c b, ElDistMatrix_c x )
+.. c:function:: ElError ElBPSparse_c( ElConstSparseMatrix_c A, ElConstMatrix_c b, ElMatrix_c x )
+.. c:function:: ElError ElBPDistSparse_c( ElConstDistSparseMatrix_c A, ElConstDistMultiVec_c b, ElDistMultiVec_c x )
+
+Double-precision complex
+""""""""""""""""""""""""
+
+.. c:function:: ElError ElBP_z( ElConstMatrix_z A, ElConstMatrix_z b, ElMatrix_z x )
+.. c:function:: ElError ElBPDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z b, ElDistMatrix_z x )
+.. c:function:: ElError ElBPSparse_z( ElConstSparseMatrix_z A, ElConstMatrix_z b, ElMatrix_z x )
+.. c:function:: ElError ElBPDistSparse_z( ElConstDistSparseMatrix_z A, ElConstDistMultiVec_z b, ElDistMultiVec_z x )
+
 Expert interface
 ^^^^^^^^^^^^^^^^
 
@@ -71,4 +95,20 @@ Double-precision
 .. c:function:: ElError ElBPXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, ElDistMatrix_d x, ElLPDirectCtrl_d ctrl )
 .. c:function:: ElError ElBPXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPDirectCtrl_d ctrl )
 .. c:function:: ElError ElBPXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, ElDistMultiVec_d x, ElLPDirectCtrl_d ctrl )
+
+Single-precision complex
+""""""""""""""""""""""""
+
+.. c:function:: ElError ElBPX_c( ElConstMatrix_c A, ElConstMatrix_c b, ElMatrix_c x, ElSOCPDirectCtrl_s ctrl )
+.. c:function:: ElError ElBPXDist_c( ElConstDistMatrix_c A, ElConstDistMatrix_c b, ElDistMatrix_c x, ElSOCPDirectCtrl_s ctrl )
+.. c:function:: ElError ElBPXSparse_c( ElConstSparseMatrix_c A, ElConstMatrix_c b, ElMatrix_c x, ElSOCPDirectCtrl_s ctrl )
+.. c:function:: ElError ElBPXDistSparse_c( ElConstDistSparseMatrix_c A, ElConstDistMultiVec_c b, ElDistMultiVec_c x, ElSOCPDirectCtrl_s ctrl )
+
+Double-precision complex
+""""""""""""""""""""""""
+
+.. c:function:: ElError ElBPX_z( ElConstMatrix_z A, ElConstMatrix_z b, ElMatrix_z x, ElSOCPDirectCtrl_d ctrl )
+.. c:function:: ElError ElBPXDist_z( ElConstDistMatrix_z A, ElConstDistMatrix_z b, ElDistMatrix_z x, ElSOCPDirectCtrl_d ctrl )
+.. c:function:: ElError ElBPXSparse_z( ElConstSparseMatrix_z A, ElConstMatrix_z b, ElMatrix_z x, ElSOCPDirectCtrl_d ctrl )
+.. c:function:: ElError ElBPXDistSparse_z( ElConstDistSparseMatrix_z A, ElConstDistMultiVec_z b, ElDistMultiVec_z x, ElSOCPDirectCtrl_d ctrl )
 

@@ -25,7 +25,7 @@ its primary dense matrix distributions are designed to spread matrix entries in
 element-wise, as opposed to block-wise, fashions [PEtAl2013]_.
 Some of the unique features of Elemental include distributed implementations of:
 
-* Dense and sparse Interior Point Methods for linear and quadratic programs
+* Dense and sparse Interior Point Methods for Linear, Quadratic, and Second-Order Cone programs
 * Support for dense and sparse basis pursuit, Lasso, SVM, etc.
 * Distributed Jordan algebras over products of Second-order Cones
 * High-performance pseudospectral computation and visualization

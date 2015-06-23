@@ -25,7 +25,7 @@ including:
 Convex optimization
 ===================
 
-* Dense and sparse Interior Point Methods for Linear and Quadratic Programs
+* Dense and sparse Interior Point Methods for Linear, Quadratic, and Second-Order Cone Programs
     - Basis Pursuit
     - Chebyshev Points
     - Dantzig selectors

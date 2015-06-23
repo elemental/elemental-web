@@ -6,3 +6,4 @@ Solvers
 
    solvers/LP
    solvers/QP
+   solvers/SOCP

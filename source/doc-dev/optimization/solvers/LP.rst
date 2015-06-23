@@ -1,7 +1,7 @@
 Linear Programs
 ===============
-The following routines attempt to solve primal-dual pairs of (convex) quadratic
-programs in either "direct" conic form,
+The following routines attempt to solve primal-dual pairs of linear programs
+in either "direct" conic form,
 
 .. math::
 

@@ -388,6 +388,11 @@ or instead installed into ``${CMAKE_INSTALL_PREFIX}/python/`` via the option::
 
     -D INSTALL_PYTHON_PACKAGE=OFF
 
+Alternatively, the user can specify a particular directory for the python
+package via::
+
+    -D PYTHON_SITE_PACKAGES=/your/desired/python/install/path
+
 Though the above instructions will work on many systems, it is common to need
 to manually specify several build options, especially when multiple versions of
 libraries or several different compilers are available on your system. For 
@@ -446,8 +451,8 @@ parallelization when packing and unpacking MPI buffers that is enabled when
 the ``-D EL_HYBRID=TRUE`` CMake option is set. If this option is used, the user
 should ensure that a threaded BLAS implementation is used.
 
-Testing the installation
-========================
+Testing the C++11 installation
+==============================
 Once Elemental has been installed, it is a good idea to verify that it is 
 functioning properly. This can be accomplished by simply running::
 
@@ -503,6 +508,44 @@ You can also build a wide variety of example and test drivers
 and/or ::
 
     -D EL_TESTS=ON  
+
+Testing the Python installation
+===============================
+A number of Python example scripts which, for example, solve sparse linear 
+systems and quadratic programs, may be found at
+`examples/interface <https://github.com/elemental/Elemental/blob/master/examples/interface>`__. However, it is typically necessary to augment the environment
+variable ``PYTHONPATH``, and perhaps also ``LD_LIBRARY_PATH``.
+
+Linux systems
+-------------
+On most Linux systems, it will be necessary to append 
+``$(CMAKE_INSTALL_PREFIX)/lib`` to ``LD_LIBRARY_PATH`` as well as setting
+``PYTHONPATH`` to a value dependent upon how Elemental was instructed to install
+the Python interface. In the default case, where Python is installed into the 
+global site packages directory, ``PYTHONPATH`` should be set to the result of::
+
+    from distutils.sysconfig import get_python_lib
+    print get_python_lib()
+
+which may have a value suh as ``$(HOME)/anaconda/lib/python2.7/site-packages``.
+
+In cases where the CMake option 
+``INSTALL_PYTHON_PACKAGE=OFF`` was specified, ``PYTHONPATH`` should be set to
+``$(CMAKE_INSTALL_PREFIX)/python``, whereas, if the CMake option 
+``INSTALL_PYTHON_INTO_USER_SITE=ON`` was specified, then ``PYTHONPATH`` 
+should be set to the result of::
+
+    import site
+    print site.USER_SITE
+
+
+which is frequently ``$(HOME)/.local/lib/python2.7/site-packages``.
+
+Mac OS X
+---------
+It should typically only be necessary to set ``PYTHONPATH`` in the same way 
+as on Linux systems (there should be no need to set ``LD_LIBRARY_PATH``, 
+nor its OS X equivalent, ``DYLD_LIBRARY_PATH``).
 
 Elemental as a CMake subproject
 ===============================

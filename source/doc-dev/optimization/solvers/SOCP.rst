@@ -12,7 +12,7 @@ or "affine" conic form
 
 .. math::
 
-   \min_{x,s} & \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h,\; s \in \mathcal{K} \;\}, \\
+   \min_{x,s} & \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h\;\wedge\; s \in \mathcal{K} \;\}, \\
    \max_{y,z} & \{\; - b^T y - h^T z \; | \; A^T y + G^T z + c = 0 \;\wedge\; z \in \mathcal{K} \;\},
 
 where :math:`\mathcal{K}` is a product of Second-Order (a.k.a. *Lorentz*, or *icecream*) Cones of the form

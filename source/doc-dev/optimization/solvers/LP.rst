@@ -12,7 +12,7 @@ or "affine" conic form
 
 .. math::
 
-   \min_{x,s} & \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h,\; s \ge 0 \;\}, \\
+   \min_{x,s} & \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h\;\wedge\; s \ge 0 \;\}, \\
    \max_{y,z} & \{\; - b^T y - h^T z \; | \; A^T y + G^T z + c = 0 \;\wedge\; z \ge 0 \;\}.
 
 By default a Mehrotra Predictor-Corrector primal-dual

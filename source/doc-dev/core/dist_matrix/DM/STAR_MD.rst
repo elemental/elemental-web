@@ -20,4 +20,5 @@ owning processes of the entries of our :math:`7 \times 7` matrix example:
 Notice that each *row* of this matrix is distributed like a diagonal of a 
 ``[MC,MR]`` distribution.
 
-.. cpp:class:: DistMatrix<T,STAR,MD>
+.. cpp:class:: DistMatrix<scalarType,STAR,MD>
+.. cpp:class:: DistMatrix<scalarType,STAR,MD,ELEMENT>

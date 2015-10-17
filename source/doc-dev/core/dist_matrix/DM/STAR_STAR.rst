@@ -24,4 +24,5 @@ sets of processes:
    \{0,1,...,5\} & \{0,1,...,5\} & \{0,1,...,5\} 
    \end{array}\right)
 
-.. cpp:class:: DistMatrix<T,STAR,STAR>
+.. cpp:class:: DistMatrix<scalarType,STAR,STAR>
+.. cpp:class:: DistMatrix<scalarType,STAR,STAR,ELEMENT>

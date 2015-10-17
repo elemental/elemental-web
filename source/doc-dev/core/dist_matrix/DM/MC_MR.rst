@@ -35,8 +35,10 @@ matrix), the individual entries would be owned as follows:
    \end{array}\right)
 
 It should also be noted that this is the default distribution format for the 
-:cpp:type:`DistMatrix\<T,U,V>` class, as :cpp:type:`DistMatrix\<T>` defaults to
-:cpp:type:`DistMatrix\<T,MC,MR>`.
+:cpp:type:`DistMatrix\<scalarType,colDist,rowDist,wrapType>` class, as
+:cpp:type:`DistMatrix\<scalarType>` defaults to
+:cpp:type:`DistMatrix\<scalarType,MC,MR,ELEMENT>`.
 
-.. cpp:class:: DistMatrix<T>
-.. cpp:class:: DistMatrix<T,MC,MR>
+.. cpp:class:: DistMatrix<scalarType>
+.. cpp:class:: DistMatrix<scalarType,MC,MR>
+.. cpp:class:: DistMatrix<scalarType,MC,MR,ELEMENT>

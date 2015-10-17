@@ -16,4 +16,5 @@ This is the transpose of the above ``[VR,* ]`` distribution. On the standard
    0 & 2 & 4 & 1 & 3 & 5 & 0 
    \end{array}\right)
 
-.. cpp:class:: DistMatrix<T,STAR,VR>
+.. cpp:class:: DistMatrix<scalarType,STAR,VR>
+.. cpp:class:: DistMatrix<scalarType,STAR,VR,ELEMENT>

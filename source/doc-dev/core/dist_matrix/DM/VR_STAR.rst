@@ -19,4 +19,5 @@ would be owned by the following sets of processes:
      0 & 0 & 0 & 0 & 0 & 0 & 0
    \end{array}\right)
 
-.. cpp:class:: DistMatrix<T,VR,STAR>
+.. cpp:class:: DistMatrix<scalarType,VR,STAR>
+.. cpp:class:: DistMatrix<scalarType,VR,STAR,ELEMENT>

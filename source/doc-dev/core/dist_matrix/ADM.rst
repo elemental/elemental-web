@@ -5,7 +5,8 @@ This abstract class defines the list of member functions that are guaranteed
 to be available for all matrix distributions and whose prototype does not 
 depend upon the particular matrix distribution.
 
-One of the many conveniences provided by :cpp:class::`AbstractDistMatrix\<T>` 
+One of the many conveniences provided by
+:cpp:class::`AbstractDistMatrix\<scalarType>` 
 is the ability for individual processes to easily modify arbitrary 
 (possibly non-local) entries of the distribute matrix using a combination of
 ``Reserve``, ``QueueUpdate``, and ``ProcessQueues``. For example:
@@ -32,11 +33,11 @@ is the ability for individual processes to easily modify arbitrary
    }
    A.ProcessQueues();
 
-.. cpp:class:: AbstractDistMatrix<T>
+.. cpp:class:: AbstractDistMatrix<scalarType>
 
    .. rubric:: Constructors and destructors
 
-   .. cpp:function:: AbstractDistMatrix( AbstractDistMatrix<T>&& A ) noexcept
+   .. cpp:function:: AbstractDistMatrix( AbstractDistMatrix<scalarType>&& A ) noexcept
 
       A C++11 move constructor which transfers the metadata from the specified
       matrix over to the new matrix as a means of cheaply transferring 
@@ -46,7 +47,7 @@ is the ability for individual processes to easily modify arbitrary
 
    .. rubric:: Assignment and reconfiguration
 
-   .. cpp:function:: AbstractDistMatrix<T>& operator=( AbstractDistMatrix<T>&& A )
+   .. cpp:function:: AbstractDistMatrix<scalarType>& operator=( AbstractDistMatrix<scalarType>&& A )
 
       A C++11 move assignment which swaps the metadata between the two matrices
       as a means of cheaply swapping the resources assigned to each matrix.
@@ -110,15 +111,15 @@ is the ability for individual processes to easily modify arbitrary
 
    .. rubric:: Buffer attachment
 
-   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, T* buffer, Int ldim, Int root=0 )
-   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const T* buffer, Int ldim, Int root=0 )
+   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, scalarType* buffer, Int ldim, Int root=0 )
+   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const scalarType* buffer, Int ldim, Int root=0 )
 
       Reconfigure around the (immutable) buffer of an implicit distributed
       matrix with the specified dimensions, alignments, process grid, and 
       local leading dimension.
 
-   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, Matrix<T>& A, Int root=0 )
-   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const Matrix<T>& A, Int root=0 )
+   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, Matrix<scalarType>& A, Int root=0 )
+   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const Matrix<scalarType>& A, Int root=0 )
 
       Reconfigure around the (immutable) local matrix of an implicit distributed
       matrix with the specified alignments, process grid, and local leading
@@ -155,23 +156,23 @@ is the ability for individual processes to easily modify arbitrary
       Return the leading dimension of the local matrix stored by a particular 
       process.
 
-   .. cpp:function:: Matrix<T>& Matrix()
-   .. cpp:function:: const Matrix<T>& LockedMatrix() const
+   .. cpp:function:: Matrix<scalarType>& Matrix()
+   .. cpp:function:: const Matrix<scalarType>& LockedMatrix() const
 
       Return an (immutable) reference to the local matrix.
 
    .. cpp:function:: size_t AllocatedMemory() const
 
-      Return the number of entries of type `T` that we have locally allocated
+      Return the number of entries of type `scalarType` that we have locally allocated
       space for.
 
-   .. cpp:function:: T* Buffer()
-   .. cpp:function:: const T* LockedBuffer() const
+   .. cpp:function:: scalarType* Buffer()
+   .. cpp:function:: const scalarType* LockedBuffer() const
 
       Return an (immutable) pointer to the local matrix's buffer.
 
-   .. cpp:function:: T* Buffer( Int iLoc, Int jLoc )
-   .. cpp:function:: const T* LockedBuffer( Int iLoc, Int jLoc ) const
+   .. cpp:function:: scalarType* Buffer( Int iLoc, Int jLoc )
+   .. cpp:function:: const scalarType* LockedBuffer( Int iLoc, Int jLoc ) const
 
       Return an (immutable) pointer to the portion of the local buffer that 
       stores entry `(iLoc,jLoc)`.
@@ -221,7 +222,7 @@ is the ability for individual processes to easily modify arbitrary
       can be reached by unioning the local data from a distribution over the
       :cpp:func:`ColComm` (via an ``AllGather``) over the 
       :cpp:func:`PartialUnionColComm`. One nontrivial example is for 
-      :cpp:class:`DistMatrix\<T,VC,STAR>`, where the column communicator is 
+      :cpp:class:`DistMatrix\<scalarType,VC,STAR>`, where the column communicator is 
       :cpp:func:`Grid::VCComm`, the partial column communicator is 
       :cpp:func:`Grid::MCComm`, and the partial union column communicator is
       :cpp:func:`Grid::MRComm`.
@@ -243,13 +244,13 @@ is the ability for individual processes to easily modify arbitrary
 
       The orthogonal complement of the product of :cpp:func:`DistComm` and 
       :cpp:func:`RedundantComm` with respect to the process grid. For instance,
-      for :cpp:class:`DistMatrix\<T,CIRC,CIRC>`, this is 
+      for :cpp:class:`DistMatrix\<scalarType,CIRC,CIRC>`, this is 
       :cpp:func:`Grid::VCComm`.
 
    .. cpp:function:: mpi::Comm RedundantComm() const
 
       The communicator over which data is redundantly stored. For instance,
-      for :cpp:class:`DistMatrix\<T,MC,STAR>`, this is 
+      for :cpp:class:`DistMatrix\<scalarType,MC,STAR>`, this is 
       :cpp:func:`Grid::RowComm`.
 
    .. cpp:function:: Int ColRank() const
@@ -342,23 +343,23 @@ is the ability for individual processes to easily modify arbitrary
 
    .. rubric:: Single-entry manipulation (global)
 
-   .. cpp:function:: T Get( Int i, Int j ) const
-   .. cpp:function:: Base<T> GetRealPart( Int i, Int j ) const
-   .. cpp:function:: Base<T> GetImagPart( Int i, Int j ) const
+   .. cpp:function:: scalarType Get( Int i, Int j ) const
+   .. cpp:function:: Base<scalarType> GetRealPart( Int i, Int j ) const
+   .. cpp:function:: Base<scalarType> GetImagPart( Int i, Int j ) const
 
       Return the `(i,j)` entry (or its real or imaginary part) of the global 
       matrix.
 
-   .. cpp:function:: void Set( Int i, Int j, T alpha )
-   .. cpp:function:: void SetRealPart( Int i, Int j, Base<T> alpha )
-   .. cpp:function:: void SetImagPart( Int i, Int j, Base<T> alpha )
+   .. cpp:function:: void Set( Int i, Int j, scalarType alpha )
+   .. cpp:function:: void SetRealPart( Int i, Int j, Base<scalarType> alpha )
+   .. cpp:function:: void SetImagPart( Int i, Int j, Base<scalarType> alpha )
 
       Set the `(i,j)` entry (or its real or imaginary part) of the global 
       matrix to :math:`\alpha`. 
 
-   .. cpp:function:: void Update( Int i, Int j, T alpha )
-   .. cpp:function:: void UpdateRealPart( Int i, Int j, Base<T> alpha )
-   .. cpp:function:: void UpdateImagPart( Int i, Int j, Base<T> alpha )
+   .. cpp:function:: void Update( Int i, Int j, scalarType alpha )
+   .. cpp:function:: void UpdateRealPart( Int i, Int j, Base<scalarType> alpha )
+   .. cpp:function:: void UpdateImagPart( Int i, Int j, Base<scalarType> alpha )
 
       Add :math:`\alpha` to the `(i,j)` entry (or its real or imaginary part) 
       of the global matrix. 
@@ -382,30 +383,41 @@ is the ability for individual processes to easily modify arbitrary
    
    .. cpp:function:: void Reserve( Int numRemoteEntries )
 
-   .. cpp:function:: void QueueUpdate( const Entry<T>& entry )
-   .. cpp:function:: void QueueUpdate( Int i, Int j, T value )
+   .. cpp:function:: void QueueUpdate( const Entry<scalarType>& entry )
+   .. cpp:function:: void QueueUpdate( Int i, Int j, scalarType value )
 
    .. cpp:function:: void ProcessQueues()
 
+   The following routines provide a mechanism for extracting (potentially) 
+   remote entries of a distributed matrix from each process. While each process
+   can independently call ``ReservePulls`` and ``QueuePull``, they must
+   collectively call ``ProcessPullQueue`` since it involves an ``mpi::AllToAll``
+   communication pattern.
+
+   .. cpp:function:: void ReservePulls( Int numPulls ) const
+   .. cpp:function:: void QueuePull( Int i, Int j ) const
+   .. cpp:function:: void ProcessPullQueue( scalarType* pullBuf ) const
+   .. cpp:function:: void ProcessPullQueue( vector<scalarType>& pullBuf ) const 
+
    .. rubric:: Single-entry manipulation (local)
 
-   .. cpp:function:: T GetLocal( Int iLoc, Int jLoc ) const
-   .. cpp:function:: Base<T> GetRealPartLocal( Int iLoc, Int jLoc ) const
-   .. cpp:function:: Base<T> GetLocalImagPart( Int iLoc, Int jLoc ) const
+   .. cpp:function:: scalarType GetLocal( Int iLoc, Int jLoc ) const
+   .. cpp:function:: Base<scalarType> GetRealPartLocal( Int iLoc, Int jLoc ) const
+   .. cpp:function:: Base<scalarType> GetLocalImagPart( Int iLoc, Int jLoc ) const
 
       Return the :math:`(iLoc,jLoc)` entry (or its real or imaginary part) of 
       our local matrix.
 
-   .. cpp:function:: void SetLocal( Int iLoc, Int jLoc, T alpha )
-   .. cpp:function:: void SetLocalRealPart( Int iLoc, Int jLoc, Base<T> alpha )
-   .. cpp:function:: void SetLocalImagPart( Int iLoc, Int jLoc, Base<T> alpha )
+   .. cpp:function:: void SetLocal( Int iLoc, Int jLoc, scalarType alpha )
+   .. cpp:function:: void SetLocalRealPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
+   .. cpp:function:: void SetLocalImagPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
 
       Set the `(iLoc,jLoc)` entry (or its real or imaginary part) of our 
       local matrix to :math:`\alpha`.
 
-   .. cpp:function:: void UpdateLocal( Int iLoc, Int jLoc, T alpha )
-   .. cpp:function:: void UpdateRealPartLocal( Int iLoc, Int jLoc, Base<T> alpha )
-   .. cpp:function:: void UpdateLocalImagPart( Int iLoc, Int jLoc, Base<T> alpha )
+   .. cpp:function:: void UpdateLocal( Int iLoc, Int jLoc, scalarType alpha )
+   .. cpp:function:: void UpdateRealPartLocal( Int iLoc, Int jLoc, Base<scalarType> alpha )
+   .. cpp:function:: void UpdateLocalImagPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
 
       Add :math:`\alpha` to the `(iLoc,jLoc)` entry (or its real or 
       imaginary part) of our local matrix.
@@ -468,17 +480,17 @@ is the ability for individual processes to easily modify arbitrary
 
    .. cpp:member:: Int colAlign
 
-      The rank in the :cpp:func:`AbstractDistMatrix\<T>::ColComm` which is
+      The rank in the :cpp:func:`AbstractDistMatrix\<scalarType>::ColComm` which is
       assigned the top-left entry of the matrix.
 
    .. cpp:member:: Int rowAlign
 
-      The rank in the :cpp:func:`AbstractDistMatrix\<T>::RowComm` which
+      The rank in the :cpp:func:`AbstractDistMatrix\<scalarType>::RowComm` which
       is assigned the top-left entry of the matrix. 
 
    .. cpp:member:: Int root
 
-      The member of the :cpp:func:`AbstractDistMatrix\<T>::CrossComm` which
+      The member of the :cpp:func:`AbstractDistMatrix\<scalarType>::CrossComm` which
       is assigned ownership of the matrix.
 
    .. cpp:member:: const Grid* grid
@@ -486,8 +498,8 @@ is the ability for individual processes to easily modify arbitrary
       An immutable pointer to the underlying process grid of the distributed
       matrix.
 
-   .. cpp:function:: DistData( const AbstractDistMatrix<T>& A )
+   .. cpp:function:: DistData( const AbstractDistMatrix<scalarType>& A )
 
       Construct the distribution data of any instance of 
-      :cpp:class:`AbstractDistMatrix\<T>`.
+      :cpp:class:`AbstractDistMatrix\<scalarType>`.
 

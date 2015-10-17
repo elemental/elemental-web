@@ -18,4 +18,5 @@ the column alignment is 0):
      \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} & \{0,1\} 
    \end{array}\right)
 
-.. cpp:class:: DistMatrix<T,MR,STAR>
+.. cpp:class:: DistMatrix<scalarType,MR,STAR>
+.. cpp:class:: DistMatrix<scalarType,MR,STAR,ELEMENT>

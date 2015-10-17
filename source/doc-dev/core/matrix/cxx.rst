@@ -1,6 +1,6 @@
 Matrix (C++ interface)
 ======================
-The :cpp:type:`Matrix\<T>` class is the building of the library:
+The :cpp:type:`Matrix\<scalarType>` class is the building of the library:
 its purpose is to provide convenient mechanisms for performing basic matrix 
 manipulations, such as setting and querying individual matrix entries, 
 without giving up compatibility with interfaces such as BLAS and LAPACK, 
@@ -21,13 +21,14 @@ numbers where the :math:`(i,j)` entry is equal to :math:`i-j` would be:
 
 whereas the complex double-precision equivalent could use :cpp:type:`Complex\<double>`, which is currently a typedef for ``std::complex<double>``.
      
-The underlying data storage for :cpp:class:`Matrix\<T>` is simply a contiguous 
-buffer that stores entries in a column-major fashion with a *leading 
+The underlying data storage for :cpp:class:`Matrix\<scalarType>` is simply a
+contiguous buffer that stores entries in a column-major fashion with a *leading 
 dimension* which is only required to be at least as large as the height of the 
 matrix (so that entry :math:`(i,j)` is located at position ``i+j*ldim``). 
-For modifiable instances of the :cpp:class:`Matrix\<T>` class, the routine
-:cpp:func:`Matrix\<T>::Buffer` returns a pointer to the underlying 
-buffer, while :cpp:func:`Matrix\<T>::LDim` returns the leading 
+For modifiable instances of the :cpp:class:`Matrix\<scalarType>` class,
+the routine
+:cpp:func:`Matrix\<scalarType>::Buffer` returns a pointer to the underlying 
+buffer, while :cpp:func:`Matrix\<scalarType>::LDim` returns the leading 
 dimension; these two routines could be used to directly perform the equivalent
 of the first code sample as follows:
 
@@ -43,13 +44,14 @@ of the first code sample as follows:
          for( Int i=0; i<m; ++i )
              buffer[i+j*ldim] = double(i-j);
 
-For immutable instances of the :cpp:class:`Matrix\<T>` class, a ``const`` 
+For immutable instances of the :cpp:class:`Matrix\<scalarType>` class, a
+``const`` 
 pointer to the underlying data can similarly be returned with a call to 
-:cpp:func:`Matrix\<T>::LockedBuffer`.
+:cpp:func:`Matrix\<scalarType>::LockedBuffer`.
 In addition, a (``const``) pointer to the place in the 
 (``const``) buffer where entry :math:`(i,j)` resides can be easily retrieved
-with a call to :cpp:func:`Matrix\<T>::Buffer` or 
-:cpp:func:`Matrix\<T>::LockedBuffer`.
+with a call to :cpp:func:`Matrix\<scalarType>::Buffer` or 
+:cpp:func:`Matrix\<scalarType>::LockedBuffer`.
 
 It is also important to be able to create matrices which are simply *views* 
 of existing (sub)matrices. In general, to view the submatrix with row indices 
@@ -62,13 +64,13 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
      ...
      auto ASub = A( IR(iBeg,iEnd), IR(jBeg,jEnd) );
 
-.. cpp:class:: Matrix<T>
+.. cpp:class:: Matrix<scalarType>
 
-   The goal is for the `Matrix` class to support any datatype `T` which 
+   The goal is for the `Matrix` class to support any datatype `scalarType` which
    supports both addition and multiplication and has the associated identities
-   (that is, when the datatype `T` is a *ring*). While there are several 
-   barriers to reaching this goal, it is important to keep in mind that, in 
-   addition to `T` being allowed to be a real or complex 
+   (that is, when the datatype `scalarType` is a *ring*). While there are
+   several barriers to reaching this goal, it is important to keep in mind that,
+   in addition to `scalarType` being allowed to be a real or complex 
    (single- or double-precision) floating-point type, signed integers 
    are also supported.
 
@@ -79,11 +81,12 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
       Many of the following constructors have the default parameter
       ``bool fixed=false``, which can be changed to ``true`` in order to 
       produce a `Matrix` whose entries can be modified, but the matrix's 
-      dimensions cannot. This is useful for the :cpp:class:`DistMatrix\<T>` 
-      class, which contains a local :cpp:class:`Matrix\<T>` whose entries can
-      be locally modified in cases where it would not make sense to change
-      the local matrix size (which should instead result from changing the size
-      of the full distributed matrix).
+      dimensions cannot. This is useful for the
+      :cpp:class:`DistMatrix\<scalarType>` 
+      class, which contains a local :cpp:class:`Matrix\<scalarType>` whose
+      entries can be locally modified in cases where it would not make sense to
+      change the local matrix size (which should instead result from changing
+      the size of the full distributed matrix).
 
    .. cpp:function:: Matrix( bool fixed=false )
 
@@ -102,18 +105,18 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
       dimension equal to `ldim` (which must be greater than or equal 
       :math:`\max(height,1)`).
 
-   .. cpp:function:: Matrix( Int height, Int width, const T* buffer, Int ldim, bool fixed=false )
-   .. cpp:function:: Matrix( Int height, Int width, T* buffer, Int ldim, bool fixed=false )
+   .. cpp:function:: Matrix( Int height, Int width, const scalarType* buffer, Int ldim, bool fixed=false )
+   .. cpp:function:: Matrix( Int height, Int width, scalarType* buffer, Int ldim, bool fixed=false )
 
       A matrix is built around a column-major (immutable) buffer 
       with the specified dimensions. The memory pointed to by `buffer` should
-      not be freed until after the :cpp:class:`Matrix\<T>` object is destructed.
+      not be freed until after the :cpp:class:`Matrix\<scalarType>` object is destructed.
 
-   .. cpp:function:: Matrix( const Matrix<T>& A )
+   .. cpp:function:: Matrix( const Matrix<scalarType>& A )
 
       A copy (not a view) of the matrix :math:`A` is built.
 
-   .. cpp:function:: Matrix( Matrix<T>&& A ) noexcept
+   .. cpp:function:: Matrix( Matrix<scalarType>&& A ) noexcept
 
       A C++11 move constructor which creates a new matrix by moving the metadata
       from the specified matrix over to the new matrix, which cheaply gives the
@@ -126,14 +129,14 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
 
    .. rubric:: Assignment and reconfiguration
 
-   .. cpp:function:: Matrix<T> operator()( Range<Int> I, Range<Int> J )
-   .. cpp:function:: const Matrix<T> operator()( Range<Int> I, Range<Int> J ) const
+   .. cpp:function:: Matrix<scalarType> operator()( Range<Int> I, Range<Int> J )
+   .. cpp:function:: const Matrix<scalarType> operator()( Range<Int> I, Range<Int> J ) const
 
-   .. cpp:function:: const Matrix<T>& operator=( const Matrix<T>& A )
+   .. cpp:function:: const Matrix<scalarType>& operator=( const Matrix<scalarType>& A )
 
       Create a full copy of the specified matrix.
 
-   .. cpp:function:: Matrix<T>& operator=( Matrix<T>&& A )
+   .. cpp:function:: Matrix<scalarType>& operator=( Matrix<scalarType>&& A )
 
       A C++11 move assignment which swaps the metadata of two matrices so that
       the resources owned by the two objects will have been cheaply
@@ -153,12 +156,12 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
       leading dimension equal to `ldim` (which must be greater than or equal to 
       :math:`\max(height,1)`).
 
-   .. cpp:function:: void Attach( Int height, Int width, T* buffer, Int ldim )
-   .. cpp:function:: void LockedAttach( Int height, Int width, const T* buffer, Int ldim )
+   .. cpp:function:: void Attach( Int height, Int width, scalarType* buffer, Int ldim )
+   .. cpp:function:: void LockedAttach( Int height, Int width, const scalarType* buffer, Int ldim )
 
       Reconfigure the matrix around the specified (unmodifiable) buffer.
 
-   .. cpp:function:: void Control( Int height, Int width, T* buffer, Int ldim )
+   .. cpp:function:: void Control( Int height, Int width, scalarType* buffer, Int ldim )
 
       Reconfigure the matrix around a specified buffer and give ownership of
       the resource to the matrix.
@@ -176,7 +179,7 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
 
    .. cpp:function:: Int MemorySize() const
 
-      Return the number of entries of type `T` that this :cpp:class:`Matrix\<T>`
+      Return the number of entries of type `scalarType` that this :cpp:class:`Matrix\<scalarType>`
       instance has allocated space for.
 
    .. cpp:function:: Int DiagonalLength( Int offset=0 ) const
@@ -186,13 +189,13 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
       the superdiagonal, an offset of :math:`-1` refers to the subdiagonal, 
       etc.
 
-   .. cpp:function:: T* Buffer()
-   .. cpp:function:: const T* LockedBuffer() const
+   .. cpp:function:: scalarType* Buffer()
+   .. cpp:function:: const scalarType* LockedBuffer() const
 
       Return a pointer to the (immutable) underlying buffer.
 
-   .. cpp:function:: T* Buffer( Int i, Int j )
-   .. cpp:function:: const T* LockedBuffer( Int i, Int j ) const
+   .. cpp:function:: scalarType* Buffer( Int i, Int j )
+   .. cpp:function:: const scalarType* LockedBuffer( Int i, Int j ) const
 
       Return a pointer to the (immutable) portion of the buffer that holds entry
       :math:`(i,j)`.
@@ -212,21 +215,21 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
 
    .. rubric:: Single-entry manipulation
 
-   .. cpp:function:: T Get( Int i, Int j ) const
-   .. cpp:function:: Base<T> GetRealPart( Int i, Int j ) const
-   .. cpp:function:: Base<T> GetImagPart( Int i, Int j ) const
+   .. cpp:function:: scalarType Get( Int i, Int j ) const
+   .. cpp:function:: Base<scalarType> GetRealPart( Int i, Int j ) const
+   .. cpp:function:: Base<scalarType> GetImagPart( Int i, Int j ) const
 
       Return entry :math:`(i,j)` (or its real or imaginary part).
 
-   .. cpp:function:: void Set( Int i, Int j, T alpha )
-   .. cpp:function:: void SetRealPart( Int i, Int j, Base<T> alpha )
-   .. cpp:function:: void SetImagPart( Int i, Int j, Base<T> alpha )
+   .. cpp:function:: void Set( Int i, Int j, scalarType alpha )
+   .. cpp:function:: void SetRealPart( Int i, Int j, Base<scalarType> alpha )
+   .. cpp:function:: void SetImagPart( Int i, Int j, Base<scalarType> alpha )
 
       Set entry :math:`(i,j)` (or its real or imaginary part) to :math:`\alpha`.
 
-   .. cpp:function:: void Update( Int i, Int j, T alpha )
-   .. cpp:function:: void UpdateRealPart( Int i, Int j, Base<T> alpha )
-   .. cpp:function:: void UpdateImagPart( Int i, Int j, Base<T> alpha ) 
+   .. cpp:function:: void Update( Int i, Int j, scalarType alpha )
+   .. cpp:function:: void UpdateRealPart( Int i, Int j, Base<scalarType> alpha )
+   .. cpp:function:: void UpdateImagPart( Int i, Int j, Base<scalarType> alpha ) 
 
       Add :math:`\alpha` to entry :math:`(i,j)` (or its real or imaginary part).
 
@@ -242,7 +245,7 @@ Special cases used in Elemental
 -------------------------------
 This list of special cases is here to help clarify the notation used throughout
 Elemental's source (as well as this documentation). These are all special
-cases of :cpp:class:`Matrix\<T>`.
+cases of :cpp:class:`Matrix\<scalarType>`.
 
 .. cpp:class:: Matrix<Real>
 

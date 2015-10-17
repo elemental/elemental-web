@@ -17,4 +17,5 @@ process grid, then the corresponding overlay for the owners of each entry of our
      0 & 0 & 0 & 0 & 0 & 0 & 0 
    \end{array}\right)
 
-.. cpp:class:: DistMatrix<T,CIRC,CIRC>
+.. cpp:class:: DistMatrix<scalarType,CIRC,CIRC>
+.. cpp:class:: DistMatrix<scalarType,CIRC,CIRC,ELEMENT>

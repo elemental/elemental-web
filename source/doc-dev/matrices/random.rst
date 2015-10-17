@@ -10,6 +10,7 @@ Random
    random/HatanoNelson
    random/HermitianUniformSpectrum
    random/NormalUniformSpectrum
+   random/Rademacher
    random/ThreeValued
    random/Uniform
    random/UniformHelmholtzGreens

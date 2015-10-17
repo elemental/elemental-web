@@ -1,7 +1,7 @@
 DistMatrix
 ==========
-The :cpp:class:`DistMatrix\<T,U,V>` class, which is a derivation from
-:cpp:class:`AbstractDistMatrix\<T>`,
+The :cpp:class:`DistMatrix\<scalarType=double,colDist=MC,rowDist=MR,wrapType=ELEMENT>` class, which is a derivation from
+:cpp:class:`AbstractDistMatrix\<scalarType>`,
 is specialized for each of the thirteen different legal distribution pairs.
 Each specialization involves choosing a
 sensical pairing of distributions for the rows and columns of the matrix:
@@ -62,7 +62,7 @@ To make this discussion more precise, each valid matrix distribution for
 `DistMatrix` logically arranges the set of `p` processes of the `r` by `c`
 process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossComm`, where `DistComm` is equal to `ColComm` x `RowComm`.
 
-.. cpp:class:: DistMatrix<T,U,V>
+.. cpp:class:: DistMatrix<scalarType=double,colDist=MC,rowDist=MR,wrapType=ELEMENT>
 
    The following routines are available for each legal pairing of row and column
    distributions.
@@ -77,12 +77,12 @@ process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossCom
 
       Create a `height` :math:`\times` `width` distributed matrix.
 
-   .. cpp:function:: DistMatrix( const DistMatrix<T,Y,Z>& A )
+   .. cpp:function:: DistMatrix( const DistMatrix<scalarType,colDist2,rowDist2>& A )
 
       Construct the current matrix to be a redistributed copy of the input 
       matrix.
 
-   .. cpp:function:: DistMatrix( const DistMatrix<T,U,V>&& A ) noexcept
+   .. cpp:function:: DistMatrix( const DistMatrix<scalarType,colDist,rowDist>&& A ) noexcept
 
       Use C++11 move semantics to construct the current matrix in a way which
       transfers the resources from the input matrix.
@@ -93,21 +93,21 @@ process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossCom
 
    .. rubric:: Assignment and reconfiguration
 
-   .. cpp:function:: DistMatrix<T,U,V>& operator=( const DistMatrix<T,Y,Z>& A )
+   .. cpp:function:: DistMatrix<scalarType,colDist,rowDist>& operator=( const DistMatrix<scalarType,colDist2,rowDist2>& A )
 
       Set the current distributed matrix equal to the matrix `A` redistributed
       into the appropriate form.
 
-   .. cpp:function:: DistMatrix<T,U,V>& operator=( DistMatrix<T,U,V>&& A )
+   .. cpp:function:: DistMatrix<scalarType,colDist,rowDist>& operator=( DistMatrix<scalarType,colDist,rowDist>&& A )
 
       A C++11 move assignment which cheaply transfers the resources from `A`
       to the current matrix by swapping metadata.
 
    .. rubric:: Viewing
 
-   .. cpp:function:: DistMatrix<T,U,V> operator()( Range<Int> I, Range<Int> J )
+   .. cpp:function:: DistMatrix<scalarType,colDist,rowDist> operator()( Range<Int> I, Range<Int> J )
 
-   .. cpp:function:: const DistMatrix<T,U,V> operator()( Range<Int> I, Range<Int> J ) const
+   .. cpp:function:: const DistMatrix<scalarType,colDist,rowDist> operator()( Range<Int> I, Range<Int> J ) const
 
 
 .. toctree::

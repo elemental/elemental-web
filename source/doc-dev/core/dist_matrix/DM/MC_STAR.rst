@@ -25,4 +25,5 @@ column alignment is 0):
      \{0,2,4\} & \{0,2,4\} 
    \end{array}\right)
 
-.. cpp:class:: DistMatrix<T,MC,STAR>
+.. cpp:class:: DistMatrix<scalarType,MC,STAR>
+.. cpp:class:: DistMatrix<scalarType,MC,STAR,ELEMENT>

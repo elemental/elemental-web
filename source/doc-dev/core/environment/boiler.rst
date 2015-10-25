@@ -9,6 +9,7 @@ Initializes Elemental and (if necessary) MPI. The usage is very similar to
 C++ API
 ^^^^^^^
 
+.. cpp:function:: void Initialize()
 .. cpp:function:: void Initialize( int& argc, char**& argv )
 
 .. code-block:: cpp

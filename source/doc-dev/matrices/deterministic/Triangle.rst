@@ -6,7 +6,6 @@ C++ API
 
 .. cpp:function:: void Triangle( Matrix<F>& A, Int n )
 .. cpp:function:: void Triangle( AbstractDistMatrix<F>& A, Int n )
-.. cpp:function:: void Triangle( AbstractBlockDistMatrix<F>& A, Int n )
 
 C API
 -----

@@ -23,7 +23,7 @@ C++ API
 -------
 
 .. cpp:function:: Base<F> LogDetDiv( UpperOrLower uplo, const Matrix<F>& A, const Matrix<F>& B )
-.. cpp:function:: Base<F> LogDetDiv( UpperOrLower uplo, const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& B )
+.. cpp:function:: Base<F> LogDetDiv( UpperOrLower uplo, const ElementalMatrix<F>& A, const ElementalMatrix<F>& B )
 
 C API
 -----

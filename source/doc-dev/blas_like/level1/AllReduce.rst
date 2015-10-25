@@ -5,8 +5,8 @@ process (which overwrites every process's input with the summation over all proc
 
 C++ API
 -------
-.. cpp:function:: void AllReduce( AbstractDistMatrix<T>& A, mpi::Comm comm )
-.. cpp:function:: void AllReduce( AbstractBlockDistMatrix<T>& A, mpi::Comm comm )
+.. cpp:function:: void AllReduce( Matrix<T>& A, mpi::Comm comm, mpi::Op op=mpi::SUM )
+.. cpp:function:: void AllReduce( AbstractDistMatrix<T>& A, mpi::Comm comm, mpi::Op op=mpi::SUM )
 
 C API
 -----

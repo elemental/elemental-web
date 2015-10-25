@@ -15,7 +15,7 @@ C++ API
 -------
 
 .. cpp:function:: void QP( const Matrix<Real>& Q, const Matrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, Matrix<Real>& x, Matrix<Real>& y, Matrix<Real>& z, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
-.. cpp:function:: void QP( const AbstractDistMatrix<Real>& Q, const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, const AbstractDistMatrix<Real>& c, AbstractDistMatrix<Real>& x, AbstractDistMatrix<Real>& y, AbstractDistMatrix<Real>& z, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
+.. cpp:function:: void QP( const ElementalMatrix<Real>& Q, const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, const ElementalMatrix<Real>& c, ElementalMatrix<Real>& x, ElementalMatrix<Real>& y, ElementalMatrix<Real>& z, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
 .. cpp:function:: void QP( const SparseMatrix<Real>& Q, const SparseMatrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, Matrix<Real>& x, Matrix<Real>& y, Matrix<Real>& z, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
 .. cpp:function:: void QP( const DistSparseMatrix<Real>& Q, const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, const DistMultiVec<Real>& c, DistMultiVec<Real>& x, DistMultiVec<Real>& y, DistMultiVec<Real>& z, const qp::direct::Ctrl<Real>& ctrl=qp::direct::Ctrl<Real>() )
 

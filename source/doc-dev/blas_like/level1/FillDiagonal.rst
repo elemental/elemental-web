@@ -6,7 +6,6 @@ C++ API
 -------
 .. cpp:function:: void FillDiagonal( Matrix<T>& A, T alpha, Int offset=0 )
 .. cpp:function:: void FillDiagonal( AbstractDistMatrix<T>& A, T alpha, Int offset=0 )
-.. cpp:function:: void FillDiagonal( AbstractBlockDistMatrix<T>& A, T alpha, Int offset=0 )
 
 C API
 -----

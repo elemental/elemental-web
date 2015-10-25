@@ -8,7 +8,7 @@ C++ API
 -------
 
 .. cpp:function:: void HermitianUniformSpectrum( Matrix<F>& A, Int n, Base<F> lower=0, Base<F> upper=1 )
-.. cpp:function:: void HermitianUniformSpectrum( DistMatrix<F,U,V>& A, Int n, Base<F> lower=0, Base<F> upper=1 )
+.. cpp:function:: void HermitianUniformSpectrum( ElementalMatrix<F>& A, Int n, Base<F> lower=0, Base<F> upper=1 )
 
 C API
 -----

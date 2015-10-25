@@ -12,7 +12,7 @@ C++ API
 -------
 
 .. cpp:function:: Base<F> Coherence( const Matrix<F>& A )
-.. cpp:function:: Base<F> Coherence( const AbstractDistMatrix<F>& A )
+.. cpp:function:: Base<F> Coherence( const ElementalMatrix<F>& A )
 
 C API
 -----

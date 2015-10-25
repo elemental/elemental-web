@@ -33,7 +33,7 @@ Python API
 C++ API
 -------
 .. cpp:function:: void TV( const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
-.. cpp:function:: void TV( const AbstractDistMatrix<Real>& b, Real lambda, AbstractDistMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
+.. cpp:function:: void TV( const ElementalMatrix<Real>& b, Real lambda, ElementalMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 .. cpp:function:: void TV( const DistMultiVec<Real>& b, Real lambda, DistMultiVec<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 
 C API

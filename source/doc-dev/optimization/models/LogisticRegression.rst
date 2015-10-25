@@ -29,7 +29,7 @@ C++ API
    and ``L2_PENALTY``
 
 .. cpp:function:: Int LogisticRegression( const Matrix<Real>& G, const Matrix<Real>& q, Matrix<Real>& z, Real gamma, Regularization penalty=L1_PENALTY, Real rho=1, Int maxIter=500, bool inv=true, bool progress=true )
-.. cpp:function:: Int LogisticRegression( const AbstractDistMatrix<Real>& G, const AbstractDistMatrix<Real>& q, AbstractDistMatrix<Real>& z, Real gamma, Regularization penalty=L1_PENALTY, Real rho=1, Int maxIter=500, bool inv=true, bool progress=true )
+.. cpp:function:: Int LogisticRegression( const ElementalMatrix<Real>& G, const ElementalMatrix<Real>& q, ElementalMatrix<Real>& z, Real gamma, Regularization penalty=L1_PENALTY, Real rho=1, Int maxIter=500, bool inv=true, bool progress=true )
 
 C API
 -----

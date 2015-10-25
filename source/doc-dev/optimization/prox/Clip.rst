@@ -2,7 +2,7 @@ Clip
 ====
 Force every entry of a matrix to lie within a given (half-)interval.
 
-`Implementations <https://github.com/elemental/Elemental/blob/master/src/optimization/Clip.cpp>`__
+`Implementations <https://github.com/elemental/Elemental/blob/master/src/optimization/prox/Clip.cpp>`__
 
 Lower clip
 ----------

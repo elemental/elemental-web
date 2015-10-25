@@ -41,7 +41,7 @@ C++ API
    .. cpp:member:: Real tol
    .. cpp:function:: RPCACtrl()
 
-.. cpp:function:: void RPCA( const AbstractDistMatrix<F>& M, AbstractDistMatrix<F>& L, AbstractDistMatrix<F>& S, const RPCACtrl<Base<F>>& ctrl=RPCACtrl<Base<F>>() )
+.. cpp:function:: void RPCA( const ElementalMatrix<F>& M, ElementalMatrix<F>& L, ElementalMatrix<F>& S, const RPCACtrl<Base<F>>& ctrl=RPCACtrl<Base<F>>() )
 
 C API
 -----

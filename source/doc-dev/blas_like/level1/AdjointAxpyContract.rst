@@ -15,8 +15,8 @@ distributed over :math:`U_0` and :math:`V_0`, then the result is of the form
 
 C++ API
 -------
-.. cpp:function:: void AdjointAxpyContract( T alpha, const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B )
-.. cpp:function:: void AdjointAxpyContract( T alpha, const AbstractBlockDistMatrix<T>& A, AbstractBlockDistMatrix<T>& B )
+.. cpp:function:: void AdjointAxpyContract( T alpha, const ElementalMatrix<T>& A, ElementalMatrix<T>& B )
+.. cpp:function:: void AdjointAxpyContract( T alpha, const BlockMatrix<T>& A, BlockMatrix<T>& B )
 
 C API
 -----

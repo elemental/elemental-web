@@ -29,7 +29,7 @@ C++ API
 -------
 
 .. cpp:function:: void NMF( const Matrix<Real>& A, Matrix<Real>& X, Matrix<Real>& Y, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
-.. cpp:function:: void NMF( const AbstractDistMatrix<Real>& A, AbstractDistMatrix<Real>& X, AbstractDistMatrix<Real>& Y, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
+.. cpp:function:: void NMF( const ElementalMatrix<Real>& A, ElementalMatrix<Real>& X, ElementalMatrix<Real>& Y, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
 
 C API
 -----

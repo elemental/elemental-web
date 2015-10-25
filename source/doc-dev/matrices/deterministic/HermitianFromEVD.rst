@@ -13,7 +13,7 @@ C++ API
 -------
 
 .. cpp:function:: void HermitianFromEVD( UpperOrLower uplo, Matrix<F>& A, const Matrix<Base<F>>& w, const Matrix<F>& Z )
-.. cpp:function:: void HermitianFromEVD( UpperOrLower uplo, AbstractDistMatrix<F>& A, const AbstractDistMatrix<Base<F>>& w, const AbstractDistMatrix<F>& Z )
+.. cpp:function:: void HermitianFromEVD( UpperOrLower uplo, ElementalMatrix<F>& A, const ElementalMatrix<Base<F>>& w, const ElementalMatrix<F>& Z )
 
 C API
 -----

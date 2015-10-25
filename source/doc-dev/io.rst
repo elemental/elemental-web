@@ -15,7 +15,6 @@ C++ API
 
 .. cpp:function:: void Display( const Matrix<T>& A, std::string title="Matrix" )
 .. cpp:function:: void Display( const AbstractDistMatrix<T>& A, std::string title="DistMatrix" )
-.. cpp:function:: void Display( const AbstractBlockDistMatrix<T>& A, std::string title="BlockDistMatrix" )
 
 C API
 """""
@@ -73,7 +72,6 @@ C++ API
 
 .. cpp:function:: void Print( const Matrix<T>& A, std::string title="Matrix", std::ostream& os=std::cout )
 .. cpp:function:: void Print( const AbstractDistMatrix<T>& A, std::string title="DistMatrix", std::ostream& os=std::cout )
-.. cpp:function:: void Print( const AbstractBlockDistMatrix<T>& A, std::string title="BlockDistMatrix", std::ostream& os=std::cout )
 
 C API
 """""
@@ -140,7 +138,6 @@ C++ API
 
 .. cpp:function:: void Spy( const Matrix<T>& A, std::string title="Matrix", Base<T> tol=0 )
 .. cpp:function:: void Spy( const AbstractDistMatrix<T>& A, std::string title="DistMatrix", Base<T> tol=0 )
-.. cpp:function:: void Spy( const AbstractBlockDistMatrix<T>& A, std::string title="BlockDistMatrix", Base<T> tol=0 )
 
 C API
 """""
@@ -256,7 +253,6 @@ C++ API
 
 .. cpp:function:: void Read( Matrix<T>& A, std::string filename, FileFormat format=AUTO )
 .. cpp:function:: void Read( AbstractDistMatrix<T>& A, std::string filename, FileFormat format=AUTO, bool sequential=false )
-.. cpp:function:: void Read( AbstractBlockDistMatrix<T>& A, std::string filename, FileFormat format=AUTO, bool sequential=false )
 
 C API
 """""
@@ -286,7 +282,6 @@ C++ API
 
 .. cpp:function:: void Write( const Matrix<T>& A, std::string basename="Matrix", FileFormat format=BINARY, std::string title="" )
 .. cpp:function:: void Write( const AbstractDistMatrix<T>& A, std::string basename="DistMatrix", FileFormat format=BINARY, std::string title="" )
-.. cpp:function:: void Write( const AbstractBlockDistMatrix<T>& A, std::string basename="BlockDistMatrix", FileFormat format=BINARY, std::string title="" )
 
 C API
 """""

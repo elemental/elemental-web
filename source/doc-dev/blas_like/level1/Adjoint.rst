@@ -5,8 +5,9 @@ Adjoint
 C++ API
 -------
 .. cpp:function:: void Adjoint( const Matrix<T>& A, Matrix<T>& B )
-.. cpp:function:: void Adjoint( const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B )
-.. cpp:function:: void Adjoint( const AbstractBlockDistMatrix<T>& A, AbstractBlockDistMatrix<T>& B )
+.. cpp:function:: void Adjoint( const ElementalMatrix<T>& A, ElementalMatrix<T>& B )
+.. cpp:function:: void Adjoint( const BlockMatrix<T>& A, BlockMatrix<T>& B )
+.. cpp:function:: void Adjoint( const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B );
 .. cpp:function:: void Adjoint( const SparseMatrix<T>& A, SparseMatrix<T>& B )
 .. cpp:function:: void Adjoint( const DistSparseMatrix<T>& A, DistSparseMatrix<T>& B )
 

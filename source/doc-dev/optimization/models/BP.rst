@@ -32,12 +32,12 @@ Python API
 C++ API
 -------
 .. cpp:function:: void BP( const Matrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )
-.. cpp:function:: void BP( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, AbstractDistMatrix<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )
+.. cpp:function:: void BP( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, ElementalMatrix<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )
 .. cpp:function:: void BP( const SparseMatrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(true) )
 .. cpp:function:: void BP( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, DistMultiVec<Real>& x, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(true) )
 
 .. cpp:function:: void BP( const Matrix<Complex<Real>>& A, const Matrix<Complex<Real>>& b, Matrix<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
-.. cpp:function:: void BP( const AbstractDistMatrix<Complex<Real>>& A, const AbstractDistMatrix<Complex<Real>>& b, AbstractDistMatrix<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
+.. cpp:function:: void BP( const ElementalMatrix<Complex<Real>>& A, const ElementalMatrix<Complex<Real>>& b, ElementalMatrix<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
 .. cpp:function:: void BP( const SparseMatrix<Complex<Real>>& A, const Matrix<Complex<Real>>& b, Matrix<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(true) )
 .. cpp:function:: void BP( const DistSparseMatrix<Complex<Real>>& A, const DistMultiVec<Complex<Real>>& b, DistMultiVec<Complex<Real>>& x, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(true) )
 

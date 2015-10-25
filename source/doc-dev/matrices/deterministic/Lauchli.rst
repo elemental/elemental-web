@@ -9,7 +9,7 @@ C++ API
 -------
 
 .. cpp:function:: void Lauchli( Matrix<T>& A, Int n, T mu )
-.. cpp:function:: void Lauchli( AbstractDistMatrix<T>& A, Int n, T mu )
+.. cpp:function:: void Lauchli( ElementalMatrix<T>& A, Int n, T mu )
 
 C API
 -----

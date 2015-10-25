@@ -8,7 +8,6 @@ C++ API
 
 .. cpp:function:: void ThreeValued( Matrix<T>& A, Int m, Int n, double p=2./3. )
 .. cpp:function:: void ThreeValued( AbstractDistMatrix<T>& A, Int m, Int n, double p=2./3. )
-.. cpp:function:: void ThreeValued( AbstractBlockDistMatrix<T>& A, Int m, Int n, double p=2./3. )
 
 C API
 -----

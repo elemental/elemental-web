@@ -10,9 +10,9 @@ C++ API
 -------
 
 .. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, const Matrix<F>& A )
-.. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
+.. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, const ElementalMatrix<F>& A )
 .. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, Matrix<F>& A, bool canOverwrite=false )
-.. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, AbstractDistMatrix<F>& A, bool canOverwrite=false )
+.. cpp:function:: Base<F> LogBarrier( UpperOrLower uplo, ElementalMatrix<F>& A, bool canOverwrite=false )
 
 C API
 -----

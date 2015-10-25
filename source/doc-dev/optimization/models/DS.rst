@@ -43,7 +43,7 @@ C++ API
 -------
 
 .. cpp:function:: void DS( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
-.. cpp:function:: void DS( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, Real lambda, AbstractDistMatrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
+.. cpp:function:: void DS( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, Real lambda, ElementalMatrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
 .. cpp:function:: void DS( const SparseMatrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
 .. cpp:function:: void DS( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, Real lambda, DistMultiVec<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
 

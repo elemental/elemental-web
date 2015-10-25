@@ -23,9 +23,9 @@ recent version of ScaLAPACK.
    Currently a typedef to ``std::array<int,9>``.
 
 While the following routine is not a wrapper around a BLACS routine, it is 
-the most common means of filling a ``blacs::Desc`` from a ``BlockDistMatrix``:
+the most common means of filling a ``blacs::Desc`` from a ``BlockMatrix``:
 
-.. cpp:function:: blacs::Desc FillDesc( const BlockDistMatrix<F>& A, int context )
+.. cpp:function:: blacs::Desc FillDesc( const BlockMatrix<F>& A, int context )
 
    Form the descriptor for the distributed matrix `A` using the specified
    context.

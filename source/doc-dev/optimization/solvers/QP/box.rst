@@ -9,7 +9,7 @@ C++ API
 -------
 
 .. cpp:function:: Int qp::ADMM( const Matrix<Real>& Q, const Matrix<Real>& C, Real lb, Real ub, Matrix<Real>& X, const ADMMCtrl<Real>& ctrl=ADMMCtrl<Real>() )
-.. cpp:function:: Int qp::ADMM( const AbstractDistMatrix<Real>& Q, const AbstractDistMatrix<Real>& C, Real lb, Real ub, AbstractDistMatrix<Real>& X, const ADMMCtrl<Real>& ctrl=ADMMCtrl<Real>() )
+.. cpp:function:: Int qp::ADMM( const ElementalMatrix<Real>& Q, const ElementalMatrix<Real>& C, Real lb, Real ub, ElementalMatrix<Real>& X, const ADMMCtrl<Real>& ctrl=ADMMCtrl<Real>() )
 
 C API
 -----

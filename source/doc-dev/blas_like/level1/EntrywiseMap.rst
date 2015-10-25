@@ -7,14 +7,12 @@ C++ API
 -------
 .. cpp:function:: void EntrywiseMap( Matrix<T>& A, std::function<T(T)> func )
 .. cpp:function:: void EntrywiseMap( AbstractDistMatrix<T>& A, std::function<T(T)> func )
-.. cpp:function:: void EntrywiseMap( AbstractBlockDistMatrix<T>& A, std::function<T(T)> func )
 .. cpp:function:: void EntrywiseMap( SparseMatrix<T>& A, std::function<T(T)> func )
 .. cpp:function:: void EntrywiseMap( DistSparseMatrix<T>& A, std::function<T(T)> func )
 .. cpp:function:: void EntrywiseMap( DistMultiVec<T>& A, std::function<T(T)> func )
 
 .. cpp:function:: void EntrywiseMap( const Matrix<S>& A, Matrix<T>& B, std::function<T(S)> func )
 .. cpp:function:: void EntrywiseMap( const AbstractDistMatrix<S>& A, AbstractDistMatrix<T>& B, std::function<T(S)> func )
-.. cpp:function:: void EntrywiseMap( const AbstractBlockDistMatrix<S>& A, AbstractBlockDistMatrix<T>& B, std::function<T(S)> func )
 .. cpp:function:: void EntrywiseMap( const SparseMatrix<S>& A, SparseMatrix<T>& B, std::function<T(S)> func )
 .. cpp:function:: void EntrywiseMap( const DistSparseMatrix<S>& A, DistSparseMatrix<T>& B, std::function<T(S)> func )
 .. cpp:function:: void EntrywiseMap( const DistMultiVec<S>& A, DistMultiVec<T>& B, std::function<T(S)> func )

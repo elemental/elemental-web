@@ -14,7 +14,6 @@ C++ API
 
 .. cpp:function:: void Whale( Matrix<Complex<Real>>& A, Int n )
 .. cpp:function:: void Whale( AbstractDistMatrix<Complex<Real>>& A, Int n )
-.. cpp:function:: void Whale( AbstractBlockDistMatrix<Complex<Real>>& A, Int n )
 
 C API
 -----

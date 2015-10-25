@@ -4,9 +4,9 @@ Proximal maps
 .. toctree::
    :maxdepth: 1
 
-   util/Clip
-   util/FrobeniusProx
-   util/HingeLossProx
-   util/LogisticProx
-   util/SVT
-   util/SoftThreshold
+   prox/Clip
+   prox/FrobeniusProx
+   prox/HingeLossProx
+   prox/LogisticProx
+   prox/SVT
+   prox/SoftThreshold

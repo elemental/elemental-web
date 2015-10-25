@@ -13,7 +13,7 @@ Python API
 C++ API
 -------
 .. cpp:function:: void LP( const Matrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, Matrix<Real>& x, Matrix<Real>& y, Matrix<Real>& z, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )
-.. cpp:function:: void LP( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, const AbstractDistMatrix<Real>& c, AbstractDistMatrix<Real>& x, AbstractDistMatrix<Real>& y, AbstractDistMatrix<Real>& z, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )
+.. cpp:function:: void LP( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, const ElementalMatrix<Real>& c, ElementalMatrix<Real>& x, ElementalMatrix<Real>& y, ElementalMatrix<Real>& z, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(false) )
 .. cpp:function:: void LP( const SparseMatrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, Matrix<Real>& x, Matrix<Real>& y, Matrix<Real>& z, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(true) )
 .. cpp:function:: void LP( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, const DistMultiVec<Real>& c, DistMultiVec<Real>& x, DistMultiVec<Real>& y, DistMultiVec<Real>& z, const lp::direct::Ctrl<Real>& ctrl=lp::direct::Ctrl<Real>(true) )
 

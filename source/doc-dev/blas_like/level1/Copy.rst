@@ -5,8 +5,9 @@ Sets :math:`Y := X`.
 C++ API
 -------
 .. cpp:function:: void Copy( const Matrix<S>& X, Matrix<T>& Y )
+.. cpp:function:: void Copy( const ElementalMatrix<S>& A, ElementalMatrix<T>& B )
+.. cpp:function:: void Copy( const BlockMatrix<S>& A, BlockMatrix<T>& B )
 .. cpp:function:: void Copy( const AbstractDistMatrix<S>& A, AbstractDistMatrix<T>& B )
-.. cpp:function:: void Copy( const AbstractBlockDistMatrix<S>& A, AbstractBlockDistMatrix<T>& B )
 
 .. cpp:function:: void CopyFromRoot( const Matrix<T>& A, DistMatrix<T,CIRC,CIRC>& B, bool includingViewers=false )
 .. cpp:function:: void CopyFromNonRoot( DistMatrix<T,CIRC,CIRC>& B, bool includingViewers=false )

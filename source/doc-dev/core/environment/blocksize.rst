@@ -26,10 +26,10 @@ Blocksize manipulation
 .. cpp:function:: Int DefaultBlockWidth()
 
    Returns the default block height (width) for 
-   :cpp:type:`BlockDistMatrix\<T,U,V>`.
+   :cpp:type:`BlockMatrix\<scalarType,colDist,rowDist>`.
 
 .. cpp:function:: void SetDefaultBlockHeight( Int mb )
 .. cpp:function:: void SetDefaultBlockWidth( Int nb )
 
    Change the default block height (width) for 
-   :cpp:type:`BlockDistMatrix\<T,U,V>`.
+   :cpp:type:`BlockMatrix\<scalarType,colDist,rowDist>`.

@@ -40,7 +40,7 @@ C++ API
 -------
 
 .. cpp:function:: void SVM( const Matrix<Real>& A, const Matrix<Real>& d, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
-.. cpp:function:: void SVM( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& d, Real lambda, AbstractDistMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
+.. cpp:function:: void SVM( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& d, Real lambda, ElementalMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 .. cpp:function:: void SVM( const SparseMatrix<Real>& A, const Matrix<Real>& d, Real lambda, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 .. cpp:function:: void SVM( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& d, Real lambda, DistMultiVec<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 

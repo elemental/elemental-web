@@ -24,7 +24,7 @@ C++ API
 -------
 
 .. cpp:function:: Int SparseInvCov( const Matrix<F>& D, Base<F> lambda, Matrix<F>& Z, const SparseInvCovCtrl<Base<F>>& ctrl=SparseInvCovCtrl<Base<F>>() )
-.. cpp:function:: Int SparseInvCov( const AbstractDistMatrix<F>& D, Base<F> lambda, AbstractDistMatrix<F>& Z, const SparseInvCovCtrl<Base<F>>& ctrl=SparseInvCovCtrl<Base<F>>() )
+.. cpp:function:: Int SparseInvCov( const ElementalMatrix<F>& D, Base<F> lambda, ElementalMatrix<F>& Z, const SparseInvCovCtrl<Base<F>>& ctrl=SparseInvCovCtrl<Base<F>>() )
 
 `Implementations <https://github.com/elemental/Elemental/blob/master/src/optimization/SparseInvCov.cpp>`__
 

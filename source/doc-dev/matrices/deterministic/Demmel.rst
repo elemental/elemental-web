@@ -17,7 +17,6 @@ C++ API
 
 .. cpp:function:: void Demmel( Matrix<F>& A, Int n )
 .. cpp:function:: void Demmel( AbstractDistMatrix<F>& A, Int n )
-.. cpp:function:: void Demmel( AbstractBlockDistMatrix<F>& A, Int n )
 
 C API
 -----

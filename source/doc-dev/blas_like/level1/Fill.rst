@@ -6,7 +6,6 @@ C++ API
 -------
 .. cpp:function:: void Fill( Matrix<T>& A, T alpha )
 .. cpp:function:: void Fill( AbstractDistMatrix<T>& A, T alpha )
-.. cpp:function:: void Fill( AbstractBlockDistMatrix<T>& A, T alpha )
 .. cpp:function:: void Fill( DistMultiVec<T>& A, T alpha )
 
 C API

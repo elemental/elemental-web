@@ -33,7 +33,7 @@ Python API
 C++ API
 -------
 .. cpp:function:: void BPDN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
-.. cpp:function:: void BPDN( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, Real lambda, AbstractDistMatrix<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
+.. cpp:function:: void BPDN( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, Real lambda, ElementalMatrix<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
 .. cpp:function:: void BPDN( const SparseMatrix<Real>& A, const Matrix<Real>& b, Real lambda, Matrix<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
 .. cpp:function:: void BPDN( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, Real lambda, DistMultiVec<Real>& x, const BPDNCtrl<Real>& ctrl=BPDNCtrl<Real>() )
 

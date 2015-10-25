@@ -21,8 +21,8 @@ or
 
 C++ API
 -------
-.. cpp:function:: void TransposeContract( const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B, bool conjugate=false )
-.. cpp:function:: void TransposeContract( const AbstractBlockDistMatrix<T>& A, AbstractBlockDistMatrix<T>& B, bool conjugate=false )
+.. cpp:function:: void TransposeContract( const ElementalMatrix<T>& A, ElementalMatrix<T>& B, bool conjugate=false )
+.. cpp:function:: void TransposeContract( const BlockMatrix<T>& A, BlockMatrix<T>& B, bool conjugate=false )
 
 C API
 -----

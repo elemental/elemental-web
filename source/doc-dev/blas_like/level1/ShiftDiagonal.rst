@@ -6,7 +6,6 @@ C++ API
 -------
 .. cpp:function:: void ShiftDiagonal( Matrix<T>& A, S alpha, Int offset=0 )
 .. cpp:function:: void ShiftDiagonal( AbstractDistMatrix<T>& A, S alpha, Int offset=0 )
-.. cpp:function:: void ShiftDiagonal( AbstractBlockDistMatrix<T>& A, S alpha, Int offset=0 )
 .. cpp:function:: void ShiftDiagonal( SparseMatrix<T>& A, S alpha, Int offset=0 )
 .. cpp:function:: void ShiftDiagonal( DistSparseMatrix<T>& A, S alpha, Int offset=0 )
 

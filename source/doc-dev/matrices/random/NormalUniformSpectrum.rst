@@ -8,7 +8,7 @@ C++ API
 -------
 
 .. cpp:function:: void NormalUniformSpectrum( Matrix<Complex<Real> >& A, Int n, Complex<Real> center=0, Real radius=1 )
-.. cpp:function:: void NormalUniformSpectrum( DistMatrix<Complex<Real>,U,V>& A, Int n, Complex<Real> center=0, Real radius=1 )
+.. cpp:function:: void NormalUniformSpectrum( ElementalMatrix<Complex<Real>& A, Int n, Complex<Real> center=0, Real radius=1 )
 
 C API
 -----

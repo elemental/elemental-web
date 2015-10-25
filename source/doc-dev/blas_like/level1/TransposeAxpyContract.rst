@@ -22,8 +22,8 @@ or
 
 C++ API
 -------
-.. cpp:function:: void TransposeAxpyContract( T alpha, const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B, bool conjugate=false )
-.. cpp:function:: void TransposeAxpyContract( T alpha, const AbstractBlockDistMatrix<T>& A, AbstractBlockDistMatrix<T>& B, bool conjugate=false )
+.. cpp:function:: void TransposeAxpyContract( T alpha, const ElementalMatrix<T>& A, ElementalMatrix<T>& B, bool conjugate=false )
+.. cpp:function:: void TransposeAxpyContract( T alpha, const BlockMatrix<T>& A, BlockMatrix<T>& B, bool conjugate=false )
 
 C API
 -----

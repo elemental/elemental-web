@@ -5,8 +5,8 @@ stored on the process with the given rank.
 
 C++ API
 -------
-.. cpp:function:: void Broadcast( AbstractDistMatrix<T>& A, mpi::Comm comm, Int rank=0 )
-.. cpp:function:: void Broadcast( AbstractBlockDistMatrix<T>& A, mpi::Comm comm, Int rank=0 )
+.. cpp:function:: void Broadcast( Matrix<T>& A, mpi::Comm comm, int rank=0 )
+.. cpp:function:: void Broadcast( AbstractDistMatrix<T>& A, mpi::Comm comm, int rank=0 )
 
 C API
 -----

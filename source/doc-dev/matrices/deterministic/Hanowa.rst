@@ -15,7 +15,7 @@ C++ API
 -------
 
 .. cpp:function:: void Hanowa( Matrix<T>& A, Int n, T mu )
-.. cpp:function:: void Hanowa( AbstractDistMatrix<T>& A, Int n, T mu )
+.. cpp:function:: void Hanowa( ElementalMatrix<T>& A, Int n, T mu )
 
 C API
 -----

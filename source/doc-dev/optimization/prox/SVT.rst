@@ -14,7 +14,7 @@ C++ API
 ^^^^^^^
 
 .. cpp:function:: Int SVT( Matrix<F>& A, Base<F> tau, bool relative=false )
-.. cpp:function:: Int SVT( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int SVT( ElementalMatrix<F>& A, Base<F> tau, bool relative=false )
 
 C API
 ^^^^^
@@ -39,7 +39,7 @@ C++ API
 ^^^^^^^
 
 .. cpp:function:: Int SVT( Matrix<F>& A, Base<F> tau, Int relaxedRank, bool relative=false )
-.. cpp:function:: Int SVT( AbstractDistMatrix<F>& A, Base<F> tau, Int relaxedRank, bool relative=false )
+.. cpp:function:: Int SVT( ElementalMatrix<F>& A, Base<F> tau, Int relaxedRank, bool relative=false )
 
 C API
 ^^^^^
@@ -66,13 +66,13 @@ namespace svt
 -------------
 
 .. cpp:function:: Int svt::Normal( Matrix<F>& A, Base<F> tau, bool relative=false )
-.. cpp:function:: Int svt::Normal( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int svt::Normal( ElementalMatrix<F>& A, Base<F> tau, bool relative=false )
 
    Runs a standard SVD, soft-thresholds the singular values, and then reforms
    the matrix.
 
 .. cpp:function:: Int svt::Cross( Matrix<F>& A, Base<F> tau, bool relative=false )
-.. cpp:function:: Int svt::Cross( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false )
+.. cpp:function:: Int svt::Cross( ElementalMatrix<F>& A, Base<F> tau, bool relative=false )
 
    Forms the normal matrix, computes its Hermitian EVD, soft-thresholds the
    eigenvalues, and then reforms the matrix. Note that Elemental's parallel 
@@ -81,12 +81,12 @@ namespace svt
    is therefore the default choice for parallel SVT.
 
 .. cpp:function:: Int svt::PivotedQR( Matrix<F>& A, Base<F> tau, Int numStepsQR, bool relative=false )
-.. cpp:function:: Int svt::PivotedQR( AbstractDistMatrix<F>& A, Base<F> tau, Int numStepsQR, bool relative=false )
+.. cpp:function:: Int svt::PivotedQR( ElementalMatrix<F>& A, Base<F> tau, Int numStepsQR, bool relative=false )
 
    Computes an approximate SVT by first approximating A as the rank-`numSteps`
    approximation produced by `numSteps` iterations of column-pivoted QR.
 
-.. cpp:function:: Int svt::TSQR( AbstractDistMatrix<F>& A, Base<F> tau, bool relative=false ) 
+.. cpp:function:: Int svt::TSQR( ElementalMatrix<F>& A, Base<F> tau, bool relative=false ) 
 
    Since the majority of the work in a tall-skinny SVT will be in the initial
    QR factorization, this algorithm runs a TSQR factorization and then 

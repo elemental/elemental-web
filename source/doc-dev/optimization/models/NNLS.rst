@@ -32,7 +32,7 @@ Python API
 C++ API
 -------
 .. cpp:function:: void NNLS( const Matrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
-.. cpp:function:: void NNLS( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& B, AbstractDistMatrix<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
+.. cpp:function:: void NNLS( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& B, ElementalMatrix<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
 .. cpp:function:: void NNLS( const SparseMatrix<Real>& A, const Matrix<Real>& B, Matrix<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
 .. cpp:function:: void NNLS( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& B, DistMultiVec<Real>& X, const NNLSCtrl<Real>& ctrl=NNLSCtrl<Real>() )
 

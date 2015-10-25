@@ -13,7 +13,7 @@ C++ API
 -------
 
 .. cpp:function:: void Covariance( const Matrix<F>& D, Matrix<F>& S )
-.. cpp:function:: void Covariance( const AbstractDistMatrix<F>& D, AbstractDistMatrix<F>& S )
+.. cpp:function:: void Covariance( const ElementalMatrix<F>& D, ElementalMatrix<F>& S )
 
 C API
 -----

@@ -6,7 +6,6 @@ C++ API
 -------
 .. cpp:function:: void EntrywiseFill( Matrix<T>& A, std::function<T(void)> func )
 .. cpp:function:: void EntrywiseFill( AbstractDistMatrix<T>& A, std::function<T(void)> func )
-.. cpp:function:: void EntrywiseFill( AbstractBlockDistMatrix<T>& A, std::function<T(void)> func )
 .. cpp:function:: void EntrywiseFill( DistMultiVec<T>& A, std::function<T(void)> func )
 
 C API

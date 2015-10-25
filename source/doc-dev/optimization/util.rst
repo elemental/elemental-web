@@ -1,5 +1,6 @@
 Utilities
 =========
+**TODO: Add Second-Order Cone Jordan algebra documentation**
 
 .. toctree::
    :maxdepth: 1

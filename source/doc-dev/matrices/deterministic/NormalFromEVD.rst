@@ -13,7 +13,7 @@ C++ API
 -------
 
 .. cpp:function:: void NormalFromEVD( Matrix<Complex<Real> >& A, const Matrix<Complex<Real> >& w, const Matrix<Complex<Real> >& Z )
-.. cpp:function:: void NormalFromEVD( AbstractDistMatrix<Complex<Real> >& A, const AbstractDistMatrix<Complex<Real>>& w, const AbstractDistMatrix<Complex<Real> >& Z )
+.. cpp:function:: void NormalFromEVD( ElementalMatrix<Complex<Real> >& A, const ElementalMatrix<Complex<Real>>& w, const ElementalMatrix<Complex<Real> >& Z )
 
 C API
 -----

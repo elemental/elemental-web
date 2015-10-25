@@ -15,7 +15,7 @@ C++ API
 -------
 
 .. cpp:function:: void ExtendedKahan( Matrix<F>& A, Int k, Base<F> phi, Base<F> mu )
-.. cpp:function:: void ExtendedKahan( AbstractDistMatrix<F>& A, Int k, Base<F> phi, Base<F> mu )
+.. cpp:function:: void ExtendedKahan( ElementalMatrix<F>& A, Int k, Base<F> phi, Base<F> mu )
 
 C API
 -----

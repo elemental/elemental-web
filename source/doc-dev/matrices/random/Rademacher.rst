@@ -8,7 +8,6 @@ C++ API
 
 .. cpp:function:: void Rademacher( Matrix<T>& A, Int m, Int n )
 .. cpp:function:: void Rademacher( AbstractDistMatrix<T>& A, Int m, Int n )
-.. cpp:function:: void Rademacher( AbstractBlockDistMatrix<T>& A, Int m, Int n )
 
 C API
 -----

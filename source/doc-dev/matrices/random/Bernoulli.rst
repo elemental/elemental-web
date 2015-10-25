@@ -9,7 +9,6 @@ C++ API
 
 .. cpp:function:: void Bernoulli( Matrix<T>& A, Int m, Int n, double p=0.5 )
 .. cpp:function:: void Bernoulli( AbstractDistMatrix<T>& A, Int m, Int n, double p=0.5 )
-.. cpp:function:: void Bernoulli( AbstractBlockDistMatrix<T>& A, Int m, Int n, double p=0.5 )
 
 C API
 -----

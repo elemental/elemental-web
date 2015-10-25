@@ -21,7 +21,7 @@ C++ API
 -------
 
 .. cpp:function:: void DruinskyToledo( Matrix<F>& A, Int k )
-.. cpp:function:: void DruinskyToledo( AbstractDistMatrix<F>& A, Int k )
+.. cpp:function:: void DruinskyToledo( ElementalMatrix<F>& A, Int k )
 
 C API
 -----

@@ -44,7 +44,7 @@ Python API
 C++ API
 -------
 .. cpp:function:: void EN( const Matrix<Real>& A, const Matrix<Real>& b, Real lambda1, Real lambda2, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
-.. cpp:function:: void EN( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, Real lambda1, Real lambda2, AbstractDistMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
+.. cpp:function:: void EN( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, Real lambda1, Real lambda2, ElementalMatrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 .. cpp:function:: void EN( const SparseMatrix<Real>& A, const Matrix<Real>& b, Real lambda1, Real lambda2, Matrix<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 .. cpp:function:: void EN( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, Real lambda1, Real lambda2, DistMultiVec<Real>& x, const qp::affine::Ctrl<Real>& ctrl=qp::affine::Ctrl<Real>() )
 

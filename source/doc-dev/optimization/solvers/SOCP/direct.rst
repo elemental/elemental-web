@@ -20,7 +20,7 @@ Python API
 C++ API
 -------
 .. cpp:function:: void SOCP( const Matrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, const Matrix<Int>& orders, const Matrix<Int>& firstInds, Matrix<Real>& x, Matrix<Real>& y, Matrix<Real>& z, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
-.. cpp:function:: void SOCP( const AbstractDistMatrix<Real>& A, const AbstractDistMatrix<Real>& b, const AbstractDistMatrix<Real>& c, const AbstractDistMatrix<Int>& orders, const AbstractDistMatrix<Int>& firstInds, AbstractDistMatrix<Real>& x, AbstractDistMatrix<Real>& y, AbstractDistMatrix<Real>& z, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
+.. cpp:function:: void SOCP( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, const ElementalMatrix<Real>& c, const ElementalMatrix<Int>& orders, const ElementalMatrix<Int>& firstInds, ElementalMatrix<Real>& x, ElementalMatrix<Real>& y, ElementalMatrix<Real>& z, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(false) )
 .. cpp:function:: void SOCP( const SparseMatrix<Real>& A, const Matrix<Real>& b, const Matrix<Real>& c, const Matrix<Int>& orders, const Matrix<Int>& firstInds, Matrix<Real>& x, Matrix<Real>& y, Matrix<Real>& z, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(true) )
 .. cpp:function:: void SOCP( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, const DistMultiVec<Real>& c, const DistMultiVec<Int>& orders, const DistMultiVec<Int>& firstInds, DistMultiVec<Real>& x, DistMultiVec<Real>& y, DistMultiVec<Real>& z, const socp::direct::Ctrl<Real>& ctrl=socp::direct::Ctrl<Real>(true) )
 

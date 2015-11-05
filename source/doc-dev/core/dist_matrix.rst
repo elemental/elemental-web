@@ -42,3 +42,5 @@ functions which are specific to a particular matrix distribution.
 
    dist_matrix/ADM
    dist_matrix/DM
+   dist_matrix/Element
+   dist_matrix/Block

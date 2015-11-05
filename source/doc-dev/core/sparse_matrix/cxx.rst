@@ -51,8 +51,11 @@ SparseMatrix (C++ interface)
    .. cpp:function:: const SparseMatrix<T>& operator=( const DistSparseMatrix<T>& A )
 
    .. cpp:function:: SparseMatrix<T> operator()( Range<Int> I, Range<Int> J ) const
+   .. cpp:function:: SparseMatrix<T> operator()( Range<Int> I, const vector<Int>& J ) const
+   .. cpp:function:: SparseMatrix<T> operator()( const vector<Int>& I, Range<Int> J ) const
+   .. cpp:function:: SparseMatrix<T> operator()( const vector<Int>& I, const vector<Int>& J ) const
 
-      Make a copy of a contiguous submatrix
+      Make a copy of a submatrix
 
    .. cpp:function:: void Empty( bool clearMemory=true )
 

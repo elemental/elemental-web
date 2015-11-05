@@ -5,8 +5,6 @@ Transpose
 C++ API
 -------
 .. cpp:function:: void Transpose( const Matrix<T>& A, Matrix<T>& B, bool conjugate=false )
-.. cpp:function:: void Transpose( const ElementalMatrix<T>& A, ElementalMatrix<T>& B )
-.. cpp:function:: void Transpose( const BlockMatrix<T>& A, BlockMatrix<T>& B )
 .. cpp:function:: void Transpose( const AbstractDistMatrix<T>& A, AbstractDistMatrix<T>& B )
 .. cpp:function:: void Transpose( const SparseMatrix<T>& A, SparseMatrix<T>& B, bool conjugate=false )
 .. cpp:function:: void Transpose( const DistSparseMatrix<T>& A, DistSparseMatrix<T>& B, bool conjugate=false )

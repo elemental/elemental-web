@@ -18,4 +18,3 @@ Core functionality
    core/View
    core/proxies
    core/flame_part
-   core/axpy_interface

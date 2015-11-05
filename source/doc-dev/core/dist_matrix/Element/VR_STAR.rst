@@ -5,7 +5,7 @@ ordering of the entire process grid. Since 1d distributions are useful for
 distributing *vectors*, and a *row-major* ordering is used, the distribution 
 symbol is ``VR``. Again using the simple :math:`2 \times 3` process grid, 
 with a zero column alignment, each entry of a :math:`7 \times 7` matrix 
-would be owned by the following sets of processes:
+would be owned by the marked process:
 
 .. math::
 

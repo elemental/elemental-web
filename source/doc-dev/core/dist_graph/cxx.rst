@@ -24,8 +24,11 @@ DistGraph (C++ interface)
    .. cpp:function:: const DistGraph& operator=( const DistGraph& A )
 
    .. cpp:function:: DistGraph operator()( Range<Int> I, Range<Int> J ) const
+   .. cpp:function:: DistGraph operator()( Range<Int> I, const vector<Int>& J ) const
+   .. cpp:function:: DistGraph operator()( const vector<Int>& I, Range<Int> J ) const
+   .. cpp:function:: DistGraph operator()( const vector<Int>& I, const vector<Int>& J ) const
 
-      Make a copy of a contiguous subgraph
+      Make a copy of a subgraph
 
    .. cpp:function:: void Empty( bool clearMemory=true )
 

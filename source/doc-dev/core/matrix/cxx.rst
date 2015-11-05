@@ -127,10 +127,22 @@ of existing (sub)matrices. In general, to view the submatrix with row indices
 
       Frees all resources owned by the matrix upon destruction.
 
-   .. rubric:: Assignment and reconfiguration
+   .. rubric:: Submatrices
 
    .. cpp:function:: Matrix<scalarType> operator()( Range<Int> I, Range<Int> J )
    .. cpp:function:: const Matrix<scalarType> operator()( Range<Int> I, Range<Int> J ) const
+
+      Return a view of a contiguous submatrix with the given row and column
+      index ranges.
+
+   .. cpp:function:: Matrix<scalarType> operator()( Range<Int> I, const vector<Int>& J ) const
+   .. cpp:function:: Matrix<scalarType> operator()( const vector<Int>& I, Range<Int> J ) const
+   .. cpp:function:: Matrix<scalarType> operator()( const vector<Int>& I, const vector<Int>& J ) const
+
+      Return a copy of the (generally non-contiguous) submatrix given by the
+      specified row and column index lists.
+
+   .. rubric:: Assignment and reconfiguration
 
    .. cpp:function:: const Matrix<scalarType>& operator=( const Matrix<scalarType>& A )
 

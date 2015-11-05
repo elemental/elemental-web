@@ -14,6 +14,8 @@ C++ API
 
 .. cpp:function:: Base<F> InfinityNorm( const Matrix<F>& A )
 .. cpp:function:: Base<F> InfinityNorm( const AbstractDistMatrix<F>& A )
+.. cpp:function:: Base<F> InfinityNorm( const SparseMatrix<F>& A )
+.. cpp:function:: Base<F> InfinityNorm( const DistSparseMatrix<F>& A )
 
 .. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const Matrix<F>& A )
 .. cpp:function:: Base<F> SymmetricInfinityNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
@@ -33,6 +35,16 @@ C API
 .. c:function:: ElError ElInfinityNormDist_d( ElConstDistMatrix_d A, double* norm )
 .. c:function:: ElError ElInfinityNormDist_c( ElConstDistMatrix_c A, float* norm )
 .. c:function:: ElError ElInfinityNormDist_z( ElConstDistMatrix_z A, double* norm )
+
+.. c:function:: ElError ElInfinityNormSparse_s( ElConstSparseMatrix_s A, float* norm )
+.. c:function:: ElError ElInfinityNormSparse_d( ElConstSparseMatrix_d A, double* norm )
+.. c:function:: ElError ElInfinityNormSparse_c( ElConstSparseMatrix_c A, float* norm )
+.. c:function:: ElError ElInfinityNormSparse_z( ElConstSparseMatrix_z A, double* norm )
+
+.. c:function:: ElError ElInfinityNormDistSparse_s( ElConstDistSparseMatrix_s A, float* norm )
+.. c:function:: ElError ElInfinityNormDistSparse_d( ElConstDistSparseMatrix_d A, double* norm )
+.. c:function:: ElError ElInfinityNormDistSparse_c( ElConstDistSparseMatrix_c A, float* norm )
+.. c:function:: ElError ElInfinityNormDistSparse_z( ElConstDistSparseMatrix_z A, double* norm )
 
 .. c:function:: ElError ElSymmetricInfinityNorm_s( ElUpperOrLower uplo, ElConstMatrix_s A, float* norm )
 .. c:function:: ElError ElSymmetricInfinityNorm_d( ElUpperOrLower uplo, ElConstMatrix_d A, double* norm )

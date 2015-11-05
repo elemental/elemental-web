@@ -1,10 +1,11 @@
 DistMatrix
 ==========
-The :cpp:class:`DistMatrix\<scalarType=double,colDist=MC,rowDist=MR,wrapType=ELEMENT>` class, which is a derivation from
-:cpp:class:`AbstractDistMatrix\<scalarType>`,
-is specialized for each of the thirteen different legal distribution pairs.
-Each specialization involves choosing a
-sensical pairing of distributions for the rows and columns of the matrix:
+The :cpp:class:`DistMatrix\<scalarType=double,colDist=MC,rowDist=MR,wrapType=ELEMENT>` class, where partial specializations to `wrapType=ELEMENT` derive from
+:cpp:class:`ElementalMatrix\<scalarType>`, and partial specializations to
+`wrapType=BLOCK` derive from :cpp:class:`BlockMatrix\<scalarType>`.
+In each case, there are thirteen different legal `(colDist,rowDist)` 
+distribution pairs; each is a sensical pairing of one of the following 
+applied to the columns of the matrix, and one applied to the rows of the matrix:
 
 -  `CIRC` : Only give the data to a single process
 -  `STAR` : Give the data to every process
@@ -61,70 +62,3 @@ assigned any data.
 To make this discussion more precise, each valid matrix distribution for
 `DistMatrix` logically arranges the set of `p` processes of the `r` by `c`
 process grid into a 4D mesh: `ColComm` x `RowComm` x `RedundantComm` x `CrossComm`, where `DistComm` is equal to `ColComm` x `RowComm`.
-
-.. cpp:class:: DistMatrix<scalarType=double,colDist=MC,rowDist=MR,wrapType=ELEMENT>
-
-   The following routines are available for each legal pairing of row and column
-   distributions.
-
-   .. rubric:: Constructors and destructors
-
-   .. cpp:function:: DistMatrix( const Grid& grid=DefaultGrid(), Int root=0 )
-
-      Construct an empty (:math:`0 \times 0`) distributed matrix.
-
-   .. cpp:function:: DistMatrix( Int height, Int width, const Grid& grid=DefaultGrid(), Int root=0 )
-
-      Create a `height` :math:`\times` `width` distributed matrix.
-
-   .. cpp:function:: DistMatrix( const DistMatrix<scalarType,colDist2,rowDist2>& A )
-
-      Construct the current matrix to be a redistributed copy of the input 
-      matrix.
-
-   .. cpp:function:: DistMatrix( const DistMatrix<scalarType,colDist,rowDist>&& A ) noexcept
-
-      Use C++11 move semantics to construct the current matrix in a way which
-      transfers the resources from the input matrix.
-
-   .. cpp:function:: ~DistMatrix()
-
-      All resources owned by the `DistMatrix` are freed upon destruction.
-
-   .. rubric:: Assignment and reconfiguration
-
-   .. cpp:function:: DistMatrix<scalarType,colDist,rowDist>& operator=( const DistMatrix<scalarType,colDist2,rowDist2>& A )
-
-      Set the current distributed matrix equal to the matrix `A` redistributed
-      into the appropriate form.
-
-   .. cpp:function:: DistMatrix<scalarType,colDist,rowDist>& operator=( DistMatrix<scalarType,colDist,rowDist>&& A )
-
-      A C++11 move assignment which cheaply transfers the resources from `A`
-      to the current matrix by swapping metadata.
-
-   .. rubric:: Viewing
-
-   .. cpp:function:: DistMatrix<scalarType,colDist,rowDist> operator()( Range<Int> I, Range<Int> J )
-
-   .. cpp:function:: const DistMatrix<scalarType,colDist,rowDist> operator()( Range<Int> I, Range<Int> J ) const
-
-
-.. toctree::
-   :maxdepth: 1
-
-   DM/MC_MR
-   DM/MC_STAR
-   DM/MD_STAR
-   DM/MR_MC
-   DM/MR_STAR
-   DM/STAR_MC
-   DM/STAR_MD
-   DM/STAR_MR
-   DM/STAR_STAR
-   DM/STAR_VC
-   DM/STAR_VR
-   DM/VC_STAR
-   DM/VR_STAR
-   DM/CIRC_CIRC
-   DM/special

@@ -14,6 +14,8 @@ C++ API
 
 .. cpp:function:: Base<F> OneNorm( const Matrix<F>& A )
 .. cpp:function:: Base<F> OneNorm( const AbstractDistMatrix<F>& A )
+.. cpp:function:: Base<F> OneNorm( const SparseMatrix<F>& A )
+.. cpp:function:: Base<F> OneNorm( const DistSparseMatrix<F>& A )
 
 .. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const Matrix<F>& A )
 .. cpp:function:: Base<F> SymmetricOneNorm( UpperOrLower uplo, const AbstractDistMatrix<F>& A )
@@ -34,6 +36,16 @@ C API
 .. c:function:: ElError ElOneNormDist_c( ElConstDistMatrix_c A, float* norm )
 .. c:function:: ElError ElOneNormDist_z( ElConstDistMatrix_z A, double* norm )
 
+.. c:function:: ElError ElOneNormSparse_s( ElConstSparseMatrix_s A, float* norm )
+.. c:function:: ElError ElOneNormSparse_d( ElConstSparseMatrix_d A, double* norm )
+.. c:function:: ElError ElOneNormSparse_c( ElConstSparseMatrix_c A, float* norm )
+.. c:function:: ElError ElOneNormSparse_z( ElConstSparseMatrix_z A, double* norm )
+
+.. c:function:: ElError ElOneNormDistSparse_s( ElConstDistSparseMatrix_s A, float* norm )
+.. c:function:: ElError ElOneNormDistSparse_d( ElConstDistSparseMatrix_d A, double* norm )
+.. c:function:: ElError ElOneNormDistSparse_c( ElConstDistSparseMatrix_c A, float* norm )
+.. c:function:: ElError ElOneNormDistSparse_z( ElConstDistSparseMatrix_z A, double* norm )
+
 .. c:function:: ElError ElSymmetricOneNorm_s( ElUpperOrLower uplo, ElConstMatrix_s A, float* norm )
 .. c:function:: ElError ElSymmetricOneNorm_d( ElUpperOrLower uplo, ElConstMatrix_d A, double* norm )
 .. c:function:: ElError ElSymmetricOneNorm_c( ElUpperOrLower uplo, ElConstMatrix_c A, float* norm )
@@ -52,5 +64,6 @@ C API
 
 Python API
 ----------
-**TODO**
-
+.. py:function:: OneNorm(A)
+.. py:function:: HermitianOneNorm(A,uplo=LOWER)
+.. py:function:: SymmetricOneNorm(A,uplo=LOWER)

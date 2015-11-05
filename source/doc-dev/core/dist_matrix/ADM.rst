@@ -52,6 +52,10 @@ is the ability for individual processes to easily modify arbitrary
       A C++11 move assignment which swaps the metadata between the two matrices
       as a means of cheaply swapping the resources assigned to each matrix.
 
+   .. cpp:function:: const AbstractDistMatrix<scalarType>& operator*=( T alpha )
+
+      Multiply every entry in the matrix by `alpha`.
+
    .. cpp:function:: void Empty()
 
       Empties the data and frees all alignments.
@@ -182,6 +186,24 @@ is the ability for individual processes to easily modify arbitrary
    .. cpp:function:: const Grid& Grid() const
 
       Return the grid that this distributed matrix is distributed over.
+
+   .. cpp:function:: DistWrap Wrap() const
+
+      Returns whether the matrix is distributed element-wise (`ELEMENT`) or 
+      block-wise (`BLOCK`).
+
+   .. cpp:function:: Int BlockHeight() const
+   .. cpp:function:: Int BlockWidth() const
+
+      Returns the height (width) of the distribution block 
+      (which is always one for element-wise distributions).
+
+   .. cpp:function:: Int ColCut() const
+   .. cpp:function:: Int RowCut() const
+
+      Returns the number of rows down (number of columns right) in a
+      distribution that the upper-left corner of the matrix occurs.
+      For element-wise distributed matrices, this must always be zero.
 
    .. cpp:function:: bool ColConstrained() const
    .. cpp:function:: bool RowConstrained() const
@@ -336,11 +358,6 @@ is the ability for individual processes to easily modify arbitrary
       Return true if the row, column, or entry, respectively, is assigned to
       this process.
 
-   .. cpp:function:: DistData DistData() const
-
-      Returns a description of the distribution and alignment information
-
-
    .. rubric:: Single-entry manipulation (global)
 
    .. cpp:function:: scalarType Get( Int i, Int j ) const
@@ -416,7 +433,7 @@ is the ability for individual processes to easily modify arbitrary
       local matrix to :math:`\alpha`.
 
    .. cpp:function:: void UpdateLocal( Int iLoc, Int jLoc, scalarType alpha )
-   .. cpp:function:: void UpdateRealPartLocal( Int iLoc, Int jLoc, Base<scalarType> alpha )
+   .. cpp:function:: void UpdateLocalRealPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
    .. cpp:function:: void UpdateLocalImagPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
 
       Add :math:`\alpha` to the `(iLoc,jLoc)` entry (or its real or 

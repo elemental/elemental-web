@@ -14,6 +14,9 @@ DistMultiVec (C++ interface)
    .. rubric:: Assignment and reconfiguration
 
    .. cpp:function:: DistMultiVec<T> operator()( Range<Int> I, Range<Int> J ) const
+   .. cpp:function:: DistMultiVec<T> operator()( Range<Int> I, const vector<Int>& J ) const
+   .. cpp:function:: DistMultiVec<T> operator()( const vector<Int>& I, Range<Int> J ) const
+   .. cpp:function:: DistMultiVec<T> operator()( const vector<Int>& I, const vector<Int>& J ) const
 
       Make a copy of a submatrix
 

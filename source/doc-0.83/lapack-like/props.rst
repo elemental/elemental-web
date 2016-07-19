@@ -78,7 +78,7 @@ where :math:`\upsilon_{i,i}` is the i'th diagonal entry of :math:`U`.
    Some of the variants allow for overwriting the input matrix in order to 
    avoid forming another temporary matrix.
 
-.. cpp:type:: struct SafeProduct<F>
+.. cpp:class:: SafeProduct<F>
 
    Represents the product of `n` values as :math:`\rho \exp(\kappa n)`, 
    where :math:`|\rho| \le 1` and :math:`\kappa \in \mathbb{R}`.

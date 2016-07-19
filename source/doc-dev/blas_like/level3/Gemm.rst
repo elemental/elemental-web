@@ -13,16 +13,19 @@ where :math:`M^\#` and :math:`M^\sharp` are individually defined to be one of
 C++ API
 -------
 
-.. cpp:type:: GemmAlgorithm
+.. cpp:enum:: GemmAlgorithm
 
-   An enum which can take the form:
+   .. cpp:enumerator:: GEMM_DEFAULT
 
-   * ``GEMM_DEFAULT``
-   * ``GEMM_SUMMA_A``
-   * ``GEMM_SUMMA_B``
-   * ``GEMM_SUMMA_C``
-   * ``GEMM_SUMMA_DOT``
-   * ``GEMM_CANNON``
+   .. cpp:enumerator:: GEMM_SUMMA_A
+
+   .. cpp:enumerator:: GEMM_SUMMA_B
+
+   .. cpp:enumerator:: GEMM_SUMMA_C
+
+   .. cpp:enumerator:: GEMM_SUMMA_DOT
+
+   .. cpp:enumerator:: GEMM_CANNON
 
 .. cpp:function:: void Gemm( Orientation orientationOfA, Orientation orientationOfB, T alpha, const Matrix<T>& A, const Matrix<T>& B, T beta, Matrix<T>& C )
 .. cpp:function:: void Gemm( Orientation orientationOfA, Orientation orientationOfB, T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B, T beta, AbstractDistMatrix<T>& C, GemmAlgorithm alg=GEMM_DEFAULT )
@@ -43,7 +46,7 @@ C API
 
 .. c:type:: ElGemmAlgorithm
 
-   An enum which can take the form:
+   An enum which can take on the values:
 
    * ``EL_GEMM_DEFAULT``
    * ``EL_GEMM_SUMMA_A``
@@ -65,4 +68,4 @@ Python API
 
    An enum which can take the values...**TODO**
 
-.. py:function:: Gemm(orientA,orientB,alpha,A,B,beta,C,alg=GEMM_DEFAULT)
+.. py:function:: Gemm(orientA,orientB,alpha,A,B,beta,C[,alg=GEMM_DEFAULT])

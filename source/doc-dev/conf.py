@@ -29,7 +29,8 @@ sys.path.append(os.path.abspath('.'))
 #              'sphinx.ext.pngmath', 'sphinx.ext.autodoc', 'sphinx.ext.todo']
 extensions = ['sphinx.ext.doctest', 'sphinx.ext.coverage',
               'sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinx.ext.todo']
-
+mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+#mathjax_path = 'MathJax-2.4-latest/MathJax.js'
 
 # Add the docstring from class.__init__ to class.__doc__ when documenting the
 # PyDolfin interface.
@@ -62,7 +63,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Elemental'
-copyright = u'2009-2014, Jack Poulson'
+copyright = u'2009-2015, Jack Poulson'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

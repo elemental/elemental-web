@@ -15,7 +15,6 @@ C++ API
 
 .. cpp:function:: void Display( const Matrix<T>& A, std::string title="Matrix" )
 .. cpp:function:: void Display( const AbstractDistMatrix<T>& A, std::string title="DistMatrix" )
-.. cpp:function:: void Display( const AbstractBlockDistMatrix<T>& A, std::string title="BlockDistMatrix" )
 
 C API
 """""
@@ -73,7 +72,6 @@ C++ API
 
 .. cpp:function:: void Print( const Matrix<T>& A, std::string title="Matrix", std::ostream& os=std::cout )
 .. cpp:function:: void Print( const AbstractDistMatrix<T>& A, std::string title="DistMatrix", std::ostream& os=std::cout )
-.. cpp:function:: void Print( const AbstractBlockDistMatrix<T>& A, std::string title="BlockDistMatrix", std::ostream& os=std::cout )
 
 C API
 """""
@@ -140,7 +138,6 @@ C++ API
 
 .. cpp:function:: void Spy( const Matrix<T>& A, std::string title="Matrix", Base<T> tol=0 )
 .. cpp:function:: void Spy( const AbstractDistMatrix<T>& A, std::string title="DistMatrix", Base<T> tol=0 )
-.. cpp:function:: void Spy( const AbstractBlockDistMatrix<T>& A, std::string title="BlockDistMatrix", Base<T> tol=0 )
 
 C API
 """""
@@ -169,23 +166,59 @@ File formats
 C++ API
 """""""
 
-.. cpp:type:: FileFormat
+.. cpp:enum:: FileFormat
 
-   An enum that can take on the following values:
+   .. cpp:enumerator:: AUTO
 
-   * ``AUTO``: attempt to detect format from filename extension
-   * ``ASCII``: simple ASCII text file
-   * ``ASCII_ASCII``: MATLAB-ready ASCII text file
-   * ``BINARY``: column-major binary file with integer height and width header
-   * ``BINARY_FLAT``: column-major binary file with no header data
-   * ``BMP``: bitmap image format (requires Qt5)
-   * ``MATRIX_MARKET``: Matrix Market format
-   * ``JPG``: JPG image format (requires Qt5)
-   * ``JPEG``: JPEG image format (requires Qt5)
-   * ``PNG``: PNG image format (requires Qt5)
-   * ``PPM``: PPM image format (requires Qt5)
-   * ``XBM``: XBM image format (requires Qt5)
-   * ``XPM``: XPM image format (requires Qt5)
+      Attempt to detect format from filename extension
+
+   .. cpp:enumerator:: ASCII
+
+      Simple ASCII text file
+
+   .. cpp:enumerator:: ASCII_MATLAB
+
+      MATLAB-ready ASCII text file
+
+   .. cpp:enumerator:: BINARY
+
+      Column-major binary file with integer height and width header
+
+   .. cpp:enumerator:: BINARY_FLAT
+
+      Column-major binary file with no header data
+
+   .. cpp:enumerator:: BMP
+
+      Bitmap image format (requires Qt5)
+
+   .. cpp:enumerator:: MATRIX_MARKET
+
+      Matrix Market format
+
+   .. cpp:enumerator:: JPG
+
+      JPG image format (requires Qt5)
+
+   .. cpp:enumerator:: JPEG
+
+      JPEG image format (requires Qt5)
+
+   .. cpp:enumerator:: PNG
+
+      PNG image format (requires Qt5)
+
+   .. cpp:enumerator:: PPM
+
+      PPM image format (requires Qt5)
+
+   .. cpp:enumerator:: XBM
+
+      XBM image format (requires Qt5)
+ 
+   .. cpp:enumerator:: XPM
+
+      XPM image format (requires Qt5)
 
 C API
 """""
@@ -220,7 +253,6 @@ C++ API
 
 .. cpp:function:: void Read( Matrix<T>& A, std::string filename, FileFormat format=AUTO )
 .. cpp:function:: void Read( AbstractDistMatrix<T>& A, std::string filename, FileFormat format=AUTO, bool sequential=false )
-.. cpp:function:: void Read( AbstractBlockDistMatrix<T>& A, std::string filename, FileFormat format=AUTO, bool sequential=false )
 
 C API
 """""
@@ -250,7 +282,6 @@ C++ API
 
 .. cpp:function:: void Write( const Matrix<T>& A, std::string basename="Matrix", FileFormat format=BINARY, std::string title="" )
 .. cpp:function:: void Write( const AbstractDistMatrix<T>& A, std::string basename="DistMatrix", FileFormat format=BINARY, std::string title="" )
-.. cpp:function:: void Write( const AbstractBlockDistMatrix<T>& A, std::string basename="BlockDistMatrix", FileFormat format=BINARY, std::string title="" )
 
 C API
 """""

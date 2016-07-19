@@ -5,7 +5,6 @@ minimum value (note: *NOT* the minimum absolute value).
 
 C++ API
 -------
-
 .. cpp:function:: ValueIntPair<Real> Max( const Matrix<Real>& A )
 .. cpp:function:: ValueIntPair<Real> Max( const AbstractDistMatrix<Real>& A )
 
@@ -17,7 +16,6 @@ C++ API
 
 C API
 -----
-
 .. c:function:: ElError ElMin_i( ElConstMatrix_i A, ElValueIntPair_i* entry )
 .. c:function:: ElError ElMin_s( ElConstMatrix_s A, ElValueIntPair_s* entry )
 .. c:function:: ElError ElMin_d( ElConstMatrix_d A, ElValueIntPair_d* entry )
@@ -38,3 +36,7 @@ C API
 .. c:function:: ElError ElVectorMinDist_i( ElConstDistMatrix_i x, ElValueInt_i* entry )
 .. c:function:: ElError ElVectorMinDist_s( ElConstDistMatrix_s x, ElValueInt_s* entry )
 .. c:function:: ElError ElVectorMinDist_d( ElConstDistMatrix_d x, ElValueInt_d* entry )
+
+Python API
+----------
+**TODO**

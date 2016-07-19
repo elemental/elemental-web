@@ -7,7 +7,7 @@ LU factorization
 
 `Test driver <https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LU.cpp>`__
 
-`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/GaussianElimination.cpp>`__
+`Example driver <https://github.com/elemental/Elemental/blob/master/examples/lapack_like/LinearSolve.cpp>`__
 
 Partial pivoting
 ----------------

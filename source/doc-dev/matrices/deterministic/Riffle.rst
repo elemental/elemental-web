@@ -10,26 +10,23 @@ C++ API
 
 .. cpp:function:: void Riffle( Matrix<F>& P, Int n )
 .. cpp:function:: void Riffle( AbstractDistMatrix<F>& P, Int n )
-.. cpp:function:: void Riffle( AbstractBlockDistMatrix<F>& P, Int n )
 
    Return the :math:`n \times n` transition matrix.
 
 .. cpp:function:: void Riffle( Matrix<F>& P, Matrix<F>& PInf, Int n )
-.. cpp:function:: void Riffle( AbstractDistMatrix<F>& P, AbstractDistMatrix<F>& PInf, Int n )
-.. cpp:function:: void Riffle( AbstractBlockDistMatrix<F>& P, AbstractBlockDistMatrix<F>& PInf, Int n )
+.. cpp:function:: void Riffle( ElementalMatrix<F>& P, ElementalMatrix<F>& PInf, Int n )
 
    Return both the :math:`n \times n` transition matrix and its stationary 
    distribution (as a square matrix with identical rows).
 
 .. cpp:function:: void RiffleStationary( Matrix<F>& PInf, Int n )
 .. cpp:function:: void RiffleStationary( AbstractDistMatrix<F>& PInf, Int n )
-.. cpp:function:: void RiffleStationary( AbstractBlockDistMatrix<F>& PInf, Int n )
 
    Return the stationary distribution of the :math:`n \times n` system as
    a square matrix with identical rows.
 
 .. cpp:function:: void RiffleDecay( Matrix<F>& A, Int n )
-.. cpp:function:: void RiffleDecay( AbstractDistMatrix<F>& A, Int n )
+.. cpp:function:: void RiffleDecay( ElementalMatrix<F>& A, Int n )
 
    Return the transition matrix with its stationary distribution subtracted
    from each row.

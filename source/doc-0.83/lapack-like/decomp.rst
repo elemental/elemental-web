@@ -63,8 +63,8 @@ Index-based subset computation
    Compute the eigenvalues of a Hermitian matrix `A` with indices in the range 
    :math:`a,a+1,...,b`.
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, int a, int b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, int a, int b, SortType sort=UNSORTED )
 
    Compute the eigenpairs of a Hermitian matrix `A` with indices in the range 
    :math:`a,a+1,...,b`.
@@ -79,9 +79,9 @@ Range-based subset computation
    Compute the eigenvalues of a Hermitian matrix `A` lying in the half-open 
    interval :math:`(a,b]`.
 
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, DistMatrix<F,STAR,STAR>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, Matrix<F>& A, Matrix<Base<F>>& w, Matrix<F>& Z, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F,STAR,STAR>& A, DistMatrix<Base<F>,STAR,STAR>& w, DistMatrix<F,STAR,STAR>& Z, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianEig( UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, Base<F> a, Base<F> b, SortType sort=UNSORTED )
 
    Compute the eigenpairs of a Hermitian matrix `A` with eigenvalues lying in 
    the half-open interval :math:`(a,b]`.
@@ -161,8 +161,8 @@ Index-based subset computation
    Compute the eigenvalues of a skew-Hermitian matrix `G` with
    indices in the range :math:`a,a+1,...,b`.
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<Complex<Base<F>> >& Z, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<Complex<Base<F>> >& Z, int a, int b, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<Complex<Base<F>> >& Z, int a, int b, SortType sort=UNSORTED )
 
    Compute the eigenpairs of a skew-Hermitian matrix `G` with 
    indices in the range :math:`a,a+1,...,b`.
@@ -176,8 +176,8 @@ Range-based subset computation
    Compute the eigenvalues of a skew-Hermitian matrix `G` 
    lying in the half-open interval :math:`(a,b]i`.
 
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, Matrix<F>& G, Matrix<Base<F>>& wImag, Matrix<F>& Z, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void SkewHermitianEig( UpperOrLower uplo, DistMatrix<F>& G, DistMatrix<Base<F>,VR,STAR>& wImag, DistMatrix<F>& Z, Base<F> a, Base<F> b, SortType sort=UNSORTED )
 
    Compute the eigenpairs of a skew-Hermitian matrix `G` with 
    eigenvalues lying in the half-open interval :math:`(a,b]i`.
@@ -186,31 +186,27 @@ Hermitian generalized-definite eigensolvers
 -------------------------------------------
 The following Hermitian generalized-definite eigenvalue problems frequently 
 appear, where both :math:`A` and :math:`B` are Hermitian, and :math:`B` is 
-additionally positive-definite:
+additionally positive-definite.
 
-.. math::
+.. cpp:enum:: HermitianGenDefiniteEigType
 
-   ABx = \lambda x,
+   .. cpp:enumerator:: ABX
 
-which is denoted with the value ``ABX`` via the 
-:cpp:type:`HermitianGenDefiniteEigType` enum,
+      .. math::
 
-.. math::
+         A B x = \lambda x
 
-   BAx = \lambda x,
+   .. cpp:enumerator:: BAX
 
-which uses the ``BAX`` value, and finally
+      .. math::
 
-.. math::
+         B A x = \lambda x
 
-   Ax = \lambda B x,
+   .. cpp:enumerator:: AXBX
 
-which uses the ``AXBX`` enum value.
+      .. math::
 
-.. cpp:type:: HermitianGenDefiniteEigType
-
-   An enum for specifying either the ``ABX``, ``BAX``, or ``AXBX`` 
-   generalized eigenvalue problems (described above).
+         A x = B x \lambda
 
 Full spectrum computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -237,8 +233,8 @@ Index-based subset computation
    generalized EVP involving the Hermitian matrices `A` and `B`, where `B` is 
    also positive-definite.
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, int a, int b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, int a, int b, SortType sort=UNSORTED )
 
    Compute the eigenpairs with indices in the range :math:`a,a+1,...,b` of a 
    generalized EVP involving the Hermitian matrices `A` and `B`, where `B` is 
@@ -254,8 +250,8 @@ Range-based subset computation
    generalized EVP involving the Hermitian matrices `A` and `B`, where `B` is 
    also positive-definite.
 
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, SortType sort=UNSORTED )
-.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, Matrix<F>& A, Matrix<F>& B, Matrix<Base<F>>& w, Matrix<F>& Z, Base<F> a, Base<F> b, SortType sort=UNSORTED )
+.. cpp:function:: void HermitianGenDefiniteEig( HermitianGenDefiniteEigType type, UpperOrLower uplo, DistMatrix<F>& A, DistMatrix<F>& B, DistMatrix<Base<F>,VR,STAR>& w, DistMatrix<F>& Z, Base<F> a, Base<F> b, SortType sort=UNSORTED )
 
    Compute the eigenpairs whose eigenvalues lie in the half-open interval 
    :math:`(a,b]` of a generalized EVP involving the Hermitian matrices `A` and 

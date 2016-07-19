@@ -28,7 +28,7 @@ C++ API
 ^^^^^^^
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d )
-.. cpp:function:: void QR( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& t, AbstractDistMatrix<Base<F>>& d )
+.. cpp:function:: void QR( ElementalMatrix<F>& A, ElementalMatrix<F>& t, ElementalMatrix<Base<F>>& d )
 
    Overwrite the matrix :math:`A` with both :math:`R` and the 
    Householder reflectors (and subsequent unitary diagonal matrix defined by
@@ -36,55 +36,55 @@ C++ API
    Householder reflectors are stored in the vector `t`.
 
 .. cpp:function:: void QR( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Matrix<int>& p, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
-.. cpp:function:: void QR( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& t, AbstractDistMatrix<Base<F>>& d, AbstractDistMatrix<int>& p, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void QR( ElementalMatrix<F>& A, ElementalMatrix<F>& t, ElementalMatrix<Base<F>>& d, ElementalMatrix<int>& p, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
 
    Overwrite :math:`A` with both the :math:`R` and (scaled) Householder 
    reflectors from a column-pivoted QR factorization and additionally return
    the permutation vector, `p`.
 
 .. cpp:function:: void qr::ExplicitTriang( Matrix<F>& A, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
-.. cpp:function:: void qr::ExplicitTriang( AbstractDistMatrix<F>& A, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void qr::ExplicitTriang( ElementalMatrix<F>& A, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
 
    Overwrite :math:`A` with :math:`R`.
 
-.. cpp:function:: void qr::ExplicitUnitary( Matrix<F>& A, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
-.. cpp:function:: void qr::ExplicitUnitary( AbstractDistMatrix<F>& A, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void qr::ExplicitUnitary( Matrix<F>& A, bool thinQ=true, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void qr::ExplicitUnitary( ElementalMatrix<F>& A, bool thinQ=true, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
 
    Overwrite :math:`A` with the orthogonal matrix from its QR factorization
    (with or without column pivoting).
 
-.. cpp:function:: void qr::Explicit( Matrix<F>& A, Matrix<F>& R, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
-.. cpp:function:: void qr::Explicit( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& R, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void qr::Explicit( Matrix<F>& A, Matrix<F>& R, bool thinQ=true, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void qr::Explicit( ElementalMatrix<F>& A, ElementalMatrix<F>& R, bool thinQ=true, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
 
    Explicitly return both :math:`Q` and :math:`R` from the QR factorization.
 
-.. cpp:function:: void qr::Explicit( Matrix<F>& A, Matrix<F>& R, Matrix<Int>& P, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
-.. cpp:function:: void qr::Explicit( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& R, AbstractDistMatrix<int>& P, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void qr::Explicit( Matrix<F>& A, Matrix<F>& R, Matrix<Int>& P, bool thinQ=true, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
+.. cpp:function:: void qr::Explicit( ElementalMatrix<F>& A, ElementalMatrix<F>& R, ElementalMatrix<int>& P, bool thinQ=true, const QRCtrl<Base<F>>& ctrl=QRCtrl<Base<F>>() )
 
    Return representations of all matrices of the pivoted QR factorization.
    Note that column pivoting is performed regardless of the value of 
    ``qrCtrl.colPiv``.
 
 .. cpp:function:: void qr::Cholesky( Matrix<F>& A, Matrix<F>& R )
-.. cpp:function:: void qr::Cholesky( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& R )
+.. cpp:function:: void qr::Cholesky( ElementalMatrix<F>& A, ElementalMatrix<F>& R )
 
    Attempt to perform a QR factorization of a tall-skinny matrix using 
    Cholesky factorization.
 
-.. cpp:function:: qr::TreeData<F> qr::TS( const AbstractDistMatrix<F>& A )
+.. cpp:function:: qr::TreeData<F> qr::TS( const ElementalMatrix<F>& A )
 
    Forms an implicit tall-skinny QR decomposition.
 
-.. cpp:function:: void qr::ExplicitTS( AbstractDistMatrix<F>& A, AbstractDistMatrix<F>& R )
+.. cpp:function:: void qr::ExplicitTS( ElementalMatrix<F>& A, ElementalMatrix<F>& R )
 
    Forms an explicit QR decomposition using a tall-skinny algorithm: 
    A is overwritten with Q.
 
-.. cpp:function:: DistMatrix<F,STAR,STAR> qr::ts::FormR( const AbstractDistMatrix<F>& A, const qr::TreeData<F>& treeData )
+.. cpp:function:: DistMatrix<F,STAR,STAR> qr::ts::FormR( const ElementalMatrix<F>& A, const qr::TreeData<F>& treeData )
 
    Return the R from the QR decomposition.
 
-.. cpp:function:: void qr::ts::FormQ( AbstractDistMatrix<F>& A, qr::TreeData<F>& treeData )
+.. cpp:function:: void qr::ts::FormQ( ElementalMatrix<F>& A, qr::TreeData<F>& treeData )
 
    Overwrite A with the Q from the QR decomposition.
 
@@ -242,7 +242,7 @@ C++ API
 ^^^^^^^
 
 .. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, Matrix<F>& B )
-.. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& t, const AbstractDistMatrix<Base<F>>& d, AbstractDistMatrix<F>& B )
+.. cpp:function:: void qr::ApplyQ( LeftOrRight side, Orientation orientation, const ElementalMatrix<F>& A, const ElementalMatrix<F>& t, const ElementalMatrix<Base<F>>& d, ElementalMatrix<F>& B )
 
 C API
 ^^^^^
@@ -267,7 +267,7 @@ C++ API
 ^^^^^^^
 
 .. cpp:function:: void qr::SolveAfter( Orientation orientation, const Matrix<F>& A, const Matrix<F>& t, const Matrix<Base<F>>& d, const Matrix<F>& B, Matrix<F>& X )
-.. cpp:function:: void qr::SolveAfter( Orientation orientation, const AbstractDistMatrix<F>& A, const AbstractDistMatrix<F>& t, const AbstractDistMatrix<Base<F>>& d, const AbstractDistMatrix<F>& B, AbstractDistMatrix<F>& X )
+.. cpp:function:: void qr::SolveAfter( Orientation orientation, const ElementalMatrix<F>& A, const ElementalMatrix<F>& t, const ElementalMatrix<Base<F>>& d, const ElementalMatrix<F>& B, ElementalMatrix<F>& X )
 
 C API
 ^^^^^

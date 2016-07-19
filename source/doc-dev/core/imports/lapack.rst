@@ -1,5 +1,5 @@
 LAPACK
-------
+======
 A handful of LAPACK routines are currently used by Elemental: a few
 routines for querying floating point characteristics and a few other utilities.
 In addition, there are several BLAS-like routines which are technically part 
@@ -11,7 +11,7 @@ while the implementations are in
 `src/imports/lapack.cpp <https://github.com/elemental/Elemental/tree/master/src/imports/lapack.cpp>`_.
 
 Machine information
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 In all of the following functions, `R` can be equal to either `float` or
 `double`.
@@ -46,7 +46,7 @@ In all of the following functions, `R` can be equal to either `float` or
    ``(1-rel. prec.)) * (base)^(overflow exponent)``.
 
 Safe norms
-^^^^^^^^^^
+----------
 
 .. cpp:function:: Real lapack::SafeNorm( Real alpha, Real beta )
 
@@ -59,7 +59,7 @@ Safe norms
    under/overflow. `R` can be equal to either `float` or `double`.
 
 Givens rotations
-^^^^^^^^^^^^^^^^
+----------------
 
 Given :math:`\phi, \gamma \in \mathbb{C}^{n \times n}`, carefully compute 
 :math:`c \in \mathbb{R}` and :math:`s, \rho \in \mathbb{C}` such that 
@@ -80,7 +80,7 @@ Kahan and Demmel's "On computing Givens rotations reliably and efficiently".
    Computes a Givens rotation and returns the combined result, :math:`\rho`.
 
 MRRR-based Hermitian EVP 
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
 .. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, Base<F> absTol=0 )
 .. cpp:function:: void lapack::HermitianEig( char uplo, int n, F* A, int lda, Base<F>* w, F* Z, int ldz, Base<F> absTol=0 )
@@ -99,7 +99,7 @@ MRRR-based Hermitian EVP
    half-open interval :math:`(v_l,v_u]`.
 
 QR- and DQDS-based SVD
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
 .. cpp:function:: void lapack::QRSVD( int m, int n, F* A, int lda, Base<F>* s, F* U, int ldu, F* VAdj, int ldva )
 
@@ -112,7 +112,7 @@ QR- and DQDS-based SVD
    condensed bidiagonal matrix.
 
 Divide-and-conquer SVD
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
 .. cpp:function:: void lapack::DivideAndConquerSVD( int m, int n, F* A, int lda, Base<F>* s, F* U, int ldu, F* VAdj, int ldva )
 
@@ -120,14 +120,14 @@ Divide-and-conquer SVD
    the condensed bidiagonal matrix.
 
 Bidiagonal QR
-^^^^^^^^^^^^^
+-------------
 
 .. cpp:function:: void lapack::BidiagQRAlg( char uplo, int n, int numColsVTrans, int numRowsU, Base<F>* d, Base<F>* e, F* VAdj, int ldva, F* U, int ldu )
 
    Computes the SVD of a bidiagonal matrix using the QR algorithm.
 
 Hessenberg Schur decomposition
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 
 .. cpp:function:: void lapack::HessenbergSchur( int n, F* H, int ldh, Complex<Base<F>>* w, bool fullTriangle=false )
 
@@ -142,7 +142,7 @@ Hessenberg Schur decomposition
    input matrix from the right.
 
 Hessenberg eigenvalues/pairs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 
 .. cpp:function:: void lapack::HessenbergEig( int n, F* H, int ldh, Complex<Base<F>>* w )
 
@@ -154,7 +154,7 @@ Hessenberg eigenvalues/pairs
    There are not yet wrappers for computing Hessenberg eigenvectors.
 
 Schur decomposition
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 .. cpp:function:: void lapack::Schur( int n, F* A, int lda, Complex<Base<F>>* w, bool fullTriangle=false )
 
@@ -166,7 +166,7 @@ Schur decomposition
    Returns the Schur decomposition of a square matrix using the QR algorithm.
 
 Eigenvalues/pairs
-^^^^^^^^^^^^^^^^^
+-----------------
 
 .. cpp:function:: void lapack::Eig( int n, F* A, int lda, Complex<Base<F>>* w )
 

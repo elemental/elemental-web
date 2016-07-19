@@ -4,18 +4,6 @@
       <div id="sub-feature">
 
       	<div class="front-block block app">
-	  <h3><a href="http://github.com/poulson/Clique">Clique</a></h3>
-          <img alt='' src='/_static/images/clique.png'
-          class='avatar avatar-84 photo' height='84' width='74' />
-
-	  <p><a href="http://github.com/poulson/Clique">Clique</a> is a
-          distributed-memory sparse-direct solver with a focus on memory
-          and triangular-solve scalability. It currently supports 
-          symmetric and Hermitian linear systems and is currently being merged
-          into Elemental.</p>
-        </div>
-
-      	<div class="front-block block app">
 	  <h3><a href="http://github.com/poulson/PSP">PSP &mdash; Parallel Sweeping Preconditioner</a></h3>
           <img alt='' src='/_static/images/psp.png'
           class='avatar avatar-84 photo' height='84' width='84' />

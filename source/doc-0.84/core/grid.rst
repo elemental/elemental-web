@@ -5,7 +5,7 @@ Th :cpp:type:`Grid` class is responsible for converting MPI communicators into
 a two-dimensional process grid meant for distributing matrices (ala the 
 soon-to-be-discussed :cpp:type:`DistMatrix\<T,U,V>` class).
 
-.. cpp:type:: class Grid
+.. cpp:class:: Grid
 
    .. cpp:function:: Grid( mpi::Comm comm=mpi::COMM_WORLD, GridOrder order=COLUMN_MAJOR )
 

@@ -7,7 +7,7 @@ C++ API
 -------
 
 .. cpp:function:: void Wigner( Matrix<F>& A, Int n, F mean=0, Base<F> stddev=1 )
-.. cpp:function:: void Wigner( AbstractDistMatrix<F>& A, Int n, F mean=0, Base<F> stddev=1 )
+.. cpp:function:: void Wigner( ElementalMatrix<F>& A, Int n, F mean=0, Base<F> stddev=1 )
 
 C API
 -----

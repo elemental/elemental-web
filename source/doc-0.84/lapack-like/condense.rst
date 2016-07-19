@@ -15,7 +15,7 @@ and stores the scaled Householder vectors in place of the introduced zeroes.
 
 `Test driver <https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/tests/lapack-like/HermitianTridiag.cpp>`__
 
-.. cpp:type:: HermitianTridiagCtrl
+.. cpp:class:: HermitianTridiagCtrl
 
    .. cpp:member:: HermitianTridiagApproach approach
    .. cpp:member:: GridOrder order

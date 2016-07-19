@@ -1,5 +1,5 @@
 BLAS
-----
+====
 The Basic Linear Algebra Subprograms (BLAS) are heavily exploited within 
 Elemental in order to achieve high performance whenever possible. Since the 
 official BLAS interface uses different routine names for different datatypes, 
@@ -12,7 +12,7 @@ while the implementations are in
 `src/imports/blas.cpp <https://github.com/elemental/Elemental/tree/master/src/imports/blas.cpp>`_.
 
 Level 1
-^^^^^^^
+-------
 
 .. cpp:function:: void blas::Axpy( int n, T alpha, const T* x, int incx, T* y, int incy )
 
@@ -57,7 +57,7 @@ Level 1
    Swap the length `n` vectors `x` and `y`.
 
 Level 2
-^^^^^^^
+-------
 
 .. cpp:function:: void blas::Gemv( char trans, int m, int n, T alpha, const T* A, int lda, const T* x, int incx, T beta, T* y, int incy )
 
@@ -156,7 +156,7 @@ Level 2
    is determined by `trans` being chosen as 'N', 'T', or 'C', respectively.
 
 Level 3
-^^^^^^^
+-------
 
 ..  cpp:function:: void blas::Gemm( char transA, char transB, int m, int n, int k, T alpha, const T* A, int lda, const T* B, int ldb, T beta, T* C, int ldc )
 

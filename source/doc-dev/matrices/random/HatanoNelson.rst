@@ -12,7 +12,7 @@ C++ API
 -------
 
 .. cpp:function:: void HatanoNelson( Matrix<F>& A, Int n, F center, Base<F> radius, F g, bool periodic=true )
-.. cpp:function:: void HatanoNelson( AbstractDistMatrix<F>& A, Int n, F center, Base<F> radius, F g, bool periodic=true )
+.. cpp:function:: void HatanoNelson( ElementalMatrix<F>& A, Int n, F center, Base<F> radius, F g, bool periodic=true )
 
 C API
 -----

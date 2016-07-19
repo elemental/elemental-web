@@ -14,7 +14,7 @@ C++ API
 -------
 
 .. cpp:function:: void FourierIdentity( Matrix<Complex<Real> >& A, Int n )
-.. cpp:function:: void FourierIdentity( AbstractDistMatrix<Complex<Real>>& A, Int n )
+.. cpp:function:: void FourierIdentity( ElementalMatrix<Complex<Real>>& A, Int n )
 
 C API
 -----

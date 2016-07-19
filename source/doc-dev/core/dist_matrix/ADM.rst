@@ -3,15 +3,41 @@ AbstractDistMatrix
 
 This abstract class defines the list of member functions that are guaranteed 
 to be available for all matrix distributions and whose prototype does not 
-depend upon the particular matrix distribution; the 
-:cpp:type:`GeneralDistMatrix\<T,U,V>` class exists for general routines whose 
-prototype *does* depend upon the particular matrix distribution.
+depend upon the particular matrix distribution.
 
-.. cpp:type:: AbstractDistMatrix<T>
+One of the many conveniences provided by
+:cpp:class::`AbstractDistMatrix\<scalarType>` 
+is the ability for individual processes to easily modify arbitrary 
+(possibly non-local) entries of the distribute matrix using a combination of
+``Reserve``, ``QueueUpdate``, and ``ProcessQueues``. For example:
+
+.. code-block:: cpp
+
+   #include "El.hpp"
+   using namespace El;
+   ...
+   DistMatrix<double> A;
+   Zeros( A, 100, 100 );
+   if( A.DistRank() == 0 )
+   {
+       A.Reserve( 3 );
+       A.QueueUpdate( 50, 50, 1. );
+       A.QueueUpdate( 51, 51, 2. );
+       A.QueueUpdate( 52, 52, 3. );
+   }
+   else if( A.DistRank() == 1 )
+   {
+       A.Reserve( 2 );
+       A.QueueUpdate( 0, 0, 17. );
+       A.QueueUpdate( 1, 0, 18. );
+   }
+   A.ProcessQueues();
+
+.. cpp:class:: AbstractDistMatrix<scalarType>
 
    .. rubric:: Constructors and destructors
 
-   .. cpp:function:: AbstractDistMatrix( AbstractDistMatrix<T>&& A ) noexcept
+   .. cpp:function:: AbstractDistMatrix( AbstractDistMatrix<scalarType>&& A ) noexcept
 
       A C++11 move constructor which transfers the metadata from the specified
       matrix over to the new matrix as a means of cheaply transferring 
@@ -21,10 +47,14 @@ prototype *does* depend upon the particular matrix distribution.
 
    .. rubric:: Assignment and reconfiguration
 
-   .. cpp:function:: AbstractDistMatrix<T>& operator=( AbstractDistMatrix<T>&& A )
+   .. cpp:function:: AbstractDistMatrix<scalarType>& operator=( AbstractDistMatrix<scalarType>&& A )
 
       A C++11 move assignment which swaps the metadata between the two matrices
       as a means of cheaply swapping the resources assigned to each matrix.
+
+   .. cpp:function:: const AbstractDistMatrix<scalarType>& operator*=( T alpha )
+
+      Multiply every entry in the matrix by `alpha`.
 
    .. cpp:function:: void Empty()
 
@@ -85,15 +115,15 @@ prototype *does* depend upon the particular matrix distribution.
 
    .. rubric:: Buffer attachment
 
-   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, T* buffer, Int ldim, Int root=0 )
-   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const T* buffer, Int ldim, Int root=0 )
+   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, scalarType* buffer, Int ldim, Int root=0 )
+   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const scalarType* buffer, Int ldim, Int root=0 )
 
       Reconfigure around the (immutable) buffer of an implicit distributed
       matrix with the specified dimensions, alignments, process grid, and 
       local leading dimension.
 
-   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, Matrix<T>& A, Int root=0 )
-   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const Matrix<T>& A, Int root=0 )
+   .. cpp:function:: void Attach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, Matrix<scalarType>& A, Int root=0 )
+   .. cpp:function:: void LockedAttach( Int height, Int width, const Grid& grid, Int colAlign, Int rowAlign, const Matrix<scalarType>& A, Int root=0 )
 
       Reconfigure around the (immutable) local matrix of an implicit distributed
       matrix with the specified alignments, process grid, and local leading
@@ -130,23 +160,23 @@ prototype *does* depend upon the particular matrix distribution.
       Return the leading dimension of the local matrix stored by a particular 
       process.
 
-   .. cpp:function:: Matrix<T>& Matrix()
-   .. cpp:function:: const Matrix<T>& LockedMatrix() const
+   .. cpp:function:: Matrix<scalarType>& Matrix()
+   .. cpp:function:: const Matrix<scalarType>& LockedMatrix() const
 
       Return an (immutable) reference to the local matrix.
 
    .. cpp:function:: size_t AllocatedMemory() const
 
-      Return the number of entries of type `T` that we have locally allocated
+      Return the number of entries of type `scalarType` that we have locally allocated
       space for.
 
-   .. cpp:function:: T* Buffer()
-   .. cpp:function:: const T* LockedBuffer() const
+   .. cpp:function:: scalarType* Buffer()
+   .. cpp:function:: const scalarType* LockedBuffer() const
 
       Return an (immutable) pointer to the local matrix's buffer.
 
-   .. cpp:function:: T* Buffer( Int iLoc, Int jLoc )
-   .. cpp:function:: const T* LockedBuffer( Int iLoc, Int jLoc ) const
+   .. cpp:function:: scalarType* Buffer( Int iLoc, Int jLoc )
+   .. cpp:function:: const scalarType* LockedBuffer( Int iLoc, Int jLoc ) const
 
       Return an (immutable) pointer to the portion of the local buffer that 
       stores entry `(iLoc,jLoc)`.
@@ -156,6 +186,24 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: const Grid& Grid() const
 
       Return the grid that this distributed matrix is distributed over.
+
+   .. cpp:function:: DistWrap Wrap() const
+
+      Returns whether the matrix is distributed element-wise (`ELEMENT`) or 
+      block-wise (`BLOCK`).
+
+   .. cpp:function:: Int BlockHeight() const
+   .. cpp:function:: Int BlockWidth() const
+
+      Returns the height (width) of the distribution block 
+      (which is always one for element-wise distributions).
+
+   .. cpp:function:: Int ColCut() const
+   .. cpp:function:: Int RowCut() const
+
+      Returns the number of rows down (number of columns right) in a
+      distribution that the upper-left corner of the matrix occurs.
+      For element-wise distributed matrices, this must always be zero.
 
    .. cpp:function:: bool ColConstrained() const
    .. cpp:function:: bool RowConstrained() const
@@ -196,7 +244,7 @@ prototype *does* depend upon the particular matrix distribution.
       can be reached by unioning the local data from a distribution over the
       :cpp:func:`ColComm` (via an ``AllGather``) over the 
       :cpp:func:`PartialUnionColComm`. One nontrivial example is for 
-      :cpp:type:`DistMatrix\<T,VC,STAR>`, where the column communicator is 
+      :cpp:class:`DistMatrix\<scalarType,VC,STAR>`, where the column communicator is 
       :cpp:func:`Grid::VCComm`, the partial column communicator is 
       :cpp:func:`Grid::MCComm`, and the partial union column communicator is
       :cpp:func:`Grid::MRComm`.
@@ -218,13 +266,14 @@ prototype *does* depend upon the particular matrix distribution.
 
       The orthogonal complement of the product of :cpp:func:`DistComm` and 
       :cpp:func:`RedundantComm` with respect to the process grid. For instance,
-      for :cpp:type:`DistMatrix\<T,CIRC,CIRC>`, this is 
+      for :cpp:class:`DistMatrix\<scalarType,CIRC,CIRC>`, this is 
       :cpp:func:`Grid::VCComm`.
 
    .. cpp:function:: mpi::Comm RedundantComm() const
 
       The communicator over which data is redundantly stored. For instance,
-      for :cpp:type:`DistMatrix\<T,MC,STAR>`, this is :cpp:func:`Grid::RowComm`.
+      for :cpp:class:`DistMatrix\<scalarType,MC,STAR>`, this is 
+      :cpp:func:`Grid::RowComm`.
 
    .. cpp:function:: Int ColRank() const
    .. cpp:function:: Int RowRank() const
@@ -309,30 +358,25 @@ prototype *does* depend upon the particular matrix distribution.
       Return true if the row, column, or entry, respectively, is assigned to
       this process.
 
-   .. cpp:function:: DistData DistData() const
-
-      Returns a description of the distribution and alignment information
-
-
    .. rubric:: Single-entry manipulation (global)
 
-   .. cpp:function:: T Get( Int i, Int j ) const
-   .. cpp:function:: Base<T> GetRealPart( Int i, Int j ) const
-   .. cpp:function:: Base<T> GetImagPart( Int i, Int j ) const
+   .. cpp:function:: scalarType Get( Int i, Int j ) const
+   .. cpp:function:: Base<scalarType> GetRealPart( Int i, Int j ) const
+   .. cpp:function:: Base<scalarType> GetImagPart( Int i, Int j ) const
 
       Return the `(i,j)` entry (or its real or imaginary part) of the global 
       matrix.
 
-   .. cpp:function:: void Set( Int i, Int j, T alpha )
-   .. cpp:function:: void SetRealPart( Int i, Int j, Base<T> alpha )
-   .. cpp:function:: void SetImagPart( Int i, Int j, Base<T> alpha )
+   .. cpp:function:: void Set( Int i, Int j, scalarType alpha )
+   .. cpp:function:: void SetRealPart( Int i, Int j, Base<scalarType> alpha )
+   .. cpp:function:: void SetImagPart( Int i, Int j, Base<scalarType> alpha )
 
       Set the `(i,j)` entry (or its real or imaginary part) of the global 
       matrix to :math:`\alpha`. 
 
-   .. cpp:function:: void Update( Int i, Int j, T alpha )
-   .. cpp:function:: void UpdateRealPart( Int i, Int j, Base<T> alpha )
-   .. cpp:function:: void UpdateImagPart( Int i, Int j, Base<T> alpha )
+   .. cpp:function:: void Update( Int i, Int j, scalarType alpha )
+   .. cpp:function:: void UpdateRealPart( Int i, Int j, Base<scalarType> alpha )
+   .. cpp:function:: void UpdateImagPart( Int i, Int j, Base<scalarType> alpha )
 
       Add :math:`\alpha` to the `(i,j)` entry (or its real or imaginary part) 
       of the global matrix. 
@@ -345,25 +389,52 @@ prototype *does* depend upon the particular matrix distribution.
 
       Conjugate the :math:`(i,j)` entry of the global matrix.
 
+   .. rubric:: Batch remote entry updates
+
+   The following set of routines provide a convenient mechanism for allowing
+   all processes to contribute updates to arbitrary entries of the 
+   distributed matrix. Each process should begin by calling ``Reserve`` with
+   an upper bound on the number of remote entries to contribute, followed
+   by calling ``QueueUpdate`` for each (potentially remote) update, and then
+   all processes must collectively call ``ProcessQueues``.
+   
+   .. cpp:function:: void Reserve( Int numRemoteEntries )
+
+   .. cpp:function:: void QueueUpdate( const Entry<scalarType>& entry )
+   .. cpp:function:: void QueueUpdate( Int i, Int j, scalarType value )
+
+   .. cpp:function:: void ProcessQueues()
+
+   The following routines provide a mechanism for extracting (potentially) 
+   remote entries of a distributed matrix from each process. While each process
+   can independently call ``ReservePulls`` and ``QueuePull``, they must
+   collectively call ``ProcessPullQueue`` since it involves an ``mpi::AllToAll``
+   communication pattern.
+
+   .. cpp:function:: void ReservePulls( Int numPulls ) const
+   .. cpp:function:: void QueuePull( Int i, Int j ) const
+   .. cpp:function:: void ProcessPullQueue( scalarType* pullBuf ) const
+   .. cpp:function:: void ProcessPullQueue( vector<scalarType>& pullBuf ) const 
+
    .. rubric:: Single-entry manipulation (local)
 
-   .. cpp:function:: T GetLocal( Int iLoc, Int jLoc ) const
-   .. cpp:function:: Base<T> GetRealPartLocal( Int iLoc, Int jLoc ) const
-   .. cpp:function:: Base<T> GetLocalImagPart( Int iLoc, Int jLoc ) const
+   .. cpp:function:: scalarType GetLocal( Int iLoc, Int jLoc ) const
+   .. cpp:function:: Base<scalarType> GetRealPartLocal( Int iLoc, Int jLoc ) const
+   .. cpp:function:: Base<scalarType> GetLocalImagPart( Int iLoc, Int jLoc ) const
 
       Return the :math:`(iLoc,jLoc)` entry (or its real or imaginary part) of 
       our local matrix.
 
-   .. cpp:function:: void SetLocal( Int iLoc, Int jLoc, T alpha )
-   .. cpp:function:: void SetLocalRealPart( Int iLoc, Int jLoc, Base<T> alpha )
-   .. cpp:function:: void SetLocalImagPart( Int iLoc, Int jLoc, Base<T> alpha )
+   .. cpp:function:: void SetLocal( Int iLoc, Int jLoc, scalarType alpha )
+   .. cpp:function:: void SetLocalRealPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
+   .. cpp:function:: void SetLocalImagPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
 
       Set the `(iLoc,jLoc)` entry (or its real or imaginary part) of our 
       local matrix to :math:`\alpha`.
 
-   .. cpp:function:: void UpdateLocal( Int iLoc, Int jLoc, T alpha )
-   .. cpp:function:: void UpdateRealPartLocal( Int iLoc, Int jLoc, Base<T> alpha )
-   .. cpp:function:: void UpdateLocalImagPart( Int iLoc, Int jLoc, Base<T> alpha )
+   .. cpp:function:: void UpdateLocal( Int iLoc, Int jLoc, scalarType alpha )
+   .. cpp:function:: void UpdateLocalRealPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
+   .. cpp:function:: void UpdateLocalImagPart( Int iLoc, Int jLoc, Base<scalarType> alpha )
 
       Add :math:`\alpha` to the `(iLoc,jLoc)` entry (or its real or 
       imaginary part) of our local matrix.
@@ -376,119 +447,6 @@ prototype *does* depend upon the particular matrix distribution.
 
       Conjugate the `(iLoc,jLoc)` entry of our local matrix.
 
-   .. rubric:: Diagonal manipulation
-
-   .. cpp:function:: void MakeDiagonalReal( Int offset=0 )
-
-      Force the specified diagonal to be real.
-
-   .. cpp:function:: void ConjugateDiagonal( Int offset=0 )
-
-      Conjugate the specified diagonal.
-
-   .. cpp:function:: void GetDiagonal( AbstractDistMatrix<T>& d, Int offset=0 ) const
-   .. cpp:function:: void GetRealPartOfDiagonal( AbstractDistMatrix<Base<T>>& d, Int offset=0 ) const
-   .. cpp:function:: void GetImagPartOfDiagonal( AbstractDistMatrix<Base<T>>& d, Int offset=0 ) const
-
-      Extracts either the (possibly real or complex portion of the) diagonal
-
-   .. cpp:function:: void SetDiagonal( const AbstractDistMatrix<T>& d, Int offset=0 )
-   .. cpp:function:: void SetRealPartOfDiagonal( const AbstractDistMatrix<Base<T>>& d, Int offset=0 ) 
-   .. cpp:function:: void SetImagPartOfDiagonal( const AbstractDistMatrix<Base<T>>& d, Int offset=0 )
-
-      Sets the (possibly real or complex portion of the) diagonal to the 
-      specified vector, :math:`d`
-
-   .. cpp:function:: void UpdateDiagonal( T alpha, const AbstractDistMatrix<T>& d, Int offset=0 )
-   .. cpp:function:: void UpdateRealPartOfDiagonal( Base<T> alpha, const AbstractDistMatrix<Base<T>>& d, Int offset=0 ) 
-   .. cpp:function:: void UpdateImagPartOfDiagonal( Base<T> alpha, const AbstractDistMatrix<Base<T>>& d, Int offset=0 )
-
-      Updates the (possibly real or complex portion of the) diagonal by
-      adding :math:`\alpha d`
-
-   .. rubric:: Arbitrary-submatrix manipulation (global)
-
-   .. cpp:function:: void GetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, AbstractDistMatrix<T>& ASub ) const
-   .. cpp:function:: void GetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, AbstractDistMatrix<Base<T>>& ASub ) const
-   .. cpp:function:: void GetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, AbstractDistMatrix<Base<T>>& ASub ) const
-
-      Return the submatrix (or its real or imaginary part) with the specified
-      row and column indices via `ASub`.
-
-   .. cpp:function:: DistMatrix<T,STAR,STAR> GetSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
-   .. cpp:function:: DistMatrix<Base<T>,STAR,STAR> GetRealPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
-   .. cpp:function:: DistMatrix<Base<T>,STAR,STAR> GetImagPartOfSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J ) const
-
-      Return the submatrix (or its real or imaginary part) with the specified
-      row and column indices via C++11 move semantics.
-
-   .. cpp:function:: void SetSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const AbstractDistMatrix<T>& ASub )
-   .. cpp:function:: void SetRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const AbstractDistMatrix<Base<T>>& ASub )
-   .. cpp:function:: void SetImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, const AbstractDistMatrix<Base<T>>& ASub )
-
-      Set the submatrix (or its real or imaginary part) with the specified
-      row and column indices equal to the matrix `ASub`.
-
-   .. cpp:function:: void UpdateSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, T alpha, const AbstractDistMatrix<T>& ASub )
-   .. cpp:function:: void UpdateRealPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const AbstractDistMatrix<Base<T>>& ASub )
-   .. cpp:function:: void UpdateImagPartOfSubmatrix( const std::vector<Int>& rowInd, const std::vector<Int>& colInd, Base<T> alpha, const AbstractDistMatrix<Base<T>>& ASub )
-
-      Update the submatrix (or its real or imaginary part) with the specified
-      row and column indices with `alpha` times `ASub`.
-
-   .. cpp:function:: void MakeSubmatrixReal( const std::vector<Int>& I, const std::vector<Int>& J )
-
-      Force the submatrix with the specified row and column indices to be real.
-
-   .. cpp:function:: void ConjugateSubmatrix( const std::vector<Int>& I, const std::vector<Int>& J )
-
-      Conjugate the entries in the submatrix with the specified row and column
-      indices.
-
-   .. rubric:: Arbitrary-submatrix manipulation (local)
-
-   .. cpp:function:: void GetLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Matrix<T>& ASub ) const
-   .. cpp:function:: void GetRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Matrix<Base<T>>& ASub ) const
-   .. cpp:function:: void GetImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Matrix<Base<T>>& ASub ) const
-
-      Return the local submatrix (or its real or imaginary part) with the specified
-      row and column indices via `ASub`.
-
-   .. cpp:function:: Matrix<T> GetLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc ) const
-   .. cpp:function:: Matrix<Base<T>> GetImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc ) const
-
-      Return the local submatrix (or its real or imaginary part) with the 
-      specified row and column indices via C++11 move semantics.
-
-   .. cpp:function:: void SetLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, const Matrix<T>& ASub )
-   .. cpp:function:: void SetRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void SetImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, const Matrix<Base<T>>& ASub )
-
-      Set the local submatrix (or its real or imaginary part) with the specified
-      row and column indices equal to the matrix `ASub`.
-
-   .. cpp:function:: void UpdateLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, T alpha, const Matrix<T>& ASub )
-   .. cpp:function:: void UpdateRealPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Base<T> alpha, const Matrix<Base<T>>& ASub )
-   .. cpp:function:: void UpdateImagPartOfLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc, Base<T> alpha, const Matrix<Base<T>>& ASub )
-
-      Update the local submatrix (or its real or imaginary part) with the 
-      specified row and column indices with `alpha` times `ASub`.
-
-   .. cpp:function:: void MakeLocalSubmatrixReal( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc )
-
-      Force the local submatrix with the specified row and column indices to be
-      real.
-
-   .. cpp:function:: void ConjugateLocalSubmatrix( const std::vector<Int>& ILoc, const std::vector<Int>& JLoc )
-
-      Conjugate the entries in the local submatrix with the specified row and 
-      column indices.
-
-   .. rubric:: Sum over a specified communicator
-
-   .. cpp:function:: void SumOver( mpi::Comm comm )
-
    .. rubric:: Assertions
 
    .. cpp:function:: void ComplainIfReal() const
@@ -499,57 +457,57 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: void AssertSameGrid( const Grid& grid ) const
    .. cpp:function:: void AssertSameSize( Int height, Int width ) const
 
-.. cpp:type:: AbstractDistMatrix<F>
+.. cpp:class:: AbstractDistMatrix<F>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is 
    assumed to be a field.
 
-.. cpp:type:: AbstractDistMatrix<Real>
+.. cpp:class:: AbstractDistMatrix<Real>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is real
    (e.g., ``float`` or ``double``).
 
-.. cpp:type:: AbstractDistMatrix<Base<F>>
+.. cpp:class:: AbstractDistMatrix<Base<F>>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is the
    underlying real datatype from a field (e.g., ``double`` is the base type
    of ``Complex<double>``).
 
-.. cpp:type:: AbstractDistMatrix<Complex<Base<F>>>
+.. cpp:class:: AbstractDistMatrix<Complex<Base<F>>>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is the
    complex extension of the base type of the field `F` (
    (e.g., ``Complex<double>`` is the complex extension of both ``double``
    and ``Complex<double>``).
 
-.. cpp:type:: AbstractDistMatrix<Int>
+.. cpp:class:: AbstractDistMatrix<Int>
 
    An instance of `AbstractDistMatrix` where the underlying datatype is 
    an ``int``.
 
-.. cpp:type:: DistData
+.. cpp:class:: DistData
 
    .. cpp:member:: Distribution colDist
 
-      The :cpp:type:`Distribution` scheme used within each column of the matrix.
+      The :cpp:enum:`Distribution` scheme used within each column of the matrix.
    
    .. cpp:member:: Distribution rowDist
 
-      The :cpp:type:`Distribution` scheme used within each row of the matrix.
+      The :cpp:enum:`Distribution` scheme used within each row of the matrix.
 
    .. cpp:member:: Int colAlign
 
-      The rank in the :cpp:func:`AbstractDistMatrix\<T>::ColComm` which is
+      The rank in the :cpp:func:`AbstractDistMatrix\<scalarType>::ColComm` which is
       assigned the top-left entry of the matrix.
 
    .. cpp:member:: Int rowAlign
 
-      The rank in the :cpp:func:`AbstractDistMatrix\<T>::RowComm` which
+      The rank in the :cpp:func:`AbstractDistMatrix\<scalarType>::RowComm` which
       is assigned the top-left entry of the matrix. 
 
    .. cpp:member:: Int root
 
-      The member of the :cpp:func:`AbstractDistMatrix\<T>::CrossComm` which
+      The member of the :cpp:func:`AbstractDistMatrix\<scalarType>::CrossComm` which
       is assigned ownership of the matrix.
 
    .. cpp:member:: const Grid* grid
@@ -557,8 +515,8 @@ prototype *does* depend upon the particular matrix distribution.
       An immutable pointer to the underlying process grid of the distributed
       matrix.
 
-   .. cpp:function:: DistData( const GeneralDistMatrix<T,U,V>& A )
+   .. cpp:function:: DistData( const AbstractDistMatrix<scalarType>& A )
 
       Construct the distribution data of any instance of 
-      :cpp:type:`GeneralDistMatrix\<T,U,V>`.
+      :cpp:class:`AbstractDistMatrix\<scalarType>`.
 

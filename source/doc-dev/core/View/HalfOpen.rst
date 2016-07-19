@@ -7,7 +7,7 @@ the usage of negative numbers, e.g., :math:`[0,0)`.
 C++ API
 ^^^^^^^
 
-.. cpp:type:: Range<T>
+.. cpp:class:: Range<T>
 
    .. cpp:member:: T beg
    .. cpp:member:: T end
@@ -30,9 +30,9 @@ C++ API
       Returns a copy of this object but with the beginning and end values
       decreased by `shift`
 
-.. cpp:type:: Range<Int>
-.. cpp:type:: Range<float>
-.. cpp:type:: Range<double>
+.. cpp:class:: Range<Int>
+.. cpp:class:: Range<float>
+.. cpp:class:: Range<double>
 
 .. cpp:type:: IR
 

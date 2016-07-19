@@ -5,7 +5,6 @@ maximum value (note: *NOT* the maximum absolute value).
 
 C++ API
 -------
-
 .. cpp:function:: ValueIntPair<Real> Max( const Matrix<Real>& A )
 .. cpp:function:: ValueIntPair<Real> Max( const AbstractDistMatrix<Real>& A )
 
@@ -17,7 +16,6 @@ C++ API
 
 C API
 -----
-
 .. c:function:: ElError ElMax_i( ElConstMatrix_i A, ElValueIntPair_i* entry )
 .. c:function:: ElError ElMax_s( ElConstMatrix_s A, ElValueIntPair_s* entry )
 .. c:function:: ElError ElMax_d( ElConstMatrix_d A, ElValueIntPair_d* entry )
@@ -38,3 +36,7 @@ C API
 .. c:function:: ElError ElVectorMaxDist_i( ElConstDistMatrix_i x, ElValueInt_i* entry )
 .. c:function:: ElError ElVectorMaxDist_s( ElConstDistMatrix_s x, ElValueInt_s* entry )
 .. c:function:: ElError ElVectorMaxDist_d( ElConstDistMatrix_d x, ElValueInt_d* entry )
+
+Python API
+----------
+**TODO**

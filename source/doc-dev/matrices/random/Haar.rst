@@ -7,15 +7,15 @@ C++ API
 -------
 
 .. cpp:function:: void Haar( Matrix<F>& A, Int n )
-.. cpp:function:: void Haar( DistMatrix<F>& A, Int n )
+.. cpp:function:: void Haar( ElementalMatrix<F>& A, Int n )
 
    Draws ``A`` from the Haar distribution. The current scheme performs a QR
    factorization of a Gaussian matrix, but Stewart introduced a well-known 
    scheme which only requires quadratic work for the implicit representation 
    as a product of random Householder reflectors.
 
-.. cpp:function:: void ImplicitHaar( Matrix<F>& A, Matrix<F>& t, Int n )
-.. cpp:function:: void ImplicitHaar( DistMatrix<F>& A, DistMatrix<F,MD,STAR>& t, Int n )
+.. cpp:function:: void ImplicitHaar( Matrix<F>& A, Matrix<F>& t, Matrix<Base<F>>& d, Int n )
+.. cpp:function:: void ImplicitHaar( ElementalMatrix<F>& A, ElementalMatrix<F>& t, Elemental<Base<F>>& d, Int n )
 
    Sets ``A`` to a set of Householder reflectors with the same structure as
    the result of a QR decomposition. The product of these reflectors is a 

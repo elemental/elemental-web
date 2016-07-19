@@ -2,30 +2,28 @@ Hermitian generalized-definite eigensolvers
 ===========================================
 The following Hermitian generalized-definite eigenvalue problems frequently 
 appear, where both :math:`A` and :math:`B` are Hermitian, and :math:`B` is 
-additionally positive-definite:
+additionally positive-definite.
 
-.. math::
+.. cpp:enum:: Pencil
 
-   ABx = \lambda x,
+   .. cpp:enumerator:: ABX
 
-which is denoted with the value ``ABX`` via the :cpp:type:`Pencil` enum,
+      .. math::
 
-.. math::
+         A B x = \lambda x
 
-   BAx = \lambda x,
+   .. cpp:enumerator:: BAX
 
-which uses the ``BAX`` value, and finally
+      .. math::
 
-.. math::
+         B A x = \lambda x
 
-   Ax = \lambda B x,
+   .. cpp:enumerator:: AXBX
 
-which uses the ``AXBX`` enum value.
+      .. math::
 
-.. cpp:type:: Pencil
+         A x = B x \lambda
 
-   An enum for specifying either the ``ABX``, ``BAX``, or ``AXBX`` 
-   generalized eigenvalue problems (described above).
 
 `Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/HermitianGenDefEig.cpp>`__
 

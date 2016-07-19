@@ -7,7 +7,7 @@ depend upon the particular matrix distribution; the
 :cpp:type:`GeneralDistMatrix\<T,U,V>` class exists for general routines whose 
 prototype *does* depend upon the particular matrix distribution.
 
-.. cpp:type:: class AbstractDistMatrix<T>
+.. cpp:class:: AbstractDistMatrix<T>
 
    .. rubric:: Constructors and destructors
 
@@ -191,7 +191,7 @@ prototype *does* depend upon the particular matrix distribution.
       can be reached by unioning the local data from a distribution over the
       :cpp:func:`ColComm` (via an ``AllGather``) over the 
       :cpp:func:`PartialUnionColComm`. One nontrivial example is for 
-      :cpp:type:`DistMatrix\<T,VC,STAR>`, where the column communicator is 
+      :cpp:class:`DistMatrix\<T,VC,STAR>`, where the column communicator is 
       :cpp:func:`Grid::VCComm`, the partial column communicator is 
       :cpp:func:`Grid::MCComm`, and the partial union column communicator is
       :cpp:func:`Grid::MRComm`.
@@ -213,13 +213,14 @@ prototype *does* depend upon the particular matrix distribution.
 
       The orthogonal complement of the product of :cpp:func:`DistComm` and 
       :cpp:func:`RedundantComm` with respect to the process grid. For instance,
-      for :cpp:type:`DistMatrix\<T,CIRC,CIRC>`, this is 
+      for :cpp:class:`DistMatrix\<T,CIRC,CIRC>`, this is 
       :cpp:func:`Grid::VCComm`.
 
    .. cpp:function:: mpi::Comm RedundantComm() const
 
       The communicator over which data is redundantly stored. For instance,
-      for :cpp:type:`DistMatrix\<T,MC,STAR>`, this is :cpp:func:`Grid::RowComm`.
+      for :cpp:class:`DistMatrix\<T,MC,STAR>`, this is 
+      :cpp:func:`Grid::RowComm`.
 
    .. cpp:function:: int ColRank() const
    .. cpp:function:: int RowRank() const
@@ -462,15 +463,15 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: void AssertSameGrid( const Grid& grid ) const
    .. cpp:function:: void AssertSameSize( int height, int width ) const
 
-.. cpp:type:: struct DistData
+.. cpp:class:: DistData
 
    .. cpp:member:: Distribution colDist
 
-      The :cpp:type:`Distribution` scheme used within each column of the matrix.
+      The :cpp:enum:`Distribution` scheme used within each column of the matrix.
    
    .. cpp:member:: Distribution rowDist
 
-      The :cpp:type:`Distribution` scheme used within each row of the matrix.
+      The :cpp:enum:`Distribution` scheme used within each row of the matrix.
 
    .. cpp:member:: int colAlign
 
@@ -495,5 +496,5 @@ prototype *does* depend upon the particular matrix distribution.
    .. cpp:function:: DistData( const GeneralDistMatrix<T,U,V>& A )
 
       Construct the distribution data of any instance of 
-      :cpp:type:`GeneralDistMatrix\<T,U,V>`.
+      :cpp:class:`GeneralDistMatrix\<T,U,V>`.
 

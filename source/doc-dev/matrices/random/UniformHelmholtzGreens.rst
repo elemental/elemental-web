@@ -12,7 +12,7 @@ C++ API
 -------
 
 .. cpp:function:: void UniformHelmholtzGreens( Matrix<Complex<Real>>& A, Int n, Real lambda )
-.. cpp:function:: void UniformHelmholtzGreens( AbstractDistMatrix<Complex<Real>>& A, Int n, Real lambda )
+.. cpp:function:: void UniformHelmholtzGreens( ElementalMatrix<Complex<Real>>& A, Int n, Real lambda )
 
 C API
 -----

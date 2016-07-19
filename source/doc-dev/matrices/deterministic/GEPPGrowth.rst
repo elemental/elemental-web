@@ -16,7 +16,7 @@ C++ API
 -------
 
 .. cpp:function:: void GEPPGrowth( Matrix<F>& A, Int n )
-.. cpp:function:: void GEPPGrowth( AbstractDistMatrix<F>& A, Int n )
+.. cpp:function:: void GEPPGrowth( ElementalMatrix<F>& A, Int n )
 
 C API
 -----

@@ -13,7 +13,6 @@ C++ API
 
 .. cpp:function:: void BullsHead( Matrix<Complex<Real>>& A, Int n )
 .. cpp:function:: void BullsHead( AbstractDistMatrix<Complex<Real>>& A, Int n )
-.. cpp:function:: void BullsHead( AbstractBlockDistMatrix<Complex<Real>>& A, Int n )
 
 C API
 -----

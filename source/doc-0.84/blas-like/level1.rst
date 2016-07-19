@@ -239,7 +239,7 @@ Swap
    Swap rows `to` and `from` in the matrix.
 
 .. cpp:function:: void ColumnSwap( Matrix<T>& A, int to, int from )
-.. cpp:function:: void RowSwap( DistMatrix<T,U,V>& A, int to, int from )
+.. cpp:function:: void ColumnSwap( DistMatrix<T,U,V>& A, int to, int from )
 
    Swap columns `to` and `from` in the matrix.
 

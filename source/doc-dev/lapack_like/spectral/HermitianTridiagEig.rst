@@ -1,9 +1,8 @@
 Hermitian tridiagonal eigensolvers
 ==================================
-`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/HermitianTridiagEig.cpp>`__
-
-Elemental provides a collection of routines for both full and partial 
-solutions of the Hermitian eigenvalue problem 
+Elemental provides a collection of routines, primarily based upon the 
+[MRRR]_ algorithm, for both full and partial solutions of the Hermitian 
+eigenvalue problem 
 
 .. math::
 
@@ -156,3 +155,10 @@ C API
       Alternatively, if `rangeSubset` is true, 
       then the eigenvalues/pairs within the numerical range
       :math:`(lowerBound,upperBound]` will be found.
+
+References
+----------
+
+`Implementation <https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/HermitianTridiagEig.cpp>`__
+
+.. [MRRR] Inderjit Dhillon, *A new O(n^2) algorithm for the symmetric tridiagonal eigenvalue/eigenvector problem*, Computer Science Technical Report No. UCB//CSD-97-971, UC Berkeley, May 1997.

@@ -4,14 +4,12 @@ Fill each entry of the passed in matrix by querying the specified function.
 
 C++ API
 -------
-
 .. cpp:function:: void EntrywiseFill( Matrix<T>& A, std::function<T(void)> func )
 .. cpp:function:: void EntrywiseFill( AbstractDistMatrix<T>& A, std::function<T(void)> func )
-.. cpp:function:: void EntrywiseFill( BlockDistMatrix<T,U,V>& A, std::function<T(void)> func )
+.. cpp:function:: void EntrywiseFill( DistMultiVec<T>& A, std::function<T(void)> func )
 
 C API
 -----
-
 .. c:function:: ElError ElEntrywiseFill_i( ElMatrix_i A, ElInt (*fill)() )
 .. c:function:: ElError ElEntrywiseFill_s( ElMatrix_s A, float (*fill)() )
 .. c:function:: ElError ElEntrywiseFill_d( ElMatrix_d A, double (*fill)() )
@@ -22,4 +20,12 @@ C API
 .. c:function:: ElError ElEntrywiseFillDist_d( ElDistMatrix_d A, double (*fill)() )
 .. c:function:: ElError ElEntrywiseFillDist_c( ElDistMatrix_c A, complex_float (*fill)() )
 .. c:function:: ElError ElEntrywiseFillDist_z( ElDistMatrix_z A, complex_double (*fill)() )
+.. c:function:: ElError ElEntrywiseFillDistMultiVec_i( ElDistMultiVec_i A, ElInt (*fill)() )
+.. c:function:: ElError ElEntrywiseFillDistMultiVec_s( ElDistMultiVec_s A, float (*fill)() )
+.. c:function:: ElError ElEntrywiseFillDistMultiVec_d( ElDistMultiVec_d A, double (*fill)() )
+.. c:function:: ElError ElEntrywiseFillDistMultiVec_c( ElDistMultiVec_c A, complex_float (*fill)() )
+.. c:function:: ElError ElEntrywiseFillDistMultiVec_z( ElDistMultiVec_z A, complex_double (*fill)() )
 
+Python API
+----------
+.. py:function:: EntrywiseFill(A,fill)

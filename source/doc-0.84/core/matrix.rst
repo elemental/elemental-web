@@ -1,6 +1,6 @@
 Sequential matrices
 ===================
-The :cpp:type:`Matrix\<T>` class is the building of the library:
+The :cpp:class:`Matrix\<T>` class is the building of the library:
 its purpose is to provide convenient mechanisms for performing basic matrix 
 manipulations, such as setting and querying individual matrix entries, 
 without giving up compatibility with interfaces such as BLAS and LAPACK, 
@@ -21,13 +21,13 @@ numbers where the :math:`(i,j)` entry is equal to :math:`i-j` would be:
 
 whereas the complex double-precision equivalent could use :cpp:type:`Complex\<double>`, which is currently a typedef for ``std::complex<double>``.
      
-The underlying data storage for :cpp:type:`Matrix\<T>` is simply a contiguous 
+The underlying data storage for :cpp:class:`Matrix\<T>` is simply a contiguous 
 buffer that stores entries in a column-major fashion with a *leading 
 dimension* which is only required to be at least as large as the height of the 
 matrix (so that entry :math:`(i,j)` is located at position ``i+j*ldim``). 
-For modifiable instances of the :cpp:type:`Matrix\<T>` class, the routine
-:cpp:type:`Matrix\<T>::Buffer` returns a pointer to the underlying 
-buffer, while :cpp:type:`Matrix\<T>::LDim` returns the leading 
+For modifiable instances of the :cpp:class:`Matrix\<T>` class, the routine
+:cpp:func:`Matrix\<T>::Buffer` returns a pointer to the underlying 
+buffer, while :cpp:func:`Matrix\<T>::LDim` returns the leading 
 dimension; these two routines could be used to directly perform the equivalent
 of the first code sample as follows:
 
@@ -43,8 +43,8 @@ of the first code sample as follows:
          for( int i=0; i<m; ++i )
              buffer[i+j*ldim] = double(i-j);
 
-For immutable instances of the :cpp:type:`Matrix\<T>` class, a ``const`` pointer
-to the underlying data can similarly be returned with a call to 
+For immutable instances of the :cpp:class:`Matrix\<T>` class, a ``const`` 
+pointer to the underlying data can similarly be returned with a call to 
 :cpp:func:`Matrix\<T>::LockedBuffer`.
 In addition, a (``const``) pointer to the place in the 
 (``const``) buffer where entry :math:`(i,j)` resides can be easily retrieved
@@ -66,7 +66,7 @@ since the bottom-right :math:`3 \times 4` submatrix beings at index
 :math:`(1,2)`. In general, to view the :math:`M \times N` submatrix starting
 at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
-.. cpp:type:: class Matrix<T>
+.. cpp:class:: Matrix<T>
 
    The goal is for the `Matrix` class to support any datatype `T` which 
    supports both addition and multiplication and has the associated identities
@@ -83,8 +83,8 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
       Many of the following constructors have the default parameter
       ``bool fixed=false``, which can be changed to ``true`` in order to 
       produce a `Matrix` whose entries can be modified, but the matrix's 
-      dimensions cannot. This is useful for the :cpp:type:`DistMatrix\<T>` 
-      class, which contains a local :cpp:type:`Matrix\<T>` whose entries can
+      dimensions cannot. This is useful for the :cpp:class:`DistMatrix\<T>` 
+      class, which contains a local :cpp:class:`Matrix\<T>` whose entries can
       be locally modified in cases where it would not make sense to change
       the local matrix size (which should instead result from changing the size
       of the full distributed matrix).
@@ -111,7 +111,7 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
       A matrix is built around a column-major (immutable) buffer 
       with the specified dimensions. The memory pointed to by `buffer` should
-      not be freed until after the :cpp:type:`Matrix\<T>` object is destructed.
+      not be freed until after the :cpp:class:`Matrix\<T>` object is destructed.
 
    .. cpp:function:: Matrix( const Matrix<T>& A )
 
@@ -177,7 +177,7 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
    .. cpp:function:: int MemorySize() const
 
-      Return the number of entries of type `T` that this :cpp:type:`Matrix\<T>`
+      Return the number of entries of type `T` that this :cpp:class:`Matrix\<T>`
       instance has allocated space for.
 
    .. cpp:function:: int DiagonalLength( int offset=0 ) const
@@ -252,7 +252,7 @@ at entry :math:`(i,j)`, one would call ``View( ABR, A, i, j, M, N );``.
 
    .. cpp:function:: Matrix<T> GetDiagonal( int offset=0 ) const
    .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
-   .. cpp:function:: Matrix<Base<T>> GetRealPartOfDiagonal( int offset=0 ) const
+   .. cpp:function:: Matrix<Base<T>> GetImagPartOfDiagonal( int offset=0 ) const
 
       Efficiently construct and return the particular diagonal 
       (or its real or imaginary part) via C++11 move semantics.
@@ -322,22 +322,22 @@ Special cases used in Elemental
 -------------------------------
 This list of special cases is here to help clarify the notation used throughout
 Elemental's source (as well as this documentation). These are all special
-cases of :cpp:type:`Matrix\<T>`.
+cases of :cpp:class:`Matrix\<T>`.
 
-.. cpp:type:: class Matrix<Real>
+.. cpp:class:: Matrix<Real>
 
    Used to denote that the underlying datatype `Real` is real.
 
-.. cpp:type:: class Matrix<Complex<Real> >
+.. cpp:class:: Matrix<Complex<Real> >
 
    Used to denote that the underlying datatype :cpp:type:`Complex\<Real>` is
    complex with base type `Real`.
 
-.. cpp:type:: class Matrix<F>
+.. cpp:class:: Matrix<F>
 
    Used to denote that the underlying datatype `F` is a field.
 
-.. cpp:type:: class Matrix<int>
+.. cpp:class:: Matrix<int>
 
    When the underlying datatype is a signed integer.
 

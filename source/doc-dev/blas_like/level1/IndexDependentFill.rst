@@ -8,7 +8,6 @@ C++ API
 
 .. cpp:function:: void IndexDependentFill( Matrix<T>& A, std::function<T(Int,Int)> func )
 .. cpp:function:: void IndexDependentFill( AbstractDistMatrix<T>& A, std::function<T(Int,Int)> func )
-.. cpp:function:: void IndexDependentFill( BlockDistMatrix<T,U,V>& A, std::function<T(Int,Int)> func )
 
 C API
 -----

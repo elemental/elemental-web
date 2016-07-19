@@ -80,18 +80,26 @@ cholesky namespace
 LDL factorization
 -----------------
 
-.. cpp:type:: enum LDLPivotType
+.. cpp:enum:: LDLPivotType
 
-   An enum for specifying the symmetric pivoting strategy. The current
-   (not yet all supported) options include:
+   For specifying a symmetric pivoting strategy.
+   The current (not yet all supported) options include:
 
-   * ``BUNCH_KAUFMAN_A`` 
-   * ``BUNCH_KAUFMAN_C`` (not yet supported)
-   * ``BUNCH_KAUFMAN_D``
-   * ``BUNCH_KAUFMAN_BOUNDED`` (not yet supported)
-   * ``BUNCH_PARLETT``
+   .. cpp:enumerator:: BUNCH_KAUFMAN_A
 
-.. cpp:type:: LDLPivot
+   .. cpp:enumerator:: BUNCH_KAUFMAN_C
+
+      Not yet supported.
+
+   .. cpp:enumerator:: BUNCH_KAUFMAN_D
+
+   .. cpp:enumerator:: BUNCH_KAUFMAN_BOUNDED
+
+      Not yet supported.
+
+   .. cpp:enumerator:: BUNCH_PARLETT
+
+.. cpp:class:: LDLPivot
 
    .. cpp:member:: int nb
    .. cpp:member:: int from[2]

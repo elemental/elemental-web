@@ -19,10 +19,10 @@ matrix decompositions, are placed here.
 
    lapack_like/props
    lapack_like/solve
+   lapack_like/euclidean_min
 
    lapack_like/perm
 
    lapack_like/reflect
 
    lapack_like/util 
-   lapack_like/tuning

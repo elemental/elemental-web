@@ -116,11 +116,6 @@ The default approach starts with Householder tridiagonalization
 (ala :cpp:func:`HermitianTridiag`) and then calls Matthias Petschow and 
 Paolo Bientinesi's PMRRR for the tridiagonal eigenvalue problem.
 
-.. note::
-
-   Please see the :ref:`lapack-tuning` section for extensive information on 
-   maximizing the performance of Householder tridiagonalization.
-
 However, it is also possible to use a (prototype) Spectral Divide and 
 Conquer algorithm (see, for example, *Stable and efficient spectral divide and conquer algorithms for the symmetric eigenvalue problem*, Nakatsukasa et al., and *Fast linear algebra is stable*, Demmel et al.). In order to do so, the 
 :cpp:type:`HermitianEigCtrl\<Real>` structure should be modified so that 

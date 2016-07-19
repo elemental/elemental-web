@@ -1,0 +1,75 @@
+Elemental 0.86, Release Candidate 1
+===================================
+
+Fundamental functionality additions
+-----------------------------------
+- Dense and sparse primal-dual predictor-corrector Interior Point Methods for Linear and Quadratic Programs
+- Dense and sparse-direct Basis Pursuit, Basis Pursuit Denoising / LASSO, Chebyshev Points, Dantzig Selectors, Elastic Nets, Least Absolute Value regression, Non-negative Least Squares, Support Vector Machines, and 1D Total Variation via LP and QP IPMs
+- Quasi-semidefinite LDL^H solvers (via a sparse-direct quasi-definite LDL^H preconditioner)
+- Sparse-direct Least Squares and Minimum Length via applying a regularized quasi-semidefinite solver to the augmented system
+- Sparse-direct nonsymmetric linear solves via the regularized quasi-semidefinite solver applied to the augmented system
+- Support for geometrically equilibrating linear systems and optimization problems
+- Basic support for quad-precision via ``__float128`` (GNU and Intel), e.g., in core data structures, BLAS, and quasi-semidefinite iterative refinement
+
+Incremental functionality additions
+-----------------------------------
+- Sequential versions of sparse-direct solvers (previously, only distributed implementations were exposed)
+- Extended the ``HermitianEig`` control structure to support timing the components
+- Ability to densify sparse matrices via ``Full``
+- Sparse versions of ``DiagonalScale``, ``DiagonalSolve``, and ``DiagonalScaleTrapezoid`` 
+- ``operator=`` now works between ``DistMultiVec`` and ``DistMatrix``
+- ``Dot``, ``Dotu``, and ``HilbertSchmidt``, and ``MaxNorm`` for ``DistMultiVec``
+- Added a ``Scan`` function for converting MPI sizes into the packed offsets
+- A version of ``DIagonal`` which accepts a ``Matrix`` rather than ``std::vector``
+- (Untested) support for Kronecker products
+
+Significant implementation and API modifications
+------------------------------------------------
+- Avoiding the need for a custom METIS routine via the usage of ``METIS_ComputeVertexSeparator``
+- Automated the usage of many of the subroutines in the ``transpose`` and ``adjoint`` namespaces
+- Modified the "move" rules for ``Matrix``, ``DistMatrix``, and ``BlockDistMatrix`` so that moves are never performed when one or more of the LHS or RHS is a view
+- Completely eliminated the intermediate ``GeneralDistMatrix`` and ``GeneralBlockDistMatrix`` classes
+- ``DistMatrix::SumScatter`` changed to ``Contract``
+- Renamed ``GaussianElimination`` to ``LinearSolve``
+- Reimplemented sparse-direct solvers to use trees rather than cumbersome arrays of fronts 
+- Moved most logic out of ``DistMatrix::operator=`` and into ``Copy`` and significantly condensed the implementations
+- Reorganized ``optimization`` folder and renamed ``NonNegativeLeastSquares`` to ``NNLS``
+- Split several "LAPACK-like" routines off into a ``euclidean_min/`` subfolder
+- Importing several members of ``std`` namespace into ``El`` namespace to avoid excessive namespace  redundancy (e.g., ``std::vector`` is now simply ``vector`` in Elemental's source) 
+
+Bug fixes
+---------
+- Fixed bug in ``DistGraph`` which caused local edge offsets of distributed sparse graphs (and sparse matrices!) with completely empty rows at the bottom of the matrix
+- Fixed bugs in edge offset computations for empty graphs
+- Adjusted the upper-bound within thresholded SVD's to account for finite-precision arithmetic
+- Fixed a mistake in the radius within ``Uniform`` random matrix generation
+- Avoiding freeing ``mpi::Comm`` in destructors after ``mpi::Finalize`` has been called
+- Removed spurious ``Print`` call in distributed two-norm condition number computation (thanks to Chander Iyer for reporting)
+- Fixed a bug in ``MaxAbs``
+
+Performance improvements
+------------------------
+- Added a simple mechanism for interleaving the matrix-vector multiplications within ``HermitianTridiag`` at a block level (thanks to extensive discussions with Alexander Heinecke)
+- Square process grids are now automatically exploited by several ``DistMatrix`` redistributions
+
+External interfaces
+-------------------
+- Added write capabilities to NumPy wrappers of ``Matrix``
+- Fixed many instances of Python return values being cTypes, rather than Python, types
+- Avoiding ``matplotlib.pyplot.show(block=False)`` when matplotlib backend detected
+- Added axes to Python pseudospectral plots
+
+Build system improvements
+-------------------------
+- The python interface can now be installed in a custom directory via specifying ``PYTHON_SITE_PACKAGES``
+- Mistakes in the MPI configuration tests were fixed
+- 64-bit integer builds have been re-enabled
+- RPATHs are now set for Mac OS X shared library installations (thanks to Barry Smith and Satish Balay for reporting)
+
+Thanks
+------
+- Andreas Heinecke for extensive discussions about the performance of ``HermitianTridiag``
+- Barry Smith and Satish Balay for reporting Mac OS X RPATH problems
+- Chander Iyer for reporting that the distributed two-norm condition number routine had a spurious ``Print`` statement
+- Michael Saunders for extensive discussions about regularized LDL^H factorizations
+- Stephen Boyd and AJ Friend for extensive discussions about Interior Point Methods and ADMM

@@ -16,18 +16,15 @@ C++ API
 
 .. cpp:function:: void Ehrenfest( Matrix<F>& P, Int n )
 .. cpp:function:: void Ehrenfest( AbstractDistMatrix<F>& P, Int n )
-.. cpp:function:: void Ehrenfest( AbstractBlockDistMatrix<F>& P, Int n )
 
 .. cpp:function:: void Ehrenfest( Matrix<F>& P, Matrix<F>& PInf, Int n )
-.. cpp:function:: void Ehrenfest( AbstractDistMatrix<F>& P, AbstractDistMatrix<F>& PInf, Int n )
-.. cpp:function:: void Ehrenfest( AbstractBlockDistMatrix<F>& P, AbstractBlockDistMatrix<F>& PInf, Int n )
+.. cpp:function:: void Ehrenfest( ElementalMatrix<F>& P, ElementalMatrix<F>& PInf, Int n )
 
 .. cpp:function:: void EhrenfestStationary( Matrix<F>& PInf, Int n )
 .. cpp:function:: void EhrenfestStationary( AbstractDistMatrix<F>& PInf, Int n )
-.. cpp:function:: void EhrenfestStationary( AbstractBlockDistMatrix<F>& PInf, Int n )
 
 .. cpp:function:: void EhrenfestDecay( Matrix<F>& A, Int n )
-.. cpp:function:: void EhrenfestDecay( AbstractDistMatrix<F>& A, Int n )
+.. cpp:function:: void EhrenfestDecay( ElementalMatrix<F>& A, Int n )
 
 C API
 -----

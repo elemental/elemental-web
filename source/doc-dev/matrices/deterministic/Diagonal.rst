@@ -12,7 +12,6 @@ C++ API
 
 .. cpp:function:: void Diagonal( Matrix<S>& D, const std::vector<T>& d )
 .. cpp:function:: void Diagonal( AbstractDistMatrix<S>& D, const std::vector<T>& d )
-.. cpp:function:: void Diagonal( AbstractBlockDistMatrix<S>& D, const std::vector<T>& d )
 
 C API
 -----

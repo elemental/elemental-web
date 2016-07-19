@@ -15,7 +15,6 @@ C++ API
 
 .. cpp:function:: void TrefethenEmbree( Matrix<Complex<Real>>& A, Int n )
 .. cpp:function:: void TrefethenEmbree( AbstractDistMatrix<Complex<Real>>& A, Int n )
-.. cpp:function:: void TrefethenEmbree( AbstractBlockDistMatrix<Complex<Real>>& A, Int n )
 
 C API
 -----

@@ -3,22 +3,31 @@ Introduction
 
 Overview
 ========
-Elemental is a library for distributed-memory dense and sparse-direct linear 
-algebra that draws heavily from the 
-`PLAPACK <http://cs.utexas.edu/users/plapack>`_ approach of building a graph of
-matrix distributions with a simple interface for redistributions 
-Elemental is also similar in functionality to 
-`ScaLAPACK <http://netlib.org/scalapack>`_, which is the very 
-widely used effort towards extending `LAPACK <http://netlib.org/lapack>`_ onto 
-distributed-memory architectures.
-Unlike PLAPACK and ScaLAPACK, Elemental performs virtually all computations 
-using element-wise, rather than block, matrix distributions 
-(please see the first journal publication on Elemental, 
-*Elemental: A new framework for distributed
-memory dense matrix computations*, for a detailed discussion of this design 
-choice).
+Elemental is a library for distributed-memory "direct" linear algebra and
+optimization, with the term "direct" being the best single descriptor for the 
+class of algorithms containing dense linear algebra, sparse-direct linear 
+algebra, and Interior Point Methods for convex optimization.
+Elemental originally began as an object-oriented analogue and extension of 
+the parallel dense linear algebra library [PLAPACK]_, which was designed 
+around the idea of building a graph of different matrix distributions and 
+providing simple API for moving a matrix from one such distribution to another 
+throughout the course of a computation.
+Over time, the functionality of Elemental steadily expanded beyond its 
+beginnings; at one point, Elemental was quite similar in scope to 
+[ScaLAPACK]_, the most widely-used library for 
+extending [LAPACK]_ to distributed-memory 
+architectures, but Elemental now also implements distributed-memory 
+sparse-direct solvers and Interior Point Methods, and so there is no longer 
+another library with comparable depth and scope.
+
+Elemental's name is derived from the fact that, unlike PLAPACK and ScaLAPACK,
+its primary dense matrix distributions are designed to spread matrix entries in
+element-wise, as opposed to block-wise, fashions [PEtAl2013]_.
 Some of the unique features of Elemental include distributed implementations of:
 
+* Dense and sparse Interior Point Methods for Linear, Quadratic, and Second-Order Cone programs
+* Support for dense and sparse basis pursuit, Lasso, SVM, etc.
+* Distributed Jordan algebras over products of Second-order Cones
 * High-performance pseudospectral computation and visualization
 * Quadratic-time low-rank Cholesky and LU modifications
 * Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
@@ -29,38 +38,32 @@ Some of the unique features of Elemental include distributed implementations of:
 * Many algorithms for Singular-Value soft-Thresholding (SVT)
 * Tall-skinny QR decompositions
 * Hermitian matrix functions
-* Sign-based Lyapunov/Ricatti/Sylvester solvers
 
-For the sake of objectivity: Elemental is primarily intended to be used from 
-C++11 or C, though interfaces to other languages, Fortran 90, Python, and R
-are in various stages of development. ScaLAPACK and PLAPACK routines are 
-currently significantly more straightforward to call from Fortran.
-
-.. note::
-
-   Though Elemental does not yet fully support computation over arbitrary 
-   fields, the vast majority of its pieces do. Moving templated 
-   implementations into header files is a necessary step in the process and 
-   also allowed for certain templating techniques to exploited in order to 
-   simplify the class hierarchy.
+Elemental currently supports C++11, C, and Python interfaces, while 
+`an R interface is being maintained by Rodrigo Canales <https://github.com/rocanale/R-Elemental>`__ and `a Julia interface <https://github.com/JuliaParallel/Elemental.jl>`__ is under development.
+Interfaces to other languages, such as Fortran 90, can be built on top of
+the C interface in a straightforward, if not tedious, manner. Ideally 
+Elemental will eventually be hooked into LLVM in order to help automate 
+the creation of external interfaces.
 
 Dependencies
 ============
 * Functioning C++11 and ANSI C compilers.
-* A working MPI2 implementation.
+* A working MPI2 implementation
 * BLAS and LAPACK (ideally version 3.3 or greater) implementations. 
 * `CMake <http://www.cmake.org>`_ (version 2.8.8 or later).
 
 If a sufficiently up-to-date C++11 compiler is used (e.g., recent versions of 
 ``g++`` or ``clang++``), Elemental should be straightforward to build on 
 Unix-like platforms. Building on Microsoft Windows platforms should also be 
-possible with minor effort.
+possible with modest effort.
 
 License and copyright
 =====================
-All files distributed with Elemental, with the exception of METIS 5.1.0, are 
-made available under the 
-`New BSD license <http://www.opensource.org/licenses/bsd-license.php>`_,
+All files distributed with Elemental, with the exception of Elemental's 
+custom `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__
+extensions (which can easily be disabled), are distributed under the terms of 
+the `New BSD license <http://www.opensource.org/licenses/bsd-license.php>`_,
 which states::
 
     Redistribution and use in source and binary forms, with or without
@@ -89,13 +92,41 @@ which states::
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
 
-Note that METIS 5.1.0 is distributed under the (equally permissive) 
-`Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>`__.
+But note that Elemental optionally downloads and installs a number of libraries,
+such as:
+
+1. `METIS <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, which is 
+   made available under the (equally permissive) 
+   `Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>`__.
+2. `ParMETIS <http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview>`__,
+   which can not be used for commercial purposes (it can be disabled with the 
+   CMake option ``-D EL_DISABLE_PARMETIS=TRUE``),
+3. `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`__, which is 
+   available under the terms of the GNU GPL (it can be disabled with the 
+   CMake option ``-D EL_DISABLE_QUAD=TRUE``), 
+4. `OpenBLAS <http://www.openblas.net/>`__, which is available under the 
+   New BSD License (it can be disabled with ``-D EL_DISABLE_OPENBLAS=TRUE``), 
+5. `BLIS <https://code.google.com/p/blis>`__, which is available under the
+   New BSD License (it can be disabled with ``-D EL_DISABLE_BLIS=TRUE``), and
+6. `ScaLAPACK <http://www.netlib.org/scalapack>`__, which is also available 
+   under the New BSD License (and can be disabled with 
+   ``-D EL_DISABLE_SCALAPACK=TRUE``).
 
 Most source files contain the copyright notice::
 
-    Copyright (c) 2009-2014, Jack Poulson
+    Copyright (c) 2009-2015, Jack Poulson
     All rights reserved.
 
 For an up-to-date list of contributing authors, please see the 
 `AUTHORS file <https://github.com/elemental/Elemental/blob/master/AUTHORS>`__.
+
+References
+==========
+
+.. [PEtAl2013] Jack Poulson, Bryan Marker, Robert A. van de Geijn, Jeff R. Hammond, and Nichols A. Romero, *Elemental: A new framework for distributed memory dense matrix computations*, ACM Transactions on Mathematical Software, Vol. 39, Issue 2, Article No. 13, 2013. DOI: `http://dx.doi.org/10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`__
+
+.. [LAPACK] E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen, *LAPACK Users' Guide: Third Edition*, Society for Industrial and Applied Mathematics, Philadelphia, PA, 1999. Last accessed from: `http://www.netlib.org/lapack/lug/ <http://www.netlib.org/lapack/lug/>`__
+
+.. [PLAPACK] Robert A. van de Geijn, *Using PLAPACK*, The MIT Press, Cambridge, MA, 1997. Currently available from: `https://mitpress.mit.edu/books/using-plapack <https://mitpress.mit.edu/books/using-plapack>`__
+
+.. [ScaLAPACK] L.S. Blackford, J. Choi, A. Cleary, E. D'Azevedo, J. Demmel, I. Dhillon, J. Dongarra, S. Hammarling, G. Henry, A. Petitet, K. Stanley, D. Walker, and C.R. Whaley, *ScaLAPACK Users' Guide*, Society for Industrial and Applied Mathematics, Philadelphia, PA, 1997. Last accessed from: `http://www.netlib.org/scalapack/slug/ <http://www.netlib.org/scalapack/slug/>`__

@@ -25,7 +25,7 @@ Just as with Tikhonov regularization, Elemental in fact supports replacing
 
 Python API
 ----------
-.. py:function:: Ridge(A,B,alpha[,alg=RIDGE_CHOLESKY])
+.. py:function:: Ridge(A,B,gamma[,alg=RIDGE_CHOLESKY])
 
 C++ API
 -------

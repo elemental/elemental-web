@@ -9,6 +9,8 @@
     optimization which <a href="/about/">supports a wide range of functionality
     not available elsewhere</a>.
     </p>
+    <a href="https://travis-ci.org/elemental/Elemental"><img src="https://api.travis-ci.org/elemental/Elemental.svg?branch=master" alt="Build Status"></a>
+    <a href="https://gitter.im/elemental/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/elemental/chat"></a>
 
   </div>
   <div class="clear-block"></div>

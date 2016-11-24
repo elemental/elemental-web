@@ -14,6 +14,5 @@
     contributing/index
     releases/index
     support/index
-    applications/index
     compilers/index
     help/index

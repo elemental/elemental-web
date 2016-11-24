@@ -14,6 +14,17 @@ functionality added in this release.
 
 `Previous releases are also available <http://libelemental.org/releases/>`__.
 
+Ubuntu PPA
+----------
+An Ubuntu Personal Package Archive (PPA) for Elemental is available at `launchpad.net/~libelemental/+archive/ubuntu/ppa <https://launchpad.net/~libelemental/+archive/ubuntu/ppa>`__. For Ubuntu 16.04 (xenial) and 16.10 (yakkety), the
+following commands should install Elemental:
+
+.. code-block:: bash
+   
+   sudo add-apt-repository ppa:libelemental/ppa
+   sudo apt-get update
+   sudo apt-get install elemental
+
 Direct repository access
 ------------------------
 The project is `openly developed on GitHub <http://github.com/elemental/Elemental.git>`__.

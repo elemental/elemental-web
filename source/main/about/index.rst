@@ -5,20 +5,6 @@
 About Elemental
 ###############
 
-Elemental is an open-source library for distributed-memory dense 
-and sparse-direct linear algebra and optimization which builds on top of 
-BLAS, LAPACK, and MPI using modern C++ and additionally exposes interfaces to
-C and Python (with a Julia interface beginning development).
-
-The development of Elemental has led to a number of 
-:doc:`research articles <../citing/index>` and 
-a number of related projects, such as the parallel sweeping 
-preconditioner, `PSP <http://github.com/poulson/PSP>`__, and a parallel 
-algorithm for Low-rank Plus Sparse MRI, `RT-LPS-MRI <http://github.com/poulson/rt-lps-mri>`__.
-
-Unique Features
-***************
-
 Elemental supports a wide collection of sequential and distributed-memory
 operations, including support for dense and sparse-direct linear algebra,
 Linear, Quadratic and Second-Order Cone Programming, and lattice reduction.
@@ -29,6 +15,10 @@ quad-precision, and arbitrary-precision floating-point arithmetic.
 The C++11 API is by far the most complete, but a large percentage of the library
 is also exposed to C and Python interfaces.
 Please see the `README <https://github.com/elemental/Elemental/blob/master/README.md>`__ for an up-to-date list of unique functionality.
+
+The development of Elemental has led to a number of 
+:doc:`research articles <../citing/index>` and is incorporated into a variety of
+scientific (e.g., `libSkylark <https://xdata-skylark.github.io/libskylark/>`__, `PETSc <https://www.mcs.anl.gov/petsc/>`__, and `CVXPY <https://github.com/cvxgrp/cvxpy>`__) and industrial projects (e.g., within Finite Element companies).
 
 ..
   This needs to be updated again...

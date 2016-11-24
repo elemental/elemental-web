@@ -11,7 +11,7 @@ BLAS, LAPACK, and MPI using modern C++ and additionally exposes interfaces to
 C and Python (with a Julia interface beginning development).
 
 The development of Elemental has led to a number of 
-:doc:`research articles<../citing/index>` and 
+:doc:`research articles <../citing/index>` and 
 a number of related projects, such as the parallel sweeping 
 preconditioner, `PSP <http://github.com/poulson/PSP>`__, and a parallel 
 algorithm for Low-rank Plus Sparse MRI, `RT-LPS-MRI <http://github.com/poulson/rt-lps-mri>`__.
@@ -19,88 +19,44 @@ algorithm for Low-rank Plus Sparse MRI, `RT-LPS-MRI <http://github.com/poulson/r
 Unique Features
 ***************
 
-Elemental supports a wide collection of distributed-memory operations, 
-including:
+Elemental supports a wide collection of sequential and distributed-memory
+operations, including support for dense and sparse-direct linear algebra,
+Linear, Quadratic and Second-Order Cone Programming, and lattice reduction.
+Furthermore, it supports such functionality for real and complex
+single-precision, double-precision, "double-double", "quad-double",
+quad-precision, and arbitrary-precision floating-point arithmetic.
 
-Convex optimization
-===================
+The C++11 API is by far the most complete, but a large percentage of the library
+is also exposed to C and Python interfaces.
+Please see the `README <https://github.com/elemental/Elemental/blob/master/README.md>`__ for an up-to-date list of unique functionality.
 
-* Dense and sparse Interior Point Methods for Linear, Quadratic, and Second-Order Cone Programs
-    - Basis Pursuit
-    - Chebyshev Points
-    - Dantzig selectors
-    - LASSO / Basis Pursuit Denoising
-    - Least Absolute Value regression
-    - Non-negative Least Squares
-    - Support Vector Machines
-    - (1D) Total Variation
-
-* Distributed Jordan algebras over products of Second-Order Cones
-
-* Various prototype dense Alternating Direction Method of Multipliers routines
-    - Sparse inverse covariance selection
-    - Robust Principal Component Analysis
-
-* Prototype alternating direction Non-negative Matrix Factorization
-
-Linear algebra
-==============
-
-* Dense and sparse-direct (generalized) Least Squares problems
-    - Least Squares / Minimum Length
-    - Tikhonov (and ridge) regression
-    - Equality-constrained Least Squares
-    - General (Gauss-Markov) Linear Models
-
-* High-performance pseudospectral computation and visualization
-
-* Quadratic-time low-rank Cholesky and LU modifications
-
-* Bunch-Kaufman and Bunch-Parlett for accurate symmetric factorization
-
-* LU and Cholesky with full pivoting
-
-* Column-pivoted QR and interpolative/skeleton decompositions
-
-* Quadratically Weighted Dynamic Halley iteration for the polar decomposition
-
-* Many algorithms for Singular-Value soft-Thresholding (SVT)
-
-* Tall-skinny QR decompositions
-
-* Hermitian matrix functions
-
-* Prototype Spectral Divide and Conquer Schur decomposition and Hermitian EVD
-
-* Sign-based Lyapunov/Ricatti/Sylvester solvers
-
-Contributors
-************
-
-Project leader: `Jack Poulson <http://web.stanford.edu/~poulson>`__
-
-Active contributors (roughly, within the last year): `Paolo Bientinesi <http://hpac.rwth-aachen.de/~pauldj/>`__, `Jake Bolewski <https://github.com/jakebolewski>`__, `Rodrigo Canales <https://github.com/rocanale>`__, `Jiahao Chen <https://jiahao.github.io>`__, `AJ Friend <http://stanford.edu/~ajfriend/>`__, `Jeff Hammond <http://pcl.intel-research.net/people/jeff.htm>`__, and `Matthias Petschow <http://hpac.rwth-aachen.de/~petschow/>`__. 
-
-Please see `the list of contributors <./contributors.html>`__ for more details 
-on current and past contributors.
+..
+  This needs to be updated again...
+  
+  Contributors
+  ************
+  Project leader: `Jack Poulson <https://github.com/poulson>`__
+  
+  Active contributors (roughly, within the last year): `Paolo Bientinesi <http://hpac.rwth-aachen.de/~pauldj/>`__, `Jake Bolewski <https://github.com/jakebolewski>`__, `Rodrigo Canales <https://github.com/rocanale>`__, `Jiahao Chen <https://jiahao.github.io>`__, `AJ Friend <http://stanford.edu/~ajfriend/>`__, `Jeff Hammond <http://pcl.intel-research.net/people/jeff.htm>`__, and `Matthias Petschow <http://hpac.rwth-aachen.de/~petschow/>`__. 
+  
+  Please see `the list of contributors <./contributors.html>`__ for more details 
+  on current and past contributors.
 
 .. _about_license:
 
 License
 *******
 
-All of Elemental is licensed under the 
-`New BSD License <http://opensource.org/licenses/BSD-3-Clause>`__,
-with the exception of 
-`METIS 5.1.0 <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview>`__, 
-which is distributed under the (equally permissive)
-`Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>`__.
+The vast majority of Elemental is licensed under the 
+`2-clause BSD License <http://opensource.org/licenses/BSD-2-Clause>`__,
+but small pieces are under various other licenses. Please see the
+`debian/copyright <https://github.com/elemental/Elemental/blob/master/debian/copyright>`__ file for more details.
 
 About these pages
 *****************
 
 `This website <http://github.com/elemental/elemental-web.git>`__  was 
-created by `Jack Poulson <http://web.stanford.edu/~poulson>`__ by 
+created by `Jack Poulson <https://github.com/poulson>`__ by 
 checking out a copy of 
 `fenics-web <https://bitbucket.org/fenics-project/fenics-web>`__ and slowly 
 replacing FEniCS-specific content with the appropriate Elemental content.

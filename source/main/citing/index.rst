@@ -14,6 +14,12 @@ Elemental as a package
   ACM Transactions on Mathematical Software.
   [`doi:10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`_]
 
+Elemental's pseudospectra and triangular eigensolver support
+------------------------------------------------------------
+* **T. Moon and J. Poulson (2016)**.
+  *Accelerating eigenvector and pseudospectra computation using blocked multi-shift triangular solves*,
+  [`arXiv:1607.01477, <https://arxiv.org/abs/1607.01477>`_].
+
 Elemental's Hermitian eigensolvers
 ----------------------------------
 
@@ -22,34 +28,28 @@ Elemental's Hermitian eigensolvers
   SIAM Journal on Scientific Computing.
   [`doi:10.1137/110848803 <http://dx.doi.org/10.1137/110848803>`_]
   [`arXiv:1205.2107 <http://arxiv.org/abs/1205.2107>`_]
-* **J. Poulson, B. Marker, R. van de Geijn, J. Hammond, and N. Romero (2013)**.
-  *Elemental: A new framework for distributed memory dense matrix computations*,
-  ACM Transactions on Mathematical Software.
-  [`doi:10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`_]
 
-Elemental's Pivoted-QR/ID/Skeleton decompositions
--------------------------------------------------
+..
+  This seems silly in hind-sight
+  Elemental's Pivoted-QR/ID/Skeleton decompositions
+  -------------------------------------------------
+  
+  * **J. Poulson, L. Demanet, N. Maxwell, and L. Ying (2013)** 
+    *A parallel butterfly algorithm*, SIAM Journal on Scientific Computing 
+    (To appear).
+    [`arXiv:1305.4650 <http://arxiv.org/abs/1305.4650>`_]
+  * **J. Poulson, B. Marker, R. van de Geijn, J. Hammond, and N. Romero (2013)**.
+    *Elemental: A new framework for distributed memory dense matrix computations*,
+    ACM Transactions on Mathematical Software.
+    [`doi:10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`_]
 
-* **J. Poulson, L. Demanet, N. Maxwell, and L. Ying (2013)** 
-  *A parallel butterfly algorithm*, SIAM Journal on Scientific Computing 
-  (To appear).
-  [`arXiv:1305.4650 <http://arxiv.org/abs/1305.4650>`_]
-* **J. Poulson, B. Marker, R. van de Geijn, J. Hammond, and N. Romero (2013)**.
-  *Elemental: A new framework for distributed memory dense matrix computations*,
-  ACM Transactions on Mathematical Software.
-  [`doi:10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`_]
-
-Elemental as a building-block for sparse-direct
------------------------------------------------
+Elemental's sparse-direct solvers
+---------------------------------
 
 * **J. Poulson, B. Engquist, S. Li, and L. Ying (2013)**.
   *A parallel sweeping preconditioner for heterogeneous 3D Helmholtz equations*,
   [`doi:10.1137/120871985 <http://dx.doi.org/10.1137/120871985>`_]
   [`arXiv:1204.0111 <http://arxiv.org/abs/1204.0111>`_]
-* **J. Poulson, B. Marker, R. van de Geijn, J. Hammond, and N. Romero (2013)**.
-  *Elemental: A new framework for distributed memory dense matrix computations*,
-  ACM Transactions on Mathematical Software.
-  [`doi:10.1145/2427023.2427030 <http://dx.doi.org/10.1145/2427023.2427030>`_]
 
 A fairly complete list is available both 
 :ref:`at the bottom of this page <bibliography>` and in

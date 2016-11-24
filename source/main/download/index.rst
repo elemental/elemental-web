@@ -7,10 +7,10 @@ Download
 
 Releases
 --------
-The current relevant versions of Elemental are the current development version
-(which is soon to be 0.86) and the last official release,
-`Elemental 0.85 <http://libelemental.org/releases/0.85>`__ 
-(and its `corresponding tarball <http://libelemental.org/pub/releases/Elemental-0.85.tgz>`__).
+The current relevant release of Elemental is
+`version 0.87.4 <https://github.com/elemental/Elemental/releases/tag/v0.87.4>`__.
+The documentation has not yet been updated to reflect the large amount of
+functionality added in this release.
 
 `Previous releases are also available <http://libelemental.org/releases/>`__.
 

@@ -10,6 +10,7 @@ Elemental's development documentation
    :maxdepth: 2
 
    intro
+   tour
    build
    core
    blas_like

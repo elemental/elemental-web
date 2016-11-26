@@ -6,7 +6,7 @@ platform-independent manner; it can be easily configured to build on Linux and
 Unix environments (including Darwin), as well as via Cygwin in a Windows 
 environment (Visual Studio's is expected to begin supporting ``constexpr``, 
 which is heavily used by Elemental, with the official VS 2015 release in 
-July 2015). A relatively recent C++11 compiler (e.g., gcc >= 4.7) is 
+July 2015). A relatively recent C++11 compiler (e.g., gcc >= 4.8) is 
 required in all cases.
 
 Elemental's main external dependencies are
@@ -23,6 +23,9 @@ Elemental's build system are
 
 1. CMake, and
 2. MPI.
+
+Ubuntu users may want to install Elemental from
+`the Ubuntu PPA <https://launchpad.net/%7Elibelemental/+archive/ubuntu/ppa>`__.
 
 Handling mandatory external dependencies
 ========================================
@@ -127,11 +130,11 @@ and OpenMPI can be installed with ::
     sudo apt-get install libopenmpi-dev
 
 Alternatively, one could manually download and install a recent stable release
-of MPICH, typically available from `http://www.mpich.org/downloads/ <http://www.mpich.org/downloads/>`__. For example, to download and install `mpich-3.1.4 <http://www.mpich.org/static/downloads/3.1.4/mpich-3.1.4.tar.gz>`__, one might run::
+of MPICH, typically available from `http://www.mpich.org/downloads/ <http://www.mpich.org/downloads/>`__. For example, to download and install `mpich-3.2 <http://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz>`__, one might run::
 
-    wget http://www.mpich.org/static/downloads/3.1.4/mpich-3.1.4.tar.gz
-    tar -xzf mpich-3.1.4.tar.gz
-    cd mpich-3.1.4/
+    wget http://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz
+    tar -xzf mpich-3.2.tar.gz
+    cd mpich-3.2/
     ./configure --prefix=/where/to/install/mpich --CC=YourCCompiler --CXX=YourC++Compiler --FC=YourFortranCompiler
     make
     sudo make install 
@@ -141,12 +144,20 @@ files into the directory specified with ``--prefix``. Lastly, these instructions
 assumed the existence of a Fortran compiler, and so, if one is not available,
 you should instead run the commands::
 
-    wget http://www.mpich.org/static/downloads/3.1.4/mpich-3.1.4.tar.gz
-    tar -xzf mpich-3.1.4.tar.gz
-    cd mpich-3.1.4/
+    wget http://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz
+    tar -xzf mpich-3.2.tar.gz
+    cd mpich-3.2/
     ./configure --prefix=/where/to/install/mpich --CC=YourCCompiler --CXX=YourC++Compiler --disable-fortran
     make
     sudo make install 
+
+.. note::
+
+   As noted in
+   `Issue #200 <https://github.com/elemental/Elemental/issues/200>`__, on recent
+   versions of OS X clang does not properly build the official release of 
+   MPICH 3.2, and so it is necessary to build the most recent git revision from
+   source.
 
 Soft dependencies
 =================
@@ -309,15 +320,14 @@ via the ``-D EL_BUILD_PARMETIS=TRUE`` option.
 ScaLAPACK
 ---------
 `ScaLAPACK <http://netlib.org/scalapack>`__ is the most widely-used library for
-distributed-memory dense linear algebra and contains a number of routines not
-implemented elsewhere. In particular, its distributed Hessenberg Schur 
-decomposition support can be optionally used within Elemental for computing
-Schur decompositions (which is the preprocessing step for Elemental's 
-high-performance pseudospectral calculations).
-The routines resulting from the work of [HWD2002]_ (and the corresponding 
-complex implementation from [Fahey2003]_), as well as the later AED versions from [GKK2010]_, are all used in different instances.
+distributed-memory dense linear algebra and Elemental can relatively easily
+interface with it should ScaLAPACK support be detected during the configuration
+phase of the build.
+While Elemental contains a relatively recent analogue of the ScaLAPACK
+implementations resulting from [HWD2002]_, [Fahey2003]_), and [GKK2010]_,
+this new implementation has not been properly benchmarked yet.
 
-Support for ScaLAPACK can be disabled via the CMake option ``-D EL_DISABLE_SCALAPACK=TRUE``, or Elemental can be requested to avoid detecting previous 
+Support for ScaLAPACK can be enabled via the CMake option ``-D EL_DISABLE_SCALAPACK=OFF``, and Elemental can be requested to avoid detecting previous 
 installations and to download/install the library via 
 ``-D EL_BUILD_SCALAPACK=TRUE``.
 
@@ -366,12 +376,14 @@ Elemental can often be built and installed using the commands::
     cd Elemental
     mkdir build
     cd build
-    cmake ..
+    sudo cmake ..
     sudo make
     sudo make install
 
-Note that super-user privileges may be required for the ``make`` phase due to 
-the installation of external packages.
+Note that super-user privileges may be required for the ``cmake`` and ``make``
+phase due to CMake's ``ExternalProject_Add`` creating folders in the
+installation directory during the ``cmake`` phase and installing the external
+projects into the installation directory during the ``make`` phase.
 
 As with the installation of CMake, the default install location is 
 system-wide, e.g., ``/usr/local``. The installation directory of the main 

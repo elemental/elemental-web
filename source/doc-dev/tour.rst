@@ -409,14 +409,14 @@ Second-Order Cone Programs via primal-dual Interior Point Methods. Further,
 each of these classes has solvers tailored to *direct conic form*, e.g.,
 
 .. math::
-   \min_x     & \{\; c^T x  \; | \; A x = b \;\wedge\; x \in \mathcal{K} \;\},\\
-   \max_{y,z} & \{\; - b^T y \; | \; A^T y - z + c = 0 \;\wedge\; z \in \mathcal{K} \;\},
+   \min_x     & \{\; c^T x  \; | \; A x = b,\; x \in \mathcal{K} \;\},\\
+   \max_{y,z} & \{\; - b^T y \; | \; A^T y - z + c = 0,\; z \in \mathcal{K} \;\},
 
 and *affine conic form*, e.g.,
 
 .. math::
-   \min_{x,s} & \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h\;\wedge\; s \in \mathcal{K} \;\}, \\
-   \max_{y,z} & \{\; - b^T y - h^T z \; | \; A^T y + G^T z + c = 0 \;\wedge\; z \in \mathcal{K} \;\},
+   \min_{x,s} & \{\; c^T x  \; | \; A x = b,\; G x + s = h,\; s \in \mathcal{K} \;\}, \\
+   \max_{y,z} & \{\; - b^T y - h^T z \; | \; A^T y + G^T z + c = 0,\; z \in \mathcal{K} \;\},
 
 where :math:`\mathcal{K}` is a product of Second-Order and Positive Orthant
 cones. Since Elemental supports the gamut of floating-point types from ``float``
@@ -428,22 +428,37 @@ Linear Programs
 For example, one could solve a random dense LP with an arbitrary floating-point
 type using:
 
+.. note::
+
+   Due to some equilibration routines having only been defined for all cases
+   except for sequential dense matrices, the following does not work in 0.87.5
+   but works in subsequent versions.
+
 .. code-block:: c++
 
   #include <El.hpp>
   template<typename Real>
-  void RandomLP( El::Int m, El::Int n, El::Int k )
+  void RandomFeasibleLP( El::Int m, El::Int n, El::Int k )
   {
-    // Create random inputs for
+    El::Output("Testing with ",El::TypeName<Real>());
+    // Create random (primal feasible) inputs for the primal/dual problem
     //    arginf_{x,s} { c^T x | A x = b, G x + s = h, s >= 0 }
+    //    argsup_{y,z} { -b^T y - h^T z | A^T y + G^T z + c = 0, z >= 0 }.
+
+    // xFeas and sFeas are only used for problem generation
+    El::Matrix<Real> xFeas, sFeas;
+    El::Uniform( xFeas, n, 1 ); // Sample over B_1(0)
+    El::Uniform( sFeas, k, 1, Real(1), Real(1) ); // Sample over B_1(1)
+
     El::Matrix<Real> A, G, b, c, h;
     El::Uniform( A, m, n );
     El::Uniform( G, k, n );
-    El::Uniform( b, m, 1 );
+    El::Gemv( El::NORMAL, Real(1), A, xFeas, b );
+    El::Gemv( El::NORMAL, Real(1), G, xFeas, h );
+    h += sFeas;
     El::Uniform( c, n, 1 );
-    El::Uniform( h, k, 1 );
 
-    // Solve the Linear Program with the default options for this precision
+    // Solve the primal/dual Linear Program with the default options
     El::Matrix<Real> x, y, z, s;
     El::LP( A, G, b, c, h, x, y, z, s );
 

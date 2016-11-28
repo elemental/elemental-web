@@ -404,9 +404,77 @@ General Linear Model (GLM)
 
 Solving Linear, Quadratic Programs, and Second-Order Cone Programs
 ==================================================================
+Elemental contains sequential and distributed, dense and sparse, variable-precision, interfaces for solving Linear Programs, Quadratic Programs, and
+Second-Order Cone Programs via primal-dual Interior Point Methods. Further,
+each of these classes has solvers tailored to *direct conic form*, e.g.,
+
+.. math::
+   \min_x     & \{\; c^T x  \; | \; A x = b \;\wedge\; x \in \mathcal{K} \;\},\\
+   \max_{y,z} & \{\; - b^T y \; | \; A^T y - z + c = 0 \;\wedge\; z \in \mathcal{K} \;\},
+
+and *affine conic form*, e.g.,
+
+.. math::
+   \min_{x,s} & \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h\;\wedge\; s \in \mathcal{K} \;\}, \\
+   \max_{y,z} & \{\; - b^T y - h^T z \; | \; A^T y + G^T z + c = 0 \;\wedge\; z \in \mathcal{K} \;\},
+
+where :math:`\mathcal{K}` is a product of Second-Order and Positive Orthant
+cones. Since Elemental supports the gamut of floating-point types from ``float``
+up to ``El::BigFloat``, one can solve Second-Order Cone Programs to 1000 digits
+of accuracy (should one so desire).
 
 Linear Programs
 ---------------
+For example, one could solve a random dense LP with an arbitrary floating-point
+type using:
+
+.. code-block:: c++
+
+  #include <El.hpp>
+  template<typename Real>
+  void RandomLP( El::Int m, El::Int n, El::Int k )
+  {
+    // Create random inputs for
+    //    arginf_{x,s} { c^T x | A x = b, G x + s = h, s >= 0 }
+    El::Matrix<Real> A, G, b, c, h;
+    El::Uniform( A, m, n );
+    El::Uniform( G, k, n );
+    El::Uniform( b, m, 1 );
+    El::Uniform( c, n, 1 );
+    El::Uniform( h, k, 1 );
+
+    // Solve the Linear Program with the default options for this precision
+    El::Matrix<Real> x, y, z, s;
+    El::LP( A, G, b, c, h, x, y, z, s );
+
+    // Print the primal and dual objective values
+    const Real primal = El::Dot(c,x);
+    const Real dual = -El::Dot(b,y) - El::Dot(h,z);
+    El::Output("c^T x = ",primal);
+    El::Output("-b^T y - h^T z = ",dual);
+
+    // Print the relative primal feasibility residual,
+    //   || A x - b ||_2 / max( || b ||_2, 1 ).
+    El::Matrix<Real> rPrimal;
+    El::Gemv( El::NORMAL, Real(1), A, x, rPrimal );
+    rPrimal -= b;
+    const Real bFrob = El::FrobeniusNorm( b );
+    const Real rPrimalFrob = El::FrobeniusNorm( rPrimal );
+    const Real primalRelResid = rPrimalFrob / El::Max( bFrob, Real(1) );
+    El::Output("|| A x - b ||_2 / || b ||_2 = ",primalRelResid);
+
+    // Print the relative dual feasiability residual,
+    //   || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ).
+    El::Matrix<Real> rDual;
+    El::Gemv( El::TRANSPOSE, Real(1), A, y, rDual );
+    El::Gemv( El::TRANSPOSE, Real(1), G, z, Real(1), rDual );
+    rDual += c;
+    const Real cFrob = El::FrobeniusNorm( c );
+    const Real rDualFrob = El::FrobeniusNorm( c );
+    const Real dualRelResid = rDualFrob / El::Max( cFrob, Real(1) );
+    El::Output
+    ("|| A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = ",dualRelResid);
+  }
 
 Quadratic Programs
 ------------------

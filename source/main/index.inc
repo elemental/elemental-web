@@ -21,8 +21,8 @@
 
     <p>
     The current recommended release of Elemental is
-    <a href="https://github.com/elemental/Elemental/releases/tag/v0.87.4">
-    version 0.87.4</a>. The documentation will soon be updated to reflect the
+    <a href="https://github.com/elemental/Elemental/releases/tag/v0.87.5">
+    version 0.87.5</a>. The documentation will soon be updated to reflect the
     large amount of functionality added in this release.
     </p>
   <div class="clear-block"></div>

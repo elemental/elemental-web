@@ -324,7 +324,7 @@ distributed-memory dense linear algebra and Elemental can relatively easily
 interface with it should ScaLAPACK support be detected during the configuration
 phase of the build.
 While Elemental contains a relatively recent analogue of the ScaLAPACK
-implementations resulting from [HWD2002]_, [Fahey2003]_), and [GKK2010]_,
+implementations resulting from [HWD2002]_, [Fahey2003]_, and [GKK2010]_,
 this new implementation has not been properly benchmarked yet.
 
 Support for ScaLAPACK can be enabled via the CMake option ``-D EL_DISABLE_SCALAPACK=OFF``, and Elemental can be requested to avoid detecting previous 

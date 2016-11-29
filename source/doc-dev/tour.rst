@@ -444,12 +444,12 @@ type using:
     // Create random (primal feasible) inputs for the primal/dual problem
     //    arginf_{x,s} { c^T x | A x = b, G x + s = h, s >= 0 }
     //    argsup_{y,z} { -b^T y - h^T z | A^T y + G^T z + c = 0, z >= 0 }.
-
+    
     // xFeas and sFeas are only used for problem generation
     El::Matrix<Real> xFeas, sFeas;
     El::Uniform( xFeas, n, 1 ); // Sample over B_1(0)
     El::Uniform( sFeas, k, 1, Real(1), Real(1) ); // Sample over B_1(1)
-
+    
     El::Matrix<Real> A, G, b, c, h;
     El::Uniform( A, m, n );
     El::Uniform( G, k, n );
@@ -457,17 +457,22 @@ type using:
     El::Gemv( El::NORMAL, Real(1), G, xFeas, h );
     h += sFeas;
     El::Uniform( c, n, 1 );
-
+    
     // Solve the primal/dual Linear Program with the default options
     El::Matrix<Real> x, y, z, s;
+    El::Timer timer; 
+    timer.Start();
     El::LP( A, G, b, c, h, x, y, z, s );
-
+    El::Output("Primal-dual LP took ",timer.Stop()," seconds");
+    
     // Print the primal and dual objective values
     const Real primal = El::Dot(c,x);
     const Real dual = -El::Dot(b,y) - El::Dot(h,z);
+    const Real relGap = El::Abs(primal-dual) / El::Max(El::Abs(dual),Real(1));
     El::Output("c^T x = ",primal);
     El::Output("-b^T y - h^T z = ",dual);
-
+    El::Output("|gap| / max( |dual|, 1 ) = ",relGap);
+    
     // Print the relative primal feasibility residual,
     //   || A x - b ||_2 / max( || b ||_2, 1 ).
     El::Matrix<Real> rPrimal;
@@ -477,7 +482,7 @@ type using:
     const Real rPrimalFrob = El::FrobeniusNorm( rPrimal );
     const Real primalRelResid = rPrimalFrob / El::Max( bFrob, Real(1) );
     El::Output("|| A x - b ||_2 / || b ||_2 = ",primalRelResid);
-
+    
     // Print the relative dual feasiability residual,
     //   || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ).
     El::Matrix<Real> rDual;
@@ -485,12 +490,94 @@ type using:
     El::Gemv( El::TRANSPOSE, Real(1), G, z, Real(1), rDual );
     rDual += c;
     const Real cFrob = El::FrobeniusNorm( c );
-    const Real rDualFrob = El::FrobeniusNorm( c );
+    const Real rDualFrob = El::FrobeniusNorm( rDual );
     const Real dualRelResid = rDualFrob / El::Max( cFrob, Real(1) );
-    El::Output
+    El::Output 
     ("|| A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = ",dualRelResid);
+    El::Output("");
   }
 
+With a driver such as
+
+.. code-block:: c++
+  
+  int main( int argc, char* argv[] )
+  {
+      El::Environment env( argc, argv );
+      try
+      {
+          const El::Int m = El::Input("--m","height of A",70);
+          const El::Int n = El::Input("--n","width of A",80);
+          const El::Int k = El::Input("--k","height of G",90);
+          El::ProcessInput();
+  
+          RandomFeasibleLP<float>( m, n, k );
+          RandomFeasibleLP<double>( m, n, k );
+  #ifdef EL_HAVE_QD
+          RandomFeasibleLP<El::DoubleDouble>( m, n, k );
+          RandomFeasibleLP<El::QuadDouble>( m, n, k );
+  #endif
+  #ifdef EL_HAVE_QUAD
+          RandomFeasibleLP<El::Quad>( m, n, k );
+  #endif
+  #ifdef EL_HAVE_MPC
+          RandomFeasibleLP<El::BigFloat>( m, n, k );
+  #endif
+      }
+      catch( std::exception& e ) { El::ReportException(e); }
+      return 0;
+  }
+
+one should see output of the form::
+  
+  Testing with float
+  Primal-dual LP took XXX seconds
+  c^T x = XXX
+  -b^T y - h^T z = XXX
+  |gap| / max( |dual|, 1 ) = 5.53131e-05
+  || A x - b ||_2 / || b ||_2 = 1.38188e-07
+  || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = 9.74921e-07
+  
+  Testing with double
+  Primal-dual LP took XXX seconds
+  c^T x = XXX
+  -b^T y - h^T z = XXX
+  |gap| / max( |dual|, 1 ) = 4.88859e-10
+  || A x - b ||_2 / || b ||_2 = 2.7623e-16
+  || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = 2.17927e-15
+  
+  Testing with DoubleDouble
+  Primal-dual LP took XXX seconds
+  c^T x = XXX
+  -b^T y - h^T z = XXX
+  |gap| / max( |dual|, 1 ) = 7.278639e-18
+  || A x - b ||_2 / || b ||_2 = 4.697166e-32
+  || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = 1.025945e-18
+  
+  Testing with QuadDouble
+  Primal-dual LP took XXX seconds
+  c^T x = XXX
+  -b^T y - h^T z = XXX
+  |gap| / max( |dual|, 1 ) = 1.421369e-33
+  || A x - b ||_2 / || b ||_2 = 7.062635e-65
+  || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = 3.568571e-36
+  
+  Testing with Quad
+  Primal-dual LP took XXX seconds
+  c^T x = XXX
+  -b^T y - h^T z = XXX
+  |gap| / max( |dual|, 1 ) = 2.508642e-18
+  || A x - b ||_2 / || b ||_2 = 3.923351e-34
+  || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = 3.076727e-20
+  
+  Testing with BigFloat
+  Primal-dual LP took XXX seconds
+  c^T x = XXX
+  -b^T y - h^T z = XXX
+  |gap| / max( |dual|, 1 ) = 8.12654984542403493113930928544054111846416192203054855606794438829784991753557e-41
+  || A x - b ||_2 / || b ||_2 = 3.41872271095398980556412036957797890873177437849829019239512280050095223533333e-77
+  || A^T y + G^T z + c ||_2 / max( || c ||_2, 1 ) = 2.20856170189320269413056964848038584344997345561703519520787934256169419209754e-42
+  
 Quadratic Programs
 ------------------
 

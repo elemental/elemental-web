@@ -604,6 +604,57 @@ Vanilla BKZ
 
 Solving Shortest Vector Problems
 --------------------------------
+One can easily solve `SVPChallenge 40 <https://www.latticechallenge.org/svp-challenge/download/challenges/svpchallengedim40seed0.txt>`__ via Elemental's BKZ.
+(Though it is important to note that Elemental does not *yet* support the
+important, aggressive precision-dropping of libraries such as NTL and FPLLL).
+
+.. note::
+
+   There is no agreed-upon convention for whether lattices should be represented
+   as collections of column or row vectors. Elemental adopts the convention of
+   column vectors, whereas the SVP Challenge uses row vectors. For this reason,
+   in addition to `[` and `]` symbols needing to be removed from the above link,
+   the matrix is transposed in the code below.
+
+.. code-block:: c++
+
+  El::Matrix<Real> BTrans;
+  El::Read( BTrans, "SVPChallenge-40.txt" );
+  El::Matrix<Real> B;
+  El::Transpose( BTrans, B ); 
+  
+  El::Matrix<Real> R; // Will hold the 'R' of the QR factorization of final B
+  El::BKZCtrl<Real> ctrl; // One can modify the members to customize BKZ
+  ctrl.blocksize = 20; // Enumerate over windows of 20 vectors at a time
+  auto info = El::BKZ( B, R, ctrl );
+  El::Print( B, "Reduced basis" );
+  El::Print( R, "R" );
+  El::Output("achieved delta:   ",info.delta);
+  El::Output("achieved eta:     ",info.eta);
+  El::Output("num swaps:        ",info.numSwaps);
+  El::Output("num enums:        ",info.numEnums);
+  El::Output("num failed enums: ",info.numEnumFailures);
+  El::Output("log(vol(L)):      ",info.logVol);
+  const Real GH = El::LatticeGaussianHeuristic( info.rank, info.logVol );
+  const Real challenge = 1.05*GH;
+  El::Output("GaussianHeuristic(L): ",GH);
+  El::Output("1.05*GH(L): ",challenge);
+  
+  auto b0 = B( El::ALL, El::IR(0) ); // The first column is our approx. shortest
+  const Real b0Norm = El::FrobeniusNorm( b0 );
+  if( b0Norm <= challenge )
+  {
+    El::Output
+    ("SVP Challenge solved via BKZ: || b_0 ||_2=",b0Norm," <= 1.05*GH(L)=",
+     challenge);
+    El::Write( b0, "b0.txt", El::ASCII, "b0" );
+  }
+  else
+  {
+    El::Output
+    ("SVP Challenge was not solved by BKZ: || b_0 ||_2=",b0Norm,
+     " > 1.05*GH(L)=",challenge);
+  }
 
 Integer dependence searches
 ---------------------------

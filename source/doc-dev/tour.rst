@@ -153,6 +153,9 @@ Dense linear algebra
 
 Solving linear systems
 ----------------------
+
+A sequential Hilbert example
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 As a pathological example, the following routine can be used to test a
 Cholesky-based linear system solver on a Hilbert matrix for various precisions:
 
@@ -177,7 +180,8 @@ Cholesky-based linear system solver on a Hilbert matrix for various precisions:
       El::Gemv( El::NORMAL, Real(1), A, x, b );
       const Real bFrob = El::FrobeniusNorm( b );
   
-      // Form xComp := inv(A) b
+      // Form xComp := inv(A) b using a solver that exploits the fact that
+      // Hilbert matrices are Hermitian Positive-Definite (HPD).
       El::Matrix<Real> xComp(b);
       El::HPDSolve( El::LOWER, El::NORMAL, A, xComp );
   
@@ -205,43 +209,37 @@ double-precision can successfully factor 20 x 20 Hilbert matrices:
   int main( int argc, char* argv[] )
   {
       El::Environment env( argc, argv );
-  
-      El::Int n;
-  #ifdef EL_HAVE_MPC
-      mpfr_prec_t prec;
-  #endif
       try
       {
-          n = El::Input("--n","matrix width",20);
+          const El::Int n = El::Input("--n","matrix width",20);
   #ifdef EL_HAVE_MPC
-          prec = El::Input("--prec","MPFR precision",256);
+          mpfr_prec_t prec = El::Input("--prec","MPFR precision",256);
   #endif
           El::ProcessInput();
-      }
-      catch( std::exception& e ) { El::ReportException(e); }
+
   #ifdef EL_HAVE_MPC
-      El::mpfr::SetPrecision( prec );
+          El::mpfr::SetPrecision( prec );
   #endif
   
-      try { SolveHilbert<float>( n ); }
-      catch( std::exception& e ) { El::ReportException(e); }
-      try { SolveHilbert<double>( n ); }
-      catch( std::exception& e ) { El::ReportException(e); }
+          try { SolveHilbert<float>( n ); }
+          catch( std::exception& e ) { El::ReportException(e); }
+          try { SolveHilbert<double>( n ); }
+          catch( std::exception& e ) { El::ReportException(e); }
   #ifdef EL_HAVE_QD
-      try { SolveHilbert<El::DoubleDouble>( n ); }
-      catch( std::exception& e ) { El::ReportException(e); }
-      try { SolveHilbert<El::QuadDouble>( n ); }
-      catch( std::exception& e ) { El::ReportException(e); }
+          try { SolveHilbert<El::DoubleDouble>( n ); }
+          catch( std::exception& e ) { El::ReportException(e); }
+          try { SolveHilbert<El::QuadDouble>( n ); }
+          catch( std::exception& e ) { El::ReportException(e); }
   #endif
   #ifdef EL_HAVE_QUAD
-      try { SolveHilbert<El::Quad>( n ); }
-      catch( std::exception& e ) { El::ReportException(e); }
+          try { SolveHilbert<El::Quad>( n ); }
+          catch( std::exception& e ) { El::ReportException(e); }
   #endif
   #ifdef EL_HAVE_MPC
-      try { SolveHilbert<El::BigFloat>( n ); }
-      catch( std::exception& e ) { El::ReportException(e); }
+          try { SolveHilbert<El::BigFloat>( n ); }
+          catch( std::exception& e ) { El::ReportException(e); }
   #endif
-  
+      } catch( std::exception& e ) { El::ReportException(e); }
       return 0;
   }
 
@@ -275,6 +273,117 @@ A cursory comparison of the residual and solution errors relative to machine eps
 solution error loses about 26 digits of accuracy. Because the relative residuals
 are on the order of machine epsilon, iterative refinement cannot be expected to
 yield any improvement.
+
+A distributed uniform random example
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modest changes to the above sequential example provide a distributed
+(real or complex) analogue for uniform random matrices:
+
+.. code-block:: c++
+
+  template<typename Field> // 'Field' can be complex, e.g., El::Complex<double>
+  void SolveUniform( Int n, const El::Grid& grid )
+  {
+      // Since 'Field' could be real or complex, Elemental has a convenience
+      // template for extracting the real 'base' field.
+      typedef El::Base<Field> Real;
+      if( grid.Rank() == 0 )
+          El::Output
+          ("Attempting to solve uniform system with ",El::TypeName<Field>());
+  
+      // Form an n x n random matrix with i.i.d. entries sampled from the
+      // uniform distribution over the ball of radius 'radius' centered at
+      const Field center = Field(0); // center samples at the origin
+      const Real radius = Field(1); // sample over ball of radius 1
+      El::DistMatrix<Field> A(grid);
+      El::Uniform( A, n, n, center, radius );
+  
+      // Form a uniform random vector
+      El::DistMatrix<Field> x(grid);
+      El::Uniform( x, n, 1 );
+      const Real xFrob = El::FrobeniusNorm( x );
+  
+      // Form b := A x
+      El::DistMatrix<Field> b(grid);
+      El::Gemv( El::NORMAL, Field(1), A, x, b );
+      const Real bFrob = El::FrobeniusNorm( b );
+  
+      // Form xComp := inv(A) b
+      El::DistMatrix<Field> xComp(b);
+      El::LinearSolve( El::NORMAL, A, xComp );
+  
+      // Form r := b - A x
+      El::DistMatrix<Field> r(b);
+      El::Gemv( El::NORMAL, Field(-1), A, xComp, Field(1), r );
+      const Real rFrob = El::FrobeniusNorm( r );
+      if( grid.Rank() == 0 )
+          El::Output("|| r ||_2 / || b ||_2 = ",rFrob/bFrob);
+
+      // Form e := x - xComp
+      El::DistMatrix<Field> e(x);
+      e -= xComp;
+      const Real eFrob = El::FrobeniusNorm( e );
+      if( grid.Rank() == 0 )
+      {
+          El::Output("|| e ||_2 / || x ||_2 = ",eFrob/xFrob);
+          El::Output("");
+      }
+  }
+
+An extremely basic (especially in the sense of not configuring the process grid)
+example of driving the above routine for the suite of datatypes is given below.
+Unlike the previous example, there is no need to wrap every single test with an
+try/catch block since we are not attempting to solve pathologically
+ill-conditioned systems.
+
+.. code-block:: c++
+  
+  int main( int argc, char* argv[] )
+  {
+      El::Environment env( argc, argv );
+      try
+      {
+          const El::Int n = El::Input("--n","matrix width",20);
+  #ifdef EL_HAVE_MPC
+          mpfr_prec_t prec = El::Input("--prec","MPFR precision",256);
+  #endif
+          El::ProcessInput();
+
+  #ifdef EL_HAVE_MPC
+          El::mpfr::SetPrecision( prec );
+  #endif
+
+          // While this is equivalent to the default constructor, it is a
+          // middle-of-the-road example of building a process grid. If
+          // performance is important, passing in a good height for the process
+          // grid (and ensuring a good mapping of processes to your network)
+          // is highly recommended.
+          const El::Grid grid(El::mpi::COMM_WORLD);
+  
+          SolveUniform<float>( n, grid );
+          SolveUniform<El::Complex<float>>( n, grid );
+          SolveUniform<double>( n, grid );
+          SolveUniform<El::Complex<double>>( n, grid );
+  #ifdef EL_HAVE_QD
+          SolveUniform<El::DoubleDouble>( n, grid );
+          SolveUniform<El::Complex<El::DoubleDouble>>( n, grid );
+          SolveUniform<El::QuadDouble>( n, grid );
+          SolveUniform<El::Complex<El::QuadDouble>>( n, grid );
+  #endif
+  #ifdef EL_HAVE_QUAD
+          SolveUniform<El::Quad>( n, grid );
+          SolveUniform<El::Complex<El::Quad>>( n, grid );
+  #endif
+  #ifdef EL_HAVE_MPC
+          SolveUniform<El::BigFloat>( n, grid );
+          SolveUniform<El::Complex<El::BigFloat>>( n, grid );
+  #endif
+      } catch( std::exception& e ) { El::ReportException(e); }
+      return 0;
+  }
+
+Factorizations (and updating them)
+----------------------------------
 
 Cholesky
 ^^^^^^^^

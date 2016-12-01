@@ -4,6 +4,19 @@ This is just starting to be sketched and the details should be filled in soon.
 
 Boiler-plate programs
 =====================
+Elemental installations include a file named ``ElVars`` which can be included
+in a ``Makefile`` to simplify reproducing the build environment used for 
+building Elemental. For example, a ``Makefile``
+
+.. code-block:: Makefile
+
+  include /usr/local/conf/ElVars
+  %: %.cpp
+  	$(CXX) $(EL_COMPILE_FLAGS) $< -o $@ $(EL_LINK_FLAGS) $(EL_LIBS)
+
+should successfully compile and link any `.cpp` drivers in the same folder as
+the ``Makefile`` (after running ``make``). A simple C++ driver for Elemental
+should have a ``main`` of the basic form
 
 .. code-block:: c++
 
@@ -16,6 +29,23 @@ Boiler-plate programs
      } catch( std::exception& except ) { El::ReportException(except); }
      return 0;
    }
+
+On OS X, successfully running said programs typically requires setting the
+environment variable ``DYLD_LIBRARY_PATH`` to include the location of the 
+Elemental shared library, e.g., ``/usr/local/lib``. On Unix systems, the 
+``LD_LIBRARY_PATH`` variable should be set instead.
+
+In order to use Elemental's python interface, one must also set the ``PYTHONPATH`` variable to include the ``python/`` subfolder of the installation, e.g.,
+``/usr/local/python``. The program
+
+.. code-block:: python
+
+   import El
+   A = El.Matrix(El.dTag)
+   El.Uniform( A, 10, 10 )
+   El.Print( A, "A" )
+
+should print a 10 x 10 matrix if the configuration was successful.
 
 Floating-point types
 ====================
@@ -175,7 +205,8 @@ Cholesky-based linear system solver on a Hilbert matrix for various precisions:
       El::Uniform( x, n, 1 );
       const Real xFrob = El::FrobeniusNorm( x );
   
-      // Form b := A x
+      // Form b := A x using a GEneral Matrix Vector (GEMV) product.
+      // The terminology is derived from the BLAS naming convention.
       El::Matrix<Real> b;
       El::Gemv( El::NORMAL, Real(1), A, x, b );
       const Real bFrob = El::FrobeniusNorm( b );
@@ -282,7 +313,7 @@ Modest changes to the above sequential example provide a distributed
 .. code-block:: c++
 
   template<typename Field> // 'Field' can be complex, e.g., El::Complex<double>
-  void SolveUniform( Int n, const El::Grid& grid )
+  void SolveUniform( El::Int n, const El::Grid& grid )
   {
       // Since 'Field' could be real or complex, Elemental has a convenience
       // template for extracting the real 'base' field.
@@ -294,7 +325,7 @@ Modest changes to the above sequential example provide a distributed
       // Form an n x n random matrix with i.i.d. entries sampled from the
       // uniform distribution over the ball of radius 'radius' centered at
       const Field center = Field(0); // center samples at the origin
-      const Real radius = Field(1); // sample over ball of radius 1
+      const Real radius = Real(1); // sample over ball of radius 1
       El::DistMatrix<Field> A(grid);
       El::Uniform( A, n, n, center, radius );
   
@@ -303,14 +334,15 @@ Modest changes to the above sequential example provide a distributed
       El::Uniform( x, n, 1 );
       const Real xFrob = El::FrobeniusNorm( x );
   
-      // Form b := A x
+      // Form b := A x using a GEneral Matrix Vector (GEMV) product.
+      // The terminology is derived from the BLAS naming convention.
       El::DistMatrix<Field> b(grid);
       El::Gemv( El::NORMAL, Field(1), A, x, b );
       const Real bFrob = El::FrobeniusNorm( b );
   
       // Form xComp := inv(A) b
       El::DistMatrix<Field> xComp(b);
-      El::LinearSolve( El::NORMAL, A, xComp );
+      El::LinearSolve( A, xComp );
   
       // Form r := b - A x
       El::DistMatrix<Field> r(b);
@@ -381,6 +413,56 @@ ill-conditioned systems.
       } catch( std::exception& e ) { El::ReportException(e); }
       return 0;
   }
+
+One should see output of the form::
+  
+  Attempting to solve uniform system with float
+  || r ||_2 / || b ||_2 = 2.67869e-07
+  || e ||_2 / || x ||_2 = 5.59922e-06
+  
+  Attempting to solve uniform system with Complex<float>
+  || r ||_2 / || b ||_2 = 2.90457e-07
+  || e ||_2 / || x ||_2 = 1.6407e-06
+  
+  Attempting to solve uniform system with double
+  || r ||_2 / || b ||_2 = 5.45493e-16
+  || e ||_2 / || x ||_2 = 1.74868e-15
+  
+  Attempting to solve uniform system with Complex<double>
+  || r ||_2 / || b ||_2 = 5.74873e-16
+  || e ||_2 / || x ||_2 = 1.04947e-15
+  
+  Attempting to solve uniform system with DoubleDouble
+  || r ||_2 / || b ||_2 = 5.287884e-32
+  || e ||_2 / || x ||_2 = 7.218625e-32
+  
+  Attempting to solve uniform system with Complex<DoubleDouble>
+  || r ||_2 / || b ||_2 = 6.457957e-32
+  || e ||_2 / || x ||_2 = 1.449757e-31
+  
+  Attempting to solve uniform system with QuadDouble
+  || r ||_2 / || b ||_2 = 1.235778e-64
+  || e ||_2 / || x ||_2 = 7.264402e-64
+  
+  Attempting to solve uniform system with Complex<QuadDouble>
+  || r ||_2 / || b ||_2 = 2.222868e-64
+  || e ||_2 / || x ||_2 = 7.022524e-64
+
+  Attempting to solve uniform system with Quad
+  || r ||_2 / || b ||_2 = 3.638647e-34
+  || e ||_2 / || x ||_2 = 2.493450e-33
+  
+  Attempting to solve uniform system with Complex<Quad>
+  || r ||_2 / || b ||_2 = 4.912223e-34
+  || e ||_2 / || x ||_2 = 1.251209e-32
+  
+  Attempting to solve uniform system with BigFloat
+  || r ||_2 / || b ||_2 = 2.16653828655365239586948146682077468955614163540705037520406655402511420652447e-77
+  || e ||_2 / || x ||_2 = 2.97048990994165182685234224120022319803727420306104459599455276499915869056496e-76
+
+  Attempting to solve uniform system with Complex<BigFloat>
+  || r ||_2 / || b ||_2 = 3.24738616195777851543838631131220519424253089607715836789726606336887173848747e-77
+  || e ||_2 / || x ||_2 = 3.17455703192509779735989674848792372192302739322476068009648661219152697503029e-76
 
 Factorizations (and updating them)
 ----------------------------------

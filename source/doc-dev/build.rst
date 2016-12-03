@@ -4,10 +4,11 @@ Elemental's build system relies on `CMake <http://www.cmake.org>`__
 in order to manage a large number of configuration options in a 
 platform-independent manner; it can be easily configured to build on Linux and 
 Unix environments (including Darwin), as well as via Cygwin in a Windows 
-environment (Visual Studio's is expected to begin supporting ``constexpr``, 
-which is heavily used by Elemental, with the official VS 2015 release in 
-July 2015). A relatively recent C++11 compiler (e.g., gcc >= 4.8) is 
-required in all cases.
+environment (Visual Studio support will be re-enabled in the near future).
+A relatively recent C++11 compiler (e.g., gcc >= 4.8) is required in all cases
+(please see `libelemental.org/compilers/ <http://libelemental.org/compilers/>`__
+for information on supported toolchains, and please feel free to provide
+feedback as/if this information becomes out-of-date).
 
 Elemental's main external dependencies are
 
@@ -333,13 +334,14 @@ installations and to download/install the library via
 
 libquadmath
 -----------
-If a GNU compiler is being used to compile Elemental, then it is likely that
-support for `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`_ was
+If a GNU or Intel compiler is being used to compile Elemental, then it is
+likely that support for
+`libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`_ was
 detected, and, by default, this would lead to both more robust Interior Point
 Methods and your copy of Elemental transitioning from the terms of the New 
 BSD License to the GNU General Public License. If you prefer not to use 
-Elemental under the terms of the GPL, then ``libquadmath`` must be disabled
-via the CMake option ``-D EL_DISABLE_QUAD=TRUE``.
+``libquadmath``, then it can be disabled via the CMake option
+``-D EL_DISABLE_QUAD=TRUE``.
 
 Qt5
 ---

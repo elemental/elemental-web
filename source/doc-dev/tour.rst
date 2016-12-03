@@ -494,6 +494,47 @@ Hermitian generalized-definite eigensolvers
 Singular Value Decompositions
 -----------------------------
 
+.. code-block:: c++
+
+   template<typename Field>
+   void TestSVD( El::Int m, El::Int n, El::Int rank )
+   {
+       El::Output("Testing SVD with ",El::TypeName<Field>());
+       typedef El::Base<Field> Real;
+       
+       // Form a random rank-r m x n matrix A := X Y
+       El::Matrix<Field> A;
+       El::Matrix<Field> X, Y;
+       El::Uniform( X, m, rank );
+       El::Uniform( Y, n, rank );
+       El::Gemm( El::NORMAL, El::NORMAL, Field(1), X, Y, A );
+
+       // Decide on the details behind the SVD solver
+       El::SVDCtrl<Real> ctrl;
+       ctrl.bidiagSVDCtrl.useQR = false; // This is the default option
+       // We can choose between El::THIN_SVD, El::COMPACT_SVD, El::FULL_SVD,
+       // and El::PRODUCT_SVD. A 'compact' SVD is most appropriate when the rank
+       // is less than the smallest dimension. 'Thin' is the default.
+       ctrl.bidiagSVDCtrl.approach = El::COMPACT_SVD;
+       // We can optionally request more accurate (but slower) internal QR
+       // iterations at the base of our Divide and Conquer tree. The default is
+       // El::RELATIVE_TO_MAX_SING_VAL_TOL.
+       ctrl.bidiagSVDCtrl.tolType = El::RELATIVE_TO_SELF_SING_VAL_TOL;
+
+       El::Matrix<Real> s;
+       El::Matrix<Field> U, V;
+       El::SVDInfo info = El::SVD( A, U, s, V, ctrl );
+       El::Output
+       ("Number of secular equation iterations: ",
+        info.bidiagSVDInfo.dcInfo.secularInfo.numIterations);
+       El::Output
+       ("Number of secular equation deflations: ",
+        info.bidiagSVDInfo.dcInfo.secularInfo.numDeflations);
+       El::Output
+       ("Number of internal QR iterations: ",
+        info.bidiagSVDInfo.qrInfo.numIterations);
+   }
+
 Schur decompositions
 --------------------
 

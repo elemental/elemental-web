@@ -23,7 +23,7 @@ following commands should install Elemental:
    
    sudo add-apt-repository ppa:libelemental/ppa
    sudo apt-get update
-   sudo apt-get install elemental
+   sudo apt-get install elemental-mpich-python2
 
 Direct repository access
 ------------------------

@@ -836,9 +836,117 @@ Vanilla BKZ
 
 Solving Shortest Vector Problems
 --------------------------------
-One can easily solve `SVPChallenge 40 <https://www.latticechallenge.org/svp-challenge/download/challenges/svpchallengedim40seed0.txt>`__ via Elemental's BKZ.
+Elemental has fairly unique support for solving complex-valued Shortest Vector
+Problems. For example we can search for a short vector (via BKZ(15)) in a
+knapsack-type basis of dimension 20 with a bottom row uniformly sampled within
+the unit ball of radius one million via:
+
+.. code-block:: c++
+
+    const El::Int blocksize = 15;
+    const El::Int n = 20;
+    const double radius = 1.e6;
+
+    El::Matrix<El::Complex<double>> B;
+    El::KnapsackTypeBasis( B, n, radius );
+    const double BOrigOne = El::OneNorm( B );
+    El::Output("|| B_orig ||_1 = ",BOrigOne);
+    El::Print( B, "BOrig" );
+
+    El::BKZCtrl<double> ctrl;
+    ctrl.blocksize = blocksize;
+
+    const double startTime = El::mpi::Time();
+    El::Matrix<El::Complex<double>> R;
+    auto info = El::BKZ( B, R, ctrl );
+    const double runTime = El::mpi::Time() - startTime;
+    El::Output
+    ("  BKZ(",blocksize,",",delta,",",eta,") took ",runTime," seconds");
+    El::Output("    achieved delta:   ",info.delta);
+    El::Output("    achieved eta:     ",info.eta);
+    El::Output("    num swaps:        ",info.numSwaps);
+    El::Output("    num enums:        ",info.numEnums);
+    El::Output("    num failed enums: ",info.numEnumFailures);
+    El::Output("    log(vol(L)):      ",info.logVol);
+    const double GH = El::LatticeGaussianHeuristic( info.rank, info.logVol );
+    const double challenge = targetRatio*GH;
+    El::Output("    GH(L):             ",GH);
+    El::Output("    targetRatio*GH(L): ",challenge);
+    const double BOneNorm = El::OneNorm( B );
+    El::Output("|| B ||_1 = ",BOneNorm);
+
+    auto b0 = B( El::ALL, El::IR(0) );
+    const double b0Norm = El::FrobeniusNorm( b0 );
+    El::Output("|| b_0 ||_2 = ",b0Norm);
+    El::Print( b0, "b0" );
+
+Running such a program should produce an output of the form::
+
+    || B_orig ||_1 = 933416
+    BOrig
+    1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i 0+0i
+    0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 0+0i 1+0i
+    668149+-143040i -115412+-37575i -261199+-400829i -741830+252950i 926075+-8490i 781004+180128i -97427+-363934i -7501+-144117i 102183+533991i -777958+515795i -248767+201953i -173494+113497i 247815+484513i 92420+412569i -151694+134284i 550082+-285722i -312183+-1197i 467495+570767i 91402+242320i 38949+212937i
+    
+    BKZ(15,0.9999,0.5) took 2.66103 seconds
+      achieved delta:   1.01546
+      achieved eta:     0.492272
+      num swaps:        3304
+      num enums:        86
+      num failed enums: 16
+      log(vol(L)):      14.7077
+      GH(L):             2.50488
+      targetRatio*GH(L): 2.63013
+    
+    || B ||_1 = 20.8284
+    || b_0 ||_2 = 3.60555
+    b0
+    0+0i
+    -1+0i
+    0+-1i
+    0+0i
+    0+0i
+    0+0i
+    -1+0i
+    -1+0i
+    0+-1i
+    0+0i
+    0+0i
+    0+1i
+    0+0i
+    -1+-1i
+    0+0i
+    0+-1i
+    1+-1i
+    0+0i
+    0+0i
+    1+0i
+    1+0i
+
+One can also easily solve
+`SVPChallenge 40 <https://www.latticechallenge.org/svp-challenge/download/challenges/svpchallengedim40seed0.txt>`__ via Elemental's BKZ.
 (Though it is important to note that Elemental does not *yet* support the
-important, aggressive precision-dropping of libraries such as NTL and FPLLL).
+important aggressive precision-dropping optimization of libraries such as
+`NTL <http://www.shoup.net/ntl/>`__ and
+`FPLLL <https://github.com/fplll/fplll>`__).
 
 .. note::
 

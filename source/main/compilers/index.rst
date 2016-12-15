@@ -18,11 +18,10 @@ Known toolchain issues
 GCC on recent versions of OS X
 ==============================
 As reported by
-`Issue #181 <https://github.com/elemental/Elemental/issues/181>`__, GCC appears
-to be improperly assuming 16-byte alignments on OS X when the `-O3`
+`Issue #181 <https://github.com/elemental/Elemental/issues/181>`__, GCC 5.x and 6.x appear to be improperly assuming 16-byte alignments on OS X when the `-O3`
 optimizations are enabled. While simply using `-O2` optimizations avoids the
 issue, Clang should perhaps be preferred on recent versions of OS X.
-
+OS X users are therefore recommended to install GCC 4.9.
 
 MPICH 3.2 + Clang + OS X
 ========================

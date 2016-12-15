@@ -111,7 +111,7 @@ The concatenation of the mantissas from two 64-bit IEEE floating-point types,
   lowest:    -1.797693e+308
 
 This datatype is only available if Elemental was configured with support for the
-package `QD <http://crd-legacy.lbl.gov/~dhbailey/mpdist/>`__ (the preprocessor definition `EL_HAVE_QD` will exist if this is the case).
+package `QD <http://crd-legacy.lbl.gov/~dhbailey/mpdist/>`__ (the preprocessor definition ``EL_HAVE_QD`` will exist if this is the case).
 
 QuadDouble
 ----------
@@ -126,10 +126,10 @@ The concatenation of the mantissas from four 64-bit IEEE floating-point types,
   max:       1.797693e+308
   lowest:    -1.797693e+308
 
-Like `El::DoubleDouble`, this datatype is only available if Elemental was
+Like ``El::DoubleDouble``, this datatype is only available if Elemental was
 configured with support for the package
 `QD <http://crd-legacy.lbl.gov/~dhbailey/mpdist/>`__ (the preprocessor
-definition `EL_HAVE_QD` will exist if this is the case).
+definition ``EL_HAVE_QD`` will exist if this is the case).
 
 Quad
 ----
@@ -146,7 +146,7 @@ The 128-bit IEEE floating-point type (which is made available by the GNU and Int
 This datatype is only available if Elemental was configured with support for
 ``__float128`` via
 `libquadmath <https://gcc.gnu.org/onlinedocs/libquadmath/>`__
-(the preprocessor definition `EL_HAVE_QUAD` will exist if this is the case).
+(the preprocessor definition ``EL_HAVE_QUAD`` will exist if this is the case).
 
 BigFloat
 --------
@@ -176,7 +176,7 @@ After a call to ``El::mpfr::SetPrecision( 1024 )``, the output should become::
 This datatype is only available if Elemental was configured with support for
 `MPFR <http://www.mpfr.org/>`__ and
 `MPC <http://www.multiprecision.org/index.php?prog=mpc>`__ 
-(the preprocessor definition `EL_HAVE_MPC` will exist if this is the case).
+(the preprocessor definition ``EL_HAVE_MPC`` will exist if this is the case).
 
 Dense linear algebra
 ====================
@@ -469,12 +469,168 @@ Factorizations (and updating them)
 
 Cholesky
 ^^^^^^^^
+Elemental provides sequential and distributed implementations (for its suite
+of datatypes) for Cholesky factorizations and quadratic-time low-rank 
+factorization updates and downdates. The following shows a generic routine
+for exercising these interfaces in a sequential environment:
+
+.. code-block:: c++
+  
+  template<typename Field>
+  void FormAndUpdateCholesky( El::Int n, El::Int rank, bool print )
+  {
+      El::Output("Testing Cholesky updates with ",El::TypeName<Field>());
+      typedef El::Base<Field> Real;
+      El::Timer timer;
+
+      // Generate a uniform random n x n matrix A.
+      El::Matrix<Field> A;
+      El::Uniform( A, n, n );
+      if( print )
+          El::Print( A, "A" );
+
+      // Form the Symmetric Positive Semi-Definite matrix C := A A^H + I.
+      El::Matrix<Field> C;
+      El::Identity( C, n, n );
+      El::Herk( El::LOWER, El::NORMAL, Real(1), A, Real(1), C ); 
+      if( print )
+          El::Print( C, "C" );
+
+      // Overwrite the lower triangle of C with its Cholesky factor.
+      timer.Start();
+      El::Cholesky( El::LOWER, C );
+      El::Output("Initial Cholesky: ",timer.Stop()," [sec]");
+      El::MakeTrapezoidal( El::LOWER, C );
+      if( print )
+          El::Print( C, "Cholesky factor of C" );
+
+      // Update the Cholesky factor of C to the Cholesky factor of C + 2 U U^H.
+      El::Matrix<Field> U;
+      El::Uniform( U, n, rank );
+      if( print )
+          El::Print( U, "U" );
+      timer.Start();
+      El::CholeskyMod( El::LOWER, C, Real(2), U );
+      El::Output("Cholesky update of rank ",rank,": ",timer.Stop()," [sec]");
+      if( print )
+          El::Print( C, "Cholesky factor of C + 2 U U^H" );
+
+      // Downdate Cholesky factor to C + 2 U U^H - V V^H, with || V ||_F = 1.
+      El::Matrix<Field> V;
+      El::Uniform( V, n, rank );
+      const Real VOrigFrob = El::FrobeniusNorm( V );
+      El::Scale( Field(1)/VOrigFrob, V );
+      if( print )
+          El::Print( V, "V" );
+      timer.Start();
+      El::CholeskyMod( El::LOWER, C, Real(-1), V );
+      El::Output("Cholesky downdate of rank ",rank,": ",timer.Stop()," [sec]");
+      if( print )
+          El::Print( C, "Cholesky factor of C + 2 U U^H - V V^H" );
+      El::Output("");
+  }
+
+Running on a recent Macbook Pro with Accelerate and ``VECLIB_MAXIMUM_THREADS=1``
+for 4000 x 4000 matrices and rank-two modifications should produce
+output of the form::
+  
+  Testing with float
+  Initial Cholesky: 0.351594 [sec]
+  Cholesky update of rank 2: 0.0181482 [sec]
+  Cholesky downdate of rank 2: 0.0203956 [sec]
+  
+  Testing with Complex<float>
+  Initial Cholesky: 3.78963 [sec]
+  Cholesky update of rank 2: 0.0632135 [sec]
+  Cholesky downdate of rank 2: 0.0666767 [sec]
+  
+  Testing with double
+  Initial Cholesky: 0.679954 [sec]
+  Cholesky update of rank 2: 0.0236046 [sec]
+  Cholesky downdate of rank 2: 0.0277888 [sec]
+  
+  Testing with Complex<double>
+  Initial Cholesky: 7.64342 [sec]
+  Cholesky update of rank 2: 0.104679 [sec]
+  Cholesky downdate of rank 2: 0.10832 [sec]
 
 Bunch-Kaufman
 ^^^^^^^^^^^^^
 
 LU
 ^^
+Elemental provides sequential and distributed implementations of Gaussian
+Elimination with no pivoting, partial pivoting, and full pivoting, as well as
+quadratic-time algorithms for performing low-rank modifications of an existing
+factorization.
+
+.. note::
+
+   The 0.87.5 release only supported a rank-one LU update interface, while
+   0.87.6 supports a higher-rank interfaces that calls the rank-one interface
+   in a loop. This approach will be replaced with a (much faster) single-pass
+   low-rank updating scheme in future releases.
+
+.. code-block:: c++
+
+  template<typename Field>
+  void FormAndUpdateLU( El::Int n, El::Int rank, bool print )
+  {
+      El::Output("Testing LU updates with ",El::TypeName<Field>());
+      typedef El::Base<Field> Real;
+      El::Timer timer;
+
+      // Generate a random n x n matrix A.
+      El::Matrix<Field> A;
+      El::Uniform( A, n, n );
+      if( print )
+          El::Print( A, "A" );
+
+      // Overwrite A with its LU factorization (with partial pivoting).
+      timer.Start();
+      El::Permutation P;
+      El::LU( A, P );
+      El::Output("Initial LU: ",timer.Stop()," [sec]");
+      if( print )
+          El::Print( A, "In-place LU of A" );
+
+      // Update the LU factors of A to those of A + 2 X Y^H.
+      El::Matrix<Field> X, Y;
+      El::Uniform( X, n, rank );
+      El::Uniform( Y, n, rank );
+      if( print )
+      {
+          El::Print( X, "X" );
+          El::Print( Y, "Y" );
+      }
+      timer.Start();
+      const bool conjugate = true;
+      El::LUMod( A, P, X, Y, conjugate );
+      El::Output("LU update of rank ",rank,": ",timer.Stop()," [sec]");
+      if( print )
+          El::Print( A, "In-place LU of A + 2 X Y^H" );
+      El::Output("");
+  }
+
+Running this for float and double on a single core should for 4000 x 4000 
+matrices and rank-two updates on a recent Macbook Pro with Accelerate and 
+``VECLIB_MAXIMUM_THREADS=1`` should yield results similar to::
+  
+  Testing LU updates with float
+  Initial LU: 1.01272 [sec]
+  LU update of rank 2: 0.230531 [sec]
+  
+  Testing LU updates with Complex<float>
+  Initial LU: 8.1526 [sec]
+  LU update of rank 2: 0.268828 [sec]
+  
+  Testing LU updates with double
+  Initial LU: 1.96392 [sec]
+  LU update of rank 2: 0.292697 [sec]
+  
+  Testing LU updates with Complex<double>
+  Initial LU: 15.9653 [sec]
+  LU update of rank 2: 0.398748 [sec]
 
 QR
 ^^
@@ -540,10 +696,16 @@ Schur decompositions
 
 Pseudospectra
 -------------
-Elemental contains many different interfaces for computing psuedospectra,
-but perhaps the simplest is via the library's Python interface. For example,
-the following script computes and visualizes the pseudospectra of the famous
-Fox-Li/Landau matrices (of dimension 50, 100, and 300) over a 300 x 300
+Elemental contains many different routines for computing one-norm and
+two-norm pseudospectra, i.e.,
+
+.. math::
+
+   \mathcal{L}_\epsilon^p(A) = \{ \xi \in \mathbb{C} : \| (A-\xi I)^{-1} \|_p > \frac{1}{\epsilon} \},
+
+but perhaps the simplest is via Elemental's Python interface. For example,
+the following Python script computes and visualizes the pseudospectra of the
+famous Fox-Li/Landau matrices (of dimension 50, 100, and 300) over a 300 x 300
 uniform grid.
 
 .. code-block:: python
@@ -594,8 +756,10 @@ uniform grid.
 
   El.Finalize()
 
-Some of the output of this script includes the visualization of the real part
-of the 50 x 50 discretization:
+An equivalent C++ program should should call the routines `El::Schur` and `El::TriangularSpectralPortrait`.
+
+Some of the output of the above script includes the visualization of the real
+part of the 50 x 50 discretization:
 
 .. image:: ../_static/images/tour/FoxLiReal_50_trim.png
 
@@ -967,34 +1131,6 @@ important aggressive precision-dropping optimization of libraries such as
   El::BKZCtrl<Real> ctrl; // One can modify the members to customize BKZ
   ctrl.blocksize = 20; // Enumerate over windows of 20 vectors at a time
   auto info = El::BKZ( B, R, ctrl );
-  El::Print( B, "Reduced basis" );
-  El::Print( R, "R" );
-  El::Output("achieved delta:   ",info.delta);
-  El::Output("achieved eta:     ",info.eta);
-  El::Output("num swaps:        ",info.numSwaps);
-  El::Output("num enums:        ",info.numEnums);
-  El::Output("num failed enums: ",info.numEnumFailures);
-  El::Output("log(vol(L)):      ",info.logVol);
-  const Real GH = El::LatticeGaussianHeuristic( info.rank, info.logVol );
-  const Real challenge = 1.05*GH;
-  El::Output("GaussianHeuristic(L): ",GH);
-  El::Output("1.05*GH(L): ",challenge);
-  
-  auto b0 = B( El::ALL, El::IR(0) ); // The first column is our approx. shortest
-  const Real b0Norm = El::FrobeniusNorm( b0 );
-  if( b0Norm <= challenge )
-  {
-    El::Output
-    ("SVP Challenge solved via BKZ: || b_0 ||_2=",b0Norm," <= 1.05*GH(L)=",
-     challenge);
-    El::Write( b0, "b0.txt", El::ASCII, "b0" );
-  }
-  else
-  {
-    El::Output
-    ("SVP Challenge was not solved by BKZ: || b_0 ||_2=",b0Norm,
-     " > 1.05*GH(L)=",challenge);
-  }
 
 Integer dependence searches
 ---------------------------

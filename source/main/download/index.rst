@@ -8,7 +8,7 @@ Download
 Releases
 --------
 The current relevant release of Elemental is
-`version 0.87.6 <https://github.com/elemental/Elemental/releases/tag/v0.87.6>`__.
+`version 0.87.7 <https://github.com/elemental/Elemental/releases/tag/v0.87.7>`__.
 The documentation has not yet been updated to reflect the large amount of
 functionality added in this release.
 

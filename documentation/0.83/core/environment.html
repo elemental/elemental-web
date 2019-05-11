@@ -1,0 +1,872 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Environment &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sequential matrices" href="matrix.html" />
+    <link rel="prev" title="libFLAME" href="imports/flame.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="environment">
+<h1>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h1>
+<p>This section describes the routines and data structures which help set up
+Elemental’s programming environment: it discusses initialization of Elemental,
+call stack manipulation, a custom data structure for complex data, many routines
+for manipulating real and complex data, a litany of custom enums, and a few
+useful routines for simplifying index calculations.</p>
+<div class="section" id="build-and-version-information">
+<h2>Build and version information<a class="headerlink" href="#build-and-version-information" title="Permalink to this headline">¶</a></h2>
+<p>Every Elemental driver with proper command-line argument processing will run
+<cite>PrintVersion</cite> if the <code class="docutils literal notranslate"><span class="pre">--version</span></code> argument is used. If <code class="docutils literal notranslate"><span class="pre">--build</span></code> is used,
+then all of the below information is reported.</p>
+<dl class="function">
+<dt id="_CPPv412PrintVersionRNSt7ostreamE">
+<span id="_CPPv312PrintVersionRNSt7ostreamE"></span><span id="_CPPv212PrintVersionRNSt7ostreamE"></span><span id="PrintVersion__osR"></span>void <code class="descname">PrintVersion</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412PrintVersionRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Prints the Git revision, (pre-)release version, and build type.
+For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span> <span class="n">version</span> <span class="n">information</span><span class="p">:</span>
+  <span class="n">Git</span> <span class="n">revision</span><span class="p">:</span> <span class="mi">3</span><span class="n">c6fbdaad901a554fc27a83378d63dab55af0dd3</span>
+  <span class="n">Version</span><span class="p">:</span>      <span class="mf">0.81</span><span class="o">-</span><span class="n">dev</span>
+  <span class="n">Build</span> <span class="nb">type</span><span class="p">:</span>   <span class="n">PureDebug</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PrintConfigRNSt7ostreamE">
+<span id="_CPPv311PrintConfigRNSt7ostreamE"></span><span id="_CPPv211PrintConfigRNSt7ostreamE"></span><span id="PrintConfig__osR"></span>void <code class="descname">PrintConfig</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PrintConfigRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Prints the relevant configuration details. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span> <span class="n">configuration</span><span class="p">:</span>
+  <span class="n">Math</span> <span class="n">libraries</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">liblapack</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libblas</span><span class="o">.</span><span class="n">so</span>
+  <span class="n">HAVE_F90_INTERFACE</span>
+  <span class="n">HAVE_PMRRR</span>
+  <span class="n">HAVE_MPI_REDUCE_SCATTER_BLOCK</span>
+  <span class="n">HAVE_MPI_IN_PLACE</span>
+  <span class="n">USE_BYTE_ALLGATHERS</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418PrintCCompilerInfoRNSt7ostreamE">
+<span id="_CPPv318PrintCCompilerInfoRNSt7ostreamE"></span><span id="_CPPv218PrintCCompilerInfoRNSt7ostreamE"></span><span id="PrintCCompilerInfo__osR"></span>void <code class="descname">PrintCCompilerInfo</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418PrintCCompilerInfoRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Prints the relevant C compilation information. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span><span class="s1">&#39;s C compiler info:</span>
+  <span class="n">CMAKE_C_COMPILER</span><span class="p">:</span>    <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcc</span>
+  <span class="n">MPI_C_COMPILER</span><span class="p">:</span>      <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">mpicc</span>
+  <span class="n">MPI_C_INCLUDE_PATH</span><span class="p">:</span>  <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">include</span>
+  <span class="n">MPI_C_COMPILE_FLAGS</span><span class="p">:</span>
+  <span class="n">MPI_C_LINK_FLAGS</span><span class="p">:</span>     <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">-</span><span class="n">rpath</span>  <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span>
+  <span class="n">MPI_C_LIBRARIES</span><span class="p">:</span>     <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpich</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libopa</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpl</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">librt</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">libpthread</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv420PrintCxxCompilerInfoRNSt7ostreamE">
+<span id="_CPPv320PrintCxxCompilerInfoRNSt7ostreamE"></span><span id="_CPPv220PrintCxxCompilerInfoRNSt7ostreamE"></span><span id="PrintCxxCompilerInfo__osR"></span>void <code class="descname">PrintCxxCompilerInfo</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420PrintCxxCompilerInfoRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Prints the relevant C++ compilation information. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span><span class="s1">&#39;s C++ compiler info:</span>
+  <span class="n">CMAKE_CXX_COMPILER</span><span class="p">:</span>    <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">g</span><span class="o">++</span>
+  <span class="n">CXX_FLAGS</span><span class="p">:</span>             <span class="o">-</span><span class="n">Wall</span>
+  <span class="n">MPI_CXX_COMPILER</span><span class="p">:</span>      <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">mpicxx</span>
+  <span class="n">MPI_CXX_INCLUDE_PATH</span><span class="p">:</span>  <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">include</span>
+  <span class="n">MPI_CXX_COMPILE_FLAGS</span><span class="p">:</span>
+  <span class="n">MPI_CXX_LINK_FLAGS</span><span class="p">:</span>     <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">-</span><span class="n">rpath</span>  <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span>
+  <span class="n">MPI_CXX_LIBRARIES</span><span class="p">:</span>     <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpichcxx</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpich</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libopa</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpl</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">librt</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">libpthread</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="set-up-and-clean-up">
+<h2>Set up and clean up<a class="headerlink" href="#set-up-and-clean-up" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv410InitializeRiRPPc">
+<span id="_CPPv310InitializeRiRPPc"></span><span id="_CPPv210InitializeRiRPPc"></span><span id="Initialize__iR.cPPR"></span>void <code class="descname">Initialize</code><span class="sig-paren">(</span>int &amp;<em>argc</em>, char **&amp;<em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410InitializeRiRPPc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes Elemental and (if necessary) MPI. The usage is very similar to
+<code class="docutils literal notranslate"><span class="pre">MPI_Init</span></code>, but the <cite>argc</cite> and <cite>argv</cite> can be directly passed in.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;elemental.hpp&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">elem</span><span class="o">::</span><span class="n">Initialize</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span> <span class="p">);</span>
+    <span class="c1">// ...</span>
+    <span class="n">elem</span><span class="o">::</span><span class="n">Finalize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Finalizev">
+<span id="_CPPv38Finalizev"></span><span id="_CPPv28Finalizev"></span><span id="Finalize"></span>void <code class="descname">Finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Finalizev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Frees all resources allocated by Elemental and (if necessary) MPI.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411Initializedv">
+<span id="_CPPv311Initializedv"></span><span id="_CPPv211Initializedv"></span><span id="Initialized"></span>bool <code class="descname">Initialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411Initializedv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether or not Elemental is currently initialized.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415ReportExceptionRNSt9exceptionE">
+<span id="_CPPv315ReportExceptionRNSt9exceptionE"></span><span id="_CPPv215ReportExceptionRNSt9exceptionE"></span><span id="ReportException__std::exceptionR"></span>void <code class="descname">ReportException</code><span class="sig-paren">(</span>std::exception &amp;<em>e</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415ReportExceptionRNSt9exceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used for handling Elemental’s various exceptions, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;elemental.hpp&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">elem</span><span class="o">::</span><span class="n">Initialize</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span> <span class="p">);</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span> <span class="k">catch</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span> <span class="p">)</span> <span class="p">{</span> <span class="n">ReportException</span><span class="p">(</span><span class="n">e</span><span class="p">);</span> <span class="p">}</span>
+    <span class="n">elem</span><span class="o">::</span><span class="n">Finalize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="blocksize-manipulation">
+<h2>Blocksize manipulation<a class="headerlink" href="#blocksize-manipulation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv49Blocksizev">
+<span id="_CPPv39Blocksizev"></span><span id="_CPPv29Blocksizev"></span><span id="Blocksize"></span>int <code class="descname">Blocksize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49Blocksizev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the currently chosen algorithmic blocksize. The optimal value
+depends on the problem size, algorithm, and architecture; the default value
+is 128.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412SetBlocksizei">
+<span id="_CPPv312SetBlocksizei"></span><span id="_CPPv212SetBlocksizei"></span><span id="SetBlocksize__i"></span>void <code class="descname">SetBlocksize</code><span class="sig-paren">(</span>int <em>blocksize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412SetBlocksizei" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the algorithmic blocksize to the specified value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418PushBlocksizeStacki">
+<span id="_CPPv318PushBlocksizeStacki"></span><span id="_CPPv218PushBlocksizeStacki"></span><span id="PushBlocksizeStack__i"></span>void <code class="descname">PushBlocksizeStack</code><span class="sig-paren">(</span>int <em>blocksize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418PushBlocksizeStacki" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It is frequently useful to temporarily change the algorithmic blocksize, so
+rather than having to manually store and reset the current state, one can
+simply push a new value onto a stack
+(and later pop the stack to reset the value).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417PopBlocksizeStackv">
+<span id="_CPPv317PopBlocksizeStackv"></span><span id="_CPPv217PopBlocksizeStackv"></span><span id="PopBlocksizeStack"></span>void <code class="descname">PopBlocksizeStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417PopBlocksizeStackv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pops the stack of blocksizes. See above.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="default-process-grid">
+<h2>Default process grid<a class="headerlink" href="#default-process-grid" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv411DefaultGridv">
+<span id="_CPPv311DefaultGridv"></span><span id="_CPPv211DefaultGridv"></span><span id="DefaultGrid"></span><a class="reference internal" href="grid.html#_CPPv44Grid" title="Grid">Grid</a> &amp;<code class="descname">DefaultGrid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411DefaultGridv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a process grid built over <a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD"><code class="xref cpp cpp-var docutils literal notranslate"><span class="pre">mpi::COMM_WORLD</span></code></a>. This is
+typically used as a means of allowing instances of the
+<a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T2MC2MRE" title="DistMatrix&lt;T, MC, MR&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T,MC,MR&gt;</span></code></a> class to be constructed without having to
+manually specify a process grid, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Build a 10 x 10 distributed matrix over mpi::COMM_WORLD</span>
+<span class="n">elem</span><span class="o">::</span><span class="n">DistMatrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">MC</span><span class="p">,</span><span class="n">MR</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="call-stack-manipulation">
+<h2>Call stack manipulation<a class="headerlink" href="#call-stack-manipulation" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following call stack manipulation routines are only available in
+non-release builds (i.e., PureDebug and HybridDebug) and are meant to allow
+for the call stack to be printed (via <a class="reference internal" href="#_CPPv413DumpCallStackv" title="DumpCallStack"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DumpCallStack()</span></code></a>) when an
+exception is caught.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv413PushCallStackNSt6stringE">
+<span id="_CPPv313PushCallStackNSt6stringE"></span><span id="_CPPv213PushCallStackNSt6stringE"></span><span id="PushCallStack__ss"></span>void <code class="descname">PushCallStack</code><span class="sig-paren">(</span>std::string <em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PushCallStackNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Push the given routine name onto the call stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412PopCallStackv">
+<span id="_CPPv312PopCallStackv"></span><span id="_CPPv212PopCallStackv"></span><span id="PopCallStack"></span>void <code class="descname">PopCallStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412PopCallStackv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove the routine name at the top of the call stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413DumpCallStackv">
+<span id="_CPPv313DumpCallStackv"></span><span id="_CPPv213DumpCallStackv"></span><span id="DumpCallStack"></span>void <code class="descname">DumpCallStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413DumpCallStackv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Print (and empty) the contents of the call stack.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="custom-exceptions">
+<h2>Custom exceptions<a class="headerlink" href="#custom-exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv423SingularMatrixException">
+<span id="_CPPv323SingularMatrixException"></span><span id="_CPPv223SingularMatrixException"></span><span id="SingularMatrixException"></span><em class="property">class </em><code class="descname">SingularMatrixException</code><a class="headerlink" href="#_CPPv423SingularMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a singular matrix is unexpectedly encountered.</p>
+<dl class="function">
+<dt id="_CPPv4N23SingularMatrixException23SingularMatrixExceptionEPKc">
+<span id="_CPPv3N23SingularMatrixException23SingularMatrixExceptionEPKc"></span><span id="_CPPv2N23SingularMatrixException23SingularMatrixExceptionEPKc"></span><span id="SingularMatrixException::SingularMatrixException__cCP"></span><code class="descname">SingularMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was singular&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N23SingularMatrixException23SingularMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">elem</span><span class="o">::</span><span class="n">SingularMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv421NonHPDMatrixException">
+<span id="_CPPv321NonHPDMatrixException"></span><span id="_CPPv221NonHPDMatrixException"></span><span id="NonHPDMatrixException"></span><em class="property">class </em><code class="descname">NonHPDMatrixException</code><a class="headerlink" href="#_CPPv421NonHPDMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a non positive-definite Hermitian matrix is unexpectedly encountered
+(e.g., during Cholesky factorization).</p>
+<dl class="function">
+<dt id="_CPPv4N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc">
+<span id="_CPPv3N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc"></span><span id="_CPPv2N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc"></span><span id="NonHPDMatrixException::NonHPDMatrixException__cCP"></span><code class="descname">NonHPDMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was not HPD&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">elem</span><span class="o">::</span><span class="n">NonHPDMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv422NonHPSDMatrixException">
+<span id="_CPPv322NonHPSDMatrixException"></span><span id="_CPPv222NonHPSDMatrixException"></span><span id="NonHPSDMatrixException"></span><em class="property">class </em><code class="descname">NonHPSDMatrixException</code><a class="headerlink" href="#_CPPv422NonHPSDMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a non positive semi-definite Hermitian matrix is unexpectedly encountered
+(e.g., during computation of the square root of a Hermitian matrix).</p>
+<dl class="function">
+<dt id="_CPPv4N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc">
+<span id="_CPPv3N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc"></span><span id="_CPPv2N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc"></span><span id="NonHPSDMatrixException::NonHPSDMatrixException__cCP"></span><code class="descname">NonHPSDMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was not HPSD&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">elem</span><span class="o">::</span><span class="n">NonHPSDMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="complex-data">
+<h2>Complex data<a class="headerlink" href="#complex-data" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv4IE7ComplexI4RealE">
+<span id="_CPPv3IE7ComplexI4RealE"></span><span id="_CPPv2IE7ComplexI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">Complex</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Currently a typedef of <code class="docutils literal notranslate"><span class="pre">std::complex&lt;Real&gt;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE4BaseI1FE">
+<span id="_CPPv3IE4BaseI1FE"></span><span id="_CPPv2IE4BaseI1FE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">Base</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying real datatype of the (potentially complex) datatype <cite>F</cite>.
+For example, <code class="docutils literal notranslate"><span class="pre">Base&lt;Complex&lt;double&gt;&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Base&lt;double&gt;</span></code> are both equivalent to <code class="docutils literal notranslate"><span class="pre">double</span></code>.
+This is often extremely useful in implementing routines which are
+templated over real and complex datatypes but still make use of real
+datatypes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4lsRNSt7ostreamE7ComplexI4RealE">
+<span id="_CPPv3lsRNSt7ostreamE7ComplexI4RealE"></span><span id="_CPPv2lsRNSt7ostreamE7ComplexI4RealE"></span><span id="lshift-operator__osR.Complex:Real:"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <a class="reference internal" href="#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamE7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pretty prints <cite>alpha</cite> in the form <code class="docutils literal notranslate"><span class="pre">a+bi</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48scomplex">
+<span id="_CPPv38scomplex"></span><span id="_CPPv28scomplex"></span><span id="scomplex"></span><em class="property">type </em><code class="descname">scomplex</code><a class="headerlink" href="#_CPPv48scomplex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">Complex&lt;float&gt;</span> <span class="pre">scomplex;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48dcomplex">
+<span id="_CPPv38dcomplex"></span><span id="_CPPv28dcomplex"></span><span id="dcomplex"></span><em class="property">type </em><code class="descname">dcomplex</code><a class="headerlink" href="#_CPPv48dcomplex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">Complex&lt;double&gt;</span> <span class="pre">dcomplex;</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="scalar-manipulation">
+<h2>Scalar manipulation<a class="headerlink" href="#scalar-manipulation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv43AbsRK1F">
+<span id="_CPPv33AbsRK1F"></span><span id="_CPPv23AbsRK1F"></span><span id="Abs__FCR"></span><a class="reference internal" href="#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">Abs</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43AbsRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the absolute value of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47FastAbsRK1F">
+<span id="_CPPv37FastAbsRK1F"></span><span id="_CPPv27FastAbsRK1F"></span><span id="FastAbs__FCR"></span>F <code class="descname">FastAbs</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47FastAbsRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a cheaper norm of the real or complex <span class="math notranslate nohighlight">\(\alpha\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[|\alpha|_{\mbox{fast}} = |\mathcal{R}(\alpha)| + |\mathcal{I}(\alpha)|\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48RealPartRK1F">
+<span id="_CPPv38RealPartRK1F"></span><span id="_CPPv28RealPartRK1F"></span><span id="RealPart__FCR"></span>F <code class="descname">RealPart</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48RealPartRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48ImagPartRK1F">
+<span id="_CPPv38ImagPartRK1F"></span><span id="_CPPv28ImagPartRK1F"></span><span id="ImagPart__FCR"></span>F <code class="descname">ImagPart</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ImagPartRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the real (imaginary) part of the real or complex variable
+<span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411SetRealPartR1FR4BaseI1FE">
+<span id="_CPPv311SetRealPartR1FR4BaseI1FE"></span><span id="_CPPv211SetRealPartR1FR4BaseI1FE"></span><span id="SetRealPart__FR.Base:F:R"></span>void <code class="descname">SetRealPart</code><span class="sig-paren">(</span>F &amp;<em>alpha</em>, <a class="reference internal" href="#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411SetRealPartR1FR4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411SetImagPartR1FR4BaseI1FE">
+<span id="_CPPv311SetImagPartR1FR4BaseI1FE"></span><span id="_CPPv211SetImagPartR1FR4BaseI1FE"></span><span id="SetImagPart__FR.Base:F:R"></span>void <code class="descname">SetImagPart</code><span class="sig-paren">(</span>F &amp;<em>alpha</em>, <a class="reference internal" href="#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411SetImagPartR1FR4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the real (imaginary) part of the real or complex variable
+<span class="math notranslate nohighlight">\(\alpha\)</span> to <span class="math notranslate nohighlight">\(\beta\)</span>.
+If <span class="math notranslate nohighlight">\(\alpha\)</span> has a real type, an error is thrown when an attempt is
+made to set the imaginary component.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414UpdateRealPartR1FR4BaseI1FE">
+<span id="_CPPv314UpdateRealPartR1FR4BaseI1FE"></span><span id="_CPPv214UpdateRealPartR1FR4BaseI1FE"></span><span id="UpdateRealPart__FR.Base:F:R"></span>void <code class="descname">UpdateRealPart</code><span class="sig-paren">(</span>F &amp;<em>alpha</em>, <a class="reference internal" href="#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414UpdateRealPartR1FR4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414UpdateImagPartR1FR4BaseI1FE">
+<span id="_CPPv314UpdateImagPartR1FR4BaseI1FE"></span><span id="_CPPv214UpdateImagPartR1FR4BaseI1FE"></span><span id="UpdateImagPart__FR.Base:F:R"></span>void <code class="descname">UpdateImagPart</code><span class="sig-paren">(</span>F &amp;<em>alpha</em>, <a class="reference internal" href="#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414UpdateImagPartR1FR4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update the real (imaginary) part of the real or complex variable
+<span class="math notranslate nohighlight">\(\alpha\)</span> to <span class="math notranslate nohighlight">\(\beta\)</span>.
+If <span class="math notranslate nohighlight">\(\alpha\)</span> has a real type, an error is thrown when an attempt is
+made to update the imaginary component.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ConjRK1F">
+<span id="_CPPv34ConjRK1F"></span><span id="_CPPv24ConjRK1F"></span><span id="Conj__FCR"></span>F <code class="descname">Conj</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ConjRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the complex conjugate of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SqrtRK1F">
+<span id="_CPPv34SqrtRK1F"></span><span id="_CPPv24SqrtRK1F"></span><span id="Sqrt__FCR"></span>F <code class="descname">Sqrt</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SqrtRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the square root or the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43CosRK1F">
+<span id="_CPPv33CosRK1F"></span><span id="_CPPv23CosRK1F"></span><span id="Cos__FCR"></span>F <code class="descname">Cos</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43CosRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the cosine of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SinRK1F">
+<span id="_CPPv33SinRK1F"></span><span id="_CPPv23SinRK1F"></span><span id="Sin__FCR"></span>F <code class="descname">Sin</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SinRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the sine of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43TanRK1F">
+<span id="_CPPv33TanRK1F"></span><span id="_CPPv23TanRK1F"></span><span id="Tan__FCR"></span>F <code class="descname">Tan</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43TanRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the tangent of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CoshRK1F">
+<span id="_CPPv34CoshRK1F"></span><span id="_CPPv24CoshRK1F"></span><span id="Cosh__FCR"></span>F <code class="descname">Cosh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CoshRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the hyperbolic cosine of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SinhRK1F">
+<span id="_CPPv34SinhRK1F"></span><span id="_CPPv24SinhRK1F"></span><span id="Sinh__FCR"></span>F <code class="descname">Sinh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SinhRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the hyperbolic sine of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43ArgRK1F">
+<span id="_CPPv33ArgRK1F"></span><span id="_CPPv23ArgRK1F"></span><span id="Arg__FCR"></span><a class="reference internal" href="#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">Arg</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43ArgRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the argument of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PolarRK1RRK1R">
+<span id="_CPPv35PolarRK1RRK1R"></span><span id="_CPPv25PolarRK1RRK1R"></span><span id="Polar__RCR.RCR"></span><a class="reference internal" href="#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <code class="descname">Polar</code><span class="sig-paren">(</span><em class="property">const</em> R &amp;<em>r</em>, <em class="property">const</em> R &amp;<em>theta</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarRK1RRK1R" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the complex variable constructed from the polar coordinates
+<span class="math notranslate nohighlight">\((r,\theta)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43ExpRK1F">
+<span id="_CPPv33ExpRK1F"></span><span id="_CPPv23ExpRK1F"></span><span id="Exp__FCR"></span>F <code class="descname">Exp</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43ExpRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the exponential of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43PowRK1FRK1F">
+<span id="_CPPv33PowRK1FRK1F"></span><span id="_CPPv23PowRK1FRK1F"></span><span id="Pow__FCR.FCR"></span>F <code class="descname">Pow</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em>, <em class="property">const</em> F &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43PowRK1FRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <span class="math notranslate nohighlight">\(\alpha^\beta\)</span> for real or complex <span class="math notranslate nohighlight">\(\alpha\)</span> and
+<span class="math notranslate nohighlight">\(\beta\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43LogRK1F">
+<span id="_CPPv33LogRK1F"></span><span id="_CPPv23LogRK1F"></span><span id="Log__FCR"></span>F <code class="descname">Log</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LogRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the logarithm of the real or complex variable <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="other-typedefs-and-enums">
+<h2>Other typedefs and enums<a class="headerlink" href="#other-typedefs-and-enums" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv44byte">
+<span id="_CPPv34byte"></span><span id="_CPPv24byte"></span><span id="byte"></span><em class="property">type </em><code class="descname">byte</code><a class="headerlink" href="#_CPPv44byte" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">unsigned</span> <span class="pre">char</span> <span class="pre">byte;</span></code></p>
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv411Conjugation">
+<span id="_CPPv311Conjugation"></span><span id="_CPPv211Conjugation"></span><em class="property">enum </em><code class="descname">Conjugation</code><a class="headerlink" href="#_CPPv411Conjugation" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N11Conjugation10CONJUGATEDE">
+<span id="_CPPv3N11Conjugation10CONJUGATEDE"></span><span id="_CPPv2N11Conjugation10CONJUGATEDE"></span><em class="property">enumerator </em><code class="descname">CONJUGATED</code><a class="headerlink" href="#_CPPv4N11Conjugation10CONJUGATEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11Conjugation12UNCONJUGATEDE">
+<span id="_CPPv3N11Conjugation12UNCONJUGATEDE"></span><span id="_CPPv2N11Conjugation12UNCONJUGATEDE"></span><em class="property">enumerator </em><code class="descname">UNCONJUGATED</code><a class="headerlink" href="#_CPPv4N11Conjugation12UNCONJUGATEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv412Distribution">
+<span id="_CPPv312Distribution"></span><span id="_CPPv212Distribution"></span><em class="property">enum </em><code class="descname">Distribution</code><a class="headerlink" href="#_CPPv412Distribution" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For specifying the distribution of a row or column of a distributed matrix:</p>
+<dl class="enumerator">
+<dt id="_CPPv4N12Distribution2MCE">
+<span id="_CPPv3N12Distribution2MCE"></span><span id="_CPPv2N12Distribution2MCE"></span><em class="property">enumerator </em><code class="descname">MC</code><a class="headerlink" href="#_CPPv4N12Distribution2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column of a standard matrix distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12Distribution2MDE">
+<span id="_CPPv3N12Distribution2MDE"></span><span id="_CPPv2N12Distribution2MDE"></span><em class="property">enumerator </em><code class="descname">MD</code><a class="headerlink" href="#_CPPv4N12Distribution2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Diagonal of a standard matrix distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12Distribution2MRE">
+<span id="_CPPv3N12Distribution2MRE"></span><span id="_CPPv2N12Distribution2MRE"></span><em class="property">enumerator </em><code class="descname">MR</code><a class="headerlink" href="#_CPPv4N12Distribution2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Row of a standard matrix distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12Distribution2VCE">
+<span id="_CPPv3N12Distribution2VCE"></span><span id="_CPPv2N12Distribution2VCE"></span><em class="property">enumerator </em><code class="descname">VC</code><a class="headerlink" href="#_CPPv4N12Distribution2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column-major vector distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12Distribution2VRE">
+<span id="_CPPv3N12Distribution2VRE"></span><span id="_CPPv2N12Distribution2VRE"></span><em class="property">enumerator </em><code class="descname">VR</code><a class="headerlink" href="#_CPPv4N12Distribution2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Row-major vector distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12Distribution4STARE">
+<span id="_CPPv3N12Distribution4STARE"></span><span id="_CPPv2N12Distribution4STARE"></span><em class="property">enumerator </em><code class="descname">STAR</code><a class="headerlink" href="#_CPPv4N12Distribution4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Redundantly stored on every process</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12Distribution4CIRCE">
+<span id="_CPPv3N12Distribution4CIRCE"></span><span id="_CPPv2N12Distribution4CIRCE"></span><em class="property">enumerator </em><code class="descname">CIRC</code><a class="headerlink" href="#_CPPv4N12Distribution4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Stored on a single process</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv417ForwardOrBackward">
+<span id="_CPPv317ForwardOrBackward"></span><span id="_CPPv217ForwardOrBackward"></span><em class="property">enum </em><code class="descname">ForwardOrBackward</code><a class="headerlink" href="#_CPPv417ForwardOrBackward" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N17ForwardOrBackward7FORWARDE">
+<span id="_CPPv3N17ForwardOrBackward7FORWARDE"></span><span id="_CPPv2N17ForwardOrBackward7FORWARDE"></span><em class="property">enumerator </em><code class="descname">FORWARD</code><a class="headerlink" href="#_CPPv4N17ForwardOrBackward7FORWARDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N17ForwardOrBackward8BACKWARDE">
+<span id="_CPPv3N17ForwardOrBackward8BACKWARDE"></span><span id="_CPPv2N17ForwardOrBackward8BACKWARDE"></span><em class="property">enumerator </em><code class="descname">BACKWARD</code><a class="headerlink" href="#_CPPv4N17ForwardOrBackward8BACKWARDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv49GridOrder">
+<span id="_CPPv39GridOrder"></span><span id="_CPPv29GridOrder"></span><em class="property">enum </em><code class="descname">GridOrder</code><a class="headerlink" href="#_CPPv49GridOrder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For specifying either a <code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code> or <code class="docutils literal notranslate"><span class="pre">COLUMN_MAJOR</span></code> ordering of a
+process grid;
+it is used to tune one of the algorithms in <a class="reference internal" href="../lapack-like/condense.html#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="HermitianTridiag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianTridiag()</span></code></a>
+which requires building a smaller square process grid from a rectangular
+process grid, as the ordering of the processes can greatly impact
+performance. See <a class="reference internal" href="../lapack-like/tuning.html#_CPPv428SetHermitianTridiagGridOrder9GridOrder" title="SetHermitianTridiagGridOrder"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SetHermitianTridiagGridOrder()</span></code></a>.</p>
+<dl class="enumerator">
+<dt id="_CPPv4N9GridOrder9ROW_MAJORE">
+<span id="_CPPv3N9GridOrder9ROW_MAJORE"></span><span id="_CPPv2N9GridOrder9ROW_MAJORE"></span><em class="property">enumerator </em><code class="descname">ROW_MAJOR</code><a class="headerlink" href="#_CPPv4N9GridOrder9ROW_MAJORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N9GridOrder12COLUMN_MAJORE">
+<span id="_CPPv3N9GridOrder12COLUMN_MAJORE"></span><span id="_CPPv2N9GridOrder12COLUMN_MAJORE"></span><em class="property">enumerator </em><code class="descname">COLUMN_MAJOR</code><a class="headerlink" href="#_CPPv4N9GridOrder12COLUMN_MAJORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv411LeftOrRight">
+<span id="_CPPv311LeftOrRight"></span><span id="_CPPv211LeftOrRight"></span><em class="property">enum </em><code class="descname">LeftOrRight</code><a class="headerlink" href="#_CPPv411LeftOrRight" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N11LeftOrRight4LEFTE">
+<span id="_CPPv3N11LeftOrRight4LEFTE"></span><span id="_CPPv2N11LeftOrRight4LEFTE"></span><em class="property">enumerator </em><code class="descname">LEFT</code><a class="headerlink" href="#_CPPv4N11LeftOrRight4LEFTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11LeftOrRight5RIGHTE">
+<span id="_CPPv3N11LeftOrRight5RIGHTE"></span><span id="_CPPv2N11LeftOrRight5RIGHTE"></span><em class="property">enumerator </em><code class="descname">RIGHT</code><a class="headerlink" href="#_CPPv4N11LeftOrRight5RIGHTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv48SortType">
+<span id="_CPPv38SortType"></span><span id="_CPPv28SortType"></span><em class="property">enum </em><code class="descname">SortType</code><a class="headerlink" href="#_CPPv48SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N8SortType8UNSORTEDE">
+<span id="_CPPv3N8SortType8UNSORTEDE"></span><span id="_CPPv2N8SortType8UNSORTEDE"></span><em class="property">enumerator </em><code class="descname">UNSORTED</code><a class="headerlink" href="#_CPPv4N8SortType8UNSORTEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Do not sort.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8SortType10DESCENDINGE">
+<span id="_CPPv3N8SortType10DESCENDINGE"></span><span id="_CPPv2N8SortType10DESCENDINGE"></span><em class="property">enumerator </em><code class="descname">DESCENDING</code><a class="headerlink" href="#_CPPv4N8SortType10DESCENDINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Smallest values first.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8SortType9ASCENDINGE">
+<span id="_CPPv3N8SortType9ASCENDINGE"></span><span id="_CPPv2N8SortType9ASCENDINGE"></span><em class="property">enumerator </em><code class="descname">ASCENDING</code><a class="headerlink" href="#_CPPv4N8SortType9ASCENDINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Largest values first.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv48NormType">
+<span id="_CPPv38NormType"></span><span id="_CPPv28NormType"></span><em class="property">enum </em><code class="descname">NormType</code><a class="headerlink" href="#_CPPv48NormType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N8NormType8ONE_NORME">
+<span id="_CPPv3N8NormType8ONE_NORME"></span><span id="_CPPv2N8NormType8ONE_NORME"></span><em class="property">enumerator </em><code class="descname">ONE_NORM</code><a class="headerlink" href="#_CPPv4N8NormType8ONE_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_1 = \max_{\|x\|_1=1} \|Ax\|_1
+        = \max_j \sum_{i=0}^{m-1} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType13INFINITY_NORME">
+<span id="_CPPv3N8NormType13INFINITY_NORME"></span><span id="_CPPv2N8NormType13INFINITY_NORME"></span><em class="property">enumerator </em><code class="descname">INFINITY_NORM</code><a class="headerlink" href="#_CPPv4N8NormType13INFINITY_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_{\infty} = \max_{\|x\|_{\infty}=1} \|Ax\|_{\infty}
+               = \max_i \sum_{j=0}^{n-1} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType14ENTRYWISE_NORME">
+<span id="_CPPv3N8NormType14ENTRYWISE_NORME"></span><span id="_CPPv2N8NormType14ENTRYWISE_NORME"></span><em class="property">enumerator </em><code class="descname">ENTRYWISE_NORM</code><a class="headerlink" href="#_CPPv4N8NormType14ENTRYWISE_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|\text{vec}(A)\|_1 = \sum_{i,j} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType8MAX_NORME">
+<span id="_CPPv3N8NormType8MAX_NORME"></span><span id="_CPPv2N8NormType8MAX_NORME"></span><em class="property">enumerator </em><code class="descname">MAX_NORM</code><a class="headerlink" href="#_CPPv4N8NormType8MAX_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_{\mbox{max}} = \max_{i,j} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType12NUCLEAR_NORME">
+<span id="_CPPv3N8NormType12NUCLEAR_NORME"></span><span id="_CPPv2N8NormType12NUCLEAR_NORME"></span><em class="property">enumerator </em><code class="descname">NUCLEAR_NORM</code><a class="headerlink" href="#_CPPv4N8NormType12NUCLEAR_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_* = \sum_{i=0}^{\min(m,n)} \sigma_i(A)\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType14FROBENIUS_NORME">
+<span id="_CPPv3N8NormType14FROBENIUS_NORME"></span><span id="_CPPv2N8NormType14FROBENIUS_NORME"></span><em class="property">enumerator </em><code class="descname">FROBENIUS_NORM</code><a class="headerlink" href="#_CPPv4N8NormType14FROBENIUS_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_F = \sqrt{\sum_{i=0}^{m-1} \sum_{j=0}^{n-1} |\alpha_{i,j}|^2}
+        = \sum_{i=0}^{\min(m,n)} \sigma_i(A)^2\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType8TWO_NORME">
+<span id="_CPPv3N8NormType8TWO_NORME"></span><span id="_CPPv2N8NormType8TWO_NORME"></span><em class="property">enumerator </em><code class="descname">TWO_NORM</code><a class="headerlink" href="#_CPPv4N8NormType8TWO_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_2 = \max_i \sigma_i(A)\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv411Orientation">
+<span id="_CPPv311Orientation"></span><span id="_CPPv211Orientation"></span><em class="property">enum </em><code class="descname">Orientation</code><a class="headerlink" href="#_CPPv411Orientation" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N11Orientation6NORMALE">
+<span id="_CPPv3N11Orientation6NORMALE"></span><span id="_CPPv2N11Orientation6NORMALE"></span><em class="property">enumerator </em><code class="descname">NORMAL</code><a class="headerlink" href="#_CPPv4N11Orientation6NORMALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Do not transpose or conjugate</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11Orientation9TRANSPOSEE">
+<span id="_CPPv3N11Orientation9TRANSPOSEE"></span><span id="_CPPv2N11Orientation9TRANSPOSEE"></span><em class="property">enumerator </em><code class="descname">TRANSPOSE</code><a class="headerlink" href="#_CPPv4N11Orientation9TRANSPOSEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Transpose without conjugation</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11Orientation7ADJOINTE">
+<span id="_CPPv3N11Orientation7ADJOINTE"></span><span id="_CPPv2N11Orientation7ADJOINTE"></span><em class="property">enumerator </em><code class="descname">ADJOINT</code><a class="headerlink" href="#_CPPv4N11Orientation7ADJOINTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Transpose and conjugate</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv413UnitOrNonUnit">
+<span id="_CPPv313UnitOrNonUnit"></span><span id="_CPPv213UnitOrNonUnit"></span><em class="property">enum </em><code class="descname">UnitOrNonUnit</code><a class="headerlink" href="#_CPPv413UnitOrNonUnit" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N13UnitOrNonUnit4UNITE">
+<span id="_CPPv3N13UnitOrNonUnit4UNITE"></span><span id="_CPPv2N13UnitOrNonUnit4UNITE"></span><em class="property">enumerator </em><code class="descname">UNIT</code><a class="headerlink" href="#_CPPv4N13UnitOrNonUnit4UNITE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N13UnitOrNonUnit8NON_UNITE">
+<span id="_CPPv3N13UnitOrNonUnit8NON_UNITE"></span><span id="_CPPv2N13UnitOrNonUnit8NON_UNITE"></span><em class="property">enumerator </em><code class="descname">NON_UNIT</code><a class="headerlink" href="#_CPPv4N13UnitOrNonUnit8NON_UNITE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv412UpperOrLower">
+<span id="_CPPv312UpperOrLower"></span><span id="_CPPv212UpperOrLower"></span><em class="property">enum </em><code class="descname">UpperOrLower</code><a class="headerlink" href="#_CPPv412UpperOrLower" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N12UpperOrLower5LOWERE">
+<span id="_CPPv3N12UpperOrLower5LOWERE"></span><span id="_CPPv2N12UpperOrLower5LOWERE"></span><em class="property">enumerator </em><code class="descname">LOWER</code><a class="headerlink" href="#_CPPv4N12UpperOrLower5LOWERE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12UpperOrLower5UPPERE">
+<span id="_CPPv3N12UpperOrLower5UPPERE"></span><span id="_CPPv2N12UpperOrLower5UPPERE"></span><em class="property">enumerator </em><code class="descname">UPPER</code><a class="headerlink" href="#_CPPv4N12UpperOrLower5UPPERE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv420VerticalOrHorizontal">
+<span id="_CPPv320VerticalOrHorizontal"></span><span id="_CPPv220VerticalOrHorizontal"></span><em class="property">enum </em><code class="descname">VerticalOrHorizontal</code><a class="headerlink" href="#_CPPv420VerticalOrHorizontal" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N20VerticalOrHorizontal8VERTICALE">
+<span id="_CPPv3N20VerticalOrHorizontal8VERTICALE"></span><span id="_CPPv2N20VerticalOrHorizontal8VERTICALE"></span><em class="property">enumerator </em><code class="descname">VERTICAL</code><a class="headerlink" href="#_CPPv4N20VerticalOrHorizontal8VERTICALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N20VerticalOrHorizontal10HORIZONTALE">
+<span id="_CPPv3N20VerticalOrHorizontal10HORIZONTALE"></span><span id="_CPPv2N20VerticalOrHorizontal10HORIZONTALE"></span><em class="property">enumerator </em><code class="descname">HORIZONTAL</code><a class="headerlink" href="#_CPPv4N20VerticalOrHorizontal10HORIZONTALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="indexing-utilities">
+<h2>Indexing utilities<a class="headerlink" href="#indexing-utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv45Shiftiii">
+<span id="_CPPv35Shiftiii"></span><span id="_CPPv25Shiftiii"></span><span id="Shift__i.i.i"></span>int <code class="descname">Shift</code><span class="sig-paren">(</span>int <em>rank</em>, int <em>firstRank</em>, int <em>numProcs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Shiftiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a element-wise cyclic distribution over <cite>numProcs</cite> processes,
+where the first entry is owned by the process with rank <cite>firstRank</cite>,
+this routine returns the first entry owned by the process with rank
+<cite>rank</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46Lengthiii">
+<span id="_CPPv36Lengthiii"></span><span id="_CPPv26Lengthiii"></span><span id="Length__i.i.i"></span>int <code class="descname">Length</code><span class="sig-paren">(</span>int <em>n</em>, int <em>shift</em>, int <em>numProcs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Lengthiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a vector with <span class="math notranslate nohighlight">\(n\)</span> entries distributed over <cite>numProcs</cite>
+processes with shift as defined above, this routine returns the number of
+entries of the vector which are owned by this process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46Lengthiiii">
+<span id="_CPPv36Lengthiiii"></span><span id="_CPPv26Lengthiiii"></span><span id="Length__i.i.i.i"></span>int <code class="descname">Length</code><span class="sig-paren">(</span>int <em>n</em>, int <em>rank</em>, int <em>firstRank</em>, int <em>numProcs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Lengthiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a vector with <span class="math notranslate nohighlight">\(n\)</span> entries distributed over <cite>numProcs</cite>
+processes, with the first entry owned by process <cite>firstRank</cite>, this routine
+returns the number of entries locally owned by the process with rank
+<cite>rank</cite>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

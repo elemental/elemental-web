@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Half-open range &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="View a submatrix via index ranges" href="IndexRanges.html" />
+    <link rel="prev" title="Viewing submatrices" href="../View.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../View.html">Viewing submatrices</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Half-open range</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="IndexRanges.html">View a submatrix via index ranges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="OffsetAndSize.html">View a submatrix via offset and size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Full.html">View a full matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../View.html">Viewing submatrices</a> &raquo;</li>
+        
+      <li>Half-open range</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/View/HalfOpen.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="half-open-range">
+<h1>Half-open range<a class="headerlink" href="#half-open-range" title="Permalink to this headline">¶</a></h1>
+<p>It is useful to represent intervals in the half-open form <span class="math notranslate nohighlight">\([a,b)\)</span>, as
+this representation easily allows for expressing empty index intervals without
+the usage of negative numbers, e.g., <span class="math notranslate nohighlight">\([0,0)\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4IE5RangeI1TE">
+<span id="_CPPv3IE5RangeI1TE"></span><span id="_CPPv2IE5RangeI1TE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Range</code>&lt;T&gt;<a class="headerlink" href="#_CPPv4IE5RangeI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N5RangeI1TE3begE">
+<span id="_CPPv3N5RangeI1TE3begE"></span><span id="_CPPv2N5RangeI1TE3begE"></span><span id="Range:T:::beg__T"></span>T <code class="descname">beg</code><a class="headerlink" href="#_CPPv4N5RangeI1TE3begE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N5RangeI1TE3endE">
+<span id="_CPPv3N5RangeI1TE3endE"></span><span id="_CPPv2N5RangeI1TE3endE"></span><span id="Range:T:::end__T"></span>T <code class="descname">end</code><a class="headerlink" href="#_CPPv4N5RangeI1TE3endE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5RangeI1TE5RangeEv">
+<span id="_CPPv3N5RangeI1TE5RangeEv"></span><span id="_CPPv2N5RangeI1TE5RangeEv"></span><span id="Range:T:::Range"></span><code class="descname">Range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5RangeI1TE5RangeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes <cite>beg</cite> and <cite>end</cite> to zero</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5RangeI1TE5RangeE1T1T">
+<span id="_CPPv3N5RangeI1TE5RangeE1T1T"></span><span id="_CPPv2N5RangeI1TE5RangeE1T1T"></span><span id="Range:T:::Range__T.T"></span><code class="descname">Range</code><span class="sig-paren">(</span>T <em>begArg</em>, T <em>endArg</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5RangeI1TE5RangeE1T1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes <cite>beg</cite> to <cite>begArg</cite> and <cite>end</cite> to <cite>endArg</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5RangeI1TEplE1T">
+<span id="_CPPv3NK5RangeI1TEplE1T"></span><span id="_CPPv2NK5RangeI1TEplE1T"></span><span id="Range:T:::add-operator__TC"></span><a class="reference internal" href="#_CPPv4IE5RangeI1TE" title="Range&lt;T&gt;">Range</a>&lt;T&gt; <code class="descname">operator+</code><span class="sig-paren">(</span>T <em>shift</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5RangeI1TEplE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a copy of this object but with the beginning and end values
+increased by <cite>shift</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5RangeI1TEmiE1T">
+<span id="_CPPv3NK5RangeI1TEmiE1T"></span><span id="_CPPv2NK5RangeI1TEmiE1T"></span><span id="Range:T:::sub-operator__TC"></span><a class="reference internal" href="#_CPPv4IE5RangeI1TE" title="Range&lt;T&gt;">Range</a>&lt;T&gt; <code class="descname">operator-</code><span class="sig-paren">(</span>T <em>shift</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5RangeI1TEmiE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a copy of this object but with the beginning and end values
+decreased by <cite>shift</cite></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE5RangeI3IntE">
+<span id="_CPPv3IE5RangeI3IntE"></span><span id="_CPPv2IE5RangeI3IntE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Range</code>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt;<a class="headerlink" href="#_CPPv4IE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE5RangeIfE">
+<span id="_CPPv3IE5RangeIfE"></span><span id="_CPPv2IE5RangeIfE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Range</code>&lt;float&gt;<a class="headerlink" href="#_CPPv4IE5RangeIfE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE5RangeIdE">
+<span id="_CPPv3IE5RangeIdE"></span><span id="_CPPv2IE5RangeIdE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Range</code>&lt;double&gt;<a class="headerlink" href="#_CPPv4IE5RangeIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv42IR">
+<span id="_CPPv32IR"></span><span id="_CPPv22IR"></span><span id="IR"></span><em class="property">type </em><code class="descname">IR</code><a class="headerlink" href="#_CPPv42IR" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A typedef to <a class="reference internal" href="#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Range&lt;Int&gt;</span></code></a> which is convenient when extracting
+contiguous submatrices</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="c.Range_i">
+<code class="descname">Range_i</code><a class="headerlink" href="#c.Range_i" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.Range_i.beg">
+<a class="reference internal" href="../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">beg</code><a class="headerlink" href="#c.Range_i.beg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.Range_i.end">
+<a class="reference internal" href="../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">end</code><a class="headerlink" href="#c.Range_i.end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.Range_s">
+<code class="descname">Range_s</code><a class="headerlink" href="#c.Range_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.Range_s.beg">
+float <code class="descname">beg</code><a class="headerlink" href="#c.Range_s.beg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.Range_s.end">
+float <code class="descname">end</code><a class="headerlink" href="#c.Range_s.end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.Range_d">
+<code class="descname">Range_d</code><a class="headerlink" href="#c.Range_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.Range_d.beg">
+double <code class="descname">beg</code><a class="headerlink" href="#c.Range_d.beg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.Range_d.end">
+double <code class="descname">end</code><a class="headerlink" href="#c.Range_d.end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="IndexRanges.html" class="btn btn-neutral float-right" title="View a submatrix via index ranges" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../View.html" class="btn btn-neutral float-left" title="Viewing submatrices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

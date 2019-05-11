@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Haar &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Hatano-Nelson" href="HatanoNelson.html" />
+    <link rel="prev" title="Gaussian" href="Gaussian.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../matrices.html">Special matrices</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../deterministic.html">Deterministic</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../random.html">Random</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Bernoulli.html">Bernoulli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Gaussian.html">Gaussian</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Haar</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="HatanoNelson.html">Hatano-Nelson</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianUniformSpectrum.html">Hermitian uniform spectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NormalUniformSpectrum.html">Normal uniform spectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Rademacher.html">Rademacher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ThreeValued.html">Three-valued</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Uniform.html">Uniform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UniformHelmholtzGreens.html">Uniform Helmholtz Green’s</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Wigner.html">Wigner</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../matrices.html">Special matrices</a> &raquo;</li>
+        
+          <li><a href="../random.html">Random</a> &raquo;</li>
+        
+      <li>Haar</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/matrices/random/Haar.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="haar">
+<h1>Haar<a class="headerlink" href="#haar" title="Permalink to this headline">¶</a></h1>
+<p>The Haar distribution is the uniform distribution over the space of real or
+complex unitary matrices.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44HaarR6MatrixI1FE3Int">
+<span id="_CPPv34HaarR6MatrixI1FE3Int"></span><span id="_CPPv24HaarR6MatrixI1FE3Int"></span><span id="Haar__Matrix:F:R.Int"></span>void <code class="descname">Haar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44HaarR6MatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44HaarR15ElementalMatrixI1FE3Int">
+<span id="_CPPv34HaarR15ElementalMatrixI1FE3Int"></span><span id="_CPPv24HaarR15ElementalMatrixI1FE3Int"></span><span id="Haar__ElementalMatrix:F:R.Int"></span>void <code class="descname">Haar</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44HaarR15ElementalMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Draws <code class="docutils literal notranslate"><span class="pre">A</span></code> from the Haar distribution. The current scheme performs a QR
+factorization of a Gaussian matrix, but Stewart introduced a well-known
+scheme which only requires quadratic work for the implicit representation
+as a product of random Householder reflectors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412ImplicitHaarR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE3Int">
+<span id="_CPPv312ImplicitHaarR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE3Int"></span><span id="_CPPv212ImplicitHaarR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE3Int"></span><span id="ImplicitHaar__Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Int"></span>void <code class="descname">ImplicitHaar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412ImplicitHaarR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412ImplicitHaarR15ElementalMatrixI1FER15ElementalMatrixI1FER9ElementalI4BaseI1FEE3Int">
+<span id="_CPPv312ImplicitHaarR15ElementalMatrixI1FER15ElementalMatrixI1FER9ElementalI4BaseI1FEE3Int"></span><span id="_CPPv212ImplicitHaarR15ElementalMatrixI1FER15ElementalMatrixI1FER9ElementalI4BaseI1FEE3Int"></span><span id="ImplicitHaar__ElementalMatrix:F:R.ElementalMatrix:F:R.Elemental:Base:F::R.Int"></span>void <code class="descname">ImplicitHaar</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, ElementalMatrix&lt;F&gt; &amp;<em>t</em>, Elemental&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412ImplicitHaarR15ElementalMatrixI1FER15ElementalMatrixI1FER9ElementalI4BaseI1FEE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets <code class="docutils literal notranslate"><span class="pre">A</span></code> to a set of Householder reflectors with the same structure as
+the result of a QR decomposition. The product of these reflectors is a
+sample from the Haar distribution.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElHaar_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaar_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaar_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHaar_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaar_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaar_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHaar_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaar_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaar_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHaar_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaar_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaar_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHaarDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaarDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaarDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHaarDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaarDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaarDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHaarDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaarDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaarDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHaarDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHaarDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHaarDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaar_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaar_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> t</em>, ElMatrix_s<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaar_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaar_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaar_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> t</em>, ElMatrix_d<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaar_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaar_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaar_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> t</em>, ElMatrix_s<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaar_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaar_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaar_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> t</em>, ElMatrix_d<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaar_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaarDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaarDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> t</em>, ElDistMatrix_s<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaarDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaarDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaarDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> t</em>, ElDistMatrix_d<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaarDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaarDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaarDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> t</em>, ElDistMatrix_s<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaarDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElImplicitHaarDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElImplicitHaarDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> t</em>, ElDistMatrix_d<em> d</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElImplicitHaarDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Haar">
+<code class="descname">Haar</code><span class="sig-paren">(</span><em>A</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#Haar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ImplicitHaar">
+<code class="descname">ImplicitHaar</code><span class="sig-paren">(</span><em>A</em>, <em>t</em>, <em>d</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#ImplicitHaar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="HatanoNelson.html" class="btn btn-neutral float-right" title="Hatano-Nelson" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Gaussian.html" class="btn btn-neutral float-left" title="Gaussian" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

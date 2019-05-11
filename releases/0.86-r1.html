@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elemental 0.86, Release Candidate 1 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-86-release-candidate-1">
+<h1>Elemental 0.86, Release Candidate 1<a class="headerlink" href="#elemental-0-86-release-candidate-1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fundamental-functionality-additions">
+<h2>Fundamental functionality additions<a class="headerlink" href="#fundamental-functionality-additions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Dense and sparse primal-dual predictor-corrector Interior Point Methods for Linear and Quadratic Programs</p></li>
+<li><p>Dense and sparse-direct Basis Pursuit, Basis Pursuit Denoising / LASSO, Chebyshev Points, Dantzig Selectors, Elastic Nets, Least Absolute Value regression, Non-negative Least Squares, Support Vector Machines, and 1D Total Variation via LP and QP IPMs</p></li>
+<li><p>Quasi-semidefinite LDL^H solvers (via a sparse-direct quasi-definite LDL^H preconditioner)</p></li>
+<li><p>Sparse-direct Least Squares and Minimum Length via applying a regularized quasi-semidefinite solver to the augmented system</p></li>
+<li><p>Sparse-direct nonsymmetric linear solves via the regularized quasi-semidefinite solver applied to the augmented system</p></li>
+<li><p>Support for geometrically equilibrating linear systems and optimization problems</p></li>
+<li><p>Basic support for quad-precision via <code class="docutils literal notranslate"><span class="pre">__float128</span></code> (GNU and Intel), e.g., in core data structures, BLAS, and quasi-semidefinite iterative refinement</p></li>
+</ul>
+</div>
+<div class="section" id="incremental-functionality-additions">
+<h2>Incremental functionality additions<a class="headerlink" href="#incremental-functionality-additions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Sequential versions of sparse-direct solvers (previously, only distributed implementations were exposed)</p></li>
+<li><p>Extended the <code class="docutils literal notranslate"><span class="pre">HermitianEig</span></code> control structure to support timing the components</p></li>
+<li><p>Ability to densify sparse matrices via <code class="docutils literal notranslate"><span class="pre">Full</span></code></p></li>
+<li><p>Sparse versions of <code class="docutils literal notranslate"><span class="pre">DiagonalScale</span></code>, <code class="docutils literal notranslate"><span class="pre">DiagonalSolve</span></code>, and <code class="docutils literal notranslate"><span class="pre">DiagonalScaleTrapezoid</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">operator=</span></code> now works between <code class="docutils literal notranslate"><span class="pre">DistMultiVec</span></code> and <code class="docutils literal notranslate"><span class="pre">DistMatrix</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Dot</span></code>, <code class="docutils literal notranslate"><span class="pre">Dotu</span></code>, and <code class="docutils literal notranslate"><span class="pre">HilbertSchmidt</span></code>, and <code class="docutils literal notranslate"><span class="pre">MaxNorm</span></code> for <code class="docutils literal notranslate"><span class="pre">DistMultiVec</span></code></p></li>
+<li><p>Added a <code class="docutils literal notranslate"><span class="pre">Scan</span></code> function for converting MPI sizes into the packed offsets</p></li>
+<li><p>A version of <code class="docutils literal notranslate"><span class="pre">DIagonal</span></code> which accepts a <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> rather than <code class="docutils literal notranslate"><span class="pre">std::vector</span></code></p></li>
+<li><p>(Untested) support for Kronecker products</p></li>
+</ul>
+</div>
+<div class="section" id="significant-implementation-and-api-modifications">
+<h2>Significant implementation and API modifications<a class="headerlink" href="#significant-implementation-and-api-modifications" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Avoiding the need for a custom METIS routine via the usage of <code class="docutils literal notranslate"><span class="pre">METIS_ComputeVertexSeparator</span></code></p></li>
+<li><p>Automated the usage of many of the subroutines in the <code class="docutils literal notranslate"><span class="pre">transpose</span></code> and <code class="docutils literal notranslate"><span class="pre">adjoint</span></code> namespaces</p></li>
+<li><p>Modified the “move” rules for <code class="docutils literal notranslate"><span class="pre">Matrix</span></code>, <code class="docutils literal notranslate"><span class="pre">DistMatrix</span></code>, and <code class="docutils literal notranslate"><span class="pre">BlockDistMatrix</span></code> so that moves are never performed when one or more of the LHS or RHS is a view</p></li>
+<li><p>Completely eliminated the intermediate <code class="docutils literal notranslate"><span class="pre">GeneralDistMatrix</span></code> and <code class="docutils literal notranslate"><span class="pre">GeneralBlockDistMatrix</span></code> classes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DistMatrix::SumScatter</span></code> changed to <code class="docutils literal notranslate"><span class="pre">Contract</span></code></p></li>
+<li><p>Renamed <code class="docutils literal notranslate"><span class="pre">GaussianElimination</span></code> to <code class="docutils literal notranslate"><span class="pre">LinearSolve</span></code></p></li>
+<li><p>Reimplemented sparse-direct solvers to use trees rather than cumbersome arrays of fronts</p></li>
+<li><p>Moved most logic out of <code class="docutils literal notranslate"><span class="pre">DistMatrix::operator=</span></code> and into <code class="docutils literal notranslate"><span class="pre">Copy</span></code> and significantly condensed the implementations</p></li>
+<li><p>Reorganized <code class="docutils literal notranslate"><span class="pre">optimization</span></code> folder and renamed <code class="docutils literal notranslate"><span class="pre">NonNegativeLeastSquares</span></code> to <code class="docutils literal notranslate"><span class="pre">NNLS</span></code></p></li>
+<li><p>Split several “LAPACK-like” routines off into a <code class="docutils literal notranslate"><span class="pre">euclidean_min/</span></code> subfolder</p></li>
+<li><p>Importing several members of <code class="docutils literal notranslate"><span class="pre">std</span></code> namespace into <code class="docutils literal notranslate"><span class="pre">El</span></code> namespace to avoid excessive namespace  redundancy (e.g., <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is now simply <code class="docutils literal notranslate"><span class="pre">vector</span></code> in Elemental’s source)</p></li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Fixed bug in <code class="docutils literal notranslate"><span class="pre">DistGraph</span></code> which caused local edge offsets of distributed sparse graphs (and sparse matrices!) with completely empty rows at the bottom of the matrix</p></li>
+<li><p>Fixed bugs in edge offset computations for empty graphs</p></li>
+<li><p>Adjusted the upper-bound within thresholded SVD’s to account for finite-precision arithmetic</p></li>
+<li><p>Fixed a mistake in the radius within <code class="docutils literal notranslate"><span class="pre">Uniform</span></code> random matrix generation</p></li>
+<li><p>Avoiding freeing <code class="docutils literal notranslate"><span class="pre">mpi::Comm</span></code> in destructors after <code class="docutils literal notranslate"><span class="pre">mpi::Finalize</span></code> has been called</p></li>
+<li><p>Removed spurious <code class="docutils literal notranslate"><span class="pre">Print</span></code> call in distributed two-norm condition number computation (thanks to Chander Iyer for reporting)</p></li>
+<li><p>Fixed a bug in <code class="docutils literal notranslate"><span class="pre">MaxAbs</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="performance-improvements">
+<h2>Performance improvements<a class="headerlink" href="#performance-improvements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Added a simple mechanism for interleaving the matrix-vector multiplications within <code class="docutils literal notranslate"><span class="pre">HermitianTridiag</span></code> at a block level (thanks to extensive discussions with Alexander Heinecke)</p></li>
+<li><p>Square process grids are now automatically exploited by several <code class="docutils literal notranslate"><span class="pre">DistMatrix</span></code> redistributions</p></li>
+</ul>
+</div>
+<div class="section" id="external-interfaces">
+<h2>External interfaces<a class="headerlink" href="#external-interfaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Added write capabilities to NumPy wrappers of <code class="docutils literal notranslate"><span class="pre">Matrix</span></code></p></li>
+<li><p>Fixed many instances of Python return values being cTypes, rather than Python, types</p></li>
+<li><p>Avoiding <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.show(block=False)</span></code> when matplotlib backend detected</p></li>
+<li><p>Added axes to Python pseudospectral plots</p></li>
+</ul>
+</div>
+<div class="section" id="build-system-improvements">
+<h2>Build system improvements<a class="headerlink" href="#build-system-improvements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The python interface can now be installed in a custom directory via specifying <code class="docutils literal notranslate"><span class="pre">PYTHON_SITE_PACKAGES</span></code></p></li>
+<li><p>Mistakes in the MPI configuration tests were fixed</p></li>
+<li><p>64-bit integer builds have been re-enabled</p></li>
+<li><p>RPATHs are now set for Mac OS X shared library installations (thanks to Barry Smith and Satish Balay for reporting)</p></li>
+</ul>
+</div>
+<div class="section" id="thanks">
+<h2>Thanks<a class="headerlink" href="#thanks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Andreas Heinecke for extensive discussions about the performance of <code class="docutils literal notranslate"><span class="pre">HermitianTridiag</span></code></p></li>
+<li><p>Barry Smith and Satish Balay for reporting Mac OS X RPATH problems</p></li>
+<li><p>Chander Iyer for reporting that the distributed two-norm condition number routine had a spurious <code class="docutils literal notranslate"><span class="pre">Print</span></code> statement</p></li>
+<li><p>Michael Saunders for extensive discussions about regularized LDL^H factorizations</p></li>
+<li><p>Stephen Boyd and AJ Friend for extensive discussions about Interior Point Methods and ADMM</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Leftward &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Down a diagonal" href="DownDiag.html" />
+    <link rel="prev" title="Rightward" href="Right.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="leftward">
+<h1>Leftward<a class="headerlink" href="#leftward" title="Permalink to this headline">¶</a></h1>
+<p>Simultaneously slide and merge the partition</p>
+<div class="math notranslate nohighlight">
+\[A = \left(\begin{array}{cc|c} A_0 &amp; A_1 &amp; A_2 \end{array}\right)\]</div>
+<p>into</p>
+<div class="math notranslate nohighlight">
+\[\left(\begin{array}{c|c} A_L &amp; A_R \end{array}\right) =
+\left(\begin{array}{c|cc} A_0 &amp; A_1 &amp; A_2 \end{array}\right).\]</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv418SlidePartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv318SlidePartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv218SlidePartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="SlidePartitionLeft__Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R"></span>void <code class="descname">SlidePartitionLeft</code><span class="sig-paren">(</span><a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AR</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A0</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A1</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A2</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418SlidePartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424SlideLockedPartitionLeftR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv324SlideLockedPartitionLeftR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv224SlideLockedPartitionLeftR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="SlideLockedPartitionLeft__Matrix:T:R.Matrix:T:R.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR"></span>void <code class="descname">SlideLockedPartitionLeft</code><span class="sig-paren">(</span><a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AR</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A0</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A1</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A2</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424SlideLockedPartitionLeftR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418SlidePartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE">
+<span id="_CPPv318SlidePartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE"></span><span id="_CPPv218SlidePartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE"></span><span id="SlidePartitionLeft__AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R"></span>void <code class="descname">SlidePartitionLeft</code><span class="sig-paren">(</span><a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>AR</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A0</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A1</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A2</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418SlidePartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424SlideLockedPartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE">
+<span id="_CPPv324SlideLockedPartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="_CPPv224SlideLockedPartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="SlideLockedPartitionLeft__AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR"></span>void <code class="descname">SlideLockedPartitionLeft</code><span class="sig-paren">(</span><a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>AR</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A0</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A1</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A2</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424SlideLockedPartitionLeftR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Each of the above routines is meant to be used in a manner similar to:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">SlidePartitionLeft</span><span class="p">(</span> <span class="n">AL</span><span class="p">,</span> <span class="cm">/**/</span> <span class="n">AR</span><span class="p">,</span>
+                    <span class="n">A0</span><span class="p">,</span> <span class="cm">/**/</span> <span class="n">A1</span><span class="p">,</span> <span class="n">A2</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElSlidePartitionLeft_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeft_i</code><span class="sig-paren">(</span>ElMatrix_i<em> AL</em>, ElMatrix_i<em> AR</em>, ElMatrix_i<em> A0</em>, ElMatrix_i<em> A1</em>, ElMatrix_i<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeft_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeft_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeft_s</code><span class="sig-paren">(</span>ElMatrix_s<em> AL</em>, ElMatrix_s<em> AR</em>, ElMatrix_s<em> A0</em>, ElMatrix_s<em> A1</em>, ElMatrix_s<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeft_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeft_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeft_d</code><span class="sig-paren">(</span>ElMatrix_d<em> AL</em>, ElMatrix_d<em> AR</em>, ElMatrix_d<em> A0</em>, ElMatrix_d<em> A1</em>, ElMatrix_d<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeft_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeft_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeft_c</code><span class="sig-paren">(</span>ElMatrix_c<em> AL</em>, ElMatrix_c<em> AR</em>, ElMatrix_c<em> A0</em>, ElMatrix_c<em> A1</em>, ElMatrix_c<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeft_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeft_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeft_z</code><span class="sig-paren">(</span>ElMatrix_z<em> AL</em>, ElMatrix_z<em> AR</em>, ElMatrix_z<em> A0</em>, ElMatrix_z<em> A1</em>, ElMatrix_z<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeft_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeftDist_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeftDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> AL</em>, ElDistMatrix_i<em> AR</em>, ElDistMatrix_i<em> A0</em>, ElDistMatrix_i<em> A1</em>, ElDistMatrix_i<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeftDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeftDist_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeftDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> AL</em>, ElDistMatrix_s<em> AR</em>, ElDistMatrix_s<em> A0</em>, ElDistMatrix_s<em> A1</em>, ElDistMatrix_s<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeftDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeftDist_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeftDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> AL</em>, ElDistMatrix_d<em> AR</em>, ElDistMatrix_d<em> A0</em>, ElDistMatrix_d<em> A1</em>, ElDistMatrix_d<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeftDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeftDist_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeftDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> AL</em>, ElDistMatrix_c<em> AR</em>, ElDistMatrix_c<em> A0</em>, ElDistMatrix_c<em> A1</em>, ElDistMatrix_c<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeftDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionLeftDist_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionLeftDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> AL</em>, ElDistMatrix_z<em> AR</em>, ElDistMatrix_z<em> A0</em>, ElDistMatrix_z<em> A1</em>, ElDistMatrix_z<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionLeftDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeft_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeft_i</code><span class="sig-paren">(</span>ElMatrix_i<em> AL</em>, ElMatrix_i<em> AR</em>, ElConstMatrix_i<em> A0</em>, ElConstMatrix_i<em> A1</em>, ElConstMatrix_i<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeft_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeft_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeft_s</code><span class="sig-paren">(</span>ElMatrix_s<em> AL</em>, ElMatrix_s<em> AR</em>, ElConstMatrix_s<em> A0</em>, ElConstMatrix_s<em> A1</em>, ElConstMatrix_s<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeft_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeft_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeft_d</code><span class="sig-paren">(</span>ElMatrix_d<em> AL</em>, ElMatrix_d<em> AR</em>, ElConstMatrix_d<em> A0</em>, ElConstMatrix_d<em> A1</em>, ElConstMatrix_d<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeft_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeft_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeft_c</code><span class="sig-paren">(</span>ElMatrix_c<em> AL</em>, ElMatrix_c<em> AR</em>, ElConstMatrix_c<em> A0</em>, ElConstMatrix_c<em> A1</em>, ElConstMatrix_c<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeft_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeft_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeft_z</code><span class="sig-paren">(</span>ElMatrix_z<em> AL</em>, ElMatrix_z<em> AR</em>, ElConstMatrix_z<em> A0</em>, ElConstMatrix_z<em> A1</em>, ElConstMatrix_z<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeft_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeftDist_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeftDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> AL</em>, ElDistMatrix_i<em> AR</em>, ElConstDistMatrix_i<em> A0</em>, ElConstDistMatrix_i<em> A1</em>, ElConstDistMatrix_i<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeftDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeftDist_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeftDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> AL</em>, ElDistMatrix_s<em> AR</em>, ElConstDistMatrix_s<em> A0</em>, ElConstDistMatrix_s<em> A1</em>, ElConstDistMatrix_s<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeftDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeftDist_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeftDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> AL</em>, ElDistMatrix_d<em> AR</em>, ElConstDistMatrix_d<em> A0</em>, ElConstDistMatrix_d<em> A1</em>, ElConstDistMatrix_d<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeftDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeftDist_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeftDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> AL</em>, ElDistMatrix_c<em> AR</em>, ElConstDistMatrix_c<em> A0</em>, ElConstDistMatrix_c<em> A1</em>, ElConstDistMatrix_c<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeftDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionLeftDist_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionLeftDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> AL</em>, ElDistMatrix_z<em> AR</em>, ElConstDistMatrix_z<em> A0</em>, ElConstDistMatrix_z<em> A1</em>, ElConstDistMatrix_z<em> A2</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionLeftDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

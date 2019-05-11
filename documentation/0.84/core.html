@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Core functionality &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Imported library routines" href="core/imports.html" />
+    <link rel="prev" title="Build system" href="build.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="core-functionality">
+<h1>Core functionality<a class="headerlink" href="#core-functionality" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core/imports.html">Imported library routines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/imports/blas.html">BLAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/imports/lapack.html">LAPACK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/imports/mpi.html">MPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/imports/pmrrr.html">PMRRR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/imports/flame.html">libFLAME</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/imports/scalapack.html">BLACS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/imports/scalapack.html#scalapack">ScaLAPACK</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/environment.html">Environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#build-and-version-information">Build and version information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#set-up-and-clean-up">Set up and clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#blocksize-manipulation">Blocksize manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#default-process-grid">Default process grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#call-stack-manipulation">Call stack manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#custom-exceptions">Custom exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#complex-data">Complex data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#scalar-manipulation">Scalar manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#other-typedefs-and-enums">Other typedefs and enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html#indexing-utilities">Indexing utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/matrix.html">Sequential matrices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/matrix.html#special-cases-used-in-elemental">Special cases used in Elemental</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/grid.html">Process grids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/dist_matrix.html">Distributed matrices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/dist_matrix/ADM.html">AbstractDistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/dist_matrix/GDM.html">GeneralDistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/dist_matrix/DM.html">DistMatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/viewing.html">Matrix views</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/viewing.html#view-a-full-matrix">View a full matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/viewing.html#view-a-submatrix">View a submatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/viewing.html#view-1x2-matrices">View 1x2 matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/viewing.html#view-2x1-matrices">View 2x1 matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/viewing.html#view-2x2-matrices">View 2x2 matrices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/partitioning.html">Matrix partitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitionup">PartitionUp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitiondown">PartitionDown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitionleft">PartitionLeft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitionright">PartitionRight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitionupdiagonal">PartitionUpDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitionupoffsetdiagonal">PartitionUpOffsetDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitiondowndiagonal">PartitionDownDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/partitioning.html#partitiondownoffsetdiagonal">PartitionDownOffsetDiagonal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/repartitioning.html">Repartitioning matrices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/repartitioning.html#repartitionup">RepartitionUp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/repartitioning.html#repartitiondown">RepartitionDown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/repartitioning.html#repartitionleft">RepartitionLeft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/repartitioning.html#repartitionright">RepartitionRight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/repartitioning.html#repartitionupdiagonal">RepartitionUpDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/repartitioning.html#repartitiondowndiagonal">RepartitionDownDiagonal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/slide_partition.html">Moving partitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/slide_partition.html#slidepartitionup">SlidePartitionUp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/slide_partition.html#slidepartitiondown">SlidePartitionDown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/slide_partition.html#slidepartitionleft">SlidePartitionLeft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/slide_partition.html#slidepartitionright">SlidePartitionRight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/slide_partition.html#slidepartitionupdiagonal">SlidePartitionUpDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/slide_partition.html#slidepartitiondowndiagonal">SlidePartitionDownDiagonal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/axpy_interface.html">The “Axpy” interface</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

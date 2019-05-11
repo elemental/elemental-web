@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Blocksize manipulation &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Other typedefs and enums" href="typedefs_and_enums.html" />
+    <link rel="prev" title="Default process grid" href="default_grid.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../environment.html">Environment</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="boiler.html">Boiler plate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="error.html">Error handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="call_stack.html">Call stack manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="default_grid.html">Default process grid</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Blocksize manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="typedefs_and_enums.html">Other typedefs and enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex.html">Complex data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="indexing.html">Indexing utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">Version and configuration information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../environment.html">Environment</a> &raquo;</li>
+        
+      <li>Blocksize manipulation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/environment/blocksize.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="blocksize-manipulation">
+<h1>Blocksize manipulation<a class="headerlink" href="#blocksize-manipulation" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="_CPPv49Blocksizev">
+<span id="_CPPv39Blocksizev"></span><span id="_CPPv29Blocksizev"></span><span id="Blocksize"></span><a class="reference internal" href="typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Blocksize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49Blocksizev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the currently chosen algorithmic blocksize. The optimal value
+depends on the problem size, algorithm, and architecture; the default value
+is 128.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412SetBlocksize3Int">
+<span id="_CPPv312SetBlocksize3Int"></span><span id="_CPPv212SetBlocksize3Int"></span><span id="SetBlocksize__Int"></span>void <code class="descname">SetBlocksize</code><span class="sig-paren">(</span><a class="reference internal" href="typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>blocksize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412SetBlocksize3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the algorithmic blocksize to the specified value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418PushBlocksizeStack3Int">
+<span id="_CPPv318PushBlocksizeStack3Int"></span><span id="_CPPv218PushBlocksizeStack3Int"></span><span id="PushBlocksizeStack__Int"></span>void <code class="descname">PushBlocksizeStack</code><span class="sig-paren">(</span><a class="reference internal" href="typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>blocksize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418PushBlocksizeStack3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It is frequently useful to temporarily change the algorithmic blocksize, so
+rather than having to manually store and reset the current state, one can
+simply push a new value onto a stack
+(and later pop the stack to reset the value).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417PopBlocksizeStackv">
+<span id="_CPPv317PopBlocksizeStackv"></span><span id="_CPPv217PopBlocksizeStackv"></span><span id="PopBlocksizeStack"></span>void <code class="descname">PopBlocksizeStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417PopBlocksizeStackv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pops the stack of blocksizes. See above.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418DefaultBlockHeightv">
+<span id="_CPPv318DefaultBlockHeightv"></span><span id="_CPPv218DefaultBlockHeightv"></span><span id="DefaultBlockHeight"></span><a class="reference internal" href="typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">DefaultBlockHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418DefaultBlockHeightv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417DefaultBlockWidthv">
+<span id="_CPPv317DefaultBlockWidthv"></span><span id="_CPPv217DefaultBlockWidthv"></span><span id="DefaultBlockWidth"></span><a class="reference internal" href="typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">DefaultBlockWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417DefaultBlockWidthv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the default block height (width) for
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">BlockMatrix&lt;scalarType,colDist,rowDist&gt;</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421SetDefaultBlockHeight3Int">
+<span id="_CPPv321SetDefaultBlockHeight3Int"></span><span id="_CPPv221SetDefaultBlockHeight3Int"></span><span id="SetDefaultBlockHeight__Int"></span>void <code class="descname">SetDefaultBlockHeight</code><span class="sig-paren">(</span><a class="reference internal" href="typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>mb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421SetDefaultBlockHeight3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv420SetDefaultBlockWidth3Int">
+<span id="_CPPv320SetDefaultBlockWidth3Int"></span><span id="_CPPv220SetDefaultBlockWidth3Int"></span><span id="SetDefaultBlockWidth__Int"></span>void <code class="descname">SetDefaultBlockWidth</code><span class="sig-paren">(</span><a class="reference internal" href="typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>nb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420SetDefaultBlockWidth3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the default block height (width) for
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">BlockMatrix&lt;scalarType,colDist,rowDist&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="typedefs_and_enums.html" class="btn btn-neutral float-right" title="Other typedefs and enums" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="default_grid.html" class="btn btn-neutral float-left" title="Default process grid" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

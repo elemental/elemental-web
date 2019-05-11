@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ElementalMatrix &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="The standard matrix distribution ([MC,MR])" href="Element/MC_MR.html" />
+    <link rel="prev" title="DistMatrix" href="DM.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ADM.html">AbstractDistMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DM.html">DistMatrix</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ElementalMatrix</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Element/MC_MR.html">The standard matrix distribution (<code class="docutils literal notranslate"><span class="pre">[MC,MR]</span></code>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/MC_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MC,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/MD_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MD,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/MR_MC.html"><code class="docutils literal notranslate"><span class="pre">[MR,MC]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/MR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MR,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/STAR_MC.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MC]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/STAR_MD.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MD]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/STAR_MR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/STAR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/STAR_VC.html"><code class="docutils literal notranslate"><span class="pre">[STAR,VC]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/STAR_VR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,VR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/VC_STAR.html"><code class="docutils literal notranslate"><span class="pre">[VC,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/VR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[VR,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/CIRC_CIRC.html"><code class="docutils literal notranslate"><span class="pre">[CIRC,CIRC]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Element/special.html">Some special cases used in Elemental</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Block.html">BlockMatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../dist_matrix.html">DistMatrix</a> &raquo;</li>
+        
+      <li>ElementalMatrix</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/dist_matrix/Element.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="elementalmatrix">
+<h1>ElementalMatrix<a class="headerlink" href="#elementalmatrix" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#_CPPv4IE15ElementalMatrixI10scalarTypeE" title="ElementalMatrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ElementalMatrix&lt;scalarType&gt;</span></code></a> is the parent class of each
+partial specialization
+<code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarTypee,colDist,rowDist,ELEMENT&gt;</span></code> of <cite>DistMatrix</cite>
+to element-wise distributions; it is a child class of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;scalarType&gt;</span></code></a>.
+Each of the derivatives of <cite>ElementalMatrix&lt;scalarType&gt;</cite> chooses a
+sensical pairing of distributions for the rows and columns of the matrix.</p>
+<dl class="class">
+<dt id="_CPPv4IE15ElementalMatrixI10scalarTypeE">
+<span id="_CPPv3IE15ElementalMatrixI10scalarTypeE"></span><span id="_CPPv2IE15ElementalMatrixI10scalarTypeE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">ElementalMatrix</code>&lt;scalarType&gt;<a class="headerlink" href="#_CPPv4IE15ElementalMatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE">
+<span id="_CPPv3IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE"></span><span id="_CPPv2IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;scalarType, colDist, rowDist, ELEMENT&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The following routines are available for each legal pairing of row and column
+distributions.</p>
+<p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK4Grid3Int">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK4Grid3Int"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK4Grid3Int"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::DistMatrix__GridCR.Int"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../grid/cxx.html#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>grid</em> = <a class="reference internal" href="../environment/default_grid.html#_CPPv411DefaultGridv" title="DefaultGrid">DefaultGrid</a>(), <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK4Grid3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct an empty (<span class="math notranslate nohighlight">\(0 \times 0\)</span>) distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixE3Int3IntRK4Grid3Int">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixE3Int3IntRK4Grid3Int"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixE3Int3IntRK4Grid3Int"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::DistMatrix__Int.Int.GridCR.Int"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> <a class="reference internal" href="../grid/cxx.html#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>grid</em> = <a class="reference internal" href="../environment/default_grid.html#_CPPv411DefaultGridv" title="DefaultGrid">DefaultGrid</a>(), <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixE3Int3IntRK4Grid3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite> distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK18AbstractDistMatrixI10scalarTypeE">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK18AbstractDistMatrixI10scalarTypeE"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK18AbstractDistMatrixI10scalarTypeE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::DistMatrix__AbstractDistMatrix:scalarType:CR"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;">AbstractDistMatrix</a>&lt;scalarType&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK18AbstractDistMatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct the current matrix to be a redistributed copy of the input
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERRK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERRK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERRK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::DistMatrix__DistMatrix:scalarType.colDist.rowDist.ELEMENT:CRR"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERK4Grid3Int" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;::DistMatrix">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE10DistMatrixERRK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Use C++11 move semantics to construct the current matrix in a way which
+transfers the resources from the input matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTED0Ev">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTED0Ev"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTED0Ev"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::~DistMatrix"></span><code class="descname">~DistMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All resources owned by the <cite>DistMatrix</cite> are freed upon destruction.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE8DistDataEv">
+<span id="_CPPv3NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE8DistDataEv"></span><span id="_CPPv2NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE8DistDataEv"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::DistDataC"></span>ElementalData <code class="descname">DistData</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE8DistDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a description of the distribution and alignment information</p>
+</dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERK18AbstractDistMatrixI10scalarTypeE">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERK18AbstractDistMatrixI10scalarTypeE"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERK18AbstractDistMatrixI10scalarTypeE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::assign-operator__AbstractDistMatrix:scalarType:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;">AbstractDistMatrix</a>&lt;scalarType&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERK18AbstractDistMatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the current distributed matrix equal to the matrix <cite>A</cite> redistributed
+into the appropriate form.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERR10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERR10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERR10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::assign-operator__DistMatrix:scalarType.colDist.rowDist.ELEMENT:RR"></span><a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEaSERR10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move assignment which cheaply transfers the resources from <cite>A</cite>
+to the current matrix by swapping metadata.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmLE1T">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmLE1T"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmLE1T"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::mul-assign-operator__T"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; &amp;<code class="descname">operator*=</code><span class="sig-paren">(</span>T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmLE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Multiply every entry in the matrix by <cite>alpha</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEpLERK18AbstractDistMatrixI1TE">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEpLERK18AbstractDistMatrixI1TE"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEpLERK18AbstractDistMatrixI1TE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::add-assign-operator__AbstractDistMatrix:T:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; &amp;<code class="descname">operator+=</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEpLERK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmIERK18AbstractDistMatrixI1TE">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmIERK18AbstractDistMatrixI1TE"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmIERK18AbstractDistMatrixI1TE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::sub-assign-operator__AbstractDistMatrix:T:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; &amp;<code class="descname">operator-=</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEmIERK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Updates this matrix (via either addition or subtraction) with another
+another matrix.</p>
+</dd></dl>
+
+<p class="rubric">Submatrices</p>
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::call-operator__Range:Int:.Range:Int:"></span><a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::call-operator__Range:Int:.Range:Int:C"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of a contiguous submatrix with the given row and column
+index ranges.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntERK6vectorI3IntE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::call-operator__Range:Int:.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclE5RangeI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntE5RangeI3IntE">
+<span id="_CPPv3NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntE5RangeI3IntE"></span><span id="_CPPv2NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntE5RangeI3IntE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::call-operator__vector:Int:CR.Range:Int:C"></span><a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="DistMatrix:scalarType.colDist.rowDist.ELEMENT:::call-operator__vector:Int:CR.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist7ELEMENTE" title="DistMatrix&lt;scalarType, colDist, rowDist, ELEMENT&gt;">DistMatrix</a>&lt;scalarType, colDist, rowDist, ELEMENT&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK10DistMatrixI10scalarType7colDist7rowDist7ELEMENTEclERK6vectorI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a copy of the (generally non-contiguous) submatrix given by the
+specified row and column index lists.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Element/MC_MR.html">The standard matrix distribution (<code class="docutils literal notranslate"><span class="pre">[MC,MR]</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/MC_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MC,STAR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/MD_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MD,STAR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/MR_MC.html"><code class="docutils literal notranslate"><span class="pre">[MR,MC]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/MR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MR,STAR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/STAR_MC.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MC]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/STAR_MD.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MD]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/STAR_MR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/STAR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,STAR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/STAR_VC.html"><code class="docutils literal notranslate"><span class="pre">[STAR,VC]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/STAR_VR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,VR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/VC_STAR.html"><code class="docutils literal notranslate"><span class="pre">[VC,STAR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/VR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[VR,STAR]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/CIRC_CIRC.html"><code class="docutils literal notranslate"><span class="pre">[CIRC,CIRC]</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Element/special.html">Some special cases used in Elemental</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Element/MC_MR.html" class="btn btn-neutral float-right" title="The standard matrix distribution ([MC,MR])" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="DM.html" class="btn btn-neutral float-left" title="DistMatrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

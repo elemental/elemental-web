@@ -1,0 +1,747 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hermitian eigensolvers &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Skew-Hermitian eigensolvers" href="SkewHermitianEig.html" />
+    <link rel="prev" title="Hermitian tridiagonal eigensolvers" href="HermitianTridiagEig.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../spectral.html">Spectral analysis</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="HermitianTridiagEig.html">Hermitian tridiagonal eigensolvers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Hermitian eigensolvers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#computing-eigenvalues">Computing eigenvalues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#computing-eigenpairs">Computing eigenpairs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#algorithmic-options">Algorithmic options</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SkewHermitianEig.html">Skew-Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianGenDefEig.html">Hermitian generalized-definite eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianSVD.html">Hermitian SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SVD.html">SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Polar.html">Polar decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Schur.html">Schur decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specialized.html">Specialized eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pseudospectra.html">Pseudospectra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spectral.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../spectral.html">Spectral analysis</a> &raquo;</li>
+        
+      <li>Hermitian eigensolvers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/spectral/HermitianEig.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hermitian-eigensolvers">
+<h1>Hermitian eigensolvers<a class="headerlink" href="#hermitian-eigensolvers" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/HermitianEig.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/HermitianEig.cpp">Test driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/HermitianEig.cpp">Example driver</a></p>
+<p>Elemental provides a collection of routines for both full and partial
+solutions of the Hermitian eigenvalue problem</p>
+<div class="math notranslate nohighlight">
+\[A Z = Z \Lambda,\]</div>
+<p>where <cite>A</cite> is the given Hermitian matrix, and unitary <cite>Z</cite> and real diagonal
+<span class="math notranslate nohighlight">\(\Lambda\)</span> are sought.</p>
+<div class="section" id="computing-eigenvalues">
+<h2>Computing eigenvalues<a class="headerlink" href="#computing-eigenvalues" title="Permalink to this headline">¶</a></h2>
+<p>Compute the set of eigenvalues of the Hermitian matrix <cite>A</cite> determined by
+the <cite>subset</cite> structure (the default is to compute all eigenvalues).
+By default, Elemental is used to transform the problem to and from
+real symmetric tridiagonal form and PMRRR is used to solve the tridiagonal
+EVP. Alternatively, the <cite>ctrl</cite> structure may be altered to request the
+usage of a (prototype) Spectral Divide and Conquer algorithm.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Strict subset computation is not currently supported with Spectral Divide
+and Conquer.</p>
+</div>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv312HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv212HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianEig__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianEig_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEig_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEig_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEig_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEig_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEig_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEig_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEig_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEig_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEig_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEig_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEig_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full set of eigenvalues</p>
+</dd></dl>
+
+<p><strong>TODO: An expert interface which used HermitianEigCtrl</strong></p>
+<dl class="function">
+<dt id="c.ElHermitianEigPartial_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartial_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartial_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPartial_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartial_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartial_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPartial_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartial_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartial_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPartial_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartial_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartial_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPartialDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartialDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartialDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPartialDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartialDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartialDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPartialDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartialDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartialDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPartialDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPartialDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPartialDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subset of the eigenvalues</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="computing-eigenpairs">
+<h2>Computing eigenpairs<a class="headerlink" href="#computing-eigenpairs" title="Permalink to this headline">¶</a></h2>
+<p>Compute the set of eigenpairs of the Hermitian matrix <cite>A</cite> determined by
+the <cite>subset</cite> structure (the default is to compute all eigenpairs).
+By default, Elemental is used to transform the problem to and from
+real symmetric tridiagonal form and PMRRR is used to solve the tridiagonal
+EVP. Alternatively, the <cite>ctrl</cite> structure may be altered to request and tune the
+usage of a (prototype) Spectral Divide and Conquer algorithm.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Strict subset computation is not currently supported with Spectral Divide
+and Conquer.</p>
+</div>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv312HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv212HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianEig__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.AbstractDistMatrix:F:R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianEigPair_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPair_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> w</em>, ElMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPair_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPair_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPair_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> w</em>, ElMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPair_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPair_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPair_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_s<em> w</em>, ElMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPair_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPair_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPair_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_d<em> w</em>, ElMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPair_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full eigenvalue decomposition.</p>
+</dd></dl>
+
+<p><strong>TODO: An expert interface which used HermitianEigCtrl</strong></p>
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartial_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartial_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> w</em>, ElMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartial_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartial_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartial_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> w</em>, ElMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartial_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartial_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartial_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_s<em> w</em>, ElMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartial_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartial_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartial_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_d<em> w</em>, ElMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartial_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartialDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartialDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartialDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartialDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartialDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartialDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartialDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartialDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartialDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigPairPartialDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianEigPairPartialDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigPairPartialDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subset of the eigenpairs</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="algorithmic-options">
+<h2>Algorithmic options<a class="headerlink" href="#algorithmic-options" title="Permalink to this headline">¶</a></h2>
+<p>The default approach starts with Householder tridiagonalization
+(ala <a class="reference internal" href="../condense/HermitianTridiag.html#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="HermitianTridiag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianTridiag()</span></code></a>) and then calls Matthias Petschow and
+Paolo Bientinesi’s PMRRR for the tridiagonal eigenvalue problem.</p>
+<p>However, it is also possible to use a (prototype) Spectral Divide and
+Conquer algorithm (see, for example, <em>Stable and efficient spectral divide and conquer algorithms for the symmetric eigenvalue problem</em>, Nakatsukasa et al., and <em>Fast linear algebra is stable</em>, Demmel et al.). In order to do so, the
+<a class="reference internal" href="#_CPPv4IE16HermitianEigCtrlI4RealE" title="HermitianEigCtrl&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">HermitianEigCtrl&lt;Real&gt;</span></code></a> structure should be modified so that
+<cite>useSDC</cite> is true. The Spectral Divide and Conquer algorithm (if selected) is
+controlled via the <a class="reference internal" href="#_CPPv4IE16HermitianSDCCtrlI4RealE" title="HermitianSDCCtrl&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">HermitianSDCCtrl&lt;Real&gt;</span></code></a> member structure.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv4IE16HermitianEigCtrlI4RealE">
+<span id="_CPPv3IE16HermitianEigCtrlI4RealE"></span><span id="_CPPv2IE16HermitianEigCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">HermitianEigCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE16HermitianEigCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N16HermitianEigCtrlI4RealE11tridiagCtrlE">
+<span id="_CPPv3N16HermitianEigCtrlI4RealE11tridiagCtrlE"></span><span id="_CPPv2N16HermitianEigCtrlI4RealE11tridiagCtrlE"></span><span id="HermitianEigCtrl:Real:::tridiagCtrl__HermitianTridiagCtrl"></span><a class="reference internal" href="../condense/HermitianTridiag.html#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a> <code class="descname">tridiagCtrl</code><a class="headerlink" href="#_CPPv4N16HermitianEigCtrlI4RealE11tridiagCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianEigCtrlI4RealE7sdcCtrlE">
+<span id="_CPPv3N16HermitianEigCtrlI4RealE7sdcCtrlE"></span><span id="_CPPv2N16HermitianEigCtrlI4RealE7sdcCtrlE"></span><span id="HermitianEigCtrl:Real:::sdcCtrl__HermitianSDCCtrl:Real:"></span><a class="reference internal" href="#_CPPv4IE16HermitianSDCCtrlI4RealE" title="HermitianSDCCtrl&lt;Real&gt;">HermitianSDCCtrl</a>&lt;Real&gt; <code class="descname">sdcCtrl</code><a class="headerlink" href="#_CPPv4N16HermitianEigCtrlI4RealE7sdcCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianEigCtrlI4RealE6useSDCE">
+<span id="_CPPv3N16HermitianEigCtrlI4RealE6useSDCE"></span><span id="_CPPv2N16HermitianEigCtrlI4RealE6useSDCE"></span><span id="HermitianEigCtrl:Real:::useSDC__b"></span>bool <code class="descname">useSDC</code><a class="headerlink" href="#_CPPv4N16HermitianEigCtrlI4RealE6useSDCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N16HermitianEigCtrlI4RealE16HermitianEigCtrlEv">
+<span id="_CPPv3N16HermitianEigCtrlI4RealE16HermitianEigCtrlEv"></span><span id="_CPPv2N16HermitianEigCtrlI4RealE16HermitianEigCtrlEv"></span><span id="HermitianEigCtrl:Real:::HermitianEigCtrl"></span><code class="descname">HermitianEigCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16HermitianEigCtrlI4RealE16HermitianEigCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes <cite>tridiagCtrl</cite> and <cite>sdcCtrl</cite> to their defaults and sets
+<cite>useSDC</cite> to false.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv3IE16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv2IE16HermitianEigCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">HermitianEigCtrl</code>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE16HermitianSDCCtrlI4RealE">
+<span id="_CPPv3IE16HermitianSDCCtrlI4RealE"></span><span id="_CPPv2IE16HermitianSDCCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">HermitianSDCCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE16HermitianSDCCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE6cutoffE">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE6cutoffE"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE6cutoffE"></span><span id="HermitianSDCCtrl:Real:::cutoff__Int"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">cutoff</code><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE6cutoffE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE11maxInnerItsE">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE11maxInnerItsE"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE11maxInnerItsE"></span><span id="HermitianSDCCtrl:Real:::maxInnerIts__Int"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxInnerIts</code><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE11maxInnerItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE11maxOuterItsE">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE11maxOuterItsE"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE11maxOuterItsE"></span><span id="HermitianSDCCtrl:Real:::maxOuterIts__Int"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxOuterIts</code><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE11maxOuterItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE3tolE">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE3tolE"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE3tolE"></span><span id="HermitianSDCCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE12spreadFactorE">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE12spreadFactorE"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE12spreadFactorE"></span><span id="HermitianSDCCtrl:Real:::spreadFactor__Real"></span>Real <code class="descname">spreadFactor</code><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE12spreadFactorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE6randomE">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE6randomE"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE6randomE"></span><span id="HermitianSDCCtrl:Real:::random__b"></span>bool <code class="descname">random</code><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE6randomE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE8progressE">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE8progressE"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE8progressE"></span><span id="HermitianSDCCtrl:Real:::progress__b"></span>bool <code class="descname">progress</code><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE8progressE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N16HermitianSDCCtrlI4RealE16HermitianSDCCtrlEv">
+<span id="_CPPv3N16HermitianSDCCtrlI4RealE16HermitianSDCCtrlEv"></span><span id="_CPPv2N16HermitianSDCCtrlI4RealE16HermitianSDCCtrlEv"></span><span id="HermitianSDCCtrl:Real:::HermitianSDCCtrl"></span><code class="descname">HermitianSDCCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16HermitianSDCCtrlI4RealE16HermitianSDCCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Defaults to using a sequential Schur decomposition for problems of size
+256 or smaller (<code class="docutils literal notranslate"><span class="pre">cutoff=256</span></code>), a maximum of two random rank-revealing
+attempts per spectral split trials (<code class="docutils literal notranslate"><span class="pre">maxInnerIts=2</span></code>), and a maximum of
+ten trial spectral split trials before failure (<code class="docutils literal notranslate"><span class="pre">maxOuterIts=10</span></code>).
+The tolerance for accepting a split is kept at its default
+(via <code class="docutils literal notranslate"><span class="pre">tol=0</span></code>), the relative spreading factor for perturbing the
+estimate of the projected spectral median is set to :<cite>1e-6</cite>
+(<code class="docutils literal notranslate"><span class="pre">spreadFactor=1e-6</span></code>), and progress is not displayed by default
+(<code class="docutils literal notranslate"><span class="pre">progress=false</span></code>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE16HermitianSDCCtrlI4BaseI1FEE">
+<span id="_CPPv3IE16HermitianSDCCtrlI4BaseI1FEE"></span><span id="_CPPv2IE16HermitianSDCCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">HermitianSDCCtrl</code>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE16HermitianSDCCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="c.HermitianEigCtrl_s">
+<code class="descname">HermitianEigCtrl_s</code><a class="headerlink" href="#c.HermitianEigCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.HermitianEigCtrl_s.tridiagCtrl">
+<a class="reference internal" href="../condense/HermitianTridiag.html#c.ElHermitianTridiagCtrl" title="ElHermitianTridiagCtrl">ElHermitianTridiagCtrl</a> <code class="descname">tridiagCtrl</code><a class="headerlink" href="#c.HermitianEigCtrl_s.tridiagCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigCtrl_s.sdcCtrl">
+<a class="reference internal" href="#c.ElHermitianSDCCtrl_s" title="ElHermitianSDCCtrl_s">ElHermitianSDCCtrl_s</a> <code class="descname">sdcCtrl</code><a class="headerlink" href="#c.HermitianEigCtrl_s.sdcCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigCtrl_s.useSDC">
+bool <code class="descname">useSDC</code><a class="headerlink" href="#c.HermitianEigCtrl_s.useSDC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.HermitianEigCtrl_d">
+<code class="descname">HermitianEigCtrl_d</code><a class="headerlink" href="#c.HermitianEigCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.HermitianEigCtrl_d.tridiagCtrl">
+<a class="reference internal" href="../condense/HermitianTridiag.html#c.ElHermitianTridiagCtrl" title="ElHermitianTridiagCtrl">ElHermitianTridiagCtrl</a> <code class="descname">tridiagCtrl</code><a class="headerlink" href="#c.HermitianEigCtrl_d.tridiagCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigCtrl_d.sdcCtrl">
+<a class="reference internal" href="#c.ElHermitianSDCCtrl_d" title="ElHermitianSDCCtrl_d">ElHermitianSDCCtrl_d</a> <code class="descname">sdcCtrl</code><a class="headerlink" href="#c.HermitianEigCtrl_d.sdcCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigCtrl_d.useSDC">
+bool <code class="descname">useSDC</code><a class="headerlink" href="#c.HermitianEigCtrl_d.useSDC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigCtrlDefault_s">
+void <code class="descname">ElHermitianEigCtrlDefault_s</code><span class="sig-paren">(</span>ElHermitianEigCtrl_s*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigCtrlDefault_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianEigCtrlDefault_d">
+void <code class="descname">ElHermitianEigCtrlDefault_d</code><span class="sig-paren">(</span>ElHermitianEigCtrl_d*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianEigCtrlDefault_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes <cite>tridiagCtrl</cite> and <cite>sdcCtrl</cite> to their defaults and sets
+<cite>useSDC</cite> to false.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElHermitianSDCCtrl_s">
+<code class="descname">ElHermitianSDCCtrl_s</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElHermitianSDCCtrl_s.cutoff">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">cutoff</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s.cutoff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_s.maxInnerIts">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxInnerIts</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s.maxInnerIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_s.maxOuterIts">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxOuterIts</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s.maxOuterIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_s.tol">
+float <code class="descname">tol</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_s.spreadFactor">
+float <code class="descname">spreadFactor</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s.spreadFactor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_s.random">
+bool <code class="descname">random</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_s.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_s.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElHermitianSDCCtrl_d">
+<code class="descname">ElHermitianSDCCtrl_d</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElHermitianSDCCtrl_d.cutoff">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">cutoff</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d.cutoff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_d.maxInnerIts">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxInnerIts</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d.maxInnerIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_d.maxOuterIts">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxOuterIts</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d.maxOuterIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_d.tol">
+double <code class="descname">tol</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_d.spreadFactor">
+double <code class="descname">spreadFactor</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d.spreadFactor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_d.random">
+bool <code class="descname">random</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElHermitianSDCCtrl_d.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElHermitianSDCCtrl_d.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSDCCtrlDefault_s">
+<code class="descname">ElHermitianSDCCtrlDefault_s</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElHermitianSDCCtrl_s" title="ElHermitianSDCCtrl_s">ElHermitianSDCCtrl_s</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSDCCtrlDefault_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSDCCtrlDefault_d">
+<code class="descname">ElHermitianSDCCtrlDefault_d</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElHermitianSDCCtrl_d" title="ElHermitianSDCCtrl_d">ElHermitianSDCCtrl_d</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSDCCtrlDefault_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defaults to using a sequential Schur decomposition for problems of size
+256 or smaller (<code class="docutils literal notranslate"><span class="pre">cutoff=256</span></code>), a maximum of two random rank-revealing
+attempts per spectral split trials (<code class="docutils literal notranslate"><span class="pre">maxInnerIts=2</span></code>), and a maximum of ten
+trial spectral split trials before failure (<code class="docutils literal notranslate"><span class="pre">maxOuterIts=10</span></code>).
+The tolerance for accepting a split is kept at its default (via <code class="docutils literal notranslate"><span class="pre">tol=0</span></code>),
+the relative spreading factor for perturbing the estimate of the projected
+spectral median is set to :<cite>1e-6</cite> (<code class="docutils literal notranslate"><span class="pre">spreadFactor=1e-6</span></code>), and progress is
+not displayed by default (<code class="docutils literal notranslate"><span class="pre">progress=false</span></code>).</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="SkewHermitianEig.html" class="btn btn-neutral float-right" title="Skew-Hermitian eigensolvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="HermitianTridiagEig.html" class="btn btn-neutral float-left" title="Hermitian tridiagonal eigensolvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

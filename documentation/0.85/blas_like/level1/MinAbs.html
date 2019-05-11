@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>MinAbs &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Nrm2" href="Nrm2.html" />
+    <link rel="prev" title="Min" href="Min.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="minabs">
+<h1>MinAbs<a class="headerlink" href="#minabs" title="Permalink to this headline">¶</a></h1>
+<p>The following routines return the coordinates and magnitude of the entry with
+the smallest absolute value.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv46MinAbsRK6MatrixI1FE">
+<span id="_CPPv36MinAbsRK6MatrixI1FE"></span><span id="_CPPv26MinAbsRK6MatrixI1FE"></span><span id="MinAbs__Matrix:F:CR"></span>ValueIntPair&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <code class="descname">MinAbs</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46MinAbsRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46MinAbsRK18AbstractDistMatrixI1FE">
+<span id="_CPPv36MinAbsRK18AbstractDistMatrixI1FE"></span><span id="_CPPv26MinAbsRK18AbstractDistMatrixI1FE"></span><span id="MinAbs__AbstractDistMatrix:F:CR"></span>ValueIntPair&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <code class="descname">MinAbs</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46MinAbsRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415SymmetricMinAbs12UpperOrLowerRK6MatrixI1FE">
+<span id="_CPPv315SymmetricMinAbs12UpperOrLowerRK6MatrixI1FE"></span><span id="_CPPv215SymmetricMinAbs12UpperOrLowerRK6MatrixI1FE"></span><span id="SymmetricMinAbs__UpperOrLower.Matrix:F:CR"></span>ValueIntPair&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <code class="descname">SymmetricMinAbs</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415SymmetricMinAbs12UpperOrLowerRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415SymmetricMinAbs12UpperOrLowerRK18AbstractDistMatrixI1FE">
+<span id="_CPPv315SymmetricMinAbs12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="_CPPv215SymmetricMinAbs12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="SymmetricMinAbs__UpperOrLower.AbstractDistMatrix:F:CR"></span>ValueIntPair&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <code class="descname">SymmetricMinAbs</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415SymmetricMinAbs12UpperOrLowerRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412VectorMinAbsRK6MatrixI1FE">
+<span id="_CPPv312VectorMinAbsRK6MatrixI1FE"></span><span id="_CPPv212VectorMinAbsRK6MatrixI1FE"></span><span id="VectorMinAbs__Matrix:F:CR"></span>ValueInt&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <code class="descname">VectorMinAbs</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412VectorMinAbsRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412VectorMinAbsRK18AbstractDistMatrixI1FE">
+<span id="_CPPv312VectorMinAbsRK18AbstractDistMatrixI1FE"></span><span id="_CPPv212VectorMinAbsRK18AbstractDistMatrixI1FE"></span><span id="VectorMinAbs__AbstractDistMatrix:F:CR"></span>ValueInt&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <code class="descname">VectorMinAbs</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412VectorMinAbsRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElMinAbs_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbs_i</code><span class="sig-paren">(</span>ElConstMatrix_i<em> A</em>, ElValueIntPair_i*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbs_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbs_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbs_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElValueIntPair_s*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbs_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbs_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbs_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElValueIntPair_d*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbs_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbs_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbs_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElValueIntPair_c*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbs_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbs_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbs_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElValueIntPair_z*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbs_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbsDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbsDist_i</code><span class="sig-paren">(</span>ElConstDistMatrix_i<em> A</em>, ElValueIntPair_i*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbsDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbsDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbsDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElValueIntPair_s*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbsDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbsDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbsDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElValueIntPair_d*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbsDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbsDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbsDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElValueIntPair_c*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbsDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMinAbsDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMinAbsDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElValueIntPair_z*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMinAbsDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbs_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbs_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_i<em> A</em>, ElValueIntPair_i*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbs_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbs_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbs_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_s<em> A</em>, ElValueIntPair_s*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbs_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbs_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbs_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_d<em> A</em>, ElValueIntPair_d*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbs_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbs_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbs_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, ElValueIntPair_c*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbs_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbs_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbs_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, ElValueIntPair_z*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbs_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbsDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbsDist_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_i<em> A</em>, ElValueIntPair_i*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbsDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbsDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbsDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_s<em> A</em>, ElValueIntPair_s*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbsDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbsDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbsDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_d<em> A</em>, ElValueIntPair_d*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbsDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbsDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbsDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, ElValueIntPair_c*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbsDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMinAbsDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMinAbsDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, ElValueIntPair_z*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMinAbsDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbs_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbs_i</code><span class="sig-paren">(</span>ElConstMatrix_i<em> x</em>, ElValueInt_i*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbs_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbs_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbs_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> x</em>, ElValueInt_s*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbs_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbs_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbs_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> x</em>, ElValueInt_d*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbs_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbs_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbs_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> x</em>, ElValueInt_c*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbs_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbs_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbs_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> x</em>, ElValueInt_z*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbs_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbsDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbsDist_i</code><span class="sig-paren">(</span>ElConstDistMatrix_i<em> x</em>, ElValueInt_i*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbsDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbsDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbsDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> x</em>, ElValueInt_s*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbsDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbsDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbsDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> x</em>, ElValueInt_d*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbsDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbsDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbsDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> x</em>, ElValueInt_c*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbsDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElVectorMinAbsDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElVectorMinAbsDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> x</em>, ElValueInt_z*<em> entry</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElVectorMinAbsDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

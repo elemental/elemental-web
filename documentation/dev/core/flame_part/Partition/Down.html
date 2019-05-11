@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Downward &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Upward" href="Up.html" />
+    <link rel="prev" title="Partitioning" href="../Partition.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../flame_part.html">FLAME-like partition tracking</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../Partition.html">Partitioning</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Downward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Up.html">Upward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Right.html">Rightward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Left.html">Leftward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DownDiag.html">Down the main diagonal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DownOffsetDiag.html">Down an offset diagonal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="UpDiag.html">Up the main diagonal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="UpOffsetDiag.html">Up an offset diagonal</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Repartition.html">Repartitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Merge.html">Merging submatrices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SlidePartition.html">Moving partition boundaries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../../flame_part.html">FLAME-like partition tracking</a> &raquo;</li>
+        
+          <li><a href="../Partition.html">Partitioning</a> &raquo;</li>
+        
+      <li>Downward</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/core/flame_part/Partition/Down.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="downward">
+<h1>Downward<a class="headerlink" href="#downward" title="Permalink to this headline">¶</a></h1>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>AT</cite> and <cite>AB</cite> to view the local data of <cite>A</cite> corresponding to the partition</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{c}A_T \\ A_B \end{array}\right),\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_T\)</span> is of a specified height.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv413PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int">
+<span id="_CPPv313PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="_CPPv213PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="PartitionDown__Matrix:T:R.Matrix:T:R.Matrix:T:R.Int"></span>void <code class="descname">PartitionDown</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, Matrix&lt;T&gt; &amp;<em>AT</em>, Matrix&lt;T&gt; &amp;<em>AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>heightAT</em> = <a class="reference internal" href="../../environment/blocksize.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int">
+<span id="_CPPv319LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="_CPPv219LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="LockedPartitionDown__Matrix:T:CR.Matrix:T:R.Matrix:T:R.Int"></span>void <code class="descname">LockedPartitionDown</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A</em>, Matrix&lt;T&gt; &amp;<em>AT</em>, Matrix&lt;T&gt; &amp;<em>AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>heightAT</em> = <a class="reference internal" href="../../environment/blocksize.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413PartitionDownR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int">
+<span id="_CPPv313PartitionDownR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="_CPPv213PartitionDownR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="PartitionDown__AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.Int"></span>void <code class="descname">PartitionDown</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>AT</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>heightAT</em> = <a class="reference internal" href="../../environment/blocksize.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PartitionDownR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419LockedPartitionDownRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int">
+<span id="_CPPv319LockedPartitionDownRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="_CPPv219LockedPartitionDownRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="LockedPartitionDown__AbstractDistMatrix:T:CR.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.Int"></span>void <code class="descname">LockedPartitionDown</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>AT</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>heightAT</em> = <a class="reference internal" href="../../environment/blocksize.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419LockedPartitionDownRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElPartitionDown_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDown_i</code><span class="sig-paren">(</span>ElMatrix_i<em> A</em>, ElMatrix_i<em> AT</em>, ElMatrix_i<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDown_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDown_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDown_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> AT</em>, ElMatrix_s<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDown_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDown_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDown_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> AT</em>, ElMatrix_d<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDown_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDown_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDown_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> AT</em>, ElMatrix_c<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDown_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDown_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDown_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> AT</em>, ElMatrix_z<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDown_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDownDist_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDownDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> A</em>, ElDistMatrix_i<em> AT</em>, ElDistMatrix_i<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDownDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDownDist_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDownDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> AT</em>, ElDistMatrix_s<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDownDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDownDist_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDownDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> AT</em>, ElDistMatrix_d<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDownDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDownDist_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDownDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> AT</em>, ElDistMatrix_c<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDownDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionDownDist_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionDownDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> AT</em>, ElDistMatrix_z<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionDownDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDown_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDown_i</code><span class="sig-paren">(</span>ElConstMatrix_i<em> A</em>, ElMatrix_i<em> AT</em>, ElMatrix_i<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDown_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDown_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDown_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> AT</em>, ElMatrix_s<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDown_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDown_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDown_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> AT</em>, ElMatrix_d<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDown_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDown_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDown_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> AT</em>, ElMatrix_c<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDown_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDown_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDown_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> AT</em>, ElMatrix_z<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDown_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDownDist_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDownDist_i</code><span class="sig-paren">(</span>ElConstDistMatrix_i<em> A</em>, ElDistMatrix_i<em> AT</em>, ElDistMatrix_i<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDownDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDownDist_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDownDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> AT</em>, ElDistMatrix_s<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDownDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDownDist_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDownDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> AT</em>, ElDistMatrix_d<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDownDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDownDist_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDownDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> AT</em>, ElDistMatrix_c<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDownDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionDownDist_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionDownDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> AT</em>, ElDistMatrix_z<em> AB</em>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> heightAT</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionDownDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Up.html" class="btn btn-neutral float-right" title="Upward" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../Partition.html" class="btn btn-neutral float-left" title="Partitioning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

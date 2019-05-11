@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>07/06/2012: Elemental 0.75-p1 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="07/06/2012: Elemental 0.75" href="../0.75/index.html" />
+    <link rel="prev" title="08/06/2012: Elemental 0.76" href="../0.76/index.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-75-p1">
+<span id="release-0-75-p1"></span><h1>07/06/2012: Elemental 0.75-p1<a class="headerlink" href="#elemental-0-75-p1" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://libelemental.org/pub/releases/elemental-0.75-p1.tgz">elemental-0.75-p1.tgz</a></p>
+<div class="section" id="new-functionality">
+<h2>New functionality<a class="headerlink" href="#new-functionality" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>SVD support through the bidiagonal QR algorithm. If libFLAME is linked, a high-performance QR algorithm will be used.</p></li>
+<li><p>Pseudoinverses and polar decompositions through the new SVD routine</p></li>
+<li><p>QR-based Dynamically-Weighted Halley iteration (QDWH) for computing the polar decomposition, with versions for both general and Hermitian matrices</p></li>
+<li><p>Support for fast expansions of packed Householder reflectors for a few cases (i.e., those needed for QR and LQ decompositions)</p></li>
+<li><p>Explicit QR and LQ decompositions</p></li>
+<li><p>Cheap two-norm estimates</p></li>
+<li><p>‘Norm’ now supports all DistMatrix distributions, instead of just [MC,MR]</p></li>
+<li><p>DistMatrix now supports ‘viewing’ processes that do not actively own data; this makes temporarily distributing to a subset of processes (e.g., a perfect square) less of a hack</p></li>
+<li><p>MakeHermitian, MakeSymmetric, and MakeReal were added</p></li>
+<li><p>LUSolve was added for solving systems using an existing LU factorization, with or without partial pivoting</p></li>
+<li><p>The routine Hetrmm, for forming one half of the Hermitian result L^H L or U U^H, was generalized to also support symmetric updates and the name was changed to Trtrmm</p></li>
+<li><p>The routine Trdtrmm was added in order to aid in the inversion of symmetric/Hermitian-indefinite matrices and forms L^H inv(D) L or U inv(D) U^H (or the symmetric counterpart)</p></li>
+</ul>
+</div>
+<div class="section" id="performance-improvements">
+<h2>Performance improvements<a class="headerlink" href="#performance-improvements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Faster ApplyPackedReflectors implementations</p></li>
+<li><p>Many variants of Gemm are now faster due to avoiding cache-unfriendly redistributions</p></li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Fixed subtle issue in Householder reflection generation when the norm of the lower part of the vector was zero</p></li>
+<li><p>Fixed namespacing complaints from new versions of GCC and Clang</p></li>
+<li><p>Fixed mistakes in 1-2-1 and Wilkinson matrix generation</p></li>
+<li><p>Fixed missing installation of FCMangle.h and cmake-dummy-lib</p></li>
+<li><p>Fixed leakage of viewingGroup in the Grid destructor</p></li>
+<li><p>Fixed mistake in parallel Adjoint and Transpose routines</p></li>
+<li><p>Avoided bug in CMake’s enable_language OPTIONAL argument</p></li>
+</ul>
+</div>
+<div class="section" id="semantic-changes">
+<h2>Semantic changes<a class="headerlink" href="#semantic-changes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Shortened ‘SetLocalEntry’ and friends to the form ‘SetLocal’ in order to be more consistent with the distributed equivalent, ‘Set’</p></li>
+<li><p>Expanded routines for extracting real and imaginary parts of complex data from the form ‘Real’ to ‘RealPart’</p></li>
+<li><p>Shortened many redundant filenames</p></li>
+</ul>
+</div>
+<div class="section" id="people-involved">
+<h2>People involved<a class="headerlink" href="#people-involved" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Robert van de Geijn, Field van Zee, and Gregorio Quintana Orti were involved in Elemental’s support for FLAME’s high-performance bidiagonal QR algorithm</p></li>
+<li><p>Yuji Nakatsukasa, Gregorio Quintana Orti, and Robert van de Geijn were involved in the QDWH implementation</p></li>
+<li><p>Bryan Marker noticed the cache-unfriendly redistributions in Gemm and Trsm</p></li>
+<li><p>Jed Brown submitted patches for the FCMangle.h and cmake-dummy-lib installation issues, as well as the viewingGroup leakage in the Grid class</p></li>
+<li><p>If I missed you, I apologize! Please let me know and I will add you!</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

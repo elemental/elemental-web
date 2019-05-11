@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Trdtrmm &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Trmm" href="Trmm.html" />
+    <link rel="prev" title="Syr2k" href="Syr2k.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="trdtrmm">
+<h1>Trdtrmm<a class="headerlink" href="#trdtrmm" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a modification of Trtrmm for LDL factorizations.</p>
+</div>
+<p>Symmetric/Hermitian triangular matrix-matrix multiply (with diagonal scaling):
+performs <span class="math notranslate nohighlight">\(L := L^T D^{-1} L\)</span>, <span class="math notranslate nohighlight">\(L := L^H D^{-1} L\)</span>,
+<span class="math notranslate nohighlight">\(U := U D^{-1} U^T\)</span>, or <span class="math notranslate nohighlight">\(U := U D^{-1} U^H\)</span>,
+depending upon the choice of the <cite>orientation</cite> and <cite>uplo</cite> parameters.
+Note that <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span> are unit-diagonal and their diagonal is
+overwritten with <span class="math notranslate nohighlight">\(D\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR6MatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR6MatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.Matrix:F:R.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.AbstractDistMatrix:F:R.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.Matrix:F:R.Matrix:F:CR.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:CR.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension to quasi-diagonal <span class="math notranslate nohighlight">\(D\)</span>, where the main diagonal is stored
+over the main diagonal of <cite>A</cite> and the subdiagonal is given by <cite>dSub</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElTrdtrmm_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmm_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmm_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmm_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElConstMatrix_s<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElConstMatrix_d<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElConstMatrix_c<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElConstMatrix_z<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Trdtrmm">
+<code class="descname">Trdtrmm</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em>, <em>conjugate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Trdtrmm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="TrdtrmmQuasi">
+<code class="descname">TrdtrmmQuasi</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em>, <em>dSub</em>, <em>conjugate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#TrdtrmmQuasi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

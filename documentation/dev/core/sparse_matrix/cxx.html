@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SparseMatrix (C++ interface) &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SparseMatrix (C interface)" href="c.html" />
+    <link rel="prev" title="SparseMatrix (Python interface)" href="python.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="python.html">SparseMatrix (Python interface)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SparseMatrix (C++ interface)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#special-cases-used-in-elemental">Special cases used in Elemental</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="c.html">SparseMatrix (C interface)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../sparse_matrix.html">SparseMatrix</a> &raquo;</li>
+        
+      <li>SparseMatrix (C++ interface)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/sparse_matrix/cxx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sparsematrix-c-interface">
+<h1>SparseMatrix (C++ interface)<a class="headerlink" href="#sparsematrix-c-interface" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">El</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="k">const</span> <span class="n">Int</span> <span class="n">n0</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">Int</span> <span class="n">n1</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">SparseMatrix</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">Int</span> <span class="n">height</span><span class="o">=</span><span class="n">n0</span><span class="o">*</span><span class="n">n1</span><span class="p">;</span>
+<span class="n">Zeros</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">height</span> <span class="p">);</span>
+
+<span class="n">A</span><span class="p">.</span><span class="n">Reserve</span><span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">hHeight</span> <span class="p">);</span>
+<span class="k">for</span><span class="p">(</span> <span class="n">Int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">height</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="n">Int</span> <span class="n">x0</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">n0</span><span class="p">;</span>
+    <span class="k">const</span> <span class="n">Int</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="n">n0</span><span class="p">;</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="n">iLoc</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">11</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">x0</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
+        <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">x0</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n0</span> <span class="p">)</span>
+        <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">x1</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
+        <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="o">-</span><span class="n">n0</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">x1</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n1</span> <span class="p">)</span>
+        <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="o">+</span><span class="n">n0</span><span class="p">,</span> <span class="mi">4</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="n">A</span><span class="p">.</span><span class="n">ProcessQueues</span><span class="p">();</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="_CPPv4IE12SparseMatrixI1TE">
+<span id="_CPPv3IE12SparseMatrixI1TE"></span><span id="_CPPv2IE12SparseMatrixI1TE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">SparseMatrix</code>&lt;T&gt;<a class="headerlink" href="#_CPPv4IE12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE12SparseMatrixEv">
+<span id="_CPPv3N12SparseMatrixI1TE12SparseMatrixEv"></span><span id="_CPPv2N12SparseMatrixI1TE12SparseMatrixEv"></span><span id="SparseMatrix:T:::SparseMatrix"></span><code class="descname">SparseMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE12SparseMatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE12SparseMatrixE3Int3Int">
+<span id="_CPPv3N12SparseMatrixI1TE12SparseMatrixE3Int3Int"></span><span id="_CPPv2N12SparseMatrixI1TE12SparseMatrixE3Int3Int"></span><span id="SparseMatrix:T:::SparseMatrix__Int.Int"></span><code class="descname">SparseMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE12SparseMatrixE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE12SparseMatrixERK12SparseMatrixI1TE">
+<span id="_CPPv3N12SparseMatrixI1TE12SparseMatrixERK12SparseMatrixI1TE"></span><span id="_CPPv2N12SparseMatrixI1TE12SparseMatrixERK12SparseMatrixI1TE"></span><span id="SparseMatrix:T:::SparseMatrix__SparseMatrix:T:CR"></span><code class="descname">SparseMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N12SparseMatrixI1TE12SparseMatrixEv" title="SparseMatrix&lt;T&gt;::SparseMatrix">SparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE12SparseMatrixERK12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE12SparseMatrixERK16DistSparseMatrixI1TE">
+<span id="_CPPv3N12SparseMatrixI1TE12SparseMatrixERK16DistSparseMatrixI1TE"></span><span id="_CPPv2N12SparseMatrixI1TE12SparseMatrixERK16DistSparseMatrixI1TE"></span><span id="SparseMatrix:T:::SparseMatrix__DistSparseMatrix:T:CR"></span><code class="descname">SparseMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE12SparseMatrixERK16DistSparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TED0Ev">
+<span id="_CPPv3N12SparseMatrixI1TED0Ev"></span><span id="_CPPv2N12SparseMatrixI1TED0Ev"></span><span id="SparseMatrix:T:::~SparseMatrix"></span><code class="descname">~SparseMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TEaSERK12SparseMatrixI1TE">
+<span id="_CPPv3N12SparseMatrixI1TEaSERK12SparseMatrixI1TE"></span><span id="_CPPv2N12SparseMatrixI1TEaSERK12SparseMatrixI1TE"></span><span id="SparseMatrix:T:::assign-operator__SparseMatrix:T:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TEaSERK12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TEaSERK16DistSparseMatrixI1TE">
+<span id="_CPPv3N12SparseMatrixI1TEaSERK16DistSparseMatrixI1TE"></span><span id="_CPPv2N12SparseMatrixI1TEaSERK16DistSparseMatrixI1TE"></span><span id="SparseMatrix:T:::assign-operator__DistSparseMatrix:T:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TEaSERK16DistSparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TEclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3NK12SparseMatrixI1TEclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2NK12SparseMatrixI1TEclE5RangeI3IntE5RangeI3IntE"></span><span id="SparseMatrix:T:::call-operator__Range:Int:.Range:Int:C"></span><a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TEclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TEclE5RangeI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK12SparseMatrixI1TEclE5RangeI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK12SparseMatrixI1TEclE5RangeI3IntERK6vectorI3IntE"></span><span id="SparseMatrix:T:::call-operator__Range:Int:.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TEclE5RangeI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TEclERK6vectorI3IntE5RangeI3IntE">
+<span id="_CPPv3NK12SparseMatrixI1TEclERK6vectorI3IntE5RangeI3IntE"></span><span id="_CPPv2NK12SparseMatrixI1TEclERK6vectorI3IntE5RangeI3IntE"></span><span id="SparseMatrix:T:::call-operator__vector:Int:CR.Range:Int:C"></span><a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TEclERK6vectorI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TEclERK6vectorI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK12SparseMatrixI1TEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK12SparseMatrixI1TEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="SparseMatrix:T:::call-operator__vector:Int:CR.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TEclERK6vectorI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make a copy of a submatrix</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE5EmptyEb">
+<span id="_CPPv3N12SparseMatrixI1TE5EmptyEb"></span><span id="_CPPv2N12SparseMatrixI1TE5EmptyEb"></span><span id="SparseMatrix:T:::Empty__b"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span>bool <em>clearMemory</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE5EmptyEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE6ResizeE3Int3Int">
+<span id="_CPPv3N12SparseMatrixI1TE6ResizeE3Int3Int"></span><span id="_CPPv2N12SparseMatrixI1TE6ResizeE3Int3Int"></span><span id="SparseMatrix:T:::Resize__Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE6ResizeE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE7ReserveE3Int">
+<span id="_CPPv3N12SparseMatrixI1TE7ReserveE3Int"></span><span id="_CPPv2N12SparseMatrixI1TE7ReserveE3Int"></span><span id="SparseMatrix:T:::Reserve__Int"></span>void <code class="descname">Reserve</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numEntries</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE7ReserveE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE6UpdateERK5EntryI1TE">
+<span id="_CPPv3N12SparseMatrixI1TE6UpdateERK5EntryI1TE"></span><span id="_CPPv2N12SparseMatrixI1TE6UpdateERK5EntryI1TE"></span><span id="SparseMatrix:T:::Update__Entry:T:CR"></span>void <code class="descname">Update</code><span class="sig-paren">(</span><em class="property">const</em> Entry&lt;T&gt; &amp;<em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE6UpdateERK5EntryI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE6UpdateE3Int3Int1T">
+<span id="_CPPv3N12SparseMatrixI1TE6UpdateE3Int3Int1T"></span><span id="_CPPv2N12SparseMatrixI1TE6UpdateE3Int3Int1T"></span><span id="SparseMatrix:T:::Update__Int.Int.T"></span>void <code class="descname">Update</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>row</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>col</em>, T <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE6UpdateE3Int3Int1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE4ZeroE3Int3Int">
+<span id="_CPPv3N12SparseMatrixI1TE4ZeroE3Int3Int"></span><span id="_CPPv2N12SparseMatrixI1TE4ZeroE3Int3Int"></span><span id="SparseMatrix:T:::Zero__Int.Int"></span>void <code class="descname">Zero</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>row</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE4ZeroE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE11QueueUpdateERK5EntryI1TE">
+<span id="_CPPv3N12SparseMatrixI1TE11QueueUpdateERK5EntryI1TE"></span><span id="_CPPv2N12SparseMatrixI1TE11QueueUpdateERK5EntryI1TE"></span><span id="SparseMatrix:T:::QueueUpdate__Entry:T:CR"></span>void <code class="descname">QueueUpdate</code><span class="sig-paren">(</span><em class="property">const</em> Entry&lt;T&gt; &amp;<em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE11QueueUpdateERK5EntryI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE11QueueUpdateEK3Int3Int1T">
+<span id="_CPPv3N12SparseMatrixI1TE11QueueUpdateEK3Int3Int1T"></span><span id="_CPPv2N12SparseMatrixI1TE11QueueUpdateEK3Int3Int1T"></span><span id="SparseMatrix:T:::QueueUpdate__IntC.Int.T"></span>void <code class="descname">QueueUpdate</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>row</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>col</em>, T <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE11QueueUpdateEK3Int3Int1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE9QueueZeroE3Int3Int">
+<span id="_CPPv3N12SparseMatrixI1TE9QueueZeroE3Int3Int"></span><span id="_CPPv2N12SparseMatrixI1TE9QueueZeroE3Int3Int"></span><span id="SparseMatrix:T:::QueueZero__Int.Int"></span>void <code class="descname">QueueZero</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>row</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE9QueueZeroE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE13ProcessQueuesEv">
+<span id="_CPPv3N12SparseMatrixI1TE13ProcessQueuesEv"></span><span id="_CPPv2N12SparseMatrixI1TE13ProcessQueuesEv"></span><span id="SparseMatrix:T:::ProcessQueues"></span>void <code class="descname">ProcessQueues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE13ProcessQueuesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE6HeightEv">
+<span id="_CPPv3NK12SparseMatrixI1TE6HeightEv"></span><span id="_CPPv2NK12SparseMatrixI1TE6HeightEv"></span><span id="SparseMatrix:T:::HeightC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE6HeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE5WidthEv">
+<span id="_CPPv3NK12SparseMatrixI1TE5WidthEv"></span><span id="_CPPv2NK12SparseMatrixI1TE5WidthEv"></span><span id="SparseMatrix:T:::WidthC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE5WidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE10NumEntriesEv">
+<span id="_CPPv3NK12SparseMatrixI1TE10NumEntriesEv"></span><span id="_CPPv2NK12SparseMatrixI1TE10NumEntriesEv"></span><span id="SparseMatrix:T:::NumEntriesC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumEntries</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE10NumEntriesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE8CapacityEv">
+<span id="_CPPv3NK12SparseMatrixI1TE8CapacityEv"></span><span id="_CPPv2NK12SparseMatrixI1TE8CapacityEv"></span><span id="SparseMatrix:T:::CapacityC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE8CapacityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE10ConsistentEv">
+<span id="_CPPv3NK12SparseMatrixI1TE10ConsistentEv"></span><span id="_CPPv2NK12SparseMatrixI1TE10ConsistentEv"></span><span id="SparseMatrix:T:::ConsistentC"></span>bool <code class="descname">Consistent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE10ConsistentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE5GraphEv">
+<span id="_CPPv3N12SparseMatrixI1TE5GraphEv"></span><span id="_CPPv2N12SparseMatrixI1TE5GraphEv"></span><span id="SparseMatrix:T:::Graph"></span>El::Graph &amp;<code class="descname">Graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE5GraphEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE11LockedGraphEv">
+<span id="_CPPv3NK12SparseMatrixI1TE11LockedGraphEv"></span><span id="_CPPv2NK12SparseMatrixI1TE11LockedGraphEv"></span><span id="SparseMatrix:T:::LockedGraphC"></span><em class="property">const</em> El::Graph &amp;<code class="descname">LockedGraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE11LockedGraphEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE3RowE3Int">
+<span id="_CPPv3NK12SparseMatrixI1TE3RowE3Int"></span><span id="_CPPv2NK12SparseMatrixI1TE3RowE3Int"></span><span id="SparseMatrix:T:::Row__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Row</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE3RowE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE3ColE3Int">
+<span id="_CPPv3NK12SparseMatrixI1TE3ColE3Int"></span><span id="_CPPv2NK12SparseMatrixI1TE3ColE3Int"></span><span id="SparseMatrix:T:::Col__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Col</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE3ColE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE5ValueE3Int">
+<span id="_CPPv3NK12SparseMatrixI1TE5ValueE3Int"></span><span id="_CPPv2NK12SparseMatrixI1TE5ValueE3Int"></span><span id="SparseMatrix:T:::Value__IntC"></span>T <code class="descname">Value</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE5ValueE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE11EntryOffsetE3Int">
+<span id="_CPPv3NK12SparseMatrixI1TE11EntryOffsetE3Int"></span><span id="_CPPv2NK12SparseMatrixI1TE11EntryOffsetE3Int"></span><span id="SparseMatrix:T:::EntryOffset__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">EntryOffset</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>row</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE11EntryOffsetE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE14NumConnectionsE3Int">
+<span id="_CPPv3NK12SparseMatrixI1TE14NumConnectionsE3Int"></span><span id="_CPPv2NK12SparseMatrixI1TE14NumConnectionsE3Int"></span><span id="SparseMatrix:T:::NumConnections__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumConnections</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>row</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE14NumConnectionsE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE12SourceBufferEv">
+<span id="_CPPv3N12SparseMatrixI1TE12SourceBufferEv"></span><span id="_CPPv2N12SparseMatrixI1TE12SourceBufferEv"></span><span id="SparseMatrix:T:::SourceBuffer"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">SourceBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE12SourceBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE12TargetBufferEv">
+<span id="_CPPv3N12SparseMatrixI1TE12TargetBufferEv"></span><span id="_CPPv2N12SparseMatrixI1TE12TargetBufferEv"></span><span id="SparseMatrix:T:::TargetBuffer"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">TargetBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE12TargetBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SparseMatrixI1TE11ValueBufferEv">
+<span id="_CPPv3N12SparseMatrixI1TE11ValueBufferEv"></span><span id="_CPPv2N12SparseMatrixI1TE11ValueBufferEv"></span><span id="SparseMatrix:T:::ValueBuffer"></span>T *<code class="descname">ValueBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SparseMatrixI1TE11ValueBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE18LockedSourceBufferEv">
+<span id="_CPPv3NK12SparseMatrixI1TE18LockedSourceBufferEv"></span><span id="_CPPv2NK12SparseMatrixI1TE18LockedSourceBufferEv"></span><span id="SparseMatrix:T:::LockedSourceBufferC"></span><em class="property">const</em> <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">LockedSourceBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE18LockedSourceBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE18LockedTargetBufferEv">
+<span id="_CPPv3NK12SparseMatrixI1TE18LockedTargetBufferEv"></span><span id="_CPPv2NK12SparseMatrixI1TE18LockedTargetBufferEv"></span><span id="SparseMatrix:T:::LockedTargetBufferC"></span><em class="property">const</em> <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">LockedTargetBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE18LockedTargetBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12SparseMatrixI1TE17LockedValueBufferEv">
+<span id="_CPPv3NK12SparseMatrixI1TE17LockedValueBufferEv"></span><span id="_CPPv2NK12SparseMatrixI1TE17LockedValueBufferEv"></span><span id="SparseMatrix:T:::LockedValueBufferC"></span><em class="property">const</em> T *<code class="descname">LockedValueBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12SparseMatrixI1TE17LockedValueBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<div class="section" id="special-cases-used-in-elemental">
+<h2>Special cases used in Elemental<a class="headerlink" href="#special-cases-used-in-elemental" title="Permalink to this headline">¶</a></h2>
+<p>This list of special cases is here to help clarify the notation used throughout
+Elemental’s source (as well as this documentation). These are all special
+cases of <a class="reference internal" href="#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">SparseMatrix&lt;T&gt;</span></code></a>.</p>
+<dl class="class">
+<dt id="_CPPv4IE12SparseMatrixI4RealE">
+<span id="_CPPv3IE12SparseMatrixI4RealE"></span><span id="_CPPv2IE12SparseMatrixI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">SparseMatrix</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE12SparseMatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>Real</cite> is real.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE12SparseMatrixI7ComplexI4RealEE">
+<span id="_CPPv3IE12SparseMatrixI7ComplexI4RealEE"></span><span id="_CPPv2IE12SparseMatrixI7ComplexI4RealEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">SparseMatrix</code>&lt;<a class="reference internal" href="../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt;<a class="headerlink" href="#_CPPv4IE12SparseMatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <a class="reference internal" href="../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Complex&lt;Real&gt;</span></code></a> is
+complex with base type <cite>Real</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE12SparseMatrixI1FE">
+<span id="_CPPv3IE12SparseMatrixI1FE"></span><span id="_CPPv2IE12SparseMatrixI1FE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">SparseMatrix</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE12SparseMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>F</cite> is a field.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE12SparseMatrixI3IntE">
+<span id="_CPPv3IE12SparseMatrixI3IntE"></span><span id="_CPPv2IE12SparseMatrixI3IntE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">SparseMatrix</code>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt;<a class="headerlink" href="#_CPPv4IE12SparseMatrixI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When the underlying datatype is a signed integer.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="c.html" class="btn btn-neutral float-right" title="SparseMatrix (C interface)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="python.html" class="btn btn-neutral float-left" title="SparseMatrix (Python interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

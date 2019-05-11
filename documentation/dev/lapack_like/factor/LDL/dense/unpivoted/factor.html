@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Factorization &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="Solve after factorization" href="solve_after.html" />
+    <link rel="prev" title="Unpivoted dense LDL" href="../unpivoted.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../../factor.html">Factorizations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../Cholesky.html">Cholesky factorization</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../LDL.html">LDL factorization</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../../dense.html">Dense LDL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../sparse.html">Sparse LDL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../LU.html">LU factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../LQ.html">LQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../QR.html">QR factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../RQ.html">RQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../GQR.html">Generalized QR factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../GRQ.html">Generalized RQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../ID.html">Interpolative Decomposition (ID)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Skeleton.html">Skeleton decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../factor.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../../../../factor.html">Factorizations</a> &raquo;</li>
+        
+          <li><a href="../../../LDL.html">LDL factorization</a> &raquo;</li>
+        
+          <li><a href="../../dense.html">Dense LDL</a> &raquo;</li>
+        
+          <li><a href="../unpivoted.html">Unpivoted dense LDL</a> &raquo;</li>
+        
+      <li>Factorization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../../_sources/lapack_like/factor/LDL/dense/unpivoted/factor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="factorization">
+<h1>Factorization<a class="headerlink" href="#factorization" title="Permalink to this headline">¶</a></h1>
+<p>Upon successful completion of the factorization, a lower-triangular (with unit diagonal) <span class="math notranslate nohighlight">\(L\)</span> and diagonal matrix <span class="math notranslate nohighlight">\(D\)</span>,
+such that <span class="math notranslate nohighlight">\(A = L D L^H\)</span> or <span class="math notranslate nohighlight">\(A = L D L^T\)</span>, will be returned in the
+lower triangle of <span class="math notranslate nohighlight">\(A\)</span>.
+If a zero pivot is attempted, then a <code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">ZeroPivotException</span></code> will
+be thrown.</p>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<p>Elemental’s Python interface to <em>unpivoted</em> dense LDL factorizations can be
+called as a special case of the <em>pivoted</em> interface, <a class="reference internal" href="../pivoted/factor.html#LDL" title="LDL"><code class="xref py py-func docutils literal notranslate"><span class="pre">LDL()</span></code></a> by
+specifying <code class="docutils literal notranslate"><span class="pre">pivType</span></code> to <a class="reference internal" href="../pivoted/factor.html#LDL_WITHOUT_PIVOTING" title="LDL_WITHOUT_PIVOTING"><code class="xref py py-data docutils literal notranslate"><span class="pre">LDL_WITHOUT_PIVOTING</span></code></a>.</p>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44LDLTR6MatrixI1FE">
+<span id="_CPPv34LDLTR6MatrixI1FE"></span><span id="_CPPv24LDLTR6MatrixI1FE"></span><span id="LDLT__Matrix:F:R"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../../../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLTR18AbstractDistMatrixI1FE">
+<span id="_CPPv34LDLTR18AbstractDistMatrixI1FE"></span><span id="_CPPv24LDLTR18AbstractDistMatrixI1FE"></span><span id="LDLT__AbstractDistMatrix:F:R"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../../../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLHR6MatrixI1FE">
+<span id="_CPPv34LDLHR6MatrixI1FE"></span><span id="_CPPv24LDLHR6MatrixI1FE"></span><span id="LDLH__Matrix:F:R"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../../../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLHR18AbstractDistMatrixI1FE">
+<span id="_CPPv34LDLHR18AbstractDistMatrixI1FE"></span><span id="_CPPv24LDLHR18AbstractDistMatrixI1FE"></span><span id="LDLH__AbstractDistMatrix:F:R"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../../../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElLDLT_s">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLT_d">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLT_c">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLT_z">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_s">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_d">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_c">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_z">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLH_c">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLH_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLH_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLH_z">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLH_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLH_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLHDist_c">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLHDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLHDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLHDist_z">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLHDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLHDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL/dense/Var3.cpp">C++11 implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.hpp">C++11 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LDL.cpp">C++11 test driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/LDL.cpp">C++11 example driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor-C.cpp">C99 wrapper</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.h">C99 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/python/lapack_like/factor.py">Python wrapper</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="solve_after.html" class="btn btn-neutral float-right" title="Solve after factorization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../unpivoted.html" class="btn btn-neutral float-left" title="Unpivoted dense LDL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

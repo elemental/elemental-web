@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>11/08/2014: Elemental 0.85 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="06/04/2014: Elemental 0.84" href="../0.84/index.html" />
+    <link rel="prev" title="Release notes for Elemental" href="../index.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-85">
+<span id="release-0-85"></span><h1>11/08/2014: Elemental 0.85<a class="headerlink" href="#elemental-0-85" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://libelemental.org/pub/releases/Elemental-0.85.tgz">Elemental-0.85.tgz</a></p>
+<p>Documentation: <a class="reference external" href="http://libelemental.org/documentation/0.85/">[HTML]</a> <a class="reference external" href="http://libelemental.org/documentation/elem-0.85.pdf">[PDF]</a></p>
+<p>The significant changes since release 0.84 are listed below.</p>
+<div class="section" id="added-functionality">
+<h2>Added functionality<a class="headerlink" href="#added-functionality" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Sparse-direct Cholesky and Bunch-Kaufman due to merging Clique into Elemental</p></li>
+<li><p>Sparse-direct least squares, ridge regression, and Tikhonov regularization</p></li>
+<li><p>Sparse Herk and various other BLAS1-like routines</p></li>
+<li><p>A (nearly full) manually-constructed C interface</p></li>
+<li><p>A (nearly full) manually-constructed Python interface, including extensions of Display functionality to matplotlib (for matrices) and networkx (for graphs)</p></li>
+<li><p>Support for Read, Write, and ReadWrite matrix proxies so that routines implemented for specific datatypes and/or data distributions can be extended to more general datatypes and arbitrary distribution choices</p></li>
+<li><p>Essentially all distributed routines in the library were generalized to AbstractDistMatrix for convenience (using proxies)</p></li>
+<li><p>Single-precision Hermitian eigensolvers are now supported (via proxies which convert to double-precision for PMRRR)</p></li>
+<li><p>Added Three-valued and Bernoulli, GEPPGrowth and Druinsky-Toledo, Fourier-Identity (“spikes and sines”) and Walsh-Identity (“spikes and Hadamard”) matrices</p></li>
+<li><p>Added ability to compute coherence</p></li>
+<li><p>Added ability to use operator() to extract contiguous submatrices (and converted library)</p></li>
+<li><p>Extended control of SVD and LDL via new SVDCtrl and LDLCtrl structures</p></li>
+<li><p>Improved performance of IO routines when ColStride() and/or RowStride() are 1</p></li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Fixed a variety of compilation errors which did not appear with g++</p></li>
+<li><p>Fixed an (uncommon) bug in distributed HermitianFrobeniusNorm</p></li>
+<li><p>Added missing shrink of the phase vector in qr::BusingerGolub</p></li>
+<li><p>Added missing scalar argument to Matrix::UpdateDiagonal</p></li>
+<li><p>Fixed Ehrenfest matrix generation</p></li>
+<li><p>Fixed indexing of Householder phases in sequential Bidiag</p></li>
+<li><p>Fixed offset used by rq::ExplicitTriang</p></li>
+<li><p>Fixed BlockDistMatrix version of MATRIX_MARKET Read</p></li>
+<li><p>Fixed BLAS wrappers for complex herk, her2k, her, and her2</p></li>
+<li><p>Fixed PURE/HYBRID CMake detection (thanks to Richard Boyd)</p></li>
+<li><p>Fixed Mac vecLib/Accelerate detection</p></li>
+</ul>
+</div>
+<div class="section" id="refactoring">
+<h2>Refactoring<a class="headerlink" href="#refactoring" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Removed MakeTriangular (due to the more general MakeTrapezoidal)</p></li>
+<li><p>Replaced AxpyTriangle with AxpyTrapezoid</p></li>
+<li><p>Added a control structure for Bisect</p></li>
+<li><p>Significantly refactored/simplified Trr2k</p></li>
+<li><p>Removed spurious integer argument to TriW</p></li>
+<li><p>Removed Riemann matrix due to vague definition (and overlap with Redheffer)</p></li>
+<li><p>Removed hyphens in directory names to avoid python conflict</p></li>
+</ul>
+</div>
+<div class="section" id="name-changes">
+<h2>Name changes<a class="headerlink" href="#name-changes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Renamed namespace “elem” to “El”, and “elem.hpp” to “El.hpp”</p></li>
+<li><p>Moved auxiliary PMRRR headers into pmrrr/ subfolder</p></li>
+<li><p>“Pseudospectra” -&gt; {“SpectralPortrait”,”SpectralWindow”,”SpectralCloud”}</p></li>
+<li><p>Better organization/naming for explicit QR/RQ/LQ factorizations</p></li>
+</ul>
+</div>
+<div class="section" id="thanks">
+<h2>Thanks<a class="headerlink" href="#thanks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Richard Boyd (of GTRI) for reporting the PURE/HYBRID configuration detection problem</p></li>
+<li><p>Field van Zee (of UT Austin) for clarifying the {c,z}her2 and {c,z}her2k scalar argument conventions</p></li>
+<li><p>Rodrigo Canales for noticing and fixing several missing static instantiations</p></li>
+<li><p>Yingzhou (Ryan) Li for reporting the vecLib/Accelerate issue</p></li>
+</ul>
+</div>
+<div class="section" id="relevant-unmerged-forks">
+<h2>Relevant unmerged forks<a class="headerlink" href="#relevant-unmerged-forks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Rodrigo Canales’s R interface: <a class="reference external" href="https://github.com/rocanale/Elemental">https://github.com/rocanale/Elemental</a></p></li>
+<li><p>Sayan Ghosh’s one-sided Axpy interface: <a class="reference external" href="https://github.com/sg0/Elemental">https://github.com/sg0/Elemental</a></p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DistGraph (C++ interface) &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DistGraph (C interface)" href="c.html" />
+    <link rel="prev" title="DistGraph (Python interface)" href="python.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../dist_graph.html">DistGraph</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="python.html">DistGraph (Python interface)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DistGraph (C++ interface)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="c.html">DistGraph (C interface)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../dist_graph.html">DistGraph</a> &raquo;</li>
+        
+      <li>DistGraph (C++ interface)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/dist_graph/cxx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="distgraph-c-interface">
+<h1>DistGraph (C++ interface)<a class="headerlink" href="#distgraph-c-interface" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv49DistGraph">
+<span id="_CPPv39DistGraph"></span><span id="_CPPv29DistGraph"></span><span id="DistGraph"></span><em class="property">class </em><code class="descname">DistGraph</code><a class="headerlink" href="#_CPPv49DistGraph" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N9DistGraph9DistGraphEN3mpi4CommE">
+<span id="_CPPv3N9DistGraph9DistGraphEN3mpi4CommE"></span><span id="_CPPv2N9DistGraph9DistGraphEN3mpi4CommE"></span><span id="DistGraph::DistGraph__mpi::Comm"></span><code class="descname">DistGraph</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em> = mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD">COMM_WORLD</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph9DistGraphEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph9DistGraphE3IntN3mpi4CommE">
+<span id="_CPPv3N9DistGraph9DistGraphE3IntN3mpi4CommE"></span><span id="_CPPv2N9DistGraph9DistGraphE3IntN3mpi4CommE"></span><span id="DistGraph::DistGraph__Int.mpi::Comm"></span><code class="descname">DistGraph</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numVertices</em>, mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em> = mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD">COMM_WORLD</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph9DistGraphE3IntN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph9DistGraphE3Int3IntN3mpi4CommE">
+<span id="_CPPv3N9DistGraph9DistGraphE3Int3IntN3mpi4CommE"></span><span id="_CPPv2N9DistGraph9DistGraphE3Int3IntN3mpi4CommE"></span><span id="DistGraph::DistGraph__Int.Int.mpi::Comm"></span><code class="descname">DistGraph</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numSources</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numTargets</em>, mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em> = mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD">COMM_WORLD</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph9DistGraphE3Int3IntN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph9DistGraphERK5Graph">
+<span id="_CPPv3N9DistGraph9DistGraphERK5Graph"></span><span id="_CPPv2N9DistGraph9DistGraphERK5Graph"></span><span id="DistGraph::DistGraph__GraphCR"></span><code class="descname">DistGraph</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../graph/cxx.html#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>graph</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph9DistGraphERK5Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph9DistGraphERK9DistGraph">
+<span id="_CPPv3N9DistGraph9DistGraphERK9DistGraph"></span><span id="_CPPv2N9DistGraph9DistGraphERK9DistGraph"></span><span id="DistGraph::DistGraph__DistGraphCR"></span><code class="descname">DistGraph</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N9DistGraph9DistGraphEN3mpi4CommE" title="DistGraph::DistGraph">DistGraph</a> &amp;<em>graph</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph9DistGraphERK9DistGraph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraphD0Ev">
+<span id="_CPPv3N9DistGraphD0Ev"></span><span id="_CPPv2N9DistGraphD0Ev"></span><span id="DistGraph::~DistGraph"></span><code class="descname">~DistGraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraphD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N9DistGraphaSERK5Graph">
+<span id="_CPPv3N9DistGraphaSERK5Graph"></span><span id="_CPPv2N9DistGraphaSERK5Graph"></span><span id="DistGraph::assign-operator__GraphCR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../graph/cxx.html#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraphaSERK5Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraphaSERK9DistGraph">
+<span id="_CPPv3N9DistGraphaSERK9DistGraph"></span><span id="_CPPv2N9DistGraphaSERK9DistGraph"></span><span id="DistGraph::assign-operator__DistGraphCR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraphaSERK9DistGraph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraphclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3NK9DistGraphclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2NK9DistGraphclE5RangeI3IntE5RangeI3IntE"></span><span id="DistGraph::call-operator__Range:Int:.Range:Int:C"></span><a class="reference internal" href="#_CPPv49DistGraph" title="DistGraph">DistGraph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraphclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraphclE5RangeI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK9DistGraphclE5RangeI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK9DistGraphclE5RangeI3IntERK6vectorI3IntE"></span><span id="DistGraph::call-operator__Range:Int:.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv49DistGraph" title="DistGraph">DistGraph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraphclE5RangeI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraphclERK6vectorI3IntE5RangeI3IntE">
+<span id="_CPPv3NK9DistGraphclERK6vectorI3IntE5RangeI3IntE"></span><span id="_CPPv2NK9DistGraphclERK6vectorI3IntE5RangeI3IntE"></span><span id="DistGraph::call-operator__vector:Int:CR.Range:Int:C"></span><a class="reference internal" href="#_CPPv49DistGraph" title="DistGraph">DistGraph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraphclERK6vectorI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraphclERK6vectorI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK9DistGraphclERK6vectorI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK9DistGraphclERK6vectorI3IntERK6vectorI3IntE"></span><span id="DistGraph::call-operator__vector:Int:CR.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv49DistGraph" title="DistGraph">DistGraph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraphclERK6vectorI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make a copy of a subgraph</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph5EmptyEb">
+<span id="_CPPv3N9DistGraph5EmptyEb"></span><span id="_CPPv2N9DistGraph5EmptyEb"></span><span id="DistGraph::Empty__b"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span>bool <em>clearMemory</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph5EmptyEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph6ResizeE3Int">
+<span id="_CPPv3N9DistGraph6ResizeE3Int"></span><span id="_CPPv2N9DistGraph6ResizeE3Int"></span><span id="DistGraph::Resize__Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numVertices</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph6ResizeE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph6ResizeE3Int3Int">
+<span id="_CPPv3N9DistGraph6ResizeE3Int3Int"></span><span id="_CPPv2N9DistGraph6ResizeE3Int3Int"></span><span id="DistGraph::Resize__Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numSources</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numTargets</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph6ResizeE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph7SetCommEN3mpi4CommE">
+<span id="_CPPv3N9DistGraph7SetCommEN3mpi4CommE"></span><span id="_CPPv2N9DistGraph7SetCommEN3mpi4CommE"></span><span id="DistGraph::SetComm__mpi::Comm"></span>void <code class="descname">SetComm</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph7SetCommEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph7ReserveE3Int3Int">
+<span id="_CPPv3N9DistGraph7ReserveE3Int3Int"></span><span id="_CPPv2N9DistGraph7ReserveE3Int3Int"></span><span id="DistGraph::Reserve__Int.Int"></span>void <code class="descname">Reserve</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numLocalEdges</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numRemoteEdges</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph7ReserveE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph7ConnectE3Int3Int">
+<span id="_CPPv3N9DistGraph7ConnectE3Int3Int"></span><span id="_CPPv2N9DistGraph7ConnectE3Int3Int"></span><span id="DistGraph::Connect__Int.Int"></span>void <code class="descname">Connect</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph7ConnectE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph10DisconnectE3Int3Int">
+<span id="_CPPv3N9DistGraph10DisconnectE3Int3Int"></span><span id="_CPPv2N9DistGraph10DisconnectE3Int3Int"></span><span id="DistGraph::Disconnect__Int.Int"></span>void <code class="descname">Disconnect</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph10DisconnectE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph12ConnectLocalE3Int3Int">
+<span id="_CPPv3N9DistGraph12ConnectLocalE3Int3Int"></span><span id="_CPPv2N9DistGraph12ConnectLocalE3Int3Int"></span><span id="DistGraph::ConnectLocal__Int.Int"></span>void <code class="descname">ConnectLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localSource</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph12ConnectLocalE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph15DisconnectLocalE3Int3Int">
+<span id="_CPPv3N9DistGraph15DisconnectLocalE3Int3Int"></span><span id="_CPPv2N9DistGraph15DisconnectLocalE3Int3Int"></span><span id="DistGraph::DisconnectLocal__Int.Int"></span>void <code class="descname">DisconnectLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localSource</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph15DisconnectLocalE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph15QueueConnectionE3Int3Intb">
+<span id="_CPPv3N9DistGraph15QueueConnectionE3Int3Intb"></span><span id="_CPPv2N9DistGraph15QueueConnectionE3Int3Intb"></span><span id="DistGraph::QueueConnection__Int.Int.b"></span>void <code class="descname">QueueConnection</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em>, bool <em>passive</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph15QueueConnectionE3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph18QueueDisconnectionE3Int3Intb">
+<span id="_CPPv3N9DistGraph18QueueDisconnectionE3Int3Intb"></span><span id="_CPPv2N9DistGraph18QueueDisconnectionE3Int3Intb"></span><span id="DistGraph::QueueDisconnection__Int.Int.b"></span>void <code class="descname">QueueDisconnection</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em>, bool <em>passive</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph18QueueDisconnectionE3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph20QueueLocalConnectionE3Int3Int">
+<span id="_CPPv3N9DistGraph20QueueLocalConnectionE3Int3Int"></span><span id="_CPPv2N9DistGraph20QueueLocalConnectionE3Int3Int"></span><span id="DistGraph::QueueLocalConnection__Int.Int"></span>void <code class="descname">QueueLocalConnection</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localSource</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph20QueueLocalConnectionE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph23QueueLocalDisconnectionE3Int3Int">
+<span id="_CPPv3N9DistGraph23QueueLocalDisconnectionE3Int3Int"></span><span id="_CPPv2N9DistGraph23QueueLocalDisconnectionE3Int3Int"></span><span id="DistGraph::QueueLocalDisconnection__Int.Int"></span>void <code class="descname">QueueLocalDisconnection</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localSource</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph23QueueLocalDisconnectionE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph13ProcessQueuesEv">
+<span id="_CPPv3N9DistGraph13ProcessQueuesEv"></span><span id="_CPPv2N9DistGraph13ProcessQueuesEv"></span><span id="DistGraph::ProcessQueues"></span>void <code class="descname">ProcessQueues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph13ProcessQueuesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph18ProcessLocalQueuesEv">
+<span id="_CPPv3N9DistGraph18ProcessLocalQueuesEv"></span><span id="_CPPv2N9DistGraph18ProcessLocalQueuesEv"></span><span id="DistGraph::ProcessLocalQueues"></span>void <code class="descname">ProcessLocalQueues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph18ProcessLocalQueuesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph10NumSourcesEv">
+<span id="_CPPv3NK9DistGraph10NumSourcesEv"></span><span id="_CPPv2NK9DistGraph10NumSourcesEv"></span><span id="DistGraph::NumSourcesC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumSources</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph10NumSourcesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph10NumTargetsEv">
+<span id="_CPPv3NK9DistGraph10NumTargetsEv"></span><span id="_CPPv2NK9DistGraph10NumTargetsEv"></span><span id="DistGraph::NumTargetsC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumTargets</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph10NumTargetsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph16FirstLocalSourceEv">
+<span id="_CPPv3NK9DistGraph16FirstLocalSourceEv"></span><span id="_CPPv2NK9DistGraph16FirstLocalSourceEv"></span><span id="DistGraph::FirstLocalSourceC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">FirstLocalSource</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph16FirstLocalSourceEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph15NumLocalSourcesEv">
+<span id="_CPPv3NK9DistGraph15NumLocalSourcesEv"></span><span id="_CPPv2NK9DistGraph15NumLocalSourcesEv"></span><span id="DistGraph::NumLocalSourcesC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumLocalSources</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph15NumLocalSourcesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph13NumLocalEdgesEv">
+<span id="_CPPv3NK9DistGraph13NumLocalEdgesEv"></span><span id="_CPPv2NK9DistGraph13NumLocalEdgesEv"></span><span id="DistGraph::NumLocalEdgesC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumLocalEdges</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph13NumLocalEdgesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph8CapacityEv">
+<span id="_CPPv3NK9DistGraph8CapacityEv"></span><span id="_CPPv2NK9DistGraph8CapacityEv"></span><span id="DistGraph::CapacityC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph8CapacityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph17LocallyConsistentEv">
+<span id="_CPPv3NK9DistGraph17LocallyConsistentEv"></span><span id="_CPPv2NK9DistGraph17LocallyConsistentEv"></span><span id="DistGraph::LocallyConsistentC"></span>bool <code class="descname">LocallyConsistent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph17LocallyConsistentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph4CommEv">
+<span id="_CPPv3NK9DistGraph4CommEv"></span><span id="_CPPv2NK9DistGraph4CommEv"></span><span id="DistGraph::CommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">Comm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph4CommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph9BlocksizeEv">
+<span id="_CPPv3NK9DistGraph9BlocksizeEv"></span><span id="_CPPv2NK9DistGraph9BlocksizeEv"></span><span id="DistGraph::BlocksizeC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Blocksize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph9BlocksizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph11SourceOwnerE3Int">
+<span id="_CPPv3NK9DistGraph11SourceOwnerE3Int"></span><span id="_CPPv2NK9DistGraph11SourceOwnerE3Int"></span><span id="DistGraph::SourceOwner__IntC"></span>int <code class="descname">SourceOwner</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph11SourceOwnerE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph12GlobalSourceE3Int">
+<span id="_CPPv3NK9DistGraph12GlobalSourceE3Int"></span><span id="_CPPv2NK9DistGraph12GlobalSourceE3Int"></span><span id="DistGraph::GlobalSource__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">GlobalSource</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localSource</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph12GlobalSourceE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph6SourceE3Int">
+<span id="_CPPv3NK9DistGraph6SourceE3Int"></span><span id="_CPPv2NK9DistGraph6SourceE3Int"></span><span id="DistGraph::Source__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Source</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localEdge</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph6SourceE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph6TargetE3Int">
+<span id="_CPPv3NK9DistGraph6TargetE3Int"></span><span id="_CPPv2NK9DistGraph6TargetE3Int"></span><span id="DistGraph::Target__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Target</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localEdge</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph6TargetE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph10EdgeOffsetE3Int">
+<span id="_CPPv3NK9DistGraph10EdgeOffsetE3Int"></span><span id="_CPPv2NK9DistGraph10EdgeOffsetE3Int"></span><span id="DistGraph::EdgeOffset__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">EdgeOffset</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localSource</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph10EdgeOffsetE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph14NumConnectionsE3Int">
+<span id="_CPPv3NK9DistGraph14NumConnectionsE3Int"></span><span id="_CPPv2NK9DistGraph14NumConnectionsE3Int"></span><span id="DistGraph::NumConnections__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumConnections</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>localSource</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph14NumConnectionsE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph12SourceBufferEv">
+<span id="_CPPv3N9DistGraph12SourceBufferEv"></span><span id="_CPPv2N9DistGraph12SourceBufferEv"></span><span id="DistGraph::SourceBuffer"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">SourceBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph12SourceBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9DistGraph12TargetBufferEv">
+<span id="_CPPv3N9DistGraph12TargetBufferEv"></span><span id="_CPPv2N9DistGraph12TargetBufferEv"></span><span id="DistGraph::TargetBuffer"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">TargetBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DistGraph12TargetBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph18LockedSourceBufferEv">
+<span id="_CPPv3NK9DistGraph18LockedSourceBufferEv"></span><span id="_CPPv2NK9DistGraph18LockedSourceBufferEv"></span><span id="DistGraph::LockedSourceBufferC"></span><em class="property">const</em> <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">LockedSourceBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph18LockedSourceBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9DistGraph18LockedTargetBufferEv">
+<span id="_CPPv3NK9DistGraph18LockedTargetBufferEv"></span><span id="_CPPv2NK9DistGraph18LockedTargetBufferEv"></span><span id="DistGraph::LockedTargetBufferC"></span><em class="property">const</em> <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">LockedTargetBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9DistGraph18LockedTargetBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="c.html" class="btn btn-neutral float-right" title="DistGraph (C interface)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="python.html" class="btn btn-neutral float-left" title="DistGraph (Python interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

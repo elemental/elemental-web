@@ -1,0 +1,859 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Build system &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core functionality" href="core.html" />
+    <link rel="prev" title="A brief tour of the library" href="tour.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#handling-mandatory-external-dependencies">Handling mandatory external dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-cmake">Installing CMake</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-usage">Basic usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-mpi">Installing MPI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#soft-dependencies">Soft dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-blas-and-lapack">Installing BLAS and LAPACK</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#openblas">OpenBLAS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blis">BLIS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">libFLAME</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pmrrr">PMRRR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metis">METIS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parmetis">ParMETIS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scalapack">ScaLAPACK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">libquadmath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Qt5</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-elemental-s-source">Getting Elemental’s source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-elemental">Building Elemental</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-modes">Build modes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-the-c-11-installation">Testing the C++11 installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-the-python-installation">Testing the Python installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linux-systems">Linux systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mac-os-x">Mac OS X</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#elemental-as-a-cmake-subproject">Elemental as a CMake subproject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Build system</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/build.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="build-system">
+<h1>Build system<a class="headerlink" href="#build-system" title="Permalink to this headline">¶</a></h1>
+<p>Elemental’s build system relies on <a class="reference external" href="http://www.cmake.org">CMake</a>
+in order to manage a large number of configuration options in a
+platform-independent manner; it can be easily configured to build on Linux and
+Unix environments (including Darwin), as well as via Cygwin in a Windows
+environment (Visual Studio support will be re-enabled in the near future).
+A relatively recent C++11 compiler (e.g., gcc &gt;= 4.8) is required in all cases
+(please see <a class="reference external" href="http://libelemental.org/compilers/">libelemental.org/compilers/</a>
+for information on supported toolchains, and please feel free to provide
+feedback as/if this information becomes out-of-date).</p>
+<p>Elemental’s main external dependencies are</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="http://www.cmake.org/">CMake</a> ,</p></li>
+<li><p><a class="reference external" href="http://en.wikipedia.org/wiki/Message_Passing_Interface">MPI</a> ,</p></li>
+<li><p><a class="reference external" href="http://netlib.org/blas">BLAS</a> ,</p></li>
+<li><p><a class="reference external" href="http://netlib.org/lapack">LAPACK</a>,</p></li>
+<li><p><a class="reference external" href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">METIS</a>, and</p></li>
+<li><p><a class="reference external" href="http://code.google.com/p/pmrrr">PMRRR</a>,</p></li>
+</ol>
+<p>and the dependencies which can <strong>not</strong> currently be automatically handled by
+Elemental’s build system are</p>
+<ol class="arabic simple">
+<li><p>CMake, and</p></li>
+<li><p>MPI.</p></li>
+</ol>
+<p>Ubuntu users may want to install Elemental from
+<a class="reference external" href="https://launchpad.net/%7Elibelemental/+archive/ubuntu/ppa">the Ubuntu PPA</a>.</p>
+<div class="section" id="handling-mandatory-external-dependencies">
+<h2>Handling mandatory external dependencies<a class="headerlink" href="#handling-mandatory-external-dependencies" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-cmake">
+<h3>Installing CMake<a class="headerlink" href="#installing-cmake" title="Permalink to this headline">¶</a></h3>
+<p>Elemental uses several relatively new CMake modules, so it is important to
+ensure that CMake version 2.8.12 or later is available. Thankfully, the
+<a class="reference external" href="http://www.cmake.org/cmake/help/install.html">installation process</a>
+is extremely straightforward: either download a platform-specific binary from
+the <a class="reference external" href="http://www.cmake.org/cmake/resources/software.html">downloads page</a>,
+or instead grab the most recent stable tarball and have CMake bootstrap itself.
+In the simplest case, the bootstrap process is as simple as running the
+following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">bootstrap</span>
+<span class="n">make</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Note that recent versions of <a class="reference external" href="http://www.ubuntu.com/">Ubuntu</a> (e.g., version 13.10) have sufficiently up-to-date
+versions of CMake, and so the following command is sufficient for installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">cmake</span>
+</pre></div>
+</div>
+<p>If you do install from source, there are two important issues to consider</p>
+<ol class="arabic">
+<li><p>By default, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code> attempts a system-wide installation
+(e.g., into <code class="docutils literal notranslate"><span class="pre">/usr/bin</span></code>) and will likely require administrative privileges.
+A different installation folder may be specified with the <code class="docutils literal notranslate"><span class="pre">--prefix</span></code>
+option to the <code class="docutils literal notranslate"><span class="pre">bootstrap</span></code> script, e.g.,:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">bootstrap</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">your_username</span>
+<span class="n">make</span>
+<span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Afterwards, it is a good idea to make sure that the environment variable
+<code class="docutils literal notranslate"><span class="pre">PATH</span></code> includes the <code class="docutils literal notranslate"><span class="pre">bin</span></code> subdirectory of the installation folder, e.g.,
+<code class="docutils literal notranslate"><span class="pre">/home/your_username/bin</span></code>.</p>
+</li>
+<li><p>Some highly optimizing compilers will not correctly build CMake, but the GNU
+compilers nearly always work. You can specify which compilers to use by
+setting the environment variables <code class="docutils literal notranslate"><span class="pre">CC</span></code> and <code class="docutils literal notranslate"><span class="pre">CXX</span></code> to the full paths to
+your preferred C and C++ compilers before running the <code class="docutils literal notranslate"><span class="pre">bootstrap</span></code> script.</p></li>
+</ol>
+<div class="section" id="basic-usage">
+<h4>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h4>
+<p>Though many configuration utilities, like
+<a class="reference external" href="http://www.gnu.org/software/autoconf/">autoconf</a>, are designed such that
+the user need only invoke <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">&amp;&amp;</span> <span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code> from the
+top-level source directory, CMake targets <em>out-of-source</em> builds, which is
+to say that the build process occurs away from the source code. The
+out-of-source build approach is ideal for projects that offer several
+different build modes, as each version of the project can be built in a
+separate folder.</p>
+<p>A common approach is to create a folder named <code class="docutils literal notranslate"><span class="pre">build</span></code> in the top-level of
+the source directory and to invoke CMake from within it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
+<span class="n">cd</span> <span class="n">build</span>
+<span class="n">cmake</span> <span class="o">..</span>
+</pre></div>
+</div>
+<p>The last line calls the command line version of CMake, <code class="docutils literal notranslate"><span class="pre">cmake</span></code>,
+and tells it that it should look in the parent directory for the configuration
+instructions, which should be in a file named <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>. Users that
+would prefer a graphical interface from the terminal (through <code class="docutils literal notranslate"><span class="pre">curses</span></code>)
+should instead use <code class="docutils literal notranslate"><span class="pre">ccmake</span></code> (on Unix platforms) or <code class="docutils literal notranslate"><span class="pre">CMakeSetup</span></code>
+(on Windows platforms). In addition, a GUI version is available through
+<code class="docutils literal notranslate"><span class="pre">cmake-gui</span></code>.</p>
+<p>Though running <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code> will remove all files generated from running
+<code class="docutils literal notranslate"><span class="pre">make</span></code>, it will not remove configuration files. Thus, the best approach for
+completely cleaning a build is to remove the entire build folder. On *nix
+machines, this is most easily accomplished with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">..</span>
+<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="n">build</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>This is perhaps a safer habit than simply running <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">*</span></code> since,
+if accidentally run from the wrong directory, deleting <code class="docutils literal notranslate"><span class="pre">build/</span></code> would be
+unlikely to have any effect.</p>
+</div>
+</div>
+<div class="section" id="installing-mpi">
+<h3>Installing MPI<a class="headerlink" href="#installing-mpi" title="Permalink to this headline">¶</a></h3>
+<p>An implementation of the Message Passing Interface (MPI) is required for
+building Elemental. The two most commonly used implementations are</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://www.mpich.org">MPICH</a>,</p></li>
+<li><p><a class="reference external" href="http://www.open-mpi.org/">OpenMPI</a>, and</p></li>
+<li><p><a class="reference external" href="http://mvapich.cse.ohio-state.edu">MVAPICH</a>,</p></li>
+</ol>
+<p>where MVAPICH is primarily focused on systems with
+<a class="reference external" href="http://en.wikipedia.org/wiki/InfiniBand">InfiniBand</a>  and/or GPUs.</p>
+<p>Each of the respective websites contains installation instructions, but, on recent versions of <a class="reference external" href="http://www.ubuntu.com/">Ubuntu</a>,
+MPICH2 can be installed with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libmpich2</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>and OpenMPI can be installed with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libopenmpi</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>Alternatively, one could manually download and install a recent stable release
+of MPICH, typically available from <a class="reference external" href="http://www.mpich.org/downloads/">http://www.mpich.org/downloads/</a>. For example, to download and install <a class="reference external" href="http://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz">mpich-3.2</a>, one might run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">mpich</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">static</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="mf">3.2</span><span class="o">/</span><span class="n">mpich</span><span class="o">-</span><span class="mf">3.2</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xzf</span> <span class="n">mpich</span><span class="o">-</span><span class="mf">3.2</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">cd</span> <span class="n">mpich</span><span class="o">-</span><span class="mf">3.2</span><span class="o">/</span>
+<span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=/</span><span class="n">where</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">install</span><span class="o">/</span><span class="n">mpich</span> <span class="o">--</span><span class="n">CC</span><span class="o">=</span><span class="n">YourCCompiler</span> <span class="o">--</span><span class="n">CXX</span><span class="o">=</span><span class="n">YourC</span><span class="o">++</span><span class="n">Compiler</span> <span class="o">--</span><span class="n">FC</span><span class="o">=</span><span class="n">YourFortranCompiler</span>
+<span class="n">make</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>where the <code class="docutils literal notranslate"><span class="pre">sudo</span></code> is obviously not needed if you have permission to install
+files into the directory specified with <code class="docutils literal notranslate"><span class="pre">--prefix</span></code>. Lastly, these instructions
+assumed the existence of a Fortran compiler, and so, if one is not available,
+you should instead run the commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">mpich</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">static</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="mf">3.2</span><span class="o">/</span><span class="n">mpich</span><span class="o">-</span><span class="mf">3.2</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xzf</span> <span class="n">mpich</span><span class="o">-</span><span class="mf">3.2</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">cd</span> <span class="n">mpich</span><span class="o">-</span><span class="mf">3.2</span><span class="o">/</span>
+<span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=/</span><span class="n">where</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">install</span><span class="o">/</span><span class="n">mpich</span> <span class="o">--</span><span class="n">CC</span><span class="o">=</span><span class="n">YourCCompiler</span> <span class="o">--</span><span class="n">CXX</span><span class="o">=</span><span class="n">YourC</span><span class="o">++</span><span class="n">Compiler</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">fortran</span>
+<span class="n">make</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As noted in
+<a class="reference external" href="https://github.com/elemental/Elemental/issues/200">Issue #200</a>, on recent
+versions of OS X clang does not properly build the official release of
+MPICH 3.2, and so it is necessary to build the most recent git revision from
+source.</p>
+</div>
+</div>
+</div>
+<div class="section" id="soft-dependencies">
+<h2>Soft dependencies<a class="headerlink" href="#soft-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>As was already mentioned, Elemental has several external dependencies which
+can be optionally be handled by the build process, and one
+(<a class="reference external" href="http://code.google.com/p/pmrrr">PMRRR</a>), which is always built by
+Elemental. For the optionally-specified dependencies
+(i.e., BLAS, LAPACK, METIS, ParMETIS, and ScaLAPACK), if custom implementations
+were not specified during the CMake configuration phase, then appropriate
+libraries will be automatically downloaded/built/installed via CMake’s
+<a class="reference external" href="http://www.cmake.org/cmake/help/v3.0/module/ExternalProject.html">ExternalProject</a> functionality. In particular, Elemental can automatically fulfill
+dependencies using:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="http://www.openblas.net/">OpenBLAS</a> or <a class="reference external" href="https://code.google.com/p/blis">BLIS</a> (to provide BLAS+LAPACK)</p></li>
+<li><p><a class="reference external" href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">METIS</a> and/or <a class="reference external" href="http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview">ParMETIS</a> (for computing a vertex separator of a graph), and</p></li>
+<li><p><a class="reference external" href="http://netlib.org/scalapack">ScaLAPACK</a> (for implementations of distributed Hessenberg QR algorithms).</p></li>
+</ol>
+<p>Furthermore, there are several further (optional) external dependencies:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="http://www.cs.utexas.edu/users/flame/">libFLAME</a> is recommended
+for faster SVD’s due to its high-performance bidiagonal QR algorithm
+implementation,</p></li>
+<li><p><a class="reference external" href="https://gcc.gnu.org/onlinedocs/libquadmath/">libquadmath</a> for
+quad-precision support (and more robust sparse-direct solvers),</p></li>
+<li><p><a class="reference external" href="http://qt-project.org">Qt5</a> for C++11 matrix visualization,</p></li>
+<li><p><a class="reference external" href="http://matplotlib.org/">matplotlib</a> for Python matrix visualization,</p></li>
+<li><p><a class="reference external" href="https://networkx.github.io/">NetworkX</a> for Python graph visualization, and</p></li>
+<li><p><a class="reference external" href="http://www.numpy.org/">NumPy</a> for supporting the Python interface in
+general.</p></li>
+</ol>
+<p>Support is not required for any of these libraries, but each is helpful for
+particular components of Elemental’s functionality.</p>
+<div class="section" id="installing-blas-and-lapack">
+<h3>Installing BLAS and LAPACK<a class="headerlink" href="#installing-blas-and-lapack" title="Permalink to this headline">¶</a></h3>
+<p>The Basic Linear Algebra Subprograms (BLAS) and Linear Algebra PACKage (LAPACK)
+are both used heavily within Elemental. On most installations of <a class="reference external" href="http://www.ubuntu.com">Ubuntu</a>, either of the following command should suffice for their installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libopenblas</span><span class="o">-</span><span class="n">dev</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libatlas</span><span class="o">-</span><span class="n">dev</span> <span class="n">liblapack</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>The reference implementation of LAPACK can be found at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</a></p>
+</div></blockquote>
+<p>and the reference implementation of BLAS can be found at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.netlib.org/blas/">http://www.netlib.org/blas/</a></p>
+</div></blockquote>
+<p>However, it is better to install an optimized version of these libraries,
+especialy for the BLAS. The most commonly used open-source versions the BLAS are
+<a class="reference external" href="http://math-atlas.sourceforge.net/">ATLAS</a>, <a class="reference external" href="https://github.com/xianyi/OpenBLAS">OpenBLAS</a>, and <a class="reference external" href="https://code.google.com/p/blis">BLIS</a>.
+If no version of BLAS+LAPACK is detected, Elemental attempts to download and
+install OpenBLAS (or BLIS).</p>
+<div class="section" id="openblas">
+<h4>OpenBLAS<a class="headerlink" href="#openblas" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://www.openblas.net">OpenBLAS</a> is a high-performance implementation of
+the BLAS (and, to a somewhat lesser degree, LAPACK) which Elemental defaults
+to downloading and installing if no other high-performance implementation
+was detected . For example, by default, on Mac OS X, either Accelerate or
+vecLib is used, but this behavior may be overridden via the CMake option
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_PREFER_OPENBLAS=TRUE</span></code>. Furthermore, Elemental may be requested not to
+use OpenBLAS via the option <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_DISABLE_OPENBLAS=TRUE</span></code>.
+Lastly, while Elemental will, by default, search for a previous installation of
+OpenBLAS before attempting to download and install the library, this search can
+be prevented via the <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_BUILD_OPENBLAS=TRUE</span></code> option.</p>
+</div>
+<div class="section" id="blis">
+<h4>BLIS<a class="headerlink" href="#blis" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="https://code.google.com/p/blis">BLIS</a> is “a software framework for
+instantiating high-performance BLAS-like dense linear algebra libraries” and
+can optionally be downloaded and installed as part of Elemental’s build
+process. In order to do so on non-Apple architectures, the flag
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_DISABLE_OPENBLAS=TRUE</span></code> should be enabled to avoid the OpenBLAS
+default, and, on Apple-architectures, the flag
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_PREFER_BLIS_LAPACK=TRUE</span></code> should be specified to avoid the
+<code class="docutils literal notranslate"><span class="pre">vecLib</span></code>/<code class="docutils literal notranslate"><span class="pre">Accelerate</span></code> frameworks.</p>
+</div>
+<div class="section" id="id1">
+<h4>libFLAME<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p><cite>libFLAME</cite> is an open source library made available as part of the FLAME
+project.
+Elemental’s current implementation of parallel SVD is dependent upon a serial
+kernel for the bidiagonal SVD. A high-performance implementation of this
+kernel was recently introduced in <a class="reference internal" href="#vzvdgq2014" id="id2"><span>[vZvdGQ2014]</span></a>.</p>
+<p>Installation of <cite>libFLAME</cite> is fairly straightforward. It is recommended that
+you download the latest nightly snapshot from</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.cs.utexas.edu/users/flame/snapshots/">http://www.cs.utexas.edu/users/flame/snapshots/</a></p>
+</div></blockquote>
+<p>and then installation should simply be a matter of running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">configure</span>
+<span class="n">make</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Automatic installation of libflame will hopefully be added into Elemental’s
+build system soon (pending the resolution of issues in the current <code class="docutils literal notranslate"><span class="pre">libflame</span></code>
+build system). Until that time, it is necessary to manually specify <code class="docutils literal notranslate"><span class="pre">libflame</span></code>
+as part of the <code class="docutils literal notranslate"><span class="pre">MATH_LIBS</span></code> variable. For example, if libflame is available at
+<code class="docutils literal notranslate"><span class="pre">/path/to/libflame.a</span></code>, then this library needs to be prepended to the
+list of BLAS and LAPACK libraries, e.g., via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">MATH_LIBS</span><span class="o">=</span><span class="s2">&quot;/path/to/libflame.a;-L/usr/lib -llapack -lblas -lm&quot;</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">MATH_LIBS</span><span class="o">=</span><span class="s2">&quot;/path/to/libflame.a;-mkl&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pmrrr">
+<h3>PMRRR<a class="headerlink" href="#pmrrr" title="Permalink to this headline">¶</a></h3>
+<p>PMRRR is a parallel implementation of the MRRR algorithm introduced by
+<a class="reference external" href="http://www.cs.utexas.edu/~inderjit/">Inderjit Dhillon</a> and
+<a class="reference external" href="http://math.berkeley.edu/~parlett/">Beresford Parlett</a> for computing
+<span class="math notranslate nohighlight">\(k\)</span> eigenvectors of a tridiagonal matrix of size <span class="math notranslate nohighlight">\(n\)</span> in
+<span class="math notranslate nohighlight">\(\mathcal{O}(nk)\)</span> time. PMRRR was written by
+<a class="reference external" href="http://www.aices.rwth-aachen.de/people/petschow">Matthias Petschow</a> and
+<a class="reference external" href="http://www.aices.rwth-aachen.de/people/bientinesi">Paolo Bientinesi</a> and,
+while it is included within Elemental, it is also available at:</p>
+<blockquote>
+<div><p><a class="reference external" href="http://code.google.com/p/pmrrr">http://code.google.com/p/pmrrr</a></p>
+</div></blockquote>
+<p>Note that PMRRR currently requires support for pthreads.</p>
+</div>
+<div class="section" id="metis">
+<h3>METIS<a class="headerlink" href="#metis" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">METIS</a> is perhaps the
+most widely-used library for (hyper)graph partitioning and is the default
+tool used within Elemental in order to construct vertex separators for the
+Nested Dissection approach to sparse-direct factorization. In particular,
+Elemental makes use of the routine <code class="docutils literal notranslate"><span class="pre">METIS_ComputeVertexSeparator</span></code>, which is
+somewhat undocumented but used by ParMETIS. METIS, unlike ParMETIS, is released
+under the terms of the Apache License Version 2.0 (which is similar in spirit
+to Elemental’s New BSD License).</p>
+<p>Support for METIS can be disabled via the CMake option
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_DISABLE_METIS=TRUE</span></code>, or Elemental can be requested to avoid
+detecting a previous installation and instead immediately decide to
+download/install the library via the <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_BUILD_METIS=TRUE</span></code> option.</p>
+</div>
+<div class="section" id="parmetis">
+<h3>ParMETIS<a class="headerlink" href="#parmetis" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview">ParMETIS</a> is a
+parallel version of METIS that is unfortunately released under a more
+restrictive license that does not allow for commercial usage, and so commercial
+users should add the CMake option <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_DISABLE_PARMETIS=TRUE</span></code> when
+configuring Elemental. Furthermore, since ParMETIS, unlike METIS, does not
+provide a routine for computing a vertex separator of a graph, Elemental
+makes use of ParMETIS’s internal APIs in order to construct such a routine
+(which can be viewed as a parallel analogue of
+<code class="docutils literal notranslate"><span class="pre">METIS_ComputeVertexSeparator</span></code>).</p>
+<p>Also, Elemental can be requested to avoid
+detecting a previous installation (which is extremely unlikely to be sufficient due to Elemental’s usage of ParMETIS’s internal API, which is not typically
+installed) and instead immediately decide to download and install the library
+via the <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_BUILD_PARMETIS=TRUE</span></code> option.</p>
+</div>
+<div class="section" id="scalapack">
+<h3>ScaLAPACK<a class="headerlink" href="#scalapack" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://netlib.org/scalapack">ScaLAPACK</a> is the most widely-used library for
+distributed-memory dense linear algebra and Elemental can relatively easily
+interface with it should ScaLAPACK support be detected during the configuration
+phase of the build.
+While Elemental contains a relatively recent analogue of the ScaLAPACK
+implementations resulting from <a class="reference internal" href="#hwd2002" id="id3"><span>[HWD2002]</span></a>, <a class="reference internal" href="#fahey2003" id="id4"><span>[Fahey2003]</span></a>, and <a class="reference internal" href="#gkk2010" id="id5"><span>[GKK2010]</span></a>,
+this new implementation has not been properly benchmarked yet.</p>
+<p>Support for ScaLAPACK can be enabled via the CMake option <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_DISABLE_SCALAPACK=OFF</span></code>, and Elemental can be requested to avoid detecting previous
+installations and to download/install the library via
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_BUILD_SCALAPACK=TRUE</span></code>.</p>
+</div>
+<div class="section" id="id6">
+<h3>libquadmath<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>If a GNU or Intel compiler is being used to compile Elemental, then it is
+likely that support for
+<a class="reference external" href="https://gcc.gnu.org/onlinedocs/libquadmath/">libquadmath</a> was
+detected, and, by default, this would lead to both more robust Interior Point
+Methods and your copy of Elemental transitioning from the terms of the New
+BSD License to the GNU General Public License. If you prefer not to use
+<code class="docutils literal notranslate"><span class="pre">libquadmath</span></code>, then it can be disabled via the CMake option
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_DISABLE_QUAD=TRUE</span></code>.</p>
+</div>
+<div class="section" id="id8">
+<h3>Qt5<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>Qt is an open source cross-platform library for creating Graphical User
+Interfaces (GUIs) in C++. Elemental currently supports using version 5.1.1 of
+the library to display and save images of matrices.</p>
+<p>Please visit Qt Project’s <a class="reference external" href="http://qt-project.org/downloads">download page</a>
+for download and installation instructions. Note that, if Elemental is launched
+with the <cite>-no-gui</cite> command-line option, then Qt5 will be started without GUI
+support. This supports using Elemental on clusters whose compute nodes do not
+run display servers, but PNG’s of matrices need to be created using Qt5’s
+simple interface.</p>
+</div>
+</div>
+<div class="section" id="getting-elemental-s-source">
+<h2>Getting Elemental’s source<a class="headerlink" href="#getting-elemental-s-source" title="Permalink to this headline">¶</a></h2>
+<p>There are two basic approaches:</p>
+<ol class="arabic">
+<li><p>Download a tarball of the most recent version from
+<a class="reference external" href="http://libelemental.org/releases/">libelemental.org/releases</a>.
+A new version is typically released every one to two months.</p></li>
+<li><p>Install <a class="reference external" href="http://git-scm.com/">git</a> and check out a copy of
+the repository by running</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">elemental</span><span class="o">/</span><span class="n">Elemental</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="building-elemental">
+<h2>Building Elemental<a class="headerlink" href="#building-elemental" title="Permalink to this headline">¶</a></h2>
+<p>On Unix-like machines with MPI and CMake installed in standard locations,
+Elemental can often be built and installed using the commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">elemental</span><span class="o">/</span><span class="n">Elemental</span>
+<span class="n">cd</span> <span class="n">Elemental</span>
+<span class="n">mkdir</span> <span class="n">build</span>
+<span class="n">cd</span> <span class="n">build</span>
+<span class="n">sudo</span> <span class="n">cmake</span> <span class="o">..</span>
+<span class="n">sudo</span> <span class="n">make</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Note that super-user privileges may be required for the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> and <code class="docutils literal notranslate"><span class="pre">make</span></code>
+phase due to CMake’s <code class="docutils literal notranslate"><span class="pre">ExternalProject_Add</span></code> creating folders in the
+installation directory during the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> phase and installing the external
+projects into the installation directory during the <code class="docutils literal notranslate"><span class="pre">make</span></code> phase.</p>
+<p>As with the installation of CMake, the default install location is
+system-wide, e.g., <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>. The installation directory of the main
+library can be changed at any time by invoking CMake with the option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">CMAKE_INSTALL_PREFIX</span><span class="o">=/</span><span class="n">your</span><span class="o">/</span><span class="n">desired</span><span class="o">/</span><span class="n">install</span><span class="o">/</span><span class="n">path</span>
+</pre></div>
+</div>
+<p>and the installation of the Python interface can be switched from the default
+system-wide location to the user’s home directory via the option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">INSTALL_PYTHON_INTO_USER_SITE</span><span class="o">=</span><span class="n">ON</span>
+</pre></div>
+</div>
+<p>or instead installed into <code class="docutils literal notranslate"><span class="pre">${CMAKE_INSTALL_PREFIX}/python/</span></code> via the option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">INSTALL_PYTHON_PACKAGE</span><span class="o">=</span><span class="n">OFF</span>
+</pre></div>
+</div>
+<p>Alternatively, the user can specify a particular directory for the python
+package via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">PYTHON_SITE_PACKAGES</span><span class="o">=/</span><span class="n">your</span><span class="o">/</span><span class="n">desired</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">install</span><span class="o">/</span><span class="n">path</span>
+</pre></div>
+</div>
+<p>Though the above instructions will work on many systems, it is common to need
+to manually specify several build options, especially when multiple versions of
+libraries or several different compilers are available on your system. For
+instance, any C++, C, or Fortran compiler can respectively be set with the
+<code class="docutils literal notranslate"><span class="pre">CMAKE_CXX_COMPILER</span></code>, <code class="docutils literal notranslate"><span class="pre">CMAKE_C_COMPILER</span></code>, and <code class="docutils literal notranslate"><span class="pre">CMAKE_Fortran_COMPILER</span></code>
+variables, e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">CMAKE_CXX_COMPILER</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">g</span><span class="o">++</span> \
+<span class="o">-</span><span class="n">D</span> <span class="n">CMAKE_C_COMPILER</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcc</span>   \
+<span class="o">-</span><span class="n">D</span> <span class="n">CMAKE_Fortran_COMPILER</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gfortran</span>
+</pre></div>
+</div>
+<p>and it may be necessary to manually specify the paths to the MPI compilers as
+well using, for example, the options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">MPI_CXX_COMPILER</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">mpicxx</span> \
+<span class="o">-</span><span class="n">D</span> <span class="n">MPI_C_COMPILER</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">mpicc</span> \
+<span class="o">-</span><span class="n">D</span> <span class="n">MPI_Fortran_COMPILER</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">mpif90</span>
+</pre></div>
+</div>
+<p>It is also occasionally necessary to specify which libraries need to be linked
+in order to link to BLAS and LAPACK (and, if SVD is important, libFLAME).
+The <code class="docutils literal notranslate"><span class="pre">MATH_LIBS</span></code> variable was introduced for this purpose and an
+(unrecommended for performance reasons) example for specifying BLAS and LAPACK
+libraries in <code class="docutils literal notranslate"><span class="pre">/usr/lib</span></code> might be</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">MATH_LIBS</span><span class="o">=</span><span class="s2">&quot;-L/usr/lib -llapack -lblas -lm&quot;</span>
+</pre></div>
+</div>
+<p>whereas specifying Intel’s MKL libraries when using the Intel compilers is often
+as simple as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">MATH_LIBS</span><span class="o">=</span><span class="s2">&quot;-mkl&quot;</span>
+</pre></div>
+</div>
+<p>It is important to ensure that if library A depends upon library B, A should
+be specified to the left of B; in this case, LAPACK depends upon BLAS, so
+<code class="docutils literal notranslate"><span class="pre">-llapack</span></code> is specified to the left of <code class="docutils literal notranslate"><span class="pre">-lblas</span></code>. If <code class="docutils literal notranslate"><span class="pre">MATH_LIBS</span></code> is not
+specified, then Elemental will attempt to download and install either
+OpenBLAS or BLIS, or, failing that, search for an installed reference
+implementation.</p>
+</div>
+<div class="section" id="build-modes">
+<h2>Build modes<a class="headerlink" href="#build-modes" title="Permalink to this headline">¶</a></h2>
+<p>Elemental currently has two different build modes:</p>
+<ul class="simple">
+<li><p><strong>Debug</strong> - Maintains a call stack and provides significant error-checking.</p></li>
+<li><p><strong>Release</strong> - An optimized build suitable for production usage (assuming high-performance BLAS and MPI implementations were used)</p></li>
+</ul>
+<p>The build mode can be specified with the <code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code> option, e.g.,
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">CMAKE_BUILD_TYPE=Debug</span></code>. If this option is not specified, Elemental
+defaults to the <strong>Release</strong> build mode.</p>
+<p>Once the build mode is selected, one might also want to manually set the
+optimization level of the compiler, e.g., via the CMake option
+<code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">CXX_FLAGS=&quot;-O3&quot;</span></code>.</p>
+<p>Furthermore, there is also an option to attempt to make use of OpenMP
+parallelization when packing and unpacking MPI buffers that is enabled when
+the <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EL_HYBRID=TRUE</span></code> CMake option is set. If this option is used, the user
+should ensure that a threaded BLAS implementation is used.</p>
+</div>
+<div class="section" id="testing-the-c-11-installation">
+<h2>Testing the C++11 installation<a class="headerlink" href="#testing-the-c-11-installation" title="Permalink to this headline">¶</a></h2>
+<p>Once Elemental has been installed, it is a good idea to verify that it is
+functioning properly. This can be accomplished by simply running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">test</span>
+</pre></div>
+</div>
+<p>Alternatively, an example of generating a random distributed matrix,
+computing its Singular Value Decomposition (SVD), and checking for numerical
+error is available in <a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/SVD.cpp">examples/lapack_like/SVD.cpp</a>.</p>
+<p>As you can see, the only required header is <code class="docutils literal notranslate"><span class="pre">El.hpp</span></code>, which must be
+in the include path when compiling this simple driver, <code class="docutils literal notranslate"><span class="pre">SVD.cpp</span></code>.
+If Elemental was installed in <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>, then
+<code class="docutils literal notranslate"><span class="pre">/usr/local/conf/ElVars</span></code> can be used to build a simple Makefile:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>include /usr/local/conf/ElVars
+
+SVD: SVD.cpp
+    ${CXX} ${EL_COMPILE_FLAGS} $&lt; -o $@ ${EL_LINK_FLAGS} ${EL_LIBS}
+</pre></div>
+</div>
+<p>As long as <code class="docutils literal notranslate"><span class="pre">SVD.cpp</span></code> and this <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> are in the current directory,
+simply typing <code class="docutils literal notranslate"><span class="pre">make</span></code> should build the driver.</p>
+<p>The executable can then typically be run with a single process (generating a
+<span class="math notranslate nohighlight">\(300 \times 300\)</span> distributed matrix, using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">SVD</span> <span class="o">--</span><span class="n">height</span> <span class="mi">300</span> <span class="o">--</span><span class="n">width</span> <span class="mi">300</span>
+</pre></div>
+</div>
+<p>and the output should be similar to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">||</span><span class="n">A</span><span class="o">||</span><span class="n">_max</span>   <span class="o">=</span> <span class="mf">0.999997</span>
+<span class="o">||</span><span class="n">A</span><span class="o">||</span><span class="n">_1</span>     <span class="o">=</span> <span class="mf">165.286</span>
+<span class="o">||</span><span class="n">A</span><span class="o">||</span><span class="n">_oo</span>    <span class="o">=</span> <span class="mf">164.116</span>
+<span class="o">||</span><span class="n">A</span><span class="o">||</span><span class="n">_F</span>     <span class="o">=</span> <span class="mf">173.012</span>
+<span class="o">||</span><span class="n">A</span><span class="o">||</span><span class="n">_2</span>     <span class="o">=</span> <span class="mf">19.7823</span>
+
+<span class="o">||</span><span class="n">A</span> <span class="o">-</span> <span class="n">U</span> <span class="n">Sigma</span> <span class="n">V</span><span class="o">^</span><span class="n">H</span><span class="o">||</span><span class="n">_max</span> <span class="o">=</span> <span class="mf">2.20202e-14</span>
+<span class="o">||</span><span class="n">A</span> <span class="o">-</span> <span class="n">U</span> <span class="n">Sigma</span> <span class="n">V</span><span class="o">^</span><span class="n">H</span><span class="o">||</span><span class="n">_1</span>   <span class="o">=</span> <span class="mf">1.187e-12</span>
+<span class="o">||</span><span class="n">A</span> <span class="o">-</span> <span class="n">U</span> <span class="n">Sigma</span> <span class="n">V</span><span class="o">^</span><span class="n">H</span><span class="o">||</span><span class="n">_oo</span>  <span class="o">=</span> <span class="mf">1.17365e-12</span>
+<span class="o">||</span><span class="n">A</span> <span class="o">-</span> <span class="n">U</span> <span class="n">Sigma</span> <span class="n">V</span><span class="o">^</span><span class="n">H</span><span class="o">||</span><span class="n">_F</span>   <span class="o">=</span> <span class="mf">1.10577e-12</span>
+<span class="o">||</span><span class="n">A</span> <span class="o">-</span> <span class="n">U</span> <span class="n">Sigma</span> <span class="n">V_H</span><span class="o">||</span><span class="n">_F</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="n">eps</span> <span class="o">||</span><span class="n">A</span><span class="o">||</span><span class="n">_2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.67825</span>
+</pre></div>
+</div>
+<p>The driver can be run with several processes using the MPI launcher provided
+by your MPI implementation; a typical way to run the <code class="docutils literal notranslate"><span class="pre">SVD</span></code> driver on
+eight processes would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">8</span> <span class="o">./</span><span class="n">SVD</span> <span class="o">--</span><span class="n">height</span> <span class="mi">300</span> <span class="o">--</span><span class="n">width</span> <span class="mi">300</span>
+</pre></div>
+</div>
+<p>You can also build a wide variety of example and test drivers
+(unfortunately the line is a little blurred) by using the CMake options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">EL_EXAMPLES</span><span class="o">=</span><span class="n">ON</span>
+</pre></div>
+</div>
+<p>and/or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">D</span> <span class="n">EL_TESTS</span><span class="o">=</span><span class="n">ON</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing-the-python-installation">
+<h2>Testing the Python installation<a class="headerlink" href="#testing-the-python-installation" title="Permalink to this headline">¶</a></h2>
+<p>A number of Python example scripts which, for example, solve sparse linear
+systems and quadratic programs, may be found at
+<a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/interface">examples/interface</a>. However, it is typically necessary to augment the environment
+variable <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>, and perhaps also <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>.</p>
+<div class="section" id="linux-systems">
+<h3>Linux systems<a class="headerlink" href="#linux-systems" title="Permalink to this headline">¶</a></h3>
+<p>On most Linux systems, it will be necessary to append
+<code class="docutils literal notranslate"><span class="pre">$(CMAKE_INSTALL_PREFIX)/lib</span></code> to <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> as well as setting
+<code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> to a value dependent upon how Elemental was instructed to install
+the Python interface. In the default case, where Python is installed into the
+global site packages directory, <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> should be set to the result of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distutils.sysconfig</span> <span class="k">import</span> <span class="n">get_python_lib</span>
+<span class="nb">print</span> <span class="n">get_python_lib</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>which may have a value suh as <code class="docutils literal notranslate"><span class="pre">$(HOME)/anaconda/lib/python2.7/site-packages</span></code>.</p>
+<p>In cases where the CMake option
+<code class="docutils literal notranslate"><span class="pre">INSTALL_PYTHON_PACKAGE=OFF</span></code> was specified, <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> should be set to
+<code class="docutils literal notranslate"><span class="pre">$(CMAKE_INSTALL_PREFIX)/python</span></code>, whereas, if the CMake option
+<code class="docutils literal notranslate"><span class="pre">INSTALL_PYTHON_INTO_USER_SITE=ON</span></code> was specified, then <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>
+should be set to the result of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">site</span>
+<span class="nb">print</span> <span class="n">site</span><span class="o">.</span><span class="n">USER_SITE</span>
+</pre></div>
+</div>
+<p>which is frequently <code class="docutils literal notranslate"><span class="pre">$(HOME)/.local/lib/python2.7/site-packages</span></code>.</p>
+</div>
+<div class="section" id="mac-os-x">
+<h3>Mac OS X<a class="headerlink" href="#mac-os-x" title="Permalink to this headline">¶</a></h3>
+<p>It should typically only be necessary to set <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> in the same way
+as on Linux systems (there should be no need to set <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>,
+nor its OS X equivalent, <code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH</span></code>).</p>
+</div>
+</div>
+<div class="section" id="elemental-as-a-cmake-subproject">
+<h2>Elemental as a CMake subproject<a class="headerlink" href="#elemental-as-a-cmake-subproject" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These instructions are somewhat out of date and so an email to
+<a class="reference external" href="mailto:users&#37;&#52;&#48;libelemental&#46;org">users<span>&#64;</span>libelemental<span>&#46;</span>org</a> might be
+more appropriate for now in order to help with using Elemental as a
+subproject of another CMake build system.</p>
+</div>
+<p>Adding Elemental as a dependency into a project which uses CMake for its build
+system can be relatively straightforward: simply put an entire copy of the
+Elemental source tree in a subdirectory of your main project folder, say
+<code class="docutils literal notranslate"><span class="pre">external/elemental</span></code>, and then create a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file in your main
+project folder that builds off of the following snippet:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cmake_minimum_required(VERSION 2.8.8)
+project(Foo)
+
+add_subdirectory(external/elemental)
+include_directories(&quot;${PROJECT_BINARY_DIR}/external/El/include&quot;)
+include_directories(${MPI_CXX_INCLUDE_PATH})
+
+# Build your project here
+# e.g.,
+#   add_library(foo ${LIBRARY_TYPE} ${FOO_SRC})
+#   target_link_libraries(foo El)
+</pre></div>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>If you run into build problems, please email
+<a class="reference external" href="mailto:maint&#37;&#52;&#48;libelemental&#46;org">maint<span>&#64;</span>libelemental<span>&#46;</span>org</a>
+and make sure to attach the file <code class="docutils literal notranslate"><span class="pre">include/El/config.h</span></code>, which should
+be generated within your build directory.
+Please only direct usage questions to
+<a class="reference external" href="mailto:users&#37;&#52;&#48;libelemental&#46;org">users<span>&#64;</span>libelemental<span>&#46;</span>org</a>,
+and development questions to
+<a class="reference external" href="mailto:dev&#37;&#52;&#48;libelemental&#46;org">dev<span>&#64;</span>libelemental<span>&#46;</span>org</a>.</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="citation">
+<dt class="label" id="hwd2002"><span class="brackets"><a class="fn-backref" href="#id3">HWD2002</a></span></dt>
+<dd><p>Greg Henry, David Watkins, and Jack Dongarra, <em>A parallel implementation of the nonsymmetric QR algorithm for distributed memory architectures</em>, SIAM Journal on Scientific Computing, Vol. 24, No. 1, pp. 284–311, 2002. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/S1064827597325165">http://dx.doi.org/10.1137/S1064827597325165</a></p>
+</dd>
+<dt class="label" id="fahey2003"><span class="brackets"><a class="fn-backref" href="#id4">Fahey2003</a></span></dt>
+<dd><p>Mark R. Fahey, <em>Algorithm 826: A parallel eigenvalue routine for complex Hessenberg matrices</em>, ACM Transactions on Mathematical Software, Vol. 29, Issue 3, pp. 326–336, 2003. DOI: <a class="reference external" href="http://dx.doi.org/10.1145/838250.838256">http://dx.doi.org/10.1145/838250.838256</a></p>
+</dd>
+<dt class="label" id="gkk2010"><span class="brackets"><a class="fn-backref" href="#id5">GKK2010</a></span></dt>
+<dd><p>Robert Granat, Bo Kagstrom, and Daniel Kressner, <em>A novel parallel QR algorithm for hybrid distributed memory HPC systems</em>, SIAM Journal on Scientific Computing, Vol. 32, No. 4, pp. 2345–2378, 2010. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/090756934">http://dx.doi.org/10.1137/090756934</a></p>
+</dd>
+<dt class="label" id="vzvdgq2014"><span class="brackets"><a class="fn-backref" href="#id2">vZvdGQ2014</a></span></dt>
+<dd><p>Field G. van Zee, Robert A. van de Geijn, and Gregorio Quintana-Orti, <em>Restructuring the tridiagonal and bidiagonal QR algorithms for performance</em>, ACM Transactions on Mathematical Software, Vol. 40, Issue 3, Article No. 18, 2014. DOI: <a class="reference external" href="http://dx.doi.org/10.1145/2535371">http://dx.doi.org/10.1145/2535371</a></p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="core.html" class="btn btn-neutral float-right" title="Core functionality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tour.html" class="btn btn-neutral float-left" title="A brief tour of the library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

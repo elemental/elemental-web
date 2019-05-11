@@ -1,0 +1,830 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>QR factorization &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="RQ factorization" href="RQ.html" />
+    <link rel="prev" title="LQ factorization" href="LQ.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="qr-factorization">
+<h1>QR factorization<a class="headerlink" href="#qr-factorization" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/QR.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/QR">Subroutines</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/QR.cpp">Test driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/QR.cpp">Example driver</a></p>
+<p>Given <span class="math notranslate nohighlight">\(A \in \mathbb{F}^{m \times n}\)</span>, a QR factorization typically
+computes an implicit unitary matrix <span class="math notranslate nohighlight">\(\hat Q \in \mathbb{F}^{m \times m}\)</span>
+such that <span class="math notranslate nohighlight">\(\hat R \equiv \hat Q^H A\)</span> is upper trapezoidal. One can then
+form the thin factors <span class="math notranslate nohighlight">\(Q \in \mathbb{F}^{m \times \mbox{min}(m,n)}\)</span> and
+<span class="math notranslate nohighlight">\(R \in \mathbb{F}^{\mbox{min}(m,n) \times n}\)</span> by setting
+<span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(R\)</span> to first <span class="math notranslate nohighlight">\(\mbox{min}(m,n)\)</span> columns and rows of
+<span class="math notranslate nohighlight">\(\hat Q\)</span> and <span class="math notranslate nohighlight">\(\hat R\)</span>, respectively. Upon completion <span class="math notranslate nohighlight">\(R\)</span> is
+stored in the upper trapezoid of <span class="math notranslate nohighlight">\(A\)</span> and the Householder reflectors
+representing <span class="math notranslate nohighlight">\(\hat Q\)</span> are stored within the columns of the strictly lower
+trapezoid (this unitary matrix is scaled from the right by a unitary diagonal
+matrix with entries given by <cite>d</cite> so that <span class="math notranslate nohighlight">\(R\)</span> has a positive diagonal).</p>
+<div class="section" id="factorization">
+<h2>Factorization<a class="headerlink" href="#factorization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv42QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE">
+<span id="_CPPv32QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="_CPPv22QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="QR__Matrix:F:R.Matrix:F:R.Matrix:Base:F::R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE">
+<span id="_CPPv32QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE"></span><span id="_CPPv22QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE"></span><span id="QR__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the matrix <span class="math notranslate nohighlight">\(A\)</span> with both <span class="math notranslate nohighlight">\(R\)</span> and the
+Householder reflectors (and subsequent unitary diagonal matrix defined by
+the vector, <cite>d</cite>) representing <span class="math notranslate nohighlight">\(\hat Q\)</span>. The scalings for the
+Householder reflectors are stored in the vector <cite>t</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixIiERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv32QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixIiERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv22QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixIiERK6QRCtrlI4BaseI1FEE"></span><span id="QR__Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Matrix:i:R.QRCtrl:Base:F::CR"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, Matrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixIiERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv32QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv22QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE"></span><span id="QR__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.AbstractDistMatrix:i:R.QRCtrl:Base:F::CR"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with both the <span class="math notranslate nohighlight">\(R\)</span> and (scaled) Householder
+reflectors from a column-pivoted QR factorization and additionally return
+the permutation vector, <cite>p</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr14ExplicitTriangER6MatrixI1FERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr14ExplicitTriangER6MatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr14ExplicitTriangER6MatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="qr::ExplicitTriang__Matrix:F:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ExplicitTriang</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr14ExplicitTriangER6MatrixI1FERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr14ExplicitTriangER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr14ExplicitTriangER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr14ExplicitTriangER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="qr::ExplicitTriang__AbstractDistMatrix:F:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ExplicitTriang</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr14ExplicitTriangER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(R\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr15ExplicitUnitaryER6MatrixI1FERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr15ExplicitUnitaryER6MatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr15ExplicitUnitaryER6MatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="qr::ExplicitUnitary__Matrix:F:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ExplicitUnitary</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr15ExplicitUnitaryER6MatrixI1FERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr15ExplicitUnitaryER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr15ExplicitUnitaryER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr15ExplicitUnitaryER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="qr::ExplicitUnitary__AbstractDistMatrix:F:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ExplicitUnitary</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr15ExplicitUnitaryER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with the orthogonal matrix from its QR factorization
+(with or without column pivoting).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER6MatrixI1FER6MatrixI1FERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr8ExplicitER6MatrixI1FER6MatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr8ExplicitER6MatrixI1FER6MatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="qr::Explicit__Matrix:F:R.Matrix:F:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>R</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER6MatrixI1FER6MatrixI1FERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE"></span><span id="qr::Explicit__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>R</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Explicitly return both <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(R\)</span> from the QR factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI3IntERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI3IntERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI3IntERK6QRCtrlI4BaseI1FEE"></span><span id="qr::Explicit__Matrix:F:R.Matrix:F:R.Matrix:Int:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>R</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>P</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI3IntERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv3N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv2N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE"></span><span id="qr::Explicit__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:i:R.QRCtrl:Base:F::CR"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>R</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>P</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return representations of all matrices of the pivoted QR factorization.
+Note that column pivoting is performed regardless of the value of
+<code class="docutils literal notranslate"><span class="pre">qrCtrl.colPiv</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8CholeskyER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N2qr8CholeskyER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N2qr8CholeskyER6MatrixI1FER6MatrixI1FE"></span><span id="qr::Cholesky__Matrix:F:R.Matrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>R</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8CholeskyER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8CholeskyER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2qr8CholeskyER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2qr8CholeskyER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="qr::Cholesky__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>R</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8CholeskyER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attempt to perform a QR factorization of a tall-skinny matrix using
+Cholesky factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr2TSERK18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2qr2TSERK18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2qr2TSERK18AbstractDistMatrixI1FE"></span><span id="qr::TS__AbstractDistMatrix:F:CR"></span>qr::TreeData&lt;F&gt; <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">TS</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr2TSERK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms an implicit tall-skinny QR decomposition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr10ExplicitTSER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2qr10ExplicitTSER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2qr10ExplicitTSER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="qr::ExplicitTS__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ExplicitTS</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>R</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr10ExplicitTSER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms an explicit QR decomposition using a tall-skinny algorithm:
+A is overwritten with Q.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr2ts5FormRERK18AbstractDistMatrixI1FERKN2qr8TreeDataI1FEE">
+<span id="_CPPv3N2qr2ts5FormRERK18AbstractDistMatrixI1FERKN2qr8TreeDataI1FEE"></span><span id="_CPPv2N2qr2ts5FormRERK18AbstractDistMatrixI1FERKN2qr8TreeDataI1FEE"></span><span id="qr::ts::FormR__AbstractDistMatrix:F:CR.qr::TreeData:F:CR"></span><a class="reference internal" href="../../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, STAR, STAR&gt; <code class="descclassname">qr::ts<code class="descclassname">::</code></code><code class="descname">FormR</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> qr::TreeData&lt;F&gt; &amp;<em>treeData</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr2ts5FormRERK18AbstractDistMatrixI1FERKN2qr8TreeDataI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the R from the QR decomposition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr2ts5FormQER18AbstractDistMatrixI1FERN2qr8TreeDataI1FEE">
+<span id="_CPPv3N2qr2ts5FormQER18AbstractDistMatrixI1FERN2qr8TreeDataI1FEE"></span><span id="_CPPv2N2qr2ts5FormQER18AbstractDistMatrixI1FERN2qr8TreeDataI1FEE"></span><span id="qr::ts::FormQ__AbstractDistMatrix:F:R.qr::TreeData:F:R"></span>void <code class="descclassname">qr::ts<code class="descclassname">::</code></code><code class="descname">FormQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, qr::TreeData&lt;F&gt; &amp;<em>treeData</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr2ts5FormQER18AbstractDistMatrixI1FERN2qr8TreeDataI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite A with the Q from the QR decomposition.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE6QRCtrlI4RealE">
+<span id="_CPPv3IE6QRCtrlI4RealE"></span><span id="_CPPv2IE6QRCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">QRCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE6QRCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N6QRCtrlI4RealE6colPivE">
+<span id="_CPPv3N6QRCtrlI4RealE6colPivE"></span><span id="_CPPv2N6QRCtrlI4RealE6colPivE"></span><span id="QRCtrl:Real:::colPiv__b"></span>bool <code class="descname">colPiv</code><a class="headerlink" href="#_CPPv4N6QRCtrlI4RealE6colPivE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N6QRCtrlI4RealE9boundRankE">
+<span id="_CPPv3N6QRCtrlI4RealE9boundRankE"></span><span id="_CPPv2N6QRCtrlI4RealE9boundRankE"></span><span id="QRCtrl:Real:::boundRank__b"></span>bool <code class="descname">boundRank</code><a class="headerlink" href="#_CPPv4N6QRCtrlI4RealE9boundRankE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N6QRCtrlI4RealE7maxRankE">
+<span id="_CPPv3N6QRCtrlI4RealE7maxRankE"></span><span id="_CPPv2N6QRCtrlI4RealE7maxRankE"></span><span id="QRCtrl:Real:::maxRank__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxRank</code><a class="headerlink" href="#_CPPv4N6QRCtrlI4RealE7maxRankE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N6QRCtrlI4RealE8adaptiveE">
+<span id="_CPPv3N6QRCtrlI4RealE8adaptiveE"></span><span id="_CPPv2N6QRCtrlI4RealE8adaptiveE"></span><span id="QRCtrl:Real:::adaptive__b"></span>bool <code class="descname">adaptive</code><a class="headerlink" href="#_CPPv4N6QRCtrlI4RealE8adaptiveE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N6QRCtrlI4RealE3tolE">
+<span id="_CPPv3N6QRCtrlI4RealE3tolE"></span><span id="_CPPv2N6QRCtrlI4RealE3tolE"></span><span id="QRCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N6QRCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N6QRCtrlI4RealE20alwaysRecomputeNormsE">
+<span id="_CPPv3N6QRCtrlI4RealE20alwaysRecomputeNormsE"></span><span id="_CPPv2N6QRCtrlI4RealE20alwaysRecomputeNormsE"></span><span id="QRCtrl:Real:::alwaysRecomputeNorms__b"></span>bool <code class="descname">alwaysRecomputeNorms</code><a class="headerlink" href="#_CPPv4N6QRCtrlI4RealE20alwaysRecomputeNormsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6QRCtrlI4RealE6QRCtrlEv">
+<span id="_CPPv3N6QRCtrlI4RealE6QRCtrlEv"></span><span id="_CPPv2N6QRCtrlI4RealE6QRCtrlEv"></span><span id="QRCtrl:Real:::QRCtrl"></span><code class="descname">QRCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6QRCtrlI4RealE6QRCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes <code class="docutils literal notranslate"><span class="pre">colPiv=false</span></code>, <code class="docutils literal notranslate"><span class="pre">boundRank=false</span></code>, <code class="docutils literal notranslate"><span class="pre">maxRank=0</span></code>,
+<code class="docutils literal notranslate"><span class="pre">adaptive=false</span></code>, <code class="docutils literal notranslate"><span class="pre">tol=0</span></code>, and <code class="docutils literal notranslate"><span class="pre">alwaysRecomputeNorms=false</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE8TreeDataI1FE">
+<span id="_CPPv3IE8TreeDataI1FE"></span><span id="_CPPv2IE8TreeDataI1FE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">TreeData</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE8TreeDataI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE3QR0E">
+<span id="_CPPv3N8TreeDataI1FE3QR0E"></span><span id="_CPPv2N8TreeDataI1FE3QR0E"></span><span id="TreeData:F:::QR0__Matrix:F:"></span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; <code class="descname">QR0</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE3QR0E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initial QR factorization</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE2t0E">
+<span id="_CPPv3N8TreeDataI1FE2t0E"></span><span id="_CPPv2N8TreeDataI1FE2t0E"></span><span id="TreeData:F:::t0__Matrix:F:"></span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; <code class="descname">t0</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE2t0E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Phases from initial QR factorization</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE2d0E">
+<span id="_CPPv3N8TreeDataI1FE2d0E"></span><span id="_CPPv2N8TreeDataI1FE2d0E"></span><span id="TreeData:F:::d0__Matrix:Base:F::"></span>Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <code class="descname">d0</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE2d0E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Signature (-1,+1) which scales the Householder matrix from the right.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE6QRListE">
+<span id="_CPPv3N8TreeDataI1FE6QRListE"></span><span id="_CPPv2N8TreeDataI1FE6QRListE"></span><span id="TreeData:F:::QRList__std::vector:Matrix:F::"></span>std::vector&lt;<a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt;&gt; <code class="descname">QRList</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE6QRListE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factorizations within reduction tree</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE5tListE">
+<span id="_CPPv3N8TreeDataI1FE5tListE"></span><span id="_CPPv2N8TreeDataI1FE5tListE"></span><span id="TreeData:F:::tList__std::vector:Matrix:F::"></span>std::vector&lt;<a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt;&gt; <code class="descname">tList</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE5tListE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Phases within reduction tree</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE5dListE">
+<span id="_CPPv3N8TreeDataI1FE5dListE"></span><span id="_CPPv2N8TreeDataI1FE5dListE"></span><span id="TreeData:F:::dList__std::vector:Matrix:Base:F:::"></span>std::vector&lt;Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; <code class="descname">dList</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE5dListE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Signatures within reduction tree</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElQR_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQR_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> t</em>, ElMatrix_s<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQR_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQR_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQR_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> t</em>, ElMatrix_d<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQR_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQR_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQR_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> t</em>, ElMatrix_s<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQR_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQR_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQR_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> t</em>, ElMatrix_d<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQR_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> t</em>, ElDistMatrix_s<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> t</em>, ElDistMatrix_d<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> t</em>, ElDistMatrix_s<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> t</em>, ElDistMatrix_d<em> d</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the packed QR factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPiv_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> t</em>, ElMatrix_s<em> d</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPiv_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> t</em>, ElMatrix_d<em> d</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPiv_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> t</em>, ElMatrix_s<em> d</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPiv_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> t</em>, ElMatrix_d<em> d</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> t</em>, ElDistMatrix_s<em> d</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> t</em>, ElDistMatrix_d<em> d</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> t</em>, ElDistMatrix_s<em> d</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> t</em>, ElDistMatrix_d<em> d</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the packed pivoted QR factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivX_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivX_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> t</em>, ElMatrix_s<em> d</em>, ElMatrix_i<em> p</em>, ElQRCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivX_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivX_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> t</em>, ElMatrix_d<em> d</em>, ElMatrix_i<em> p</em>, ElQRCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivX_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivX_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> t</em>, ElMatrix_s<em> d</em>, ElMatrix_i<em> p</em>, ElQRCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivX_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivX_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivX_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> t</em>, ElMatrix_d<em> d</em>, ElMatrix_i<em> p</em>, ElQRCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivX_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivXDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivXDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> t</em>, ElDistMatrix_s<em> d</em>, ElDistMatrix_i<em> p</em>, ElQRCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivXDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivXDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> t</em>, ElDistMatrix_d<em> d</em>, ElDistMatrix_i<em> p</em>, ElQRCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivXDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivXDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> t</em>, ElDistMatrix_s<em> d</em>, ElDistMatrix_i<em> p</em>, ElQRCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivXDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRColPivXDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRColPivXDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> t</em>, ElDistMatrix_d<em> d</em>, ElDistMatrix_i<em> p</em>, ElQRCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRColPivXDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the packed QR factorization (expert version).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicit_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicit_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicit_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicit_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicit_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicit_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicit_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicit_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicit_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicit_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicit_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicit_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the explicit QR factorization (replace <cite>A</cite> with <cite>Q</cite> and return <cite>R</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPiv_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> R</em>, ElMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPiv_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> R</em>, ElMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPiv_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> R</em>, ElMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPiv_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> R</em>, ElMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPivDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> R</em>, ElDistMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPivDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> R</em>, ElDistMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPivDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> R</em>, ElDistMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitColPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitColPivDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> R</em>, ElDistMatrix_i<em> P</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitColPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the explicit QR factorization with column pivoting
+(replace <cite>A</cite> with <cite>Q</cite> and return <cite>R</cite> and <cite>P</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriang_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriang_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriang_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriang_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriang_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriang_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriang_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriang_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriang_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriang_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriang_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriang_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriangDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriangDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriangDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriangDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriangDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriangDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriangDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriangDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriangDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitTriangDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitTriangDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitTriangDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the triangular factor from QR with no pivoting</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An expert wrapper which supports column-pivoting is needed.</p>
+</div>
+<dl class="function">
+<dt id="c.ElQRExplicitUnitary_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitary_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitary_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitUnitary_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitary_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitary_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitUnitary_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitary_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitary_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitUnitary_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitary_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitary_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitUnitaryDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitaryDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitaryDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitUnitaryDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitaryDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitaryDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitUnitaryDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitaryDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitaryDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElQRExplicitUnitaryDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElQRExplicitUnitaryDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElQRExplicitUnitaryDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the unitary factor from QR with no pivoting</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An expert wrapper which supports column-pivoting is needed.</p>
+</div>
+<dl class="function">
+<dt id="c.ElCholeskyQR_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQR_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQR_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyQR_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQR_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQR_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyQR_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQR_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQR_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyQR_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQR_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQR_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyQRDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQRDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQRDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyQRDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQRDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQRDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyQRDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQRDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQRDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyQRDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyQRDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> R</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyQRDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to perform a Cholesky-based QR factorization of a tall-skinny matrix.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="apply-the-factorization-to-vectors">
+<h2>Apply the factorization to vectors<a class="headerlink" href="#apply-the-factorization-to-vectors" title="Permalink to this headline">¶</a></h2>
+<p>Applies the implicitly-defined <span class="math notranslate nohighlight">\(Q\)</span> (or its adjoint) stored within
+<cite>A</cite>, <cite>t</cite>, and <cite>d</cite> from either the left or the right to <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEER6MatrixI1FE">
+<span id="_CPPv3N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="_CPPv2N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="qr::ApplyQ__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:Base:F::CR.Matrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <em class="property">const</em> Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2qr6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2qr6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE"></span><span id="qr::ApplyQ__LeftOrRight.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElApplyQAfterQR_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQR_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> t</em>, ElConstMatrix_s<em> d</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQR_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterQR_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQR_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> t</em>, ElConstMatrix_d<em> d</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQR_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterQR_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQR_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> t</em>, ElConstMatrix_s<em> d</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQR_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterQR_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQR_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> t</em>, ElConstMatrix_d<em> d</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQR_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterQRDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQRDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> t</em>, ElConstDistMatrix_s<em> d</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQRDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterQRDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQRDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> t</em>, ElConstDistMatrix_d<em> d</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQRDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterQRDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQRDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> t</em>, ElConstDistMatrix_s<em> d</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQRDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterQRDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterQRDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> t</em>, ElConstDistMatrix_d<em> d</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterQRDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="solve-linear-systems-with-the-factorization">
+<h2>Solve linear systems with the factorization<a class="headerlink" href="#solve-linear-systems-with-the-factorization" title="Permalink to this headline">¶</a></h2>
+<p>Solves a set of linear systems using an existing packed QR factorization
+given by <span class="math notranslate nohighlight">\(A\)</span> and the vectors <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(d\)</span>.
+<span class="math notranslate nohighlight">\(B\)</span> is the matrix of input vectors and <span class="math notranslate nohighlight">\(X\)</span> is the matrix of
+solutions.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N2qr10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N2qr10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N2qr10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FER6MatrixI1FE"></span><span id="qr::SolveAfter__Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:Base:F::CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <em class="property">const</em> Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2qr10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2qr10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="qr::SolveAfter__Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSolveAfterQR_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQR_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> t</em>, ElConstMatrix_s<em> d</em>, ElConstMatrix_s<em> B</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQR_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterQR_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQR_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> t</em>, ElConstMatrix_d<em> d</em>, ElConstMatrix_d<em> B</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQR_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterQR_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQR_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> t</em>, ElConstMatrix_s<em> d</em>, ElConstMatrix_c<em> B</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQR_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterQR_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQR_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> t</em>, ElConstMatrix_d<em> d</em>, ElConstMatrix_z<em> B</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQR_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterQRDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQRDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> t</em>, ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_s<em> B</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQRDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterQRDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQRDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> t</em>, ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_d<em> B</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQRDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterQRDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQRDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> t</em>, ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_c<em> B</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQRDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterQRDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterQRDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> t</em>, ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_z<em> B</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterQRDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

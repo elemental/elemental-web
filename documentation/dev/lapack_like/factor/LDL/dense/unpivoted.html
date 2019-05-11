@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Unpivoted dense LDL &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Factorization" href="unpivoted/factor.html" />
+    <link rel="prev" title="Inertia after factorization" href="pivoted/inertia_after.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../factor.html">Factorizations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../Cholesky.html">Cholesky factorization</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../LDL.html">LDL factorization</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../dense.html">Dense LDL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sparse.html">Sparse LDL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../LU.html">LU factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../LQ.html">LQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../QR.html">QR factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../RQ.html">RQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GQR.html">Generalized QR factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GRQ.html">Generalized RQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ID.html">Interpolative Decomposition (ID)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Skeleton.html">Skeleton decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../factor.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../../../factor.html">Factorizations</a> &raquo;</li>
+        
+          <li><a href="../../LDL.html">LDL factorization</a> &raquo;</li>
+        
+          <li><a href="../dense.html">Dense LDL</a> &raquo;</li>
+        
+      <li>Unpivoted dense LDL</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/lapack_like/factor/LDL/dense/unpivoted.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="unpivoted-dense-ldl">
+<h1>Unpivoted dense LDL<a class="headerlink" href="#unpivoted-dense-ldl" title="Permalink to this headline">¶</a></h1>
+<p>Though Cholesky factorizations are ideal for Hermitian Positive-Definite
+matrices, unpivoted <span class="math notranslate nohighlight">\(LDL^T\)</span> and <span class="math notranslate nohighlight">\(LDL^H\)</span> factorizations are
+frequently used for significantly larger classes of matrices, with the most
+notable example being Symmetric Quasidefinite matrices, which were introduced
+by <a class="reference internal" href="#vanderbei1995" id="id1"><span>[Vanderbei1995]</span></a> and subsequently analyzed as a simple rescaling of a
+nonsymmetric positive-definite matrix in <a class="reference internal" href="#gss1996" id="id2"><span>[GSS1996]</span></a>. While the stability
+properties of unpivoted <span class="math notranslate nohighlight">\(LDL^H\)</span> factorizations of dense quasidefinite
+matrices are of intrinsic interest, there are significantly more practical
+applications for sparse matrices, where dynamic pivoting incurs typically
+substantially increases both the memory requirements and operation count of a
+factorization.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unpivoted/factor.html">Factorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unpivoted/solve_after.html">Solve after factorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unpivoted/multiply_after.html">Multiply after factorization</a></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="citation">
+<dt class="label" id="vanderbei1995"><span class="brackets"><a class="fn-backref" href="#id1">Vanderbei1995</a></span></dt>
+<dd><p>Robert J. Vanderbei, <em>Symmetric quasi-definite matrices</em>, SIAM Journal on Optimization, Vol. 5, No. 1, pp. 100–113, 1995. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/0805005">http://dx.doi.org/10.1137/0805005</a></p>
+</dd>
+<dt class="label" id="gss1996"><span class="brackets"><a class="fn-backref" href="#id2">GSS1996</a></span></dt>
+<dd><p>Philip E. Gill, Michael A. Saunders, and Joseph R. Shinnerl, <em>On the stability of Cholesky factorization for symmetric quasidefinite systems</em>, SIAM Journal on Matrix Analysis and Applications, Vol. 17, No. 1, pp. 35–46, 1996. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/S0895479893252623">http://dx.doi.org/10.1137/S0895479893252623</a></p>
+</dd>
+</dl>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL.cpp">C++11 implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL/dense/">C++11 subroutines</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.hpp">C++11 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor-C.cpp">C99 wrappers</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.h">C99 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/python/lapack_like/factor.py">Python wrappers</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LDL.cpp">C++11 test driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/LDL.cpp">C++11 example driver</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="unpivoted/factor.html" class="btn btn-neutral float-right" title="Factorization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pivoted/inertia_after.html" class="btn btn-neutral float-left" title="Inertia after factorization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

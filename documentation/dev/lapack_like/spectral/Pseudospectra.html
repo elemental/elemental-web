@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Pseudospectra &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Spectral portrait" href="Pseudospectra/SpectralPortrait.html" />
+    <link rel="prev" title="Specialized eigensolvers" href="specialized.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../spectral.html">Spectral analysis</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="HermitianTridiagEig.html">Hermitian tridiagonal eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianEig.html">Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SkewHermitianEig.html">Skew-Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianGenDefEig.html">Hermitian generalized-definite eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianSVD.html">Hermitian SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SVD.html">SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Polar.html">Polar decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Schur.html">Schur decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specialized.html">Specialized eigensolvers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Pseudospectra</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Pseudospectra/SpectralPortrait.html">Spectral portrait</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pseudospectra/SpectralWindow.html">Spectral window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pseudospectra/SpectralCloud.html">Spectral cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pseudospectra/ControlStructures.html">Control structures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../spectral.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../spectral.html">Spectral analysis</a> &raquo;</li>
+        
+      <li>Pseudospectra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/spectral/Pseudospectra.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pseudospectra">
+<h1>Pseudospectra<a class="headerlink" href="#pseudospectra" title="Permalink to this headline">¶</a></h1>
+<p>The <span class="math notranslate nohighlight">\(p\)</span>-norm <span class="math notranslate nohighlight">\(\epsilon\)</span>-<em>pseudospectrum</em> of a square matrix
+<span class="math notranslate nohighlight">\(A\)</span> is the set of all shifts <span class="math notranslate nohighlight">\(\xi \in \mathbb{C}\)</span> such that
+the inverse of <span class="math notranslate nohighlight">\(A - \xi I\)</span> is sufficiently large (greater than <span class="math notranslate nohighlight">\(1/\epsilon\)</span>) in the <span class="math notranslate nohighlight">\(p\)</span>-norm:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_\epsilon^p(A) = \{ \xi \in \mathbb{C} : \| (A-\xi I)^{-1} \|_p &gt; \frac{1}{\epsilon} \},\]</div>
+<p>with the convention that <span class="math notranslate nohighlight">\(\| (A-\xi I)^{-1} \|_p = +\infty\)</span> if the
+<strong>resolvent</strong>, <span class="math notranslate nohighlight">\((A-\xi I)^{-1}\)</span>, does not exist. In the most common case,
+where <span class="math notranslate nohighlight">\(p=2\)</span>, the definition of the <span class="math notranslate nohighlight">\(\epsilon\)</span>-pseudospectrum
+reduces to</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_\epsilon^2(A) = \{ \xi \in \mathbb{C} : \sigma_{\text{min}}(A-\xi I) &lt; \epsilon \}.\]</div>
+<p>Elemental currently supports two methods for computing two-norm pseudospectra:
+the first is a high-performance improvement of the triangularization followed
+by inverse iteration approach of <a class="reference internal" href="#vanloan1984" id="id1"><span>[VanLoan1984]</span></a> and <a class="reference internal" href="#lui1997" id="id2"><span>[Lui1997]</span></a>.
+In particular, Elemental begins by computing the Schur decomposition of the
+given matrix, which preserves the (two-norm) <span class="math notranslate nohighlight">\(\epsilon\)</span>-pseudospectrum,
+up to round-off error, and then simultaneously performs many Implicitly
+Restarted Arnoldi (IRA) iterations with the inverse normal matrix for each
+shift in a manner which communicates no more data than a standard triangular
+solve with many right-hand sides (with vectors deflated immediately after
+convergence).</p>
+<p>The second approach is quite similar and, instead of reducing to triangular
+form, reduces to Hessenberg form and performs multi-shift triangular solves
+in a manner similar to <a class="reference internal" href="#henry1994" id="id3"><span>[Henry1994]</span></a> and <a class="reference internal" href="#bdp1996" id="id4"><span>[BDP1996]</span></a>. This algorithm is not yet
+performance-tuned in Elemental, but could perhaps be preferred in situations
+where a Schur decomposition is infeasible.</p>
+<p>Elemental also supports proof-of-concept implementations of high-performance
+one-norm pseudospectra which are based upon the Hager-Higham algorithm
+(<a class="reference internal" href="#hager1984" id="id5"><span>[Hager1984]</span></a>, <a class="reference internal" href="#higham1988" id="id6"><span>[Higham1988]</span></a>, and <a class="reference internal" href="#higham1990" id="id7"><span>[Higham1990]</span></a>) for
+black-box one-norm estimation, but the blocked variant of <a class="reference internal" href="#highamtisseur2006" id="id8"><span>[HighamTisseur2006]</span></a>
+provides qualitatively superior results.</p>
+<p>Please see <a class="reference internal" href="#trefethenembree2009" id="id9"><span>[TrefethenEmbree2009]</span></a> or <a class="reference internal" href="#trefethen1999" id="id10"><span>[Trefethen1999]</span></a> for comprehensive
+histories of the computation of pseudospectra.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Pseudospectra/SpectralPortrait.html">Spectral portrait</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Pseudospectra/SpectralWindow.html">Spectral window</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Pseudospectra/SpectralCloud.html">Spectral cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Pseudospectra/ControlStructures.html">Control structures</a></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="citation">
+<dt class="label" id="bdp1996"><span class="brackets"><a class="fn-backref" href="#id4">BDP1996</a></span></dt>
+<dd><p>Christian H. Bischof, Biswa Nath Datta, and Avijit Purkayastha, <em>A parallel algorithm for the Sylvester Observer Equation</em>, SIAM Journal on Scientific Computing, Vol. 17, No. 3, pp. 686–698, 1996. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/S1064827591223276">http://dx.doi.org/10.1137/S1064827591223276</a></p>
+</dd>
+<dt class="label" id="hager1984"><span class="brackets"><a class="fn-backref" href="#id5">Hager1984</a></span></dt>
+<dd><p>William W. Hager, <em>Condition estimates</em>, SIAM Journal on Scientific and Statistical Computing, Vol. 5, No. 2, pp. 311–316, 1984. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/0905023">http://dx.doi.org/10.1137/0905023</a></p>
+</dd>
+<dt class="label" id="henry1994"><span class="brackets"><a class="fn-backref" href="#id3">Henry1994</a></span></dt>
+<dd><p>Greg Henry, <em>The shifted Hessenberg system solve computation</em>, Technical Report, Cornell University, Ithica, NY, 1994. Last accessed from: <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.33.7403">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.33.7403</a></p>
+</dd>
+<dt class="label" id="higham1988"><span class="brackets"><a class="fn-backref" href="#id6">Higham1988</a></span></dt>
+<dd><p>Nicholas J. Higham, <em>FORTRAN codes for estimating the one-norm of a real or complex matrix, with applications to condition estimation (Algorithm 674)</em>, ACM Transactions on Mathematical Software, Vol. 14, Issue 4, pp. 381–396, 1988. DOI: <a class="reference external" href="http://dx.doi.org/10.1145/50063.214386">http://dx.doi.org/10.1145/50063.214386</a></p>
+</dd>
+<dt class="label" id="higham1990"><span class="brackets"><a class="fn-backref" href="#id7">Higham1990</a></span></dt>
+<dd><p>Nicholas J. Higham, <em>Experience with a matrix norm estimator</em>, SIAM Journal on Scientific and Statistical Computing, Vol. 11, No. 4, pp. 804–809, 1990. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/0911047">http://dx.doi.org/10.1137/0911047</a></p>
+</dd>
+<dt class="label" id="highamtisseur2006"><span class="brackets"><a class="fn-backref" href="#id8">HighamTisseur2006</a></span></dt>
+<dd><p>Nicholas J. Higham and Francoise Tisseur, <em>A block algorithm for matrix 1-norm estimation, with an application to 1-norm pseudospectra</em>, SIAM Journal on Matrix Analysis and Applications, Vol. 21, No. 4, pp. 1185–1201, 2006. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/S0895479899356080">http://dx.doi.org/10.1137/S0895479899356080</a></p>
+</dd>
+<dt class="label" id="lui1997"><span class="brackets"><a class="fn-backref" href="#id2">Lui1997</a></span></dt>
+<dd><p>S.H. Lui, <em>Computation of pseudospectra by continuation</em>, SIAM Journal on Scientific Computing, Vol. 18, No. 2, pp. 565–573, 1997. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/S1064827594276035">http://dx.doi.org/10.1137/S1064827594276035</a></p>
+</dd>
+<dt class="label" id="trefethen1999"><span class="brackets"><a class="fn-backref" href="#id10">Trefethen1999</a></span></dt>
+<dd><p>Lloyd N. Trefethen, <em>Computation of pseudospectra</em>, Acta Numerica, pp. 247–295, 1999. Last accessed from: <a class="reference external" href="http://eprints.maths.ox.ac.uk/1294/1/NA-99-03.pdf">http://eprints.maths.ox.ac.uk/1294/1/NA-99-03.pdf</a></p>
+</dd>
+<dt class="label" id="trefethenembree2009"><span class="brackets"><a class="fn-backref" href="#id9">TrefethenEmbree2009</a></span></dt>
+<dd><p>Lloyd N. Trefethen and Mark Embree, <em>Spectra and pseudospectra: The behavior of nonnormal matrices</em>, Princeton University Press, Princeton, 2009. Official website: <a class="reference external" href="http://press.princeton.edu/titles/8113.html">http://press.princeton.edu/titles/8113.html</a></p>
+</dd>
+<dt class="label" id="vanloan1984"><span class="brackets"><a class="fn-backref" href="#id1">VanLoan1984</a></span></dt>
+<dd><p>Charles Van Loan, <em>How near is a stable matrix to an unstable matrix?</em>, Technical Report, Cornell University, Ithica, NY. Last accessed from: <a class="reference external" href="http://hdl.handle.net/1813/6488">http://hdl.handle.net/1813/6488</a></p>
+</dd>
+</dl>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/spectral/Pseudospectra.cpp">C++ implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Pseudospectra.cpp">C++ pseudospectra example driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedPseudospectra.cpp">C++ ChunkedPseudospectra example driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/TriangularPseudospectra.cpp">C++ TriangularPseudospectra example driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedTriangularPseudospectra.cpp">C++ ChunkedTriangularPseudospectra example driver</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Pseudospectra/SpectralPortrait.html" class="btn btn-neutral float-right" title="Spectral portrait" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="specialized.html" class="btn btn-neutral float-left" title="Specialized eigensolvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

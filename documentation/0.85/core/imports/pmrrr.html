@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>PMRRR &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="libFLAME" href="flame.html" />
+    <link rel="prev" title="MPI" href="mpi.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pmrrr">
+<h1>PMRRR<a class="headerlink" href="#pmrrr" title="Permalink to this headline">¶</a></h1>
+<p>Rather than directly using Petschow and Bientinesi’s parallel implementation of
+the Multiple Relatively Robust Representations (MRRR) algorithm, several
+simplified interfaces have been exposed.</p>
+<p>The prototypes can be found in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/El/core/imports/pmrrr.hpp">include/El/core/imports/pmrrr.hpp</a>,
+while the implementations are in the folder
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/external/pmrrr/">external/pmrrr/</a>.</p>
+<div class="section" id="data-structures">
+<h2>Data structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv4N16herm_tridiag_eig8EstimateE">
+<span id="_CPPv3N16herm_tridiag_eig8EstimateE"></span><span id="_CPPv2N16herm_tridiag_eig8EstimateE"></span><span id="herm_tridiag_eig::Estimate"></span><em class="property">type </em><code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Estimate</code><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig8EstimateE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For returning upper bounds on the number of local and global eigenvalues
+with eigenvalues lying in the specified interval, <span class="math notranslate nohighlight">\((a,b]\)</span>.</p>
+<dl class="member">
+<dt id="_CPPv4N16herm_tridiag_eig8Estimate19numLocalEigenvaluesE">
+<span id="_CPPv3N16herm_tridiag_eig8Estimate19numLocalEigenvaluesE"></span><span id="_CPPv2N16herm_tridiag_eig8Estimate19numLocalEigenvaluesE"></span><span id="herm_tridiag_eig::Estimate::numLocalEigenvalues__i"></span>int <code class="descname">numLocalEigenvalues</code><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig8Estimate19numLocalEigenvaluesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The upper bound on the number of eigenvalues in the specified interval
+that our process stores locally.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16herm_tridiag_eig8Estimate20numGlobalEigenvaluesE">
+<span id="_CPPv3N16herm_tridiag_eig8Estimate20numGlobalEigenvaluesE"></span><span id="_CPPv2N16herm_tridiag_eig8Estimate20numGlobalEigenvaluesE"></span><span id="herm_tridiag_eig::Estimate::numGlobalEigenvalues__i"></span>int <code class="descname">numGlobalEigenvalues</code><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig8Estimate20numGlobalEigenvaluesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The upper bound on the number of eigenvalues in the specified interval.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N16herm_tridiag_eig4InfoE">
+<span id="_CPPv3N16herm_tridiag_eig4InfoE"></span><span id="_CPPv2N16herm_tridiag_eig4InfoE"></span><span id="herm_tridiag_eig::Info"></span><em class="property">type </em><code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Info</code><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig4InfoE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For returning information about the computed eigenvalues.</p>
+<dl class="member">
+<dt id="_CPPv4N16herm_tridiag_eig4Info19numLocalEigenvaluesE">
+<span id="_CPPv3N16herm_tridiag_eig4Info19numLocalEigenvaluesE"></span><span id="_CPPv2N16herm_tridiag_eig4Info19numLocalEigenvaluesE"></span><span id="herm_tridiag_eig::Info::numLocalEigenvalues__i"></span>int <code class="descname">numLocalEigenvalues</code><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig4Info19numLocalEigenvaluesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of computed eigenvalues that our process locally stores.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16herm_tridiag_eig4Info20numGlobalEigenvaluesE">
+<span id="_CPPv3N16herm_tridiag_eig4Info20numGlobalEigenvaluesE"></span><span id="_CPPv2N16herm_tridiag_eig4Info20numGlobalEigenvaluesE"></span><span id="herm_tridiag_eig::Info::numGlobalEigenvalues__i"></span>int <code class="descname">numGlobalEigenvalues</code><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig4Info20numGlobalEigenvaluesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of computed eigenvalues.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N16herm_tridiag_eig4Info20firstLocalEigenvalueE">
+<span id="_CPPv3N16herm_tridiag_eig4Info20firstLocalEigenvalueE"></span><span id="_CPPv2N16herm_tridiag_eig4Info20firstLocalEigenvalueE"></span><span id="herm_tridiag_eig::Info::firstLocalEigenvalue__i"></span>int <code class="descname">firstLocalEigenvalue</code><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig4Info20firstLocalEigenvalueE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The index of the first eigenvalue stored locally on our process.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="compute-all-eigenvalues">
+<h2>Compute all eigenvalues<a class="headerlink" href="#compute-all-eigenvalues" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommE">
+<span id="_CPPv3N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommE"></span><span id="_CPPv2N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommE"></span><span id="herm_tridiag_eig::Eig__i.doubleP.doubleP.doubleP.mpi::Comm"></span>herm_tridiag_eig::<a class="reference internal" href="#_CPPv4N16herm_tridiag_eig4InfoE" title="herm_tridiag_eig::Info">Info</a> <code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Eig</code><span class="sig-paren">(</span>int <em>n</em>, double *<em>d</em>, double *<em>e</em>, double *<em>w</em>, mpi::<a class="reference internal" href="mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute all of the eigenvalues of the real symmetric tridiagonal matrix with
+diagonal <cite>d</cite> and subdiagonal <cite>e</cite>: the eigenvalues will be stored in
+<cite>w</cite> and the work will be divided among the processors in <cite>comm</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommE">
+<span id="_CPPv3N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommE"></span><span id="_CPPv2N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommE"></span><span id="herm_tridiag_eig::Eig__i.doubleP.doubleP.doubleP.doubleP.i.mpi::Comm"></span>herm_tridiag_eig::<a class="reference internal" href="#_CPPv4N16herm_tridiag_eig4InfoE" title="herm_tridiag_eig::Info">Info</a> <code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Eig</code><span class="sig-paren">(</span>int <em>n</em>, double *<em>d</em>, double *<em>e</em>, double *<em>w</em>, double *<em>Z</em>, int <em>ldz</em>, mpi::<a class="reference internal" href="mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as above, but also compute the corresponding eigenvectors.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="compute-eigenvalues-within-interval">
+<h2>Compute eigenvalues within interval<a class="headerlink" href="#compute-eigenvalues-within-interval" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEdd">
+<span id="_CPPv3N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEdd"></span><span id="_CPPv2N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEdd"></span><span id="herm_tridiag_eig::Eig__i.doubleP.doubleP.doubleP.mpi::Comm.double.double"></span>herm_tridiag_eig::<a class="reference internal" href="#_CPPv4N16herm_tridiag_eig4InfoE" title="herm_tridiag_eig::Info">Info</a> <code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Eig</code><span class="sig-paren">(</span>int <em>n</em>, double *<em>d</em>, double *<em>e</em>, double *<em>w</em>, mpi::<a class="reference internal" href="mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, double <em>a</em>, double <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEdd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Only compute the eigenvalues lying within the interval <span class="math notranslate nohighlight">\((a,b]\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEdd">
+<span id="_CPPv3N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEdd"></span><span id="_CPPv2N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEdd"></span><span id="herm_tridiag_eig::Eig__i.doubleP.doubleP.doubleP.doubleP.i.mpi::Comm.double.double"></span>herm_tridiag_eig::<a class="reference internal" href="#_CPPv4N16herm_tridiag_eig4InfoE" title="herm_tridiag_eig::Info">Info</a> <code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Eig</code><span class="sig-paren">(</span>int <em>n</em>, double *<em>d</em>, double *<em>e</em>, double *<em>w</em>, double *<em>Z</em>, int <em>ldz</em>, mpi::<a class="reference internal" href="mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, double <em>a</em>, double <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEdd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as above, but also compute the corresponding eigenvectors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N16herm_tridiag_eig11EigEstimateEiPdPdN3mpi4CommEdd">
+<span id="_CPPv3N16herm_tridiag_eig11EigEstimateEiPdPdN3mpi4CommEdd"></span><span id="_CPPv2N16herm_tridiag_eig11EigEstimateEiPdPdN3mpi4CommEdd"></span><span id="herm_tridiag_eig::EigEstimate__i.doubleP.doubleP.mpi::Comm.double.double"></span>herm_tridiag_eig::<a class="reference internal" href="#_CPPv4N16herm_tridiag_eig8EstimateE" title="herm_tridiag_eig::Estimate">Estimate</a> <code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">EigEstimate</code><span class="sig-paren">(</span>int <em>n</em>, double *<em>d</em>, double *<em>w</em>, mpi::<a class="reference internal" href="mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, double <em>a</em>, double <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig11EigEstimateEiPdPdN3mpi4CommEdd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return upper bounds on the number of local and global eigenvalues lying
+within the specified interval.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="compute-eigenvalues-in-index-range">
+<h2>Compute eigenvalues in index range<a class="headerlink" href="#compute-eigenvalues-in-index-range" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEii">
+<span id="_CPPv3N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEii"></span><span id="_CPPv2N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEii"></span><span id="herm_tridiag_eig::Eig__i.doubleP.doubleP.doubleP.mpi::Comm.i.i"></span>herm_tridiag_eig::<a class="reference internal" href="#_CPPv4N16herm_tridiag_eig4InfoE" title="herm_tridiag_eig::Info">Info</a> <code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Eig</code><span class="sig-paren">(</span>int <em>n</em>, double *<em>d</em>, double *<em>e</em>, double *<em>w</em>, mpi::<a class="reference internal" href="mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, int <em>a</em>, int <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig3EigEiPdPdPdN3mpi4CommEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Only compute the eigenvalues with indices ranging from <code class="docutils literal notranslate"><span class="pre">a</span></code> to <code class="docutils literal notranslate"><span class="pre">b</span></code>, where
+<span class="math notranslate nohighlight">\(0 \le a \le b &lt; n\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEii">
+<span id="_CPPv3N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEii"></span><span id="_CPPv2N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEii"></span><span id="herm_tridiag_eig::Eig__i.doubleP.doubleP.doubleP.doubleP.i.mpi::Comm.i.i"></span>herm_tridiag_eig::<a class="reference internal" href="#_CPPv4N16herm_tridiag_eig4InfoE" title="herm_tridiag_eig::Info">Info</a> <code class="descclassname">herm_tridiag_eig<code class="descclassname">::</code></code><code class="descname">Eig</code><span class="sig-paren">(</span>int <em>n</em>, double *<em>d</em>, double *<em>e</em>, double *<em>w</em>, double *<em>Z</em>, int <em>ldz</em>, mpi::<a class="reference internal" href="mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, int <em>a</em>, int <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16herm_tridiag_eig3EigEiPdPdPdPdiN3mpi4CommEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as above, but also compute the corresponding eigenvectors.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

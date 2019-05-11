@@ -1,0 +1,569 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Some special cases used in Elemental &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Graph" href="../../graph.html" />
+    <link rel="prev" title="[CIRC,CIRC]" href="CIRC_CIRC.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grid.html">Grid</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../dist_matrix.html">DistMatrix</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../ADM.html">AbstractDistMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../DM.html">DistMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Element.html">ElementalMatrix</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../Block.html">BlockMatrix</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="MC_MR.html">The standard matrix distribution (<code class="docutils literal notranslate"><span class="pre">[MC,MR]</span></code>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MC_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MC,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="MD_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MD,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="MR_MC.html"><code class="docutils literal notranslate"><span class="pre">[MR,MC]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="MR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[MR,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="STAR_MC.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MC]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="STAR_MD.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MD]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="STAR_MR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,MR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="STAR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="STAR_VC.html"><code class="docutils literal notranslate"><span class="pre">[STAR,VC]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="STAR_VR.html"><code class="docutils literal notranslate"><span class="pre">[STAR,VR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="VC_STAR.html"><code class="docutils literal notranslate"><span class="pre">[VC,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="VR_STAR.html"><code class="docutils literal notranslate"><span class="pre">[VR,STAR]</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CIRC_CIRC.html"><code class="docutils literal notranslate"><span class="pre">[CIRC,CIRC]</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Some special cases used in Elemental</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../../dist_matrix.html">DistMatrix</a> &raquo;</li>
+        
+          <li><a href="../Block.html">BlockMatrix</a> &raquo;</li>
+        
+      <li>Some special cases used in Elemental</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/core/dist_matrix/Block/special.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="some-special-cases-used-in-elemental">
+<h1>Some special cases used in Elemental<a class="headerlink" href="#some-special-cases-used-in-elemental" title="Permalink to this headline">¶</a></h1>
+<p>This list of special cases is here to help clarify the notation used throughout
+Elemental’s source (as well as this documentation). These are all special
+cases of <a class="reference internal" href="../Block.html#_CPPv4IE10DistMatrixI10scalarType7colDist7rowDist5BLOCKE" title="DistMatrix&lt;scalarType, colDist, rowDist, BLOCK&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,colDist,rowDist,BLOCK&gt;</span></code></a>.</p>
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real7colDist7rowDist5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real7colDist7rowDist5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real7colDist7rowDist5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, colDist, rowDist, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real7colDist7rowDist5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real4CIRC4CIRC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real4CIRC4CIRC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real4CIRC4CIRC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4CIRC4CIRC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real2MC2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real2MC2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real2MC2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MC2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real2MC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real2MC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real2MC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real2MD4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real2MD4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real2MD4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MD4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real2MR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real2MR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real2MR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real2MR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real2MR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real2MR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2MD5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2MD5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2MD5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2MD5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2VC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2VC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2VC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2VC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2VR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2VR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2VR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2VR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real2VC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real2VC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real2VC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2VC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI4Real2VR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI4Real2VR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI4Real2VR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;Real, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2VR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype, <cite>Real</cite>, is real (as opposed to complex).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE7colDist7rowDist5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE7colDist7rowDist5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE7colDist7rowDist5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, colDist, rowDist, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE7colDist7rowDist5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4CIRC4CIRC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4CIRC4CIRC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4CIRC4CIRC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4CIRC4CIRC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MC2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MC2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MC2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MC2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MD4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MD4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MD4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MD4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MD5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2MD5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2MD5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MD5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2VC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2VC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2VR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2VR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2VC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2VC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2VC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2VC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2VR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2VR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2VR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2VR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype, <a class="reference internal" href="../../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Complex&lt;Real&gt;</span></code></a>, is complex with base type
+<cite>Real</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F7colDist7rowDist5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F7colDist7rowDist5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F7colDist7rowDist5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, colDist, rowDist, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F7colDist7rowDist5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F4CIRC4CIRC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F4CIRC4CIRC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F4CIRC4CIRC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4CIRC4CIRC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F2MC2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F2MC2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F2MC2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MC2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F2MC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F2MC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F2MC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F2MD4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F2MD4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F2MD4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MD4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F2MR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F2MR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F2MR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F2MR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F2MR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F2MR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2MD5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2MD5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2MD5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2MD5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2VC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2VC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2VC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2VC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2VR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2VR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2VR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2VR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F2VC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F2VC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F2VC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2VC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI1F2VR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI1F2VR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI1F2VR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;F, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2VR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype, <cite>F</cite>, is a field.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int7colDist7rowDist5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int7colDist7rowDist5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int7colDist7rowDist5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, colDist, rowDist, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int7colDist7rowDist5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int4CIRC4CIRC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int4CIRC4CIRC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int4CIRC4CIRC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4CIRC4CIRC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int2MC2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int2MC2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int2MC2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MC2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int2MC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int2MC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int2MC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int2MD4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int2MD4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int2MD4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MD4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int2MR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int2MR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int2MR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int2MR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int2MR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int2MR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2MC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2MC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2MC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MCE" title="MC">MC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2MC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2MD5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2MD5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2MD5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MDE" title="MD">MD</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2MD5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2MR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2MR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2MR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2MRE" title="MR">MR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2MR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2VC5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2VC5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2VC5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2VC5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2VR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2VR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2VR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2VR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int2VC4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int2VC4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int2VC4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VCE" title="VC">VC</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2VC4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE10DistMatrixI3Int2VR4STAR5BLOCKE">
+<span id="_CPPv3IE10DistMatrixI3Int2VR4STAR5BLOCKE"></span><span id="_CPPv2IE10DistMatrixI3Int2VR4STAR5BLOCKE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist2VRE" title="VR">VR</a>, <a class="reference internal" href="../../environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>, BLOCK&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2VR4STAR5BLOCKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype is a signed integer (of standard size).</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../graph.html" class="btn btn-neutral float-right" title="Graph" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CIRC_CIRC.html" class="btn btn-neutral float-left" title="[CIRC,CIRC]" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

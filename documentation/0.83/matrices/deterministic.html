@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Deterministic &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Random" href="random.html" />
+    <link rel="prev" title="Special matrices" href="../matrices.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="deterministic">
+<h1>Deterministic<a class="headerlink" href="#deterministic" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cauchy">
+<h2>Cauchy<a class="headerlink" href="#cauchy" title="Permalink to this headline">¶</a></h2>
+<p>An <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> is called <em>Cauchy</em> if there exist
+vectors <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i,j} = \frac{1}{\chi_i - \eta_j},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\chi_i\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>’th entry of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(\eta_j\)</span>
+is the <span class="math notranslate nohighlight">\(j\)</span>’th entry of <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv46CauchyR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEE">
+<span id="_CPPv36CauchyR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="_CPPv26CauchyR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="Cauchy__Matrix:F:R.std::vector:F:CR.std::vector:F:CR"></span>void <code class="descname">Cauchy</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>x</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46CauchyR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46CauchyR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEE">
+<span id="_CPPv36CauchyR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="_CPPv26CauchyR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="Cauchy__DistMatrix:F.U.V:R.std::vector:F:CR.std::vector:F:CR"></span>void <code class="descname">Cauchy</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>x</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46CauchyR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate a Cauchy matrix using the defining vectors, <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="cauchy-like">
+<h2>Cauchy-like<a class="headerlink" href="#cauchy-like" title="Permalink to this headline">¶</a></h2>
+<p>An <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> is called <em>Cauchy-like</em> if there exist
+vectors <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(s\)</span>, <span class="math notranslate nohighlight">\(x\)</span>, and <span class="math notranslate nohighlight">\(y\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i,j} = \frac{\rho_i \psi_j}{\chi_i - \eta_j},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho_i\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>’th entry of <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(\psi_j\)</span> is the <span class="math notranslate nohighlight">\(j\)</span>’th
+entry of <span class="math notranslate nohighlight">\(s\)</span>, <span class="math notranslate nohighlight">\(\chi_i\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>’th entry of <span class="math notranslate nohighlight">\(x\)</span>, and <span class="math notranslate nohighlight">\(\eta_j\)</span>
+is the <span class="math notranslate nohighlight">\(j\)</span>’th entry of <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv410CauchyLikeR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE">
+<span id="_CPPv310CauchyLikeR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="_CPPv210CauchyLikeR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="CauchyLike__Matrix:F:R.std::vector:F:CR.std::vector:F:CR.std::vector:F:CR.std::vector:F:CR"></span>void <code class="descname">CauchyLike</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>r</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>s</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>x</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410CauchyLikeR6MatrixI1FERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410CauchyLikeR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE">
+<span id="_CPPv310CauchyLikeR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="_CPPv210CauchyLikeR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE"></span><span id="CauchyLike__DistMatrix:F.U.V:R.std::vector:F:CR.std::vector:F:CR.std::vector:F:CR.std::vector:F:CR"></span>void <code class="descname">CauchyLike</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>r</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>s</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>x</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410CauchyLikeR10DistMatrixI1F1U1VERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEERKNSt6vectorI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate a Cauchy-like matrix using the defining vectors: <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(s\)</span>, <span class="math notranslate nohighlight">\(x\)</span>, and <span class="math notranslate nohighlight">\(y\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="circulant">
+<h2>Circulant<a class="headerlink" href="#circulant" title="Permalink to this headline">¶</a></h2>
+<p>An <span class="math notranslate nohighlight">\(n \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> is called <em>circulant</em> if there exists a vector <span class="math notranslate nohighlight">\(b\)</span>
+such that</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i,j} = \beta_{(i-j) \bmod n},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta_k\)</span> is the <span class="math notranslate nohighlight">\(k\)</span>’th entry of vector <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv49CirculantR6MatrixI1TERKNSt6vectorI1TEE">
+<span id="_CPPv39CirculantR6MatrixI1TERKNSt6vectorI1TEE"></span><span id="_CPPv29CirculantR6MatrixI1TERKNSt6vectorI1TEE"></span><span id="Circulant__Matrix:T:R.std::vector:T:CR"></span>void <code class="descname">Circulant</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49CirculantR6MatrixI1TERKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49CirculantR10DistMatrixI1T1U1VERKNSt6vectorI1TEE">
+<span id="_CPPv39CirculantR10DistMatrixI1T1U1VERKNSt6vectorI1TEE"></span><span id="_CPPv29CirculantR10DistMatrixI1T1U1VERKNSt6vectorI1TEE"></span><span id="Circulant__DistMatrix:T.U.V:R.std::vector:T:CR"></span>void <code class="descname">Circulant</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49CirculantR10DistMatrixI1T1U1VERKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate a circulant matrix using the vector <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="diagonal">
+<h2>Diagonal<a class="headerlink" href="#diagonal" title="Permalink to this headline">¶</a></h2>
+<p>An <span class="math notranslate nohighlight">\(n \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> is called <em>diagonal</em> if each entry <span class="math notranslate nohighlight">\((i,j)\)</span>, where
+<span class="math notranslate nohighlight">\(i \neq j\)</span>, is <span class="math notranslate nohighlight">\(0\)</span>. They are therefore defined by the <em>diagonal</em> values, where
+<span class="math notranslate nohighlight">\(i = j\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv48DiagonalR6MatrixI1TERKNSt6vectorI1TEE">
+<span id="_CPPv38DiagonalR6MatrixI1TERKNSt6vectorI1TEE"></span><span id="_CPPv28DiagonalR6MatrixI1TERKNSt6vectorI1TEE"></span><span id="Diagonal__Matrix:T:R.std::vector:T:CR"></span>void <code class="descname">Diagonal</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>D</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48DiagonalR6MatrixI1TERKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48DiagonalR10DistMatrixI1T1U1VERKNSt6vectorI1TEE">
+<span id="_CPPv38DiagonalR10DistMatrixI1T1U1VERKNSt6vectorI1TEE"></span><span id="_CPPv28DiagonalR10DistMatrixI1T1U1VERKNSt6vectorI1TEE"></span><span id="Diagonal__DistMatrix:T.U.V:R.std::vector:T:CR"></span>void <code class="descname">Diagonal</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>D</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48DiagonalR10DistMatrixI1T1U1VERKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a diagonal matrix from the vector of diagonal values, <span class="math notranslate nohighlight">\(d\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="egorov">
+<h2>Egorov<a class="headerlink" href="#egorov" title="Permalink to this headline">¶</a></h2>
+<p>Sets <span class="math notranslate nohighlight">\(A\)</span> to an <span class="math notranslate nohighlight">\(n \times n\)</span> matrix with the <span class="math notranslate nohighlight">\((i,j)\)</span> entry
+equal to</p>
+<div class="math notranslate nohighlight">
+\[\exp(i \phi(i,j)).\]</div>
+<dl class="function">
+<dt id="_CPPv46EgorovR6MatrixI7ComplexI4RealEERK11RealFunctori">
+<span id="_CPPv36EgorovR6MatrixI7ComplexI4RealEERK11RealFunctori"></span><span id="_CPPv26EgorovR6MatrixI7ComplexI4RealEERK11RealFunctori"></span><span id="Egorov__Matrix:Complex:Real::R.RealFunctorCR.i"></span>void <code class="descname">Egorov</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> RealFunctor &amp;<em>phase</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46EgorovR6MatrixI7ComplexI4RealEERK11RealFunctori" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46EgorovR10DistMatrixI7ComplexI4RealE1U1VERK11RealFunctori">
+<span id="_CPPv36EgorovR10DistMatrixI7ComplexI4RealE1U1VERK11RealFunctori"></span><span id="_CPPv26EgorovR10DistMatrixI7ComplexI4RealE1U1VERK11RealFunctori"></span><span id="Egorov__DistMatrix:Complex:Real:.U.V:R.RealFunctorCR.i"></span>void <code class="descname">Egorov</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealE1U1VE" title="DistMatrix&lt;Complex&lt;Real&gt;, U, V&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> RealFunctor &amp;<em>phase</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46EgorovR10DistMatrixI7ComplexI4RealE1U1VERK11RealFunctori" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="extended-kahan">
+<h2>Extended Kahan<a class="headerlink" href="#extended-kahan" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv413ExtendedKahanR6MatrixI1FEi4BaseI1FE4BaseI1FE">
+<span id="_CPPv313ExtendedKahanR6MatrixI1FEi4BaseI1FE4BaseI1FE"></span><span id="_CPPv213ExtendedKahanR6MatrixI1FEi4BaseI1FE4BaseI1FE"></span><span id="ExtendedKahan__Matrix:F:R.i.Base:F:.Base:F:"></span>void <code class="descname">ExtendedKahan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>k</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>phi</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>mu</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413ExtendedKahanR6MatrixI1FEi4BaseI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413ExtendedKahanR10DistMatrixI1F1U1VEi4BaseI1FE4BaseI1FE">
+<span id="_CPPv313ExtendedKahanR10DistMatrixI1F1U1VEi4BaseI1FE4BaseI1FE"></span><span id="_CPPv213ExtendedKahanR10DistMatrixI1F1U1VEi4BaseI1FE4BaseI1FE"></span><span id="ExtendedKahan__DistMatrix:F.U.V:R.i.Base:F:.Base:F:"></span>void <code class="descname">ExtendedKahan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, int <em>k</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>phi</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>mu</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413ExtendedKahanR10DistMatrixI1F1U1VEi4BaseI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="fiedler">
+<h2>Fiedler<a class="headerlink" href="#fiedler" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv47FiedlerR6MatrixI1FERKNSt6vectorI1FEE">
+<span id="_CPPv37FiedlerR6MatrixI1FERKNSt6vectorI1FEE"></span><span id="_CPPv27FiedlerR6MatrixI1FERKNSt6vectorI1FEE"></span><span id="Fiedler__Matrix:F:R.std::vector:F:CR"></span>void <code class="descname">Fiedler</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47FiedlerR6MatrixI1FERKNSt6vectorI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47FiedlerR10DistMatrixI1F1U1VERKNSt6vectorI1FEE">
+<span id="_CPPv37FiedlerR10DistMatrixI1F1U1VERKNSt6vectorI1FEE"></span><span id="_CPPv27FiedlerR10DistMatrixI1F1U1VERKNSt6vectorI1FEE"></span><span id="Fiedler__DistMatrix:F.U.V:R.std::vector:F:CR"></span>void <code class="descname">Fiedler</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> std::vector&lt;F&gt; &amp;<em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47FiedlerR10DistMatrixI1F1U1VERKNSt6vectorI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="forsythe">
+<h2>Forsythe<a class="headerlink" href="#forsythe" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv48ForsytheR6MatrixI1TEi1T1T">
+<span id="_CPPv38ForsytheR6MatrixI1TEi1T1T"></span><span id="_CPPv28ForsytheR6MatrixI1TEi1T1T"></span><span id="Forsythe__Matrix:T:R.i.T.T"></span>void <code class="descname">Forsythe</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>J</em>, int <em>n</em>, T <em>alpha</em>, T <em>lambda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ForsytheR6MatrixI1TEi1T1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48ForsytheR10DistMatrixI1T1U1VEi1T1T">
+<span id="_CPPv38ForsytheR10DistMatrixI1T1U1VEi1T1T"></span><span id="_CPPv28ForsytheR10DistMatrixI1T1U1VEi1T1T"></span><span id="Forsythe__DistMatrix:T.U.V:R.i.T.T"></span>void <code class="descname">Forsythe</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>J</em>, int <em>n</em>, T <em>alpha</em>, T <em>lambda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ForsytheR10DistMatrixI1T1U1VEi1T1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="fourier">
+<h2>Fourier<a class="headerlink" href="#fourier" title="Permalink to this headline">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\(n \times n\)</span> <em>Discrete Fourier Transform</em> (DFT) matrix, say <span class="math notranslate nohighlight">\(A\)</span>, is given by</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i,j} = \frac{e^{-2\pi i j / n}}{\sqrt{n}}.\]</div>
+<dl class="function">
+<dt id="_CPPv47FourierR6MatrixI7ComplexI4RealEEi">
+<span id="_CPPv37FourierR6MatrixI7ComplexI4RealEEi"></span><span id="_CPPv27FourierR6MatrixI7ComplexI4RealEEi"></span><span id="Fourier__Matrix:Complex:Real::R.i"></span>void <code class="descname">Fourier</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47FourierR6MatrixI7ComplexI4RealEEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47FourierR10DistMatrixI7ComplexI4RealE1U1VEi">
+<span id="_CPPv37FourierR10DistMatrixI7ComplexI4RealE1U1VEi"></span><span id="_CPPv27FourierR10DistMatrixI7ComplexI4RealE1U1VEi"></span><span id="Fourier__DistMatrix:Complex:Real:.U.V:R.i"></span>void <code class="descname">Fourier</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealE1U1VE" title="DistMatrix&lt;Complex&lt;Real&gt;, U, V&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, U, V&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47FourierR10DistMatrixI7ComplexI4RealE1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> equal to the <span class="math notranslate nohighlight">\(n \times n\)</span> DFT matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411MakeFourierR6MatrixI7ComplexI4RealEE">
+<span id="_CPPv311MakeFourierR6MatrixI7ComplexI4RealEE"></span><span id="_CPPv211MakeFourierR6MatrixI7ComplexI4RealEE"></span><span id="MakeFourier__Matrix:Complex:Real::R"></span>void <code class="descname">MakeFourier</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411MakeFourierR6MatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411MakeFourierR10DistMatrixI7ComplexI4RealE1U1VE">
+<span id="_CPPv311MakeFourierR10DistMatrixI7ComplexI4RealE1U1VE"></span><span id="_CPPv211MakeFourierR10DistMatrixI7ComplexI4RealE1U1VE"></span><span id="MakeFourier__DistMatrix:Complex:Real:.U.V:R"></span>void <code class="descname">MakeFourier</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealE1U1VE" title="DistMatrix&lt;Complex&lt;Real&gt;, U, V&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, U, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411MakeFourierR10DistMatrixI7ComplexI4RealE1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Turn the existing <span class="math notranslate nohighlight">\(n \times n\)</span> matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> into a DFT matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="gcdmatrix">
+<h2>GCDMatrix<a class="headerlink" href="#gcdmatrix" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv49GCDMatrixR6MatrixI1TEii">
+<span id="_CPPv39GCDMatrixR6MatrixI1TEii"></span><span id="_CPPv29GCDMatrixR6MatrixI1TEii"></span><span id="GCDMatrix__Matrix:T:R.i.i"></span>void <code class="descname">GCDMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>G</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49GCDMatrixR6MatrixI1TEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49GCDMatrixR10DistMatrixI1T1U1VEii">
+<span id="_CPPv39GCDMatrixR10DistMatrixI1T1U1VEii"></span><span id="_CPPv29GCDMatrixR10DistMatrixI1T1U1VEii"></span><span id="GCDMatrix__DistMatrix:T.U.V:R.i.i"></span>void <code class="descname">GCDMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>G</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49GCDMatrixR10DistMatrixI1T1U1VEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="gear">
+<h2>Gear<a class="headerlink" href="#gear" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv44GearR6MatrixI1TEiii">
+<span id="_CPPv34GearR6MatrixI1TEiii"></span><span id="_CPPv24GearR6MatrixI1TEiii"></span><span id="Gear__Matrix:T:R.i.i.i"></span>void <code class="descname">Gear</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>G</em>, int <em>n</em>, int <em>s</em>, int <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44GearR6MatrixI1TEiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44GearR10DistMatrixI1T1U1VEiii">
+<span id="_CPPv34GearR10DistMatrixI1T1U1VEiii"></span><span id="_CPPv24GearR10DistMatrixI1T1U1VEiii"></span><span id="Gear__DistMatrix:T.U.V:R.i.i.i"></span>void <code class="descname">Gear</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>G</em>, int <em>n</em>, int <em>s</em>, int <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44GearR10DistMatrixI1T1U1VEiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="golub-klema-stewart">
+<h2>Golub/Klema/Stewart<a class="headerlink" href="#golub-klema-stewart" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv43GKSR6MatrixI1FEi">
+<span id="_CPPv33GKSR6MatrixI1FEi"></span><span id="_CPPv23GKSR6MatrixI1FEi"></span><span id="GKS__Matrix:F:R.i"></span>void <code class="descname">GKS</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GKSR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43GKSR10DistMatrixI1F1U1VEi">
+<span id="_CPPv33GKSR10DistMatrixI1F1U1VEi"></span><span id="_CPPv23GKSR10DistMatrixI1F1U1VEi"></span><span id="GKS__DistMatrix:F.U.V:R.i"></span>void <code class="descname">GKS</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GKSR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="grcar">
+<h2>Grcar<a class="headerlink" href="#grcar" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv45GrcarR6MatrixI1TEii">
+<span id="_CPPv35GrcarR6MatrixI1TEii"></span><span id="_CPPv25GrcarR6MatrixI1TEii"></span><span id="Grcar__Matrix:T:R.i.i"></span>void <code class="descname">Grcar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>n</em>, int <em>k</em> = 3<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45GrcarR6MatrixI1TEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45GrcarR10DistMatrixI1T1U1VEii">
+<span id="_CPPv35GrcarR10DistMatrixI1T1U1VEii"></span><span id="_CPPv25GrcarR10DistMatrixI1T1U1VEii"></span><span id="Grcar__DistMatrix:T.U.V:R.i.i"></span>void <code class="descname">Grcar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>n</em>, int <em>k</em> = 3<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45GrcarR10DistMatrixI1T1U1VEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="hankel">
+<h2>Hankel<a class="headerlink" href="#hankel" title="Permalink to this headline">¶</a></h2>
+<p>An <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> is called a <em>Hankel matrix</em> if there
+exists a vector <span class="math notranslate nohighlight">\(b\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i,j} = \beta_{i+j},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha_{i,j}\)</span> is the <span class="math notranslate nohighlight">\((i,j)\)</span> entry of <span class="math notranslate nohighlight">\(A\)</span> and
+<span class="math notranslate nohighlight">\(\beta_k\)</span> is the <span class="math notranslate nohighlight">\(k\)</span>’th entry of the vector <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv46HankelR6MatrixI1TEiiRKNSt6vectorI1TEE">
+<span id="_CPPv36HankelR6MatrixI1TEiiRKNSt6vectorI1TEE"></span><span id="_CPPv26HankelR6MatrixI1TEiiRKNSt6vectorI1TEE"></span><span id="Hankel__Matrix:T:R.i.i.std::vector:T:CR"></span>void <code class="descname">Hankel</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46HankelR6MatrixI1TEiiRKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46HankelR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE">
+<span id="_CPPv36HankelR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE"></span><span id="_CPPv26HankelR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE"></span><span id="Hankel__DistMatrix:T.U.V:R.i.i.std::vector:T:CR"></span>void <code class="descname">Hankel</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46HankelR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create an <span class="math notranslate nohighlight">\(m \times n\)</span> Hankel matrix from the generate vector,
+<span class="math notranslate nohighlight">\(b\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hanowa">
+<h2>Hanowa<a class="headerlink" href="#hanowa" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv46HanowaR6MatrixI1TEi1T">
+<span id="_CPPv36HanowaR6MatrixI1TEi1T"></span><span id="_CPPv26HanowaR6MatrixI1TEi1T"></span><span id="Hanowa__Matrix:T:R.i.T"></span>void <code class="descname">Hanowa</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>n</em>, T <em>mu</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46HanowaR6MatrixI1TEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46HanowaR10DistMatrixI1T1U1VEi1T">
+<span id="_CPPv36HanowaR10DistMatrixI1T1U1VEi1T"></span><span id="_CPPv26HanowaR10DistMatrixI1T1U1VEi1T"></span><span id="Hanowa__DistMatrix:T.U.V:R.i.T"></span>void <code class="descname">Hanowa</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>n</em>, T <em>mu</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46HanowaR10DistMatrixI1T1U1VEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="helmholtz">
+<h2>Helmholtz<a class="headerlink" href="#helmholtz" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv49HelmholtzR6MatrixI1FEi1F">
+<span id="_CPPv39HelmholtzR6MatrixI1FEi1F"></span><span id="_CPPv29HelmholtzR6MatrixI1FEi1F"></span><span id="Helmholtz__Matrix:F:R.i.F"></span>void <code class="descname">Helmholtz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, int <em>n</em>, F <em>shift</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49HelmholtzR6MatrixI1FEi1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49HelmholtzR10DistMatrixI1F1U1VEi1F">
+<span id="_CPPv39HelmholtzR10DistMatrixI1F1U1VEi1F"></span><span id="_CPPv29HelmholtzR10DistMatrixI1F1U1VEi1F"></span><span id="Helmholtz__DistMatrix:F.U.V:R.i.F"></span>void <code class="descname">Helmholtz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>H</em>, int <em>n</em>, F <em>shift</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49HelmholtzR10DistMatrixI1F1U1VEi1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>1D Helmholtz: <strong>TODO</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49HelmholtzR6MatrixI1FEii1F">
+<span id="_CPPv39HelmholtzR6MatrixI1FEii1F"></span><span id="_CPPv29HelmholtzR6MatrixI1FEii1F"></span><span id="Helmholtz__Matrix:F:R.i.i.F"></span>void <code class="descname">Helmholtz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, int <em>nx</em>, int <em>ny</em>, F <em>shift</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49HelmholtzR6MatrixI1FEii1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49HelmholtzR10DistMatrixI1F1U1VEii1F">
+<span id="_CPPv39HelmholtzR10DistMatrixI1F1U1VEii1F"></span><span id="_CPPv29HelmholtzR10DistMatrixI1F1U1VEii1F"></span><span id="Helmholtz__DistMatrix:F.U.V:R.i.i.F"></span>void <code class="descname">Helmholtz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>H</em>, int <em>nx</em>, int <em>ny</em>, F <em>shift</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49HelmholtzR10DistMatrixI1F1U1VEii1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>2D Helmholtz: <strong>TODO</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49HelmholtzR6MatrixI1FEiii1F">
+<span id="_CPPv39HelmholtzR6MatrixI1FEiii1F"></span><span id="_CPPv29HelmholtzR6MatrixI1FEiii1F"></span><span id="Helmholtz__Matrix:F:R.i.i.i.F"></span>void <code class="descname">Helmholtz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, int <em>nx</em>, int <em>ny</em>, int <em>nz</em>, F <em>shift</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49HelmholtzR6MatrixI1FEiii1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49HelmholtzR10DistMatrixI1F1U1VEiii1F">
+<span id="_CPPv39HelmholtzR10DistMatrixI1F1U1VEiii1F"></span><span id="_CPPv29HelmholtzR10DistMatrixI1F1U1VEiii1F"></span><span id="Helmholtz__DistMatrix:F.U.V:R.i.i.i.F"></span>void <code class="descname">Helmholtz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>H</em>, int <em>nx</em>, int <em>ny</em>, int <em>nz</em>, F <em>shift</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49HelmholtzR10DistMatrixI1F1U1VEiii1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>3D Helmholtz: <strong>TODO</strong></p>
+</dd></dl>
+
+</div>
+<div class="section" id="hilbert">
+<h2>Hilbert<a class="headerlink" href="#hilbert" title="Permalink to this headline">¶</a></h2>
+<p>The Hilbert matrix of order <span class="math notranslate nohighlight">\(n\)</span> is the <span class="math notranslate nohighlight">\(n \times n\)</span> matrix where
+entry <span class="math notranslate nohighlight">\((i,j)\)</span> is equal to <span class="math notranslate nohighlight">\(1/(i+j+1)\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv47HilbertR6MatrixI1FEi">
+<span id="_CPPv37HilbertR6MatrixI1FEi"></span><span id="_CPPv27HilbertR6MatrixI1FEi"></span><span id="Hilbert__Matrix:F:R.i"></span>void <code class="descname">Hilbert</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47HilbertR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47HilbertR10DistMatrixI1F1U1VEi">
+<span id="_CPPv37HilbertR10DistMatrixI1F1U1VEi"></span><span id="_CPPv27HilbertR10DistMatrixI1F1U1VEi"></span><span id="Hilbert__DistMatrix:F.U.V:R.i"></span>void <code class="descname">Hilbert</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47HilbertR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate the <span class="math notranslate nohighlight">\(n \times n\)</span> Hilbert matrix <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411MakeHilbertR6MatrixI1FE">
+<span id="_CPPv311MakeHilbertR6MatrixI1FE"></span><span id="_CPPv211MakeHilbertR6MatrixI1FE"></span><span id="MakeHilbert__Matrix:F:R"></span>void <code class="descname">MakeHilbert</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411MakeHilbertR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411MakeHilbertR10DistMatrixI1F1U1VE">
+<span id="_CPPv311MakeHilbertR10DistMatrixI1F1U1VE"></span><span id="_CPPv211MakeHilbertR10DistMatrixI1F1U1VE"></span><span id="MakeHilbert__DistMatrix:F.U.V:R"></span>void <code class="descname">MakeHilbert</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411MakeHilbertR10DistMatrixI1F1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Turn the square matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> into a Hilbert matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hermitianfromevd">
+<h2>HermitianFromEVD<a class="headerlink" href="#hermitianfromevd" title="Permalink to this headline">¶</a></h2>
+<p>Form</p>
+<div class="math notranslate nohighlight">
+\[A := Z \Omega Z^H,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Omega\)</span> is a real diagonal matrix.</p>
+<dl class="function">
+<dt id="_CPPv416HermitianFromEVD12UpperOrLowerR6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FE">
+<span id="_CPPv316HermitianFromEVD12UpperOrLowerR6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FE"></span><span id="_CPPv216HermitianFromEVD12UpperOrLowerR6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FE"></span><span id="HermitianFromEVD__UpperOrLower.Matrix:F:R.Matrix:Base:F::CR.Matrix:F:CR"></span>void <code class="descname">HermitianFromEVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianFromEVD12UpperOrLowerR6MatrixI1FERK6MatrixI4BaseI1FEERK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianFromEVD12UpperOrLowerR10DistMatrixI1FERK10DistMatrixI4BaseI1FE2VR4STARERK10DistMatrixI1FE">
+<span id="_CPPv316HermitianFromEVD12UpperOrLowerR10DistMatrixI1FERK10DistMatrixI4BaseI1FE2VR4STARERK10DistMatrixI1FE"></span><span id="_CPPv216HermitianFromEVD12UpperOrLowerR10DistMatrixI1FERK10DistMatrixI4BaseI1FE2VR4STARERK10DistMatrixI1FE"></span><span id="HermitianFromEVD__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:CR.DistMatrix:F:CR"></span>void <code class="descname">HermitianFromEVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianFromEVD12UpperOrLowerR10DistMatrixI1FERK10DistMatrixI4BaseI1FE2VR4STARERK10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The diagonal entries of <span class="math notranslate nohighlight">\(\Omega\)</span> are given by the vector <span class="math notranslate nohighlight">\(w\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="identity">
+<h2>Identity<a class="headerlink" href="#identity" title="Permalink to this headline">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\(n \times n\)</span> <em>identity matrix</em> is simply defined by setting entry
+<span class="math notranslate nohighlight">\((i,j)\)</span> to one if <span class="math notranslate nohighlight">\(i = j\)</span>, and zero otherwise. For various
+reasons, we generalize this definition to nonsquare, <span class="math notranslate nohighlight">\(m \times n\)</span>,
+matrices.</p>
+<dl class="function">
+<dt id="_CPPv48IdentityR6MatrixI1TEii">
+<span id="_CPPv38IdentityR6MatrixI1TEii"></span><span id="_CPPv28IdentityR6MatrixI1TEii"></span><span id="Identity__Matrix:T:R.i.i"></span>void <code class="descname">Identity</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48IdentityR6MatrixI1TEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48IdentityR10DistMatrixI1T1U1VEii">
+<span id="_CPPv38IdentityR10DistMatrixI1T1U1VEii"></span><span id="_CPPv28IdentityR10DistMatrixI1T1U1VEii"></span><span id="Identity__DistMatrix:T.U.V:R.i.i"></span>void <code class="descname">Identity</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48IdentityR10DistMatrixI1T1U1VEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> equal to the <span class="math notranslate nohighlight">\(m \times n\)</span> identity(-like) matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412MakeIdentityR6MatrixI1TE">
+<span id="_CPPv312MakeIdentityR6MatrixI1TE"></span><span id="_CPPv212MakeIdentityR6MatrixI1TE"></span><span id="MakeIdentity__Matrix:T:R"></span>void <code class="descname">MakeIdentity</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412MakeIdentityR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412MakeIdentityR10DistMatrixI1T1U1VE">
+<span id="_CPPv312MakeIdentityR10DistMatrixI1T1U1VE"></span><span id="_CPPv212MakeIdentityR10DistMatrixI1T1U1VE"></span><span id="MakeIdentity__DistMatrix:T.U.V:R"></span>void <code class="descname">MakeIdentity</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412MakeIdentityR10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> to be identity-like.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="jordan">
+<h2>Jordan<a class="headerlink" href="#jordan" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv46JordanR6MatrixI1TEi1T">
+<span id="_CPPv36JordanR6MatrixI1TEi1T"></span><span id="_CPPv26JordanR6MatrixI1TEi1T"></span><span id="Jordan__Matrix:T:R.i.T"></span>void <code class="descname">Jordan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>J</em>, int <em>n</em>, T <em>lambda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46JordanR6MatrixI1TEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46JordanR10DistMatrixI1T1U1VEi1T">
+<span id="_CPPv36JordanR10DistMatrixI1T1U1VEi1T"></span><span id="_CPPv26JordanR10DistMatrixI1T1U1VEi1T"></span><span id="Jordan__DistMatrix:T.U.V:R.i.T"></span>void <code class="descname">Jordan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>J</em>, int <em>n</em>, T <em>lambda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46JordanR10DistMatrixI1T1U1VEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="kahan">
+<h2>Kahan<a class="headerlink" href="#kahan" title="Permalink to this headline">¶</a></h2>
+<p>For any pair <span class="math notranslate nohighlight">\((\phi,\zeta)\)</span> such that <span class="math notranslate nohighlight">\(|\phi|^2+|\zeta|^2=1\)</span>,
+the corresponding <span class="math notranslate nohighlight">\(n \times n\)</span> Kahan matrix is given by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}K = \text{diag}(1,\phi,\ldots,\phi^{n-1}) \begin{pmatrix}
+1      &amp; -\zeta &amp; -\zeta &amp; \cdots &amp; -\zeta \\
+0      &amp; 1      &amp; -\zeta &amp; \cdots &amp; -\zeta \\
+       &amp; \ddots &amp;        &amp; \vdots &amp; \vdots \\
+\vdots &amp;        &amp;        &amp; 1      &amp; -\zeta \\
+0      &amp;        &amp; \cdots &amp;        &amp; 1 \end{pmatrix}\end{split}\]</div>
+<dl class="function">
+<dt id="_CPPv45KahanR6MatrixI1FEi1F">
+<span id="_CPPv35KahanR6MatrixI1FEi1F"></span><span id="_CPPv25KahanR6MatrixI1FEi1F"></span><span id="Kahan__Matrix:F:R.i.F"></span>void <code class="descname">Kahan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>n</em>, F <em>phi</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45KahanR6MatrixI1FEi1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45KahanR10DistMatrixI1FEi1F">
+<span id="_CPPv35KahanR10DistMatrixI1FEi1F"></span><span id="_CPPv25KahanR10DistMatrixI1FEi1F"></span><span id="Kahan__DistMatrix:F:R.i.F"></span>void <code class="descname">Kahan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>n</em>, F <em>phi</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45KahanR10DistMatrixI1FEi1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> equal to the <span class="math notranslate nohighlight">\(n \times n\)</span> Kahan matrix with
+the specified value for <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="kms">
+<h2>KMS<a class="headerlink" href="#kms" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv43KMSR6MatrixI1TEi1T">
+<span id="_CPPv33KMSR6MatrixI1TEi1T"></span><span id="_CPPv23KMSR6MatrixI1TEi1T"></span><span id="KMS__Matrix:T:R.i.T"></span>void <code class="descname">KMS</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>K</em>, int <em>n</em>, T <em>rho</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43KMSR6MatrixI1TEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43KMSR10DistMatrixI1T1U1VEi1T">
+<span id="_CPPv33KMSR10DistMatrixI1T1U1VEi1T"></span><span id="_CPPv23KMSR10DistMatrixI1T1U1VEi1T"></span><span id="KMS__DistMatrix:T.U.V:R.i.T"></span>void <code class="descname">KMS</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>K</em>, int <em>n</em>, T <em>rho</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43KMSR10DistMatrixI1T1U1VEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="laplacian">
+<h2>Laplacian<a class="headerlink" href="#laplacian" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv49LaplacianR6MatrixI1FEi">
+<span id="_CPPv39LaplacianR6MatrixI1FEi"></span><span id="_CPPv29LaplacianR6MatrixI1FEi"></span><span id="Laplacian__Matrix:F:R.i"></span>void <code class="descname">Laplacian</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>L</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LaplacianR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49LaplacianR10DistMatrixI1F1U1VEi">
+<span id="_CPPv39LaplacianR10DistMatrixI1F1U1VEi"></span><span id="_CPPv29LaplacianR10DistMatrixI1F1U1VEi"></span><span id="Laplacian__DistMatrix:F.U.V:R.i"></span>void <code class="descname">Laplacian</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>L</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LaplacianR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>1D Laplacian: <strong>TODO</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49LaplacianR6MatrixI1FEii">
+<span id="_CPPv39LaplacianR6MatrixI1FEii"></span><span id="_CPPv29LaplacianR6MatrixI1FEii"></span><span id="Laplacian__Matrix:F:R.i.i"></span>void <code class="descname">Laplacian</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>L</em>, int <em>nx</em>, int <em>ny</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LaplacianR6MatrixI1FEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49LaplacianR10DistMatrixI1F1U1VEii">
+<span id="_CPPv39LaplacianR10DistMatrixI1F1U1VEii"></span><span id="_CPPv29LaplacianR10DistMatrixI1F1U1VEii"></span><span id="Laplacian__DistMatrix:F.U.V:R.i.i"></span>void <code class="descname">Laplacian</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>L</em>, int <em>nx</em>, int <em>ny</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LaplacianR10DistMatrixI1F1U1VEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>2D Laplacian: <strong>TODO</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49LaplacianR6MatrixI1FEiii">
+<span id="_CPPv39LaplacianR6MatrixI1FEiii"></span><span id="_CPPv29LaplacianR6MatrixI1FEiii"></span><span id="Laplacian__Matrix:F:R.i.i.i"></span>void <code class="descname">Laplacian</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>L</em>, int <em>nx</em>, int <em>ny</em>, int <em>nz</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LaplacianR6MatrixI1FEiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49LaplacianR10DistMatrixI1F1U1VEiii">
+<span id="_CPPv39LaplacianR10DistMatrixI1F1U1VEiii"></span><span id="_CPPv29LaplacianR10DistMatrixI1F1U1VEiii"></span><span id="Laplacian__DistMatrix:F.U.V:R.i.i.i"></span>void <code class="descname">Laplacian</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>L</em>, int <em>nx</em>, int <em>ny</em>, int <em>nz</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LaplacianR10DistMatrixI1F1U1VEiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>3D Laplacian: <strong>TODO</strong></p>
+</dd></dl>
+
+</div>
+<div class="section" id="lauchli">
+<h2>Lauchli<a class="headerlink" href="#lauchli" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv47LauchliR6MatrixI1TEi1T">
+<span id="_CPPv37LauchliR6MatrixI1TEi1T"></span><span id="_CPPv27LauchliR6MatrixI1TEi1T"></span><span id="Lauchli__Matrix:T:R.i.T"></span>void <code class="descname">Lauchli</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>n</em>, T <em>mu</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47LauchliR6MatrixI1TEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47LauchliR10DistMatrixI1T1U1VEi1T">
+<span id="_CPPv37LauchliR10DistMatrixI1T1U1VEi1T"></span><span id="_CPPv27LauchliR10DistMatrixI1T1U1VEi1T"></span><span id="Lauchli__DistMatrix:T.U.V:R.i.T"></span>void <code class="descname">Lauchli</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>n</em>, T <em>mu</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47LauchliR10DistMatrixI1T1U1VEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="legendre">
+<h2>Legendre<a class="headerlink" href="#legendre" title="Permalink to this headline">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\(n \times n\)</span> tridiagonal Jacobi matrix associated with the Legendre
+polynomials. Its main diagonal is zero, and the off-diagonal terms are given
+by</p>
+<div class="math notranslate nohighlight">
+\[\beta_j = \frac{1}{2}\left(1-(2(j+1))^{-2}\right)^{-1/2},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta_j\)</span> connects the <span class="math notranslate nohighlight">\(j\)</span>’th degree of freedom to the
+<span class="math notranslate nohighlight">\(j+1\)</span>’th degree of freedom, counting from zero.
+The eigenvalues of this matrix lie in <span class="math notranslate nohighlight">\([-1,1]\)</span> and are the locations for
+Gaussian quadrature of order <span class="math notranslate nohighlight">\(n\)</span>. The corresponding weights may be found
+by doubling the square of the first entry of the corresponding normalized
+eigenvector.</p>
+<dl class="function">
+<dt id="_CPPv48LegendreR6MatrixI1FEi">
+<span id="_CPPv38LegendreR6MatrixI1FEi"></span><span id="_CPPv28LegendreR6MatrixI1FEi"></span><span id="Legendre__Matrix:F:R.i"></span>void <code class="descname">Legendre</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48LegendreR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48LegendreR10DistMatrixI1F1U1VEi">
+<span id="_CPPv38LegendreR10DistMatrixI1F1U1VEi"></span><span id="_CPPv28LegendreR10DistMatrixI1F1U1VEi"></span><span id="Legendre__DistMatrix:F.U.V:R.i"></span>void <code class="descname">Legendre</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48LegendreR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> equal to the <span class="math notranslate nohighlight">\(n \times n\)</span> Jacobi matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="lehmer">
+<h2>Lehmer<a class="headerlink" href="#lehmer" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv46LehmerR6MatrixI1FEi">
+<span id="_CPPv36LehmerR6MatrixI1FEi"></span><span id="_CPPv26LehmerR6MatrixI1FEi"></span><span id="Lehmer__Matrix:F:R.i"></span>void <code class="descname">Lehmer</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>L</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46LehmerR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46LehmerR10DistMatrixI1F1U1VEi">
+<span id="_CPPv36LehmerR10DistMatrixI1F1U1VEi"></span><span id="_CPPv26LehmerR10DistMatrixI1F1U1VEi"></span><span id="Lehmer__DistMatrix:F.U.V:R.i"></span>void <code class="descname">Lehmer</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>L</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46LehmerR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="lotkin">
+<h2>Lotkin<a class="headerlink" href="#lotkin" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv46LotkinR6MatrixI1FEi">
+<span id="_CPPv36LotkinR6MatrixI1FEi"></span><span id="_CPPv26LotkinR6MatrixI1FEi"></span><span id="Lotkin__Matrix:F:R.i"></span>void <code class="descname">Lotkin</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46LotkinR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46LotkinR10DistMatrixI1F1U1VEi">
+<span id="_CPPv36LotkinR10DistMatrixI1F1U1VEi"></span><span id="_CPPv26LotkinR10DistMatrixI1F1U1VEi"></span><span id="Lotkin__DistMatrix:F.U.V:R.i"></span>void <code class="descname">Lotkin</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46LotkinR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="minij">
+<h2>MinIJ<a class="headerlink" href="#minij" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv45MinIJR6MatrixI1TEi">
+<span id="_CPPv35MinIJR6MatrixI1TEi"></span><span id="_CPPv25MinIJR6MatrixI1TEi"></span><span id="MinIJ__Matrix:T:R.i"></span>void <code class="descname">MinIJ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>M</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45MinIJR6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45MinIJR10DistMatrixI1T1U1VEi">
+<span id="_CPPv35MinIJR10DistMatrixI1T1U1VEi"></span><span id="_CPPv25MinIJR10DistMatrixI1T1U1VEi"></span><span id="MinIJ__DistMatrix:T.U.V:R.i"></span>void <code class="descname">MinIJ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>M</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45MinIJR10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="normalfromevd">
+<h2>NormalFromEVD<a class="headerlink" href="#normalfromevd" title="Permalink to this headline">¶</a></h2>
+<p>Form</p>
+<div class="math notranslate nohighlight">
+\[A := Z \Omega Z^H,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Omega\)</span> is a complex diagonal matrix.</p>
+<dl class="function">
+<dt id="_CPPv413NormalFromEVDR6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEE">
+<span id="_CPPv313NormalFromEVDR6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEE"></span><span id="_CPPv213NormalFromEVDR6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEE"></span><span id="NormalFromEVD__Matrix:Complex:Real::R.Matrix:Complex:Real::CR.Matrix:Complex:Real::CR"></span>void <code class="descname">NormalFromEVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>w</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413NormalFromEVDR6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413NormalFromEVDR10DistMatrixI7ComplexI4RealEERK10DistMatrixI7ComplexI4RealE2VR4STARERK10DistMatrixI7ComplexI4RealEE">
+<span id="_CPPv313NormalFromEVDR10DistMatrixI7ComplexI4RealEERK10DistMatrixI7ComplexI4RealE2VR4STARERK10DistMatrixI7ComplexI4RealEE"></span><span id="_CPPv213NormalFromEVDR10DistMatrixI7ComplexI4RealEERK10DistMatrixI7ComplexI4RealE2VR4STARERK10DistMatrixI7ComplexI4RealEE"></span><span id="NormalFromEVD__DistMatrix:Complex:Real::R.DistMatrix:Complex:Real:.VR.STAR:CR.DistMatrix:Complex:Real::CR"></span>void <code class="descname">NormalFromEVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealEE" title="DistMatrix&lt;Complex&lt;Real&gt;&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealE2VR4STARE" title="DistMatrix&lt;Complex&lt;Real&gt;, VR, STAR&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealEE" title="DistMatrix&lt;Complex&lt;Real&gt;&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413NormalFromEVDR10DistMatrixI7ComplexI4RealEERK10DistMatrixI7ComplexI4RealE2VR4STARERK10DistMatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The diagonal entries of <span class="math notranslate nohighlight">\(\Omega\)</span> are given by the vector <span class="math notranslate nohighlight">\(w\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="ones">
+<h2>Ones<a class="headerlink" href="#ones" title="Permalink to this headline">¶</a></h2>
+<p>Create an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix of all ones.</p>
+<dl class="function">
+<dt id="_CPPv44OnesR6MatrixI1TEii">
+<span id="_CPPv34OnesR6MatrixI1TEii"></span><span id="_CPPv24OnesR6MatrixI1TEii"></span><span id="Ones__Matrix:T:R.i.i"></span>void <code class="descname">Ones</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44OnesR6MatrixI1TEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44OnesR10DistMatrixI1T1U1VEii">
+<span id="_CPPv34OnesR10DistMatrixI1T1U1VEii"></span><span id="_CPPv24OnesR10DistMatrixI1T1U1VEii"></span><span id="Ones__DistMatrix:T.U.V:R.i.i"></span>void <code class="descname">Ones</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44OnesR10DistMatrixI1T1U1VEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> to be an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix of all ones.</p>
+</dd></dl>
+
+<p>Change all entries of the matrix <span class="math notranslate nohighlight">\(A\)</span> to one.</p>
+<dl class="function">
+<dt id="_CPPv48MakeOnesR6MatrixI1TE">
+<span id="_CPPv38MakeOnesR6MatrixI1TE"></span><span id="_CPPv28MakeOnesR6MatrixI1TE"></span><span id="MakeOnes__Matrix:T:R"></span>void <code class="descname">MakeOnes</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48MakeOnesR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48MakeOnesR10DistMatrixI1T1U1VE">
+<span id="_CPPv38MakeOnesR10DistMatrixI1T1U1VE"></span><span id="_CPPv28MakeOnesR10DistMatrixI1T1U1VE"></span><span id="MakeOnes__DistMatrix:T.U.V:R"></span>void <code class="descname">MakeOnes</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48MakeOnesR10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the entries of the matrix to ones.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="onetwoone">
+<h2>OneTwoOne<a class="headerlink" href="#onetwoone" title="Permalink to this headline">¶</a></h2>
+<p>A “1-2-1” matrix is tridiagonal with a diagonal of all twos and sub- and
+super-diagonals of all ones.</p>
+<dl class="function">
+<dt id="_CPPv49OneTwoOneR6MatrixI1TEi">
+<span id="_CPPv39OneTwoOneR6MatrixI1TEi"></span><span id="_CPPv29OneTwoOneR6MatrixI1TEi"></span><span id="OneTwoOne__Matrix:T:R.i"></span>void <code class="descname">OneTwoOne</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49OneTwoOneR6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49OneTwoOneR10DistMatrixI1T1U1VEi">
+<span id="_CPPv39OneTwoOneR10DistMatrixI1T1U1VEi"></span><span id="_CPPv29OneTwoOneR10DistMatrixI1T1U1VEi"></span><span id="OneTwoOne__DistMatrix:T.U.V:R.i"></span>void <code class="descname">OneTwoOne</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49OneTwoOneR10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set <code class="docutils literal notranslate"><span class="pre">A</span></code> to a <span class="math notranslate nohighlight">\(n \times n\)</span> “1-2-1” matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413MakeOneTwoOneR6MatrixI1TE">
+<span id="_CPPv313MakeOneTwoOneR6MatrixI1TE"></span><span id="_CPPv213MakeOneTwoOneR6MatrixI1TE"></span><span id="MakeOneTwoOne__Matrix:T:R"></span>void <code class="descname">MakeOneTwoOne</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413MakeOneTwoOneR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413MakeOneTwoOneR10DistMatrixI1T1U1VE">
+<span id="_CPPv313MakeOneTwoOneR10DistMatrixI1T1U1VE"></span><span id="_CPPv213MakeOneTwoOneR10DistMatrixI1T1U1VE"></span><span id="MakeOneTwoOne__DistMatrix:T.U.V:R"></span>void <code class="descname">MakeOneTwoOne</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413MakeOneTwoOneR10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Modify the entries of the square matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> to be “1-2-1”.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="parter">
+<h2>Parter<a class="headerlink" href="#parter" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv46ParterR6MatrixI1FEi">
+<span id="_CPPv36ParterR6MatrixI1FEi"></span><span id="_CPPv26ParterR6MatrixI1FEi"></span><span id="Parter__Matrix:F:R.i"></span>void <code class="descname">Parter</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46ParterR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46ParterR10DistMatrixI1F1U1VEi">
+<span id="_CPPv36ParterR10DistMatrixI1F1U1VEi"></span><span id="_CPPv26ParterR10DistMatrixI1F1U1VEi"></span><span id="Parter__DistMatrix:F.U.V:R.i"></span>void <code class="descname">Parter</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>P</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46ParterR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="pei">
+<h2>Pei<a class="headerlink" href="#pei" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv43PeiR6MatrixI1TEi1T">
+<span id="_CPPv33PeiR6MatrixI1TEi1T"></span><span id="_CPPv23PeiR6MatrixI1TEi1T"></span><span id="Pei__Matrix:T:R.i.T"></span>void <code class="descname">Pei</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>P</em>, int <em>n</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43PeiR6MatrixI1TEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43PeiR10DistMatrixI1T1U1VEi1T">
+<span id="_CPPv33PeiR10DistMatrixI1T1U1VEi1T"></span><span id="_CPPv23PeiR10DistMatrixI1T1U1VEi1T"></span><span id="Pei__DistMatrix:T.U.V:R.i.T"></span>void <code class="descname">Pei</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>P</em>, int <em>n</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43PeiR10DistMatrixI1T1U1VEi1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="redheffer">
+<h2>Redheffer<a class="headerlink" href="#redheffer" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv49RedhefferR6MatrixI1TEi">
+<span id="_CPPv39RedhefferR6MatrixI1TEi"></span><span id="_CPPv29RedhefferR6MatrixI1TEi"></span><span id="Redheffer__Matrix:T:R.i"></span>void <code class="descname">Redheffer</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>R</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49RedhefferR6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49RedhefferR10DistMatrixI1T1U1VEi">
+<span id="_CPPv39RedhefferR10DistMatrixI1T1U1VEi"></span><span id="_CPPv29RedhefferR10DistMatrixI1T1U1VEi"></span><span id="Redheffer__DistMatrix:T.U.V:R.i"></span>void <code class="descname">Redheffer</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>R</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49RedhefferR10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="riemann">
+<h2>Riemann<a class="headerlink" href="#riemann" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv47RiemannR6MatrixI1TEi">
+<span id="_CPPv37RiemannR6MatrixI1TEi"></span><span id="_CPPv27RiemannR6MatrixI1TEi"></span><span id="Riemann__Matrix:T:R.i"></span>void <code class="descname">Riemann</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>R</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RiemannR6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47RiemannR10DistMatrixI1T1U1VEi">
+<span id="_CPPv37RiemannR10DistMatrixI1T1U1VEi"></span><span id="_CPPv27RiemannR10DistMatrixI1T1U1VEi"></span><span id="Riemann__DistMatrix:T.U.V:R.i"></span>void <code class="descname">Riemann</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>R</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RiemannR10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="ris">
+<h2>Ris<a class="headerlink" href="#ris" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv43RisR6MatrixI1FEi">
+<span id="_CPPv33RisR6MatrixI1FEi"></span><span id="_CPPv23RisR6MatrixI1FEi"></span><span id="Ris__Matrix:F:R.i"></span>void <code class="descname">Ris</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>R</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43RisR6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43RisR10DistMatrixI1F1U1VEi">
+<span id="_CPPv33RisR10DistMatrixI1F1U1VEi"></span><span id="_CPPv23RisR10DistMatrixI1F1U1VEi"></span><span id="Ris__DistMatrix:F.U.V:R.i"></span>void <code class="descname">Ris</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F1U1VE" title="DistMatrix&lt;F, U, V&gt;">DistMatrix</a>&lt;F, U, V&gt; &amp;<em>R</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43RisR10DistMatrixI1F1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="toeplitz">
+<h2>Toeplitz<a class="headerlink" href="#toeplitz" title="Permalink to this headline">¶</a></h2>
+<p>An <span class="math notranslate nohighlight">\(m \times n\)</span> matrix is <em>Toeplitz</em> if there exists a vector <span class="math notranslate nohighlight">\(b\)</span> such that, for each entry <span class="math notranslate nohighlight">\(\alpha_{i,j}\)</span> of <span class="math notranslate nohighlight">\(A\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i,j} = \beta_{i-j+(n-1)},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta_k\)</span> is the <span class="math notranslate nohighlight">\(k\)</span>’th entry of <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv48ToeplitzR6MatrixI1TEiiRKNSt6vectorI1TEE">
+<span id="_CPPv38ToeplitzR6MatrixI1TEiiRKNSt6vectorI1TEE"></span><span id="_CPPv28ToeplitzR6MatrixI1TEiiRKNSt6vectorI1TEE"></span><span id="Toeplitz__Matrix:T:R.i.i.std::vector:T:CR"></span>void <code class="descname">Toeplitz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ToeplitzR6MatrixI1TEiiRKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48ToeplitzR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE">
+<span id="_CPPv38ToeplitzR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE"></span><span id="_CPPv28ToeplitzR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE"></span><span id="Toeplitz__DistMatrix:T.U.V:R.i.i.std::vector:T:CR"></span>void <code class="descname">Toeplitz</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em>, <em class="property">const</em> std::vector&lt;T&gt; &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ToeplitzR10DistMatrixI1T1U1VEiiRKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Build the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> using the generating vector <span class="math notranslate nohighlight">\(b\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="triw">
+<h2>TriW<a class="headerlink" href="#triw" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv44TriWR6MatrixI1TEii1Ti">
+<span id="_CPPv34TriWR6MatrixI1TEii1Ti"></span><span id="_CPPv24TriWR6MatrixI1TEii1Ti"></span><span id="TriW__Matrix:T:R.i.i.T.i"></span>void <code class="descname">TriW</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em>, T <em>alpha</em>, int <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44TriWR6MatrixI1TEii1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44TriWR10DistMatrixI1T1U1VEii1Ti">
+<span id="_CPPv34TriWR10DistMatrixI1T1U1VEii1Ti"></span><span id="_CPPv24TriWR10DistMatrixI1T1U1VEii1Ti"></span><span id="TriW__DistMatrix:T.U.V:R.i.i.T.i"></span>void <code class="descname">TriW</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em>, T <em>alpha</em>, int <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44TriWR10DistMatrixI1T1U1VEii1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="walsh">
+<h2>Walsh<a class="headerlink" href="#walsh" title="Permalink to this headline">¶</a></h2>
+<p>The Walsh matrix of order <span class="math notranslate nohighlight">\(k\)</span> is a <span class="math notranslate nohighlight">\(2^k \times 2^k\)</span> matrix, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}W_1 = \left(\begin{array}{cc} 1 &amp; 1 \\ 1 &amp; -1 \end{array}\right),\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}W_k = \left(\begin{array}{cc} W_{k-1} &amp; W_{k-1} \\ W_{k-1} &amp; -W_{k-1}
+            \end{array}\right).\end{split}\]</div>
+<p>A <em>binary</em> Walsh matrix changes the bottom-right entry of <span class="math notranslate nohighlight">\(W_1\)</span> from
+<span class="math notranslate nohighlight">\(-1\)</span> to <span class="math notranslate nohighlight">\(0\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv45WalshR6MatrixI1TEib">
+<span id="_CPPv35WalshR6MatrixI1TEib"></span><span id="_CPPv25WalshR6MatrixI1TEib"></span><span id="Walsh__Matrix:T:R.i.b"></span>void <code class="descname">Walsh</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>W</em>, int <em>k</em>, bool <em>binary</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45WalshR6MatrixI1TEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45WalshR10DistMatrixI1T1U1VEib">
+<span id="_CPPv35WalshR10DistMatrixI1T1U1VEib"></span><span id="_CPPv25WalshR10DistMatrixI1T1U1VEib"></span><span id="Walsh__DistMatrix:T.U.V:R.i.b"></span>void <code class="descname">Walsh</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>W</em>, int <em>k</em>, bool <em>binary</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45WalshR10DistMatrixI1T1U1VEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the matrix <span class="math notranslate nohighlight">\(W\)</span> equal to the <span class="math notranslate nohighlight">\(k\)</span>’th (possibly binary) Walsh
+matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="wilkinson">
+<h2>Wilkinson<a class="headerlink" href="#wilkinson" title="Permalink to this headline">¶</a></h2>
+<p>A <em>Wilkinson matrix</em> of order <span class="math notranslate nohighlight">\(k\)</span> is a tridiagonal matrix with diagonal</p>
+<div class="math notranslate nohighlight">
+\[[k,k-1,k-2,...,1,0,1,...,k-2,k-1,k],\]</div>
+<p>and sub- and super-diagonals of all ones.</p>
+<dl class="function">
+<dt id="_CPPv49WilkinsonR6MatrixI1TEi">
+<span id="_CPPv39WilkinsonR6MatrixI1TEi"></span><span id="_CPPv29WilkinsonR6MatrixI1TEi"></span><span id="Wilkinson__Matrix:T:R.i"></span>void <code class="descname">Wilkinson</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>W</em>, int <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49WilkinsonR6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49WilkinsonR10DistMatrixI1T1U1VEi">
+<span id="_CPPv39WilkinsonR10DistMatrixI1T1U1VEi"></span><span id="_CPPv29WilkinsonR10DistMatrixI1T1U1VEi"></span><span id="Wilkinson__DistMatrix:T.U.V:R.i"></span>void <code class="descname">Wilkinson</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>W</em>, int <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49WilkinsonR10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the matrix <span class="math notranslate nohighlight">\(W\)</span> equal to the <span class="math notranslate nohighlight">\(k\)</span>’th Wilkinson matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zeros">
+<h2>Zeros<a class="headerlink" href="#zeros" title="Permalink to this headline">¶</a></h2>
+<p>Create an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix of all zeros.</p>
+<dl class="function">
+<dt id="_CPPv45ZerosR6MatrixI1TEii">
+<span id="_CPPv35ZerosR6MatrixI1TEii"></span><span id="_CPPv25ZerosR6MatrixI1TEii"></span><span id="Zeros__Matrix:T:R.i.i"></span>void <code class="descname">Zeros</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45ZerosR6MatrixI1TEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45ZerosR10DistMatrixI1T1U1VEii">
+<span id="_CPPv35ZerosR10DistMatrixI1T1U1VEii"></span><span id="_CPPv25ZerosR10DistMatrixI1T1U1VEii"></span><span id="Zeros__DistMatrix:T.U.V:R.i.i"></span>void <code class="descname">Zeros</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>m</em>, int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45ZerosR10DistMatrixI1T1U1VEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> to be an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix of all zeros.</p>
+</dd></dl>
+
+<p>Change all entries of the matrix <span class="math notranslate nohighlight">\(A\)</span> to zero.</p>
+<dl class="function">
+<dt id="_CPPv49MakeZerosR6MatrixI1TE">
+<span id="_CPPv39MakeZerosR6MatrixI1TE"></span><span id="_CPPv29MakeZerosR6MatrixI1TE"></span><span id="MakeZeros__Matrix:T:R"></span>void <code class="descname">MakeZeros</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49MakeZerosR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49MakeZerosR10DistMatrixI1T1U1VE">
+<span id="_CPPv39MakeZerosR10DistMatrixI1T1U1VE"></span><span id="_CPPv29MakeZerosR10DistMatrixI1T1U1VE"></span><span id="MakeZeros__DistMatrix:T.U.V:R"></span>void <code class="descname">MakeZeros</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49MakeZerosR10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the entries of the matrix to zero.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Geometric equilibration &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Ruiz Equilibration" href="RuizEquil.html" />
+    <link rel="prev" title="Broadcast" href="Broadcast.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../solvers.html">Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prox.html">Proximal maps</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../util.html">Utilities</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../Cone.html">Cone Utilities</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="AllReduce.html">AllReduce</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Broadcast.html">Broadcast</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Geometric equilibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RuizEquil.html">Ruiz Equilibration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../PosOrth.html">Positive Orthant Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SOC.html">Second-order Cone Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Coherence.html">Coherence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Covariance.html">Covariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../LogBarrier.html">LogBarrier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../LogDetDiv.html">LogDetDiv</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../../util.html">Utilities</a> &raquo;</li>
+        
+          <li><a href="../Cone.html">Cone Utilities</a> &raquo;</li>
+        
+      <li>Geometric equilibration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/optimization/util/Cone/GeomEquil.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="geometric-equilibration">
+<h1>Geometric equilibration<a class="headerlink" href="#geometric-equilibration" title="Permalink to this headline">¶</a></h1>
+<p>Perform geometric diagonal equilibration of a matrix in a way which ensures that
+members of subcones are scaled equally (otherwise equilibration would not
+preserve, for example, a Second-Order Cone Program).</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>cutoff</cite> parameter only effects parallel performance and is used to
+decide whether a subcone is sufficiently large to be treated separately.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv4N4cone9GeomEquilER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb">
+<span id="_CPPv3N4cone9GeomEquilER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb"></span><span id="_CPPv2N4cone9GeomEquilER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb"></span><span id="cone::GeomEquil__Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Matrix:Base:F::R.Matrix:Base:F::R.Matrix:Int:CR.Matrix:Int:CR.b"></span>void <code class="descclassname">cone<code class="descclassname">::</code></code><code class="descname">GeomEquil</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowA</em>, Matrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowB</em>, Matrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dCol</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, bool <em>progress</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4cone9GeomEquilER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4cone9GeomEquilER15ElementalMatrixI1FER15ElementalMatrixI1FER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntE3Intb">
+<span id="_CPPv3N4cone9GeomEquilER15ElementalMatrixI1FER15ElementalMatrixI1FER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntE3Intb"></span><span id="_CPPv2N4cone9GeomEquilER15ElementalMatrixI1FER15ElementalMatrixI1FER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntE3Intb"></span><span id="cone::GeomEquil__ElementalMatrix:F:R.ElementalMatrix:F:R.ElementalMatrix:Base:F::R.ElementalMatrix:Base:F::R.ElementalMatrix:Base:F::R.ElementalMatrix:Int:CR.ElementalMatrix:Int:CR.Int.b"></span>void <code class="descclassname">cone<code class="descclassname">::</code></code><code class="descname">GeomEquil</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, ElementalMatrix&lt;F&gt; &amp;<em>B</em>, ElementalMatrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowA</em>, ElementalMatrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowB</em>, ElementalMatrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dCol</em>, <em class="property">const</em> ElementalMatrix&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> ElementalMatrix&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, <a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>cutoff</em> = 1000, bool <em>progress</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4cone9GeomEquilER15ElementalMatrixI1FER15ElementalMatrixI1FER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEER15ElementalMatrixI4BaseI1FEERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntE3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4cone9GeomEquilER12SparseMatrixI1FER12SparseMatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb">
+<span id="_CPPv3N4cone9GeomEquilER12SparseMatrixI1FER12SparseMatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb"></span><span id="_CPPv2N4cone9GeomEquilER12SparseMatrixI1FER12SparseMatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb"></span><span id="cone::GeomEquil__SparseMatrix:F:R.SparseMatrix:F:R.Matrix:Base:F::R.Matrix:Base:F::R.Matrix:Base:F::R.Matrix:Int:CR.Matrix:Int:CR.b"></span>void <code class="descclassname">cone<code class="descclassname">::</code></code><code class="descname">GeomEquil</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowA</em>, Matrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowB</em>, Matrix&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dCol</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, bool <em>progress</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4cone9GeomEquilER12SparseMatrixI1FER12SparseMatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEERK6MatrixI3IntERK6MatrixI3IntEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4cone9GeomEquilER16DistSparseMatrixI1FER16DistSparseMatrixI1FER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEERK12DistMultiVecI3IntERK12DistMultiVecI3IntE3Intb">
+<span id="_CPPv3N4cone9GeomEquilER16DistSparseMatrixI1FER16DistSparseMatrixI1FER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEERK12DistMultiVecI3IntERK12DistMultiVecI3IntE3Intb"></span><span id="_CPPv2N4cone9GeomEquilER16DistSparseMatrixI1FER16DistSparseMatrixI1FER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEERK12DistMultiVecI3IntERK12DistMultiVecI3IntE3Intb"></span><span id="cone::GeomEquil__DistSparseMatrix:F:R.DistSparseMatrix:F:R.DistMultiVec:Base:F::R.DistMultiVec:Base:F::R.DistMultiVec:Base:F::R.DistMultiVec:Int:CR.DistMultiVec:Int:CR.Int.b"></span>void <code class="descclassname">cone<code class="descclassname">::</code></code><code class="descname">GeomEquil</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>B</em>, DistMultiVec&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowA</em>, DistMultiVec&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dRowB</em>, DistMultiVec&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dCol</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI3IntE" title="DistMultiVec&lt;Int&gt;">DistMultiVec</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI3IntE" title="DistMultiVec&lt;Int&gt;">DistMultiVec</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, <a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>cutoff</em> = 1000, bool <em>progress</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4cone9GeomEquilER16DistSparseMatrixI1FER16DistSparseMatrixI1FER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEER12DistMultiVecI4BaseI1FEERK12DistMultiVecI3IntERK12DistMultiVecI3IntE3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="RuizEquil.html" class="btn btn-neutral float-right" title="Ruiz Equilibration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Broadcast.html" class="btn btn-neutral float-left" title="Broadcast" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+Chebyshev point
+===============
+A Chebyshev point (CP) minimizes :math:`b - A x` in a pointwise sense, i.e.,
+
+.. math::
+
+   \min_x \| A x - b \|_{\infty},
+
+and is known to be the solution of a linear program when :math:`A` and 
+:math:`b` are real. In particular, we may solve
+
+.. math::
+  
+   \min_{x,t} \{\; t \; | \; -t \le A x - b \le t \; \},
+
+which, in affine conic form, becomes
+
+.. math::
+
+   \min_{x,t} \{\; \begin{pmatrix} 0 \\ 1 \end{pmatrix}^T \begin{pmatrix} x \\ t \end{pmatrix} \; | \; \begin{pmatrix} A & -1 \\ -A & -1 \end{pmatrix} \begin{pmatrix} x \\ t \end{pmatrix} \le \begin{pmatrix} b \\ -b \end{pmatrix} \; \}.
+
+By default, Elemental solves this linear program via a Mehrotra 
+Predictor-Corrector primal-dual Interior Point Method.
+
+Python API
+----------
+.. py:function:: CP(A,b[,ctrl=None])
+
+   :param A: dense or sparse, sequential or distributed matrix
+   :param b: dense right-hand side vector (with type compatible to ``A``)
+   :param ctrl: (optional) :py:class:`LPAffineCtrl` instance
+   :rtype: dense solution vector (with type matching that of ``b``)
+
+C++ API
+-------
+.. cpp:function:: void CP( const Matrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
+.. cpp:function:: void CP( const ElementalMatrix<Real>& A, const ElementalMatrix<Real>& b, ElementalMatrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
+.. cpp:function:: void CP( const SparseMatrix<Real>& A, const Matrix<Real>& b, Matrix<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
+.. cpp:function:: void CP( const DistSparseMatrix<Real>& A, const DistMultiVec<Real>& b, DistMultiVec<Real>& x, const lp::affine::Ctrl<Real>& ctrl=lp::affine::Ctrl<Real>() )
+
+C API
+-----
+
+Single-precision
+""""""""""""""""
+
+.. c:function:: ElError ElCP_s( ElConstMatrix_s A, ElConstMatrix_s b, ElMatrix_s x )
+.. c:function:: ElError ElCPDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, ElDistMatrix_s x )
+.. c:function:: ElError ElCPSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, ElMatrix_s x )
+.. c:function:: ElError ElCPDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, ElDistMultiVec_s x )
+
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElCP_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
+.. c:function:: ElError ElCPDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, ElDistMatrix_d x )
+.. c:function:: ElError ElCPSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x )
+.. c:function:: ElError ElCPDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, ElDistMultiVec_d x )
+
+Expert interface
+^^^^^^^^^^^^^^^^
+
+Single-precision
+""""""""""""""""
+
+.. c:function:: ElError ElCPX_s( ElConstMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElCPXDist_s( ElConstDistMatrix_s A, ElConstDistMatrix_s b, ElDistMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElCPXSparse_s( ElConstSparseMatrix_s A, ElConstMatrix_s b, ElMatrix_s x, ElLPAffineCtrl_s ctrl )
+.. c:function:: ElError ElCPXDistSparse_s( ElConstDistSparseMatrix_s A, ElConstDistMultiVec_s b, ElDistMultiVec_s x, ElLPAffineCtrl_s ctrl )
+
+Double-precision
+""""""""""""""""
+
+.. c:function:: ElError ElCPX_d( ElConstMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElCPXDist_d( ElConstDistMatrix_d A, ElConstDistMatrix_d b, ElDistMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElCPXSparse_d( ElConstSparseMatrix_d A, ElConstMatrix_d b, ElMatrix_d x, ElLPAffineCtrl_d ctrl )
+.. c:function:: ElError ElCPXDistSparse_d( ElConstDistSparseMatrix_d A, ElConstDistMultiVec_d b, ElDistMultiVec_d x, ElLPAffineCtrl_d ctrl )
+

@@ -1,0 +1,993 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pseudospectra &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Matrix functions" href="../funcs.html" />
+    <link rel="prev" title="Specialized eigensolvers" href="specialized.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pseudospectra">
+<h1>Pseudospectra<a class="headerlink" href="#pseudospectra" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.hpp">C++ Header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.h">C Header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/spectral.py">Python Header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/spectral/Pseudospectra.cpp">C++ implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/Pseudospectra.cpp">C++ pseudospectra example driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedPseudospectra.cpp">C++ ChunkedPseudospectra example driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/TriangularPseudospectra.cpp">C++ TriangularPseudospectra example driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ChunkedTriangularPseudospectra.cpp">C++ ChunkedTriangularPseudospectra example driver</a></p>
+<p>The <span class="math notranslate nohighlight">\(\epsilon\)</span>-<em>pseudospectrum</em> of a square matrix <span class="math notranslate nohighlight">\(A\)</span> is the set
+of all shifts <span class="math notranslate nohighlight">\(z\)</span> such that <span class="math notranslate nohighlight">\(\hat A - z\)</span> is singular for some
+<span class="math notranslate nohighlight">\(\hat A\)</span> such that <span class="math notranslate nohighlight">\(\| \hat A - A \|_2 &lt; \epsilon\)</span>. In other
+words, <span class="math notranslate nohighlight">\(z\)</span> is in the <span class="math notranslate nohighlight">\(\epsilon\)</span>-pseudospectrum of <span class="math notranslate nohighlight">\(A\)</span> if
+the smallest singular value of <span class="math notranslate nohighlight">\(A - z\)</span> is less than <span class="math notranslate nohighlight">\(\epsilon\)</span>.</p>
+<p>Elemental currently supports two methods for computing pseudospectra:
+the first is a high-performance improvement of Shiu-Hong Lui’s
+triangularization followed by inverse iteration approach suggested in
+<em>Computation of pseudospectra by continuation</em> (please see
+Trefethen’s <em>Computation of pseudospectra</em> for a comprehensive review).
+In particular, Elemental begins by computing the Schur decomposition of the
+given matrix, which preserves the <span class="math notranslate nohighlight">\(\epsilon\)</span>-pseudospectrum, up to
+round-off error, and then simultaneously performs many Implicitly Restarted
+Arnoldi (IRA) iterations with the inverse normal matrix for each shift in a
+manner which communicates no more data than a standard triangular solve with
+many right-hand sides.
+Converged pseudospectral estimates are deflated after convergence.</p>
+<p>The second approach is quite similar and, instead of reducing to triangular
+form, reduces to Hessenberg form and performs multi-shift triangular solves
+in a manner similar to Greg Henry’s <em>The shifted Hessenberg system solve
+computation</em> and Purkayastha et al.’s <em>A parallel algorithm for the
+Sylvester-Observer Equation</em>. This algorithm is not yet performance-tuned in
+Elemental, but should be preferred in massively-parallel situations where the
+Schur decomposition is considered infeasible.</p>
+<div class="section" id="spectral-portrait">
+<h2>Spectral portrait<a class="headerlink" href="#spectral-portrait" title="Permalink to this headline">¶</a></h2>
+<p>The following routines return the norms of the shifted inverses over an
+<em>automatically-determined</em> 2D window in the complex plane
+(in the matrix <code class="docutils literal notranslate"><span class="pre">invNormMap</span></code>) with the specified x and y resolutions.
+The returned integer matrix corresponds to the number of iterations required
+for convergence at each shift in the 2D grid.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv416SpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv316SpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv216SpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="SpectralPortrait__Matrix:F:CR.Matrix:Base:F::R.Int.Int.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">SpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv316SpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv216SpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="SpectralPortrait__AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.Int.Int.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int&gt; <code class="descname">SpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv426TriangularSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv326TriangularSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv226TriangularSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="TriangularSpectralPortrait__Matrix:F:CR.Matrix:Base:F::R.Int.Int.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">TriangularSpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>U</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426TriangularSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv426TriangularSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv326TriangularSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv226TriangularSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="TriangularSpectralPortrait__AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.Int.Int.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int&gt; <code class="descname">TriangularSpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426TriangularSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv431QuasiTriangularSpectralPortraitRK6MatrixI4RealER6MatrixI4RealE3Int3Int14PseudospecCtrlI4RealE">
+<span id="_CPPv331QuasiTriangularSpectralPortraitRK6MatrixI4RealER6MatrixI4RealE3Int3Int14PseudospecCtrlI4RealE"></span><span id="_CPPv231QuasiTriangularSpectralPortraitRK6MatrixI4RealER6MatrixI4RealE3Int3Int14PseudospecCtrlI4RealE"></span><span id="QuasiTriangularSpectralPortrait__Matrix:Real:CR.Matrix:Real:R.Int.Int.PseudospecCtrl:Real:"></span>Matrix&lt;int&gt; <code class="descname">QuasiTriangularSpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431QuasiTriangularSpectralPortraitRK6MatrixI4RealER6MatrixI4RealE3Int3Int14PseudospecCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv431QuasiTriangularSpectralPortraitRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE3Int3Int14PseudospecCtrlI4RealE">
+<span id="_CPPv331QuasiTriangularSpectralPortraitRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE3Int3Int14PseudospecCtrlI4RealE"></span><span id="_CPPv231QuasiTriangularSpectralPortraitRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE3Int3Int14PseudospecCtrlI4RealE"></span><span id="QuasiTriangularSpectralPortrait__AbstractDistMatrix:Real:CR.AbstractDistMatrix:Real:R.Int.Int.PseudospecCtrl:Real:"></span>DistMatrix&lt;int&gt; <code class="descname">QuasiTriangularSpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431QuasiTriangularSpectralPortraitRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE3Int3Int14PseudospecCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv426HessenbergSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv326HessenbergSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv226HessenbergSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="HessenbergSpectralPortrait__Matrix:F:CR.Matrix:Base:F::R.Int.Int.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">HessenbergSpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426HessenbergSpectralPortraitRK6MatrixI1FER6MatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv426HessenbergSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv326HessenbergSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv226HessenbergSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="HessenbergSpectralPortrait__AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.Int.Int.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int&gt; <code class="descname">HessenbergSpectralPortrait</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426HessenbergSpectralPortraitRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSpectralPortrait_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortrait_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortrait_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortrait_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortrait_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortrait_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortrait_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortrait_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortrait_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortrait_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortrait_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortrait_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitX_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitX_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitX_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitX_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitX_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitX_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitX_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitX_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitX_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitX_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitXDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitXDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitXDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitXDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitXDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitXDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitXDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralPortraitXDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralPortraitXDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralPortraitXDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h3>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="SpectralPortrait">
+<code class="descname">SpectralPortrait</code><span class="sig-paren">(</span><em>A</em>, <em>realSize=100</em>, <em>imagSize=100</em>, <em>ctrl=None</em><span class="sig-paren">)</span><a class="headerlink" href="#SpectralPortrait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="spectral-window">
+<h2>Spectral window<a class="headerlink" href="#spectral-window" title="Permalink to this headline">¶</a></h2>
+<p>The following routines return the norms of the shifted inverses over a
+<em>user-specified</em> 2D window in the complex plane (in the matrix <code class="docutils literal notranslate"><span class="pre">invNormMap</span></code>)
+with the specified x and y resolutions.
+The returned integer matrix corresponds to the number of iterations required
+for convergence at each shift in the 2D grid.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv414SpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv314SpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv214SpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="SpectralWindow__Matrix:F:CR.Matrix:Base:F::R.Complex:Base:F::.Base:F:.Base:F:.Int.Int.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">SpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>center</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>realWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414SpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414SpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv314SpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv214SpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="SpectralWindow__AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.Complex:Base:F::.Base:F:.Base:F:.Int.Int.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int&gt; <code class="descname">SpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>center</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>realWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414SpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424TriangularSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv324TriangularSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv224TriangularSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="TriangularSpectralWindow__Matrix:F:CR.Matrix:Base:F::R.Complex:Base:F::.Base:F:.Base:F:.Int.Int.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">TriangularSpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>U</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>center</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>realWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424TriangularSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424TriangularSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv324TriangularSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv224TriangularSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="TriangularSpectralWindow__AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.Complex:Base:F::.Base:F:.Base:F:.Int.Int.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int&gt; <code class="descname">TriangularSpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>center</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>realWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424TriangularSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv429QuasiTriangularSpectralWindowRK6MatrixI4RealER6MatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE">
+<span id="_CPPv329QuasiTriangularSpectralWindowRK6MatrixI4RealER6MatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE"></span><span id="_CPPv229QuasiTriangularSpectralWindowRK6MatrixI4RealER6MatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE"></span><span id="QuasiTriangularSpectralWindow__Matrix:Real:CR.Matrix:Real:R.Complex:Real:.Real.Real.Int.Int.PseudospecCtrl:Real:"></span>Matrix&lt;int&gt; <code class="descname">QuasiTriangularSpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>center</em>, Real <em>realWidth</em>, Real <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429QuasiTriangularSpectralWindowRK6MatrixI4RealER6MatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv429QuasiTriangularSpectralWindowRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE">
+<span id="_CPPv329QuasiTriangularSpectralWindowRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE"></span><span id="_CPPv229QuasiTriangularSpectralWindowRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE"></span><span id="QuasiTriangularSpectralWindow__AbstractDistMatrix:Real:CR.AbstractDistMatrix:Real:R.Complex:Real:.Real.Real.Int.Int.PseudospecCtrl:Real:"></span>DistMatrix&lt;int&gt; <code class="descname">QuasiTriangularSpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>invNormMap</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>center</em>, Real <em>realWidth</em>, Real <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429QuasiTriangularSpectralWindowRK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE7ComplexI4RealE4Real4Real3Int3Int14PseudospecCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424HessenbergSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv324HessenbergSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv224HessenbergSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="HessenbergSpectralWindow__Matrix:F:CR.Matrix:Base:F::R.Complex:Base:F::.Base:F:.Base:F:.Int.Int.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">HessenbergSpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>center</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>realWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424HessenbergSpectralWindowRK6MatrixI1FER6MatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424HessenbergSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv324HessenbergSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv224HessenbergSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE"></span><span id="HessenbergSpectralWindow__AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.Complex:Base:F::.Base:F:.Base:F:.Int.Int.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int&gt; <code class="descname">HessenbergSpectralWindow</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNormMap</em>, Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>center</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>realWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>imagWidth</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>realSize</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>imagSize</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424HessenbergSpectralWindowRK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE7ComplexI4BaseI1FEE4BaseI1FE4BaseI1FE3Int3Int14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSpectralWindow_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindow_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindow_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindow_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindow_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindow_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindow_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindow_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindow_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindow_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindow_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindow_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowX_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowX_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowX_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowX_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowX_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowX_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowX_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowX_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowX_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowX_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowXDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowXDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowXDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowXDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowXDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowXDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> center</em>, float<em> realWidth</em>, float<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowXDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralWindowXDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralWindowXDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> invNormMap</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> center</em>, double<em> realWidth</em>, double<em> imagWidth</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> realSize</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> imagSize</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralWindowXDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h3>Python API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="SpectralWindow">
+<code class="descname">SpectralWindow</code><span class="sig-paren">(</span><em>A</em>, <em>center=0</em>, <em>realWidth=1</em>, <em>imagWidth=1</em>, <em>realSize=100</em>, <em>imagSize=100</em>, <em>ctrl=None</em><span class="sig-paren">)</span><a class="headerlink" href="#SpectralWindow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="spectral-cloud">
+<h2>Spectral cloud<a class="headerlink" href="#spectral-cloud" title="Permalink to this headline">¶</a></h2>
+<p>The following routines return the norms of the shifted inverses in the vector
+<code class="docutils literal notranslate"><span class="pre">invNorms</span></code> for a given set of shifts. The returned integer vector is a list
+of the number of iterations required for convergence of each shift.</p>
+<div class="section" id="id5">
+<h3>C++ API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv413SpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv313SpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv213SpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="SpectralCloud__Matrix:F:CR.Matrix:Complex:Base:F:::CR.Matrix:Base:F::R.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">SpectralCloud</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>shifts</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNorms</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413SpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv313SpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv213SpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="SpectralCloud__AbstractDistMatrix:F:CR.AbstractDistMatrix:Complex:Base:F:::CR.AbstractDistMatrix:Base:F::R.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int, VR, STAR&gt; <code class="descname">SpectralCloud</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="AbstractDistMatrix&lt;Complex&lt;Base&lt;F&gt;&gt;&gt;">AbstractDistMatrix</a>&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNorms</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423TriangularSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv323TriangularSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv223TriangularSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="TriangularSpectralCloud__Matrix:F:CR.Matrix:Complex:Base:F:::CR.Matrix:Base:F::R.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">TriangularSpectralCloud</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>U</em>, <em class="property">const</em> Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>shifts</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNorms</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423TriangularSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423TriangularSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv323TriangularSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv223TriangularSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="TriangularSpectralCloud__AbstractDistMatrix:F:CR.AbstractDistMatrix:Complex:Base:F:::CR.AbstractDistMatrix:Base:F::R.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int, VR, STAR&gt; <code class="descname">TriangularSpectralCloud</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>U</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="AbstractDistMatrix&lt;Complex&lt;Base&lt;F&gt;&gt;&gt;">AbstractDistMatrix</a>&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNorms</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423TriangularSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv428QuasiTriangularSpectralCloudRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealE14PseudospecCtrlI4RealE">
+<span id="_CPPv328QuasiTriangularSpectralCloudRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealE14PseudospecCtrlI4RealE"></span><span id="_CPPv228QuasiTriangularSpectralCloudRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealE14PseudospecCtrlI4RealE"></span><span id="QuasiTriangularSpectralCloud__AbstractDistMatrix:Real:CR.AbstractDistMatrix:Complex:Real::CR.AbstractDistMatrix:Real:R.PseudospecCtrl:Real:"></span>DistMatrix&lt;int, VR, STAR&gt; <code class="descname">QuasiTriangularSpectralCloud</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>U</em>, <em class="property">const</em> AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>invNorms</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="PseudospecCtrl&lt;Real&gt;">PseudospecCtrl</a>&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428QuasiTriangularSpectralCloudRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealE14PseudospecCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HessenbergSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv323HessenbergSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv223HessenbergSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="HessenbergSpectralCloud__Matrix:F:CR.Matrix:Complex:Base:F:::CR.Matrix:Base:F::R.PseudospecCtrl:Base:F::"></span>Matrix&lt;int&gt; <code class="descname">HessenbergSpectralCloud</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>shifts</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNorms</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HessenbergSpectralCloudRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HessenbergSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv323HessenbergSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv223HessenbergSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE"></span><span id="HessenbergSpectralCloud__AbstractDistMatrix:F:CR.AbstractDistMatrix:Complex:Base:F:::CR.AbstractDistMatrix:Base:F::R.PseudospecCtrl:Base:F::"></span>DistMatrix&lt;int, VR, STAR&gt; <code class="descname">HessenbergSpectralCloud</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="AbstractDistMatrix&lt;Complex&lt;Base&lt;F&gt;&gt;&gt;">AbstractDistMatrix</a>&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>invNorms</em>, <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>psCtrl</em> = <a class="reference internal" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="PseudospecCtrl&lt;Base&lt;F&gt;&gt;">PseudospecCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HessenbergSpectralCloudRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h3>C API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSpectralCloud_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloud_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_c<em> shifts</em>, ElMatrix_s<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloud_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloud_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloud_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_z<em> shifts</em>, ElMatrix_d<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloud_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloud_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloud_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> shifts</em>, ElMatrix_s<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloud_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloud_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloud_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> shifts</em>, ElMatrix_d<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloud_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_c<em> shifts</em>, ElDistMatrix_s<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_z<em> shifts</em>, ElDistMatrix_d<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> shifts</em>, ElDistMatrix_s<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> shifts</em>, ElDistMatrix_d<em> invNormMap</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudX_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudX_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_c<em> shifts</em>, ElMatrix_s<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudX_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudX_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_z<em> shifts</em>, ElMatrix_d<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudX_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudX_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> shifts</em>, ElMatrix_s<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudX_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudX_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudX_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> shifts</em>, ElMatrix_d<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudX_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudXDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudXDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_c<em> shifts</em>, ElDistMatrix_s<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudXDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudXDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_z<em> shifts</em>, ElDistMatrix_d<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudXDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudXDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> shifts</em>, ElDistMatrix_s<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudXDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSpectralCloudXDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSpectralCloudXDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> shifts</em>, ElDistMatrix_d<em> invNormMap</em>, <a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSpectralCloudXDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h3>Python API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="SpectralCloud">
+<code class="descname">SpectralCloud</code><span class="sig-paren">(</span><em>A</em>, <em>shifts</em>, <em>ctrl=None</em><span class="sig-paren">)</span><a class="headerlink" href="#SpectralCloud" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="control-structures">
+<h2>Control structures<a class="headerlink" href="#control-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id8">
+<h3>C++ API<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="_CPPv412SnapshotCtrl">
+<span id="_CPPv312SnapshotCtrl"></span><span id="_CPPv212SnapshotCtrl"></span><span id="SnapshotCtrl"></span><em class="property">class </em><code class="descname">SnapshotCtrl</code><a class="headerlink" href="#_CPPv412SnapshotCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl8realSizeE">
+<span id="_CPPv3N12SnapshotCtrl8realSizeE"></span><span id="_CPPv2N12SnapshotCtrl8realSizeE"></span><span id="SnapshotCtrl::realSize__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">realSize</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl8realSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl8imagSizeE">
+<span id="_CPPv3N12SnapshotCtrl8imagSizeE"></span><span id="_CPPv2N12SnapshotCtrl8imagSizeE"></span><span id="SnapshotCtrl::imagSize__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imagSize</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl8imagSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl11imgSaveFreqE">
+<span id="_CPPv3N12SnapshotCtrl11imgSaveFreqE"></span><span id="_CPPv2N12SnapshotCtrl11imgSaveFreqE"></span><span id="SnapshotCtrl::imgSaveFreq__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgSaveFreq</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11imgSaveFreqE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl11numSaveFreqE">
+<span id="_CPPv3N12SnapshotCtrl11numSaveFreqE"></span><span id="_CPPv2N12SnapshotCtrl11numSaveFreqE"></span><span id="SnapshotCtrl::numSaveFreq__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">numSaveFreq</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11numSaveFreqE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl11imgDispFreqE">
+<span id="_CPPv3N12SnapshotCtrl11imgDispFreqE"></span><span id="_CPPv2N12SnapshotCtrl11imgDispFreqE"></span><span id="SnapshotCtrl::imgDispFreq__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgDispFreq</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11imgDispFreqE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Negative if no snapshots should be saved/displayed,
+zero if only a final snapshot should be saved/displayed, and equal to
+<span class="math notranslate nohighlight">\(n &gt; 0\)</span> if, in addition to a final snapshot, the partial results
+should be output roughly overy <cite>n</cite> iterations (there is no output in the
+middle of Impliclty Restarted Arnoldi cycles).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl12imgSaveCountE">
+<span id="_CPPv3N12SnapshotCtrl12imgSaveCountE"></span><span id="_CPPv2N12SnapshotCtrl12imgSaveCountE"></span><span id="SnapshotCtrl::imgSaveCount__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgSaveCount</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12imgSaveCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl12numSaveCountE">
+<span id="_CPPv3N12SnapshotCtrl12numSaveCountE"></span><span id="_CPPv2N12SnapshotCtrl12numSaveCountE"></span><span id="SnapshotCtrl::numSaveCount__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">numSaveCount</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12numSaveCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl12imgDispCountE">
+<span id="_CPPv3N12SnapshotCtrl12imgDispCountE"></span><span id="_CPPv2N12SnapshotCtrl12imgDispCountE"></span><span id="SnapshotCtrl::imgDispCount__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgDispCount</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12imgDispCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl7imgBaseE">
+<span id="_CPPv3N12SnapshotCtrl7imgBaseE"></span><span id="_CPPv2N12SnapshotCtrl7imgBaseE"></span><span id="SnapshotCtrl::imgBase__ss"></span>std::string <code class="descname">imgBase</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl7imgBaseE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl7numBaseE">
+<span id="_CPPv3N12SnapshotCtrl7numBaseE"></span><span id="_CPPv2N12SnapshotCtrl7numBaseE"></span><span id="SnapshotCtrl::numBase__ss"></span>std::string <code class="descname">numBase</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl7numBaseE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl9imgFormatE">
+<span id="_CPPv3N12SnapshotCtrl9imgFormatE"></span><span id="_CPPv2N12SnapshotCtrl9imgFormatE"></span><span id="SnapshotCtrl::imgFormat__FileFormat"></span><a class="reference internal" href="../../io.html#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <code class="descname">imgFormat</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl9imgFormatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl9numFormatE">
+<span id="_CPPv3N12SnapshotCtrl9numFormatE"></span><span id="_CPPv2N12SnapshotCtrl9numFormatE"></span><span id="SnapshotCtrl::numFormat__FileFormat"></span><a class="reference internal" href="../../io.html#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <code class="descname">numFormat</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl9numFormatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SnapshotCtrl12SnapshotCtrlEv">
+<span id="_CPPv3N12SnapshotCtrl12SnapshotCtrlEv"></span><span id="_CPPv2N12SnapshotCtrl12SnapshotCtrlEv"></span><span id="SnapshotCtrl::SnapshotCtrl"></span><code class="descname">SnapshotCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12SnapshotCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All counters and dimensions are initially zero, all save/display
+“frequencies” are set to -1 (no output), the basename strings are
+initialized to “ps”, the image format to <code class="docutils literal notranslate"><span class="pre">PNG</span></code>, and the numerical
+format to <code class="docutils literal notranslate"><span class="pre">ASCII_MATLAB</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SnapshotCtrl11ResetCountsEv">
+<span id="_CPPv3N12SnapshotCtrl11ResetCountsEv"></span><span id="_CPPv2N12SnapshotCtrl11ResetCountsEv"></span><span id="SnapshotCtrl::ResetCounts"></span>void <code class="descname">ResetCounts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11ResetCountsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Resets all counters to zero</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SnapshotCtrl7IterateEv">
+<span id="_CPPv3N12SnapshotCtrl7IterateEv"></span><span id="_CPPv2N12SnapshotCtrl7IterateEv"></span><span id="SnapshotCtrl::Iterate"></span>void <code class="descname">Iterate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SnapshotCtrl7IterateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Increments all counters by one</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE14PseudospecCtrlI4RealE">
+<span id="_CPPv3IE14PseudospecCtrlI4RealE"></span><span id="_CPPv2IE14PseudospecCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">PseudospecCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE17forceComplexSchurE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE17forceComplexSchurE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE17forceComplexSchurE"></span><span id="PseudospecCtrl:Real:::forceComplexSchur__b"></span>bool <code class="descname">forceComplexSchur</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE17forceComplexSchurE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE14forceComplexPsE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE14forceComplexPsE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE14forceComplexPsE"></span><span id="PseudospecCtrl:Real:::forceComplexPs__b"></span>bool <code class="descname">forceComplexPs</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE14forceComplexPsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE9schurCtrlE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE9schurCtrlE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE9schurCtrlE"></span><span id="PseudospecCtrl:Real:::schurCtrl__SchurCtrl:Real:"></span><a class="reference internal" href="Schur.html#_CPPv4IE9SchurCtrlI4RealE" title="SchurCtrl&lt;Real&gt;">SchurCtrl</a>&lt;Real&gt; <code class="descname">schurCtrl</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE9schurCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE6maxItsE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE6maxItsE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE6maxItsE"></span><span id="PseudospecCtrl:Real:::maxIts__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxIts</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE6maxItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE3tolE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE3tolE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE3tolE"></span><span id="PseudospecCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE7deflateE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE7deflateE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE7deflateE"></span><span id="PseudospecCtrl:Real:::deflate__b"></span>bool <code class="descname">deflate</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE7deflateE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE7arnoldiE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE7arnoldiE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE7arnoldiE"></span><span id="PseudospecCtrl:Real:::arnoldi__b"></span>bool <code class="descname">arnoldi</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE7arnoldiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE9basisSizeE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE9basisSizeE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE9basisSizeE"></span><span id="PseudospecCtrl:Real:::basisSize__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">basisSize</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE9basisSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE8reorthogE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE8reorthogE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE8reorthogE"></span><span id="PseudospecCtrl:Real:::reorthog__b"></span>bool <code class="descname">reorthog</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE8reorthogE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE8progressE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE8progressE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE8progressE"></span><span id="PseudospecCtrl:Real:::progress__b"></span>bool <code class="descname">progress</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE8progressE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE8snapCtrlE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE8snapCtrlE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE8snapCtrlE"></span><span id="PseudospecCtrl:Real:::snapCtrl__SnapshotCtrl"></span><a class="reference internal" href="#_CPPv412SnapshotCtrl" title="SnapshotCtrl">SnapshotCtrl</a> <code class="descname">snapCtrl</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE8snapCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv3IE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv2IE14PseudospecCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">PseudospecCtrl</code>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h3>C API<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="c.ElSnapshotCtrl">
+<code class="descname">ElSnapshotCtrl</code><a class="headerlink" href="#c.ElSnapshotCtrl" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElSnapshotCtrl.realSize">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">realSize</code><a class="headerlink" href="#c.ElSnapshotCtrl.realSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imagSize">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imagSize</code><a class="headerlink" href="#c.ElSnapshotCtrl.imagSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgSaveFreq">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgSaveFreq</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgSaveFreq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numSaveFreq">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">numSaveFreq</code><a class="headerlink" href="#c.ElSnapshotCtrl.numSaveFreq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgDispFreq">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgDispFreq</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgDispFreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Negative if no snapshots should be saved/displayed,
+zero if only a final snapshot should be saved/displayed, and equal to
+<span class="math notranslate nohighlight">\(n &gt; 0\)</span> if, in addition to a final snapshot, the partial results
+should be output roughly overy <cite>n</cite> iterations (there is no output in the
+middle of Impliclty Restarted Arnoldi cycles).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgSaveCount">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgSaveCount</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgSaveCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numSaveCount">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">numSaveCount</code><a class="headerlink" href="#c.ElSnapshotCtrl.numSaveCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgDispCount">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgDispCount</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgDispCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgBase">
+const char* <code class="descname">imgBase</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgBase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numBase">
+const char* <code class="descname">numBase</code><a class="headerlink" href="#c.ElSnapshotCtrl.numBase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgFormat">
+<a class="reference internal" href="../../io.html#c.ElFileFormat" title="ElFileFormat">ElFileFormat</a> <code class="descname">imgFormat</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numFormat">
+<a class="reference internal" href="../../io.html#c.ElFileFormat" title="ElFileFormat">ElFileFormat</a> <code class="descname">numFormat</code><a class="headerlink" href="#c.ElSnapshotCtrl.numFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElSnapshotCtrlDefault">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSnapshotCtrlDefault</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSnapshotCtrlDefault" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSnapshotCtrlDestroy">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSnapshotCtrlDestroy</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSnapshotCtrlDestroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="c.ElPseudospecCtrl_s">
+<code class="descname">ElPseudospecCtrl_s</code><a class="headerlink" href="#c.ElPseudospecCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElPseudospecCtrl_s.forceComplexSchur">
+bool <code class="descname">forceComplexSchur</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.forceComplexSchur" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.forceComplexPs">
+bool <code class="descname">forceComplexPs</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.forceComplexPs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.schurCtrl">
+ElSchurCtrl_s <code class="descname">schurCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.schurCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.maxIts">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxIts</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.maxIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.tol">
+float <code class="descname">tol</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.deflate">
+bool <code class="descname">deflate</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.deflate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.arnoldi">
+bool <code class="descname">arnoldi</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.arnoldi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.basisSize">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">basisSize</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.basisSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.reorthog">
+bool <code class="descname">reorthog</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.reorthog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.snapCtrl">
+<a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a> <code class="descname">snapCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.snapCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElPseudospecCtrl_d">
+<code class="descname">ElPseudospecCtrl_d</code><a class="headerlink" href="#c.ElPseudospecCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElPseudospecCtrl_d.forceComplexSchur">
+bool <code class="descname">forceComplexSchur</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.forceComplexSchur" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.forceComplexPs">
+bool <code class="descname">forceComplexPs</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.forceComplexPs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.schurCtrl">
+ElSchurCtrl_s <code class="descname">schurCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.schurCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.maxIts">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxIts</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.maxIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.tol">
+double <code class="descname">tol</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.deflate">
+bool <code class="descname">deflate</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.deflate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.arnoldi">
+bool <code class="descname">arnoldi</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.arnoldi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.basisSize">
+<a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">basisSize</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.basisSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.reorthog">
+bool <code class="descname">reorthog</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.reorthog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.snapCtrl">
+<a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a> <code class="descname">snapCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.snapCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDefault_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDefault_s</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDefault_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDefault_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDefault_d</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDefault_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDestroy_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDestroy_s</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDestroy_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDestroy_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDestroy_d</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDestroy_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id10">
+<h3>Python API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p><strong>TODO</strong></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

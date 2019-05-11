@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>View a submatrix via offset and size &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="View a full matrix" href="Full.html" />
+    <link rel="prev" title="View a submatrix via index ranges" href="IndexRanges.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="view-a-submatrix-via-offset-and-size">
+<h1>View a submatrix via offset and size<a class="headerlink" href="#view-a-submatrix-via-offset-and-size" title="Permalink to this headline">¶</a></h1>
+<p>The following routines return a view of a <cite>height</cite> by <cite>width</cite> contiguous
+submatrix of the matrix <span class="math notranslate nohighlight">\(B\)</span> whose upper-left entry has coordinates
+<span class="math notranslate nohighlight">\((i,j)\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44ViewR6MatrixI1TER6MatrixI1TEiiii">
+<span id="_CPPv34ViewR6MatrixI1TER6MatrixI1TEiiii"></span><span id="_CPPv24ViewR6MatrixI1TER6MatrixI1TEiiii"></span><span id="View__Matrix:T:R.Matrix:T:R.i.i.i.i"></span>void <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR6MatrixI1TER6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewR6MatrixI1TERK6MatrixI1TEiiii">
+<span id="_CPPv310LockedViewR6MatrixI1TERK6MatrixI1TEiiii"></span><span id="_CPPv210LockedViewR6MatrixI1TERK6MatrixI1TEiiii"></span><span id="LockedView__Matrix:T:R.Matrix:T:CR.i.i.i.i"></span>void <code class="descname">LockedView</code><span class="sig-paren">(</span><a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewR6MatrixI1TERK6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv34ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv24ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii"></span><span id="View__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i.i.i.i"></span>void <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv310LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv210LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii"></span><span id="LockedView__DistMatrix:T.U.V:R.DistMatrix:T.U.V:CR.i.i.i.i"></span>void <code class="descname">LockedView</code><span class="sig-paren">(</span><a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The view is returned in <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR6MatrixI1TEiiii">
+<span id="_CPPv34ViewR6MatrixI1TEiiii"></span><span id="_CPPv24ViewR6MatrixI1TEiiii"></span><span id="View__Matrix:T:R.i.i.i.i"></span><a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewRK6MatrixI1TEiiii">
+<span id="_CPPv310LockedViewRK6MatrixI1TEiiii"></span><span id="_CPPv210LockedViewRK6MatrixI1TEiiii"></span><span id="LockedView__Matrix:T:CR.i.i.i.i"></span><a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">LockedView</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewRK6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv34ViewR10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv24ViewR10DistMatrixI1T1U1VEiiii"></span><span id="View__DistMatrix:T.U.V:R.i.i.i.i"></span><a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewRK10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv310LockedViewRK10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv210LockedViewRK10DistMatrixI1T1U1VEiiii"></span><span id="LockedView__DistMatrix:T.U.V:CR.i.i.i.i"></span><a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">LockedView</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewRK10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The view is the return value of the function.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElViewOffset_i">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffset_i</code><span class="sig-paren">(</span>ElMatrix_i<em> A</em>, ElMatrix_i<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffset_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffset_s">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffset_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffset_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffset_d">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffset_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffset_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffset_c">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffset_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffset_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffset_z">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffset_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffset_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffsetDist_i">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffsetDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> A</em>, ElDistMatrix_i<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffsetDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffsetDist_s">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffsetDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffsetDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffsetDist_d">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffsetDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffsetDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffsetDist_c">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffsetDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffsetDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElViewOffsetDist_z">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElViewOffsetDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElViewOffsetDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>The input matrix is mutable</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffset_i">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffset_i</code><span class="sig-paren">(</span>ElMatrix_i<em> A</em>, ElConstMatrix_i<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffset_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffset_s">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffset_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffset_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffset_d">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffset_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffset_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffset_c">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffset_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffset_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffset_z">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffset_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffset_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffsetDist_i">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffsetDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> A</em>, ElConstDistMatrix_i<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffsetDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffsetDist_s">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffsetDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffsetDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffsetDist_d">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffsetDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffsetDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffsetDist_c">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffsetDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffsetDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedViewOffsetDist_z">
+<a class="reference internal" href="../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedViewOffsetDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> B</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> i</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> j</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> height</em>, <a class="reference internal" href="../environment.html#c.ElInt" title="ElInt">ElInt</a><em> width</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedViewOffsetDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>The input matrix need not be mutable</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Linear programs &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Logistic regression" href="LogisticRegression.html" />
+    <link rel="prev" title="Least absolute shrinkage and selection operator" href="Lasso.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="linear-programs">
+<h1>Linear programs<a class="headerlink" href="#linear-programs" title="Permalink to this headline">¶</a></h1>
+<p>The following routines attempt to solve linear programs of the form</p>
+<div class="math notranslate nohighlight">
+\[\text{min}\, c^T z \;\;\;\text{such that }Az=b,\; z \ge 0.\]</div>
+<p>using the Alternating Direction Method of Multipliers.</p>
+<p>The following functions were inspired by a simple
+<a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm/linprog/linprog.html">ADMM linear program solver</a> due to Boyd et al.
+Elemental’s implementations make use of parallel (dense) linear algebra,
+a custom structured factorization, and allows the user to optionally
+directly invert the (pivoted) Schur complement to accelerate its
+application. The return value is the number of performed ADMM iterations.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv413LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv313LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv213LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="LinearProgram__Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.Real.Real.Int.Real.Real.b.b"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LinearProgram</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>c</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>z</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = false, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LinearProgramRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv313LinearProgramRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv213LinearProgramRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="LinearProgram__AbstractDistMatrix:Real:CR.AbstractDistMatrix:Real:CR.AbstractDistMatrix:Real:CR.AbstractDistMatrix:Real:R.Real.Real.Int.Real.Real.b.b"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LinearProgram</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>c</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>z</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = true, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LinearProgramRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/optimization/LinearProgram.cpp">Implementation</a></p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/optimization/LinearProgram.cpp">Example driver</a></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 20%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Input/Output</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>A</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of constraints, <span class="math notranslate nohighlight">\(Ax=b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>b</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of constraints, <span class="math notranslate nohighlight">\(Ax=b\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><cite>c</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of the objective, <span class="math notranslate nohighlight">\(c^T x\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>z</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (second term)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>rho</cite></p></td>
+<td><p>Input</p></td>
+<td><p>augmented-Lagrangian parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>alpha</cite></p></td>
+<td><p>Input</p></td>
+<td><p>over-relaxation parameter
+(usually in <span class="math notranslate nohighlight">\([1,1.8]\)</span>)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>maxIter</cite></p></td>
+<td><p>Input</p></td>
+<td><p>maximum number of ADMM iterations</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>absTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>absolute convergence tolerance</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>relTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>relative convergence tolerance</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>inv</cite></p></td>
+<td><p>Input</p></td>
+<td><p>directly compute Schur-complement inverse?</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>progress</cite></p></td>
+<td><p>Input</p></td>
+<td><p>display detailed progress information?</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElLinearProgram_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearProgram_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElMatrix_s<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearProgram_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearProgram_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearProgram_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElMatrix_d<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearProgram_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearProgramDist_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearProgramDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> b</em>, ElConstDistMatrix_s<em> c</em>, ElDistMatrix_s<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearProgramDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearProgramDist_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearProgramDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> b</em>, ElConstDistMatrix_d<em> c</em>, ElDistMatrix_d<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearProgramDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

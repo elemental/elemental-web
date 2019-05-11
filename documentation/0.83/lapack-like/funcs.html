@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Matrix functions &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Matrix properties" href="props.html" />
+    <link rel="prev" title="Factorizations" href="factor.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="matrix-functions">
+<h1>Matrix functions<a class="headerlink" href="#matrix-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="direct-inversion">
+<h2>Direct inversion<a class="headerlink" href="#direct-inversion" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="triangular">
+<h3>Triangular<a class="headerlink" href="#triangular" title="Permalink to this headline">¶</a></h3>
+<p>Inverts a (possibly unit-diagonal) triangular matrix in-place.</p>
+<dl class="function">
+<dt id="_CPPv417TriangularInverse12UpperOrLower13UnitOrNonUnitR6MatrixI1FE">
+<span id="_CPPv317TriangularInverse12UpperOrLower13UnitOrNonUnitR6MatrixI1FE"></span><span id="_CPPv217TriangularInverse12UpperOrLower13UnitOrNonUnitR6MatrixI1FE"></span><span id="TriangularInverse__UpperOrLower.UnitOrNonUnit.Matrix:F:R"></span>void <code class="descname">TriangularInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417TriangularInverse12UpperOrLower13UnitOrNonUnitR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417TriangularInverse12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FE">
+<span id="_CPPv317TriangularInverse12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FE"></span><span id="_CPPv217TriangularInverse12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FE"></span><span id="TriangularInverse__UpperOrLower.UnitOrNonUnit.DistMatrix:F:R"></span>void <code class="descname">TriangularInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417TriangularInverse12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inverts the triangle of <cite>A</cite> specified by the parameter <cite>uplo</cite>;
+if <cite>diag</cite> is set to <cite>UNIT</cite>, then <cite>A</cite> is treated as unit-diagonal.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="general">
+<h3>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h3>
+<p>This routine computes the in-place inverse of a general fully-populated
+(invertible) matrix <span class="math notranslate nohighlight">\(A\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[A^{-1} = U^{-1} L^{-1} P,\]</div>
+<p>where <span class="math notranslate nohighlight">\(PA=LU\)</span> is the result of LU factorization with partial pivoting.
+The algorithm essentially factors <span class="math notranslate nohighlight">\(A\)</span>, inverts <span class="math notranslate nohighlight">\(U\)</span> in place,
+solves against <span class="math notranslate nohighlight">\(L\)</span> one block column at a time, and then applies the
+row pivots in reverse order to the columns of the result.</p>
+<dl class="function">
+<dt id="_CPPv47InverseR6MatrixI1FE">
+<span id="_CPPv37InverseR6MatrixI1FE"></span><span id="_CPPv27InverseR6MatrixI1FE"></span><span id="Inverse__Matrix:F:R"></span>void <code class="descname">Inverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47InverseR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47InverseR10DistMatrixI1FE">
+<span id="_CPPv37InverseR10DistMatrixI1FE"></span><span id="_CPPv27InverseR10DistMatrixI1FE"></span><span id="Inverse__DistMatrix:F:R"></span>void <code class="descname">Inverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47InverseR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites the general matrix <cite>A</cite> with its inverse.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="symmetric-hermitian">
+<h3>Symmetric/Hermitian<a class="headerlink" href="#symmetric-hermitian" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv416SymmetricInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType">
+<span id="_CPPv316SymmetricInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType"></span><span id="_CPPv216SymmetricInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType"></span><span id="SymmetricInverse__UpperOrLower.Matrix:F:R.b.LDLPivotType"></span>void <code class="descname">SymmetricInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SymmetricInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType">
+<span id="_CPPv316SymmetricInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType"></span><span id="_CPPv216SymmetricInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType"></span><span id="SymmetricInverse__UpperOrLower.DistMatrix:F:R.b.LDLPivotType"></span>void <code class="descname">SymmetricInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Invert a symmetric or Hermitian matrix using a pivoted LDL factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType">
+<span id="_CPPv316HermitianInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType"></span><span id="_CPPv216HermitianInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType"></span><span id="HermitianInverse__UpperOrLower.Matrix:F:R.b.LDLPivotType"></span>void <code class="descname">HermitianInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianInverse12UpperOrLowerR6MatrixI1FEb12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType">
+<span id="_CPPv316HermitianInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType"></span><span id="_CPPv216HermitianInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType"></span><span id="HermitianInverse__UpperOrLower.DistMatrix:F:R.b.LDLPivotType"></span>void <code class="descname">HermitianInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianInverse12UpperOrLowerR10DistMatrixI1FEb12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Invert a Hermitian matrix using a pivoted LDL factorization.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hpd">
+<h3>HPD<a class="headerlink" href="#hpd" title="Permalink to this headline">¶</a></h3>
+<p>This routine uses a custom algorithm for computing the inverse of a
+Hermitian positive-definite matrix <span class="math notranslate nohighlight">\(A\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[A^{-1} = (L L^H)^{-1} = L^{-H} L^{-1},\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is the lower Cholesky factor of <span class="math notranslate nohighlight">\(A\)</span> (the upper Cholesky
+factor is computed in the case of upper-triangular storage). Rather than
+performing Cholesky factorization, triangular inversion, and then the Hermitian
+triangular outer product in sequence, this routine makes use of the single-sweep
+algorithm described in Bientinesi et al.’s “Families of algorithms related to
+the inversion of a symmetric positive definite matrix”, in particular, the
+variant 2 algorithm from Fig. 9.</p>
+<p>If the matrix is found to not be HPD, then a <a class="reference internal" href="../core/environment.html#_CPPv421NonHPDMatrixException" title="NonHPDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPDMatrixException</span></code></a>
+is thrown.</p>
+<dl class="function">
+<dt id="_CPPv410HPDInverse12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv310HPDInverse12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv210HPDInverse12UpperOrLowerR6MatrixI1FE"></span><span id="HPDInverse__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HPDInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410HPDInverse12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410HPDInverse12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv310HPDInverse12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv210HPDInverse12UpperOrLowerR10DistMatrixI1FE"></span><span id="HPDInverse__UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">HPDInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410HPDInverse12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the <cite>uplo</cite> triangle of the HPD matrix <cite>A</cite> with the same
+triangle of the inverse of <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="hermitian-functions">
+<h2>Hermitian functions<a class="headerlink" href="#hermitian-functions" title="Permalink to this headline">¶</a></h2>
+<p>Reform the matrix with the eigenvalues modified by a user-defined function.
+When the user-defined function is real-valued, the result will remain Hermitian,
+but when the function is complex-valued, the result is best characterized as
+normal.</p>
+<p>When the user-defined function, say <span class="math notranslate nohighlight">\(f\)</span>, is analytic, we can say much
+more about the result: if the eigenvalue decomposition of the
+Hermitian matrix <span class="math notranslate nohighlight">\(A\)</span> is <span class="math notranslate nohighlight">\(A=Z \Lambda Z^H\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[f(A) = f(Z \Lambda Z^H) = Z f(\Lambda) Z^H.\]</div>
+<p>Two important special cases are <span class="math notranslate nohighlight">\(f(\lambda) = \exp(\lambda)\)</span> and
+<span class="math notranslate nohighlight">\(f(\lambda)=\exp(i \lambda)\)</span>, where the former results in a Hermitian
+matrix and the latter in a normal (in fact, unitary) matrix.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since Elemental currently depends on PMRRR for its tridiagonal
+eigensolver, only double-precision results are supported as of now.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv421RealHermitianFunction12UpperOrLowerR6MatrixI1FERK11RealFunctor">
+<span id="_CPPv321RealHermitianFunction12UpperOrLowerR6MatrixI1FERK11RealFunctor"></span><span id="_CPPv221RealHermitianFunction12UpperOrLowerR6MatrixI1FERK11RealFunctor"></span><span id="RealHermitianFunction__UpperOrLower.Matrix:F:R.RealFunctorCR"></span>void <code class="descname">RealHermitianFunction</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> RealFunctor &amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421RealHermitianFunction12UpperOrLowerR6MatrixI1FERK11RealFunctor" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421RealHermitianFunction12UpperOrLowerR10DistMatrixI1FERK11RealFunctor">
+<span id="_CPPv321RealHermitianFunction12UpperOrLowerR10DistMatrixI1FERK11RealFunctor"></span><span id="_CPPv221RealHermitianFunction12UpperOrLowerR10DistMatrixI1FERK11RealFunctor"></span><span id="RealHermitianFunction__UpperOrLower.DistMatrix:F:R.RealFunctorCR"></span>void <code class="descname">RealHermitianFunction</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> RealFunctor &amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421RealHermitianFunction12UpperOrLowerR10DistMatrixI1FERK11RealFunctor" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Modifies the eigenvalues of the passed-in Hermitian matrix by replacing
+each eigenvalue <span class="math notranslate nohighlight">\(\lambda_i\)</span> with <span class="math notranslate nohighlight">\(f(\lambda_i) \in \mathbb{R}\)</span>.
+<code class="docutils literal notranslate"><span class="pre">RealFunctor</span></code> is any
+class which has the member function <code class="docutils literal notranslate"><span class="pre">Real</span> <span class="pre">operator()(</span> <span class="pre">Real</span> <span class="pre">omega</span> <span class="pre">)</span> <span class="pre">const</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424ComplexHermitianFunction12UpperOrLowerR6MatrixI7ComplexI4RealEERK14ComplexFunctor">
+<span id="_CPPv324ComplexHermitianFunction12UpperOrLowerR6MatrixI7ComplexI4RealEERK14ComplexFunctor"></span><span id="_CPPv224ComplexHermitianFunction12UpperOrLowerR6MatrixI7ComplexI4RealEERK14ComplexFunctor"></span><span id="ComplexHermitianFunction__UpperOrLower.Matrix:Complex:Real::R.ComplexFunctorCR"></span>void <code class="descname">ComplexHermitianFunction</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> ComplexFunctor &amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424ComplexHermitianFunction12UpperOrLowerR6MatrixI7ComplexI4RealEERK14ComplexFunctor" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424ComplexHermitianFunction12UpperOrLowerR10DistMatrixI7ComplexI4RealEERK14ComplexFunctor">
+<span id="_CPPv324ComplexHermitianFunction12UpperOrLowerR10DistMatrixI7ComplexI4RealEERK14ComplexFunctor"></span><span id="_CPPv224ComplexHermitianFunction12UpperOrLowerR10DistMatrixI7ComplexI4RealEERK14ComplexFunctor"></span><span id="ComplexHermitianFunction__UpperOrLower.DistMatrix:Complex:Real::R.ComplexFunctorCR"></span>void <code class="descname">ComplexHermitianFunction</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealEE" title="DistMatrix&lt;Complex&lt;Real&gt;&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> ComplexFunctor &amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424ComplexHermitianFunction12UpperOrLowerR10DistMatrixI7ComplexI4RealEERK14ComplexFunctor" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Modifies the eigenvalues of the passed-in complex Hermitian matrix by
+replacing each eigenvalue <span class="math notranslate nohighlight">\(\lambda_i\)</span> with
+<span class="math notranslate nohighlight">\(f(\lambda_i) \in \mathbb{C}\)</span>. <code class="docutils literal notranslate"><span class="pre">ComplexFunctor</span></code> can be any class
+which has the member function <code class="docutils literal notranslate"><span class="pre">Complex&lt;Real&gt;</span> <span class="pre">operator()(</span> <span class="pre">Real</span> <span class="pre">omega</span> <span class="pre">)</span> <span class="pre">const</span></code>.</p>
+</dd></dl>
+
+<p><strong>TODO: A version of ComplexHermitianFunction which begins with a real matrix</strong></p>
+</div>
+<div class="section" id="pseudoinverse">
+<h2>Pseudoinverse<a class="headerlink" href="#pseudoinverse" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv413PseudoinverseR6MatrixI1FE4BaseI1FE">
+<span id="_CPPv313PseudoinverseR6MatrixI1FE4BaseI1FE"></span><span id="_CPPv213PseudoinverseR6MatrixI1FE4BaseI1FE"></span><span id="Pseudoinverse__Matrix:F:R.Base:F:"></span><code class="descname">Pseudoinverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tolerance</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PseudoinverseR6MatrixI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413PseudoinverseR10DistMatrixI1FE4BaseI1FE">
+<span id="_CPPv313PseudoinverseR10DistMatrixI1FE4BaseI1FE"></span><span id="_CPPv213PseudoinverseR10DistMatrixI1FE4BaseI1FE"></span><span id="Pseudoinverse__DistMatrix:F:R.Base:F:"></span><code class="descname">Pseudoinverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tolerance</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PseudoinverseR10DistMatrixI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the pseudoinverse of a general matrix through computing its SVD,
+modifying the singular values with the function</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f(\sigma) = \left\{\begin{array}{cc}
+  1/\sigma, &amp; \sigma \ge \epsilon \, n \, \| A \|_2 \\
+      0,      &amp; \mbox{otherwise}
+\end{array}\right.,\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon\)</span> is the relative machine precision,
+<span class="math notranslate nohighlight">\(n\)</span> is the height of <span class="math notranslate nohighlight">\(A\)</span>, and <span class="math notranslate nohighlight">\(\| A \|_2\)</span> is the maximum
+singular value.
+If a nonzero value for <cite>tolerance</cite> was specified, it is used instead of
+<span class="math notranslate nohighlight">\(\epsilon n \| A \|_2\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv422HermitianPseudoinverse12UpperOrLowerR6MatrixI1FE4BaseI1FE">
+<span id="_CPPv322HermitianPseudoinverse12UpperOrLowerR6MatrixI1FE4BaseI1FE"></span><span id="_CPPv222HermitianPseudoinverse12UpperOrLowerR6MatrixI1FE4BaseI1FE"></span><span id="HermitianPseudoinverse__UpperOrLower.Matrix:F:R.Base:F:"></span><code class="descname">HermitianPseudoinverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tolerance</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422HermitianPseudoinverse12UpperOrLowerR6MatrixI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv422HermitianPseudoinverse12UpperOrLowerR10DistMatrixI1FE4BaseI1FE">
+<span id="_CPPv322HermitianPseudoinverse12UpperOrLowerR10DistMatrixI1FE4BaseI1FE"></span><span id="_CPPv222HermitianPseudoinverse12UpperOrLowerR10DistMatrixI1FE4BaseI1FE"></span><span id="HermitianPseudoinverse__UpperOrLower.DistMatrix:F:R.Base:F:"></span><code class="descname">HermitianPseudoinverse</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tolerance</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422HermitianPseudoinverse12UpperOrLowerR10DistMatrixI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the pseudoinverse of a Hermitian matrix through a customized version
+of <a class="reference internal" href="#_CPPv421RealHermitianFunction12UpperOrLowerR6MatrixI1FERK11RealFunctor" title="RealHermitianFunction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RealHermitianFunction()</span></code></a> which used the eigenvalue mapping
+function</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f(\omega) = \left\{\begin{array}{cc}
+  1/\omega, &amp; |\omega| \ge \epsilon \, n \, \| A \|_2 \\
+      0,      &amp; \mbox{otherwise}
+\end{array}\right.,\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon\)</span> is the relative machine precision,
+<span class="math notranslate nohighlight">\(n\)</span> is the height of <span class="math notranslate nohighlight">\(A\)</span>, and <span class="math notranslate nohighlight">\(\| A \|_2\)</span> can be computed
+as the maximum absolute value of the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>.
+If a nonzero value for <cite>tolerance</cite> is specified, it is used instead of
+<span class="math notranslate nohighlight">\(\epsilon n \| A \|_2\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="square-root">
+<h2>Square root<a class="headerlink" href="#square-root" title="Permalink to this headline">¶</a></h2>
+<p>A matrix <span class="math notranslate nohighlight">\(B\)</span> satisfying</p>
+<div class="math notranslate nohighlight">
+\[B^2 = A\]</div>
+<p>is referred to as the <em>square-root</em> of the matrix <span class="math notranslate nohighlight">\(A\)</span>. Such a matrix
+is guaranteed to exist as long as <span class="math notranslate nohighlight">\(A\)</span> is diagonalizable: if
+<span class="math notranslate nohighlight">\(A = X \Lambda X^{-1}\)</span>, then we may put</p>
+<div class="math notranslate nohighlight">
+\[B = X \sqrt{\Lambda} X^{-1},\]</div>
+<p>where each eigenvalue <span class="math notranslate nohighlight">\(\lambda = r e^{i\theta}\)</span> maps to
+<span class="math notranslate nohighlight">\(\sqrt{\lambda} = \sqrt{r} e^{i\theta/2}\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv410SquareRootR6MatrixI1FE">
+<span id="_CPPv310SquareRootR6MatrixI1FE"></span><span id="_CPPv210SquareRootR6MatrixI1FE"></span><span id="SquareRoot__Matrix:F:R"></span>void <code class="descname">SquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410SquareRootR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410SquareRootR10DistMatrixI1FE">
+<span id="_CPPv310SquareRootR10DistMatrixI1FE"></span><span id="_CPPv210SquareRootR10DistMatrixI1FE"></span><span id="SquareRoot__DistMatrix:F:R"></span>void <code class="descname">SquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410SquareRootR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Currently uses a Newton iteration to compute the general matrix square-root.
+See <code class="docutils literal notranslate"><span class="pre">square_root::Newton</span></code> for the more detailed interface.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HPSDSquareRoot12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv314HPSDSquareRoot12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv214HPSDSquareRoot12UpperOrLowerR6MatrixI1FE"></span><span id="HPSDSquareRoot__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HPSDSquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPSDSquareRoot12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HPSDSquareRoot12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv314HPSDSquareRoot12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv214HPSDSquareRoot12UpperOrLowerR10DistMatrixI1FE"></span><span id="HPSDSquareRoot__UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">HPSDSquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPSDSquareRoot12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the Hermitian EVD, square-roots the eigenvalues, and then
+reforms the matrix. If any of the eigenvalues were sufficiently negative,
+a <a class="reference internal" href="../core/environment.html#_CPPv422NonHPSDMatrixException" title="NonHPSDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPSDMatrixException</span></code></a> is thrown.</p>
+</dd></dl>
+
+<p><strong>TODO: HermitianSquareRoot</strong></p>
+<div class="section" id="square-root-namespace">
+<h3>square_root namespace<a class="headerlink" href="#square-root-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N11square_root6NewtonER6MatrixI1FEi4BaseI1FE">
+<span id="_CPPv3N11square_root6NewtonER6MatrixI1FEi4BaseI1FE"></span><span id="_CPPv2N11square_root6NewtonER6MatrixI1FEi4BaseI1FE"></span><span id="square_root::Newton__Matrix:F:R.i.Base:F:"></span>int <code class="descclassname">square_root<code class="descclassname">::</code></code><code class="descname">Newton</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>maxIts</em> = 100, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N11square_root6NewtonER6MatrixI1FEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N11square_root6NewtonER10DistMatrixI1FEi4BaseI1FE">
+<span id="_CPPv3N11square_root6NewtonER10DistMatrixI1FEi4BaseI1FE"></span><span id="_CPPv2N11square_root6NewtonER10DistMatrixI1FEi4BaseI1FE"></span><span id="square_root::Newton__DistMatrix:F:R.i.Base:F:"></span>int <code class="descclassname">square_root<code class="descclassname">::</code></code><code class="descname">Newton</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, int <em>maxIts</em> = 100, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N11square_root6NewtonER10DistMatrixI1FEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs at most <code class="docutils literal notranslate"><span class="pre">maxIts</span></code> Newton steps in an attempt to compute the
+matrix square-root within the specified tolerance, which defaults to
+<span class="math notranslate nohighlight">\(n \epsilon\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the matrix height and <span class="math notranslate nohighlight">\(\epsilon\)</span>
+is the machine precision.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="sign">
+<h2>Sign<a class="headerlink" href="#sign" title="Permalink to this headline">¶</a></h2>
+<p>The matrix sign function can be written as</p>
+<div class="math notranslate nohighlight">
+\[\text{sgn}(A) = A(A^2)^{-1/2},\]</div>
+<p>as long as <span class="math notranslate nohighlight">\(A\)</span> does not have any pure-imaginary eigenvalues.</p>
+<dl class="function">
+<dt id="_CPPv44SignR6MatrixI1FE">
+<span id="_CPPv34SignR6MatrixI1FE"></span><span id="_CPPv24SignR6MatrixI1FE"></span><span id="Sign__Matrix:F:R"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SignR10DistMatrixI1FE">
+<span id="_CPPv34SignR10DistMatrixI1FE"></span><span id="_CPPv24SignR10DistMatrixI1FE"></span><span id="Sign__DistMatrix:F:R"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SignR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv34SignR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv24SignR6MatrixI1FER6MatrixI1FE"></span><span id="Sign__Matrix:F:R.Matrix:F:R"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SignR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv34SignR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv24SignR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="Sign__DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the matrix sign through a globally-convergent Newton iteration
+scaled with the Frobenius norm of the iterate and its inverse.
+Optionally return the full decomposition, <span class="math notranslate nohighlight">\(A=S N\)</span>, where <span class="math notranslate nohighlight">\(A\)</span>
+is overwritten by <span class="math notranslate nohighlight">\(S\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR6MatrixI1FE"></span><span id="HermitianSign__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR10DistMatrixI1FE"></span><span id="HermitianSign__UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="HermitianSign__UpperOrLower.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="HermitianSign__UpperOrLower.DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the Hermitian EVD, replace the eigenvalues with their sign, and then
+reform the matrix. Optionally return the full decomposition, <span class="math notranslate nohighlight">\(A=SN\)</span>,
+where <span class="math notranslate nohighlight">\(A\)</span> is overwritten by <span class="math notranslate nohighlight">\(S\)</span>. Note that this will also be
+a polar decomposition.</p>
+</dd></dl>
+
+<div class="section" id="sign-namespace">
+<h3>sign namespace<a class="headerlink" href="#sign-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv4N4sign7ScalingE">
+<span id="_CPPv3N4sign7ScalingE"></span><span id="_CPPv2N4sign7ScalingE"></span><span id="sign::Scaling"></span><em class="property">type </em><code class="descclassname">sign<code class="descclassname">::</code></code><code class="descname">Scaling</code><a class="headerlink" href="#_CPPv4N4sign7ScalingE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying the scaling strategy to be used for the Newton
+iteration for the matrix sign function. It must be either <code class="docutils literal notranslate"><span class="pre">NONE</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DETERMINANT</span></code>, or <code class="docutils literal notranslate"><span class="pre">FROB_NORM</span></code> (the default).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4sign6NewtonER6MatrixI1FEN4sign7ScalingEi4BaseI1FE">
+<span id="_CPPv3N4sign6NewtonER6MatrixI1FEN4sign7ScalingEi4BaseI1FE"></span><span id="_CPPv2N4sign6NewtonER6MatrixI1FEN4sign7ScalingEi4BaseI1FE"></span><span id="sign::Newton__Matrix:F:R.sign::Scaling.i.Base:F:"></span>int <code class="descclassname">sign<code class="descclassname">::</code></code><code class="descname">Newton</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, sign::<a class="reference internal" href="#_CPPv4N4sign7ScalingE" title="sign::Scaling">Scaling</a> <em>scaling</em> = FROB_NORM, int <em>maxIts</em> = 100, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4sign6NewtonER6MatrixI1FEN4sign7ScalingEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4sign6NewtonER10DistMatrixI1FEN4sign7ScalingEi4BaseI1FE">
+<span id="_CPPv3N4sign6NewtonER10DistMatrixI1FEN4sign7ScalingEi4BaseI1FE"></span><span id="_CPPv2N4sign6NewtonER10DistMatrixI1FEN4sign7ScalingEi4BaseI1FE"></span><span id="sign::Newton__DistMatrix:F:R.sign::Scaling.i.Base:F:"></span>int <code class="descclassname">sign<code class="descclassname">::</code></code><code class="descname">Newton</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, sign::<a class="reference internal" href="#_CPPv4N4sign7ScalingE" title="sign::Scaling">Scaling</a> <em>scaling</em> = FROB_NORM, int <em>maxIts</em> = 100, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4sign6NewtonER10DistMatrixI1FEN4sign7ScalingEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a (scaled) Newton iteration for at most <code class="docutils literal notranslate"><span class="pre">maxIts</span></code> iterations with
+the specified tolerance, which, if undefined, is set to <span class="math notranslate nohighlight">\(n \epsilon\)</span>,
+where <span class="math notranslate nohighlight">\(n\)</span> is the matrix dimension and <span class="math notranslate nohighlight">\(\epsilon\)</span> is the
+machine epsilon. The return value is the number of performed iterations.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

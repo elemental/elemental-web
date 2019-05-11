@@ -1,0 +1,527 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Factorization &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="Solve after factorization" href="solve_after.html" />
+    <link rel="prev" title="Pivoted dense LDL" href="../pivoted.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../../factor.html">Factorizations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../Cholesky.html">Cholesky factorization</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../LDL.html">LDL factorization</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../../dense.html">Dense LDL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../sparse.html">Sparse LDL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../LU.html">LU factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../LQ.html">LQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../QR.html">QR factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../RQ.html">RQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../GQR.html">Generalized QR factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../GRQ.html">Generalized RQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../ID.html">Interpolative Decomposition (ID)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Skeleton.html">Skeleton decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../factor.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../../../../factor.html">Factorizations</a> &raquo;</li>
+        
+          <li><a href="../../../LDL.html">LDL factorization</a> &raquo;</li>
+        
+          <li><a href="../../dense.html">Dense LDL</a> &raquo;</li>
+        
+          <li><a href="../pivoted.html">Pivoted dense LDL</a> &raquo;</li>
+        
+      <li>Factorization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../../_sources/lapack_like/factor/LDL/dense/pivoted/factor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="factorization">
+<h1>Factorization<a class="headerlink" href="#factorization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="LDL">
+<code class="descname">LDL</code><span class="sig-paren">(</span><em>A</em><span class="optional">[</span>, <em>conjugate=True</em><span class="optional">[</span>, <em>pivType=BUNCH_KAUFMAN_A</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#LDL" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – The (sequential or distributed) dense input/output matrix</p></li>
+<li><p><strong>conjugate</strong> – (optional) boolean for whether to perform LDLT or LDLH</p></li>
+<li><p><strong>pivType</strong> – (optional) the preferred pivoting strategy</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Nothing is returned if <code class="docutils literal notranslate"><span class="pre">pivType</span></code> is <a class="reference internal" href="#LDL_WITHOUT_PIVOTING" title="LDL_WITHOUT_PIVOTING"><code class="xref py py-data docutils literal notranslate"><span class="pre">LDL_WITHOUT_PIVOTING</span></code></a>, but, otherwise, the subdiagonal of <span class="math notranslate nohighlight">\(D\)</span>, <code class="docutils literal notranslate"><span class="pre">dSub</span></code>, and the permutation vector, <code class="docutils literal notranslate"><span class="pre">p</span></code>, are returned</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The following Python pseudo-enum contains the list of allowable pivoting
+approaches for dense LDL factorization:</p>
+<dl class="data">
+<dt id="BUNCH_KAUFMAN_A">
+<code class="descname">BUNCH_KAUFMAN_A</code><a class="headerlink" href="#BUNCH_KAUFMAN_A" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hardcoded to the value 0</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="BUNCH_KAUFMAN_C">
+<code class="descname">BUNCH_KAUFMAN_C</code><a class="headerlink" href="#BUNCH_KAUFMAN_C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not yet supported (and hardcoded to the value 1)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="BUNCH_KAUFMAN_D">
+<code class="descname">BUNCH_KAUFMAN_D</code><a class="headerlink" href="#BUNCH_KAUFMAN_D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hardcoded to the value 2</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="BUNCH_KAUFMAN_BOUNDED">
+<code class="descname">BUNCH_KAUFMAN_BOUNDED</code><a class="headerlink" href="#BUNCH_KAUFMAN_BOUNDED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not yet supported (and hardcoded to the value 3)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="BUNCH_PARLETT">
+<code class="descname">BUNCH_PARLETT</code><a class="headerlink" href="#BUNCH_PARLETT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hardcoded to the value 4</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="LDL_WITHOUT_PIVOTING">
+<code class="descname">LDL_WITHOUT_PIVOTING</code><a class="headerlink" href="#LDL_WITHOUT_PIVOTING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hardcoded to the value 5</p>
+</dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="enum">
+<dt id="_CPPv412LDLPivotType">
+<span id="_CPPv312LDLPivotType"></span><span id="_CPPv212LDLPivotType"></span><em class="property">enum </em><code class="descname">LDLPivotType</code><a class="headerlink" href="#_CPPv412LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For specifying the symmetric pivoting strategy. The current
+(not yet all supported) options include:</p>
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE">
+<span id="_CPPv3N12LDLPivotType15BUNCH_KAUFMAN_AE"></span><span id="_CPPv2N12LDLPivotType15BUNCH_KAUFMAN_AE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_A</code><a class="headerlink" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_CE">
+<span id="_CPPv3N12LDLPivotType15BUNCH_KAUFMAN_CE"></span><span id="_CPPv2N12LDLPivotType15BUNCH_KAUFMAN_CE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_C</code><a class="headerlink" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_CE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Not yet supported</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_DE">
+<span id="_CPPv3N12LDLPivotType15BUNCH_KAUFMAN_DE"></span><span id="_CPPv2N12LDLPivotType15BUNCH_KAUFMAN_DE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_D</code><a class="headerlink" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_DE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE">
+<span id="_CPPv3N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE"></span><span id="_CPPv2N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_BOUNDED</code><a class="headerlink" href="#_CPPv4N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Not yet supported</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType13BUNCH_PARLETTE">
+<span id="_CPPv3N12LDLPivotType13BUNCH_PARLETTE"></span><span id="_CPPv2N12LDLPivotType13BUNCH_PARLETTE"></span><em class="property">enumerator </em><code class="descname">BUNCH_PARLETT</code><a class="headerlink" href="#_CPPv4N12LDLPivotType13BUNCH_PARLETTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType20LDL_WITHOUT_PIVOTINGE">
+<span id="_CPPv3N12LDLPivotType20LDL_WITHOUT_PIVOTINGE"></span><span id="_CPPv2N12LDLPivotType20LDL_WITHOUT_PIVOTINGE"></span><em class="property">enumerator </em><code class="descname">LDL_WITHOUT_PIVOTING</code><a class="headerlink" href="#_CPPv4N12LDLPivotType20LDL_WITHOUT_PIVOTINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IE16LDLPivotConstantI4RealE4Real12LDLPivotType">
+<span id="_CPPv3IE16LDLPivotConstantI4RealE12LDLPivotType"></span><span id="_CPPv2IE16LDLPivotConstantI4RealE12LDLPivotType"></span>template&lt;&gt;<br />Real <code class="descname">LDLPivotConstant</code>&lt;Real&gt;<span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IE16LDLPivotConstantI4RealE4Real12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Maps various LDL pivotings schemes to their optimal threshold constant.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE12LDLPivotCtrlI4RealE">
+<span id="_CPPv3IE12LDLPivotCtrlI4RealE"></span><span id="_CPPv2IE12LDLPivotCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">LDLPivotCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE12LDLPivotCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N12LDLPivotCtrlI4RealE9pivotTypeE">
+<span id="_CPPv3N12LDLPivotCtrlI4RealE9pivotTypeE"></span><span id="_CPPv2N12LDLPivotCtrlI4RealE9pivotTypeE"></span><span id="LDLPivotCtrl:Real:::pivotType__LDLPivotType"></span><a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <code class="descname">pivotType</code><a class="headerlink" href="#_CPPv4N12LDLPivotCtrlI4RealE9pivotTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of pivoting to perform (by default, <code class="docutils literal notranslate"><span class="pre">BUNCH_KAUFMAN_A</span></code>)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12LDLPivotCtrlI4RealE5gammaE">
+<span id="_CPPv3N12LDLPivotCtrlI4RealE5gammaE"></span><span id="_CPPv2N12LDLPivotCtrlI4RealE5gammaE"></span><span id="LDLPivotCtrl:Real:::gamma__Real"></span>Real <code class="descname">gamma</code><a class="headerlink" href="#_CPPv4N12LDLPivotCtrlI4RealE5gammaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pivot tolerance (by default, set to <code class="docutils literal notranslate"><span class="pre">LDLPivotConstant&lt;Real&gt;(pivotType)</span></code>)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType">
+<span id="_CPPv3N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType"></span><span id="_CPPv2N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType"></span><span id="LDLPivotCtrl:Real:::LDLPivotCtrl__LDLPivotType"></span><code class="descname">LDLPivotCtrl</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>piv</em> = <a class="reference internal" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48LDLPivot">
+<span id="_CPPv38LDLPivot"></span><span id="_CPPv28LDLPivot"></span><span id="LDLPivot"></span><em class="property">class </em><code class="descname">LDLPivot</code><a class="headerlink" href="#_CPPv48LDLPivot" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8LDLPivot2nbE">
+<span id="_CPPv3N8LDLPivot2nbE"></span><span id="_CPPv2N8LDLPivot2nbE"></span><span id="LDLPivot::nb__Int"></span><a class="reference internal" href="../../../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">nb</code><a class="headerlink" href="#_CPPv4N8LDLPivot2nbE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether the pivot is 1x1 or 2x2.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8LDLPivot4fromE">
+<span id="_CPPv3N8LDLPivot4fromE"></span><span id="_CPPv2N8LDLPivot4fromE"></span><span id="LDLPivot::from__IntA"></span><a class="reference internal" href="../../../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">from</code>[2]<a class="headerlink" href="#_CPPv4N8LDLPivot4fromE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The source indices of the row or rows to swap with for the 1x1 or 2x2
+pivot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv33LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv23LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="LDL__Matrix:F:R.Matrix:F:R.Matrix:i:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descname">LDL</code><span class="sig-paren">(</span><a class="reference internal" href="../../../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, Matrix&lt;int&gt; &amp;<em>p</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv33LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv23LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="LDL__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:i:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descname">LDL</code><span class="sig-paren">(</span><a class="reference internal" href="../../../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="c.ElLDLPivotType">
+<code class="descname">ElLDLPivotType</code><a class="headerlink" href="#c.ElLDLPivotType" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum for specifying the symmetric pivoting strategy. The current
+(not yet all supported) options include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_A</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_C</span></code> (not yet supported)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_D</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_BOUNDED</span></code> (not yet supported)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_PARLETT</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLDLPivotCtrl_s">
+<code class="descname">ElLDLPivotCtrl_s</code><a class="headerlink" href="#c.ElLDLPivotCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElLDLPivotCtrl_s.pivotType">
+<a class="reference internal" href="#c.ElLDLPivotType" title="ElLDLPivotType">ElLDLPivotType</a> <code class="descname">pivotType</code><a class="headerlink" href="#c.ElLDLPivotCtrl_s.pivotType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElLDLPivotCtrl_s.gamma">
+float <code class="descname">gamma</code><a class="headerlink" href="#c.ElLDLPivotCtrl_s.gamma" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLDLPivotCtrl_d">
+<code class="descname">ElLDLPivotCtrl_d</code><a class="headerlink" href="#c.ElLDLPivotCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElLDLPivotCtrl_d.pivotType">
+<a class="reference internal" href="#c.ElLDLPivotType" title="ElLDLPivotType">ElLDLPivotType</a> <code class="descname">pivotType</code><a class="headerlink" href="#c.ElLDLPivotCtrl_d.pivotType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElLDLPivotCtrl_d.gamma">
+double <code class="descname">gamma</code><a class="headerlink" href="#c.ElLDLPivotCtrl_d.gamma" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLDLPivot">
+<code class="descname">ElLDLPivot</code><a class="headerlink" href="#c.ElLDLPivot" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElLDLPivot.nb">
+Int <code class="descname">nb</code><a class="headerlink" href="#c.ElLDLPivot.nb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the pivot is 1x1 or 2x2.</p>
+</dd></dl>
+
+<dl class="member">
+<dt>
+<code class="descname">Int from[2]</code></dt>
+<dd><p>The source indices of the row or rows to swap with for the 1x1 or 2x2
+pivot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_s">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> dSub</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_d">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> dSub</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_c">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> dSub</em>, ElMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_z">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> dSub</em>, ElMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_s">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> dSub</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_d">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> dSub</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_c">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> dSub</em>, ElDistMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_z">
+<a class="reference internal" href="../../../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> dSub</em>, ElDistMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL/dense/Pivoted.hpp">C++11 implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL/dense/Pivoted/">C++11 subroutines</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.hpp">C++11 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor-C.cpp">C99 wrapper</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.h">C99 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/python/lapack_like/factor.py">Python wrapper</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LDL.cpp">C++11 test driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/LDL.cpp">C++11 example driver</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="solve_after.html" class="btn btn-neutral float-right" title="Solve after factorization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../pivoted.html" class="btn btn-neutral float-left" title="Pivoted dense LDL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

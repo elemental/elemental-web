@@ -1,0 +1,602 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>General to bidiagonal &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Factorizations" href="../factor.html" />
+    <link rel="prev" title="Square to Hessenberg" href="Hessenberg.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../condense.html">Reduction to condensed form</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="HermitianTridiag.html">Hermitian to tridiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hessenberg.html">Square to Hessenberg</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">General to bidiagonal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reduction">Reduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applying-the-changes-of-basis">Applying the changes of basis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../condense.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../condense.html">Reduction to condensed form</a> &raquo;</li>
+        
+      <li>General to bidiagonal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/condense/Bidiag.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="general-to-bidiagonal">
+<h1>General to bidiagonal<a class="headerlink" href="#general-to-bidiagonal" title="Permalink to this headline">¶</a></h1>
+<p>Reduces a general fully-populated <span class="math notranslate nohighlight">\(m \times n\)</span> matrix to bidiagonal form
+through two-sided Householder transformations; when the <span class="math notranslate nohighlight">\(m \ge n\)</span>, the
+result is upper bidiagonal, otherwise it is lower bidiagonal. This routine is
+most commonly used as a preprocessing step in computing the SVD of a general
+matrix.</p>
+<div class="section" id="reduction">
+<h2>Reduction<a class="headerlink" href="#reduction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-api">
+<h3>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Bidiag">
+<code class="descname">Bidiag</code><span class="sig-paren">(</span><em>A</em><span class="optional">[</span>, <em>bidiagOnly=False</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Bidiag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv46BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv36BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv26BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="Bidiag__Matrix:F:R.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">Bidiag</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>tP</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46BidiagR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv36BidiagR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv26BidiagR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="Bidiag__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">Bidiag</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>tP</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46BidiagR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites the main and sub (or super) diagonal of the real matrix <cite>A</cite> with
+the resulting bidiagonal matrix and stores the scaled Householder vectors in
+the remainder of the matrix.
+The complex case must also store the scalings of the Householder
+transformations (in <cite>tP</cite> and <cite>tQ</cite>) if they are to be applied.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N6bidiag8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N6bidiag8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="bidiag::Explicit__Matrix:F:R.Matrix:F:R.Matrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag8ExplicitER6MatrixI1FER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N6bidiag8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N6bidiag8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="bidiag::Explicit__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>P</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag8ExplicitER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with the bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>, and
+also return <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag17ExplicitCondensedER6MatrixI1FE">
+<span id="_CPPv3N6bidiag17ExplicitCondensedER6MatrixI1FE"></span><span id="_CPPv2N6bidiag17ExplicitCondensedER6MatrixI1FE"></span><span id="bidiag::ExplicitCondensed__Matrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ExplicitCondensed</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag17ExplicitCondensedER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag17ExplicitCondensedER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N6bidiag17ExplicitCondensedER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N6bidiag17ExplicitCondensedER18AbstractDistMatrixI1FE"></span><span id="bidiag::ExplicitCondensed__AbstractDistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ExplicitCondensed</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag17ExplicitCondensedER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns just the resulting bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="single-precision">
+<h4>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElBidiag_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiag_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> tP</em>, ElMatrix_s<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiag_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> tP</em>, ElDistMatrix_s<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrites the main and sub (or super) diagonal of the real matrix <cite>A</cite> with
+the resulting bidiagonal matrix and stores the scaled Householder vectors in
+the remainder of the matrix.
+The complex case must also store the scalings of the Householder
+transformations (in <cite>tP</cite> and <cite>tQ</cite>) if they are to be applied.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicit_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicit_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> P</em>, ElMatrix_s<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicit_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> P</em>, ElDistMatrix_s<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with the bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>, and
+also return <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensed_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensed_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensed_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensedDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensedDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensedDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns just the resulting bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h4>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElBidiag_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiag_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> tP</em>, ElMatrix_d<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiag_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> tP</em>, ElDistMatrix_d<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrites the main and sub (or super) diagonal of the real matrix <cite>A</cite> with
+the resulting bidiagonal matrix and stores the scaled Householder vectors in
+the remainder of the matrix.
+The complex case must also store the scalings of the Householder
+transformations (in <cite>tP</cite> and <cite>tQ</cite>) if they are to be applied.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicit_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicit_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> P</em>, ElMatrix_d<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicit_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> P</em>, ElDistMatrix_d<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with the bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>, and
+also return <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensed_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensed_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensed_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensedDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensedDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensedDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns just the resulting bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h4>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElBidiag_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiag_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> tP</em>, ElMatrix_c<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiag_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> tP</em>, ElDistMatrix_c<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrites the main and sub (or super) diagonal of the real matrix <cite>A</cite> with
+the resulting bidiagonal matrix and stores the scaled Householder vectors in
+the remainder of the matrix.
+The complex case must also store the scalings of the Householder
+transformations (in <cite>tP</cite> and <cite>tQ</cite>) if they are to be applied.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicit_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicit_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> P</em>, ElMatrix_c<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicit_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> P</em>, ElDistMatrix_c<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with the bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>, and
+also return <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensed_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensed_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensed_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensedDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensedDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensedDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns just the resulting bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h4>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElBidiag_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiag_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> tP</em>, ElMatrix_z<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiag_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> tP</em>, ElDistMatrix_z<em> tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrites the main and sub (or super) diagonal of the real matrix <cite>A</cite> with
+the resulting bidiagonal matrix and stores the scaled Householder vectors in
+the remainder of the matrix.
+The complex case must also store the scalings of the Householder
+transformations (in <cite>tP</cite> and <cite>tQ</cite>) if they are to be applied.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicit_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicit_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> P</em>, ElMatrix_z<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicit_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> P</em>, ElDistMatrix_z<em> Q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with the bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>, and
+also return <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensed_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensed_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensed_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBidiagExplicitCondensedDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBidiagExplicitCondensedDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBidiagExplicitCondensedDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns just the resulting bidiagonal matrix, <span class="math notranslate nohighlight">\(B = Q^H A P\)</span>.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="applying-the-changes-of-basis">
+<h2>Applying the changes of basis<a class="headerlink" href="#applying-the-changes-of-basis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>Python API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ApplyQAfterBidiag">
+<code class="descname">ApplyQAfterBidiag</code><span class="sig-paren">(</span><em>side</em>, <em>orient</em>, <em>A</em>, <em>t</em>, <em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#ApplyQAfterBidiag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C++ API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="bidiag::ApplyQ__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="bidiag::ApplyQ__LeftOrRight.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="bidiag::ApplyP__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyP</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyPE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyPE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="bidiag::ApplyP__LeftOrRight.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyP</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h3>C API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h4>Single-precision<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiag_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiag_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> t</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiag_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiagDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiagDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> t</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiagDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiag_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiag_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> t</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiag_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiagDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiagDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> t</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiagDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h4>Double-precision<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiag_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiag_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> t</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiag_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiagDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiagDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> t</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiagDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiag_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiag_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> t</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiag_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiagDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiagDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> t</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiagDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h4>Single-precision complex<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiag_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiag_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> t</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiag_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiagDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiagDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> t</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiagDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiag_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiag_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> t</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiag_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiagDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiagDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> t</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiagDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id8">
+<h4>Double-precision complex<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiag_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiag_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> t</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiag_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterBidiagDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterBidiagDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> t</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterBidiagDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiag_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiag_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> t</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiag_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyPAfterBidiagDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyPAfterBidiagDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> t</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyPAfterBidiagDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/condense/Bidiag.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/condense/Bidiag">Subroutine implementations</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/Bidiag.cpp">Test driver</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../factor.html" class="btn btn-neutral float-right" title="Factorizations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Hessenberg.html" class="btn btn-neutral float-left" title="Square to Hessenberg" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

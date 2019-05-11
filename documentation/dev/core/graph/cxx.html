@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Graph (C++ interface) &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Graph (C interface)" href="c.html" />
+    <link rel="prev" title="Graph (Python interface)" href="python.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../graph.html">Graph</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="python.html">Graph (Python interface)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Graph (C++ interface)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="c.html">Graph (C interface)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../graph.html">Graph</a> &raquo;</li>
+        
+      <li>Graph (C++ interface)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/graph/cxx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="graph-c-interface">
+<h1>Graph (C++ interface)<a class="headerlink" href="#graph-c-interface" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">Graph</span></code> class allows for the efficient construction and manipulation
+of sequentially-stored, sparse graphs within Elemental and is the primary
+building block for the <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">SparsMatrix&lt;T&gt;</span></code> class. The usual usage
+pattern is to construct a trivial graph, e.g., via</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="p">...</span>
+<span class="n">El</span><span class="o">::</span><span class="n">Graph</span> <span class="n">graph</span><span class="p">(</span><span class="n">numSources</span><span class="p">,</span><span class="n">numTargets</span><span class="p">);</span>
+<span class="c1">// Set aside space for the edges to be inserted</span>
+<span class="n">graph</span><span class="p">.</span><span class="n">Reserve</span><span class="p">(</span><span class="n">numEdgesUpperBound</span><span class="p">);</span>
+<span class="c1">// Iterate over the set of edges to insert</span>
+<span class="p">...</span>
+  <span class="c1">// Queue the insertion of a particular edge</span>
+  <span class="n">graph</span><span class="p">.</span><span class="n">QueueConnection</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">);</span>
+<span class="p">...</span>
+<span class="c1">// Handle insertation of all of the queued edges</span>
+<span class="n">graph</span><span class="p">.</span><span class="n">ProcessQueues</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For example, to create the graph of a 1D lattice, one could run</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="p">...</span>
+<span class="n">El</span><span class="o">::</span><span class="n">Graph</span> <span class="n">graph</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="n">graph</span><span class="p">.</span><span class="n">Reserve</span><span class="p">(</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span> <span class="p">);</span>
+<span class="k">for</span><span class="p">(</span> <span class="n">El</span><span class="o">::</span><span class="n">Int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
+        <span class="n">graph</span><span class="p">.</span><span class="n">QueueConnection</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
+        <span class="n">graph</span><span class="p">.</span><span class="n">QueueConnection</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="n">graph</span><span class="p">.</span><span class="n">ProcessQueues</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>which would be a significantly faster alternative to</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="p">...</span>
+<span class="n">El</span><span class="o">::</span><span class="n">Graph</span> <span class="n">graph</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="k">for</span><span class="p">(</span> <span class="n">El</span><span class="o">::</span><span class="n">Int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
+        <span class="n">graph</span><span class="p">.</span><span class="n">Connect</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
+        <span class="n">graph</span><span class="p">.</span><span class="n">Connect</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="class">
+<dt id="_CPPv45Graph">
+<span id="_CPPv35Graph"></span><span id="_CPPv25Graph"></span><span id="Graph"></span><em class="property">class </em><code class="descname">Graph</code><a class="headerlink" href="#_CPPv45Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N5Graph5GraphEv">
+<span id="_CPPv3N5Graph5GraphEv"></span><span id="_CPPv2N5Graph5GraphEv"></span><span id="Graph::Graph"></span><code class="descname">Graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph5GraphEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a trivial graph with zero source and target vertices.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph5GraphE3Int">
+<span id="_CPPv3N5Graph5GraphE3Int"></span><span id="_CPPv2N5Graph5GraphE3Int"></span><span id="Graph::Graph__Int"></span><code class="descname">Graph</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numVertices</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph5GraphE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initialize a trivial graph with <code class="docutils literal notranslate"><span class="pre">numVertices</span></code> source and target
+vertices (with no edges). Edges can subsequently be added with
+either the <code class="docutils literal notranslate"><span class="pre">Connect</span></code> routine, or a (more efficient) combination of
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::Reserve()</span></code>, <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::QueueConnection()</span></code>, and
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::ProcessQueues()</span></code> routines.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph5GraphE3Int3Int">
+<span id="_CPPv3N5Graph5GraphE3Int3Int"></span><span id="_CPPv2N5Graph5GraphE3Int3Int"></span><span id="Graph::Graph__Int.Int"></span><code class="descname">Graph</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numSources</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numTargets</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph5GraphE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initialize a trivial graph with <code class="docutils literal notranslate"><span class="pre">numSources</span></code> source vertices,
+<code class="docutils literal notranslate"><span class="pre">numTargets</span></code> target vertices, and no edges. Edges can subsequently be
+added with either the <code class="docutils literal notranslate"><span class="pre">Connect</span></code> routine, or a (more efficient)
+combination of <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::Reserve()</span></code>,
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::QueueConnection()</span></code>, and
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::ProcessQueues()</span></code> routines.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph5GraphERK5Graph">
+<span id="_CPPv3N5Graph5GraphERK5Graph"></span><span id="_CPPv2N5Graph5GraphERK5Graph"></span><span id="Graph::Graph__GraphCR"></span><code class="descname">Graph</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5Graph5GraphEv" title="Graph::Graph">Graph</a> &amp;<em>graph</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph5GraphERK5Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new graph as a copy of a given graph.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph5GraphERK9DistGraph">
+<span id="_CPPv3N5Graph5GraphERK9DistGraph"></span><span id="_CPPv2N5Graph5GraphERK9DistGraph"></span><span id="Graph::Graph__DistGraphCR"></span><code class="descname">Graph</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>graph</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph5GraphERK9DistGraph" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new graph as a copy of a given <code class="docutils literal notranslate"><span class="pre">DistGraph</span></code> which was only
+distributed over a single process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5GraphD0Ev">
+<span id="_CPPv3N5GraphD0Ev"></span><span id="_CPPv2N5GraphD0Ev"></span><span id="Graph::~Graph"></span><code class="descname">~Graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5GraphD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N5GraphaSERK5Graph">
+<span id="_CPPv3N5GraphaSERK5Graph"></span><span id="_CPPv2N5GraphaSERK5Graph"></span><span id="Graph::assign-operator__GraphCR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv45Graph" title="Graph">Graph</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5GraphaSERK5Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set this graph equal to a copy of the given graph.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5GraphaSERK9DistGraph">
+<span id="_CPPv3N5GraphaSERK9DistGraph"></span><span id="_CPPv2N5GraphaSERK9DistGraph"></span><span id="Graph::assign-operator__DistGraphCR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv45Graph" title="Graph">Graph</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5GraphaSERK9DistGraph" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set this graph equal to a copy of the given trivially-distributed
+(i.e., over a single process) graph.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5GraphclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3NK5GraphclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2NK5GraphclE5RangeI3IntE5RangeI3IntE"></span><span id="Graph::call-operator__Range:Int:.Range:Int:C"></span><a class="reference internal" href="#_CPPv45Graph" title="Graph">Graph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5GraphclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5GraphclE5RangeI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK5GraphclE5RangeI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK5GraphclE5RangeI3IntERK6vectorI3IntE"></span><span id="Graph::call-operator__Range:Int:.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv45Graph" title="Graph">Graph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5GraphclE5RangeI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5GraphclERK6vectorI3IntE5RangeI3IntE">
+<span id="_CPPv3NK5GraphclERK6vectorI3IntE5RangeI3IntE"></span><span id="_CPPv2NK5GraphclERK6vectorI3IntE5RangeI3IntE"></span><span id="Graph::call-operator__vector:Int:CR.Range:Int:C"></span><a class="reference internal" href="#_CPPv45Graph" title="Graph">Graph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5GraphclERK6vectorI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5GraphclERK6vectorI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK5GraphclERK6vectorI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK5GraphclERK6vectorI3IntERK6vectorI3IntE"></span><span id="Graph::call-operator__vector:Int:CR.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv45Graph" title="Graph">Graph</a> <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5GraphclERK6vectorI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make a copy of a subgraph</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph5EmptyEb">
+<span id="_CPPv3N5Graph5EmptyEb"></span><span id="_CPPv2N5Graph5EmptyEb"></span><span id="Graph::Empty__b"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span>bool <em>clearMemory</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph5EmptyEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set this graph equal to a trivial (<span class="math notranslate nohighlight">\(0 \times 0\)</span>) graph
+(and optionally free all previously-used resources)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph6ResizeE3Int">
+<span id="_CPPv3N5Graph6ResizeE3Int"></span><span id="_CPPv2N5Graph6ResizeE3Int"></span><span id="Graph::Resize__Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numVertices</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph6ResizeE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph6ResizeE3Int3Int">
+<span id="_CPPv3N5Graph6ResizeE3Int3Int"></span><span id="_CPPv2N5Graph6ResizeE3Int3Int"></span><span id="Graph::Resize__Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numSources</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numTargets</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph6ResizeE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the number of source and target vertices.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph7ReserveE3Int">
+<span id="_CPPv3N5Graph7ReserveE3Int"></span><span id="_CPPv2N5Graph7ReserveE3Int"></span><span id="Graph::Reserve__Int"></span>void <code class="descname">Reserve</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numEdges</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph7ReserveE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set aside space for the efficient queueing of up to <code class="docutils literal notranslate"><span class="pre">numEdges</span></code>
+edges.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph7ConnectE3Int3Int">
+<span id="_CPPv3N5Graph7ConnectE3Int3Int"></span><span id="_CPPv2N5Graph7ConnectE3Int3Int"></span><span id="Graph::Connect__Int.Int"></span>void <code class="descname">Connect</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph7ConnectE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph10DisconnectE3Int3Int">
+<span id="_CPPv3N5Graph10DisconnectE3Int3Int"></span><span id="_CPPv2N5Graph10DisconnectE3Int3Int"></span><span id="Graph::Disconnect__Int.Int"></span>void <code class="descname">Disconnect</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph10DisconnectE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Insert or remote a new edge and perform the necessary sorting so that the
+graph is in a consistent state.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When multiple edges are to be inserted/removed, these routine should be
+avoided in favor of a combination of <a class="reference internal" href="#_CPPv4N5Graph7ReserveE3Int" title="Graph::Reserve"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::Reserve()</span></code></a>,
+multiple <a class="reference internal" href="#_CPPv4N5Graph15QueueConnectionE3Int3Int" title="Graph::QueueConnection"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::QueueConnection()</span></code></a> and/or
+<a class="reference internal" href="#_CPPv4N5Graph18QueueDisconnectionE3Int3Int" title="Graph::QueueDisconnection"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">QueueDisconnection()</span></code></a> calls, and then
+<a class="reference internal" href="#_CPPv4N5Graph13ProcessQueuesEv" title="Graph::ProcessQueues"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Graph::ProcessQueues()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph15QueueConnectionE3Int3Int">
+<span id="_CPPv3N5Graph15QueueConnectionE3Int3Int"></span><span id="_CPPv2N5Graph15QueueConnectionE3Int3Int"></span><span id="Graph::QueueConnection__Int.Int"></span>void <code class="descname">QueueConnection</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph15QueueConnectionE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph18QueueDisconnectionE3Int3Int">
+<span id="_CPPv3N5Graph18QueueDisconnectionE3Int3Int"></span><span id="_CPPv2N5Graph18QueueDisconnectionE3Int3Int"></span><span id="Graph::QueueDisconnection__Int.Int"></span>void <code class="descname">QueueDisconnection</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph18QueueDisconnectionE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph13ProcessQueuesEv">
+<span id="_CPPv3N5Graph13ProcessQueuesEv"></span><span id="_CPPv2N5Graph13ProcessQueuesEv"></span><span id="Graph::ProcessQueues"></span>void <code class="descname">ProcessQueues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph13ProcessQueuesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK5Graph10NumSourcesEv">
+<span id="_CPPv3NK5Graph10NumSourcesEv"></span><span id="_CPPv2NK5Graph10NumSourcesEv"></span><span id="Graph::NumSourcesC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumSources</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph10NumSourcesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph10NumTargetsEv">
+<span id="_CPPv3NK5Graph10NumTargetsEv"></span><span id="_CPPv2NK5Graph10NumTargetsEv"></span><span id="Graph::NumTargetsC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumTargets</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph10NumTargetsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph8NumEdgesEv">
+<span id="_CPPv3NK5Graph8NumEdgesEv"></span><span id="_CPPv2NK5Graph8NumEdgesEv"></span><span id="Graph::NumEdgesC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumEdges</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph8NumEdgesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph8CapacityEv">
+<span id="_CPPv3NK5Graph8CapacityEv"></span><span id="_CPPv2NK5Graph8CapacityEv"></span><span id="Graph::CapacityC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph8CapacityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph10ConsistentEv">
+<span id="_CPPv3NK5Graph10ConsistentEv"></span><span id="_CPPv2NK5Graph10ConsistentEv"></span><span id="Graph::ConsistentC"></span>bool <code class="descname">Consistent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph10ConsistentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph6SourceE3Int">
+<span id="_CPPv3NK5Graph6SourceE3Int"></span><span id="_CPPv2NK5Graph6SourceE3Int"></span><span id="Graph::Source__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Source</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>edge</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph6SourceE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph6TargetE3Int">
+<span id="_CPPv3NK5Graph6TargetE3Int"></span><span id="_CPPv2NK5Graph6TargetE3Int"></span><span id="Graph::Target__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Target</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>edge</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph6TargetE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph10EdgeOffsetE3Int">
+<span id="_CPPv3NK5Graph10EdgeOffsetE3Int"></span><span id="_CPPv2NK5Graph10EdgeOffsetE3Int"></span><span id="Graph::EdgeOffset__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">EdgeOffset</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph10EdgeOffsetE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph14NumConnectionsE3Int">
+<span id="_CPPv3NK5Graph14NumConnectionsE3Int"></span><span id="_CPPv2NK5Graph14NumConnectionsE3Int"></span><span id="Graph::NumConnections__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NumConnections</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>source</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph14NumConnectionsE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph12SourceBufferEv">
+<span id="_CPPv3N5Graph12SourceBufferEv"></span><span id="_CPPv2N5Graph12SourceBufferEv"></span><span id="Graph::SourceBuffer"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">SourceBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph12SourceBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5Graph12TargetBufferEv">
+<span id="_CPPv3N5Graph12TargetBufferEv"></span><span id="_CPPv2N5Graph12TargetBufferEv"></span><span id="Graph::TargetBuffer"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">TargetBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Graph12TargetBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph18LockedSourceBufferEv">
+<span id="_CPPv3NK5Graph18LockedSourceBufferEv"></span><span id="_CPPv2NK5Graph18LockedSourceBufferEv"></span><span id="Graph::LockedSourceBufferC"></span><em class="property">const</em> <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">LockedSourceBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph18LockedSourceBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5Graph18LockedTargetBufferEv">
+<span id="_CPPv3NK5Graph18LockedTargetBufferEv"></span><span id="_CPPv2NK5Graph18LockedTargetBufferEv"></span><span id="Graph::LockedTargetBufferC"></span><em class="property">const</em> <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> *<code class="descname">LockedTargetBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5Graph18LockedTargetBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="c.html" class="btn btn-neutral float-right" title="Graph (C interface)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="python.html" class="btn btn-neutral float-left" title="Graph (Python interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

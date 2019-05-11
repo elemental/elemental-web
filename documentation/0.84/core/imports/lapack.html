@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>LAPACK &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="MPI" href="mpi.html" />
+    <link rel="prev" title="BLAS" href="blas.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="lapack">
+<h1>LAPACK<a class="headerlink" href="#lapack" title="Permalink to this headline">¶</a></h1>
+<p>A handful of LAPACK routines are currently used by Elemental: a few
+routines for querying floating point characteristics and a few other utilities.
+In addition, there are several BLAS-like routines which are technically part
+of LAPACK (e.g., <code class="docutils literal notranslate"><span class="pre">csyr</span></code>) which were included in the BLAS imports section.</p>
+<p>The prototypes can be found in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/elemental/core/imports/lapack.hpp">include/elemental/core/imports/lapack.hpp</a>,
+while the implementations are in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/imports/lapack.cpp">src/imports/lapack.cpp</a>.</p>
+<div class="section" id="machine-information">
+<h2>Machine information<a class="headerlink" href="#machine-information" title="Permalink to this headline">¶</a></h2>
+<p>In all of the following functions, <cite>R</cite> can be equal to either <cite>float</cite> or
+<cite>double</cite>.</p>
+<dl class="function">
+<dt id="_CPPv4IEN6lapack14MachineEpsilonI4RealEE4Realv">
+<span id="_CPPv3IEN6lapack14MachineEpsilonI4RealEEv"></span><span id="_CPPv2IEN6lapack14MachineEpsilonI4RealEEv"></span>template&lt;&gt;<br />Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">MachineEpsilon</code>&lt;Real&gt;<span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6lapack14MachineEpsilonI4RealEE4Realv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the relative machine precision.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IEN6lapack14MachineSafeMinI4RealEE4Realv">
+<span id="_CPPv3IEN6lapack14MachineSafeMinI4RealEEv"></span><span id="_CPPv2IEN6lapack14MachineSafeMinI4RealEEv"></span>template&lt;&gt;<br />Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">MachineSafeMin</code>&lt;Real&gt;<span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6lapack14MachineSafeMinI4RealEE4Realv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the minimum number which can be inverted without underflow.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IEN6lapack16MachinePrecisionI4RealEE4Realv">
+<span id="_CPPv3IEN6lapack16MachinePrecisionI4RealEEv"></span><span id="_CPPv2IEN6lapack16MachinePrecisionI4RealEEv"></span>template&lt;&gt;<br />Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">MachinePrecision</code>&lt;Real&gt;<span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6lapack16MachinePrecisionI4RealEE4Realv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the relative machine precision multiplied by the base.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IEN6lapack24MachineUnderflowExponentI4RealEE4Realv">
+<span id="_CPPv3IEN6lapack24MachineUnderflowExponentI4RealEEv"></span><span id="_CPPv2IEN6lapack24MachineUnderflowExponentI4RealEEv"></span>template&lt;&gt;<br />Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">MachineUnderflowExponent</code>&lt;Real&gt;<span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6lapack24MachineUnderflowExponentI4RealEE4Realv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the minimum exponent before (gradual) underflow occurs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IEN6lapack25MachineUnderflowThresholdI4RealEE4Realv">
+<span id="_CPPv3IEN6lapack25MachineUnderflowThresholdI4RealEEv"></span><span id="_CPPv2IEN6lapack25MachineUnderflowThresholdI4RealEEv"></span>template&lt;&gt;<br />Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">MachineUnderflowThreshold</code>&lt;Real&gt;<span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6lapack25MachineUnderflowThresholdI4RealEE4Realv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the underflow threshold: <code class="docutils literal notranslate"><span class="pre">(base)^((underflow</span> <span class="pre">exponent)-1)</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IEN6lapack23MachineOverflowExponentI4RealEE4Realv">
+<span id="_CPPv3IEN6lapack23MachineOverflowExponentI4RealEEv"></span><span id="_CPPv2IEN6lapack23MachineOverflowExponentI4RealEEv"></span>template&lt;&gt;<br />Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">MachineOverflowExponent</code>&lt;Real&gt;<span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6lapack23MachineOverflowExponentI4RealEE4Realv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the largest exponent before overflow.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IEN6lapack24MachineOverflowThresholdI4RealEE4Realv">
+<span id="_CPPv3IEN6lapack24MachineOverflowThresholdI4RealEEv"></span><span id="_CPPv2IEN6lapack24MachineOverflowThresholdI4RealEEv"></span>template&lt;&gt;<br />Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">MachineOverflowThreshold</code>&lt;Real&gt;<span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6lapack24MachineOverflowThresholdI4RealEE4Realv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the overflow threshold:
+<code class="docutils literal notranslate"><span class="pre">(1-rel.</span> <span class="pre">prec.))</span> <span class="pre">*</span> <span class="pre">(base)^(overflow</span> <span class="pre">exponent)</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="safe-norms">
+<h2>Safe norms<a class="headerlink" href="#safe-norms" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack8SafeNormE4Real4Real">
+<span id="_CPPv3N6lapack8SafeNormE4Real4Real"></span><span id="_CPPv2N6lapack8SafeNormE4Real4Real"></span><span id="lapack::SafeNorm__Real.Real"></span>Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">SafeNorm</code><span class="sig-paren">(</span>Real <em>alpha</em>, Real <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack8SafeNormE4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return <span class="math notranslate nohighlight">\(\sqrt{\alpha^2+\beta^2}\)</span> in a manner which avoids
+under/overflow. <cite>R</cite> can be equal to either <cite>float</cite> or <cite>double</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack8SafeNormE4Real4Real4Real">
+<span id="_CPPv3N6lapack8SafeNormE4Real4Real4Real"></span><span id="_CPPv2N6lapack8SafeNormE4Real4Real4Real"></span><span id="lapack::SafeNorm__Real.Real.Real"></span>Real <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">SafeNorm</code><span class="sig-paren">(</span>Real <em>alpha</em>, Real <em>beta</em>, Real <em>gamma</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack8SafeNormE4Real4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return <span class="math notranslate nohighlight">\(\sqrt{\alpha^2+\beta^2+\gamma^2}\)</span> in a manner which avoids
+under/overflow. <cite>R</cite> can be equal to either <cite>float</cite> or <cite>double</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="givens-rotations">
+<h2>Givens rotations<a class="headerlink" href="#givens-rotations" title="Permalink to this headline">¶</a></h2>
+<p>Given <span class="math notranslate nohighlight">\(\phi, \gamma \in \mathbb{C}^{n \times n}\)</span>, carefully compute
+<span class="math notranslate nohighlight">\(c \in \mathbb{R}\)</span> and <span class="math notranslate nohighlight">\(s, \rho \in \mathbb{C}\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left[\begin{array}{cc}
+  c       &amp; s \\
+  -\bar s &amp; c \end{array}\right]
+\left[ \begin{array}{c} \phi \\ \gamma \end{array} \right] =
+\left[ \begin{array}{c} \rho \\ 0 \end{array} \right],\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(c^2 + |s|^2 = 1\)</span> and the mapping from <span class="math notranslate nohighlight">\((\phi,\gamma) \rightarrow (c,s,\rho)\)</span> is “as continuous as possible”, in the manner described by
+Kahan and Demmel’s “On computing Givens rotations reliably and efficiently”.</p>
+<dl class="function">
+<dt id="_CPPv4N6lapack6GivensE1F1FP4BaseI1FEP1F">
+<span id="_CPPv3N6lapack6GivensE1F1FP4BaseI1FEP1F"></span><span id="_CPPv2N6lapack6GivensE1F1FP4BaseI1FEP1F"></span><span id="lapack::Givens__F.F.Base:F:P.FP"></span>F <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">Givens</code><span class="sig-paren">(</span>F <em>phi</em>, F <em>gamma</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>c</em>, F *<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack6GivensE1F1FP4BaseI1FEP1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes a Givens rotation and returns the combined result, <span class="math notranslate nohighlight">\(\rho\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="mrrr-based-hermitian-evp">
+<h2>MRRR-based Hermitian EVP<a class="headerlink" href="#mrrr-based-hermitian-evp" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE">
+<span id="_CPPv3N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE"></span><span id="_CPPv2N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE"></span><span id="lapack::HermitianEig__c.i.FP.i.Base:F:P.Base:F:"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HermitianEig</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>w</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE">
+<span id="_CPPv3N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE"></span><span id="_CPPv2N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE"></span><span id="lapack::HermitianEig__c.i.FP.i.Base:F:P.FP.i.Base:F:"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HermitianEig</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>w</em>, F *<em>Z</em>, int <em>ldz</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute all eigen-values/pairs of a Hermitian matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEii4BaseI1FE">
+<span id="_CPPv3N6lapack12HermitianEigEciP1FiP4BaseI1FEii4BaseI1FE"></span><span id="_CPPv2N6lapack12HermitianEigEciP1FiP4BaseI1FEii4BaseI1FE"></span><span id="lapack::HermitianEig__c.i.FP.i.Base:F:P.i.i.Base:F:"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HermitianEig</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>w</em>, int <em>il</em>, int <em>iu</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fiii4BaseI1FE">
+<span id="_CPPv3N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fiii4BaseI1FE"></span><span id="_CPPv2N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fiii4BaseI1FE"></span><span id="lapack::HermitianEig__c.i.FP.i.Base:F:P.FP.i.i.i.Base:F:"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HermitianEig</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>w</em>, F *<em>Z</em>, int <em>ldz</em>, int <em>il</em>, int <em>iu</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the <cite>il</cite>’th through <cite>iu</cite>’th eigen-values/pairs of a Hermitian matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE4BaseI1FE4BaseI1FE">
+<span id="_CPPv3N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE4BaseI1FE4BaseI1FE"></span><span id="_CPPv2N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE4BaseI1FE4BaseI1FE"></span><span id="lapack::HermitianEig__c.i.FP.i.Base:F:P.Base:F:.Base:F:.Base:F:"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HermitianEig</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>w</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>vl</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>vu</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FE4BaseI1FE4BaseI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE4BaseI1FE4BaseI1FE">
+<span id="_CPPv3N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE4BaseI1FE4BaseI1FE"></span><span id="_CPPv2N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE4BaseI1FE4BaseI1FE"></span><span id="lapack::HermitianEig__c.i.FP.i.Base:F:P.FP.i.Base:F:.Base:F:.Base:F:"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HermitianEig</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>w</em>, F *<em>Z</em>, int <em>ldz</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>vl</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>vu</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack12HermitianEigEciP1FiP4BaseI1FEP1Fi4BaseI1FE4BaseI1FE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigen-values/pairs of a Hermitian matrix with eigenvalues in the
+half-open interval <span class="math notranslate nohighlight">\((v_l,v_u]\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="qr-and-dqds-based-svd">
+<h2>QR- and DQDS-based SVD<a class="headerlink" href="#qr-and-dqds-based-svd" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack5QRSVDEiiP1FiP4BaseI1FEP1FiP1Fi">
+<span id="_CPPv3N6lapack5QRSVDEiiP1FiP4BaseI1FEP1FiP1Fi"></span><span id="_CPPv2N6lapack5QRSVDEiiP1FiP4BaseI1FEP1FiP1Fi"></span><span id="lapack::QRSVD__i.i.FP.i.Base:F:P.FP.i.FP.i"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">QRSVD</code><span class="sig-paren">(</span>int <em>m</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>s</em>, F *<em>U</em>, int <em>ldu</em>, F *<em>VAdj</em>, int <em>ldva</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack5QRSVDEiiP1FiP4BaseI1FEP1FiP1Fi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the singular value decomposition of a general matrix by running the
+QR algorithm on the condensed bidiagonal matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack3SVDEiiP1FiP4BaseI1FE">
+<span id="_CPPv3N6lapack3SVDEiiP1FiP4BaseI1FE"></span><span id="_CPPv2N6lapack3SVDEiiP1FiP4BaseI1FE"></span><span id="lapack::SVD__i.i.FP.i.Base:F:P"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">SVD</code><span class="sig-paren">(</span>int <em>m</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack3SVDEiiP1FiP4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the singular values of a general matrix by running DQDS on the
+condensed bidiagonal matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="divide-and-conquer-svd">
+<h2>Divide-and-conquer SVD<a class="headerlink" href="#divide-and-conquer-svd" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack19DivideAndConquerSVDEiiP1FiP4BaseI1FEP1FiP1Fi">
+<span id="_CPPv3N6lapack19DivideAndConquerSVDEiiP1FiP4BaseI1FEP1FiP1Fi"></span><span id="_CPPv2N6lapack19DivideAndConquerSVDEiiP1FiP4BaseI1FEP1FiP1Fi"></span><span id="lapack::DivideAndConquerSVD__i.i.FP.i.Base:F:P.FP.i.FP.i"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">DivideAndConquerSVD</code><span class="sig-paren">(</span>int <em>m</em>, int <em>n</em>, F *<em>A</em>, int <em>lda</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>s</em>, F *<em>U</em>, int <em>ldu</em>, F *<em>VAdj</em>, int <em>ldva</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack19DivideAndConquerSVDEiiP1FiP4BaseI1FEP1FiP1Fi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the SVD of a general matrix using a divide-and-conquer algorithm on
+the condensed bidiagonal matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="bidiagonal-qr">
+<h2>Bidiagonal QR<a class="headerlink" href="#bidiagonal-qr" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack11BidiagQRAlgEciiiP4BaseI1FEP4BaseI1FEP1FiP1Fi">
+<span id="_CPPv3N6lapack11BidiagQRAlgEciiiP4BaseI1FEP4BaseI1FEP1FiP1Fi"></span><span id="_CPPv2N6lapack11BidiagQRAlgEciiiP4BaseI1FEP4BaseI1FEP1FiP1Fi"></span><span id="lapack::BidiagQRAlg__c.i.i.i.Base:F:P.Base:F:P.FP.i.FP.i"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">BidiagQRAlg</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, int <em>numColsVTrans</em>, int <em>numRowsU</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>d</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; *<em>e</em>, F *<em>VAdj</em>, int <em>ldva</em>, F *<em>U</em>, int <em>ldu</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack11BidiagQRAlgEciiiP4BaseI1FEP4BaseI1FEP1FiP1Fi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the SVD of a bidiagonal matrix using the QR algorithm.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hessenberg-schur-decomposition">
+<h2>Hessenberg Schur decomposition<a class="headerlink" href="#hessenberg-schur-decomposition" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEb">
+<span id="_CPPv3N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEb"></span><span id="_CPPv2N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEb"></span><span id="lapack::HessenbergSchur__i.FP.i.Complex:Base:F::P.b"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HessenbergSchur</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>H</em>, int <em>ldh</em>, Complex&lt;<a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em>, bool <em>fullTriangle</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the eigenvalues (and possibly the full Schur factor) of an upper
+Hessenberg matrix using the QR algorithm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEP1Fibb">
+<span id="_CPPv3N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEP1Fibb"></span><span id="_CPPv2N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEP1Fibb"></span><span id="lapack::HessenbergSchur__i.FP.i.Complex:Base:F::P.FP.i.b.b"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HessenbergSchur</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>H</em>, int <em>ldh</em>, Complex&lt;<a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em>, F *<em>Q</em>, int <em>ldq</em>, bool <em>fullTriangle</em> = true, bool <em>multiplyQ</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack15HessenbergSchurEiP1FiP7ComplexI4BaseI1FEEP1Fibb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the eigenvalues (and possibly the full Schur factor) as well as
+the Schur vectors of of an upper Hessenberg matrix using the QR algorithm.
+If <cite>multiplyQ</cite> is true, then the Schur vectors are multiplied against the
+input matrix from the right.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hessenberg-eigenvalues-pairs">
+<h2>Hessenberg eigenvalues/pairs<a class="headerlink" href="#hessenberg-eigenvalues-pairs" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack13HessenbergEigEiP1FiP7ComplexI4BaseI1FEE">
+<span id="_CPPv3N6lapack13HessenbergEigEiP1FiP7ComplexI4BaseI1FEE"></span><span id="_CPPv2N6lapack13HessenbergEigEiP1FiP7ComplexI4BaseI1FEE"></span><span id="lapack::HessenbergEig__i.FP.i.Complex:Base:F::P"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">HessenbergEig</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>H</em>, int <em>ldh</em>, Complex&lt;<a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack13HessenbergEigEiP1FiP7ComplexI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the eigenvalues of an upper Hessenberg matrix using the QR
+algorithm.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are not yet wrappers for computing Hessenberg eigenvectors.</p>
+</div>
+</div>
+<div class="section" id="schur-decomposition">
+<h2>Schur decomposition<a class="headerlink" href="#schur-decomposition" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEb">
+<span id="_CPPv3N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEb"></span><span id="_CPPv2N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEb"></span><span id="lapack::Schur__i.FP.i.Complex:Base:F::P.b"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">Schur</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>A</em>, int <em>lda</em>, Complex&lt;<a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em>, bool <em>fullTriangle</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the eigenvalues (and possibly also the Schur factor) of a square
+matrix using the QR algorithm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEP1Fib">
+<span id="_CPPv3N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEP1Fib"></span><span id="_CPPv2N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEP1Fib"></span><span id="lapack::Schur__i.FP.i.Complex:Base:F::P.FP.i.b"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">Schur</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>A</em>, int <em>lda</em>, Complex&lt;<a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em>, F *<em>Q</em>, int <em>ldq</em>, bool <em>fullTriangle</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack5SchurEiP1FiP7ComplexI4BaseI1FEEP1Fib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the Schur decomposition of a square matrix using the QR algorithm.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="eigenvalues-pairs">
+<h2>Eigenvalues/pairs<a class="headerlink" href="#eigenvalues-pairs" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N6lapack3EigEiP1FiP7ComplexI4BaseI1FEE">
+<span id="_CPPv3N6lapack3EigEiP1FiP7ComplexI4BaseI1FEE"></span><span id="_CPPv2N6lapack3EigEiP1FiP7ComplexI4BaseI1FEE"></span><span id="lapack::Eig__i.FP.i.Complex:Base:F::P"></span>void <code class="descclassname">lapack<code class="descclassname">::</code></code><code class="descname">Eig</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>A</em>, int <em>lda</em>, Complex&lt;<a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6lapack3EigEiP1FiP7ComplexI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the eigenvalues of a square matrix using the QR algorithm.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are not yet wrappers for computing general eigenvectors.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

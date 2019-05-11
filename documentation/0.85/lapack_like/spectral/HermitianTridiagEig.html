@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hermitian tridiagonal eigensolvers &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Hermitian eigensolvers" href="HermitianEig.html" />
+    <link rel="prev" title="Spectral analysis" href="../spectral.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hermitian-tridiagonal-eigensolvers">
+<h1>Hermitian tridiagonal eigensolvers<a class="headerlink" href="#hermitian-tridiagonal-eigensolvers" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/HermitianTridiagEig.cpp">Implementation</a></p>
+<p>Elemental provides a collection of routines for both full and partial
+solutions of the Hermitian eigenvalue problem</p>
+<div class="math notranslate nohighlight">
+\[T Z = Z \Lambda,\]</div>
+<p>where <cite>T</cite> is a given Hermitian tridiagonal matrix, and unitary <cite>Z</cite> and real
+diagonal <span class="math notranslate nohighlight">\(\Lambda\)</span> are sought.</p>
+<p>Note that the tridiagonal matrix is defined via its real main
+diagonal, <cite>d</cite>, and (possibly complex) <em>subdiagonal</em>, <cite>dSub</cite>.</p>
+<div class="section" id="computing-eigenvalues">
+<h2>Computing eigenvalues<a class="headerlink" href="#computing-eigenvalues" title="Permalink to this headline">¶</a></h2>
+<p>Compute the set of eigenvalues of the Hermitian tridiagonal matrix <cite>T</cite>
+determined by the <cite>subset</cite> structure (the default is to compute all
+eigenvalues).</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv419HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE">
+<span id="_CPPv319HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="_CPPv219HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="HermitianTridiagEig__Matrix:Base:F::R.Matrix:F:R.Matrix:Base:F::R.SortType.HermitianEigSubset:Base:F::C"></span>void <code class="descname">HermitianTridiagEig</code><span class="sig-paren">(</span>Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = ASCENDING, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE">
+<span id="_CPPv319HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="_CPPv219HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="HermitianTridiagEig__AbstractDistMatrix:Base:F::CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.SortType.HermitianEigSubset:Base:F::C"></span>void <code class="descname">HermitianTridiagEig</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = ASCENDING, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianTridiagEig_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEig_s</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_s<em> dSub</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEig_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEig_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEig_d</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_d<em> dSub</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEig_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEig_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEig_c</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_c<em> dSub</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEig_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEig_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEig_z</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_z<em> dSub</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEig_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_s<em> dSub</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_d<em> dSub</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_c<em> dSub</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_z<em> dSub</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full set of eigenvalues</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartial_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartial_s</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_s<em> dSub</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartial_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartial_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartial_d</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_d<em> dSub</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartial_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartial_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartial_c</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_c<em> dSub</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartial_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartial_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartial_z</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_z<em> dSub</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartial_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartialDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartialDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_s<em> dSub</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartialDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartialDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartialDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_d<em> dSub</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartialDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartialDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartialDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_c<em> dSub</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartialDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPartialDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPartialDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_z<em> dSub</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPartialDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subset of the eigenvalues</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="computing-eigenpairs">
+<h2>Computing eigenpairs<a class="headerlink" href="#computing-eigenpairs" title="Permalink to this headline">¶</a></h2>
+<p>Compute the set of eigenpairs of the Hermitian tridiagonal matrix <cite>T</cite>
+determined by the <cite>subset</cite> structure (the default is to compute all eigenpairs)
+via PMRRR.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv419HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE">
+<span id="_CPPv319HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="_CPPv219HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="HermitianTridiagEig__Matrix:Base:F::R.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.SortType.HermitianEigSubset:Base:F::C"></span>void <code class="descname">HermitianTridiagEig</code><span class="sig-paren">(</span>Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = ASCENDING, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419HermitianTridiagEigR6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE">
+<span id="_CPPv319HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="_CPPv219HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE"></span><span id="HermitianTridiagEig__AbstractDistMatrix:Base:F::CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:Base:F::R.AbstractDistMatrix:F:R.SortType.HermitianEigSubset:Base:F::C"></span>void <code class="descname">HermitianTridiagEig</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = ASCENDING, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419HermitianTridiagEigRK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPair_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPair_s</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_s<em> dSub</em>, ElMatrix_s<em> w</em>, ElMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPair_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPair_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPair_d</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_d<em> dSub</em>, ElMatrix_d<em> w</em>, ElMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPair_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPair_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPair_c</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_c<em> dSub</em>, ElMatrix_s<em> w</em>, ElMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPair_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPair_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPair_z</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_z<em> dSub</em>, ElMatrix_d<em> w</em>, ElMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPair_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_s<em> dSub</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_d<em> dSub</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_c<em> dSub</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_z<em> dSub</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full set of eigenvalues</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartial_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartial_s</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_s<em> dSub</em>, ElMatrix_s<em> w</em>, ElMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartial_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartial_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartial_d</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_d<em> dSub</em>, ElMatrix_d<em> w</em>, ElMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartial_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartial_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartial_c</code><span class="sig-paren">(</span>ElMatrix_s<em> d</em>, ElMatrix_c<em> dSub</em>, ElMatrix_s<em> w</em>, ElMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartial_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartial_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartial_z</code><span class="sig-paren">(</span>ElMatrix_d<em> d</em>, ElMatrix_z<em> dSub</em>, ElMatrix_d<em> w</em>, ElMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartial_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartialDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartialDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_s<em> dSub</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartialDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartialDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartialDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_d<em> dSub</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartialDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartialDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartialDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_c<em> dSub</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartialDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagEigPairPartialDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagEigPairPartialDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_z<em> dSub</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagEigPairPartialDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subset of the eigenvalues</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="subset-computation">
+<h2>Subset computation<a class="headerlink" href="#subset-computation" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#_CPPv4IE18HermitianEigSubsetI4RealE" title="HermitianEigSubset&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">HermitianEigSubset&lt;Real&gt;</span></code></a> structure is used to control subset
+computation, and, when not explicitly manipulated, defaults to a request for
+the entire set of eigenvalues or eigenpairs.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv4IE18HermitianEigSubsetI4RealE">
+<span id="_CPPv3IE18HermitianEigSubsetI4RealE"></span><span id="_CPPv2IE18HermitianEigSubsetI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">HermitianEigSubset</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE18HermitianEigSubsetI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N18HermitianEigSubsetI4RealE11indexSubsetE">
+<span id="_CPPv3N18HermitianEigSubsetI4RealE11indexSubsetE"></span><span id="_CPPv2N18HermitianEigSubsetI4RealE11indexSubsetE"></span><span id="HermitianEigSubset:Real:::indexSubset__b"></span>bool <code class="descname">indexSubset</code><a class="headerlink" href="#_CPPv4N18HermitianEigSubsetI4RealE11indexSubsetE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N18HermitianEigSubsetI4RealE10lowerIndexE">
+<span id="_CPPv3N18HermitianEigSubsetI4RealE10lowerIndexE"></span><span id="_CPPv2N18HermitianEigSubsetI4RealE10lowerIndexE"></span><span id="HermitianEigSubset:Real:::lowerIndex__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">lowerIndex</code><a class="headerlink" href="#_CPPv4N18HermitianEigSubsetI4RealE10lowerIndexE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N18HermitianEigSubsetI4RealE10upperIndexE">
+<span id="_CPPv3N18HermitianEigSubsetI4RealE10upperIndexE"></span><span id="_CPPv2N18HermitianEigSubsetI4RealE10upperIndexE"></span><span id="HermitianEigSubset:Real:::upperIndex__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">upperIndex</code><a class="headerlink" href="#_CPPv4N18HermitianEigSubsetI4RealE10upperIndexE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <cite>indexSubset</cite> is true, then the eigenvalues/pairs with indices
+(inclusively) between <cite>lowerIndex</cite> and <cite>upperIndex</cite> will be found.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N18HermitianEigSubsetI4RealE11rangeSubsetE">
+<span id="_CPPv3N18HermitianEigSubsetI4RealE11rangeSubsetE"></span><span id="_CPPv2N18HermitianEigSubsetI4RealE11rangeSubsetE"></span><span id="HermitianEigSubset:Real:::rangeSubset__b"></span>bool <code class="descname">rangeSubset</code><a class="headerlink" href="#_CPPv4N18HermitianEigSubsetI4RealE11rangeSubsetE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N18HermitianEigSubsetI4RealE10lowerBoundE">
+<span id="_CPPv3N18HermitianEigSubsetI4RealE10lowerBoundE"></span><span id="_CPPv2N18HermitianEigSubsetI4RealE10lowerBoundE"></span><span id="HermitianEigSubset:Real:::lowerBound__Real"></span>Real <code class="descname">lowerBound</code><a class="headerlink" href="#_CPPv4N18HermitianEigSubsetI4RealE10lowerBoundE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N18HermitianEigSubsetI4RealE10upperBoundE">
+<span id="_CPPv3N18HermitianEigSubsetI4RealE10upperBoundE"></span><span id="_CPPv2N18HermitianEigSubsetI4RealE10upperBoundE"></span><span id="HermitianEigSubset:Real:::upperBound__Real"></span>Real <code class="descname">upperBound</code><a class="headerlink" href="#_CPPv4N18HermitianEigSubsetI4RealE10upperBoundE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Alternatively, if <cite>rangeSubset</cite> is true,
+then the eigenvalues/pairs within the numerical range
+<span class="math notranslate nohighlight">\((lowerBound,upperBound]\)</span> will be found.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE18HermitianEigSubsetI4BaseI1FEE">
+<span id="_CPPv3IE18HermitianEigSubsetI4BaseI1FEE"></span><span id="_CPPv2IE18HermitianEigSubsetI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">HermitianEigSubset</code>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="c.HermitianEigSubset_s">
+<code class="descname">HermitianEigSubset_s</code><a class="headerlink" href="#c.HermitianEigSubset_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.HermitianEigSubset_s.indexSubset">
+bool <code class="descname">indexSubset</code><a class="headerlink" href="#c.HermitianEigSubset_s.indexSubset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_s.lowerIndex">
+Int <code class="descname">lowerIndex</code><a class="headerlink" href="#c.HermitianEigSubset_s.lowerIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_s.upperIndex">
+Int <code class="descname">upperIndex</code><a class="headerlink" href="#c.HermitianEigSubset_s.upperIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <cite>indexSubset</cite> is true, then the eigenvalues/pairs with indices
+(inclusively) between <cite>lowerIndex</cite> and <cite>upperIndex</cite> will be found.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_s.rangeSubset">
+bool <code class="descname">rangeSubset</code><a class="headerlink" href="#c.HermitianEigSubset_s.rangeSubset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_s.lowerBound">
+float <code class="descname">lowerBound</code><a class="headerlink" href="#c.HermitianEigSubset_s.lowerBound" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_s.upperBound">
+float <code class="descname">upperBound</code><a class="headerlink" href="#c.HermitianEigSubset_s.upperBound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternatively, if <cite>rangeSubset</cite> is true,
+then the eigenvalues/pairs within the numerical range
+<span class="math notranslate nohighlight">\((lowerBound,upperBound]\)</span> will be found.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.HermitianEigSubset_d">
+<code class="descname">HermitianEigSubset_d</code><a class="headerlink" href="#c.HermitianEigSubset_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.HermitianEigSubset_d.indexSubset">
+bool <code class="descname">indexSubset</code><a class="headerlink" href="#c.HermitianEigSubset_d.indexSubset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_d.lowerIndex">
+Int <code class="descname">lowerIndex</code><a class="headerlink" href="#c.HermitianEigSubset_d.lowerIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_d.upperIndex">
+Int <code class="descname">upperIndex</code><a class="headerlink" href="#c.HermitianEigSubset_d.upperIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <cite>indexSubset</cite> is true, then the eigenvalues/pairs with indices
+(inclusively) between <cite>lowerIndex</cite> and <cite>upperIndex</cite> will be found.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_d.rangeSubset">
+bool <code class="descname">rangeSubset</code><a class="headerlink" href="#c.HermitianEigSubset_d.rangeSubset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_d.lowerBound">
+double <code class="descname">lowerBound</code><a class="headerlink" href="#c.HermitianEigSubset_d.lowerBound" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.HermitianEigSubset_d.upperBound">
+double <code class="descname">upperBound</code><a class="headerlink" href="#c.HermitianEigSubset_d.upperBound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternatively, if <cite>rangeSubset</cite> is true,
+then the eigenvalues/pairs within the numerical range
+<span class="math notranslate nohighlight">\((lowerBound,upperBound]\)</span> will be found.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

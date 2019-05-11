@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Matrix (C++ interface) &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Matrix (C interface)" href="c.html" />
+    <link rel="prev" title="Matrix (Python interface)" href="python.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../matrix.html">Matrix</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="python.html">Matrix (Python interface)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Matrix (C++ interface)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#special-cases-used-in-elemental">Special cases used in Elemental</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="c.html">Matrix (C interface)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../matrix.html">Matrix</a> &raquo;</li>
+        
+      <li>Matrix (C++ interface)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/matrix/cxx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="matrix-c-interface">
+<h1>Matrix (C++ interface)<a class="headerlink" href="#matrix-c-interface" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a> class is the building of the library:
+its purpose is to provide convenient mechanisms for performing basic matrix
+manipulations, such as setting and querying individual matrix entries,
+without giving up compatibility with interfaces such as BLAS and LAPACK,
+which assume column-major storage.</p>
+<p>An example of generating an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix of real double-precision
+numbers where the <span class="math notranslate nohighlight">\((i,j)\)</span> entry is equal to <span class="math notranslate nohighlight">\(i-j\)</span> would be:</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">El</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">for</span><span class="p">(</span> <span class="n">Int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span> <span class="p">)</span>
+    <span class="k">for</span><span class="p">(</span> <span class="n">Int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+        <span class="n">A</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="kt">double</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>whereas the complex double-precision equivalent could use <code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Complex&lt;double&gt;</span></code>, which is currently a typedef for <code class="docutils literal notranslate"><span class="pre">std::complex&lt;double&gt;</span></code>.</p>
+<p>The underlying data storage for <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a> is simply a
+contiguous buffer that stores entries in a column-major fashion with a <em>leading
+dimension</em> which is only required to be at least as large as the height of the
+matrix (so that entry <span class="math notranslate nohighlight">\((i,j)\)</span> is located at position <code class="docutils literal notranslate"><span class="pre">i+j*ldim</span></code>).
+For modifiable instances of the <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a> class,
+the routine
+<a class="reference internal" href="#_CPPv4N6MatrixI10scalarTypeE6BufferEv" title="Matrix&lt;scalarType&gt;::Buffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;::Buffer()</span></code></a> returns a pointer to the underlying
+buffer, while <a class="reference internal" href="#_CPPv4NK6MatrixI10scalarTypeE4LDimEv" title="Matrix&lt;scalarType&gt;::LDim"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;::LDim()</span></code></a> returns the leading
+dimension; these two routines could be used to directly perform the equivalent
+of the first code sample as follows:</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">El</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="p">);</span>
+<span class="kt">double</span><span class="o">*</span> <span class="n">buffer</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">Buffer</span><span class="p">();</span>
+<span class="k">const</span> <span class="n">Int</span> <span class="n">ldim</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">LDim</span><span class="p">();</span>
+<span class="k">for</span><span class="p">(</span> <span class="n">Int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span> <span class="p">)</span>
+    <span class="k">for</span><span class="p">(</span> <span class="n">Int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+        <span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">*</span><span class="n">ldim</span><span class="p">]</span> <span class="o">=</span> <span class="kt">double</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For immutable instances of the <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a> class, a
+<code class="docutils literal notranslate"><span class="pre">const</span></code>
+pointer to the underlying data can similarly be returned with a call to
+<a class="reference internal" href="#_CPPv4NK6MatrixI10scalarTypeE12LockedBufferEv" title="Matrix&lt;scalarType&gt;::LockedBuffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;::LockedBuffer()</span></code></a>.
+In addition, a (<code class="docutils literal notranslate"><span class="pre">const</span></code>) pointer to the place in the
+(<code class="docutils literal notranslate"><span class="pre">const</span></code>) buffer where entry <span class="math notranslate nohighlight">\((i,j)\)</span> resides can be easily retrieved
+with a call to <a class="reference internal" href="#_CPPv4N6MatrixI10scalarTypeE6BufferEv" title="Matrix&lt;scalarType&gt;::Buffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;::Buffer()</span></code></a> or
+<a class="reference internal" href="#_CPPv4NK6MatrixI10scalarTypeE12LockedBufferEv" title="Matrix&lt;scalarType&gt;::LockedBuffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;::LockedBuffer()</span></code></a>.</p>
+<p>It is also important to be able to create matrices which are simply <em>views</em>
+of existing (sub)matrices. In general, to view the submatrix with row indices
+<span class="math notranslate nohighlight">\([\text{iBeg},\text{iEnd}]\)</span> and column indices
+<span class="math notranslate nohighlight">\([\text{jBeg},\text{jEnd}]\)</span>, one can use a statement of the form</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="p">...</span>
+<span class="k">auto</span> <span class="n">ASub</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span> <span class="n">IR</span><span class="p">(</span><span class="n">iBeg</span><span class="p">,</span><span class="n">iEnd</span><span class="p">),</span> <span class="n">IR</span><span class="p">(</span><span class="n">jBeg</span><span class="p">,</span><span class="n">jEnd</span><span class="p">)</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI10scalarTypeE">
+<span id="_CPPv3IE6MatrixI10scalarTypeE"></span><span id="_CPPv2IE6MatrixI10scalarTypeE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;scalarType&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The goal is for the <cite>Matrix</cite> class to support any datatype <cite>scalarType</cite> which
+supports both addition and multiplication and has the associated identities
+(that is, when the datatype <cite>scalarType</cite> is a <em>ring</em>). While there are
+several barriers to reaching this goal, it is important to keep in mind that,
+in addition to <cite>scalarType</cite> being allowed to be a real or complex
+(single- or double-precision) floating-point type, signed integers
+are also supported.</p>
+<p class="rubric">Constructors and destructors</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Many of the following constructors have the default parameter
+<code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">fixed=false</span></code>, which can be changed to <code class="docutils literal notranslate"><span class="pre">true</span></code> in order to
+produce a <cite>Matrix</cite> whose entries can be modified, but the matrix’s
+dimensions cannot. This is useful for the
+<a class="reference internal" href="../dist_matrix/Element/MC_MR.html#_CPPv4IE10DistMatrixI10scalarTypeE" title="DistMatrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType&gt;</span></code></a>
+class, which contains a local <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a> whose
+entries can be locally modified in cases where it would not make sense to
+change the local matrix size (which should instead result from changing
+the size of the full distributed matrix).</p>
+</div>
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6MatrixEb">
+<span id="_CPPv3N6MatrixI10scalarTypeE6MatrixEb"></span><span id="_CPPv2N6MatrixI10scalarTypeE6MatrixEb"></span><span id="Matrix:scalarType:::Matrix__b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span>bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This simply creates a default <span class="math notranslate nohighlight">\(0 \times 0\)</span> matrix with a leading
+dimension of one (BLAS and LAPACK require positive leading dimensions).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3Intb">
+<span id="_CPPv3N6MatrixI10scalarTypeE6MatrixE3Int3Intb"></span><span id="_CPPv2N6MatrixI10scalarTypeE6MatrixE3Int3Intb"></span><span id="Matrix:scalarType:::Matrix__Int.Int.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite> matrix is created with an unspecified
+leading dimension (though it is currently implemented as
+<span class="math notranslate nohighlight">\(\max(height,1)\)</span>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3Int3Intb">
+<span id="_CPPv3N6MatrixI10scalarTypeE6MatrixE3Int3Int3Intb"></span><span id="_CPPv2N6MatrixI10scalarTypeE6MatrixE3Int3Int3Intb"></span><span id="Matrix:scalarType:::Matrix__Int.Int.Int.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite> matrix is created with a leading
+dimension equal to <cite>ldim</cite> (which must be greater than or equal
+<span class="math notranslate nohighlight">\(\max(height,1)\)</span>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3IntPK10scalarType3Intb">
+<span id="_CPPv3N6MatrixI10scalarTypeE6MatrixE3Int3IntPK10scalarType3Intb"></span><span id="_CPPv2N6MatrixI10scalarTypeE6MatrixE3Int3IntPK10scalarType3Intb"></span><span id="Matrix:scalarType:::Matrix__Int.Int.scalarTypeCP.Int.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> scalarType *<em>buffer</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3IntPK10scalarType3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3IntP10scalarType3Intb">
+<span id="_CPPv3N6MatrixI10scalarTypeE6MatrixE3Int3IntP10scalarType3Intb"></span><span id="_CPPv2N6MatrixI10scalarTypeE6MatrixE3Int3IntP10scalarType3Intb"></span><span id="Matrix:scalarType:::Matrix__Int.Int.scalarTypeP.Int.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, scalarType *<em>buffer</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixE3Int3IntP10scalarType3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A matrix is built around a column-major (immutable) buffer
+with the specified dimensions. The memory pointed to by <cite>buffer</cite> should
+not be freed until after the <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a> object is destructed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6MatrixERK6MatrixI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeE6MatrixERK6MatrixI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeE6MatrixERK6MatrixI10scalarTypeE"></span><span id="Matrix:scalarType:::Matrix__Matrix:scalarType:CR"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixEb" title="Matrix&lt;scalarType&gt;::Matrix">Matrix</a>&lt;scalarType&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixERK6MatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A copy (not a view) of the matrix <span class="math notranslate nohighlight">\(A\)</span> is built.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6MatrixERR6MatrixI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeE6MatrixERR6MatrixI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeE6MatrixERR6MatrixI10scalarTypeE"></span><span id="Matrix:scalarType:::Matrix__Matrix:scalarType:RR"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixEb" title="Matrix&lt;scalarType&gt;::Matrix">Matrix</a>&lt;scalarType&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6MatrixERR6MatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move constructor which creates a new matrix by moving the metadata
+from the specified matrix over to the new matrix, which cheaply gives the
+new matrix control over the resources originally assigned to the input
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeED0Ev">
+<span id="_CPPv3N6MatrixI10scalarTypeED0Ev"></span><span id="_CPPv2N6MatrixI10scalarTypeED0Ev"></span><span id="Matrix:scalarType:::~Matrix"></span><code class="descname">~Matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Frees all resources owned by the matrix upon destruction.</p>
+</dd></dl>
+
+<p class="rubric">Submatrices</p>
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3N6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2N6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE"></span><span id="Matrix:scalarType:::call-operator__Range:Int:.Range:Int:"></span><a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3NK6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2NK6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE"></span><span id="Matrix:scalarType:::call-operator__Range:Int:.Range:Int:C"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeEclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of a contiguous submatrix with the given row and column
+index ranges.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeEclE5RangeI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK6MatrixI10scalarTypeEclE5RangeI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK6MatrixI10scalarTypeEclE5RangeI3IntERK6vectorI3IntE"></span><span id="Matrix:scalarType:::call-operator__Range:Int:.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeEclE5RangeI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeEclERK6vectorI3IntE5RangeI3IntE">
+<span id="_CPPv3NK6MatrixI10scalarTypeEclERK6vectorI3IntE5RangeI3IntE"></span><span id="_CPPv2NK6MatrixI10scalarTypeEclERK6vectorI3IntE5RangeI3IntE"></span><span id="Matrix:scalarType:::call-operator__vector:Int:CR.Range:Int:C"></span><a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeEclERK6vectorI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeEclERK6vectorI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK6MatrixI10scalarTypeEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK6MatrixI10scalarTypeEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="Matrix:scalarType:::call-operator__vector:Int:CR.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeEclERK6vectorI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a copy of the (generally non-contiguous) submatrix given by the
+specified row and column index lists.</p>
+</dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeEaSERK6MatrixI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeEaSERK6MatrixI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeEaSERK6MatrixI10scalarTypeE"></span><span id="Matrix:scalarType:::assign-operator__Matrix:scalarType:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeEaSERK6MatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a full copy of the specified matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeEaSERR6MatrixI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeEaSERR6MatrixI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeEaSERR6MatrixI10scalarTypeE"></span><span id="Matrix:scalarType:::assign-operator__Matrix:scalarType:RR"></span><a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;">Matrix</a>&lt;scalarType&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeEaSERR6MatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move assignment which swaps the metadata of two matrices so that
+the resources owned by the two objects will have been cheaply
+switched.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE5EmptyEv">
+<span id="_CPPv3N6MatrixI10scalarTypeE5EmptyEv"></span><span id="_CPPv2N6MatrixI10scalarTypeE5EmptyEv"></span><span id="Matrix:scalarType:::Empty"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE5EmptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix to <span class="math notranslate nohighlight">\(0 \times 0\)</span> and frees any owned resources.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6ResizeE3Int3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE6ResizeE3Int3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE6ResizeE3Int3Int"></span><span id="Matrix:scalarType:::Resize__Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6ResizeE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigures the matrix to be <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6ResizeE3Int3Int3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE6ResizeE3Int3Int3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE6ResizeE3Int3Int3Int"></span><span id="Matrix:scalarType:::Resize__Int.Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6ResizeE3Int3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigures the matrix to be <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite>, but with
+leading dimension equal to <cite>ldim</cite> (which must be greater than or equal to
+<span class="math notranslate nohighlight">\(\max(height,1)\)</span>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6AttachE3Int3IntP10scalarType3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE6AttachE3Int3IntP10scalarType3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE6AttachE3Int3IntP10scalarType3Int"></span><span id="Matrix:scalarType:::Attach__Int.Int.scalarTypeP.Int"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, scalarType *<em>buffer</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6AttachE3Int3IntP10scalarType3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE12LockedAttachE3Int3IntPK10scalarType3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE12LockedAttachE3Int3IntPK10scalarType3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE12LockedAttachE3Int3IntPK10scalarType3Int"></span><span id="Matrix:scalarType:::LockedAttach__Int.Int.scalarTypeCP.Int"></span>void <code class="descname">LockedAttach</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> scalarType *<em>buffer</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE12LockedAttachE3Int3IntPK10scalarType3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure the matrix around the specified (unmodifiable) buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE7ControlE3Int3IntP10scalarType3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE7ControlE3Int3IntP10scalarType3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE7ControlE3Int3IntP10scalarType3Int"></span><span id="Matrix:scalarType:::Control__Int.Int.scalarTypeP.Int"></span>void <code class="descname">Control</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, scalarType *<em>buffer</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE7ControlE3Int3IntP10scalarType3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure the matrix around a specified buffer and give ownership of
+the resource to the matrix.</p>
+</dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE6HeightEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE6HeightEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE6HeightEv"></span><span id="Matrix:scalarType:::HeightC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE6HeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE5WidthEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE5WidthEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE5WidthEv"></span><span id="Matrix:scalarType:::WidthC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE5WidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height/width of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE4LDimEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE4LDimEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE4LDimEv"></span><span id="Matrix:scalarType:::LDimC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LDim</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE4LDimEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the leading dimension of the underlying buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE10MemorySizeEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE10MemorySizeEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE10MemorySizeEv"></span><span id="Matrix:scalarType:::MemorySizeC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">MemorySize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE10MemorySizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of entries of type <cite>scalarType</cite> that this <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a>
+instance has allocated space for.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE14DiagonalLengthE3Int">
+<span id="_CPPv3NK6MatrixI10scalarTypeE14DiagonalLengthE3Int"></span><span id="_CPPv2NK6MatrixI10scalarTypeE14DiagonalLengthE3Int"></span><span id="Matrix:scalarType:::DiagonalLength__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">DiagonalLength</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE14DiagonalLengthE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the length of the specified diagonal of the matrix: an offset of
+<span class="math notranslate nohighlight">\(0\)</span> refers to the main diagonal, an offset of <span class="math notranslate nohighlight">\(1\)</span> refers to
+the superdiagonal, an offset of <span class="math notranslate nohighlight">\(-1\)</span> refers to the subdiagonal,
+etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6BufferEv">
+<span id="_CPPv3N6MatrixI10scalarTypeE6BufferEv"></span><span id="_CPPv2N6MatrixI10scalarTypeE6BufferEv"></span><span id="Matrix:scalarType:::Buffer"></span>scalarType *<code class="descname">Buffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6BufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE12LockedBufferEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE12LockedBufferEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE12LockedBufferEv"></span><span id="Matrix:scalarType:::LockedBufferC"></span><em class="property">const</em> scalarType *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE12LockedBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a pointer to the (immutable) underlying buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6BufferE3Int3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE6BufferE3Int3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE6BufferE3Int3Int"></span><span id="Matrix:scalarType:::Buffer__Int.Int"></span>scalarType *<code class="descname">Buffer</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6BufferE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE12LockedBufferE3Int3Int">
+<span id="_CPPv3NK6MatrixI10scalarTypeE12LockedBufferE3Int3Int"></span><span id="_CPPv2NK6MatrixI10scalarTypeE12LockedBufferE3Int3Int"></span><span id="Matrix:scalarType:::LockedBuffer__Int.IntC"></span><em class="property">const</em> scalarType *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE12LockedBufferE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a pointer to the (immutable) portion of the buffer that holds entry
+<span class="math notranslate nohighlight">\((i,j)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE7ViewingEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE7ViewingEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE7ViewingEv"></span><span id="Matrix:scalarType:::ViewingC"></span>bool <code class="descname">Viewing</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE7ViewingEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <cite>true</cite> if the underlying buffer is merely a pointer into an
+externally-owned buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE9FixedSizeEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE9FixedSizeEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE9FixedSizeEv"></span><span id="Matrix:scalarType:::FixedSizeC"></span>bool <code class="descname">FixedSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE9FixedSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <cite>true</cite> if the dimensions of the matrix cannot be changed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE6LockedEv">
+<span id="_CPPv3NK6MatrixI10scalarTypeE6LockedEv"></span><span id="_CPPv2NK6MatrixI10scalarTypeE6LockedEv"></span><span id="Matrix:scalarType:::LockedC"></span>bool <code class="descname">Locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE6LockedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <cite>true</cite> if the entries of the matrix cannot be changed.</p>
+</dd></dl>
+
+<p class="rubric">Single-entry manipulation</p>
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE3GetE3Int3Int">
+<span id="_CPPv3NK6MatrixI10scalarTypeE3GetE3Int3Int"></span><span id="_CPPv2NK6MatrixI10scalarTypeE3GetE3Int3Int"></span><span id="Matrix:scalarType:::Get__Int.IntC"></span>scalarType <code class="descname">Get</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE3GetE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE11GetRealPartE3Int3Int">
+<span id="_CPPv3NK6MatrixI10scalarTypeE11GetRealPartE3Int3Int"></span><span id="_CPPv2NK6MatrixI10scalarTypeE11GetRealPartE3Int3Int"></span><span id="Matrix:scalarType:::GetRealPart__Int.IntC"></span>Base&lt;scalarType&gt; <code class="descname">GetRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE11GetRealPartE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI10scalarTypeE11GetImagPartE3Int3Int">
+<span id="_CPPv3NK6MatrixI10scalarTypeE11GetImagPartE3Int3Int"></span><span id="_CPPv2NK6MatrixI10scalarTypeE11GetImagPartE3Int3Int"></span><span id="Matrix:scalarType:::GetImagPart__Int.IntC"></span>Base&lt;scalarType&gt; <code class="descname">GetImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI10scalarTypeE11GetImagPartE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return entry <span class="math notranslate nohighlight">\((i,j)\)</span> (or its real or imaginary part).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE3SetE3Int3Int10scalarType">
+<span id="_CPPv3N6MatrixI10scalarTypeE3SetE3Int3Int10scalarType"></span><span id="_CPPv2N6MatrixI10scalarTypeE3SetE3Int3Int10scalarType"></span><span id="Matrix:scalarType:::Set__Int.Int.scalarType"></span>void <code class="descname">Set</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, scalarType <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE3SetE3Int3Int10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="Matrix:scalarType:::SetRealPart__Int.Int.Base:scalarType:"></span>void <code class="descname">SetRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="Matrix:scalarType:::SetImagPart__Int.Int.Base:scalarType:"></span>void <code class="descname">SetImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set entry <span class="math notranslate nohighlight">\((i,j)\)</span> (or its real or imaginary part) to <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE6UpdateE3Int3Int10scalarType">
+<span id="_CPPv3N6MatrixI10scalarTypeE6UpdateE3Int3Int10scalarType"></span><span id="_CPPv2N6MatrixI10scalarTypeE6UpdateE3Int3Int10scalarType"></span><span id="Matrix:scalarType:::Update__Int.Int.scalarType"></span>void <code class="descname">Update</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, scalarType <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE6UpdateE3Int3Int10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="Matrix:scalarType:::UpdateRealPart__Int.Int.Base:scalarType:"></span>void <code class="descname">UpdateRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N6MatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N6MatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="Matrix:scalarType:::UpdateImagPart__Int.Int.Base:scalarType:"></span>void <code class="descname">UpdateImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add <span class="math notranslate nohighlight">\(\alpha\)</span> to entry <span class="math notranslate nohighlight">\((i,j)\)</span> (or its real or imaginary part).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE8MakeRealE3Int3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE8MakeRealE3Int3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE8MakeRealE3Int3Int"></span><span id="Matrix:scalarType:::MakeReal__Int.Int"></span>void <code class="descname">MakeReal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE8MakeRealE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the <span class="math notranslate nohighlight">\((i,j)\)</span> entry to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI10scalarTypeE9ConjugateE3Int3Int">
+<span id="_CPPv3N6MatrixI10scalarTypeE9ConjugateE3Int3Int"></span><span id="_CPPv2N6MatrixI10scalarTypeE9ConjugateE3Int3Int"></span><span id="Matrix:scalarType:::Conjugate__Int.Int"></span>void <code class="descname">Conjugate</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI10scalarTypeE9ConjugateE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the <span class="math notranslate nohighlight">\((i,j)\)</span> entry of the matrix.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="special-cases-used-in-elemental">
+<h2>Special cases used in Elemental<a class="headerlink" href="#special-cases-used-in-elemental" title="Permalink to this headline">¶</a></h2>
+<p>This list of special cases is here to help clarify the notation used throughout
+Elemental’s source (as well as this documentation). These are all special
+cases of <a class="reference internal" href="#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a>.</p>
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI4RealE">
+<span id="_CPPv3IE6MatrixI4RealE"></span><span id="_CPPv2IE6MatrixI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>Real</cite> is real.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI7ComplexI4RealEE">
+<span id="_CPPv3IE6MatrixI7ComplexI4RealEE"></span><span id="_CPPv2IE6MatrixI7ComplexI4RealEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;<a class="reference internal" href="../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <a class="reference internal" href="../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Complex&lt;Real&gt;</span></code></a> is
+complex with base type <cite>Real</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI1FE">
+<span id="_CPPv3IE6MatrixI1FE"></span><span id="_CPPv2IE6MatrixI1FE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>F</cite> is a field.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI3IntE">
+<span id="_CPPv3IE6MatrixI3IntE"></span><span id="_CPPv2IE6MatrixI3IntE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When the underlying datatype is a signed integer.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="c.html" class="btn btn-neutral float-right" title="Matrix (C interface)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="python.html" class="btn btn-neutral float-left" title="Matrix (Python interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

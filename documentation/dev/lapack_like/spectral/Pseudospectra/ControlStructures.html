@@ -1,0 +1,659 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Control structures &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Matrix functions" href="../../funcs.html" />
+    <link rel="prev" title="Spectral cloud" href="SpectralCloud.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../factor.html">Factorizations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../spectral.html">Spectral analysis</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../HermitianTridiagEig.html">Hermitian tridiagonal eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HermitianEig.html">Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SkewHermitianEig.html">Skew-Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HermitianGenDefEig.html">Hermitian generalized-definite eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HermitianSVD.html">Hermitian SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SVD.html">SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Polar.html">Polar decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Schur.html">Schur decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../specialized.html">Specialized eigensolvers</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../Pseudospectra.html">Pseudospectra</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="SpectralPortrait.html">Spectral portrait</a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpectralWindow.html">Spectral window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpectralCloud.html">Spectral cloud</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Control structures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Pseudospectra.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../spectral.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../../spectral.html">Spectral analysis</a> &raquo;</li>
+        
+          <li><a href="../Pseudospectra.html">Pseudospectra</a> &raquo;</li>
+        
+      <li>Control structures</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/lapack_like/spectral/Pseudospectra/ControlStructures.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="control-structures">
+<h1>Control structures<a class="headerlink" href="#control-structures" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="enum">
+<dt id="_CPPv414PseudospecNorm">
+<span id="_CPPv314PseudospecNorm"></span><span id="_CPPv214PseudospecNorm"></span><em class="property">enum </em><code class="descname">PseudospecNorm</code><a class="headerlink" href="#_CPPv414PseudospecNorm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N14PseudospecNorm11PS_TWO_NORME">
+<span id="_CPPv3N14PseudospecNorm11PS_TWO_NORME"></span><span id="_CPPv2N14PseudospecNorm11PS_TWO_NORME"></span><em class="property">enumerator </em><code class="descname">PS_TWO_NORM</code><a class="headerlink" href="#_CPPv4N14PseudospecNorm11PS_TWO_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute <span class="math notranslate nohighlight">\(\{ \xi \in \mathbb{C} : \| (A - \xi I)^{-1} \|_2 &gt; \frac{1}{\epsilon} \}\)</span></p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N14PseudospecNorm11PS_ONE_NORME">
+<span id="_CPPv3N14PseudospecNorm11PS_ONE_NORME"></span><span id="_CPPv2N14PseudospecNorm11PS_ONE_NORME"></span><em class="property">enumerator </em><code class="descname">PS_ONE_NORM</code><a class="headerlink" href="#_CPPv4N14PseudospecNorm11PS_ONE_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute <span class="math notranslate nohighlight">\(\{ \xi \in \mathbb{C} : \| (A - \xi I)^{-1} \|_1 &gt; \frac{1}{\epsilon} \}\)</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv412SnapshotCtrl">
+<span id="_CPPv312SnapshotCtrl"></span><span id="_CPPv212SnapshotCtrl"></span><span id="SnapshotCtrl"></span><em class="property">class </em><code class="descname">SnapshotCtrl</code><a class="headerlink" href="#_CPPv412SnapshotCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl8realSizeE">
+<span id="_CPPv3N12SnapshotCtrl8realSizeE"></span><span id="_CPPv2N12SnapshotCtrl8realSizeE"></span><span id="SnapshotCtrl::realSize__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">realSize</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl8realSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl8imagSizeE">
+<span id="_CPPv3N12SnapshotCtrl8imagSizeE"></span><span id="_CPPv2N12SnapshotCtrl8imagSizeE"></span><span id="SnapshotCtrl::imagSize__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imagSize</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl8imagSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl11imgSaveFreqE">
+<span id="_CPPv3N12SnapshotCtrl11imgSaveFreqE"></span><span id="_CPPv2N12SnapshotCtrl11imgSaveFreqE"></span><span id="SnapshotCtrl::imgSaveFreq__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgSaveFreq</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11imgSaveFreqE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl11numSaveFreqE">
+<span id="_CPPv3N12SnapshotCtrl11numSaveFreqE"></span><span id="_CPPv2N12SnapshotCtrl11numSaveFreqE"></span><span id="SnapshotCtrl::numSaveFreq__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">numSaveFreq</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11numSaveFreqE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl11imgDispFreqE">
+<span id="_CPPv3N12SnapshotCtrl11imgDispFreqE"></span><span id="_CPPv2N12SnapshotCtrl11imgDispFreqE"></span><span id="SnapshotCtrl::imgDispFreq__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgDispFreq</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11imgDispFreqE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Negative if no snapshots should be saved/displayed,
+zero if only a final snapshot should be saved/displayed, and equal to
+<span class="math notranslate nohighlight">\(n &gt; 0\)</span> if, in addition to a final snapshot, the partial results
+should be output roughly overy <cite>n</cite> iterations (there is no output in the
+middle of Impliclty Restarted Arnoldi cycles).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl12imgSaveCountE">
+<span id="_CPPv3N12SnapshotCtrl12imgSaveCountE"></span><span id="_CPPv2N12SnapshotCtrl12imgSaveCountE"></span><span id="SnapshotCtrl::imgSaveCount__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgSaveCount</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12imgSaveCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl12numSaveCountE">
+<span id="_CPPv3N12SnapshotCtrl12numSaveCountE"></span><span id="_CPPv2N12SnapshotCtrl12numSaveCountE"></span><span id="SnapshotCtrl::numSaveCount__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">numSaveCount</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12numSaveCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl12imgDispCountE">
+<span id="_CPPv3N12SnapshotCtrl12imgDispCountE"></span><span id="_CPPv2N12SnapshotCtrl12imgDispCountE"></span><span id="SnapshotCtrl::imgDispCount__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">imgDispCount</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12imgDispCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl7imgBaseE">
+<span id="_CPPv3N12SnapshotCtrl7imgBaseE"></span><span id="_CPPv2N12SnapshotCtrl7imgBaseE"></span><span id="SnapshotCtrl::imgBase__ss"></span>std::string <code class="descname">imgBase</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl7imgBaseE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl7numBaseE">
+<span id="_CPPv3N12SnapshotCtrl7numBaseE"></span><span id="_CPPv2N12SnapshotCtrl7numBaseE"></span><span id="SnapshotCtrl::numBase__ss"></span>std::string <code class="descname">numBase</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl7numBaseE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl9imgFormatE">
+<span id="_CPPv3N12SnapshotCtrl9imgFormatE"></span><span id="_CPPv2N12SnapshotCtrl9imgFormatE"></span><span id="SnapshotCtrl::imgFormat__FileFormat"></span><a class="reference internal" href="../../../io.html#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <code class="descname">imgFormat</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl9imgFormatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12SnapshotCtrl9numFormatE">
+<span id="_CPPv3N12SnapshotCtrl9numFormatE"></span><span id="_CPPv2N12SnapshotCtrl9numFormatE"></span><span id="SnapshotCtrl::numFormat__FileFormat"></span><a class="reference internal" href="../../../io.html#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <code class="descname">numFormat</code><a class="headerlink" href="#_CPPv4N12SnapshotCtrl9numFormatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SnapshotCtrl12SnapshotCtrlEv">
+<span id="_CPPv3N12SnapshotCtrl12SnapshotCtrlEv"></span><span id="_CPPv2N12SnapshotCtrl12SnapshotCtrlEv"></span><span id="SnapshotCtrl::SnapshotCtrl"></span><code class="descname">SnapshotCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SnapshotCtrl12SnapshotCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All counters and dimensions are initially zero, all save/display
+“frequencies” are set to -1 (no output), the basename strings are
+initialized to “ps”, the image format to <code class="docutils literal notranslate"><span class="pre">PNG</span></code>, and the numerical
+format to <code class="docutils literal notranslate"><span class="pre">ASCII_MATLAB</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SnapshotCtrl11ResetCountsEv">
+<span id="_CPPv3N12SnapshotCtrl11ResetCountsEv"></span><span id="_CPPv2N12SnapshotCtrl11ResetCountsEv"></span><span id="SnapshotCtrl::ResetCounts"></span>void <code class="descname">ResetCounts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SnapshotCtrl11ResetCountsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Resets all counters to zero</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12SnapshotCtrl7IterateEv">
+<span id="_CPPv3N12SnapshotCtrl7IterateEv"></span><span id="_CPPv2N12SnapshotCtrl7IterateEv"></span><span id="SnapshotCtrl::Iterate"></span>void <code class="descname">Iterate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12SnapshotCtrl7IterateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Increments all counters by one</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE14PseudospecCtrlI4RealE">
+<span id="_CPPv3IE14PseudospecCtrlI4RealE"></span><span id="_CPPv2IE14PseudospecCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">PseudospecCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE14PseudospecCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE17forceComplexSchurE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE17forceComplexSchurE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE17forceComplexSchurE"></span><span id="PseudospecCtrl:Real:::forceComplexSchur__b"></span>bool <code class="descname">forceComplexSchur</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE17forceComplexSchurE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE14forceComplexPsE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE14forceComplexPsE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE14forceComplexPsE"></span><span id="PseudospecCtrl:Real:::forceComplexPs__b"></span>bool <code class="descname">forceComplexPs</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE14forceComplexPsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE9schurCtrlE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE9schurCtrlE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE9schurCtrlE"></span><span id="PseudospecCtrl:Real:::schurCtrl__SchurCtrl:Real:"></span><a class="reference internal" href="../Schur.html#_CPPv4IE9SchurCtrlI4RealE" title="SchurCtrl&lt;Real&gt;">SchurCtrl</a>&lt;Real&gt; <code class="descname">schurCtrl</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE9schurCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE6maxItsE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE6maxItsE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE6maxItsE"></span><span id="PseudospecCtrl:Real:::maxIts__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxIts</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE6maxItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE3tolE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE3tolE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE3tolE"></span><span id="PseudospecCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE7deflateE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE7deflateE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE7deflateE"></span><span id="PseudospecCtrl:Real:::deflate__b"></span>bool <code class="descname">deflate</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE7deflateE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE7arnoldiE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE7arnoldiE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE7arnoldiE"></span><span id="PseudospecCtrl:Real:::arnoldi__b"></span>bool <code class="descname">arnoldi</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE7arnoldiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE9basisSizeE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE9basisSizeE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE9basisSizeE"></span><span id="PseudospecCtrl:Real:::basisSize__Int"></span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">basisSize</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE9basisSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE8reorthogE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE8reorthogE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE8reorthogE"></span><span id="PseudospecCtrl:Real:::reorthog__b"></span>bool <code class="descname">reorthog</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE8reorthogE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE8progressE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE8progressE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE8progressE"></span><span id="PseudospecCtrl:Real:::progress__b"></span>bool <code class="descname">progress</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE8progressE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14PseudospecCtrlI4RealE8snapCtrlE">
+<span id="_CPPv3N14PseudospecCtrlI4RealE8snapCtrlE"></span><span id="_CPPv2N14PseudospecCtrlI4RealE8snapCtrlE"></span><span id="PseudospecCtrl:Real:::snapCtrl__SnapshotCtrl"></span><a class="reference internal" href="#_CPPv412SnapshotCtrl" title="SnapshotCtrl">SnapshotCtrl</a> <code class="descname">snapCtrl</code><a class="headerlink" href="#_CPPv4N14PseudospecCtrlI4RealE8snapCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE14PseudospecCtrlI4BaseI1FEE">
+<span id="_CPPv3IE14PseudospecCtrlI4BaseI1FEE"></span><span id="_CPPv2IE14PseudospecCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">PseudospecCtrl</code>&lt;<a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE14PseudospecCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="c.ElSnapshotCtrl">
+<code class="descname">ElSnapshotCtrl</code><a class="headerlink" href="#c.ElSnapshotCtrl" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElSnapshotCtrl.realSize">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">realSize</code><a class="headerlink" href="#c.ElSnapshotCtrl.realSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imagSize">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imagSize</code><a class="headerlink" href="#c.ElSnapshotCtrl.imagSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgSaveFreq">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgSaveFreq</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgSaveFreq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numSaveFreq">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">numSaveFreq</code><a class="headerlink" href="#c.ElSnapshotCtrl.numSaveFreq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgDispFreq">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgDispFreq</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgDispFreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Negative if no snapshots should be saved/displayed,
+zero if only a final snapshot should be saved/displayed, and equal to
+<span class="math notranslate nohighlight">\(n &gt; 0\)</span> if, in addition to a final snapshot, the partial results
+should be output roughly overy <cite>n</cite> iterations (there is no output in the
+middle of Impliclty Restarted Arnoldi cycles).</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgSaveCount">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgSaveCount</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgSaveCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numSaveCount">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">numSaveCount</code><a class="headerlink" href="#c.ElSnapshotCtrl.numSaveCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgDispCount">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">imgDispCount</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgDispCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgBase">
+const char* <code class="descname">imgBase</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgBase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numBase">
+const char* <code class="descname">numBase</code><a class="headerlink" href="#c.ElSnapshotCtrl.numBase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.imgFormat">
+<a class="reference internal" href="../../../io.html#c.ElFileFormat" title="ElFileFormat">ElFileFormat</a> <code class="descname">imgFormat</code><a class="headerlink" href="#c.ElSnapshotCtrl.imgFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSnapshotCtrl.numFormat">
+<a class="reference internal" href="../../../io.html#c.ElFileFormat" title="ElFileFormat">ElFileFormat</a> <code class="descname">numFormat</code><a class="headerlink" href="#c.ElSnapshotCtrl.numFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElSnapshotCtrlDefault">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSnapshotCtrlDefault</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSnapshotCtrlDefault" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSnapshotCtrlDestroy">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSnapshotCtrlDestroy</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSnapshotCtrlDestroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="c.ElPseudospecCtrl_s">
+<code class="descname">ElPseudospecCtrl_s</code><a class="headerlink" href="#c.ElPseudospecCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElPseudospecCtrl_s.forceComplexSchur">
+bool <code class="descname">forceComplexSchur</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.forceComplexSchur" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.forceComplexPs">
+bool <code class="descname">forceComplexPs</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.forceComplexPs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.schurCtrl">
+ElSchurCtrl_s <code class="descname">schurCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.schurCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.maxIts">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxIts</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.maxIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.tol">
+float <code class="descname">tol</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.deflate">
+bool <code class="descname">deflate</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.deflate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.arnoldi">
+bool <code class="descname">arnoldi</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.arnoldi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.basisSize">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">basisSize</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.basisSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.reorthog">
+bool <code class="descname">reorthog</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.reorthog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_s.snapCtrl">
+<a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a> <code class="descname">snapCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_s.snapCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElPseudospecCtrl_d">
+<code class="descname">ElPseudospecCtrl_d</code><a class="headerlink" href="#c.ElPseudospecCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElPseudospecCtrl_d.forceComplexSchur">
+bool <code class="descname">forceComplexSchur</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.forceComplexSchur" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.forceComplexPs">
+bool <code class="descname">forceComplexPs</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.forceComplexPs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.schurCtrl">
+ElSchurCtrl_s <code class="descname">schurCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.schurCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.maxIts">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxIts</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.maxIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.tol">
+double <code class="descname">tol</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.deflate">
+bool <code class="descname">deflate</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.deflate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.arnoldi">
+bool <code class="descname">arnoldi</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.arnoldi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.basisSize">
+<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">basisSize</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.basisSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.reorthog">
+bool <code class="descname">reorthog</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.reorthog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElPseudospecCtrl_d.snapCtrl">
+<a class="reference internal" href="#c.ElSnapshotCtrl" title="ElSnapshotCtrl">ElSnapshotCtrl</a> <code class="descname">snapCtrl</code><a class="headerlink" href="#c.ElPseudospecCtrl_d.snapCtrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDefault_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDefault_s</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDefault_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDefault_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDefault_d</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDefault_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDestroy_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDestroy_s</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_s" title="ElPseudospecCtrl_s">ElPseudospecCtrl_s</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDestroy_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPseudospecCtrlDestroy_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPseudospecCtrlDestroy_d</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElPseudospecCtrl_d" title="ElPseudospecCtrl_d">ElPseudospecCtrl_d</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPseudospecCtrlDestroy_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../funcs.html" class="btn btn-neutral float-right" title="Matrix functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="SpectralCloud.html" class="btn btn-neutral float-left" title="Spectral cloud" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

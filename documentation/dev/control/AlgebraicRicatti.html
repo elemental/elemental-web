@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Algebraic Ricatti &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lyapunov" href="Lyapunov.html" />
+    <link rel="prev" title="Control theory" href="../control.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Optimization</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../control.html">Control theory</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Algebraic Ricatti</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">C API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#single-precision">Single-precision</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#double-precision">Double-precision</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#single-precision-complex">Single-precision complex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#double-precision-complex">Double-precision complex</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Lyapunov.html">Lyapunov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sylvester.html">Sylvester</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../control.html">Control theory</a> &raquo;</li>
+        
+      <li>Algebraic Ricatti</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/control/AlgebraicRicatti.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="algebraic-ricatti">
+<h1>Algebraic Ricatti<a class="headerlink" href="#algebraic-ricatti" title="Permalink to this headline">¶</a></h1>
+<p>Under suitable conditions, the following routines solve for <span class="math notranslate nohighlight">\(X\)</span> in the
+<em>algebraic Ricatti equation</em></p>
+<div class="math notranslate nohighlight">
+\[X K X - A^H X - X A = L,\]</div>
+<p>where both <span class="math notranslate nohighlight">\(K\)</span> and <span class="math notranslate nohighlight">\(L\)</span> are Hermitian, via computing the matrix sign
+of</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}W = \begin{pmatrix} A^H &amp; L \\ K &amp; -A \end{pmatrix}.\end{split}\]</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Ricatti">
+<code class="descname">Ricatti</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em>, <em>K</em>, <em>L</em><span class="sig-paren">)</span><a class="headerlink" href="#Ricatti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="RicattiPreformed">
+<code class="descname">RicattiPreformed</code><span class="sig-paren">(</span><em>W</em><span class="sig-paren">)</span><a class="headerlink" href="#RicattiPreformed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__UpperOrLower.Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>K</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>L</em>, <a class="reference internal" href="../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__UpperOrLower.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>K</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>L</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Versions which accept the individual matrices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__Matrix:F:R.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="../lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Versions which save memory by directly accepting the preformed <span class="math notranslate nohighlight">\(W\)</span>
+matrix</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElRicatti_s">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_s</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> K</em>, ElConstMatrix_s<em> L</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_s">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> K</em>, ElConstDistMatrix_s<em> L</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the individual matrices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_s">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_s</code><span class="sig-paren">(</span>ElMatrix_s<em> W</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_s">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> W</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the preformed <span class="math notranslate nohighlight">\(W\)</span> matrix</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElRicatti_d">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_d</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> K</em>, ElConstMatrix_d<em> L</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_d">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> K</em>, ElConstDistMatrix_d<em> L</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the individual matrices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_d">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_d</code><span class="sig-paren">(</span>ElMatrix_d<em> W</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_d">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> W</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the preformed <span class="math notranslate nohighlight">\(W\)</span> matrix</p>
+</dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h3>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElRicatti_c">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_c</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> K</em>, ElConstMatrix_c<em> L</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_c">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> K</em>, ElConstDistMatrix_c<em> L</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the individual matrices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_c">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_c</code><span class="sig-paren">(</span>ElMatrix_c<em> W</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_c">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> W</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the preformed <span class="math notranslate nohighlight">\(W\)</span> matrix</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h3>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElRicatti_z">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_z</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> K</em>, ElConstMatrix_z<em> L</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_z">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> K</em>, ElConstDistMatrix_z<em> L</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the individual matrices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_z">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_z</code><span class="sig-paren">(</span>ElMatrix_z<em> W</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_z">
+<a class="reference internal" href="../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> W</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the preformed <span class="math notranslate nohighlight">\(W\)</span> matrix</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Lyapunov.html" class="btn btn-neutral float-right" title="Lyapunov" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../control.html" class="btn btn-neutral float-left" title="Control theory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

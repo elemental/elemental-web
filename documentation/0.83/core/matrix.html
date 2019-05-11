@@ -1,0 +1,682 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sequential matrices &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Process grids" href="grid.html" />
+    <link rel="prev" title="Environment" href="environment.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sequential-matrices">
+<h1>Sequential matrices<a class="headerlink" href="#sequential-matrices" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a> class is the building of the library:
+its purpose is to provide convenient mechanisms for performing basic matrix
+manipulations, such as setting and querying individual matrix entries,
+without giving up compatibility with interfaces such as BLAS and LAPACK,
+which assume column-major storage.</p>
+<p>An example of generating an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix of real double-precision
+numbers where the <span class="math notranslate nohighlight">\((i,j)\)</span> entry is equal to <span class="math notranslate nohighlight">\(i-j\)</span> would be:</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;elemental.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">elem</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span> <span class="p">)</span>
+    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+        <span class="n">A</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="kt">double</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>whereas the complex double-precision equivalent could use
+<code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Complex&lt;double&gt;</span></code>, which is currently a typedef for
+<code class="docutils literal notranslate"><span class="pre">std::complex&lt;double&gt;</span></code>.</p>
+<p>The underlying data storage for <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a> is simply a contiguous
+buffer that stores entries in a column-major fashion with a <em>leading
+dimension</em> which is only required to be at least as large as the height of the
+matrix (so that entry <span class="math notranslate nohighlight">\((i,j)\)</span> is located at position <code class="docutils literal notranslate"><span class="pre">i+j*ldim</span></code>).
+For modifiable instances of the <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a> class, the routine
+<a class="reference internal" href="#_CPPv4N6MatrixI1TE6BufferEv" title="Matrix&lt;T&gt;::Buffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;::Buffer()</span></code></a> returns a pointer to the underlying
+buffer, while <a class="reference internal" href="#_CPPv4NK6MatrixI1TE4LDimEv" title="Matrix&lt;T&gt;::LDim"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;::LDim()</span></code></a> returns the leading
+dimension; these two routines could be used to directly perform the equivalent
+of the first code sample as follows:</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;elemental.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">elem</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="p">);</span>
+<span class="kt">double</span><span class="o">*</span> <span class="n">buffer</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">Buffer</span><span class="p">();</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">ldim</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">LDim</span><span class="p">();</span>
+<span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span> <span class="p">)</span>
+    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+        <span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">*</span><span class="n">ldim</span><span class="p">]</span> <span class="o">=</span> <span class="kt">double</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For immutable instances of the <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a> class, a <code class="docutils literal notranslate"><span class="pre">const</span></code>
+pointer to the underlying data can similarly be returned with a call to
+<a class="reference internal" href="#_CPPv4NK6MatrixI1TE12LockedBufferEv" title="Matrix&lt;T&gt;::LockedBuffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;::LockedBuffer()</span></code></a>.
+In addition, a (<code class="docutils literal notranslate"><span class="pre">const</span></code>) pointer to the place in the
+(<code class="docutils literal notranslate"><span class="pre">const</span></code>) buffer where entry <span class="math notranslate nohighlight">\((i,j)\)</span> resides can be easily retrieved
+with a call to <a class="reference internal" href="#_CPPv4N6MatrixI1TE6BufferEv" title="Matrix&lt;T&gt;::Buffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;::Buffer()</span></code></a> or
+<a class="reference internal" href="#_CPPv4NK6MatrixI1TE12LockedBufferEv" title="Matrix&lt;T&gt;::LockedBuffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;::LockedBuffer()</span></code></a>.</p>
+<p>It is also important to be able to create matrices which are simply <em>views</em>
+of existing (sub)matrices. For example, if <cite>A</cite> is a <span class="math notranslate nohighlight">\(10 \times 10\)</span>
+matrix of complex doubles, then a matrix <span class="math notranslate nohighlight">\(A_{BR}\)</span> can easily be created
+to view the bottom-right <span class="math notranslate nohighlight">\(6 \times 7\)</span> submatrix using</p>
+<blockquote>
+<div><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;elemental.hpp&quot;</span><span class="cp"></span>
+<span class="p">...</span>
+<span class="k">auto</span> <span class="n">ABR</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>since the bottom-right <span class="math notranslate nohighlight">\(3 \times 4\)</span> submatrix beings at index
+<span class="math notranslate nohighlight">\((1,2)\)</span>. In general, to view the <span class="math notranslate nohighlight">\(M \times N\)</span> submatrix starting
+at entry <span class="math notranslate nohighlight">\((i,j)\)</span>, one would call <code class="docutils literal notranslate"><span class="pre">View(</span> <span class="pre">ABR,</span> <span class="pre">A,</span> <span class="pre">i,</span> <span class="pre">j,</span> <span class="pre">M,</span> <span class="pre">N</span> <span class="pre">);</span></code>.</p>
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI1TE">
+<span id="_CPPv3IE6MatrixI1TE"></span><span id="_CPPv2IE6MatrixI1TE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;T&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The goal is for the <cite>Matrix</cite> class to support any datatype <cite>T</cite> which
+supports both addition and multiplication and has the associated identities
+(that is, when the datatype <cite>T</cite> is a <em>ring</em>). While there are several
+barriers to reaching this goal, it is important to keep in mind that, in
+addition to <cite>T</cite> being allowed to be a real or complex
+(single- or double-precision) floating-point type, signed integers
+are also supported.</p>
+<p class="rubric">Constructors and destructors</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Many of the following constructors have the default parameter
+<code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">fixed=false</span></code>, which can be changed to <code class="docutils literal notranslate"><span class="pre">true</span></code> in order to
+produce a <cite>Matrix</cite> whose entries can be modified, but the matrix’s
+dimensions cannot. This is useful for the <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T&gt;</span></code></a>
+class, which contains a local <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a> whose entries can
+be locally modified in cases where it would not make sense to change
+the local matrix size (which should instead result from changing the size
+of the full distributed matrix).</p>
+</div>
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6MatrixEb">
+<span id="_CPPv3N6MatrixI1TE6MatrixEb"></span><span id="_CPPv2N6MatrixI1TE6MatrixEb"></span><span id="Matrix:T:::Matrix__b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span>bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This simply creates a default <span class="math notranslate nohighlight">\(0 \times 0\)</span> matrix with a leading
+dimension of one (BLAS and LAPACK require positive leading dimensions).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6MatrixEiib">
+<span id="_CPPv3N6MatrixI1TE6MatrixEiib"></span><span id="_CPPv2N6MatrixI1TE6MatrixEiib"></span><span id="Matrix:T:::Matrix__i.i.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6MatrixEiib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite> matrix is created with an unspecified
+leading dimension (though it is currently implemented as
+<span class="math notranslate nohighlight">\(\max(height,1)\)</span>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6MatrixEiiib">
+<span id="_CPPv3N6MatrixI1TE6MatrixEiiib"></span><span id="_CPPv2N6MatrixI1TE6MatrixEiiib"></span><span id="Matrix:T:::Matrix__i.i.i.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, int <em>ldim</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6MatrixEiiib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite> matrix is created with a leading
+dimension equal to <cite>ldim</cite> (which must be greater than or equal
+<span class="math notranslate nohighlight">\(\max(height,1)\)</span>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6MatrixEiiPK1Tib">
+<span id="_CPPv3N6MatrixI1TE6MatrixEiiPK1Tib"></span><span id="_CPPv2N6MatrixI1TE6MatrixEiiPK1Tib"></span><span id="Matrix:T:::Matrix__i.i.TCP.i.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, <em class="property">const</em> T *<em>buffer</em>, int <em>ldim</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6MatrixEiiPK1Tib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6MatrixEiiP1Tib">
+<span id="_CPPv3N6MatrixI1TE6MatrixEiiP1Tib"></span><span id="_CPPv2N6MatrixI1TE6MatrixEiiP1Tib"></span><span id="Matrix:T:::Matrix__i.i.TP.i.b"></span><code class="descname">Matrix</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, T *<em>buffer</em>, int <em>ldim</em>, bool <em>fixed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6MatrixEiiP1Tib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A matrix is built around a column-major (immutable) buffer
+with the specified dimensions. The memory pointed to by <cite>buffer</cite> should
+not be freed until after the <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a> object is destructed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6MatrixERK6MatrixI1TE">
+<span id="_CPPv3N6MatrixI1TE6MatrixERK6MatrixI1TE"></span><span id="_CPPv2N6MatrixI1TE6MatrixERK6MatrixI1TE"></span><span id="Matrix:T:::Matrix__Matrix:T:CR"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6MatrixERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A copy (not a view) of the matrix <span class="math notranslate nohighlight">\(A\)</span> is built.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6MatrixERR6MatrixI1TE">
+<span id="_CPPv3N6MatrixI1TE6MatrixERR6MatrixI1TE"></span><span id="_CPPv2N6MatrixI1TE6MatrixERR6MatrixI1TE"></span><span id="Matrix:T:::Matrix__Matrix:T:RR"></span><code class="descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6MatrixERR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move constructor which creates a new matrix by moving the metadata
+from the specified matrix over to the new matrix, which cheaply gives the
+new matrix control over the resources originally assigned to the input
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TED0Ev">
+<span id="_CPPv3N6MatrixI1TED0Ev"></span><span id="_CPPv2N6MatrixI1TED0Ev"></span><span id="Matrix:T:::~Matrix"></span><code class="descname">~Matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Frees all resources owned by the matrix upon destruction.</p>
+</dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TEaSERK6MatrixI1TE">
+<span id="_CPPv3N6MatrixI1TEaSERK6MatrixI1TE"></span><span id="_CPPv2N6MatrixI1TEaSERK6MatrixI1TE"></span><span id="Matrix:T:::assign-operator__Matrix:T:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TEaSERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a full copy of the specified matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TEaSERR6MatrixI1TE">
+<span id="_CPPv3N6MatrixI1TEaSERR6MatrixI1TE"></span><span id="_CPPv2N6MatrixI1TEaSERR6MatrixI1TE"></span><span id="Matrix:T:::assign-operator__Matrix:T:RR"></span><a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TEaSERR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move assignment which swaps the metadata of two matrices so that
+the resources owned by the two objects will have been cheaply
+switched.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE5EmptyEv">
+<span id="_CPPv3N6MatrixI1TE5EmptyEv"></span><span id="_CPPv2N6MatrixI1TE5EmptyEv"></span><span id="Matrix:T:::Empty"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE5EmptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix to <span class="math notranslate nohighlight">\(0 \times 0\)</span> and frees any owned resources.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6ResizeEii">
+<span id="_CPPv3N6MatrixI1TE6ResizeEii"></span><span id="_CPPv2N6MatrixI1TE6ResizeEii"></span><span id="Matrix:T:::Resize__i.i"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6ResizeEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigures the matrix to be <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6ResizeEiii">
+<span id="_CPPv3N6MatrixI1TE6ResizeEiii"></span><span id="_CPPv2N6MatrixI1TE6ResizeEiii"></span><span id="Matrix:T:::Resize__i.i.i"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, int <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6ResizeEiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigures the matrix to be <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite>, but with
+leading dimension equal to <cite>ldim</cite> (which must be greater than or equal to
+<span class="math notranslate nohighlight">\(\max(height,1)\)</span>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6AttachEiiP1Ti">
+<span id="_CPPv3N6MatrixI1TE6AttachEiiP1Ti"></span><span id="_CPPv2N6MatrixI1TE6AttachEiiP1Ti"></span><span id="Matrix:T:::Attach__i.i.TP.i"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, T *<em>buffer</em>, int <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6AttachEiiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE12LockedAttachEiiPK1Ti">
+<span id="_CPPv3N6MatrixI1TE12LockedAttachEiiPK1Ti"></span><span id="_CPPv2N6MatrixI1TE12LockedAttachEiiPK1Ti"></span><span id="Matrix:T:::LockedAttach__i.i.TCP.i"></span>void <code class="descname">LockedAttach</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, <em class="property">const</em> T *<em>buffer</em>, int <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE12LockedAttachEiiPK1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure the matrix around the specified (unmodifiable) buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE7ControlEiiP1Ti">
+<span id="_CPPv3N6MatrixI1TE7ControlEiiP1Ti"></span><span id="_CPPv2N6MatrixI1TE7ControlEiiP1Ti"></span><span id="Matrix:T:::Control__i.i.TP.i"></span>void <code class="descname">Control</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, T *<em>buffer</em>, int <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE7ControlEiiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure the matrix around a specified buffer and give ownership of
+the resource to the matrix.</p>
+</dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE6HeightEv">
+<span id="_CPPv3NK6MatrixI1TE6HeightEv"></span><span id="_CPPv2NK6MatrixI1TE6HeightEv"></span><span id="Matrix:T:::HeightC"></span>int <code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE6HeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE5WidthEv">
+<span id="_CPPv3NK6MatrixI1TE5WidthEv"></span><span id="_CPPv2NK6MatrixI1TE5WidthEv"></span><span id="Matrix:T:::WidthC"></span>int <code class="descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE5WidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height/width of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE4LDimEv">
+<span id="_CPPv3NK6MatrixI1TE4LDimEv"></span><span id="_CPPv2NK6MatrixI1TE4LDimEv"></span><span id="Matrix:T:::LDimC"></span>int <code class="descname">LDim</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE4LDimEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the leading dimension of the underlying buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE10MemorySizeEv">
+<span id="_CPPv3NK6MatrixI1TE10MemorySizeEv"></span><span id="_CPPv2NK6MatrixI1TE10MemorySizeEv"></span><span id="Matrix:T:::MemorySizeC"></span>int <code class="descname">MemorySize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE10MemorySizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of entries of type <cite>T</cite> that this <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a>
+instance has allocated space for.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE14DiagonalLengthEi">
+<span id="_CPPv3NK6MatrixI1TE14DiagonalLengthEi"></span><span id="_CPPv2NK6MatrixI1TE14DiagonalLengthEi"></span><span id="Matrix:T:::DiagonalLength__iC"></span>int <code class="descname">DiagonalLength</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE14DiagonalLengthEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the length of the specified diagonal of the matrix: an offset of
+<span class="math notranslate nohighlight">\(0\)</span> refers to the main diagonal, an offset of <span class="math notranslate nohighlight">\(1\)</span> refers to
+the superdiagonal, an offset of <span class="math notranslate nohighlight">\(-1\)</span> refers to the subdiagonal,
+etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6BufferEv">
+<span id="_CPPv3N6MatrixI1TE6BufferEv"></span><span id="_CPPv2N6MatrixI1TE6BufferEv"></span><span id="Matrix:T:::Buffer"></span>T *<code class="descname">Buffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6BufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE12LockedBufferEv">
+<span id="_CPPv3NK6MatrixI1TE12LockedBufferEv"></span><span id="_CPPv2NK6MatrixI1TE12LockedBufferEv"></span><span id="Matrix:T:::LockedBufferC"></span><em class="property">const</em> T *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE12LockedBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a pointer to the (immutable) underlying buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6BufferEii">
+<span id="_CPPv3N6MatrixI1TE6BufferEii"></span><span id="_CPPv2N6MatrixI1TE6BufferEii"></span><span id="Matrix:T:::Buffer__i.i"></span>T *<code class="descname">Buffer</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6BufferEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE12LockedBufferEii">
+<span id="_CPPv3NK6MatrixI1TE12LockedBufferEii"></span><span id="_CPPv2NK6MatrixI1TE12LockedBufferEii"></span><span id="Matrix:T:::LockedBuffer__i.iC"></span><em class="property">const</em> T *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE12LockedBufferEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a pointer to the (immutable) portion of the buffer that holds entry
+<span class="math notranslate nohighlight">\((i,j)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE7ViewingEv">
+<span id="_CPPv3NK6MatrixI1TE7ViewingEv"></span><span id="_CPPv2NK6MatrixI1TE7ViewingEv"></span><span id="Matrix:T:::ViewingC"></span>bool <code class="descname">Viewing</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE7ViewingEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <cite>true</cite> if the underlying buffer is merely a pointer into an
+externally-owned buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE9FixedSizeEv">
+<span id="_CPPv3NK6MatrixI1TE9FixedSizeEv"></span><span id="_CPPv2NK6MatrixI1TE9FixedSizeEv"></span><span id="Matrix:T:::FixedSizeC"></span>bool <code class="descname">FixedSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE9FixedSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <cite>true</cite> if the dimensions of the matrix cannot be changed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE6LockedEv">
+<span id="_CPPv3NK6MatrixI1TE6LockedEv"></span><span id="_CPPv2NK6MatrixI1TE6LockedEv"></span><span id="Matrix:T:::LockedC"></span>bool <code class="descname">Locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE6LockedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <cite>true</cite> if the entries of the matrix cannot be changed.</p>
+</dd></dl>
+
+<p class="rubric">Single-entry manipulation</p>
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE3GetEii">
+<span id="_CPPv3NK6MatrixI1TE3GetEii"></span><span id="_CPPv2NK6MatrixI1TE3GetEii"></span><span id="Matrix:T:::Get__i.iC"></span>T <code class="descname">Get</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE3GetEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE11GetRealPartEii">
+<span id="_CPPv3NK6MatrixI1TE11GetRealPartEii"></span><span id="_CPPv2NK6MatrixI1TE11GetRealPartEii"></span><span id="Matrix:T:::GetRealPart__i.iC"></span>Base&lt;T&gt; <code class="descname">GetRealPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE11GetRealPartEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE11GetImagPartEii">
+<span id="_CPPv3NK6MatrixI1TE11GetImagPartEii"></span><span id="_CPPv2NK6MatrixI1TE11GetImagPartEii"></span><span id="Matrix:T:::GetImagPart__i.iC"></span>Base&lt;T&gt; <code class="descname">GetImagPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE11GetImagPartEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return entry <span class="math notranslate nohighlight">\((i,j)\)</span> (or its real or imaginary part).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE3SetEii1T">
+<span id="_CPPv3N6MatrixI1TE3SetEii1T"></span><span id="_CPPv2N6MatrixI1TE3SetEii1T"></span><span id="Matrix:T:::Set__i.i.T"></span>void <code class="descname">Set</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE3SetEii1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE11SetRealPartEii4BaseI1TE">
+<span id="_CPPv3N6MatrixI1TE11SetRealPartEii4BaseI1TE"></span><span id="_CPPv2N6MatrixI1TE11SetRealPartEii4BaseI1TE"></span><span id="Matrix:T:::SetRealPart__i.i.Base:T:"></span>void <code class="descname">SetRealPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE11SetRealPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE11SetImagPartEii4BaseI1TE">
+<span id="_CPPv3N6MatrixI1TE11SetImagPartEii4BaseI1TE"></span><span id="_CPPv2N6MatrixI1TE11SetImagPartEii4BaseI1TE"></span><span id="Matrix:T:::SetImagPart__i.i.Base:T:"></span>void <code class="descname">SetImagPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE11SetImagPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set entry <span class="math notranslate nohighlight">\((i,j)\)</span> (or its real or imaginary part) to <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE6UpdateEii1T">
+<span id="_CPPv3N6MatrixI1TE6UpdateEii1T"></span><span id="_CPPv2N6MatrixI1TE6UpdateEii1T"></span><span id="Matrix:T:::Update__i.i.T"></span>void <code class="descname">Update</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE6UpdateEii1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE14UpdateRealPartEii4BaseI1TE">
+<span id="_CPPv3N6MatrixI1TE14UpdateRealPartEii4BaseI1TE"></span><span id="_CPPv2N6MatrixI1TE14UpdateRealPartEii4BaseI1TE"></span><span id="Matrix:T:::UpdateRealPart__i.i.Base:T:"></span>void <code class="descname">UpdateRealPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE14UpdateRealPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE14UpdateImagPartEii4BaseI1TE">
+<span id="_CPPv3N6MatrixI1TE14UpdateImagPartEii4BaseI1TE"></span><span id="_CPPv2N6MatrixI1TE14UpdateImagPartEii4BaseI1TE"></span><span id="Matrix:T:::UpdateImagPart__i.i.Base:T:"></span>void <code class="descname">UpdateImagPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE14UpdateImagPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add <span class="math notranslate nohighlight">\(\alpha\)</span> to entry <span class="math notranslate nohighlight">\((i,j)\)</span> (or its real or imaginary part).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE8MakeRealEii">
+<span id="_CPPv3N6MatrixI1TE8MakeRealEii"></span><span id="_CPPv2N6MatrixI1TE8MakeRealEii"></span><span id="Matrix:T:::MakeReal__i.i"></span>void <code class="descname">MakeReal</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE8MakeRealEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the <span class="math notranslate nohighlight">\((i,j)\)</span> entry to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE9ConjugateEii">
+<span id="_CPPv3N6MatrixI1TE9ConjugateEii"></span><span id="_CPPv2N6MatrixI1TE9ConjugateEii"></span><span id="Matrix:T:::Conjugate__i.i"></span>void <code class="descname">Conjugate</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE9ConjugateEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the <span class="math notranslate nohighlight">\((i,j)\)</span> entry of the matrix.</p>
+</dd></dl>
+
+<p class="rubric">Diagonal manipulation</p>
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE11GetDiagonalER6MatrixI1TEi">
+<span id="_CPPv3NK6MatrixI1TE11GetDiagonalER6MatrixI1TEi"></span><span id="_CPPv2NK6MatrixI1TE11GetDiagonalER6MatrixI1TEi"></span><span id="Matrix:T:::GetDiagonal__Matrix:T:R.iC"></span>void <code class="descname">GetDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE11GetDiagonalER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE21GetRealPartOfDiagonalER6MatrixI4BaseI1TEEi">
+<span id="_CPPv3NK6MatrixI1TE21GetRealPartOfDiagonalER6MatrixI4BaseI1TEEi"></span><span id="_CPPv2NK6MatrixI1TE21GetRealPartOfDiagonalER6MatrixI4BaseI1TEEi"></span><span id="Matrix:T:::GetRealPartOfDiagonal__Matrix:Base:T::R.iC"></span>void <code class="descname">GetRealPartOfDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE21GetRealPartOfDiagonalER6MatrixI4BaseI1TEEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE21GetImagPartOfDiagonalER6MatrixI4BaseI1TEEi">
+<span id="_CPPv3NK6MatrixI1TE21GetImagPartOfDiagonalER6MatrixI4BaseI1TEEi"></span><span id="_CPPv2NK6MatrixI1TE21GetImagPartOfDiagonalER6MatrixI4BaseI1TEEi"></span><span id="Matrix:T:::GetImagPartOfDiagonal__Matrix:Base:T::R.iC"></span>void <code class="descname">GetImagPartOfDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE21GetImagPartOfDiagonalER6MatrixI4BaseI1TEEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Modify <span class="math notranslate nohighlight">\(d\)</span> into a column-vector containing the entries (or their
+real or imaginary parts) lying on the <cite>offset</cite> diagonal of our matrix
+(for instance, the main diagonal has offset <span class="math notranslate nohighlight">\(0\)</span>, the subdiagonal
+has offset <span class="math notranslate nohighlight">\(-1\)</span>, and the superdiagonal has offset <span class="math notranslate nohighlight">\(+1\)</span>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE11GetDiagonalEi">
+<span id="_CPPv3NK6MatrixI1TE11GetDiagonalEi"></span><span id="_CPPv2NK6MatrixI1TE11GetDiagonalEi"></span><span id="Matrix:T:::GetDiagonal__iC"></span><a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">GetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE11GetDiagonalEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE21GetRealPartOfDiagonalEi">
+<span id="_CPPv3NK6MatrixI1TE21GetRealPartOfDiagonalEi"></span><span id="_CPPv2NK6MatrixI1TE21GetRealPartOfDiagonalEi"></span><span id="Matrix:T:::GetRealPartOfDiagonal__iC"></span><a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; <code class="descname">GetRealPartOfDiagonal</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE21GetRealPartOfDiagonalEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE21GetImagPartOfDiagonalEi">
+<span id="_CPPv3NK6MatrixI1TE21GetImagPartOfDiagonalEi"></span><span id="_CPPv2NK6MatrixI1TE21GetImagPartOfDiagonalEi"></span><span id="Matrix:T:::GetImagPartOfDiagonal__iC"></span><a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; <code class="descname">GetImagPartOfDiagonal</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE21GetImagPartOfDiagonalEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Efficiently construct and return the particular diagonal
+(or its real or imaginary part) via C++11 move semantics.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE11SetDiagonalERK6MatrixI1TEi">
+<span id="_CPPv3N6MatrixI1TE11SetDiagonalERK6MatrixI1TEi"></span><span id="_CPPv2N6MatrixI1TE11SetDiagonalERK6MatrixI1TEi"></span><span id="Matrix:T:::SetDiagonal__Matrix:T:CR.i"></span>void <code class="descname">SetDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE11SetDiagonalERK6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE21SetRealPartOfDiagonalERK6MatrixI4BaseI1TEEi">
+<span id="_CPPv3N6MatrixI1TE21SetRealPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="_CPPv2N6MatrixI1TE21SetRealPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="Matrix:T:::SetRealPartOfDiagonal__Matrix:Base:T::CR.i"></span>void <code class="descname">SetRealPartOfDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE21SetRealPartOfDiagonalERK6MatrixI4BaseI1TEEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE21SetImagPartOfDiagonalERK6MatrixI4BaseI1TEEi">
+<span id="_CPPv3N6MatrixI1TE21SetImagPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="_CPPv2N6MatrixI1TE21SetImagPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="Matrix:T:::SetImagPartOfDiagonal__Matrix:Base:T::CR.i"></span>void <code class="descname">SetImagPartOfDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE21SetImagPartOfDiagonalERK6MatrixI4BaseI1TEEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the entries (or their real or imaginary parts) in the <cite>offset</cite>
+diagonal entries from the contents of the column-vector <span class="math notranslate nohighlight">\(d\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE14UpdateDiagonalERK6MatrixI1TEi">
+<span id="_CPPv3N6MatrixI1TE14UpdateDiagonalERK6MatrixI1TEi"></span><span id="_CPPv2N6MatrixI1TE14UpdateDiagonalERK6MatrixI1TEi"></span><span id="Matrix:T:::UpdateDiagonal__Matrix:T:CR.i"></span>void <code class="descname">UpdateDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE14UpdateDiagonalERK6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE24UpdateRealPartOfDiagonalERK6MatrixI4BaseI1TEEi">
+<span id="_CPPv3N6MatrixI1TE24UpdateRealPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="_CPPv2N6MatrixI1TE24UpdateRealPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="Matrix:T:::UpdateRealPartOfDiagonal__Matrix:Base:T::CR.i"></span>void <code class="descname">UpdateRealPartOfDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE24UpdateRealPartOfDiagonalERK6MatrixI4BaseI1TEEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE24UpdateImagPartOfDiagonalERK6MatrixI4BaseI1TEEi">
+<span id="_CPPv3N6MatrixI1TE24UpdateImagPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="_CPPv2N6MatrixI1TE24UpdateImagPartOfDiagonalERK6MatrixI4BaseI1TEEi"></span><span id="Matrix:T:::UpdateImagPartOfDiagonal__Matrix:Base:T::CR.i"></span>void <code class="descname">UpdateImagPartOfDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>d</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE24UpdateImagPartOfDiagonalERK6MatrixI4BaseI1TEEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add the contents of <span class="math notranslate nohighlight">\(d\)</span> onto the entries (or the real or imaginary
+parts) in the <cite>offset</cite> diagonal.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE16MakeDiagonalRealEi">
+<span id="_CPPv3N6MatrixI1TE16MakeDiagonalRealEi"></span><span id="_CPPv2N6MatrixI1TE16MakeDiagonalRealEi"></span><span id="Matrix:T:::MakeDiagonalReal__i"></span>void <code class="descname">MakeDiagonalReal</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE16MakeDiagonalRealEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the specified diagonal of the matrix to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE17ConjugateDiagonalEi">
+<span id="_CPPv3N6MatrixI1TE17ConjugateDiagonalEi"></span><span id="_CPPv2N6MatrixI1TE17ConjugateDiagonalEi"></span><span id="Matrix:T:::ConjugateDiagonal__i"></span>void <code class="descname">ConjugateDiagonal</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE17ConjugateDiagonalEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the specified diagonal of the matrix.</p>
+</dd></dl>
+
+<p class="rubric">Arbitrary-submatrix manipulation</p>
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE">
+<span id="_CPPv3NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE"></span><span id="_CPPv2NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE"></span><span id="Matrix:T:::GetSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:T:RC"></span>void <code class="descname">GetSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE">
+<span id="_CPPv3NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="_CPPv2NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="Matrix:T:::GetRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::RC"></span>void <code class="descname">GetRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE">
+<span id="_CPPv3NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="_CPPv2NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="Matrix:T:::GetImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::RC"></span>void <code class="descname">GetImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the submatrix (or its real or imaginary part) with the specified
+row and column indices via <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="Matrix:T:::GetSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span><a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">GetSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="Matrix:T:::GetRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span><a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; <code class="descname">GetRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="Matrix:T:::GetImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span><a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; <code class="descname">GetImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6MatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the submatrix (or its real or imaginary part) with the specified
+row and column indices via C++11 move semantics.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE">
+<span id="_CPPv3N6MatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE"></span><span id="_CPPv2N6MatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE"></span><span id="Matrix:T:::SetSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:T:CR"></span>void <code class="descname">SetSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N6MatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N6MatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="Matrix:T:::SetRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::CR"></span>void <code class="descname">SetRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N6MatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N6MatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="Matrix:T:::SetImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::CR"></span>void <code class="descname">SetImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the submatrix (or its real or imaginary part) with the specified
+row and column indices equal to the matrix <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE">
+<span id="_CPPv3N6MatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE"></span><span id="_CPPv2N6MatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE"></span><span id="Matrix:T:::UpdateSubmatrix__std::vector:i:CR.std::vector:i:CR.T.Matrix:T:CR"></span>void <code class="descname">UpdateSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N6MatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N6MatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="Matrix:T:::UpdateRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Base:T:.Matrix:Base:T::CR"></span>void <code class="descname">UpdateRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, Base&lt;T&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N6MatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N6MatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="Matrix:T:::UpdateImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Base:T:.Matrix:Base:T::CR"></span>void <code class="descname">UpdateImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, Base&lt;T&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N6MatrixI1TE6MatrixEb" title="Matrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update the submatrix (or its real or imaginary part) with the specified
+row and column indices with <cite>alpha</cite> times <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3N6MatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2N6MatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="Matrix:T:::MakeSubmatrixReal__std::vector:i:CR.std::vector:i:CR"></span>void <code class="descname">MakeSubmatrixReal</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the submatrix with the specified row and column indices to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6MatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3N6MatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2N6MatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="Matrix:T:::ConjugateSubmatrix__std::vector:i:CR.std::vector:i:CR"></span>void <code class="descname">ConjugateSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6MatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the entries in the submatrix with the specified row and column
+indices.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="special-cases-used-in-elemental">
+<h2>Special cases used in Elemental<a class="headerlink" href="#special-cases-used-in-elemental" title="Permalink to this headline">¶</a></h2>
+<p>This list of special cases is here to help clarify the notation used throughout
+Elemental’s source (as well as this documentation). These are all special
+cases of <a class="reference internal" href="#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;T&gt;</span></code></a>.</p>
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI4RealE">
+<span id="_CPPv3IE6MatrixI4RealE"></span><span id="_CPPv2IE6MatrixI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>Real</cite> is real.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI7ComplexI4RealEE">
+<span id="_CPPv3IE6MatrixI7ComplexI4RealEE"></span><span id="_CPPv2IE6MatrixI7ComplexI4RealEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;<a class="reference internal" href="environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <a class="reference internal" href="environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Complex&lt;Real&gt;</span></code></a> is
+complex with base type <cite>Real</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE6MatrixI1FE">
+<span id="_CPPv3IE6MatrixI1FE"></span><span id="_CPPv2IE6MatrixI1FE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>F</cite> is a field.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE6MatrixIiE">
+<span id="_CPPv3IE6MatrixIiE"></span><span id="_CPPv2IE6MatrixIiE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">Matrix</code>&lt;int&gt;<a class="headerlink" href="#_CPPv4IE6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When the underlying datatype is a signed integer.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

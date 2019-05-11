@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hermitian SVD &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SVD" href="SVD.html" />
+    <link rel="prev" title="Hermitian generalized-definite eigensolvers" href="HermitianGenDefEig.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hermitian-svd">
+<h1>Hermitian SVD<a class="headerlink" href="#hermitian-svd" title="Permalink to this headline">¶</a></h1>
+<p>Suppose that <span class="math notranslate nohighlight">\(A\)</span> is Hermitian, with a spectral decomposition</p>
+<div class="math notranslate nohighlight">
+\[A = V \Lambda V^H.\]</div>
+<p>Then an SVD of <span class="math notranslate nohighlight">\(A\)</span> can easily be computed as</p>
+<div class="math notranslate nohighlight">
+\[A = U |\Lambda| V^H,\]</div>
+<p>where the columns of <span class="math notranslate nohighlight">\(U\)</span> equal the columns of <span class="math notranslate nohighlight">\(V\)</span>, modulo sign
+flips introduced by negative eigenvalues.</p>
+<div class="section" id="computing-singular-values">
+<h2>Computing singular values<a class="headerlink" href="#computing-singular-values" title="Permalink to this headline">¶</a></h2>
+<p>The following routines return the singular values of <span class="math notranslate nohighlight">\(A\)</span> in <cite>s</cite>. Note
+that the appropriate triangle of <cite>A</cite> is overwritten during computation.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="HermitianSVD__UpperOrLower.Matrix:F:R.Matrix:Base:F::R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE"></span><span id="HermitianSVD__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianSingularValues_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValues_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValues_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSingularValues_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValues_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValues_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSingularValues_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValues_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValues_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSingularValues_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValues_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValues_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSingularValuesDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValuesDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValuesDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSingularValuesDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValuesDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValuesDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSingularValuesDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValuesDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValuesDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSingularValuesDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSingularValuesDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSingularValuesDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="computing-singular-value-decompositions">
+<h2>Computing Singular Value Decompositions<a class="headerlink" href="#computing-singular-value-decompositions" title="Permalink to this headline">¶</a></h2>
+<p>The following routines return a vector of singular values, <span class="math notranslate nohighlight">\(s\)</span>, and the
+left and right singular vector matrices, <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span>, such that
+<span class="math notranslate nohighlight">\(A=U \mathrm{diag}(s) V^H\)</span>.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE"></span><span id="HermitianSVD__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="HermitianSVD__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianSVD_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVD_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> s</em>, ElMatrix_s<em> U</em>, ElMatrix_s<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVD_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSVD_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVD_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> s</em>, ElMatrix_d<em> U</em>, ElMatrix_d<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVD_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSVD_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVD_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_s<em> s</em>, ElMatrix_c<em> U</em>, ElMatrix_c<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVD_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSVD_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVD_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_d<em> s</em>, ElMatrix_z<em> U</em>, ElMatrix_z<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVD_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSVDDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVDDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> s</em>, ElDistMatrix_s<em> U</em>, ElDistMatrix_s<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVDDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSVDDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVDDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> s</em>, ElDistMatrix_d<em> U</em>, ElDistMatrix_d<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVDDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSVDDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVDDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> s</em>, ElDistMatrix_c<em> U</em>, ElDistMatrix_c<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVDDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSVDDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSVDDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> s</em>, ElDistMatrix_z<em> U</em>, ElDistMatrix_z<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSVDDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

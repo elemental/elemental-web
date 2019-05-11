@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Complex data &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Indexing utilities" href="indexing.html" />
+    <link rel="prev" title="Other typedefs and enums" href="typedefs_and_enums.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../environment.html">Environment</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="boiler.html">Boiler plate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="error.html">Error handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="call_stack.html">Call stack manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="default_grid.html">Default process grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blocksize.html">Blocksize manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="typedefs_and_enums.html">Other typedefs and enums</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Complex data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="indexing.html">Indexing utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">Version and configuration information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../environment.html">Environment</a> &raquo;</li>
+        
+      <li>Complex data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/environment/complex.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="complex-data">
+<h1>Complex data<a class="headerlink" href="#complex-data" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv4IE7ComplexI4RealE">
+<span id="_CPPv3IE7ComplexI4RealE"></span><span id="_CPPv2IE7ComplexI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">Complex</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Currently a typedef of <code class="docutils literal notranslate"><span class="pre">std::complex&lt;Real&gt;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE4BaseI1FE">
+<span id="_CPPv3IE4BaseI1FE"></span><span id="_CPPv2IE4BaseI1FE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">Base</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying real datatype of the (potentially complex) datatype <cite>F</cite>.
+For example, <code class="docutils literal notranslate"><span class="pre">Base&lt;Complex&lt;double&gt;&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Base&lt;double&gt;</span></code> are both equivalent to <code class="docutils literal notranslate"><span class="pre">double</span></code>.
+This is often extremely useful in implementing routines which are
+templated over real and complex datatypes but still make use of real
+datatypes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4lsRNSt7ostreamE7ComplexI4RealE">
+<span id="_CPPv3lsRNSt7ostreamE7ComplexI4RealE"></span><span id="_CPPv2lsRNSt7ostreamE7ComplexI4RealE"></span><span id="lshift-operator__osR.Complex:Real:"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <a class="reference internal" href="#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamE7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pretty prints <cite>alpha</cite> in the form <code class="docutils literal notranslate"><span class="pre">a+bi</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48scomplex">
+<span id="_CPPv38scomplex"></span><span id="_CPPv28scomplex"></span><span id="scomplex"></span><em class="property">type </em><code class="descname">scomplex</code><a class="headerlink" href="#_CPPv48scomplex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">Complex&lt;float&gt;</span> <span class="pre">scomplex;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48dcomplex">
+<span id="_CPPv38dcomplex"></span><span id="_CPPv28dcomplex"></span><span id="dcomplex"></span><em class="property">type </em><code class="descname">dcomplex</code><a class="headerlink" href="#_CPPv48dcomplex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">Complex&lt;double&gt;</span> <span class="pre">dcomplex;</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="c.complex_float">
+<code class="descname">complex_float</code><a class="headerlink" href="#c.complex_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>A struct equivalent to <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">complex_float</span> <span class="pre">{</span> <span class="pre">float</span> <span class="pre">real,</span> <span class="pre">imag;</span> <span class="pre">}</span></code> which
+is meant to be binary compatible with <code class="docutils literal notranslate"><span class="pre">std::complex&lt;float&gt;</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.complex_double">
+<code class="descname">complex_double</code><a class="headerlink" href="#c.complex_double" title="Permalink to this definition">¶</a></dt>
+<dd><p>A struct equivalent to <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">complex_double</span> <span class="pre">{</span> <span class="pre">double</span> <span class="pre">real,</span> <span class="pre">imag;</span> <span class="pre">}</span></code>
+which is meant to be binary compatible with <code class="docutils literal notranslate"><span class="pre">std::complex&lt;double&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="indexing.html" class="btn btn-neutral float-right" title="Indexing utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="typedefs_and_enums.html" class="btn btn-neutral float-left" title="Other typedefs and enums" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

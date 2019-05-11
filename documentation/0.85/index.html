@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elemental’s development documentation &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="intro.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-s-development-documentation">
+<h1>Elemental’s development documentation<a class="headerlink" href="#elemental-s-development-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#license-and-copyright">License and copyright</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#getting-elemental-s-source">Getting Elemental’s source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#building-elemental">Building Elemental</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#testing-the-installation">Testing the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#elemental-as-a-subproject">Elemental as a subproject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/matrix.html">Sequential matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/grid.html">Process grids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/dist_matrix.html">Distributed matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/flame_part.html">FLAME-like partition tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/axpy_interface.html">The “Axpy” interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blas_like.html">BLAS-like linear algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1.html">Level 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2.html">Level 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3.html">Level 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/tuning.html">Tuning parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack_like.html">LAPACK-like linear algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/solve.html">Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/util.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack_like/tuning.html">Tuning parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="optimization/BasisPursuit.html">Basis pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/Lasso.html">Least absolute shrinkage and selection operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/LinearProgram.html">Linear programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/LogisticRegression.html">Logistic regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/ModelFit.html">Model fit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/NonNegativeLeastSquares.html">Non-negative least squares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/NMF.html">Non-negative matrix factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/QuadraticProgram.html">Quadratic programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/RPCA.html">Robust principal component analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/SparseInvCov.html">Sparse inverse covariance selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/SVM.html">Support vector machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization/utilities.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="control.html">Control theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="control.html#sylvester">Sylvester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#lyapunov">Lyapunov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html#algebraic-ricatti">Algebraic Ricatti</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Special matrices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="matrices/deterministic.html">Deterministic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrices/random.html">Random</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">Input/output</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="io.html#display">Display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#print">Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#spy">Spy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#read">Read</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#write">Write</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

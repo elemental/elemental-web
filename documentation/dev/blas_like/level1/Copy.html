@@ -1,0 +1,713 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Copy &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DiagonalScale" href="DiagonalScale.html" />
+    <link rel="prev" title="ConjugateSubmatrix" href="ConjugateSubmatrix.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../level1.html">Level 1</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Adjoint.html">Adjoint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AdjointContract.html">AdjointContract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AdjointAxpy.html">AdjointAxpy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AdjointAxpyContract.html">AdjointAxpyContract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AllReduce.html">AllReduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Axpy.html">Axpy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AxpyTrapezoid.html">AxpyTrapezoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Broadcast.html">Broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Conjugate.html">Conjugate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ConjugateDiagonal.html">ConjugateDiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ConjugateSubmatrix.html">ConjugateSubmatrix</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Copy</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="DiagonalScale.html">DiagonalScale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DiagonalScaleTrapezoid.html">DiagonalScaleTrapezoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DiagonalSolve.html">DiagonalSolve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Dot.html">Dot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Dotu.html">Dotu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="EntrywiseFill.html">EntrywiseFill</a></li>
+<li class="toctree-l3"><a class="reference internal" href="EntrywiseMap.html">EntrywiseMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Fill.html">Fill</a></li>
+<li class="toctree-l3"><a class="reference internal" href="FillDiagonal.html">FillDiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GetDiagonal.html">GetDiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GetMappedDiagonal.html">GetMappedDiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GetSubmatrix.html">GetSubmatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hadamard.html">Hadamard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HilbertSchmidt.html">HilbertSchmidt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IndexDependentFill.html">IndexDependentFill</a></li>
+<li class="toctree-l3"><a class="reference internal" href="IndexDependentMap.html">IndexDependentMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MakeTrapezoidal.html">MakeTrapezoidal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Max.html">Max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MaxAbs.html">MaxAbs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Min.html">Min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MinAbs.html">MinAbs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Nrm2.html">Nrm2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="QuasiDiagonalScale.html">QuasiDiagonalScale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="QuasiDiagonalSolve.html">QuasiDiagonalSolve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Reshape.html">Reshape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Scale.html">Scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScaleTrapezoid.html">ScaleTrapezoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SetDiagonal.html">SetDiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SetSubmatrix.html">SetSubmatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ShiftDiagonal.html">ShiftDiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Swap.html">Swap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Symmetric2x2Scale.html">Symmetric2x2Scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Symmetric2x2Solve.html">Symmetric2x2Solve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Transpose.html">Transpose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TransposeAxpyContract.html">TransposeAxpyContract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TransposeContract.html">TransposeContract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UpdateDiagonal.html">UpdateDiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UpdateSubmatrix.html">UpdateSubmatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Zero.html">Zero</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../level2.html">Level 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../level3.html">Level 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning.html">Tuning parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../blas_like.html">BLAS-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../level1.html">Level 1</a> &raquo;</li>
+        
+      <li>Copy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/blas_like/level1/Copy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="copy">
+<h1>Copy<a class="headerlink" href="#copy" title="Permalink to this headline">¶</a></h1>
+<p>Sets <span class="math notranslate nohighlight">\(Y := X\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44CopyRK6MatrixI1SER6MatrixI1TE">
+<span id="_CPPv34CopyRK6MatrixI1SER6MatrixI1TE"></span><span id="_CPPv24CopyRK6MatrixI1SER6MatrixI1TE"></span><span id="Copy__Matrix:S:CR.Matrix:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;S&gt; &amp;<em>X</em>, Matrix&lt;T&gt; &amp;<em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK6MatrixI1SER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK18AbstractDistMatrixI1SER18AbstractDistMatrixI1TE">
+<span id="_CPPv34CopyRK18AbstractDistMatrixI1SER18AbstractDistMatrixI1TE"></span><span id="_CPPv24CopyRK18AbstractDistMatrixI1SER18AbstractDistMatrixI1TE"></span><span id="Copy__AbstractDistMatrix:S:CR.AbstractDistMatrix:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;S&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK18AbstractDistMatrixI1SER18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412CopyFromRootRK6MatrixI1TER10DistMatrixI1T4CIRC4CIRCEb">
+<span id="_CPPv312CopyFromRootRK6MatrixI1TER10DistMatrixI1T4CIRC4CIRCEb"></span><span id="_CPPv212CopyFromRootRK6MatrixI1TER10DistMatrixI1T4CIRC4CIRCEb"></span><span id="CopyFromRoot__Matrix:T:CR.DistMatrix:T.CIRC.CIRC:R.b"></span>void <code class="descname">CopyFromRoot</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A</em>, DistMatrix&lt;T, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>&gt; &amp;<em>B</em>, bool <em>includingViewers</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412CopyFromRootRK6MatrixI1TER10DistMatrixI1T4CIRC4CIRCEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415CopyFromNonRootR10DistMatrixI1T4CIRC4CIRCEb">
+<span id="_CPPv315CopyFromNonRootR10DistMatrixI1T4CIRC4CIRCEb"></span><span id="_CPPv215CopyFromNonRootR10DistMatrixI1T4CIRC4CIRCEb"></span><span id="CopyFromNonRoot__DistMatrix:T.CIRC.CIRC:R.b"></span>void <code class="descname">CopyFromNonRoot</code><span class="sig-paren">(</span>DistMatrix&lt;T, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N4Dist4CIRCE" title="CIRC">CIRC</a>&gt; &amp;<em>B</em>, bool <em>includingViewers</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415CopyFromNonRootR10DistMatrixI1T4CIRC4CIRCEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK12SparseMatrixI1SER12SparseMatrixI1TE">
+<span id="_CPPv34CopyRK12SparseMatrixI1SER12SparseMatrixI1TE"></span><span id="_CPPv24CopyRK12SparseMatrixI1SER12SparseMatrixI1TE"></span><span id="Copy__SparseMatrix:S:CR.SparseMatrix:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> SparseMatrix&lt;S&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK12SparseMatrixI1SER12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK12SparseMatrixI1SER6MatrixI1TE">
+<span id="_CPPv34CopyRK12SparseMatrixI1SER6MatrixI1TE"></span><span id="_CPPv24CopyRK12SparseMatrixI1SER6MatrixI1TE"></span><span id="Copy__SparseMatrix:S:CR.Matrix:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> SparseMatrix&lt;S&gt; &amp;<em>A</em>, Matrix&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK12SparseMatrixI1SER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK16DistSparseMatrixI1SER16DistSparseMatrixI1TE">
+<span id="_CPPv34CopyRK16DistSparseMatrixI1SER16DistSparseMatrixI1TE"></span><span id="_CPPv24CopyRK16DistSparseMatrixI1SER16DistSparseMatrixI1TE"></span><span id="Copy__DistSparseMatrix:S:CR.DistSparseMatrix:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> DistSparseMatrix&lt;S&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK16DistSparseMatrixI1SER16DistSparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK16DistSparseMatrixI1SER18AbstractDistMatrixI1TE">
+<span id="_CPPv34CopyRK16DistSparseMatrixI1SER18AbstractDistMatrixI1TE"></span><span id="_CPPv24CopyRK16DistSparseMatrixI1SER18AbstractDistMatrixI1TE"></span><span id="Copy__DistSparseMatrix:S:CR.AbstractDistMatrix:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> DistSparseMatrix&lt;S&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK16DistSparseMatrixI1SER18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK12DistMultiVecI1TER12DistMultiVecI1TE">
+<span id="_CPPv34CopyRK12DistMultiVecI1TER12DistMultiVecI1TE"></span><span id="_CPPv24CopyRK12DistMultiVecI1TER12DistMultiVecI1TE"></span><span id="Copy__DistMultiVec:T:CR.DistMultiVec:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK12DistMultiVecI1TER12DistMultiVecI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK12DistMultiVecI1TER18AbstractDistMatrixI1TE">
+<span id="_CPPv34CopyRK12DistMultiVecI1TER18AbstractDistMatrixI1TE"></span><span id="_CPPv24CopyRK12DistMultiVecI1TER18AbstractDistMatrixI1TE"></span><span id="Copy__DistMultiVec:T:CR.AbstractDistMatrix:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK12DistMultiVecI1TER18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK18AbstractDistMatrixI1TER12DistMultiVecI1TE">
+<span id="_CPPv34CopyRK18AbstractDistMatrixI1TER12DistMultiVecI1TE"></span><span id="_CPPv24CopyRK18AbstractDistMatrixI1TER12DistMultiVecI1TE"></span><span id="Copy__AbstractDistMatrix:T:CR.DistMultiVec:T:R"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK18AbstractDistMatrixI1TER12DistMultiVecI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412CopyFromRootRK16DistSparseMatrixI1TER12SparseMatrixI1TE">
+<span id="_CPPv312CopyFromRootRK16DistSparseMatrixI1TER12SparseMatrixI1TE"></span><span id="_CPPv212CopyFromRootRK16DistSparseMatrixI1TER12SparseMatrixI1TE"></span><span id="CopyFromRoot__DistSparseMatrix:T:CR.SparseMatrix:T:R"></span>void <code class="descname">CopyFromRoot</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>ADist</em>, <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412CopyFromRootRK16DistSparseMatrixI1TER12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415CopyFromNonRootRK16DistSparseMatrixI1TEi">
+<span id="_CPPv315CopyFromNonRootRK16DistSparseMatrixI1TEi"></span><span id="_CPPv215CopyFromNonRootRK16DistSparseMatrixI1TEi"></span><span id="CopyFromNonRoot__DistSparseMatrix:T:CR.i"></span>void <code class="descname">CopyFromNonRoot</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>ADist</em>, int <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415CopyFromNonRootRK16DistSparseMatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412CopyFromRootRK12DistMultiVecI1TER6MatrixI1TE">
+<span id="_CPPv312CopyFromRootRK12DistMultiVecI1TER6MatrixI1TE"></span><span id="_CPPv212CopyFromRootRK12DistMultiVecI1TER6MatrixI1TE"></span><span id="CopyFromRoot__DistMultiVec:T:CR.Matrix:T:R"></span>void <code class="descname">CopyFromRoot</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<em>XDist</em>, Matrix&lt;T&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412CopyFromRootRK12DistMultiVecI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415CopyFromNonRootRK12DistMultiVecI1TEi">
+<span id="_CPPv315CopyFromNonRootRK12DistMultiVecI1TEi"></span><span id="_CPPv215CopyFromNonRootRK12DistMultiVecI1TEi"></span><span id="CopyFromNonRoot__DistMultiVec:T:CR.i"></span>void <code class="descname">CopyFromNonRoot</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<em>XDist</em>, int <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415CopyFromNonRootRK12DistMultiVecI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK5GraphR5Graph">
+<span id="_CPPv34CopyRK5GraphR5Graph"></span><span id="_CPPv24CopyRK5GraphR5Graph"></span><span id="Copy__GraphCR.GraphR"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/graph/cxx.html#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>A</em>, <a class="reference internal" href="../../core/graph/cxx.html#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK5GraphR5Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK5GraphR9DistGraph">
+<span id="_CPPv34CopyRK5GraphR9DistGraph"></span><span id="_CPPv24CopyRK5GraphR9DistGraph"></span><span id="Copy__GraphCR.DistGraphR"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/graph/cxx.html#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK5GraphR9DistGraph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK9DistGraphR5Graph">
+<span id="_CPPv34CopyRK9DistGraphR5Graph"></span><span id="_CPPv24CopyRK9DistGraphR5Graph"></span><span id="Copy__DistGraphCR.GraphR"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>A</em>, <a class="reference internal" href="../../core/graph/cxx.html#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK9DistGraphR5Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44CopyRK9DistGraphR9DistGraph">
+<span id="_CPPv34CopyRK9DistGraphR9DistGraph"></span><span id="_CPPv24CopyRK9DistGraphR9DistGraph"></span><span id="Copy__DistGraphCR.DistGraphR"></span>void <code class="descname">Copy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CopyRK9DistGraphR9DistGraph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412CopyFromRootRK9DistGraphR5Graph">
+<span id="_CPPv312CopyFromRootRK9DistGraphR5Graph"></span><span id="_CPPv212CopyFromRootRK9DistGraphR5Graph"></span><span id="CopyFromRoot__DistGraphCR.GraphR"></span>void <code class="descname">CopyFromRoot</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>distGraph</em>, <a class="reference internal" href="../../core/graph/cxx.html#_CPPv45Graph" title="Graph">Graph</a> &amp;<em>graph</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412CopyFromRootRK9DistGraphR5Graph" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415CopyFromNonRootRK9DistGraphi">
+<span id="_CPPv315CopyFromNonRootRK9DistGraphi"></span><span id="_CPPv215CopyFromNonRootRK9DistGraphi"></span><span id="CopyFromNonRoot__DistGraphCR.i"></span>void <code class="descname">CopyFromNonRoot</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_graph/cxx.html#_CPPv49DistGraph" title="DistGraph">DistGraph</a> &amp;<em>distGraph</em>, int <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415CopyFromNonRootRK9DistGraphi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="section" id="copy-namespace">
+<h3>copy namespace<a class="headerlink" href="#copy-namespace" title="Permalink to this headline">¶</a></h3>
+<p><strong>TODO</strong></p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElCopy_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopy_i</code><span class="sig-paren">(</span>ElConstMatrix_i<em> X</em>, ElMatrix_i<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopy_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopy_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopy_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> X</em>, ElMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopy_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopy_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopy_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> X</em>, ElMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopy_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopy_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopy_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> X</em>, ElMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopy_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopy_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopy_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> X</em>, ElMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopy_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDist_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDist_i</code><span class="sig-paren">(</span>ElConstDistMatrix_i<em> X</em>, ElDistMatrix_i<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> X</em>, ElDistMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> X</em>, ElDistMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> X</em>, ElDistMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> X</em>, ElDistMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparse_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparse_i</code><span class="sig-paren">(</span>ElConstSparseMatrix_i<em> X</em>, ElSparseMatrix_i<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparse_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> X</em>, ElSparseMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> X</em>, ElSparseMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> X</em>, ElSparseMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> X</em>, ElSparseMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparse_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparse_i</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_i<em> X</em>, ElDistSparseMatrix_i<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparse_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> X</em>, ElDistSparseMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> X</em>, ElDistSparseMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> X</em>, ElDistSparseMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> X</em>, ElDistSparseMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistMultiVec_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistMultiVec_i</code><span class="sig-paren">(</span>ElConstDistMultiVec_i<em> A</em>, ElDistMultiVec_i<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistMultiVec_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistMultiVec_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistMultiVec_s</code><span class="sig-paren">(</span>ElConstDistMultiVec_s<em> A</em>, ElDistMultiVec_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistMultiVec_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistMultiVec_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistMultiVec_d</code><span class="sig-paren">(</span>ElConstDistMultiVec_d<em> A</em>, ElDistMultiVec_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistMultiVec_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistMultiVec_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistMultiVec_c</code><span class="sig-paren">(</span>ElConstDistMultiVec_c<em> A</em>, ElDistMultiVec_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistMultiVec_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistMultiVec_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistMultiVec_z</code><span class="sig-paren">(</span>ElConstDistMultiVec_z<em> A</em>, ElDistMultiVec_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistMultiVec_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseToDense_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseToDense_i</code><span class="sig-paren">(</span>ElConstSparseMatrix_i<em> A</em>, ElMatrix_i<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseToDense_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseToDense_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseToDense_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseToDense_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseToDense_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseToDense_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseToDense_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseToDense_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseToDense_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseToDense_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseToDense_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseToDense_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseToDense_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparseToDense_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparseToDense_i</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_i<em> A</em>, ElSparseMatrix_i<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparseToDense_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparseToDense_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparseToDense_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElSparseMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparseToDense_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparseToDense_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparseToDense_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElSparseMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparseToDense_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparseToDense_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparseToDense_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElSparseMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparseToDense_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistSparseToDense_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistSparseToDense_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElSparseMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistSparseToDense_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromRoot_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromRoot_i</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_i<em> ADist</em>, ElSparseMatrix_i<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromRoot_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromRoot_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromRoot_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> ADist</em>, ElSparseMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromRoot_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromRoot_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromRoot_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> ADist</em>, ElSparseMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromRoot_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromRoot_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromRoot_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> ADist</em>, ElSparseMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromRoot_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromRoot_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromRoot_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> ADist</em>, ElSparseMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromRoot_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromNonRoot_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromNonRoot_i</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_i<em> ADist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromNonRoot_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromNonRoot_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromNonRoot_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> ADist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromNonRoot_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromNonRoot_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromNonRoot_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> ADist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromNonRoot_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromNonRoot_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromNonRoot_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> ADist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromNonRoot_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopySparseMatrixFromNonRoot_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopySparseMatrixFromNonRoot_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> ADist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopySparseMatrixFromNonRoot_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromRoot_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromRoot_i</code><span class="sig-paren">(</span>ElConstDistMultiVec_i<em> XDist</em>, ElMatrix_i<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromRoot_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromRoot_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromRoot_s</code><span class="sig-paren">(</span>ElConstDistMultiVec_s<em> XDist</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromRoot_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromRoot_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromRoot_d</code><span class="sig-paren">(</span>ElConstDistMultiVec_d<em> XDist</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromRoot_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromRoot_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromRoot_c</code><span class="sig-paren">(</span>ElConstDistMultiVec_c<em> XDist</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromRoot_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromRoot_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromRoot_z</code><span class="sig-paren">(</span>ElConstDistMultiVec_z<em> XDist</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromRoot_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromNonRoot_i">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromNonRoot_i</code><span class="sig-paren">(</span>ElConstDistMultiVec_i<em> XDist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromNonRoot_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromNonRoot_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromNonRoot_s</code><span class="sig-paren">(</span>ElConstDistMultiVec_s<em> XDist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromNonRoot_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromNonRoot_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromNonRoot_d</code><span class="sig-paren">(</span>ElConstDistMultiVec_d<em> XDist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromNonRoot_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromNonRoot_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromNonRoot_c</code><span class="sig-paren">(</span>ElConstDistMultiVec_c<em> XDist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromNonRoot_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyMultiVecFromNonRoot_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyMultiVecFromNonRoot_z</code><span class="sig-paren">(</span>ElConstDistMultiVec_z<em> XDist</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyMultiVecFromNonRoot_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyGraph">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyGraph</code><span class="sig-paren">(</span>ElConstGraph<em> A</em>, ElGraph<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyGraph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyDistGraph">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyDistGraph</code><span class="sig-paren">(</span>ElConstDistGraph<em> A</em>, ElDistGraph<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyDistGraph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyGraphFromRoot">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyGraphFromRoot</code><span class="sig-paren">(</span>ElConstDistGraph<em> distGraph</em>, ElGraph<em> graph</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyGraphFromRoot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCopyGraphFromNonRoot">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCopyGraphFromNonRoot</code><span class="sig-paren">(</span>ElConstDistGraph<em> distGraph</em>, int<em> root</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCopyGraphFromNonRoot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Copy">
+<code class="descname">Copy</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#Copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="CopyFromRoot">
+<code class="descname">CopyFromRoot</code><span class="sig-paren">(</span><em>ADist</em>, <em>ASeq</em><span class="sig-paren">)</span><a class="headerlink" href="#CopyFromRoot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="CopyFromNonRoot">
+<code class="descname">CopyFromNonRoot</code><span class="sig-paren">(</span><em>ADist</em>, <em>root=0</em><span class="sig-paren">)</span><a class="headerlink" href="#CopyFromNonRoot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="DiagonalScale.html" class="btn btn-neutral float-right" title="DiagonalScale" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ConjugateSubmatrix.html" class="btn btn-neutral float-left" title="ConjugateSubmatrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

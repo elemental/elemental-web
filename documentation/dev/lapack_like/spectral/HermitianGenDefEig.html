@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hermitian generalized-definite eigensolvers &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Hermitian SVD" href="HermitianSVD.html" />
+    <link rel="prev" title="Skew-Hermitian eigensolvers" href="SkewHermitianEig.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../spectral.html">Spectral analysis</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="HermitianTridiagEig.html">Hermitian tridiagonal eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianEig.html">Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SkewHermitianEig.html">Skew-Hermitian eigensolvers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Hermitian generalized-definite eigensolvers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#computing-eigenvalues">Computing eigenvalues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#computing-eigenpairs">Computing eigenpairs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianSVD.html">Hermitian SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SVD.html">SVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Polar.html">Polar decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Schur.html">Schur decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specialized.html">Specialized eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pseudospectra.html">Pseudospectra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spectral.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../spectral.html">Spectral analysis</a> &raquo;</li>
+        
+      <li>Hermitian generalized-definite eigensolvers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/spectral/HermitianGenDefEig.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hermitian-generalized-definite-eigensolvers">
+<h1>Hermitian generalized-definite eigensolvers<a class="headerlink" href="#hermitian-generalized-definite-eigensolvers" title="Permalink to this headline">¶</a></h1>
+<p>The following Hermitian generalized-definite eigenvalue problems frequently
+appear, where both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are Hermitian, and <span class="math notranslate nohighlight">\(B\)</span> is
+additionally positive-definite.</p>
+<dl class="enum">
+<dt id="_CPPv46Pencil">
+<span id="_CPPv36Pencil"></span><span id="_CPPv26Pencil"></span><em class="property">enum </em><code class="descname">Pencil</code><a class="headerlink" href="#_CPPv46Pencil" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N6Pencil3ABXE">
+<span id="_CPPv3N6Pencil3ABXE"></span><span id="_CPPv2N6Pencil3ABXE"></span><em class="property">enumerator </em><code class="descname">ABX</code><a class="headerlink" href="#_CPPv4N6Pencil3ABXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[A B x = \lambda x\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N6Pencil3BAXE">
+<span id="_CPPv3N6Pencil3BAXE"></span><span id="_CPPv2N6Pencil3BAXE"></span><em class="property">enumerator </em><code class="descname">BAX</code><a class="headerlink" href="#_CPPv4N6Pencil3BAXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[B A x = \lambda x\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N6Pencil4AXBXE">
+<span id="_CPPv3N6Pencil4AXBXE"></span><span id="_CPPv2N6Pencil4AXBXE"></span><em class="property">enumerator </em><code class="descname">AXBX</code><a class="headerlink" href="#_CPPv4N6Pencil4AXBXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[A x = B x \lambda\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/HermitianGenDefEig.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/HermitianGenDefEig.cpp">Test driver</a></p>
+<div class="section" id="computing-eigenvalues">
+<h2>Computing eigenvalues<a class="headerlink" href="#computing-eigenvalues" title="Permalink to this headline">¶</a></h2>
+<p>Compute the set of eigenvalues of the Hermitian-definite matrix pencil
+determined by
+the <cite>subset</cite> structure (the default is to compute all eigenvalues).
+By default, Elemental is used to transform the problem to and from
+real symmetric tridiagonal form and PMRRR is used to solve the tridiagonal
+EVP. Alternatively, the <cite>ctrl</cite> structure may be altered to request the
+usage of a (prototype) Spectral Divide and Conquer algorithm.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Strict subset computation is not currently supported with Spectral Divide
+and Conquer.</p>
+</div>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv318HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv218HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianGenDefEig__Pencil.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianGenDefEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46Pencil" title="Pencil">Pencil</a> <em>pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv318HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv218HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianGenDefEig__Pencil.UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianGenDefEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46Pencil" title="Pencil">Pencil</a> <em>pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianGenDefEig_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEig_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> B</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEig_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEig_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEig_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> B</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEig_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEig_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEig_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEig_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEig_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEig_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEig_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigDist_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigDist_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigDist_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigDist_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartial_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartial_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> B</em>, ElMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartial_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartial_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartial_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> B</em>, ElMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartial_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartial_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartial_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, ElMatrix_s<em> w</em>, ElMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartial_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartial_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartial_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, ElMatrix_d<em> w</em>, SortType<em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartial_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartialDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartialDist_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartialDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartialDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartialDist_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartialDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartialDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartialDist_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em>, ElDistMatrix_s<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartialDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPartialDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPartialDist_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em>, ElDistMatrix_d<em> w</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPartialDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="computing-eigenpairs">
+<h2>Computing eigenpairs<a class="headerlink" href="#computing-eigenpairs" title="Permalink to this headline">¶</a></h2>
+<p>Compute the set of eigenpairs of the Hermitian-definite matrix pencil
+determined by
+the <cite>subset</cite> structure (the default is to compute all eigenpairs).
+By default, Elemental is used to transform the problem to and from
+real symmetric tridiagonal form and PMRRR is used to solve the tridiagonal
+EVP. Alternatively, the <cite>ctrl</cite> structure may be altered to request the
+usage of a (prototype) Spectral Divide and Conquer algorithm.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Strict subset computation is not currently supported with Spectral Divide
+and Conquer.</p>
+</div>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv318HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv218HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianGenDefEig__Pencil.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianGenDefEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46Pencil" title="Pencil">Pencil</a> <em>pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE">
+<span id="_CPPv318HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="_CPPv218HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE"></span><span id="HermitianGenDefEig__Pencil.UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.AbstractDistMatrix:F:R.SortType.HermitianEigSubset:Base:F::C.HermitianEigCtrl:Base:F::C"></span>void <code class="descname">HermitianGenDefEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46Pencil" title="Pencil">Pencil</a> <em>pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a>, <em class="property">const</em> <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>subset</em> = <a class="reference internal" href="HermitianTridiagEig.html#_CPPv4IE18HermitianEigSubsetI4BaseI1FEE" title="HermitianEigSubset&lt;Base&lt;F&gt;&gt;">HermitianEigSubset</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), <em class="property">const</em> <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="HermitianEig.html#_CPPv4IE16HermitianEigCtrlI4BaseI1FEE" title="HermitianEigCtrl&lt;Base&lt;F&gt;&gt;">HermitianEigCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418HermitianGenDefEig6Pencil12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FE8SortTypeK18HermitianEigSubsetI4BaseI1FEEK16HermitianEigCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPair_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPair_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> B</em>, ElMatrix_s<em> w</em>, ElMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPair_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPair_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPair_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> B</em>, ElMatrix_d<em> w</em>, ElMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPair_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPair_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPair_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, ElMatrix_s<em> w</em>, ElMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPair_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPair_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPair_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, ElMatrix_d<em> w</em>, ElMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPair_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairDist_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairDist_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairDist_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairDist_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartial_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartial_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> B</em>, ElMatrix_s<em> w</em>, ElMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartial_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartial_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartial_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> B</em>, ElMatrix_d<em> w</em>, ElMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartial_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartial_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartial_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, ElMatrix_s<em> w</em>, ElMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartial_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartial_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartial_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, ElMatrix_d<em> w</em>, ElMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartial_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartialDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartialDist_s</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_s<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartialDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartialDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartialDist_d</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_d<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartialDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartialDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartialDist_c</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em>, ElDistMatrix_s<em> w</em>, ElDistMatrix_c<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_s<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartialDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianGenDefEigPairPartialDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianGenDefEigPairPartialDist_z</code><span class="sig-paren">(</span>ElPencil<em> pencil</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em>, ElDistMatrix_d<em> w</em>, ElDistMatrix_z<em> Z</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElSortType" title="ElSortType">ElSortType</a><em> sort</em>, ElHermitianEigSubset_d<em> subset</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianGenDefEigPairPartialDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="HermitianSVD.html" class="btn btn-neutral float-right" title="Hermitian SVD" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="SkewHermitianEig.html" class="btn btn-neutral float-left" title="Skew-Hermitian eigensolvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

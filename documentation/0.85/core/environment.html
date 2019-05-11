@@ -1,0 +1,982 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Environment &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Element manipulation" href="element.html" />
+    <link rel="prev" title="BLACS" href="imports/scalapack.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="environment">
+<h1>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h1>
+<p>This section describes the routines and data structures which help set up
+Elemental’s programming environment: it discusses initialization of Elemental,
+call stack manipulation, a custom data structure for complex data, many routines
+for manipulating real and complex data, a litany of custom enums, and a few
+useful routines for simplifying index calculations.</p>
+<div class="section" id="version-and-configuration-information">
+<h2>Version and configuration information<a class="headerlink" href="#version-and-configuration-information" title="Permalink to this headline">¶</a></h2>
+<p>Every Elemental driver with proper command-line argument processing will run
+<cite>PrintVersion</cite> if the <code class="docutils literal notranslate"><span class="pre">--version</span></code> argument is used. If <code class="docutils literal notranslate"><span class="pre">--build</span></code> is used,
+then all of the below information is reported.</p>
+<div class="section" id="versioning">
+<h3>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h3>
+<p>The following routines print the Git revision, (pre-)release version, and
+build type. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span> <span class="n">version</span> <span class="n">information</span><span class="p">:</span>
+  <span class="n">Git</span> <span class="n">revision</span><span class="p">:</span> <span class="mi">3</span><span class="n">c6fbdaad901a554fc27a83378d63dab55af0dd3</span>
+  <span class="n">Version</span><span class="p">:</span>      <span class="mf">0.85</span><span class="o">-</span><span class="n">dev</span>
+  <span class="n">Build</span> <span class="nb">type</span><span class="p">:</span>   <span class="n">PureDebug</span>
+</pre></div>
+</div>
+<div class="section" id="c-api">
+<h4>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv412PrintVersionRNSt7ostreamE">
+<span id="_CPPv312PrintVersionRNSt7ostreamE"></span><span id="_CPPv212PrintVersionRNSt7ostreamE"></span><span id="PrintVersion__osR"></span>void <code class="descname">PrintVersion</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412PrintVersionRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h4>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElPrintVersion">
+<a class="reference internal" href="#c.ElError" title="ElError">ElError</a> <code class="descname">ElPrintVersion</code><span class="sig-paren">(</span>FILE*<em> stream</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPrintVersion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h4>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="PrintVersion">
+<code class="descname">PrintVersion</code><span class="sig-paren">(</span><em>f=ctypes.pythonapi.PyFile_AsFile(sys.stdout)</em><span class="sig-paren">)</span><a class="headerlink" href="#PrintVersion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>The following routines print several relevant configuration details.
+For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span> <span class="n">configuration</span><span class="p">:</span>
+  <span class="n">Math</span> <span class="n">libraries</span><span class="p">:</span>               <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">liblapack</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libblas</span><span class="o">.</span><span class="n">so</span>
+  <span class="n">Have</span> <span class="n">FLAME</span> <span class="n">bidiagonal</span> <span class="n">SVD</span><span class="p">:</span>    <span class="n">YES</span>
+  <span class="n">Have</span> <span class="n">OpenMP</span><span class="p">:</span>                  <span class="n">YES</span>
+  <span class="n">Have</span> <span class="n">Qt5</span><span class="p">:</span>                     <span class="n">YES</span>
+  <span class="n">Avoiding</span> <span class="nb">complex</span> <span class="n">MPI</span><span class="p">:</span>         <span class="n">YES</span>
+  <span class="n">Have</span> <span class="n">MPI_Reducescatter_block</span><span class="p">:</span> <span class="n">YES</span>
+  <span class="n">Have</span> <span class="n">MPI_IN_PLACE</span><span class="p">:</span>            <span class="n">YES</span>
+  <span class="n">AllReduce</span> <span class="n">ReduceScatterBlock</span><span class="p">:</span> <span class="n">YES</span>
+  <span class="n">Use</span> <span class="n">byte</span> <span class="n">AllGathers</span><span class="p">:</span>          <span class="n">YES</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h4>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv411PrintConfigRNSt7ostreamE">
+<span id="_CPPv311PrintConfigRNSt7ostreamE"></span><span id="_CPPv211PrintConfigRNSt7ostreamE"></span><span id="PrintConfig__osR"></span>void <code class="descname">PrintConfig</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PrintConfigRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElPrintConfig">
+<a class="reference internal" href="#c.ElError" title="ElError">ElError</a> <code class="descname">ElPrintConfig</code><span class="sig-paren">(</span>FILE*<em> stream</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPrintConfig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h4>Python API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="PrintConfig">
+<code class="descname">PrintConfig</code><span class="sig-paren">(</span><em>f=ctypes.pythonapi.PyFile_AsFile(sys.stdout)</em><span class="sig-paren">)</span><a class="headerlink" href="#PrintConfig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="c-compiler-info">
+<h3>C compiler info<a class="headerlink" href="#c-compiler-info" title="Permalink to this headline">¶</a></h3>
+<p>The following routines print various details about the C compilation process.
+For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span><span class="s1">&#39;s C compiler info:</span>
+  <span class="n">EL_CMAKE_C_COMPILER</span><span class="p">:</span>    <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcc</span>
+  <span class="n">EL_MPI_C_COMPILER</span><span class="p">:</span>      <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">mpicc</span>
+  <span class="n">EL_MPI_C_INCLUDE_PATH</span><span class="p">:</span>  <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">include</span>
+  <span class="n">EL_MPI_C_COMPILE_FLAGS</span><span class="p">:</span>
+  <span class="n">EL_MPI_C_LINK_FLAGS</span><span class="p">:</span>     <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">-</span><span class="n">rpath</span>  <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span>
+  <span class="n">EL_MPI_C_LIBRARIES</span><span class="p">:</span>     <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpich</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libopa</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpl</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">librt</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">libpthread</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+<div class="section" id="id5">
+<h4>C++ API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv418PrintCCompilerInfoRNSt7ostreamE">
+<span id="_CPPv318PrintCCompilerInfoRNSt7ostreamE"></span><span id="_CPPv218PrintCCompilerInfoRNSt7ostreamE"></span><span id="PrintCCompilerInfo__osR"></span>void <code class="descname">PrintCCompilerInfo</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418PrintCCompilerInfoRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h4>C API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElPrintCCompilerInfo">
+<a class="reference internal" href="#c.ElError" title="ElError">ElError</a> <code class="descname">ElPrintCCompilerInfo</code><span class="sig-paren">(</span>FILE*<em> stream</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPrintCCompilerInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h4>Python API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="PrintCCompilerInfo">
+<code class="descname">PrintCCompilerInfo</code><span class="sig-paren">(</span><em>f=ctypes.pythonapi.PyFile_AsFile(sys.stdout)</em><span class="sig-paren">)</span><a class="headerlink" href="#PrintCCompilerInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id8">
+<h3>C++ compiler info<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>The following routines print various details about the C++ compilation process.
+For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Elemental</span><span class="s1">&#39;s C++ compiler info:</span>
+  <span class="n">EL_CMAKE_CXX_COMPILER</span><span class="p">:</span>    <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">g</span><span class="o">++</span>
+  <span class="n">EL_CXX_FLAGS</span><span class="p">:</span>             <span class="o">-</span><span class="n">Wall</span>
+  <span class="n">EL_MPI_CXX_COMPILER</span><span class="p">:</span>      <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">mpicxx</span>
+  <span class="n">EL_MPI_CXX_INCLUDE_PATH</span><span class="p">:</span>  <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">include</span>
+  <span class="n">EL_MPI_CXX_COMPILE_FLAGS</span><span class="p">:</span>
+  <span class="n">EL_MPI_CXX_LINK_FLAGS</span><span class="p">:</span>     <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">-</span><span class="n">rpath</span>  <span class="o">-</span><span class="n">Wl</span><span class="p">,</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span>
+  <span class="n">EL_MPI_CXX_LIBRARIES</span><span class="p">:</span>     <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpichcxx</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpich</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libopa</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">poulson</span><span class="o">/</span><span class="n">Install</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libmpl</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">librt</span><span class="o">.</span><span class="n">so</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">i386</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">libpthread</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+<div class="section" id="id9">
+<h4>C++ API<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv420PrintCxxCompilerInfoRNSt7ostreamE">
+<span id="_CPPv320PrintCxxCompilerInfoRNSt7ostreamE"></span><span id="_CPPv220PrintCxxCompilerInfoRNSt7ostreamE"></span><span id="PrintCxxCompilerInfo__osR"></span>void <code class="descname">PrintCxxCompilerInfo</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420PrintCxxCompilerInfoRNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id10">
+<h4>C API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElPrintCxxCompilerInfo">
+<a class="reference internal" href="#c.ElError" title="ElError">ElError</a> <code class="descname">ElPrintCxxCompilerInfo</code><span class="sig-paren">(</span>FILE*<em> stream</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPrintCxxCompilerInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id11">
+<h4>Python API<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="PrintCxxCompilerInfo">
+<code class="descname">PrintCxxCompilerInfo</code><span class="sig-paren">(</span><em>f=ctypes.pythonapi.PyFile_AsFile(sys.stdout)</em><span class="sig-paren">)</span><a class="headerlink" href="#PrintCxxCompilerInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="set-up-and-clean-up">
+<h2>Set up and clean up<a class="headerlink" href="#set-up-and-clean-up" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h3>
+<p>Initializes Elemental and (if necessary) MPI. The usage is very similar to
+<code class="docutils literal notranslate"><span class="pre">MPI_Init</span></code>, but the <cite>argc</cite> and <cite>argv</cite> can be directly passed in.</p>
+<div class="section" id="id12">
+<h4>C++ API<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv410InitializeRiRPPc">
+<span id="_CPPv310InitializeRiRPPc"></span><span id="_CPPv210InitializeRiRPPc"></span><span id="Initialize__iR.cPPR"></span>void <code class="descname">Initialize</code><span class="sig-paren">(</span>int &amp;<em>argc</em>, char **&amp;<em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410InitializeRiRPPc" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Initialize</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span> <span class="p">);</span>
+    <span class="c1">// ...</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Finalize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id13">
+<h4>C API<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElInitialize">
+<a class="reference internal" href="#c.ElError" title="ElError">ElError</a> <code class="descname">ElInitialize</code><span class="sig-paren">(</span>int*<em> argc</em>, char***<em> argv</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInitialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="finalization">
+<h3>Finalization<a class="headerlink" href="#finalization" title="Permalink to this headline">¶</a></h3>
+<p>The following routines free all resources allocated by Elemental and
+(if necessary) MPI.</p>
+<div class="section" id="id14">
+<h4>C++ API<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv48Finalizev">
+<span id="_CPPv38Finalizev"></span><span id="_CPPv28Finalizev"></span><span id="Finalize"></span>void <code class="descname">Finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Finalizev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id15">
+<h4>C API<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElFinalize">
+<a class="reference internal" href="#c.ElError" title="ElError">ElError</a> <code class="descname">ElFinalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFinalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="testing-for-initialization">
+<h3>Testing for initialization<a class="headerlink" href="#testing-for-initialization" title="Permalink to this headline">¶</a></h3>
+<p>Several routines are provided for querying whether or not Elemental is
+currently initialized.</p>
+<div class="section" id="id16">
+<h4>C++ API<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv411Initializedv">
+<span id="_CPPv311Initializedv"></span><span id="_CPPv211Initializedv"></span><span id="Initialized"></span>bool <code class="descname">Initialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411Initializedv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id17">
+<h4>C API<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElInitialized">
+<a class="reference internal" href="#c.ElError" title="ElError">ElError</a> <code class="descname">ElInitialized</code><span class="sig-paren">(</span>bool*<em> initialized</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInitialized" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="exception-handling">
+<h3>Exception handling<a class="headerlink" href="#exception-handling" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h4>C++ API<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv415ReportExceptionRNSt9exceptionE">
+<span id="_CPPv315ReportExceptionRNSt9exceptionE"></span><span id="_CPPv215ReportExceptionRNSt9exceptionE"></span><span id="ReportException__std::exceptionR"></span>void <code class="descname">ReportException</code><span class="sig-paren">(</span>std::exception &amp;<em>e</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415ReportExceptionRNSt9exceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used for handling Elemental’s various exceptions, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Initialize</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span> <span class="p">);</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span> <span class="k">catch</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span> <span class="p">)</span> <span class="p">{</span> <span class="n">ReportException</span><span class="p">(</span><span class="n">e</span><span class="p">);</span> <span class="p">}</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Finalize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="id19">
+<h4>C API<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h4>
+<p>Please see the :c:type::<cite>ElError</cite> enum.</p>
+</div>
+</div>
+</div>
+<div class="section" id="blocksize-manipulation">
+<h2>Blocksize manipulation<a class="headerlink" href="#blocksize-manipulation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv49Blocksizev">
+<span id="_CPPv39Blocksizev"></span><span id="_CPPv29Blocksizev"></span><span id="Blocksize"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">Blocksize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49Blocksizev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the currently chosen algorithmic blocksize. The optimal value
+depends on the problem size, algorithm, and architecture; the default value
+is 128.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412SetBlocksize3Int">
+<span id="_CPPv312SetBlocksize3Int"></span><span id="_CPPv212SetBlocksize3Int"></span><span id="SetBlocksize__Int"></span>void <code class="descname">SetBlocksize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>blocksize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412SetBlocksize3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the algorithmic blocksize to the specified value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418PushBlocksizeStack3Int">
+<span id="_CPPv318PushBlocksizeStack3Int"></span><span id="_CPPv218PushBlocksizeStack3Int"></span><span id="PushBlocksizeStack__Int"></span>void <code class="descname">PushBlocksizeStack</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>blocksize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418PushBlocksizeStack3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It is frequently useful to temporarily change the algorithmic blocksize, so
+rather than having to manually store and reset the current state, one can
+simply push a new value onto a stack
+(and later pop the stack to reset the value).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417PopBlocksizeStackv">
+<span id="_CPPv317PopBlocksizeStackv"></span><span id="_CPPv217PopBlocksizeStackv"></span><span id="PopBlocksizeStack"></span>void <code class="descname">PopBlocksizeStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417PopBlocksizeStackv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pops the stack of blocksizes. See above.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418DefaultBlockHeightv">
+<span id="_CPPv318DefaultBlockHeightv"></span><span id="_CPPv218DefaultBlockHeightv"></span><span id="DefaultBlockHeight"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">DefaultBlockHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418DefaultBlockHeightv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417DefaultBlockWidthv">
+<span id="_CPPv317DefaultBlockWidthv"></span><span id="_CPPv217DefaultBlockWidthv"></span><span id="DefaultBlockWidth"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">DefaultBlockWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417DefaultBlockWidthv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the default block height (width) for
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">BlockDistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421SetDefaultBlockHeight3Int">
+<span id="_CPPv321SetDefaultBlockHeight3Int"></span><span id="_CPPv221SetDefaultBlockHeight3Int"></span><span id="SetDefaultBlockHeight__Int"></span>void <code class="descname">SetDefaultBlockHeight</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>mb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421SetDefaultBlockHeight3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv420SetDefaultBlockWidth3Int">
+<span id="_CPPv320SetDefaultBlockWidth3Int"></span><span id="_CPPv220SetDefaultBlockWidth3Int"></span><span id="SetDefaultBlockWidth__Int"></span>void <code class="descname">SetDefaultBlockWidth</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>nb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420SetDefaultBlockWidth3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Change the default block height (width) for
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">BlockDistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="default-process-grid">
+<h2>Default process grid<a class="headerlink" href="#default-process-grid" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv411DefaultGridv">
+<span id="_CPPv311DefaultGridv"></span><span id="_CPPv211DefaultGridv"></span><span id="DefaultGrid"></span><a class="reference internal" href="grid.html#_CPPv44Grid" title="Grid">Grid</a> &amp;<code class="descname">DefaultGrid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411DefaultGridv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a process grid built over <a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">mpi::COMM_WORLD</span></code></a>. This is
+typically used as a means of allowing instances of the
+<a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T2MC2MRE" title="DistMatrix&lt;T, MC, MR&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,MC,MR&gt;</span></code></a> class to be constructed without having to
+manually specify a process grid, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Build a 10 x 10 distributed matrix over mpi::COMM_WORLD</span>
+<span class="n">El</span><span class="o">::</span><span class="n">DistMatrix</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">MC</span><span class="p">,</span><span class="n">MR</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="call-stack-manipulation">
+<h2>Call stack manipulation<a class="headerlink" href="#call-stack-manipulation" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following call stack manipulation routines are only available in
+non-release builds (i.e., PureDebug and HybridDebug) and are meant to allow
+for the call stack to be printed (via <a class="reference internal" href="#_CPPv413DumpCallStackv" title="DumpCallStack"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DumpCallStack()</span></code></a>) when an
+exception is caught.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv413PushCallStackNSt6stringE">
+<span id="_CPPv313PushCallStackNSt6stringE"></span><span id="_CPPv213PushCallStackNSt6stringE"></span><span id="PushCallStack__ss"></span>void <code class="descname">PushCallStack</code><span class="sig-paren">(</span>std::string <em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PushCallStackNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Push the given routine name onto the call stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412PopCallStackv">
+<span id="_CPPv312PopCallStackv"></span><span id="_CPPv212PopCallStackv"></span><span id="PopCallStack"></span>void <code class="descname">PopCallStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412PopCallStackv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove the routine name at the top of the call stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413DumpCallStackv">
+<span id="_CPPv313DumpCallStackv"></span><span id="_CPPv213DumpCallStackv"></span><span id="DumpCallStack"></span>void <code class="descname">DumpCallStack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413DumpCallStackv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Print (and empty) the contents of the call stack.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="error-handling">
+<h2>Error handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id20">
+<h3>C++ API<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv423SingularMatrixException">
+<span id="_CPPv323SingularMatrixException"></span><span id="_CPPv223SingularMatrixException"></span><span id="SingularMatrixException"></span><em class="property">type </em><code class="descname">SingularMatrixException</code><a class="headerlink" href="#_CPPv423SingularMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a singular matrix is unexpectedly encountered.</p>
+<dl class="function">
+<dt id="_CPPv4N23SingularMatrixException23SingularMatrixExceptionEPKc">
+<span id="_CPPv3N23SingularMatrixException23SingularMatrixExceptionEPKc"></span><span id="_CPPv2N23SingularMatrixException23SingularMatrixExceptionEPKc"></span><span id="SingularMatrixException::SingularMatrixException__cCP"></span><code class="descname">SingularMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was singular&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N23SingularMatrixException23SingularMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">El</span><span class="o">::</span><span class="n">SingularMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv421NonHPDMatrixException">
+<span id="_CPPv321NonHPDMatrixException"></span><span id="_CPPv221NonHPDMatrixException"></span><span id="NonHPDMatrixException"></span><em class="property">type </em><code class="descname">NonHPDMatrixException</code><a class="headerlink" href="#_CPPv421NonHPDMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a non positive-definite Hermitian matrix is unexpectedly encountered
+(e.g., during Cholesky factorization).</p>
+<dl class="function">
+<dt id="_CPPv4N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc">
+<span id="_CPPv3N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc"></span><span id="_CPPv2N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc"></span><span id="NonHPDMatrixException::NonHPDMatrixException__cCP"></span><code class="descname">NonHPDMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was not HPD&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">El</span><span class="o">::</span><span class="n">NonHPDMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv422NonHPSDMatrixException">
+<span id="_CPPv322NonHPSDMatrixException"></span><span id="_CPPv222NonHPSDMatrixException"></span><span id="NonHPSDMatrixException"></span><em class="property">type </em><code class="descname">NonHPSDMatrixException</code><a class="headerlink" href="#_CPPv422NonHPSDMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a non positive semi-definite Hermitian matrix is unexpectedly encountered
+(e.g., during computation of the square root of a Hermitian matrix).</p>
+<dl class="function">
+<dt id="_CPPv4N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc">
+<span id="_CPPv3N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc"></span><span id="_CPPv2N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc"></span><span id="NonHPSDMatrixException::NonHPSDMatrixException__cCP"></span><code class="descname">NonHPSDMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was not HPSD&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">El</span><span class="o">::</span><span class="n">NonHPSDMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="id21">
+<h3>C API<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="c.ElError">
+<code class="descname">ElError</code><a class="headerlink" href="#c.ElError" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum which can be set to one of the following values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_SUCCESS</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ALLOC_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_OUT_OF_BOUNDS_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ARG_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_LOGIC_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_RUNTIME_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ERROR</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElErrorString">
+const char* <code class="descname">ElErrorString</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElError" title="ElError">ElError</a><em> error</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElErrorString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the error code into a (hopefully) descriptive message</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="complex-data">
+<h2>Complex data<a class="headerlink" href="#complex-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id22">
+<h3>C++ API<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv4IE7ComplexI4RealE">
+<span id="_CPPv3IE7ComplexI4RealE"></span><span id="_CPPv2IE7ComplexI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">Complex</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Currently a typedef of <code class="docutils literal notranslate"><span class="pre">std::complex&lt;Real&gt;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE4BaseI1FE">
+<span id="_CPPv3IE4BaseI1FE"></span><span id="_CPPv2IE4BaseI1FE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">Base</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying real datatype of the (potentially complex) datatype <cite>F</cite>.
+For example, <code class="docutils literal notranslate"><span class="pre">Base&lt;Complex&lt;double&gt;&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Base&lt;double&gt;</span></code> are both equivalent to <code class="docutils literal notranslate"><span class="pre">double</span></code>.
+This is often extremely useful in implementing routines which are
+templated over real and complex datatypes but still make use of real
+datatypes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4lsRNSt7ostreamE7ComplexI4RealE">
+<span id="_CPPv3lsRNSt7ostreamE7ComplexI4RealE"></span><span id="_CPPv2lsRNSt7ostreamE7ComplexI4RealE"></span><span id="lshift-operator__osR.Complex:Real:"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <a class="reference internal" href="#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamE7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pretty prints <cite>alpha</cite> in the form <code class="docutils literal notranslate"><span class="pre">a+bi</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48scomplex">
+<span id="_CPPv38scomplex"></span><span id="_CPPv28scomplex"></span><span id="scomplex"></span><em class="property">type </em><code class="descname">scomplex</code><a class="headerlink" href="#_CPPv48scomplex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">Complex&lt;float&gt;</span> <span class="pre">scomplex;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48dcomplex">
+<span id="_CPPv38dcomplex"></span><span id="_CPPv28dcomplex"></span><span id="dcomplex"></span><em class="property">type </em><code class="descname">dcomplex</code><a class="headerlink" href="#_CPPv48dcomplex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">Complex&lt;double&gt;</span> <span class="pre">dcomplex;</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="id23">
+<h3>C API<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="c.complex_float">
+<code class="descname">complex_float</code><a class="headerlink" href="#c.complex_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>A struct equivalent to <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">complex_float</span> <span class="pre">{</span> <span class="pre">float</span> <span class="pre">real,</span> <span class="pre">imag;</span> <span class="pre">}</span></code> which
+is meant to be binary compatible with <code class="docutils literal notranslate"><span class="pre">std::complex&lt;float&gt;</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.complex_double">
+<code class="descname">complex_double</code><a class="headerlink" href="#c.complex_double" title="Permalink to this definition">¶</a></dt>
+<dd><p>A struct equivalent to <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">complex_double</span> <span class="pre">{</span> <span class="pre">double</span> <span class="pre">real,</span> <span class="pre">imag;</span> <span class="pre">}</span></code>
+which is meant to be binary compatible with <code class="docutils literal notranslate"><span class="pre">std::complex&lt;double&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="other-typedefs-and-enums">
+<h2>Other typedefs and enums<a class="headerlink" href="#other-typedefs-and-enums" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id24">
+<h3>C++ API<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv44byte">
+<span id="_CPPv34byte"></span><span id="_CPPv24byte"></span><span id="byte"></span><em class="property">type </em><code class="descname">byte</code><a class="headerlink" href="#_CPPv44byte" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">unsigned</span> <span class="pre">char</span> <span class="pre">byte;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv43Int">
+<span id="_CPPv33Int"></span><span id="_CPPv23Int"></span><span id="Int"></span><em class="property">type </em><code class="descname">Int</code><a class="headerlink" href="#_CPPv43Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">int</span></code>, but if the experimental <code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code>
+compilation mode is enabled, it becomes a typedef to <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">int</span></code>,
+which is guaranteed to be at least 64-bit by C++11</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48Unsigned">
+<span id="_CPPv38Unsigned"></span><span id="_CPPv28Unsigned"></span><span id="Unsigned"></span><em class="property">type </em><code class="descname">Unsigned</code><a class="headerlink" href="#_CPPv48Unsigned" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">unsigned</span></code>, but if the experimental
+<code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code> compilation mode is enabled, it becomes a typedef to
+<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">unsigned</span></code>, which is guaranteed to be at least 64-bit by C++11</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv411Conjugation">
+<span id="_CPPv311Conjugation"></span><span id="_CPPv211Conjugation"></span><span id="Conjugation"></span><em class="property">type </em><code class="descname">Conjugation</code><a class="headerlink" href="#_CPPv411Conjugation" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum which can be set to either <code class="docutils literal notranslate"><span class="pre">CONJUGATED</span></code> or <code class="docutils literal notranslate"><span class="pre">UNCONJUGATED</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv44Dist">
+<span id="_CPPv34Dist"></span><span id="_CPPv24Dist"></span><span id="Dist"></span><em class="property">type </em><code class="descname">Dist</code><a class="headerlink" href="#_CPPv44Dist" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying the distribution of a row or column of a distributed
+matrix:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MC</span></code>: Column of a standard matrix distribution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MD</span></code>: Diagonal of a standard matrix distribution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MR</span></code>: Row of a standard matrix distribution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VC</span></code>: Column-major vector distribution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VR</span></code>: Row-major vector distribution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">STAR</span></code>: Redundantly stored on every process</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CIRC</span></code>: Stored on a single process</p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv417ForwardOrBackward">
+<span id="_CPPv317ForwardOrBackward"></span><span id="_CPPv217ForwardOrBackward"></span><span id="ForwardOrBackward"></span><em class="property">type </em><code class="descname">ForwardOrBackward</code><a class="headerlink" href="#_CPPv417ForwardOrBackward" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying <code class="docutils literal notranslate"><span class="pre">FORWARD</span></code> or <code class="docutils literal notranslate"><span class="pre">BACKWARD</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv49GridOrder">
+<span id="_CPPv39GridOrder"></span><span id="_CPPv29GridOrder"></span><span id="GridOrder"></span><em class="property">type </em><code class="descname">GridOrder</code><a class="headerlink" href="#_CPPv49GridOrder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying either a <code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code> or <code class="docutils literal notranslate"><span class="pre">COLUMN_MAJOR</span></code> ordering;
+it is used to decide how to construct process grids and is also useful for
+tuning one of the algorithms in <a class="reference internal" href="../lapack_like/condense/HermitianTridiag.html#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="HermitianTridiag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianTridiag()</span></code></a>
+which requires building a smaller square process grid from a rectangular
+process grid, as the ordering of the processes can greatly impact
+performance. See <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SetHermitianTridiagGridOrder()</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv411LeftOrRight">
+<span id="_CPPv311LeftOrRight"></span><span id="_CPPv211LeftOrRight"></span><span id="LeftOrRight"></span><em class="property">type </em><code class="descname">LeftOrRight</code><a class="headerlink" href="#_CPPv411LeftOrRight" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying <code class="docutils literal notranslate"><span class="pre">LEFT</span></code> or <code class="docutils literal notranslate"><span class="pre">RIGHT</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48SortType">
+<span id="_CPPv38SortType"></span><span id="_CPPv28SortType"></span><span id="SortType"></span><em class="property">type </em><code class="descname">SortType</code><a class="headerlink" href="#_CPPv48SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying a sorting strategy:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">UNSORTED</span></code>: do not sort</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DESCENDING</span></code>: smallest values first</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ASCENDING</span></code>: largest values first</p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48NormType">
+<span id="_CPPv38NormType"></span><span id="_CPPv28NormType"></span><span id="NormType"></span><em class="property">type </em><code class="descname">NormType</code><a class="headerlink" href="#_CPPv48NormType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum that can be set to either</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ONE_NORM</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\|A\|_1 = \max_{\|x\|_1=1} \|Ax\|_1
+        = \max_j \sum_{i=0}^{m-1} |\alpha_{i,j}|\]</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INFINITY_NORM</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\|A\|_{\infty} = \max_{\|x\|_{\infty}=1} \|Ax\|_{\infty}
+               = \max_i \sum_{j=0}^{n-1} |\alpha_{i,j}|\]</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ENTRYWISE_ONE_NORM</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\|\text{vec}(A)\|_1 = \sum_{i,j} |\alpha_{i,j}|\]</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MAX_NORM</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\|A\|_{\mbox{max}} = \max_{i,j} |\alpha_{i,j}|\]</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NUCLEAR_NORM</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\|A\|_* = \sum_{i=0}^{\min(m,n)} \sigma_i(A)\]</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FROBENIUS_NORM</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\|A\|_F = \sqrt{\sum_{i=0}^{m-1} \sum_{j=0}^{n-1} |\alpha_{i,j}|^2}
+        = \sum_{i=0}^{\min(m,n)} \sigma_i(A)^2\]</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TWO_NORM</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\|A\|_2 = \max_i \sigma_i(A)\]</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv411Orientation">
+<span id="_CPPv311Orientation"></span><span id="_CPPv211Orientation"></span><span id="Orientation"></span><em class="property">type </em><code class="descname">Orientation</code><a class="headerlink" href="#_CPPv411Orientation" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying whether a matrix, say <span class="math notranslate nohighlight">\(A\)</span>, should be implicitly
+treated as <span class="math notranslate nohighlight">\(A\)</span> (<code class="docutils literal notranslate"><span class="pre">NORMAL</span></code>), <span class="math notranslate nohighlight">\(A^H\)</span> (<code class="docutils literal notranslate"><span class="pre">ADJOINT</span></code>), or <span class="math notranslate nohighlight">\(A^T\)</span>
+(<code class="docutils literal notranslate"><span class="pre">TRANSPOSE</span></code>).</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv413UnitOrNonUnit">
+<span id="_CPPv313UnitOrNonUnit"></span><span id="_CPPv213UnitOrNonUnit"></span><span id="UnitOrNonUnit"></span><em class="property">type </em><code class="descname">UnitOrNonUnit</code><a class="headerlink" href="#_CPPv413UnitOrNonUnit" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying either <code class="docutils literal notranslate"><span class="pre">UNIT</span></code> or <code class="docutils literal notranslate"><span class="pre">NON_UNIT</span></code>; typically used for
+stating whether or not a triangular matrix’s diagonal is explicitly stored
+(<code class="docutils literal notranslate"><span class="pre">NON_UNIT</span></code>) or is implicitly unit-diagonal (<code class="docutils literal notranslate"><span class="pre">UNIT</span></code>).</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv412UpperOrLower">
+<span id="_CPPv312UpperOrLower"></span><span id="_CPPv212UpperOrLower"></span><span id="UpperOrLower"></span><em class="property">type </em><code class="descname">UpperOrLower</code><a class="headerlink" href="#_CPPv412UpperOrLower" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying <code class="docutils literal notranslate"><span class="pre">LOWER</span></code> or <code class="docutils literal notranslate"><span class="pre">UPPER</span></code> (triangular).</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv420VerticalOrHorizontal">
+<span id="_CPPv320VerticalOrHorizontal"></span><span id="_CPPv220VerticalOrHorizontal"></span><span id="VerticalOrHorizontal"></span><em class="property">type </em><code class="descname">VerticalOrHorizontal</code><a class="headerlink" href="#_CPPv420VerticalOrHorizontal" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying <code class="docutils literal notranslate"><span class="pre">VERTICAL</span></code> or <code class="docutils literal notranslate"><span class="pre">HORIZONTAL</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id25">
+<h3>C API<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<p>The following are analogues to the above C++ definitions.</p>
+<dl class="type">
+<dt id="c.ElByte">
+<code class="descname">ElByte</code><a class="headerlink" href="#c.ElByte" title="Permalink to this definition">¶</a></dt>
+<dd><p>A typedef to <code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">char</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElInt">
+<code class="descname">ElInt</code><a class="headerlink" href="#c.ElInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">int</span></code>, but if the experimental <code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code>
+compilation mode is enabled, it becomes a typedef to <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">int</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElUnsigned">
+<code class="descname">ElUnsigned</code><a class="headerlink" href="#c.ElUnsigned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">unsigned</span></code>, but if the experimental
+<code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code> compilation mode is enabled, it becomes a typedef to
+<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">unsigned</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElConjugation">
+<code class="descname">ElConjugation</code><a class="headerlink" href="#c.ElConjugation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_CONJUGATED</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_UNCONJUGATED</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElDist">
+<code class="descname">ElDist</code><a class="headerlink" href="#c.ElDist" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to one of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MC</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MD</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_STAR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_VC</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_VR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_CIRC</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElForwardOrBackward">
+<code class="descname">ElForwardOrBackward</code><a class="headerlink" href="#c.ElForwardOrBackward" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_FORWARD</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_BACKWARD</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElGridOrder">
+<code class="descname">ElGridOrder</code><a class="headerlink" href="#c.ElGridOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_ROW_MAJOR</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_COLUMN_MAJOR</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLeftOrRight">
+<code class="descname">ElLeftOrRight</code><a class="headerlink" href="#c.ElLeftOrRight" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_LEFT</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_RIGHT</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElSortType">
+<code class="descname">ElSortType</code><a class="headerlink" href="#c.ElSortType" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to <code class="docutils literal notranslate"><span class="pre">EL_UNSORTED</span></code>, <code class="docutils literal notranslate"><span class="pre">EL_ASCENDING</span></code>, or <code class="docutils literal notranslate"><span class="pre">EL_DESCENDING</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElNormType">
+<code class="descname">ElNormType</code><a class="headerlink" href="#c.ElNormType" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to one of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ONE_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_INFINITY_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ENTRYWISE_ONE_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MAX_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_NUCLEAR_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_FROBENIUS_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_TWO_NORM</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElOrientation">
+<code class="descname">ElOrientation</code><a class="headerlink" href="#c.ElOrientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to <code class="docutils literal notranslate"><span class="pre">EL_NORMAL</span></code>, <code class="docutils literal notranslate"><span class="pre">EL_TRANSPOSE</span></code>, or <code class="docutils literal notranslate"><span class="pre">EL_ADJOINT</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElUnitOrNonUnit">
+<code class="descname">ElUnitOrNonUnit</code><a class="headerlink" href="#c.ElUnitOrNonUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_UNIT</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_NON_UNIT</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElUpperOrLower">
+<code class="descname">ElUpperOrLower</code><a class="headerlink" href="#c.ElUpperOrLower" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_UPPER</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_LOWER</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElVerticalOrHorizontal">
+<code class="descname">ElVerticalOrHorizontal</code><a class="headerlink" href="#c.ElVerticalOrHorizontal" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_VERTICAL</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_HORIZONTAL</span></code></p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indexing-utilities">
+<h2>Indexing utilities<a class="headerlink" href="#indexing-utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv45Shift3Int3Int3Int">
+<span id="_CPPv35Shift3Int3Int3Int"></span><span id="_CPPv25Shift3Int3Int3Int"></span><span id="Shift__Int.Int.Int"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">Shift</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>rank</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>firstRank</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>numProcs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Shift3Int3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a element-wise cyclic distribution over <cite>numProcs</cite> processes,
+where the first entry is owned by the process with rank <cite>firstRank</cite>,
+this routine returns the first entry owned by the process with rank
+<cite>rank</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46Length3Int3Int3Int">
+<span id="_CPPv36Length3Int3Int3Int"></span><span id="_CPPv26Length3Int3Int3Int"></span><span id="Length__Int.Int.Int"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">Length</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>n</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>shift</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>numProcs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Length3Int3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a vector with <span class="math notranslate nohighlight">\(n\)</span> entries distributed over <cite>numProcs</cite>
+processes with shift as defined above, this routine returns the number of
+entries of the vector which are owned by this process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46Length3Int3Int3Int3Int">
+<span id="_CPPv36Length3Int3Int3Int3Int"></span><span id="_CPPv26Length3Int3Int3Int3Int"></span><span id="Length__Int.Int.Int.Int"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">Length</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>n</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>rank</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>firstRank</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>numProcs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Length3Int3Int3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a vector with <span class="math notranslate nohighlight">\(n\)</span> entries distributed over <cite>numProcs</cite>
+processes, with the first entry owned by process <cite>firstRank</cite>, this routine
+returns the number of entries locally owned by the process with rank
+<cite>rank</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49MaxLength3Int3Int">
+<span id="_CPPv39MaxLength3Int3Int"></span><span id="_CPPv29MaxLength3Int3Int"></span><span id="MaxLength__Int.Int"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">MaxLength</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>n</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>numProcs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49MaxLength3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum result of <a class="reference internal" href="#_CPPv46Length3Int3Int3Int" title="Length"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Length()</span></code></a> with the given parameters.
+This is useful for padding collective communication routines which are
+almost regular.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43Mod3Int3Int">
+<span id="_CPPv33Mod3Int3Int"></span><span id="_CPPv23Mod3Int3Int"></span><span id="Mod__Int.Int"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">Mod</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>a</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43Mod3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of C++’s <code class="docutils literal notranslate"><span class="pre">%</span></code> operator which handles cases where <cite>a</cite> is
+negative and still returns a result in <span class="math notranslate nohighlight">\([0,b)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43GCD3Int3Int">
+<span id="_CPPv33GCD3Int3Int"></span><span id="_CPPv23GCD3Int3Int"></span><span id="GCD__Int.Int"></span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <code class="descname">GCD</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>a</em>, <a class="reference internal" href="#_CPPv43Int" title="Int">Int</a> <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GCD3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the greatest common denominator of the integers <cite>a</cite> and <cite>b</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Log28Unsigned">
+<span id="_CPPv34Log28Unsigned"></span><span id="_CPPv24Log28Unsigned"></span><span id="Log2__Unsigned"></span><a class="reference internal" href="#_CPPv48Unsigned" title="Unsigned">Unsigned</a> <code class="descname">Log2</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48Unsigned" title="Unsigned">Unsigned</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Log28Unsigned" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the base-two logarithm of a positive integer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410PowerOfTwo8Unsigned">
+<span id="_CPPv310PowerOfTwo8Unsigned"></span><span id="_CPPv210PowerOfTwo8Unsigned"></span><span id="PowerOfTwo__Unsigned"></span>bool <code class="descname">PowerOfTwo</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48Unsigned" title="Unsigned">Unsigned</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410PowerOfTwo8Unsigned" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return whether or not a positive integer is an integer power of two.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

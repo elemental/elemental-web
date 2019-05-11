@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Scale &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ScaleTrapezoid" href="ScaleTrapezoid.html" />
+    <link rel="prev" title="QuasiDiagonalSolve" href="QuasiDiagonalSolve.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="scale">
+<h1>Scale<a class="headerlink" href="#scale" title="Permalink to this headline">¶</a></h1>
+<p><span class="math notranslate nohighlight">\(X := \alpha X\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv45Scale1TR6MatrixI1TE">
+<span id="_CPPv35Scale1TR6MatrixI1TE"></span><span id="_CPPv25Scale1TR6MatrixI1TE"></span><span id="Scale__T.Matrix:T:R"></span>void <code class="descname">Scale</code><span class="sig-paren">(</span>T <em>alpha</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Scale1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45Scale1TR18AbstractDistMatrixI1TE">
+<span id="_CPPv35Scale1TR18AbstractDistMatrixI1TE"></span><span id="_CPPv25Scale1TR18AbstractDistMatrixI1TE"></span><span id="Scale__T.AbstractDistMatrix:T:R"></span>void <code class="descname">Scale</code><span class="sig-paren">(</span>T <em>alpha</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Scale1TR18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45Scale1TR12SparseMatrixI1TE">
+<span id="_CPPv35Scale1TR12SparseMatrixI1TE"></span><span id="_CPPv25Scale1TR12SparseMatrixI1TE"></span><span id="Scale__T.SparseMatrix:T:R"></span>void <code class="descname">Scale</code><span class="sig-paren">(</span>T <em>alpha</em>, SparseMatrix&lt;T&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Scale1TR12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45Scale1TR16DistSparseMatrixI1TE">
+<span id="_CPPv35Scale1TR16DistSparseMatrixI1TE"></span><span id="_CPPv25Scale1TR16DistSparseMatrixI1TE"></span><span id="Scale__T.DistSparseMatrix:T:R"></span>void <code class="descname">Scale</code><span class="sig-paren">(</span>T <em>alpha</em>, DistSparseMatrix&lt;T&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Scale1TR16DistSparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElScale_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScale_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElMatrix_i<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScale_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScale_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScale_s</code><span class="sig-paren">(</span>float<em> alpha</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScale_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScale_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScale_d</code><span class="sig-paren">(</span>double<em> alpha</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScale_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScale_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScale_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScale_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScale_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScale_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScale_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDist_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElDistMatrix_i<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDist_s</code><span class="sig-paren">(</span>float<em> alpha</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDist_d</code><span class="sig-paren">(</span>double<em> alpha</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleSparse_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleSparse_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElSparseMatrix_i<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleSparse_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleSparse_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleSparse_s</code><span class="sig-paren">(</span>float<em> alpha</em>, ElSparseMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleSparse_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleSparse_d</code><span class="sig-paren">(</span>double<em> alpha</em>, ElSparseMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleSparse_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElSparseMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleSparse_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElSparseMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDistSparse_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDistSparse_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElDistSparseMatrix_i<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDistSparse_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDistSparse_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDistSparse_s</code><span class="sig-paren">(</span>float<em> alpha</em>, ElDistSparseMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDistSparse_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDistSparse_d</code><span class="sig-paren">(</span>double<em> alpha</em>, ElDistSparseMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDistSparse_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDistSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElDistSparseMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElScaleDistSparse_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElScaleDistSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElDistSparseMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElScaleDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Scale">
+<code class="descname">Scale</code><span class="sig-paren">(</span><em>allpha</em>, <em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#Scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

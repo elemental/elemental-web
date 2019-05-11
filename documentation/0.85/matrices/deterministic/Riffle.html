@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Riffle &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ris" href="Ris.html" />
+    <link rel="prev" title="Redheffer" href="Redheffer.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="riffle">
+<h1>Riffle<a class="headerlink" href="#riffle" title="Permalink to this headline">¶</a></h1>
+<p>This is an implementation of the riffle-shuffle transition matrix made famous by
+Diaconis et al. The computation of binomial and Eulerian coefficients closely
+follows the scripts provided in Trefethen and Embree’s
+<em>Spectra and Pseudospectra: The Behaviour of Nonnormal Matrices and Operators</em>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv46RiffleR6MatrixI1FE3Int">
+<span id="_CPPv36RiffleR6MatrixI1FE3Int"></span><span id="_CPPv26RiffleR6MatrixI1FE3Int"></span><span id="Riffle__Matrix:F:R.Int"></span>void <code class="descname">Riffle</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46RiffleR6MatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46RiffleR18AbstractDistMatrixI1FE3Int">
+<span id="_CPPv36RiffleR18AbstractDistMatrixI1FE3Int"></span><span id="_CPPv26RiffleR18AbstractDistMatrixI1FE3Int"></span><span id="Riffle__AbstractDistMatrix:F:R.Int"></span>void <code class="descname">Riffle</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>P</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46RiffleR18AbstractDistMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46RiffleR23AbstractBlockDistMatrixI1FE3Int">
+<span id="_CPPv36RiffleR23AbstractBlockDistMatrixI1FE3Int"></span><span id="_CPPv26RiffleR23AbstractBlockDistMatrixI1FE3Int"></span><span id="Riffle__AbstractBlockDistMatrix:F:R.Int"></span>void <code class="descname">Riffle</code><span class="sig-paren">(</span>AbstractBlockDistMatrix&lt;F&gt; &amp;<em>P</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46RiffleR23AbstractBlockDistMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <span class="math notranslate nohighlight">\(n \times n\)</span> transition matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46RiffleR6MatrixI1FER6MatrixI1FE3Int">
+<span id="_CPPv36RiffleR6MatrixI1FER6MatrixI1FE3Int"></span><span id="_CPPv26RiffleR6MatrixI1FER6MatrixI1FE3Int"></span><span id="Riffle__Matrix:F:R.Matrix:F:R.Int"></span>void <code class="descname">Riffle</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>PInf</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46RiffleR6MatrixI1FER6MatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46RiffleR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE3Int">
+<span id="_CPPv36RiffleR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE3Int"></span><span id="_CPPv26RiffleR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE3Int"></span><span id="Riffle__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.Int"></span>void <code class="descname">Riffle</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>P</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>PInf</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46RiffleR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46RiffleR23AbstractBlockDistMatrixI1FER23AbstractBlockDistMatrixI1FE3Int">
+<span id="_CPPv36RiffleR23AbstractBlockDistMatrixI1FER23AbstractBlockDistMatrixI1FE3Int"></span><span id="_CPPv26RiffleR23AbstractBlockDistMatrixI1FER23AbstractBlockDistMatrixI1FE3Int"></span><span id="Riffle__AbstractBlockDistMatrix:F:R.AbstractBlockDistMatrix:F:R.Int"></span>void <code class="descname">Riffle</code><span class="sig-paren">(</span>AbstractBlockDistMatrix&lt;F&gt; &amp;<em>P</em>, AbstractBlockDistMatrix&lt;F&gt; &amp;<em>PInf</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46RiffleR23AbstractBlockDistMatrixI1FER23AbstractBlockDistMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return both the <span class="math notranslate nohighlight">\(n \times n\)</span> transition matrix and its stationary
+distribution (as a square matrix with identical rows).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416RiffleStationaryR6MatrixI1FE3Int">
+<span id="_CPPv316RiffleStationaryR6MatrixI1FE3Int"></span><span id="_CPPv216RiffleStationaryR6MatrixI1FE3Int"></span><span id="RiffleStationary__Matrix:F:R.Int"></span>void <code class="descname">RiffleStationary</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>PInf</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416RiffleStationaryR6MatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416RiffleStationaryR18AbstractDistMatrixI1FE3Int">
+<span id="_CPPv316RiffleStationaryR18AbstractDistMatrixI1FE3Int"></span><span id="_CPPv216RiffleStationaryR18AbstractDistMatrixI1FE3Int"></span><span id="RiffleStationary__AbstractDistMatrix:F:R.Int"></span>void <code class="descname">RiffleStationary</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>PInf</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416RiffleStationaryR18AbstractDistMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416RiffleStationaryR23AbstractBlockDistMatrixI1FE3Int">
+<span id="_CPPv316RiffleStationaryR23AbstractBlockDistMatrixI1FE3Int"></span><span id="_CPPv216RiffleStationaryR23AbstractBlockDistMatrixI1FE3Int"></span><span id="RiffleStationary__AbstractBlockDistMatrix:F:R.Int"></span>void <code class="descname">RiffleStationary</code><span class="sig-paren">(</span>AbstractBlockDistMatrix&lt;F&gt; &amp;<em>PInf</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416RiffleStationaryR23AbstractBlockDistMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the stationary distribution of the <span class="math notranslate nohighlight">\(n \times n\)</span> system as
+a square matrix with identical rows.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411RiffleDecayR6MatrixI1FE3Int">
+<span id="_CPPv311RiffleDecayR6MatrixI1FE3Int"></span><span id="_CPPv211RiffleDecayR6MatrixI1FE3Int"></span><span id="RiffleDecay__Matrix:F:R.Int"></span>void <code class="descname">RiffleDecay</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411RiffleDecayR6MatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411RiffleDecayR18AbstractDistMatrixI1FE3Int">
+<span id="_CPPv311RiffleDecayR18AbstractDistMatrixI1FE3Int"></span><span id="_CPPv211RiffleDecayR18AbstractDistMatrixI1FE3Int"></span><span id="RiffleDecay__AbstractDistMatrix:F:R.Int"></span>void <code class="descname">RiffleDecay</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411RiffleDecayR18AbstractDistMatrixI1FE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the transition matrix with its stationary distribution subtracted
+from each row.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElRiffle_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffle_s</code><span class="sig-paren">(</span>ElMatrix_s<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffle_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffle_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffle_d</code><span class="sig-paren">(</span>ElMatrix_d<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffle_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffle_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffle_c</code><span class="sig-paren">(</span>ElMatrix_c<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffle_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffle_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffle_z</code><span class="sig-paren">(</span>ElMatrix_z<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffle_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> P</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <span class="math notranslate nohighlight">\(n \times n\)</span> transition matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationary_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationary_s</code><span class="sig-paren">(</span>ElMatrix_s<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationary_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationary_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationary_d</code><span class="sig-paren">(</span>ElMatrix_d<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationary_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationary_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationary_c</code><span class="sig-paren">(</span>ElMatrix_c<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationary_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationary_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationary_z</code><span class="sig-paren">(</span>ElMatrix_z<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationary_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationaryDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationaryDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationaryDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationaryDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationaryDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationaryDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationaryDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationaryDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationaryDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleStationaryDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleStationaryDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> PInf</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleStationaryDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the stationary distribution of the <span class="math notranslate nohighlight">\(n \times n\)</span> system as a
+square matrix with identical rows.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDecay_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDecay_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDecay_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDecay_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDecay_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDecay_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDecay_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDecay_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDecay_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRiffleDecay_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRiffleDecay_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRiffleDecay_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the transition matrix with its stationary distribution subtracted
+from each row.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Riffle">
+<code class="descname">Riffle</code><span class="sig-paren">(</span><em>P</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#Riffle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="RiffleStationary">
+<code class="descname">RiffleStationary</code><span class="sig-paren">(</span><em>PInf</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#RiffleStationary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="RiffleDecay">
+<code class="descname">RiffleDecay</code><span class="sig-paren">(</span><em>A</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#RiffleDecay" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

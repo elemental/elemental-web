@@ -1,0 +1,936 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MPI &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="PMRRR" href="pmrrr.html" />
+    <link rel="prev" title="LAPACK" href="lapack.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../imports.html">Imported library routines</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="blas.html">BLAS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lapack.html">LAPACK</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">MPI</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#datatypes">Datatypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants">Constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#routines">Routines</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pmrrr.html">PMRRR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flame.html">libFLAME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scalapack.html">ScaLAPACK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metis_parmetis.html">METIS and ParMETIS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../imports.html">Imported library routines</a> &raquo;</li>
+        
+      <li>MPI</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/imports/mpi.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mpi">
+<h1>MPI<a class="headerlink" href="#mpi" title="Permalink to this headline">¶</a></h1>
+<p>All communication within Elemental is built on top of the Message Passing
+Interface (MPI). Just like with BLAS and LAPACK, a minimal set of datatype
+independent abstractions has been built directly on top of the standard
+MPI interface. This has the added benefit of localizing the changes required
+for porting Elemental to architectures that do not have full MPI
+implementations available.</p>
+<p>The prototypes can be found in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/El/core/imports/mpi.hpp">include/El/core/imports/mpi.hpp</a>,
+while the implementations are in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/imports/mpi.cpp">src/imports/mpi.cpp</a>.</p>
+<div class="section" id="datatypes">
+<h2>Datatypes<a class="headerlink" href="#datatypes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N3mpi4CommE">
+<span id="_CPPv3N3mpi4CommE"></span><span id="_CPPv2N3mpi4CommE"></span><span id="mpi::Comm"></span><em class="property">class </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Comm</code><a class="headerlink" href="#_CPPv4N3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N3mpi4Comm4commE">
+<span id="_CPPv3N3mpi4Comm4commE"></span><span id="_CPPv2N3mpi4Comm4commE"></span><span id="mpi::Comm::comm__MPI_Comm"></span>MPI_Comm <code class="descname">comm</code><a class="headerlink" href="#_CPPv4N3mpi4Comm4commE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4Comm4CommE8MPI_Comm">
+<span id="_CPPv3N3mpi4Comm4CommE8MPI_Comm"></span><span id="_CPPv2N3mpi4Comm4CommE8MPI_Comm"></span><span id="mpi::Comm::Comm__MPI_Comm"></span><code class="descname">Comm</code><span class="sig-paren">(</span>MPI_Comm <em>mpiComm</em> = MPI_COMM_NULL<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4Comm4CommE8MPI_Comm" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4eqRKN3mpi4CommERKN3mpi4CommE">
+<span id="_CPPv3eqRKN3mpi4CommERKN3mpi4CommE"></span><span id="_CPPv2eqRKN3mpi4CommERKN3mpi4CommE"></span><span id="eq-operator__mpi::CommCR.mpi::CommCR"></span>bool <code class="descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>a</em>, <em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4eqRKN3mpi4CommERKN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4neRKN3mpi4CommERKN3mpi4CommE">
+<span id="_CPPv3neRKN3mpi4CommERKN3mpi4CommE"></span><span id="_CPPv2neRKN3mpi4CommERKN3mpi4CommE"></span><span id="neq-operator__mpi::CommCR.mpi::CommCR"></span>bool <code class="descname">operator!=</code><span class="sig-paren">(</span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>a</em>, <em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4neRKN3mpi4CommERKN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4N3mpi5GroupE">
+<span id="_CPPv3N3mpi5GroupE"></span><span id="_CPPv2N3mpi5GroupE"></span><span id="mpi::Group"></span><em class="property">class </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Group</code><a class="headerlink" href="#_CPPv4N3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N3mpi5Group5groupE">
+<span id="_CPPv3N3mpi5Group5groupE"></span><span id="_CPPv2N3mpi5Group5groupE"></span><span id="mpi::Group::group__MPI_Group"></span>MPI_Group <code class="descname">group</code><a class="headerlink" href="#_CPPv4N3mpi5Group5groupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi5Group5GroupE9MPI_Group">
+<span id="_CPPv3N3mpi5Group5GroupE9MPI_Group"></span><span id="_CPPv2N3mpi5Group5GroupE9MPI_Group"></span><span id="mpi::Group::Group__MPI_Group"></span><code class="descname">Group</code><span class="sig-paren">(</span>MPI_Group <em>mpiGroup</em> = MPI_GROUP_NULL<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi5Group5GroupE9MPI_Group" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4eqRKN3mpi5GroupERKN3mpi5GroupE">
+<span id="_CPPv3eqRKN3mpi5GroupERKN3mpi5GroupE"></span><span id="_CPPv2eqRKN3mpi5GroupERKN3mpi5GroupE"></span><span id="eq-operator__mpi::GroupCR.mpi::GroupCR"></span>bool <code class="descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>a</em>, <em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4eqRKN3mpi5GroupERKN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4neRKN3mpi5GroupERKN3mpi5GroupE">
+<span id="_CPPv3neRKN3mpi5GroupERKN3mpi5GroupE"></span><span id="_CPPv2neRKN3mpi5GroupERKN3mpi5GroupE"></span><span id="neq-operator__mpi::GroupCR.mpi::GroupCR"></span>bool <code class="descname">operator!=</code><span class="sig-paren">(</span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>a</em>, <em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4neRKN3mpi5GroupERKN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4N3mpi2OpE">
+<span id="_CPPv3N3mpi2OpE"></span><span id="_CPPv2N3mpi2OpE"></span><span id="mpi::Op"></span><em class="property">class </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Op</code><a class="headerlink" href="#_CPPv4N3mpi2OpE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N3mpi2Op2opE">
+<span id="_CPPv3N3mpi2Op2opE"></span><span id="_CPPv2N3mpi2Op2opE"></span><span id="mpi::Op::op__MPI_Op"></span>MPI_Op <code class="descname">op</code><a class="headerlink" href="#_CPPv4N3mpi2Op2opE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi2Op2OpE6MPI_Op">
+<span id="_CPPv3N3mpi2Op2OpE6MPI_Op"></span><span id="_CPPv2N3mpi2Op2OpE6MPI_Op"></span><span id="mpi::Op::Op__MPI_Op"></span><code class="descname">Op</code><span class="sig-paren">(</span>MPI_Op <em>mpiOp</em> = MPI_OP_NULL<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi2Op2OpE6MPI_Op" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4eqRKN3mpi2OpERKN3mpi2OpE">
+<span id="_CPPv3eqRKN3mpi2OpERKN3mpi2OpE"></span><span id="_CPPv2eqRKN3mpi2OpERKN3mpi2OpE"></span><span id="eq-operator__mpi::OpCR.mpi::OpCR"></span>bool <code class="descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> &amp;<em>a</em>, <em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4eqRKN3mpi2OpERKN3mpi2OpE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4neRKN3mpi2OpERKN3mpi2OpE">
+<span id="_CPPv3neRKN3mpi2OpERKN3mpi2OpE"></span><span id="_CPPv2neRKN3mpi2OpERKN3mpi2OpE"></span><span id="neq-operator__mpi::OpCR.mpi::OpCR"></span>bool <code class="descname">operator!=</code><span class="sig-paren">(</span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> &amp;<em>a</em>, <em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4neRKN3mpi2OpERKN3mpi2OpE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N3mpi8DatatypeE">
+<span id="_CPPv3N3mpi8DatatypeE"></span><span id="_CPPv2N3mpi8DatatypeE"></span><span id="mpi::Datatype"></span><em class="property">type </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Datatype</code><a class="headerlink" href="#_CPPv4N3mpi8DatatypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_Datatype</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N3mpi12ErrorHandlerE">
+<span id="_CPPv3N3mpi12ErrorHandlerE"></span><span id="_CPPv2N3mpi12ErrorHandlerE"></span><span id="mpi::ErrorHandler"></span><em class="property">type </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ErrorHandler</code><a class="headerlink" href="#_CPPv4N3mpi12ErrorHandlerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_Errhandler</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N3mpi7RequestE">
+<span id="_CPPv3N3mpi7RequestE"></span><span id="_CPPv2N3mpi7RequestE"></span><span id="mpi::Request"></span><em class="property">type </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Request</code><a class="headerlink" href="#_CPPv4N3mpi7RequestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_Request</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N3mpi6StatusE">
+<span id="_CPPv3N3mpi6StatusE"></span><span id="_CPPv2N3mpi6StatusE"></span><span id="mpi::Status"></span><em class="property">type </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Status</code><a class="headerlink" href="#_CPPv4N3mpi6StatusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_Status</span></code>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N3mpi12UserFunctionE">
+<span id="_CPPv3N3mpi12UserFunctionE"></span><span id="_CPPv2N3mpi12UserFunctionE"></span><span id="mpi::UserFunction"></span><em class="property">type </em><code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">UserFunction</code><a class="headerlink" href="#_CPPv4N3mpi12UserFunctionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_User_function</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="member">
+<dt id="_CPPv4N3mpi10ANY_SOURCEE">
+<span id="_CPPv3N3mpi10ANY_SOURCEE"></span><span id="_CPPv2N3mpi10ANY_SOURCEE"></span><span id="mpi::ANY_SOURCE__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ANY_SOURCE</code><a class="headerlink" href="#_CPPv4N3mpi10ANY_SOURCEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_ANY_SOURCE</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi7ANY_TAGE">
+<span id="_CPPv3N3mpi7ANY_TAGE"></span><span id="_CPPv2N3mpi7ANY_TAGE"></span><span id="mpi::ANY_TAG__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ANY_TAG</code><a class="headerlink" href="#_CPPv4N3mpi7ANY_TAGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_ANY_TAG</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi13THREAD_SINGLEE">
+<span id="_CPPv3N3mpi13THREAD_SINGLEE"></span><span id="_CPPv2N3mpi13THREAD_SINGLEE"></span><span id="mpi::THREAD_SINGLE__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">THREAD_SINGLE</code><a class="headerlink" href="#_CPPv4N3mpi13THREAD_SINGLEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_THREAD_SINGLE</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi15THREAD_FUNNELEDE">
+<span id="_CPPv3N3mpi15THREAD_FUNNELEDE"></span><span id="_CPPv2N3mpi15THREAD_FUNNELEDE"></span><span id="mpi::THREAD_FUNNELED__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">THREAD_FUNNELED</code><a class="headerlink" href="#_CPPv4N3mpi15THREAD_FUNNELEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_THREAD_FUNNELED</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi17THREAD_SERIALIZEDE">
+<span id="_CPPv3N3mpi17THREAD_SERIALIZEDE"></span><span id="_CPPv2N3mpi17THREAD_SERIALIZEDE"></span><span id="mpi::THREAD_SERIALIZED__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">THREAD_SERIALIZED</code><a class="headerlink" href="#_CPPv4N3mpi17THREAD_SERIALIZEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_THREAD_SERIALIZED</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi15THREAD_MULTIPLEE">
+<span id="_CPPv3N3mpi15THREAD_MULTIPLEE"></span><span id="_CPPv2N3mpi15THREAD_MULTIPLEE"></span><span id="mpi::THREAD_MULTIPLE__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">THREAD_MULTIPLE</code><a class="headerlink" href="#_CPPv4N3mpi15THREAD_MULTIPLEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_THREAD_MULTIPLE</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi9UNDEFINEDE">
+<span id="_CPPv3N3mpi9UNDEFINEDE"></span><span id="_CPPv2N3mpi9UNDEFINEDE"></span><span id="mpi::UNDEFINED__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">UNDEFINED</code><a class="headerlink" href="#_CPPv4N3mpi9UNDEFINEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_UNDEFINED</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi10GROUP_NULLE">
+<span id="_CPPv3N3mpi10GROUP_NULLE"></span><span id="_CPPv2N3mpi10GROUP_NULLE"></span><span id="mpi::GROUP_NULL__mpi::GroupC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">GROUP_NULL</code><a class="headerlink" href="#_CPPv4N3mpi10GROUP_NULLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_GROUP_NULL</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi9COMM_NULLE">
+<span id="_CPPv3N3mpi9COMM_NULLE"></span><span id="_CPPv2N3mpi9COMM_NULLE"></span><span id="mpi::COMM_NULL__mpi::CommC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">COMM_NULL</code><a class="headerlink" href="#_CPPv4N3mpi9COMM_NULLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_COMM_NULL</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi9COMM_SELFE">
+<span id="_CPPv3N3mpi9COMM_SELFE"></span><span id="_CPPv2N3mpi9COMM_SELFE"></span><span id="mpi::COMM_SELF__mpi::CommC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">COMM_SELF</code><a class="headerlink" href="#_CPPv4N3mpi9COMM_SELFE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_COMM_SELF</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi10COMM_WORLDE">
+<span id="_CPPv3N3mpi10COMM_WORLDE"></span><span id="_CPPv2N3mpi10COMM_WORLDE"></span><span id="mpi::COMM_WORLD__mpi::CommC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">COMM_WORLD</code><a class="headerlink" href="#_CPPv4N3mpi10COMM_WORLDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi13ERRORS_RETURNE">
+<span id="_CPPv3N3mpi13ERRORS_RETURNE"></span><span id="_CPPv2N3mpi13ERRORS_RETURNE"></span><span id="mpi::ERRORS_RETURN__mpi::ErrorHandlerC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi12ErrorHandlerE" title="mpi::ErrorHandler">ErrorHandler</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ERRORS_RETURN</code><a class="headerlink" href="#_CPPv4N3mpi13ERRORS_RETURNE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_ERRORS_RETURN</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi16ERRORS_ARE_FATALE">
+<span id="_CPPv3N3mpi16ERRORS_ARE_FATALE"></span><span id="_CPPv2N3mpi16ERRORS_ARE_FATALE"></span><span id="mpi::ERRORS_ARE_FATAL__mpi::ErrorHandlerC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi12ErrorHandlerE" title="mpi::ErrorHandler">ErrorHandler</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ERRORS_ARE_FATAL</code><a class="headerlink" href="#_CPPv4N3mpi16ERRORS_ARE_FATALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_ERRORS_ARE_FATAL</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi11GROUP_EMPTYE">
+<span id="_CPPv3N3mpi11GROUP_EMPTYE"></span><span id="_CPPv2N3mpi11GROUP_EMPTYE"></span><span id="mpi::GROUP_EMPTY__mpi::GroupC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">GROUP_EMPTY</code><a class="headerlink" href="#_CPPv4N3mpi11GROUP_EMPTYE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_GROUP_EMPTY</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi12REQUEST_NULLE">
+<span id="_CPPv3N3mpi12REQUEST_NULLE"></span><span id="_CPPv2N3mpi12REQUEST_NULLE"></span><span id="mpi::REQUEST_NULL__mpi::RequestC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi7RequestE" title="mpi::Request">Request</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">REQUEST_NULL</code><a class="headerlink" href="#_CPPv4N3mpi12REQUEST_NULLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_REQUEST_NULL</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi3MAXE">
+<span id="_CPPv3N3mpi3MAXE"></span><span id="_CPPv2N3mpi3MAXE"></span><span id="mpi::MAX__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">MAX</code><a class="headerlink" href="#_CPPv4N3mpi3MAXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_MAX</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi3MINE">
+<span id="_CPPv3N3mpi3MINE"></span><span id="_CPPv2N3mpi3MINE"></span><span id="mpi::MIN__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">MIN</code><a class="headerlink" href="#_CPPv4N3mpi3MINE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_MIN</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi4PRODE">
+<span id="_CPPv3N3mpi4PRODE"></span><span id="_CPPv2N3mpi4PRODE"></span><span id="mpi::PROD__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">PROD</code><a class="headerlink" href="#_CPPv4N3mpi4PRODE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_PROD</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi3SUME">
+<span id="_CPPv3N3mpi3SUME"></span><span id="_CPPv2N3mpi3SUME"></span><span id="mpi::SUM__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">SUM</code><a class="headerlink" href="#_CPPv4N3mpi3SUME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_SUM</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi11LOGICAL_ANDE">
+<span id="_CPPv3N3mpi11LOGICAL_ANDE"></span><span id="_CPPv2N3mpi11LOGICAL_ANDE"></span><span id="mpi::LOGICAL_AND__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">LOGICAL_AND</code><a class="headerlink" href="#_CPPv4N3mpi11LOGICAL_ANDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_LAND</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi10LOGICAL_ORE">
+<span id="_CPPv3N3mpi10LOGICAL_ORE"></span><span id="_CPPv2N3mpi10LOGICAL_ORE"></span><span id="mpi::LOGICAL_OR__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">LOGICAL_OR</code><a class="headerlink" href="#_CPPv4N3mpi10LOGICAL_ORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_LOR</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi11LOGICAL_XORE">
+<span id="_CPPv3N3mpi11LOGICAL_XORE"></span><span id="_CPPv2N3mpi11LOGICAL_XORE"></span><span id="mpi::LOGICAL_XOR__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">LOGICAL_XOR</code><a class="headerlink" href="#_CPPv4N3mpi11LOGICAL_XORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_LXOR</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi10BINARY_ANDE">
+<span id="_CPPv3N3mpi10BINARY_ANDE"></span><span id="_CPPv2N3mpi10BINARY_ANDE"></span><span id="mpi::BINARY_AND__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">BINARY_AND</code><a class="headerlink" href="#_CPPv4N3mpi10BINARY_ANDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_BAND</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi9BINARY_ORE">
+<span id="_CPPv3N3mpi9BINARY_ORE"></span><span id="_CPPv2N3mpi9BINARY_ORE"></span><span id="mpi::BINARY_OR__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">BINARY_OR</code><a class="headerlink" href="#_CPPv4N3mpi9BINARY_ORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_BOR</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi10BINARY_XORE">
+<span id="_CPPv3N3mpi10BINARY_XORE"></span><span id="_CPPv2N3mpi10BINARY_XORE"></span><span id="mpi::BINARY_XOR__mpi::OpC"></span><em class="property">const</em> mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">BINARY_XOR</code><a class="headerlink" href="#_CPPv4N3mpi10BINARY_XORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">MPI_BXOR</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N3mpi12MIN_COLL_MSGE">
+<span id="_CPPv3N3mpi12MIN_COLL_MSGE"></span><span id="_CPPv2N3mpi12MIN_COLL_MSGE"></span><span id="mpi::MIN_COLL_MSG__iC"></span><em class="property">const</em> int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">MIN_COLL_MSG</code><a class="headerlink" href="#_CPPv4N3mpi12MIN_COLL_MSGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The minimum message size for collective communication, e.g., the minimum
+number of elements contributed by each process in an <code class="docutils literal notranslate"><span class="pre">MPI_Allgather</span></code>.
+By default, it is hardcoded to <cite>1</cite> in order to avoid problems with
+MPI implementations that do not support the <cite>0</cite> corner case.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="routines">
+<h2>Routines<a class="headerlink" href="#routines" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Environmental</p>
+<dl class="function">
+<dt id="_CPPv4N3mpi10InitializeERiRPPc">
+<span id="_CPPv3N3mpi10InitializeERiRPPc"></span><span id="_CPPv2N3mpi10InitializeERiRPPc"></span><span id="mpi::Initialize__iR.cPPR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Initialize</code><span class="sig-paren">(</span>int &amp;<em>argc</em>, char **&amp;<em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi10InitializeERiRPPc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent of <code class="docutils literal notranslate"><span class="pre">MPI_Init</span></code>
+(but notice the difference in the calling convention).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">El</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">mpi</span><span class="o">::</span><span class="n">Initialize</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span> <span class="p">);</span>
+    <span class="p">...</span>
+    <span class="n">mpi</span><span class="o">::</span><span class="n">Finalize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi16InitializeThreadERiRPPci">
+<span id="_CPPv3N3mpi16InitializeThreadERiRPPci"></span><span id="_CPPv2N3mpi16InitializeThreadERiRPPci"></span><span id="mpi::InitializeThread__iR.cPPR.i"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">InitializeThread</code><span class="sig-paren">(</span>int &amp;<em>argc</em>, char **&amp;<em>argv</em>, int <em>required</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi16InitializeThreadERiRPPci" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The threaded equivalent of <code class="docutils literal notranslate"><span class="pre">mpi::Initialize</span></code>; the return integer indicates
+the level of achieved threading support, e.g., <code class="docutils literal notranslate"><span class="pre">mpi::THREAD_MULTIPLE</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi8FinalizeEv">
+<span id="_CPPv3N3mpi8FinalizeEv"></span><span id="_CPPv2N3mpi8FinalizeEv"></span><span id="mpi::Finalize"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi8FinalizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Shut down the MPI environment, freeing all of the allocated resources.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi11InitializedEv">
+<span id="_CPPv3N3mpi11InitializedEv"></span><span id="_CPPv2N3mpi11InitializedEv"></span><span id="mpi::Initialized"></span>bool <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Initialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi11InitializedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if MPI has been initialized.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9FinalizedEv">
+<span id="_CPPv3N3mpi9FinalizedEv"></span><span id="_CPPv2N3mpi9FinalizedEv"></span><span id="mpi::Finalized"></span>bool <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Finalized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9FinalizedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if MPI has been finalized.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4TimeEv">
+<span id="_CPPv3N3mpi4TimeEv"></span><span id="_CPPv2N3mpi4TimeEv"></span><span id="mpi::Time"></span>double <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4TimeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the current wall-time in seconds.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi6CreateEPN3mpi12UserFunctionEbR2Op">
+<span id="_CPPv3N3mpi6CreateEPN3mpi12UserFunctionEbR2Op"></span><span id="_CPPv2N3mpi6CreateEPN3mpi12UserFunctionEbR2Op"></span><span id="mpi::Create__mpi::UserFunctionP.b.OpR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Create</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi12UserFunctionE" title="mpi::UserFunction">UserFunction</a> *<em>func</em>, bool <em>commutes</em>, <a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> &amp;<em>op</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi6CreateEPN3mpi12UserFunctionEbR2Op" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a custom operation for use in reduction routines, e.g.,
+<code class="docutils literal notranslate"><span class="pre">mpi::Reduce</span></code>, <code class="docutils literal notranslate"><span class="pre">mpi::AllReduce</span></code>, and <code class="docutils literal notranslate"><span class="pre">mpi::ReduceScatter</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">mpi::UserFunction</span></code> could be defined as</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">mpi</span> <span class="p">{</span>
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="n">UserFunction</span><span class="p">)</span> <span class="p">(</span> <span class="kt">void</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">length</span><span class="p">,</span> <span class="n">mpi</span><span class="o">::</span><span class="n">Datatype</span><span class="o">*</span> <span class="n">datatype</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <cite>commutes</cite> parameter is also important, as it specifies whether or not
+the operation <code class="docutils literal notranslate"><span class="pre">b[i]</span> <span class="pre">=</span> <span class="pre">a[i]</span> <span class="pre">op</span> <span class="pre">b[i],</span> <span class="pre">for</span> <span class="pre">i=0,...,length-1</span></code>, can be
+performed in an arbitrary order (for example, using a minimum spanning tree).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4FreeERN3mpi2OpE">
+<span id="_CPPv3N3mpi4FreeERN3mpi2OpE"></span><span id="_CPPv2N3mpi4FreeERN3mpi2OpE"></span><span id="mpi::Free__mpi::OpR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Free</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> &amp;<em>op</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4FreeERN3mpi2OpE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Free the specified MPI reduction operator.</p>
+</dd></dl>
+
+<p class="rubric">Communicator manipulation</p>
+<dl class="function">
+<dt id="_CPPv4N3mpi4RankEN3mpi4CommE">
+<span id="_CPPv3N3mpi4RankEN3mpi4CommE"></span><span id="_CPPv2N3mpi4RankEN3mpi4CommE"></span><span id="mpi::Rank__mpi::Comm"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Rank</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4RankEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our rank in the specified communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4SizeEN3mpi4CommE">
+<span id="_CPPv3N3mpi4SizeEN3mpi4CommE"></span><span id="_CPPv2N3mpi4SizeEN3mpi4CommE"></span><span id="mpi::Size__mpi::Comm"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Size</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4SizeEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of processes in the specified communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi6CreateEN3mpi4CommEN3mpi5GroupERN3mpi4CommE">
+<span id="_CPPv3N3mpi6CreateEN3mpi4CommEN3mpi5GroupERN3mpi4CommE"></span><span id="_CPPv2N3mpi6CreateEN3mpi4CommEN3mpi5GroupERN3mpi4CommE"></span><span id="mpi::Create__mpi::Comm.mpi::Group.mpi::CommR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Create</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>parentComm</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>subsetGroup</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>subsetComm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi6CreateEN3mpi4CommEN3mpi5GroupERN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a communicator (<cite>subsetComm</cite>) which is a subset of <cite>parentComm</cite>
+consisting of the processes specified by <cite>subsetGroup</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi3DupEN3mpi4CommERN3mpi4CommE">
+<span id="_CPPv3N3mpi3DupEN3mpi4CommERN3mpi4CommE"></span><span id="_CPPv2N3mpi3DupEN3mpi4CommERN3mpi4CommE"></span><span id="mpi::Dup__mpi::Comm.mpi::CommR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Dup</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>original</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>duplicate</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi3DupEN3mpi4CommERN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a copy of a communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi5SplitEN3mpi4CommEiiRN3mpi4CommE">
+<span id="_CPPv3N3mpi5SplitEN3mpi4CommEiiRN3mpi4CommE"></span><span id="_CPPv2N3mpi5SplitEN3mpi4CommEiiRN3mpi4CommE"></span><span id="mpi::Split__mpi::Comm.i.i.mpi::CommR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Split</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, int <em>color</em>, int <em>key</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>newComm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi5SplitEN3mpi4CommEiiRN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Split the communicator <cite>comm</cite> into different subcommunicators, where each
+process specifies the <cite>color</cite> (unique integer) of the subcommunicator it
+will reside in, as well as its <cite>key</cite> (rank) for the new subcommunicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4FreeERN3mpi4CommE">
+<span id="_CPPv3N3mpi4FreeERN3mpi4CommE"></span><span id="_CPPv2N3mpi4FreeERN3mpi4CommE"></span><span id="mpi::Free__mpi::CommR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Free</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4FreeERN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Free the specified communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9CongruentEN3mpi4CommEN3mpi4CommE">
+<span id="_CPPv3N3mpi9CongruentEN3mpi4CommEN3mpi4CommE"></span><span id="_CPPv2N3mpi9CongruentEN3mpi4CommEN3mpi4CommE"></span><span id="mpi::Congruent__mpi::Comm.mpi::Comm"></span>bool <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Congruent</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm1</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm2</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9CongruentEN3mpi4CommEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the two communicators consist of the same set of processes
+(in the same order).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi15ErrorHandlerSetEN3mpi4CommEN3mpi12ErrorHandlerE">
+<span id="_CPPv3N3mpi15ErrorHandlerSetEN3mpi4CommEN3mpi12ErrorHandlerE"></span><span id="_CPPv2N3mpi15ErrorHandlerSetEN3mpi4CommEN3mpi12ErrorHandlerE"></span><span id="mpi::ErrorHandlerSet__mpi::Comm.mpi::ErrorHandler"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ErrorHandlerSet</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi12ErrorHandlerE" title="mpi::ErrorHandler">ErrorHandler</a> <em>errorHandler</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi15ErrorHandlerSetEN3mpi4CommEN3mpi12ErrorHandlerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Modify the specified communicator to use the specified error-handling
+approach.</p>
+</dd></dl>
+
+<p class="rubric">Cartesian communicator manipulation</p>
+<dl class="function">
+<dt id="_CPPv4N3mpi10CartCreateEN3mpi4CommEiPKiPKibRN3mpi4CommE">
+<span id="_CPPv3N3mpi10CartCreateEN3mpi4CommEiPKiPKibRN3mpi4CommE"></span><span id="_CPPv2N3mpi10CartCreateEN3mpi4CommEiPKiPKibRN3mpi4CommE"></span><span id="mpi::CartCreate__mpi::Comm.i.iCP.iCP.b.mpi::CommR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">CartCreate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, int <em>numDims</em>, <em class="property">const</em> int *<em>dimensions</em>, <em class="property">const</em> int *<em>periods</em>, bool <em>reorder</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>cartComm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi10CartCreateEN3mpi4CommEiPKiPKibRN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a Cartesian communicator (<cite>cartComm</cite>) from the specified
+communicator (<cite>comm</cite>), given the number of dimensions (<cite>numDims</cite>),
+the sizes of each dimension (<cite>dimensions</cite>), whether or not each
+dimension is periodic (<cite>periods</cite>), and whether or not the ordering of the
+processes may be changed (<cite>reorder</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi7CartSubEN3mpi4CommEPKiRN3mpi4CommE">
+<span id="_CPPv3N3mpi7CartSubEN3mpi4CommEPKiRN3mpi4CommE"></span><span id="_CPPv2N3mpi7CartSubEN3mpi4CommEPKiRN3mpi4CommE"></span><span id="mpi::CartSub__mpi::Comm.iCP.mpi::CommR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">CartSub</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, <em class="property">const</em> int *<em>remainingDims</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> &amp;<em>subComm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi7CartSubEN3mpi4CommEPKiRN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create this process’s subcommunicator of <cite>comm</cite> that results from only
+keeping the specified dimensions (0 for ignoring and 1 for keeping).</p>
+</dd></dl>
+
+<p class="rubric">Group manipulation</p>
+<dl class="function">
+<dt id="_CPPv4N3mpi4RankEN3mpi5GroupE">
+<span id="_CPPv3N3mpi4RankEN3mpi5GroupE"></span><span id="_CPPv2N3mpi4RankEN3mpi5GroupE"></span><span id="mpi::Rank__mpi::Group"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Rank</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>group</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4RankEN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our rank in the specified group.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4SizeEN3mpi5GroupE">
+<span id="_CPPv3N3mpi4SizeEN3mpi5GroupE"></span><span id="_CPPv2N3mpi4SizeEN3mpi5GroupE"></span><span id="mpi::Size__mpi::Group"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Size</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>group</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4SizeEN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of processes in the specified group.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9CommGroupEN3mpi4CommERN3mpi5GroupE">
+<span id="_CPPv3N3mpi9CommGroupEN3mpi4CommERN3mpi5GroupE"></span><span id="_CPPv2N3mpi9CommGroupEN3mpi4CommERN3mpi5GroupE"></span><span id="mpi::CommGroup__mpi::Comm.mpi::GroupR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">CommGroup</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>group</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9CommGroupEN3mpi4CommERN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extract the underlying group from the specified communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi3DupEN3mpi5GroupERN3mpi5GroupE">
+<span id="_CPPv3N3mpi3DupEN3mpi5GroupERN3mpi5GroupE"></span><span id="_CPPv2N3mpi3DupEN3mpi5GroupERN3mpi5GroupE"></span><span id="mpi::Dup__mpi::Group.mpi::GroupR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Dup</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>group</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>newGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi3DupEN3mpi5GroupERN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>While <code class="docutils literal notranslate"><span class="pre">MPI_Group_dup</span></code> does not exist, we can mirror its functionality by
+unioning a group with itself.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi5UnionEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE">
+<span id="_CPPv3N3mpi5UnionEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE"></span><span id="_CPPv2N3mpi5UnionEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE"></span><span id="mpi::Union__mpi::Group.mpi::Group.mpi::GroupR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Union</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>groupA</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>groupB</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>newGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi5UnionEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Unions the ranks in groups A and B into a single new group.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4InclEN3mpi5GroupEiPKiRN3mpi5GroupE">
+<span id="_CPPv3N3mpi4InclEN3mpi5GroupEiPKiRN3mpi5GroupE"></span><span id="_CPPv2N3mpi4InclEN3mpi5GroupEiPKiRN3mpi5GroupE"></span><span id="mpi::Incl__mpi::Group.i.iCP.mpi::GroupR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Incl</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>group</em>, int <em>n</em>, <em class="property">const</em> int *<em>ranks</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>subGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4InclEN3mpi5GroupEiPKiRN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a subgroup of <cite>group</cite> that consists of the <cite>n</cite> processes whose
+ranks are specified in the <cite>ranks</cite> array.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi10DifferenceEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE">
+<span id="_CPPv3N3mpi10DifferenceEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE"></span><span id="_CPPv2N3mpi10DifferenceEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE"></span><span id="mpi::Difference__mpi::Group.mpi::Group.mpi::GroupR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Difference</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>parent</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>subset</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> &amp;<em>complement</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi10DifferenceEN3mpi5GroupEN3mpi5GroupERN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Form a group (<cite>complement</cite>) out of the set of processes which are in
+the <cite>parent</cite> communicator, but not in the <cite>subset</cite> communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4FreeERN3mpI5GroupE">
+<span id="_CPPv3N3mpi4FreeERN3mpI5GroupE"></span><span id="_CPPv2N3mpi4FreeERN3mpI5GroupE"></span><span id="mpi::Free__mpI::GroupR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Free</code><span class="sig-paren">(</span>mpI::Group &amp;<em>group</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4FreeERN3mpI5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Free the specified group.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi5GroupEiN3mpi5GroupE">
+<span id="_CPPv3N3mpi9TranslateEN3mpi5GroupEiN3mpi5GroupE"></span><span id="_CPPv2N3mpi9TranslateEN3mpi5GroupEiN3mpi5GroupE"></span><span id="mpi::Translate__mpi::Group.i.mpi::Group"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>origGroup</em>, int <em>origRank</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>newGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi5GroupEiN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi4CommEiN3mpi5GroupE">
+<span id="_CPPv3N3mpi9TranslateEN3mpi4CommEiN3mpi5GroupE"></span><span id="_CPPv2N3mpi9TranslateEN3mpi4CommEiN3mpi5GroupE"></span><span id="mpi::Translate__mpi::Comm.i.mpi::Group"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>origComm</em>, int <em>origRank</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>newGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi4CommEiN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi5GroupEiN3mpi4CommE">
+<span id="_CPPv3N3mpi9TranslateEN3mpi5GroupEiN3mpi4CommE"></span><span id="_CPPv2N3mpi9TranslateEN3mpi5GroupEiN3mpi4CommE"></span><span id="mpi::Translate__mpi::Group.i.mpi::Comm"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>origGroup</em>, int <em>origRank</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>newComm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi5GroupEiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi4CommEiN3mpi4CommE">
+<span id="_CPPv3N3mpi9TranslateEN3mpi4CommEiN3mpi4CommE"></span><span id="_CPPv2N3mpi9TranslateEN3mpi4CommEiN3mpi4CommE"></span><span id="mpi::Translate__mpi::Comm.i.mpi::Comm"></span>int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>origComm</em>, int <em>origRank</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>newComm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi4CommEiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the new rank within <cite>newGroup</cite> (<cite>newComm</cite>) of the process
+specified by its rank in <cite>origGroup</cite> (<cite>origComm</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi5GroupEPi">
+<span id="_CPPv3N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi5GroupEPi"></span><span id="_CPPv2N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi5GroupEPi"></span><span id="mpi::Translate__mpi::Group.i.iCP.mpi::Group.iP"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>origGroup</em>, int <em>size</em>, <em class="property">const</em> int *<em>origRanks</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>newGroup</em>, int *<em>newRanks</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi5GroupEPi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi4CommEiPKiN3mpi5GroupEPi">
+<span id="_CPPv3N3mpi9TranslateEN3mpi4CommEiPKiN3mpi5GroupEPi"></span><span id="_CPPv2N3mpi9TranslateEN3mpi4CommEiPKiN3mpi5GroupEPi"></span><span id="mpi::Translate__mpi::Comm.i.iCP.mpi::Group.iP"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>origComm</em>, int <em>size</em>, <em class="property">const</em> int *<em>origRanks</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>newGroup</em>, int *<em>newRanks</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi4CommEiPKiN3mpi5GroupEPi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi4CommEPi">
+<span id="_CPPv3N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi4CommEPi"></span><span id="_CPPv2N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi4CommEPi"></span><span id="mpi::Translate__mpi::Group.i.iCP.mpi::Comm.iP"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>origGroup</em>, int <em>size</em>, <em class="property">const</em> int *<em>origRanks</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>newComm</em>, int *<em>newRanks</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi5GroupEiPKiN3mpi4CommEPi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9TranslateEN3mpi4CommEiPKiN3mpi4CommEPi">
+<span id="_CPPv3N3mpi9TranslateEN3mpi4CommEiPKiN3mpi4CommEPi"></span><span id="_CPPv2N3mpi9TranslateEN3mpi4CommEiPKiN3mpi4CommEPi"></span><span id="mpi::Translate__mpi::Comm.i.iCP.mpi::Comm.iP"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Translate</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>origComm</em>, int <em>size</em>, <em class="property">const</em> int *<em>origRanks</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>newComm</em>, int *<em>newRanks</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9TranslateEN3mpi4CommEiPKiN3mpi4CommEPi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the ranks within <cite>newGroup</cite> (<cite>newComm</cite>) of the <cite>size</cite> processes
+specified by their ranks in <cite>origGroup</cite> (<cite>origComm</cite>) using the <cite>origRanks</cite>
+array. The result will be in the <cite>newRanks</cite> array, which must have been
+preallocated to a length at least as large as <cite>size</cite>.</p>
+</dd></dl>
+
+<p class="rubric">Utilities</p>
+<dl class="function">
+<dt id="_CPPv4N3mpi7BarrierEN3mpi4CommE">
+<span id="_CPPv3N3mpi7BarrierEN3mpi4CommE"></span><span id="_CPPv2N3mpi7BarrierEN3mpi4CommE"></span><span id="mpi::Barrier__mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Barrier</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi7BarrierEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pause until all processes within the <cite>comm</cite> communicator have called this
+routine.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4WaitERN3mpi7RequestE">
+<span id="_CPPv3N3mpi4WaitERN3mpi7RequestE"></span><span id="_CPPv2N3mpi4WaitERN3mpi7RequestE"></span><span id="mpi::Wait__mpi::RequestR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Wait</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi7RequestE" title="mpi::Request">Request</a> &amp;<em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4WaitERN3mpi7RequestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pause until the specified request has completed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4TestERN3mpi7RequestE">
+<span id="_CPPv3N3mpi4TestERN3mpi7RequestE"></span><span id="_CPPv2N3mpi4TestERN3mpi7RequestE"></span><span id="mpi::Test__mpi::RequestR"></span>bool <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Test</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi7RequestE" title="mpi::Request">Request</a> &amp;<em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4TestERN3mpi7RequestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the specified request has completed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi6IProbeEiiN3mpi4CommERN3mpi6StatusE">
+<span id="_CPPv3N3mpi6IProbeEiiN3mpi4CommERN3mpi6StatusE"></span><span id="_CPPv2N3mpi6IProbeEiiN3mpi4CommERN3mpi6StatusE"></span><span id="mpi::IProbe__i.i.mpi::Comm.mpi::StatusR"></span>bool <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">IProbe</code><span class="sig-paren">(</span>int <em>source</em>, int <em>tag</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi6StatusE" title="mpi::Status">Status</a> &amp;<em>status</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi6IProbeEiiN3mpi4CommERN3mpi6StatusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if there is a message ready which</p>
+<ul class="simple">
+<li><p>is from the process with rank <cite>source</cite> in the communicator <cite>comm</cite>
+(note that <code class="docutils literal notranslate"><span class="pre">mpi::ANY_SOURCE</span></code> is allowed)</p></li>
+<li><p>had the integer tag <cite>tag</cite></p></li>
+</ul>
+<p>If <cite>true</cite> was returned, then <cite>status</cite> will have been filled with the
+relevant information, e.g., the source’s rank.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IEN3mpi8GetCountI1TEEiRN3mpi6StatusE">
+<span id="_CPPv3IEN3mpi8GetCountI1TEERN3mpi6StatusE"></span><span id="_CPPv2IEN3mpi8GetCountI1TEERN3mpi6StatusE"></span>template&lt;&gt;<br />int <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">GetCount</code>&lt;T&gt;<span class="sig-paren">(</span>mpi::<a class="reference internal" href="#_CPPv4N3mpi6StatusE" title="mpi::Status">Status</a> &amp;<em>status</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN3mpi8GetCountI1TEEiRN3mpi6StatusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of entries of the specified datatype which are ready to
+be received.</p>
+</dd></dl>
+
+<p class="rubric">Point-to-point communication</p>
+<dl class="function">
+<dt id="_CPPv4N3mpi4SendEPK1TiiiN3mpi4CommE">
+<span id="_CPPv3N3mpi4SendEPK1TiiiN3mpi4CommE"></span><span id="_CPPv2N3mpi4SendEPK1TiiiN3mpi4CommE"></span><span id="mpi::Send__TCP.i.i.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Send</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>buf</em>, int <em>count</em>, int <em>to</em>, int <em>tag</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4SendEPK1TiiiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Send <cite>count</cite> entries of type <cite>T</cite> to the process with rank <cite>to</cite> in the
+communicator <cite>comm</cite>, and tag the message with the integer <cite>tag</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi5ISendEPK1TiiiN3mpi4CommERN3mpi7RequestE">
+<span id="_CPPv3N3mpi5ISendEPK1TiiiN3mpi4CommERN3mpi7RequestE"></span><span id="_CPPv2N3mpi5ISendEPK1TiiiN3mpi4CommERN3mpi7RequestE"></span><span id="mpi::ISend__TCP.i.i.i.mpi::Comm.mpi::RequestR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ISend</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>buf</em>, int <em>count</em>, int <em>to</em>, int <em>tag</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi7RequestE" title="mpi::Request">Request</a> &amp;<em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi5ISendEPK1TiiiN3mpi4CommERN3mpi7RequestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">mpi::Send</span></code>, but the call is non-blocking.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi6ISSendEPK1TiiiN3mpi4CommERN3mpi7RequestE">
+<span id="_CPPv3N3mpi6ISSendEPK1TiiiN3mpi4CommERN3mpi7RequestE"></span><span id="_CPPv2N3mpi6ISSendEPK1TiiiN3mpi4CommERN3mpi7RequestE"></span><span id="mpi::ISSend__TCP.i.i.i.mpi::Comm.mpi::RequestR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ISSend</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>buf</em>, int <em>count</em>, int <em>to</em>, int <em>tag</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi7RequestE" title="mpi::Request">Request</a> &amp;<em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi6ISSendEPK1TiiiN3mpi4CommERN3mpi7RequestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">mpi::ISend</span></code>, but the call is in synchronous mode.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi4RecvEP1TiiiN3mpi4CommE">
+<span id="_CPPv3N3mpi4RecvEP1TiiiN3mpi4CommE"></span><span id="_CPPv2N3mpi4RecvEP1TiiiN3mpi4CommE"></span><span id="mpi::Recv__TP.i.i.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Recv</code><span class="sig-paren">(</span>T *<em>buf</em>, int <em>count</em>, int <em>from</em>, int <em>tag</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi4RecvEP1TiiiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Receive <cite>count</cite> entries of type <cite>T</cite> from the process with rank <cite>from</cite>
+in the communicator <cite>comm</cite>, where the message must have been tagged with
+the integer <cite>tag</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi5IRecvEP1TiiiN3mpi4CommERN3mpi7RequestE">
+<span id="_CPPv3N3mpi5IRecvEP1TiiiN3mpi4CommERN3mpi7RequestE"></span><span id="_CPPv2N3mpi5IRecvEP1TiiiN3mpi4CommERN3mpi7RequestE"></span><span id="mpi::IRecv__TP.i.i.i.mpi::Comm.mpi::RequestR"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">IRecv</code><span class="sig-paren">(</span>T *<em>buf</em>, int <em>count</em>, int <em>from</em>, int <em>tag</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi7RequestE" title="mpi::Request">Request</a> &amp;<em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi5IRecvEP1TiiiN3mpi4CommERN3mpi7RequestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">mpi::Recv</span></code>, but the call is non-blocking.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi8SendRecvEPK1TiiiP1TiiiN3mpi4CommE">
+<span id="_CPPv3N3mpi8SendRecvEPK1TiiiP1TiiiN3mpi4CommE"></span><span id="_CPPv2N3mpi8SendRecvEPK1TiiiP1TiiiN3mpi4CommE"></span><span id="mpi::SendRecv__TCP.i.i.i.TP.i.i.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">SendRecv</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, int <em>sendCount</em>, int <em>to</em>, int <em>sendTag</em>, T *<em>recvBuf</em>, int <em>recvCount</em>, int <em>from</em>, int <em>recvTag</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi8SendRecvEPK1TiiiP1TiiiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Send <cite>sendCount</cite> entries of type <cite>T</cite> to process <cite>to</cite>, and
+simultaneously receive <cite>recvCount</cite> entries of type <cite>T</cite> from process
+<cite>from</cite>.</p>
+</dd></dl>
+
+<p class="rubric">Collective communication</p>
+<dl class="function">
+<dt id="_CPPv4N3mpi9BroadcastEP1TiiN3mpi4CommE">
+<span id="_CPPv3N3mpi9BroadcastEP1TiiN3mpi4CommE"></span><span id="_CPPv2N3mpi9BroadcastEP1TiiN3mpi4CommE"></span><span id="mpi::Broadcast__TP.i.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Broadcast</code><span class="sig-paren">(</span>T *<em>buf</em>, int <em>count</em>, int <em>root</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9BroadcastEP1TiiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The contents of <cite>buf</cite> (<cite>count</cite> entries of type <cite>T</cite>) on process <cite>root</cite>
+are duplicated in the local buffers of every process in the communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi6GatherEPK1TiP1TiiN3mpi4CommE">
+<span id="_CPPv3N3mpi6GatherEPK1TiP1TiiN3mpi4CommE"></span><span id="_CPPv2N3mpi6GatherEPK1TiP1TiiN3mpi4CommE"></span><span id="mpi::Gather__TCP.i.TP.i.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Gather</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, int <em>sendCount</em>, T *<em>recvBuf</em>, int <em>recvCount</em>, int <em>root</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi6GatherEPK1TiP1TiiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Each process sends an independent amount of data (i.e., <cite>sendCount</cite>
+entries of type <cite>T</cite>) to the process with rank <cite>root</cite>; the <cite>root</cite>
+process must specify the maximum number of entries sent from each process,
+<cite>recvCount</cite>, so that the data received from process <cite>i</cite> lies within the
+<code class="docutils literal notranslate"><span class="pre">[i*recvCount,(i+1)*recvCount)</span></code> range of the receive buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9AllGatherEPK1TiP1TiN3mpi4CommE">
+<span id="_CPPv3N3mpi9AllGatherEPK1TiP1TiN3mpi4CommE"></span><span id="_CPPv2N3mpi9AllGatherEPK1TiP1TiN3mpi4CommE"></span><span id="mpi::AllGather__TCP.i.TP.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">AllGather</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, int <em>sendCount</em>, T *<em>recvBuf</em>, int <em>recvCount</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9AllGatherEPK1TiP1TiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">mpi::Gather</span></code>, but every process receives the result.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi7ScatterEPK1TiP1TiiN3mpi4CommE">
+<span id="_CPPv3N3mpi7ScatterEPK1TiP1TiiN3mpi4CommE"></span><span id="_CPPv2N3mpi7ScatterEPK1TiP1TiiN3mpi4CommE"></span><span id="mpi::Scatter__TCP.i.TP.i.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Scatter</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, int <em>sendCount</em>, T *<em>recvBuf</em>, int <em>recvCount</em>, int <em>root</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi7ScatterEPK1TiP1TiiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The same as <code class="docutils literal notranslate"><span class="pre">mpi::Gather</span></code>, but in reverse: the root process starts with
+an array of data and sends the <code class="docutils literal notranslate"><span class="pre">[i*sendCount,(i+1)*sendCount)</span></code> entries
+to process <cite>i</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi8AllToAllEPK1TiP1TiN3mpi4CommE">
+<span id="_CPPv3N3mpi8AllToAllEPK1TiP1TiN3mpi4CommE"></span><span id="_CPPv2N3mpi8AllToAllEPK1TiP1TiN3mpi4CommE"></span><span id="mpi::AllToAll__TCP.i.TP.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">AllToAll</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, int <em>sendCount</em>, T *<em>recvBuf</em>, int <em>recvCount</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi8AllToAllEPK1TiP1TiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This can be thought of as every process simultaneously scattering data: after
+completion, the <code class="docutils literal notranslate"><span class="pre">[i*recvCount,(i+1)*recvCount)</span></code> portion of the receive
+buffer on process <cite>j</cite> will contain the <code class="docutils literal notranslate"><span class="pre">[j*sendCount,(j+1)*sendCount)</span></code>
+portion of the send buffer on process <cite>i</cite>, where <cite>sendCount</cite> refers to
+the value specified on process <cite>i</cite>, and <cite>recvCount</cite> refers to the value
+specified on process <cite>j</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi8AllToAllEPK1TPKiPKiP1TPKiPKiN3mpi4CommE">
+<span id="_CPPv3N3mpi8AllToAllEPK1TPKiPKiP1TPKiPKiN3mpi4CommE"></span><span id="_CPPv2N3mpi8AllToAllEPK1TPKiPKiP1TPKiPKiN3mpi4CommE"></span><span id="mpi::AllToAll__TCP.iCP.iCP.TP.iCP.iCP.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">AllToAll</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, <em class="property">const</em> int *<em>sendCounts</em>, <em class="property">const</em> int *<em>sendDispls</em>, T *<em>recvBuf</em>, <em class="property">const</em> int *<em>recvCounts</em>, <em class="property">const</em> int *<em>recvDispls</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi8AllToAllEPK1TPKiPKiP1TPKiPKiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as previous <code class="docutils literal notranslate"><span class="pre">mpi::AllToAll</span></code>, but the amount of data sent to and
+received from each process is allowed to vary; after completion, the
+<code class="docutils literal notranslate"><span class="pre">[recvDispls[i],recvDispls[i]+recvCounts[i])</span></code> portion of the receive buffer
+on process <cite>j</cite> will contain the
+<code class="docutils literal notranslate"><span class="pre">[sendDispls[j],sendDispls[j]+sendCounts[j])</span></code> portion of the send buffer
+on process <cite>i</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi6ReduceEPK1TP1TiN3mpi2OpEiN3mpi4CommE">
+<span id="_CPPv3N3mpi6ReduceEPK1TP1TiN3mpi2OpEiN3mpi4CommE"></span><span id="_CPPv2N3mpi6ReduceEPK1TP1TiN3mpi2OpEiN3mpi4CommE"></span><span id="mpi::Reduce__TCP.TP.i.mpi::Op.i.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">Reduce</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, T *<em>recvBuf</em>, int <em>count</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <em>op</em>, int <em>root</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi6ReduceEPK1TP1TiN3mpi2OpEiN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <cite>root</cite> process receives the result of performing</p>
+<p><span class="math notranslate nohighlight">\(S_{p-1} + (S_{n-2} + \cdots (S_2 + (S_1 + S_0)) \cdots )\)</span>,
+where <span class="math notranslate nohighlight">\(S_i\)</span> represents the send buffer of process <cite>i</cite>, and <span class="math notranslate nohighlight">\(+\)</span>
+represents the operation specified by <cite>op</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi9AllReduceEPK1TP1TiN3mpi2OpEN3mpi4CommE">
+<span id="_CPPv3N3mpi9AllReduceEPK1TP1TiN3mpi2OpEN3mpi4CommE"></span><span id="_CPPv2N3mpi9AllReduceEPK1TP1TiN3mpi2OpEN3mpi4CommE"></span><span id="mpi::AllReduce__TCP.TP.i.mpi::Op.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">AllReduce</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, T *<em>recvBuf</em>, int <em>count</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <em>op</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi9AllReduceEPK1TP1TiN3mpi2OpEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">mpi::Reduce</span></code>, but every process receives the result.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3mpi13ReduceScatterEPK1TP1TPKiN3mpi2OpEN3mpi4CommE">
+<span id="_CPPv3N3mpi13ReduceScatterEPK1TP1TPKiN3mpi2OpEN3mpi4CommE"></span><span id="_CPPv2N3mpi13ReduceScatterEPK1TP1TPKiN3mpi2OpEN3mpi4CommE"></span><span id="mpi::ReduceScatter__TCP.TP.iCP.mpi::Op.mpi::Comm"></span>void <code class="descclassname">mpi<code class="descclassname">::</code></code><code class="descname">ReduceScatter</code><span class="sig-paren">(</span><em class="property">const</em> T *<em>sendBuf</em>, T *<em>recvBuf</em>, <em class="property">const</em> int *<em>recvCounts</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi2OpE" title="mpi::Op">Op</a> <em>op</em>, mpi::<a class="reference internal" href="#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3mpi13ReduceScatterEPK1TP1TPKiN3mpi2OpEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">mpi::AllReduce</span></code>, but process 0 only receives the
+<code class="docutils literal notranslate"><span class="pre">[0,recvCounts[0])</span></code> portion of the result, process 1 only receives the
+<code class="docutils literal notranslate"><span class="pre">[recvCounts[0],recvCounts[0]+recvCounts[1])</span></code> portion of the result,
+etc.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pmrrr.html" class="btn btn-neutral float-right" title="PMRRR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lapack.html" class="btn btn-neutral float-left" title="LAPACK" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

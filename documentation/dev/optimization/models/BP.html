@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basis pursuit &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Basis pursuit denoising / Lasso" href="BPDN.html" />
+    <link rel="prev" title="Models" href="../models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../models.html">Models</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Basis pursuit</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="BPDN.html">Basis pursuit denoising / Lasso</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CP.html">Chebyshev point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DS.html">Dantzig selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="EN.html">Elastic net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LAV.html">Least Absolute Value regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LogisticRegression.html">Logistic regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ModelFit.html">Model fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NMF.html">Non-negative matrix factorizations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NNLS.html">Non-negative least squares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="RPCA.html">Robust principal component analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SparseInvCov.html">Sparse inverse covariance selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SVM.html">Support vector machines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TV.html">Total variation denoising</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../prox.html">Proximal maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../models.html">Models</a> &raquo;</li>
+        
+      <li>Basis pursuit</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/optimization/models/BP.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="basis-pursuit">
+<h1>Basis pursuit<a class="headerlink" href="#basis-pursuit" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://dx.doi.org/10.1109/ACSSC.1994.471413">Basis pursuit (BP)</a> is the
+search for a solution to <span class="math notranslate nohighlight">\(A x = b\)</span> which minimizes the one norm of
+<span class="math notranslate nohighlight">\(x\)</span>, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[\min_x \| x \|_1 \text{ such that } A x = b.\]</div>
+<p>Real instances of the problem are <a class="reference external" href="http://dx.doi.org/10.1137/S003614450037906X">expressible as a Linear Program</a> by decomposing <span class="math notranslate nohighlight">\(x\)</span> into its positive and negative parts, say <span class="math notranslate nohighlight">\(x = u - v\)</span>, and posing the problem</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\min_{u,v} \{\; 1^T \begin{pmatrix} u \\ v \end{pmatrix} \; | \; \begin{pmatrix} A &amp; -A \end{pmatrix} \begin{pmatrix} u \\ v \end{pmatrix} = b \; \wedge \; \begin{pmatrix} u \\ v \end{pmatrix} \ge 0 \; \}.\end{split}\]</div>
+<p>By default, Elemental solves this linear program via a Mehrotra
+Predictor-Corrector primal-dual Interior Point Method.</p>
+<p>Complex instances of Basis Pursuit are currently supported through
+Second-Order Cone Programs. <strong>TODO</strong>: Describe this embedding.</p>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="BP">
+<code class="descname">BP</code><span class="sig-paren">(</span><em>A</em>, <em>b</em><span class="optional">[</span>, <em>ctrl=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#BP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – dense or sparse, sequential or distributed matrix</p></li>
+<li><p><strong>b</strong> – dense right-hand side vector (with type compatible to <code class="docutils literal notranslate"><span class="pre">A</span></code>)</p></li>
+<li><p><strong>ctrl</strong> – (optional) <code class="xref py py-class docutils literal notranslate"><span class="pre">LPDirectCtrl</span></code> instance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dense solution vector (with type matching that of <code class="docutils literal notranslate"><span class="pre">b</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv42BPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="BP__Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.lp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::direct::Ctrl&lt;Real&gt;(false)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42BPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="BP__ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:R.lp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>b</em>, ElementalMatrix&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::direct::Ctrl&lt;Real&gt;(false)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42BPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="BP__SparseMatrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.lp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI4RealE" title="SparseMatrix&lt;Real&gt;">SparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::direct::Ctrl&lt;Real&gt;(true)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42BPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6direct4CtrlI4RealEE"></span><span id="BP__DistSparseMatrix:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Real:R.lp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI4RealE" title="DistSparseMatrix&lt;Real&gt;">DistSparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::direct::Ctrl&lt;Real&gt;(true)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42BPRK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="BP__Matrix:Complex:Real::CR.Matrix:Complex:Real::CR.Matrix:Complex:Real::R.socp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>x</em>, <em class="property">const</em> socp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::direct::Ctrl&lt;Real&gt;(false)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK6MatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42BPRK15ElementalMatrixI7ComplexI4RealEERK15ElementalMatrixI7ComplexI4RealEER15ElementalMatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK15ElementalMatrixI7ComplexI4RealEERK15ElementalMatrixI7ComplexI4RealEER15ElementalMatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK15ElementalMatrixI7ComplexI4RealEERK15ElementalMatrixI7ComplexI4RealEER15ElementalMatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="BP__ElementalMatrix:Complex:Real::CR.ElementalMatrix:Complex:Real::CR.ElementalMatrix:Complex:Real::R.socp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> ElementalMatrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> ElementalMatrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>b</em>, ElementalMatrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>x</em>, <em class="property">const</em> socp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::direct::Ctrl&lt;Real&gt;(false)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK15ElementalMatrixI7ComplexI4RealEERK15ElementalMatrixI7ComplexI4RealEER15ElementalMatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42BPRK12SparseMatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK12SparseMatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK12SparseMatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="BP__SparseMatrix:Complex:Real::CR.Matrix:Complex:Real::CR.Matrix:Complex:Real::R.socp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI7ComplexI4RealEE" title="SparseMatrix&lt;Complex&lt;Real&gt;&gt;">SparseMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>x</em>, <em class="property">const</em> socp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::direct::Ctrl&lt;Real&gt;(true)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK12SparseMatrixI7ComplexI4RealEERK6MatrixI7ComplexI4RealEER6MatrixI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42BPRK16DistSparseMatrixI7ComplexI4RealEERK12DistMultiVecI7ComplexI4RealEER12DistMultiVecI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE">
+<span id="_CPPv32BPRK16DistSparseMatrixI7ComplexI4RealEERK12DistMultiVecI7ComplexI4RealEER12DistMultiVecI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="_CPPv22BPRK16DistSparseMatrixI7ComplexI4RealEERK12DistMultiVecI7ComplexI4RealEER12DistMultiVecI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE"></span><span id="BP__DistSparseMatrix:Complex:Real::CR.DistMultiVec:Complex:Real::CR.DistMultiVec:Complex:Real::R.socp::direct::Ctrl:Real:CR"></span>void <code class="descname">BP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI7ComplexI4RealEE" title="DistSparseMatrix&lt;Complex&lt;Real&gt;&gt;">DistSparseMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI7ComplexI4RealEE" title="DistMultiVec&lt;Complex&lt;Real&gt;&gt;">DistMultiVec</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI7ComplexI4RealEE" title="DistMultiVec&lt;Complex&lt;Real&gt;&gt;">DistMultiVec</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>x</em>, <em class="property">const</em> socp::direct::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::direct::Ctrl&lt;Real&gt;(true)<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42BPRK16DistSparseMatrixI7ComplexI4RealEERK12DistMultiVecI7ComplexI4RealEER12DistMultiVecI7ComplexI4RealEERKN4socp6direct4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBP_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBP_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBP_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> b</em>, ElDistMatrix_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistMultiVec_s<em> b</em>, ElDistMultiVec_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBP_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBP_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBP_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> b</em>, ElDistMatrix_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistMultiVec_d<em> b</em>, ElDistMultiVec_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h3>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBP_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBP_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> b</em>, ElMatrix_c<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBP_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> b</em>, ElDistMatrix_c<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPSparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElConstMatrix_c<em> b</em>, ElMatrix_c<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElConstDistMultiVec_c<em> b</em>, ElDistMultiVec_c<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h3>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBP_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBP_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> b</em>, ElMatrix_z<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBP_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> b</em>, ElDistMatrix_z<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPSparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElConstMatrix_z<em> b</em>, ElMatrix_z<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElConstDistMultiVec_z<em> b</em>, ElDistMultiVec_z<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="expert-interface">
+<h4>Expert interface<a class="headerlink" href="#expert-interface" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Single-precision<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBPX_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPX_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em>, ElLPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> b</em>, ElDistMatrix_s<em> x</em>, ElLPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em>, ElLPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistMultiVec_s<em> b</em>, ElDistMultiVec_s<em> x</em>, ElLPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>Double-precision<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBPX_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPX_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em>, ElLPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> b</em>, ElDistMatrix_d<em> x</em>, ElLPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em>, ElLPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistMultiVec_d<em> b</em>, ElDistMultiVec_d<em> x</em>, ElLPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h3>Single-precision complex<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBPX_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPX_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> b</em>, ElMatrix_c<em> x</em>, ElSOCPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPX_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> b</em>, ElDistMatrix_c<em> x</em>, ElSOCPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXSparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElConstMatrix_c<em> b</em>, ElMatrix_c<em> x</em>, ElSOCPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElConstDistMultiVec_c<em> b</em>, ElDistMultiVec_c<em> x</em>, ElSOCPDirectCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>Double-precision complex<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElBPX_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPX_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> b</em>, ElMatrix_z<em> x</em>, ElSOCPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPX_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> b</em>, ElDistMatrix_z<em> x</em>, ElSOCPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXSparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElConstMatrix_z<em> b</em>, ElMatrix_z<em> x</em>, ElSOCPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElBPXDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElBPXDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElConstDistMultiVec_z<em> b</em>, ElDistMultiVec_z<em> x</em>, ElSOCPDirectCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElBPXDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="BPDN.html" class="btn btn-neutral float-right" title="Basis pursuit denoising / Lasso" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../models.html" class="btn btn-neutral float-left" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

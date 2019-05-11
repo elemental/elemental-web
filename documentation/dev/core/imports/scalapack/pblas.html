@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PBLAS &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ScaLAPACK proper" href="scalapack.html" />
+    <link rel="prev" title="BLACS" href="blacs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../imports.html">Imported library routines</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../blas.html">BLAS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../lapack.html">LAPACK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mpi.html">MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pmrrr.html">PMRRR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flame.html">libFLAME</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../scalapack.html">ScaLAPACK</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="blacs.html">BLACS</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">PBLAS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scalapack.html">ScaLAPACK proper</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../metis_parmetis.html">METIS and ParMETIS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../../imports.html">Imported library routines</a> &raquo;</li>
+        
+          <li><a href="../scalapack.html">ScaLAPACK</a> &raquo;</li>
+        
+      <li>PBLAS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/core/imports/scalapack/pblas.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pblas">
+<h1>PBLAS<a class="headerlink" href="#pblas" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="level-2">
+<h2>Level 2<a class="headerlink" href="#level-2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="gemv">
+<h3>Gemv<a class="headerlink" href="#gemv" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4GemvEcii1FPK1FPKiPK1FPKii1FP1FPKii">
+<span id="_CPPv3N5pblas4GemvEcii1FPK1FPKiPK1FPKii1FP1FPKii"></span><span id="_CPPv2N5pblas4GemvEcii1FPK1FPKiPK1FPKii1FP1FPKii"></span><span id="pblas::Gemv__c.i.i.F.FCP.iCP.FCP.iCP.i.F.FP.iCP.i"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Gemv</code><span class="sig-paren">(</span>char <em>trans</em>, int <em>m</em>, int <em>n</em>, F <em>alpha</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, <em class="property">const</em> F *<em>x</em>, <em class="property">const</em> int *<em>descx</em>, int <em>incx</em>, F <em>beta</em>, F *<em>y</em>, <em class="property">const</em> int *<em>descy</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4GemvEcii1FPK1FPKiPK1FPKii1FP1FPKii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="hemv">
+<h3>Hemv<a class="headerlink" href="#hemv" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4HemvEci1FPK1FPKiPK1FPKii1FP1FPKii">
+<span id="_CPPv3N5pblas4HemvEci1FPK1FPKiPK1FPKii1FP1FPKii"></span><span id="_CPPv2N5pblas4HemvEci1FPK1FPKiPK1FPKii1FP1FPKii"></span><span id="pblas::Hemv__c.i.F.FCP.iCP.FCP.iCP.i.F.FP.iCP.i"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Hemv</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F <em>alpha</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, <em class="property">const</em> F *<em>x</em>, <em class="property">const</em> int *<em>descx</em>, int <em>incx</em>, F <em>beta</em>, F *<em>y</em>, <em class="property">const</em> int *<em>descy</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4HemvEci1FPK1FPKiPK1FPKii1FP1FPKii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="symv">
+<h3>Symv<a class="headerlink" href="#symv" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4SymvEci1FPK1FPKiPK1FPKii1FP1FPKii">
+<span id="_CPPv3N5pblas4SymvEci1FPK1FPKiPK1FPKii1FP1FPKii"></span><span id="_CPPv2N5pblas4SymvEci1FPK1FPKiPK1FPKii1FP1FPKii"></span><span id="pblas::Symv__c.i.F.FCP.iCP.FCP.iCP.i.F.FP.iCP.i"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Symv</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F <em>alpha</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, <em class="property">const</em> F *<em>x</em>, <em class="property">const</em> int *<em>descx</em>, int <em>incx</em>, F <em>beta</em>, F *<em>y</em>, <em class="property">const</em> int *<em>descy</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4SymvEci1FPK1FPKiPK1FPKii1FP1FPKii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ScaLAPACK does not provide complex versions of Symv.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="trmv">
+<h3>Trmv<a class="headerlink" href="#trmv" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4TrmvEccciPK1FPKiP1FPKii">
+<span id="_CPPv3N5pblas4TrmvEccciPK1FPKiP1FPKii"></span><span id="_CPPv2N5pblas4TrmvEccciPK1FPKiP1FPKii"></span><span id="pblas::Trmv__c.c.c.i.FCP.iCP.FP.iCP.i"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Trmv</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, char <em>diag</em>, int <em>n</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, F *<em>x</em>, <em class="property">const</em> int *<em>descx</em>, int <em>incx</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4TrmvEccciPK1FPKiP1FPKii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trsv">
+<h3>Trsv<a class="headerlink" href="#trsv" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4TrsvEccciPK1FPKiP1FPKii">
+<span id="_CPPv3N5pblas4TrsvEccciPK1FPKiP1FPKii"></span><span id="_CPPv2N5pblas4TrsvEccciPK1FPKiP1FPKii"></span><span id="pblas::Trsv__c.c.c.i.FCP.iCP.FP.iCP.i"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Trsv</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, char <em>diag</em>, int <em>n</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, F *<em>x</em>, <em class="property">const</em> int *<em>descx</em>, int <em>incx</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4TrsvEccciPK1FPKiP1FPKii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="level-3">
+<h2>Level 3<a class="headerlink" href="#level-3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="gemm">
+<h3>Gemm<a class="headerlink" href="#gemm" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4GemmEcciii1FPK1FPKiPK1FPKi1FP1FPKi">
+<span id="_CPPv3N5pblas4GemmEcciii1FPK1FPKiPK1FPKi1FP1FPKi"></span><span id="_CPPv2N5pblas4GemmEcciii1FPK1FPKiPK1FPKi1FP1FPKi"></span><span id="pblas::Gemm__c.c.i.i.i.F.FCP.iCP.FCP.iCP.F.FP.iCP"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Gemm</code><span class="sig-paren">(</span>char <em>transa</em>, char <em>transb</em>, int <em>m</em>, int <em>n</em>, int <em>k</em>, F <em>alpha</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, <em class="property">const</em> F *<em>B</em>, <em class="property">const</em> int *<em>descb</em>, F <em>beta</em>, F *<em>C</em>, <em class="property">const</em> int *<em>descc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4GemmEcciii1FPK1FPKiPK1FPKi1FP1FPKi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trmm">
+<h3>Trmm<a class="headerlink" href="#trmm" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4TrmmEccccii1FPK1FPKiP1FPKi">
+<span id="_CPPv3N5pblas4TrmmEccccii1FPK1FPKiP1FPKi"></span><span id="_CPPv2N5pblas4TrmmEccccii1FPK1FPKiP1FPKi"></span><span id="pblas::Trmm__c.c.c.c.i.i.F.FCP.iCP.FP.iCP"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Trmm</code><span class="sig-paren">(</span>char <em>side</em>, char <em>uplo</em>, char <em>trans</em>, char <em>diag</em>, int <em>m</em>, int <em>n</em>, F <em>alpha</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, F *<em>B</em>, <em class="property">const</em> int *<em>descb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4TrmmEccccii1FPK1FPKiP1FPKi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trsm">
+<h3>Trsm<a class="headerlink" href="#trsm" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5pblas4TrsmEccccii1FPK1FPKiP1FPKi">
+<span id="_CPPv3N5pblas4TrsmEccccii1FPK1FPKiP1FPKi"></span><span id="_CPPv2N5pblas4TrsmEccccii1FPK1FPKiP1FPKi"></span><span id="pblas::Trsm__c.c.c.c.i.i.F.FCP.iCP.FP.iCP"></span>void <code class="descclassname">pblas<code class="descclassname">::</code></code><code class="descname">Trsm</code><span class="sig-paren">(</span>char <em>side</em>, char <em>uplo</em>, char <em>trans</em>, char <em>diag</em>, int <em>m</em>, int <em>n</em>, F <em>alpha</em>, <em class="property">const</em> F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, F *<em>B</em>, <em class="property">const</em> int *<em>descb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pblas4TrsmEccccii1FPK1FPKiP1FPKi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scalapack.html" class="btn btn-neutral float-right" title="ScaLAPACK proper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="blacs.html" class="btn btn-neutral float-left" title="BLACS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>05/05/2012: Elemental 0.74 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="03/11/2012: Elemental 0.73-p1" href="../0.73-p1/index.html" />
+    <link rel="prev" title="07/06/2012: Elemental 0.75" href="../0.75/index.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-74">
+<span id="release-0-74"></span><h1>05/05/2012: Elemental 0.74<a class="headerlink" href="#elemental-0-74" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://libelemental.org/pub/releases/elemental-0.74.tgz">elemental-0.74.tgz</a></p>
+<div class="section" id="feature-improvements">
+<h2>Feature Improvements<a class="headerlink" href="#feature-improvements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Support for generating shared libraries was added with the “-D SHARED_LIBRARIES=ON” configuration option</p></li>
+<li><p>Elemental can now generate many different types of special matrices (Hilbert, Walsh, DFT, etc.)</p></li>
+<li><p>The routine “NormalUniformSpectrum” was added which generates a complex matrix by uniformly sampling the eigenvalues from a ball in the complex plane.</p></li>
+<li><p>The routines “MakeHermitianUniform” and “MakeUniformHPD” were removed in favor of the function “HermitianUniformSpectrum”, which takes in the interval to uniformly sample the eigenvalues from.</p></li>
+<li><p>Many more examples in the examples/ folder</p></li>
+<li><p>HermitianSVD was added</p></li>
+<li><p>More functions are now supported by the Complex class</p></li>
+<li><p>A Shaheen (not just Intrepid) BG/P toolchain file now exists</p></li>
+</ul>
+</div>
+<div class="section" id="minor-improvements-and-changes">
+<h2>Minor improvements and changes<a class="headerlink" href="#minor-improvements-and-changes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The routine “SquareRoot” was changed to “HPSDSquareRoot” since versions which do not assume a Hermitian Positive Semi-Definite matrix may eventually be added</p></li>
+<li><p>The enum “Side” was changed to “LeftOrRight” for clarity</p></li>
+<li><p>The enum “Diagonal” was changed to “UnitOrNonUnit” for clarity</p></li>
+<li><p>The DistMatrix implementation was greatly simplified, and many utility functions were pulled out of the class. For instance, DistMatrix member functions “MakeIdentity”, “MakeTrapezoidal”, and “MakeZero” were all removed from the class and are now external.</p></li>
+<li><p>The documentation now uses a better style (Haiku instead of Default)</p></li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h2>Bug fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Several buffers in ApplyPackedReflectors are now explicitly initialized as zero since any entries which happened to be initialized as a NaN would propagate</p></li>
+<li><p>Fixed several bugs in the new DistMatrix constructors where the proper row and column shifts were not correctly set</p></li>
+<li><p>MPI_Comm_f2c is now used to translate Fortran communicator handles into C in the experimental F90 interface</p></li>
+<li><p>“CMAKE_REQUIRED_INCLUDE” -&gt; “CMAKE_REQUIRED_INCLUDES” in main CMakeLists.txt</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

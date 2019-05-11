@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Trdtrmm &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Trmm" href="Trmm.html" />
+    <link rel="prev" title="Syr2k" href="Syr2k.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../level1.html">Level 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../level2.html">Level 2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../level3.html">Level 3</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Gemm.html">Gemm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hemm.html">Hemm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Herk.html">Herk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Her2k.html">Her2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiShiftQuasiTrsm.html">Multi-shift QuasiTrsm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiShiftTrsm.html">Multi-shift Trsm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="QuasiTrsm.html">QuasiTrsm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Symm.html">Symm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Syrk.html">Syrk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Syr2k.html">Syr2k</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Trdtrmm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Trmm.html">Trmm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trrk.html">Trrk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trr2k.html">Trr2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trsm.html">Trsm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trtrmm.html">Trtrmm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trstrm.html">Trstrm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TwoSidedTrmm.html">Two-sided Trmm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TwoSidedTrsm.html">Two-sided Trsm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning.html">Tuning parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../blas_like.html">BLAS-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../level3.html">Level 3</a> &raquo;</li>
+        
+      <li>Trdtrmm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/blas_like/level3/Trdtrmm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="trdtrmm">
+<h1>Trdtrmm<a class="headerlink" href="#trdtrmm" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a modification of Trtrmm for LDL factorizations.</p>
+</div>
+<p>Symmetric/Hermitian triangular matrix-matrix multiply (with diagonal scaling):
+performs <span class="math notranslate nohighlight">\(L := L^T D^{-1} L\)</span>, <span class="math notranslate nohighlight">\(L := L^H D^{-1} L\)</span>,
+<span class="math notranslate nohighlight">\(U := U D^{-1} U^T\)</span>, or <span class="math notranslate nohighlight">\(U := U D^{-1} U^H\)</span>,
+depending upon the choice of the <cite>orientation</cite> and <cite>uplo</cite> parameters.
+Note that <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span> are unit-diagonal and their diagonal is
+overwritten with <span class="math notranslate nohighlight">\(D\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR6MatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR6MatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.Matrix:F:R.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.AbstractDistMatrix:F:R.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.Matrix:F:R.Matrix:F:CR.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR6MatrixI1FERK6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb">
+<span id="_CPPv37Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb"></span><span id="_CPPv27Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb"></span><span id="Trdtrmm__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:CR.b"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm12UpperOrLowerR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension to quasi-diagonal <span class="math notranslate nohighlight">\(D\)</span>, where the main diagonal is stored
+over the main diagonal of <cite>A</cite> and the subdiagonal is given by <cite>dSub</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElTrdtrmm_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmm_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmm_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmm_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmm_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElConstMatrix_s<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElConstMatrix_d<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElConstMatrix_c<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasi_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasi_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElConstMatrix_z<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasi_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> dOff</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTrdtrmmQuasiDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTrdtrmmQuasiDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> dOff</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTrdtrmmQuasiDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Trdtrmm">
+<code class="descname">Trdtrmm</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em>, <em>conjugate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Trdtrmm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="TrdtrmmQuasi">
+<code class="descname">TrdtrmmQuasi</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em>, <em>dSub</em>, <em>conjugate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#TrdtrmmQuasi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Trmm.html" class="btn btn-neutral float-right" title="Trmm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Syr2k.html" class="btn btn-neutral float-left" title="Syr2k" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

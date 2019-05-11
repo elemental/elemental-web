@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basic element manipulation and I/O &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Magnitude and sign" href="mag_and_sign.html" />
+    <link rel="prev" title="Element manipulation" href="../element.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../element.html">Element manipulation</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Basic element manipulation and I/O</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#return-the-real-imaginary-part-of-an-element">Return the real/imaginary part of an element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#set-the-real-imaginary-part-of-an-element">Set the real/imaginary part of an element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#update-the-real-imaginary-part-of-an-element">Update the real/imaginary part of an element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conjugate-an-element">Conjugate an element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-the-complex-argument">Return the complex argument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#construct-a-complex-number-from-its-polar-coordinates">Construct a complex number from its polar coordinates</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mag_and_sign.html">Magnitude and sign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exp.html">Exponentiation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="trig.html">Trigonometric functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hyper.html">Hyperbolic functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../element.html">Element manipulation</a> &raquo;</li>
+        
+      <li>Basic element manipulation and I/O</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/element/basic.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="basic-element-manipulation-and-i-o">
+<h1>Basic element manipulation and I/O<a class="headerlink" href="#basic-element-manipulation-and-i-o" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="return-the-real-imaginary-part-of-an-element">
+<h2>Return the real/imaginary part of an element<a class="headerlink" href="#return-the-real-imaginary-part-of-an-element" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv48RealPartRK1T">
+<span id="_CPPv38RealPartRK1T"></span><span id="_CPPv28RealPartRK1T"></span><span id="RealPart__TCR"></span>T <code class="descname">RealPart</code><span class="sig-paren">(</span><em class="property">const</em> T &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48RealPartRK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48ImagPartRK1T">
+<span id="_CPPv38ImagPartRK1T"></span><span id="_CPPv28ImagPartRK1T"></span><span id="ImagPart__TCR"></span>T <code class="descname">ImagPart</code><span class="sig-paren">(</span><em class="property">const</em> T &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ImagPartRK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="set-the-real-imaginary-part-of-an-element">
+<h2>Set the real/imaginary part of an element<a class="headerlink" href="#set-the-real-imaginary-part-of-an-element" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an element is non-complex, an error is thrown if an attempt is
+made to set its imaginary component.</p>
+</div>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv411SetRealPartR1TR4BaseI1TE">
+<span id="_CPPv311SetRealPartR1TR4BaseI1TE"></span><span id="_CPPv211SetRealPartR1TR4BaseI1TE"></span><span id="SetRealPart__TR.Base:T:R"></span>void <code class="descname">SetRealPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411SetRealPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411SetImagPartR1TR4BaseI1TE">
+<span id="_CPPv311SetImagPartR1TR4BaseI1TE"></span><span id="_CPPv211SetImagPartR1TR4BaseI1TE"></span><span id="SetImagPart__TR.Base:T:R"></span>void <code class="descname">SetImagPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411SetImagPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="update-the-real-imaginary-part-of-an-element">
+<h2>Update the real/imaginary part of an element<a class="headerlink" href="#update-the-real-imaginary-part-of-an-element" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an element is non-complex, an error is thrown if an attempt is
+made to update its imaginary component.</p>
+</div>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv414UpdateRealPartR1TR4BaseI1TE">
+<span id="_CPPv314UpdateRealPartR1TR4BaseI1TE"></span><span id="_CPPv214UpdateRealPartR1TR4BaseI1TE"></span><span id="UpdateRealPart__TR.Base:T:R"></span>void <code class="descname">UpdateRealPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414UpdateRealPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414UpdateImagPartR1TR4BaseI1TE">
+<span id="_CPPv314UpdateImagPartR1TR4BaseI1TE"></span><span id="_CPPv214UpdateImagPartR1TR4BaseI1TE"></span><span id="UpdateImagPart__TR.Base:T:R"></span>void <code class="descname">UpdateImagPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414UpdateImagPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="conjugate-an-element">
+<h2>Conjugate an element<a class="headerlink" href="#conjugate-an-element" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>C++ API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv44ConjRK1F">
+<span id="_CPPv34ConjRK1F"></span><span id="_CPPv24ConjRK1F"></span><span id="Conj__FCR"></span>F <code class="descname">Conj</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ConjRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h3>C API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="return-the-complex-argument">
+<h2>Return the complex argument<a class="headerlink" href="#return-the-complex-argument" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id8">
+<h3>C++ API<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43ArgRK1F">
+<span id="_CPPv33ArgRK1F"></span><span id="_CPPv23ArgRK1F"></span><span id="Arg__FCR"></span><a class="reference internal" href="../environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">Arg</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43ArgRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h3>C API<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElArg_s">
+<a class="reference internal" href="../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElArg_d">
+<a class="reference internal" href="../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElArg_c">
+<a class="reference internal" href="../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_c</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElArg_z">
+<a class="reference internal" href="../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_z</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="construct-a-complex-number-from-its-polar-coordinates">
+<h2>Construct a complex number from its polar coordinates<a class="headerlink" href="#construct-a-complex-number-from-its-polar-coordinates" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id10">
+<h3>C++ API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv45PolarRK1RRK1R">
+<span id="_CPPv35PolarRK1RRK1R"></span><span id="_CPPv25PolarRK1RRK1R"></span><span id="Polar__RCR.RCR"></span><a class="reference internal" href="../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <code class="descname">Polar</code><span class="sig-paren">(</span><em class="property">const</em> R &amp;<em>r</em>, <em class="property">const</em> R &amp;<em>theta</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarRK1RRK1R" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id11">
+<h3>C API<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElComplexFromPolar_c">
+<a class="reference internal" href="../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElComplexFromPolar_c</code><span class="sig-paren">(</span>float<em> r</em>, float<em> theta</em>, <a class="reference internal" href="../environment/complex.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElComplexFromPolar_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElComplexFromPolar_z">
+<a class="reference internal" href="../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElComplexFromPolar_z</code><span class="sig-paren">(</span>double<em> r</em>, double<em> theta</em>, <a class="reference internal" href="../environment/complex.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElComplexFromPolar_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mag_and_sign.html" class="btn btn-neutral float-right" title="Magnitude and sign" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../element.html" class="btn btn-neutral float-left" title="Element manipulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

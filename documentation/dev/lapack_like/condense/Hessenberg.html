@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Square to Hessenberg &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="General to bidiagonal" href="Bidiag.html" />
+    <link rel="prev" title="Hermitian to tridiagonal" href="HermitianTridiag.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../condense.html">Reduction to condensed form</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="HermitianTridiag.html">Hermitian to tridiagonal</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Square to Hessenberg</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reduction">Reduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applying-the-change-of-basis">Applying the change of basis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Bidiag.html">General to bidiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../condense.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../condense.html">Reduction to condensed form</a> &raquo;</li>
+        
+      <li>Square to Hessenberg</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/condense/Hessenberg.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="square-to-hessenberg">
+<h1>Square to Hessenberg<a class="headerlink" href="#square-to-hessenberg" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reduction">
+<h2>Reduction<a class="headerlink" href="#reduction" title="Permalink to this headline">¶</a></h2>
+<p>Elemental’s algorithms for reducing square matrices to Hessenberg form via
+products of Householder similarity transformations are straight-forward
+parallelizations (and extensions to the complex field) of an algorithm
+described within <a class="reference internal" href="#qvdg2006" id="id1"><span>[QvdG2006]</span></a>, which can be viewed as a modification of the
+corresponding algorithm from <a class="reference internal" href="#dsh1989" id="id2"><span>[DSH1989]</span></a> which shifts some of the work from
+level 2 to level 3 BLAS.</p>
+<div class="section" id="python-api">
+<h3>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Hessenberg">
+<code class="descname">Hessenberg</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em><span class="optional">[</span>, <em>hessOnly=False</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Hessenberg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv410Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv310Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv210Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="Hessenberg__UpperOrLower.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">Hessenberg</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410Hessenberg12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv310Hessenberg12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv210Hessenberg12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="Hessenberg__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">Hessenberg</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410Hessenberg12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the in-place reduction of the matrix A to lower-/upper-Hessenberg
+form. The vector <cite>t</cite> contains the scalings for the Householder
+reflectors, which are stored in the locations of the zeros that they
+introduced.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10hessenberg17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv3N10hessenberg17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv2N10hessenberg17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE"></span><span id="hessenberg::ExplicitCondensed__UpperOrLower.Matrix:F:R"></span>void <code class="descclassname">hessenberg<code class="descclassname">::</code></code><code class="descname">ExplicitCondensed</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10hessenberg17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10hessenberg17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FE">
+<span id="_CPPv3N10hessenberg17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="_CPPv2N10hessenberg17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="hessenberg::ExplicitCondensed__UpperOrLower.AbstractDistMatrix:F:R"></span>void <code class="descclassname">hessenberg<code class="descclassname">::</code></code><code class="descname">ExplicitCondensed</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10hessenberg17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return just the Hessenberg matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="single-precision">
+<h4>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHessenberg_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenberg_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenberg_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the in-place reduction of the matrix A to lower-/upper-Hessenberg
+form. The vector <cite>t</cite> contains the scalings for the Householder
+reflectors, which are stored in the locations of the zeros that they
+introduced.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensed_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensed_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensed_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensedDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensedDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensedDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return just the Hessenberg matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h4>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHessenberg_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenberg_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenberg_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the in-place reduction of the matrix A to lower-/upper-Hessenberg
+form. The vector <cite>t</cite> contains the scalings for the Householder
+reflectors, which are stored in the locations of the zeros that they
+introduced.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensed_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensed_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensed_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensedDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensedDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensedDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return just the Hessenberg matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h4>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHessenberg_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenberg_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenberg_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the in-place reduction of the matrix A to lower-/upper-Hessenberg
+form. The vector <cite>t</cite> contains the scalings for the Householder
+reflectors, which are stored in the locations of the zeros that they
+introduced.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensed_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensed_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensed_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensedDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensedDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensedDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return just the Hessenberg matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h4>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHessenberg_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenberg_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenberg_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the in-place reduction of the matrix A to lower-/upper-Hessenberg
+form. The vector <cite>t</cite> contains the scalings for the Householder
+reflectors, which are stored in the locations of the zeros that they
+introduced.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensed_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensed_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensed_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHessenbergExplicitCondensedDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHessenbergExplicitCondensedDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHessenbergExplicitCondensedDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return just the Hessenberg matrix.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="applying-the-change-of-basis">
+<h2>Applying the change of basis<a class="headerlink" href="#applying-the-change-of-basis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h3>Python API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ApplyQAfterHessenberg">
+<code class="descname">ApplyQAfterHessenberg</code><span class="sig-paren">(</span><em>side</em>, <em>uplo</em>, <em>orient</em>, <em>A</em>, <em>t</em>, <em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#ApplyQAfterHessenberg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C++ API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="hessenberg::ApplyQ__LeftOrRight.UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">hessenberg<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="hessenberg::ApplyQ__LeftOrRight.UpperOrLower.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">hessenberg<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>H</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10hessenberg6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h3>C API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h4>Single-precision<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenberg_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenberg_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> t</em>, ElMatrix_s<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenberg_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenbergDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenbergDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> t</em>, ElDistMatrix_s<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenbergDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id8">
+<h4>Double-precision<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenberg_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenberg_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> t</em>, ElMatrix_d<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenberg_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenbergDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenbergDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> t</em>, ElDistMatrix_d<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenbergDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h4>Single-precision complex<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenberg_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenberg_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> t</em>, ElMatrix_c<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenberg_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenbergDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenbergDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> t</em>, ElDistMatrix_c<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenbergDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id10">
+<h4>Double-precision complex<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenberg_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenberg_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> t</em>, ElMatrix_z<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenberg_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterHessenbergDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHessenbergDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> t</em>, ElDistMatrix_z<em> H</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHessenbergDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/condense/Hessenberg.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/condense/Hessenberg">Subroutine header files</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/Hessenberg.cpp">Test driver</a></p>
+<dl class="citation">
+<dt class="label" id="dsh1989"><span class="brackets"><a class="fn-backref" href="#id2">DSH1989</a></span></dt>
+<dd><p>Jack J. Dongarra, Danny C. Sorensen, and Sven J. Hammarling, <em>Block reduction of matrices to condensed forms for eigenvalue computations</em>, Journal of Computational and Applied Mathematics, Vol. 27, Issues 1–2, pp. 215–227, 1989. DOI: <a class="reference external" href="http://dx.doi.org/10.1016/0377-0427(89)90367-1">http://dx.doi.org/10.1016/0377-0427(89)90367-1</a> &lt;<a class="reference external" href="http://dx.doi.org/10.1016/0377-0427(89)90367-1">http://dx.doi.org/10.1016/0377-0427(89)90367-1</a>&gt;`__</p>
+</dd>
+<dt class="label" id="qvdg2006"><span class="brackets"><a class="fn-backref" href="#id1">QvdG2006</a></span></dt>
+<dd><p>Gregorio Quintana-Orti and Robert van de Geijn, <em>Improving the performance of reduction to Hessenberg form</em>, ACM Transactions on Mathematical Software, Vol. 32, Issue 2, pp. 180–194, 2006. DOI: <a class="reference external" href="http://dx.doi.org/10.1145/1141885.1141887">http://dx.doi.org/10.1145/1141885.1141887</a></p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Bidiag.html" class="btn btn-neutral float-right" title="General to bidiagonal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="HermitianTridiag.html" class="btn btn-neutral float-left" title="Hermitian to tridiagonal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

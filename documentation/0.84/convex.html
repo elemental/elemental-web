@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Convex optimization &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Control theory" href="control.html" />
+    <link rel="prev" title="Tuning parameters" href="lapack-like/tuning.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="convex-optimization">
+<h1>Convex optimization<a class="headerlink" href="#convex-optimization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="admm-solvers">
+<h2>ADMM solvers<a class="headerlink" href="#admm-solvers" title="Permalink to this headline">¶</a></h2>
+<p>The following functions are inspired by
+<a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm/">the MATLAB scripts</a> associated
+with the paper:</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm_distr_stats.html">S. Boyd, N. Parikh, E. Chu, B. Peleato, and J. Eckstein, Distributed optimization and
+statistical learning via the Alternating Direction Method of Multipliers</a>,</p>
+</div></blockquote>
+<p>which describes a wide variety of optimization schemes using the Alternating Direction Method of
+Multipliers (ADMM).</p>
+<div class="section" id="basispursuit">
+<h3>BasisPursuit<a class="headerlink" href="#basispursuit" title="Permalink to this headline">¶</a></h3>
+<p>Attempt to minimize <span class="math notranslate nohighlight">\(\| x \|_1\)</span> such that <span class="math notranslate nohighlight">\(Ax=b\)</span> using ADMM.</p>
+<dl class="function">
+<dt id="_CPPv412BasisPursuitRK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb">
+<span id="_CPPv312BasisPursuitRK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb"></span><span id="_CPPv212BasisPursuitRK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb"></span><span id="BasisPursuit__Matrix:F:CR.Matrix:F:CR.Matrix:F:R.Matrix:F:R.Matrix:F:R.Base:F:.Base:F:.Int.Base:F:.Base:F:.b.Base:F:.b"></span>int <code class="descname">BasisPursuit</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>b</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>x</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>z</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>u</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>rho</em> = 1, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 1e-6, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 1e-4, bool <em>usePinv</em> = true, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>pinvTol</em> = 0, bool <em>progress</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412BasisPursuitRK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412BasisPursuitRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb">
+<span id="_CPPv312BasisPursuitRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb"></span><span id="_CPPv212BasisPursuitRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb"></span><span id="BasisPursuit__DistMatrix:F:CR.DistMatrix:F:CR.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:F:R.Base:F:.Base:F:.Int.Base:F:.Base:F:.b.Base:F:.b"></span>int <code class="descname">BasisPursuit</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>b</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>x</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>z</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>u</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>rho</em> = 1, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 1e-6, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 1e-4, bool <em>usePinv</em> = true, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>pinvTol</em> = 0, bool <em>progress</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412BasisPursuitRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEb4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/BasisPursuit.hpp">Implementations on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/examples/convex/BasisPursuit.cpp">Example driver on GitHub</a></p>
+<p>These functions are inspired by <a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm/basis_pursuit/basis_pursuit.html">this basis pursuit ADMM implementation</a>.
+Elemental’s implementations use parallel (dense) linear algebra and
+allows the user to choose between either directly computing a
+(thresholded-)pseudoinverse or an LQ factorization. The return value is the
+number of performed ADMM iterations.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 21%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Input/Output</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>A</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of constraint <span class="math notranslate nohighlight">\(Ax=b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>b</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of constraint <span class="math notranslate nohighlight">\(Ax=b\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><cite>x</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (first term)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>z</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (second term)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>u</cite></p></td>
+<td><p>Output</p></td>
+<td><p>dual solution</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>rho</cite></p></td>
+<td><p>Input</p></td>
+<td><p>augmented-Lagrangian parameter</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>alpha</cite></p></td>
+<td><p>Input</p></td>
+<td><p>over-relaxation parameter
+(usually in <span class="math notranslate nohighlight">\([1,1.8]\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>maxIter</cite></p></td>
+<td><p>Input</p></td>
+<td><p>maximum number of ADMM iterations</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>absTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>absolute convergence tolerance</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>relTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>relative convergence tolerance</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>usePinv</cite></p></td>
+<td><p>Input</p></td>
+<td><p>directly compute a pseudoinverse?</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>pinvTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>the pseudoinverse inversion tolerance</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>progress</cite></p></td>
+<td><p>Input</p></td>
+<td><p>display detailed progress information?</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="linearprogram">
+<h3>LinearProgram<a class="headerlink" href="#linearprogram" title="Permalink to this headline">¶</a></h3>
+<p>Attempt to solve the linear program</p>
+<div class="math notranslate nohighlight">
+\[\text{min}\, c^T x \;\;\;\text{such that }Ax=b,\; x \ge 0.\]</div>
+<p>using ADMM.</p>
+<dl class="function">
+<dt id="_CPPv413LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv313LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv213LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="LinearProgram__Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.Real.Real.Int.Real.Real.b.b"></span>int <code class="descname">LinearProgram</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>c</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>u</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = false, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LinearProgramRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LinearProgramRK10DistMatrixI4RealERK10DistMatrixI4RealERK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI1FE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv313LinearProgramRK10DistMatrixI4RealERK10DistMatrixI4RealERK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI1FE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv213LinearProgramRK10DistMatrixI4RealERK10DistMatrixI4RealERK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI1FE4Real4Real3Int4Real4Realbb"></span><span id="LinearProgram__DistMatrix:Real:CR.DistMatrix:Real:CR.DistMatrix:Real:CR.DistMatrix:Real:R.DistMatrix:Real:R.DistMatrix:F:R.Real.Real.Int.Real.Real.b.b"></span>int <code class="descname">LinearProgram</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>c</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>u</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = true, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LinearProgramRK10DistMatrixI4RealERK10DistMatrixI4RealERK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI1FE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/LinearProgram.hpp">Implementations on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/examples/convex/LinearProgram.cpp">Example driver on GitHub</a></p>
+<p>These functions are inspired by <a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm/linprog/linprog.html">this ADMM linear program solver</a>.
+Elemental’s implementations make use of parallel (dense) linear algebra,
+a custom structured factorization, and allows the user to optionally
+directly invert the (pivoted) Schur complement to accelerate its
+application. The return value is the number of performed ADMM iterations.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 20%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Input/Output</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>A</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of constraints, <span class="math notranslate nohighlight">\(Ax=b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>b</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of constraints, <span class="math notranslate nohighlight">\(Ax=b\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><cite>c</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of the objective, <span class="math notranslate nohighlight">\(c^T x\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>x</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (first term)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>z</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (second term)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>u</cite></p></td>
+<td><p>Output</p></td>
+<td><p>dual solution</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>rho</cite></p></td>
+<td><p>Input</p></td>
+<td><p>augmented-Lagrangian parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>alpha</cite></p></td>
+<td><p>Input</p></td>
+<td><p>over-relaxation parameter
+(usually in <span class="math notranslate nohighlight">\([1,1.8]\)</span>)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>maxIter</cite></p></td>
+<td><p>Input</p></td>
+<td><p>maximum number of ADMM iterations</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>absTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>absolute convergence tolerance</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>relTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>relative convergence tolerance</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>inv</cite></p></td>
+<td><p>Input</p></td>
+<td><p>directly compute Schur-complement inverse?</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>progress</cite></p></td>
+<td><p>Input</p></td>
+<td><p>display detailed progress information?</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="quadraticprogram">
+<h3>QuadraticProgram<a class="headerlink" href="#quadraticprogram" title="Permalink to this headline">¶</a></h3>
+<p>Attempt to solve the quadratic program</p>
+<div class="math notranslate nohighlight">
+\[\text{min} \frac{1}{2} x^T P x + q^T x\;\;\;\text{such that }l_b \le x \le u_b\]</div>
+<p>using ADMM.</p>
+<dl class="function">
+<dt id="_CPPv416QuadraticProgramRK6MatrixI4RealERK6MatrixI4RealE4Real4RealR6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv316QuadraticProgramRK6MatrixI4RealERK6MatrixI4RealE4Real4RealR6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv216QuadraticProgramRK6MatrixI4RealERK6MatrixI4RealE4Real4RealR6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="QuadraticProgram__Matrix:Real:CR.Matrix:Real:CR.Real.Real.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.Real.Real.Int.Real.Real.b.b"></span>int <code class="descname">QuadraticProgram</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>P</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>q</em>, Real <em>lb</em>, Real <em>ub</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>u</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = false, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416QuadraticProgramRK6MatrixI4RealERK6MatrixI4RealE4Real4RealR6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416QuadraticProgramRK10DistMatrixI4RealERK10DistMatrixI4RealE4Real4RealR10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv316QuadraticProgramRK10DistMatrixI4RealERK10DistMatrixI4RealE4Real4RealR10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv216QuadraticProgramRK10DistMatrixI4RealERK10DistMatrixI4RealE4Real4RealR10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="QuadraticProgram__DistMatrix:Real:CR.DistMatrix:Real:CR.Real.Real.DistMatrix:Real:R.DistMatrix:Real:R.DistMatrix:Real:R.Real.Real.Int.Real.Real.b.b"></span>int <code class="descname">QuadraticProgram</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>P</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>q</em>, Real <em>lb</em>, Real <em>ub</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>u</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = true, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416QuadraticProgramRK10DistMatrixI4RealERK10DistMatrixI4RealE4Real4RealR10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/QuadraticProgram.hpp">Implementations on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/examples/convex/QuadraticProgram.cpp">Example driver on GitHub</a></p>
+<p>These functions are inspired by <a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm/quadprog/quadprog.html">this ADMM quadratic program solver</a>.
+Elemental’s implementations make use of parallel (dense) linear algebra
+and allows the user to optionally directly invert the Cholesky factor to
+improve the parallel performance of the application of its inverse.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 20%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Input/Output</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>P</cite></p></td>
+<td><p>Input</p></td>
+<td><p>SPD and part of objective,
+<span class="math notranslate nohighlight">\(\frac{1}{2}x^T P x + q^T x\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>q</cite></p></td>
+<td><p>Input</p></td>
+<td><p>part of objective</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>lb</cite></p></td>
+<td><p>Input</p></td>
+<td><p>lower-bound of constraints,
+<span class="math notranslate nohighlight">\(l_b \le x \le u_b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>ub</cite></p></td>
+<td><p>Input</p></td>
+<td><p>upper-bound of constraints,
+<span class="math notranslate nohighlight">\(l_b \le x \le u_b\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><cite>x</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (first term)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>z</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (second term)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>u</cite></p></td>
+<td><p>Output</p></td>
+<td><p>dual solution</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>rho</cite></p></td>
+<td><p>Input</p></td>
+<td><p>augmented-Lagrangian parameter</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>alpha</cite></p></td>
+<td><p>Input</p></td>
+<td><p>over-relaxation parameter
+(usually in <span class="math notranslate nohighlight">\([1,1.8]\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>maxIter</cite></p></td>
+<td><p>Input</p></td>
+<td><p>maximum number of ADMM iterations</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>absTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>absolute convergence tolerance</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>relTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>relative convergence tolerance</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>inv</cite></p></td>
+<td><p>Input</p></td>
+<td><p>compute inverse of Cholesky factor?</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>progress</cite></p></td>
+<td><p>Input</p></td>
+<td><p>display detailed progress information?</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="sparseinvcov">
+<h3>SparseInvCov<a class="headerlink" href="#sparseinvcov" title="Permalink to this headline">¶</a></h3>
+<p>Attempt to find a sparse inverse covariance matrix which generated the given
+observations by solving the program</p>
+<div class="math notranslate nohighlight">
+\[\text{min} \text{trace}(S X) - \text{log}\;\text{det}\;X + \lambda \|\text{vec}(X)\|_1\]</div>
+<p>using ADMM.</p>
+<dl class="function">
+<dt id="_CPPv412SparseInvCovRK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real4Real3Int4Real4Realb">
+<span id="_CPPv312SparseInvCovRK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real4Real3Int4Real4Realb"></span><span id="_CPPv212SparseInvCovRK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real4Real3Int4Real4Realb"></span><span id="SparseInvCov__Matrix:Real:CR.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.Real.Real.Real.Int.Real.Real.b"></span>int <code class="descname">SparseInvCov</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>D</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>Z</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>U</em>, Real <em>lambda</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412SparseInvCovRK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealE4Real4Real4Real3Int4Real4Realb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412SparseInvCovRK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real4Real3Int4Real4Realb">
+<span id="_CPPv312SparseInvCovRK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real4Real3Int4Real4Realb"></span><span id="_CPPv212SparseInvCovRK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real4Real3Int4Real4Realb"></span><span id="SparseInvCov__DistMatrix:Real:CR.DistMatrix:Real:R.DistMatrix:Real:R.DistMatrix:Real:R.Real.Real.Real.Int.Real.Real.b"></span>int <code class="descname">SparseInvCov</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>D</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>X</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>Z</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>U</em>, Real <em>lambda</em>, Real <em>rho</em> = 1., Real <em>alpha</em> = 1.2, Int <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412SparseInvCovRK10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealER10DistMatrixI4RealE4Real4Real4Real3Int4Real4Realb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/SparseInvCov.hpp">Implementations on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/examples/convex/SparseInvCov.cpp">Example driver on GitHub</a></p>
+<p>These functions are inspired by <a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm/covsel/covsel.html">this ADMM solver</a>.
+Elemental’s implementations make use of parallel (dense) linear algebra
+(including PMRRR for the symmetric tridiagonal eigensolver).</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 20%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Input/Output</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>D</cite></p></td>
+<td><p>Input</p></td>
+<td><p>Observations</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>X</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (first term)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>Z</cite></p></td>
+<td><p>Output</p></td>
+<td><p>primal solution (second term)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>U</cite></p></td>
+<td><p>Output</p></td>
+<td><p>dual solution</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>lambda</cite></p></td>
+<td><p>Input</p></td>
+<td><p>coefficient for vector-l1 penalty</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>rho</cite></p></td>
+<td><p>Input</p></td>
+<td><p>augmented-Lagrangian parameter</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>alpha</cite></p></td>
+<td><p>Input</p></td>
+<td><p>over-relaxation parameter
+(usually in <span class="math notranslate nohighlight">\([1,1.8]\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>maxIter</cite></p></td>
+<td><p>Input</p></td>
+<td><p>maximum number of ADMM iterations</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>absTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>absolute convergence tolerance</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>relTol</cite></p></td>
+<td><p>Input</p></td>
+<td><p>relative convergence tolerance</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>progress</cite></p></td>
+<td><p>Input</p></td>
+<td><p>display detailed progress information?</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<p>The following utility routines are widely-used within first-order optimization
+methods, and some, such as Singular Value soft-Thresholding (SVT), warrant
+non-trivial implementations.</p>
+<div class="section" id="clip">
+<h3>Clip<a class="headerlink" href="#clip" title="Permalink to this headline">¶</a></h3>
+<p>Force every entry of a matrix to lie within a given (half-)interval.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/Clip.hpp">Implementations on GitHub</a></p>
+<dl class="function">
+<dt id="_CPPv49LowerClipR6MatrixI4RealE4Real">
+<span id="_CPPv39LowerClipR6MatrixI4RealE4Real"></span><span id="_CPPv29LowerClipR6MatrixI4RealE4Real"></span><span id="LowerClip__Matrix:Real:R.Real"></span>void <code class="descname">LowerClip</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LowerClipR6MatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49LowerClipR10DistMatrixI4RealE4Real">
+<span id="_CPPv39LowerClipR10DistMatrixI4RealE4Real"></span><span id="_CPPv29LowerClipR10DistMatrixI4RealE4Real"></span><span id="LowerClip__DistMatrix:Real:R.Real"></span>void <code class="descname">LowerClip</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LowerClipR10DistMatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force every entry to be at least <cite>lowerBound</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49UpperClipR6MatrixI4RealE4Real">
+<span id="_CPPv39UpperClipR6MatrixI4RealE4Real"></span><span id="_CPPv29UpperClipR6MatrixI4RealE4Real"></span><span id="UpperClip__Matrix:Real:R.Real"></span>void <code class="descname">UpperClip</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>upperBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49UpperClipR6MatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49UpperClipR10DistMatrixI4RealE4Real">
+<span id="_CPPv39UpperClipR10DistMatrixI4RealE4Real"></span><span id="_CPPv29UpperClipR10DistMatrixI4RealE4Real"></span><span id="UpperClip__DistMatrix:Real:R.Real"></span>void <code class="descname">UpperClip</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>upperBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49UpperClipR10DistMatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force every entry to be at most <cite>upperBound</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ClipR6MatrixI4RealE4Real4Real">
+<span id="_CPPv34ClipR6MatrixI4RealE4Real4Real"></span><span id="_CPPv24ClipR6MatrixI4RealE4Real4Real"></span><span id="Clip__Matrix:Real:R.Real.Real"></span>void <code class="descname">Clip</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0, Real <em>upperBound</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ClipR6MatrixI4RealE4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ClipR10DistMatrixI4RealE4Real4Real">
+<span id="_CPPv34ClipR10DistMatrixI4RealE4Real4Real"></span><span id="_CPPv24ClipR10DistMatrixI4RealE4Real4Real"></span><span id="Clip__DistMatrix:Real:R.Real.Real"></span>void <code class="descname">Clip</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0, Real <em>upperBound</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ClipR10DistMatrixI4RealE4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force every entry to lie within the interval defined by <cite>lowerBound</cite> and <cite>upperBound</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="logbarrier">
+<h3>LogBarrier<a class="headerlink" href="#logbarrier" title="Permalink to this headline">¶</a></h3>
+<p>Uses a careful calculation of the log of the determinant in order to return
+the <em>log barrier</em> of a Hermitian positive-definite matrix <cite>A</cite>,
+<span class="math notranslate nohighlight">\(-\log(\mbox{det}(A))\)</span>.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/LogBarrier.hpp">Implementations on GitHub</a></p>
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerRK6MatrixI1FE">
+<span id="_CPPv310LogBarrier12UpperOrLowerRK6MatrixI1FE"></span><span id="_CPPv210LogBarrier12UpperOrLowerRK6MatrixI1FE"></span><span id="LogBarrier__UpperOrLower.Matrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerRK10DistMatrixI1FE">
+<span id="_CPPv310LogBarrier12UpperOrLowerRK10DistMatrixI1FE"></span><span id="_CPPv210LogBarrier12UpperOrLowerRK10DistMatrixI1FE"></span><span id="LogBarrier__UpperOrLower.DistMatrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerRK10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerR6MatrixI1FEb">
+<span id="_CPPv310LogBarrier12UpperOrLowerR6MatrixI1FEb"></span><span id="_CPPv210LogBarrier12UpperOrLowerR6MatrixI1FEb"></span><span id="LogBarrier__UpperOrLower.Matrix:F:R.b"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerR10DistMatrixI1FEb">
+<span id="_CPPv310LogBarrier12UpperOrLowerR10DistMatrixI1FEb"></span><span id="_CPPv210LogBarrier12UpperOrLowerR10DistMatrixI1FEb"></span><span id="LogBarrier__UpperOrLower.DistMatrix:F:R.b"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerR10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="logdetdiv">
+<h3>LogDetDiv<a class="headerlink" href="#logdetdiv" title="Permalink to this headline">¶</a></h3>
+<p>The <em>log-det divergence</em> of a pair of <span class="math notranslate nohighlight">\(n \times n\)</span> Hermitian
+positive-definite matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[D_{ld}(A,B) = \mbox{tr}(A B^{-1}) -\log(\mbox{det}(A B^{-1})) - n,\]</div>
+<p>which can be greatly simplified using the Cholesky factors of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>.
+In particular, if we set <span class="math notranslate nohighlight">\(Z = L_B^{-1} L_A\)</span>, where <span class="math notranslate nohighlight">\(A=L_A L_A^H\)</span> and
+<span class="math notranslate nohighlight">\(B=L_B L_B^H\)</span> are Cholesky factorizations, then</p>
+<div class="math notranslate nohighlight">
+\[D_{ld}(A,B) = \| Z \|_F^2 - 2 \log(\mbox{det}(Z)) - n.\]</div>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/LogDetDiv.hpp">Implementations on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/examples/convex/LogDetDiv.cpp">Example driver on GitHub</a></p>
+<dl class="function">
+<dt id="_CPPv416LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE">
+<span id="_CPPv316LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE"></span><span id="_CPPv216LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE"></span><span id="LogDetDivergence__UpperOrLower.Matrix:F:CR.Matrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogDetDivergence</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE">
+<span id="_CPPv316LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE"></span><span id="_CPPv216LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE"></span><span id="LogDetDivergence__UpperOrLower.DistMatrix:F:CR.DistMatrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogDetDivergence</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="singular-value-soft-thresholding">
+<h3>Singular-value soft-thresholding<a class="headerlink" href="#singular-value-soft-thresholding" title="Permalink to this headline">¶</a></h3>
+<p>Overwrites <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(U S_{\tau}(\Sigma) V^H\)</span>, where <span class="math notranslate nohighlight">\(U \Sigma V^H\)</span> is the singular-value decomposition of <span class="math notranslate nohighlight">\(A\)</span> upon input and <span class="math notranslate nohighlight">\(S_{\tau}\)</span> performs soft-thresholding with parameter <span class="math notranslate nohighlight">\(\tau\)</span>.
+The return value is the rank of the soft-thresholded matrix.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/SVT.hpp">Implementations on GitHub</a></p>
+<dl class="function">
+<dt id="_CPPv43SVTR6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv33SVTR6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv23SVTR6MatrixI1FE4BaseI1FEb"></span><span id="SVT__Matrix:F:R.Base:F:.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv33SVTR10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv23SVTR10DistMatrixI1FE4BaseI1FEb"></span><span id="SVT__DistMatrix:F:R.Base:F:.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs the default SVT algorithm. In the sequential case, this is currently
+<cite>svt::Normal</cite>, and, in the parallel case, it is <cite>svt::Cross</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR6MatrixI1FE4BaseI1FEib">
+<span id="_CPPv33SVTR6MatrixI1FE4BaseI1FEib"></span><span id="_CPPv23SVTR6MatrixI1FE4BaseI1FEib"></span><span id="SVT__Matrix:F:R.Base:F:.i.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>relaxedRank</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR6MatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR10DistMatrixI1FE4BaseI1FEib">
+<span id="_CPPv33SVTR10DistMatrixI1FE4BaseI1FEib"></span><span id="_CPPv23SVTR10DistMatrixI1FE4BaseI1FEib"></span><span id="SVT__DistMatrix:F:R.Base:F:.i.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>relaxedRank</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR10DistMatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a faster (for small ranks), but less accurate, algorithm given an
+upper bound on the rank of the soft-thresholded matrix.
+The current implementation preprocesses via <cite>relaxedRank</cite> steps of
+(Businger-Golub) column-pivoted QR via the routine <cite>svt::PivotedQR</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR10DistMatrixI1F1U4STARE4BaseI1FEb">
+<span id="_CPPv33SVTR10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="_CPPv23SVTR10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="SVT__DistMatrix:F.U.STAR:R.Base:F:.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span>DistMatrix&lt;F, U, <a class="reference internal" href="core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR10DistMatrixI1F1U4STARE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs an SVT algorithm designed for tall-skinny matrices.
+The current implementation is based on TSQR factorization and is
+<cite>svt::TSQR</cite>.</p>
+</dd></dl>
+
+<div class="section" id="namespace-svt">
+<h4>namespace svt<a class="headerlink" href="#namespace-svt" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N3svt6NormalER6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt6NormalER6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt6NormalER6MatrixI1FE4BaseI1FEb"></span><span id="svt::Normal__Matrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Normal</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt6NormalER6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt6NormalER10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt6NormalER10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt6NormalER10DistMatrixI1FE4BaseI1FEb"></span><span id="svt::Normal__DistMatrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Normal</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt6NormalER10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a standard SVD, soft-thresholds the singular values, and then reforms
+the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt5CrossER6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt5CrossER6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt5CrossER6MatrixI1FE4BaseI1FEb"></span><span id="svt::Cross__Matrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Cross</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt5CrossER6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt5CrossER10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt5CrossER10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt5CrossER10DistMatrixI1FE4BaseI1FEb"></span><span id="svt::Cross__DistMatrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Cross</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt5CrossER10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms the normal matrix, computes its Hermitian EVD, soft-thresholds the
+eigenvalues, and then reforms the matrix. Note that Elemental’s parallel
+Hermitian EVD is much faster than its parallel SVD; this is typically worth
+the loss of accuracy in the computed small (truncated) singular values and
+is therefore the default choice for parallel SVT.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib">
+<span id="_CPPv3N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib"></span><span id="_CPPv2N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib"></span><span id="svt::PivotedQR__Matrix:F:R.Base:F:.i.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">PivotedQR</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>numStepsQR</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib">
+<span id="_CPPv3N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib"></span><span id="_CPPv2N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib"></span><span id="svt::PivotedQR__DistMatrix:F:R.Base:F:.i.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">PivotedQR</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>numStepsQR</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes an approximate SVT by first approximating A as the rank-<cite>numSteps</cite>
+approximation produced by <cite>numSteps</cite> iterations of column-pivoted QR.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb">
+<span id="_CPPv3N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="_CPPv2N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="svt::TSQR__DistMatrix:F.U.STAR:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">TSQR</code><span class="sig-paren">(</span>DistMatrix&lt;F, U, <a class="reference internal" href="core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Since the majority of the work in a tall-skinny SVT will be in the initial
+QR factorization, this algorithm runs a TSQR factorization and then
+computes the SVT of the small R factor using a single process.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="soft-thresholding">
+<h3>Soft-thresholding<a class="headerlink" href="#soft-thresholding" title="Permalink to this headline">¶</a></h3>
+<p>Overwrites each entry of <span class="math notranslate nohighlight">\(A\)</span> with its soft-thresholded value.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/convex/SoftThreshold.hpp">Implementations on GitHub</a></p>
+<dl class="function">
+<dt id="_CPPv413SoftThresholdR6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv313SoftThresholdR6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv213SoftThresholdR6MatrixI1FE4BaseI1FEb"></span><span id="SoftThreshold__Matrix:F:R.Base:F:.b"></span>void <code class="descname">SoftThreshold</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SoftThresholdR6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413SoftThresholdR10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv313SoftThresholdR10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv213SoftThresholdR10DistMatrixI1FE4BaseI1FEb"></span><span id="SoftThreshold__DistMatrix:F:R.Base:F:.b"></span>void <code class="descname">SoftThreshold</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SoftThresholdR10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

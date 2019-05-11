@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hermitian Positive-Definite &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Hermitian functions" href="../Hermitian.html" />
+    <link rel="prev" title="Symmetric/Hermitian" href="symmetric.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../funcs.html">Matrix functions</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../Inverse.html">Direct inversion</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="general.html">General</a></li>
+<li class="toctree-l4"><a class="reference internal" href="triangular.html">Triangular</a></li>
+<li class="toctree-l4"><a class="reference internal" href="symmetric.html">Symmetric/Hermitian</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Hermitian Positive-Definite</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Hermitian.html">Hermitian functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Pseudoinverse.html">Pseudoinverse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SquareRoot.html">Square root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Sign.html">Sign</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../../funcs.html">Matrix functions</a> &raquo;</li>
+        
+          <li><a href="../Inverse.html">Direct inversion</a> &raquo;</li>
+        
+      <li>Hermitian Positive-Definite</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/lapack_like/funcs/Inverse/HPD.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hermitian-positive-definite">
+<h1>Hermitian Positive-Definite<a class="headerlink" href="#hermitian-positive-definite" title="Permalink to this headline">¶</a></h1>
+<p>This routine uses a custom algorithm for computing the inverse of a
+Hermitian positive-definite matrix <span class="math notranslate nohighlight">\(A\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[A^{-1} = (L L^H)^{-1} = L^{-H} L^{-1},\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is the lower Cholesky factor of <span class="math notranslate nohighlight">\(A\)</span> (the upper Cholesky
+factor is computed in the case of upper-triangular storage). Rather than
+performing Cholesky factorization, triangular inversion, and then the Hermitian
+triangular outer product in sequence, this routine makes use of the single-sweep
+algorithm described in <a class="reference internal" href="#bgvdg2008" id="id1"><span>[BGvdG2008]</span></a> (in particular, the variant 2 algorithm
+from Fig. 9).</p>
+<p>If the matrix is found to not be HPD, then a <a class="reference internal" href="../../../core/environment/error.html#_CPPv421NonHPDMatrixException" title="NonHPDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPDMatrixException</span></code></a>
+is thrown.</p>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="HPDInverse">
+<code class="descname">HPDInverse</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#HPDInverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv410HPDInverse12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv310HPDInverse12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv210HPDInverse12UpperOrLowerR6MatrixI1FE"></span><span id="HPDInverse__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HPDInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410HPDInverse12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410HPDInverse12UpperOrLowerR18AbstractDistMatrixI1FE">
+<span id="_CPPv310HPDInverse12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="_CPPv210HPDInverse12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="HPDInverse__UpperOrLower.AbstractDistMatrix:F:R"></span>void <code class="descname">HPDInverse</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410HPDInverse12UpperOrLowerR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id2">
+<h2>C API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHPDInverse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverse_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDInverseDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverseDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverseDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHPDInverse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverse_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDInverseDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverseDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverseDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h3>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHPDInverse_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDInverseDist_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverseDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverseDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h3>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHPDInverse_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDInverseDist_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDInverseDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDInverseDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="citation">
+<dt class="label" id="bgvdg2008"><span class="brackets"><a class="fn-backref" href="#id1">BGvdG2008</a></span></dt>
+<dd><p><a class="reference external" href="http://dl.acm.org/citation.cfm?doid=1377603.1377606">Paolo Bientinesi, Brian Gunter, and Robert A. van de Geijn, *Families of algorithms related to the inversion of a Symmetric Positive Definite matrix*, ACM Transactions on Mathematical Software, Vol. 35, Issue 1, Article No. 3, 2008.</a></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Hermitian.html" class="btn btn-neutral float-right" title="Hermitian functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="symmetric.html" class="btn btn-neutral float-left" title="Symmetric/Hermitian" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

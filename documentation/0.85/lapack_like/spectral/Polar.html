@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Polar decomposition &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Schur decomposition" href="Schur.html" />
+    <link rel="prev" title="SVD" href="SVD.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="polar-decomposition">
+<h1>Polar decomposition<a class="headerlink" href="#polar-decomposition" title="Permalink to this headline">¶</a></h1>
+<p>Every matrix <span class="math notranslate nohighlight">\(A\)</span> can be written as <span class="math notranslate nohighlight">\(A=QP\)</span>, where <span class="math notranslate nohighlight">\(Q\)</span> is
+unitary and <span class="math notranslate nohighlight">\(P\)</span> is Hermitian and positive semi-definite. This is known as
+the <em>polar decomposition</em> of <span class="math notranslate nohighlight">\(A\)</span> and can be constructed as
+<span class="math notranslate nohighlight">\(Q := U V^H\)</span> and <span class="math notranslate nohighlight">\(P := V \Sigma V^H\)</span>, where
+<span class="math notranslate nohighlight">\(A = U \Sigma V^H\)</span> is the SVD of <span class="math notranslate nohighlight">\(A\)</span>. Alternatively, it can be
+computed through (a dynamically-weighted) Halley iteration.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/Polar.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/Polar/SVD.hpp">SVD approach</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/Polar/QDWH.hpp">QWDH approach</a></p>
+<dl class="function">
+<dt id="_CPPv45PolarR6MatrixI1FERK9PolarCtrl">
+<span id="_CPPv35PolarR6MatrixI1FERK9PolarCtrl"></span><span id="_CPPv25PolarR6MatrixI1FERK9PolarCtrl"></span><span id="Polar__Matrix:F:R.PolarCtrlCR"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR6MatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PolarR18AbstractDistMatrixI1FERK9PolarCtrl">
+<span id="_CPPv35PolarR18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="_CPPv25PolarR18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="Polar__AbstractDistMatrix:F:R.PolarCtrlCR"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR18AbstractDistMatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PolarR6MatrixI1FER6MatrixI1FERK9PolarCtrl">
+<span id="_CPPv35PolarR6MatrixI1FER6MatrixI1FERK9PolarCtrl"></span><span id="_CPPv25PolarR6MatrixI1FER6MatrixI1FERK9PolarCtrl"></span><span id="Polar__Matrix:F:R.Matrix:F:R.PolarCtrlCR"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR6MatrixI1FER6MatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PolarR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl">
+<span id="_CPPv35PolarR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="_CPPv25PolarR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="Polar__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.PolarCtrlCR"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>P</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the polar decomposition of <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(A=QP\)</span>, returning
+<span class="math notranslate nohighlight">\(Q\)</span> within <cite>A</cite> and <span class="math notranslate nohighlight">\(P\)</span> within <cite>P</cite>. The current implementation
+first computes the SVD.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FERK9PolarCtrl">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR6MatrixI1FERK9PolarCtrl"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR6MatrixI1FERK9PolarCtrl"></span><span id="HermitianPolar__UpperOrLower.Matrix:F:R.PolarCtrlCR"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FERK9PolarCtrl">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="HermitianPolar__UpperOrLower.AbstractDistMatrix:F:R.PolarCtrlCR"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FERK9PolarCtrl">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FERK9PolarCtrl"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FERK9PolarCtrl"></span><span id="HermitianPolar__UpperOrLower.Matrix:F:R.Matrix:F:R.PolarCtrlCR"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl"></span><span id="HermitianPolar__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.PolarCtrlCR"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>P</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49PolarCtrl" title="PolarCtrl">PolarCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK9PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the polar decomposition through a Hermitian EVD. Since this is
+equivalent to a Hermitian sign decomposition (if <span class="math notranslate nohighlight">\(\text{sgn}(0)\)</span> is
+set to 1), these routines are equivalent to <cite>HermitianSign</cite>.</p>
+</dd></dl>
+
+<div class="section" id="algorithmic-options">
+<h2>Algorithmic options<a class="headerlink" href="#algorithmic-options" title="Permalink to this headline">¶</a></h2>
+<p>By default, an SVD-based algorithm is used, but an approach based upon
+a QR-based Dynamically Weighted Halley (QDWH) iteration can be manually chosen.</p>
+<dl class="type">
+<dt id="_CPPv49PolarCtrl">
+<span id="_CPPv39PolarCtrl"></span><span id="_CPPv29PolarCtrl"></span><span id="PolarCtrl"></span><em class="property">type </em><code class="descname">PolarCtrl</code><a class="headerlink" href="#_CPPv49PolarCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N9PolarCtrl4qdwhE">
+<span id="_CPPv3N9PolarCtrl4qdwhE"></span><span id="_CPPv2N9PolarCtrl4qdwhE"></span><span id="PolarCtrl::qdwh__b"></span>bool <code class="descname">qdwh</code><a class="headerlink" href="#_CPPv4N9PolarCtrl4qdwhE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether or not to use QDWH (the default is no)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9PolarCtrl6colPivE">
+<span id="_CPPv3N9PolarCtrl6colPivE"></span><span id="_CPPv2N9PolarCtrl6colPivE"></span><span id="PolarCtrl::colPiv__b"></span>bool <code class="descname">colPiv</code><a class="headerlink" href="#_CPPv4N9PolarCtrl6colPivE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether or not QDWH should use column pivoting in its QR factorizations
+(the default is no)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9PolarCtrl6maxItsE">
+<span id="_CPPv3N9PolarCtrl6maxItsE"></span><span id="_CPPv2N9PolarCtrl6maxItsE"></span><span id="PolarCtrl::maxIts__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxIts</code><a class="headerlink" href="#_CPPv4N9PolarCtrl6maxItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum number of iterations of QDWH (the default is 20, but typically
+no more than 6 or 7 will be performed)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9PolarCtrl6numItsE">
+<span id="_CPPv3N9PolarCtrl6numItsE"></span><span id="_CPPv2N9PolarCtrl6numItsE"></span><span id="PolarCtrl::numIts__Int"></span><em class="property">mutable</em> <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">numIts</code><a class="headerlink" href="#_CPPv4N9PolarCtrl6numItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of iterations of QDWH performed in the last call</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

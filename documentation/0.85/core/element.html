@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Element manipulation &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sequential matrices" href="matrix.html" />
+    <link rel="prev" title="Environment" href="environment.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="element-manipulation">
+<h1>Element manipulation<a class="headerlink" href="#element-manipulation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-element-manipulation-and-i-o">
+<h2>Basic element manipulation and I/O<a class="headerlink" href="#basic-element-manipulation-and-i-o" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="return-the-real-imaginary-part-of-an-element">
+<h3>Return the real/imaginary part of an element<a class="headerlink" href="#return-the-real-imaginary-part-of-an-element" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="c-api">
+<h4>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv48RealPartRK1T">
+<span id="_CPPv38RealPartRK1T"></span><span id="_CPPv28RealPartRK1T"></span><span id="RealPart__TCR"></span>T <code class="descname">RealPart</code><span class="sig-paren">(</span><em class="property">const</em> T &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48RealPartRK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48ImagPartRK1T">
+<span id="_CPPv38ImagPartRK1T"></span><span id="_CPPv28ImagPartRK1T"></span><span id="ImagPart__TCR"></span>T <code class="descname">ImagPart</code><span class="sig-paren">(</span><em class="property">const</em> T &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ImagPartRK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h4>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="set-the-real-imaginary-part-of-an-element">
+<h3>Set the real/imaginary part of an element<a class="headerlink" href="#set-the-real-imaginary-part-of-an-element" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an element is non-complex, an error is thrown if an attempt is
+made to set its imaginary component.</p>
+</div>
+<div class="section" id="id2">
+<h4>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv411SetRealPartR1TR4BaseI1TE">
+<span id="_CPPv311SetRealPartR1TR4BaseI1TE"></span><span id="_CPPv211SetRealPartR1TR4BaseI1TE"></span><span id="SetRealPart__TR.Base:T:R"></span>void <code class="descname">SetRealPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411SetRealPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411SetImagPartR1TR4BaseI1TE">
+<span id="_CPPv311SetImagPartR1TR4BaseI1TE"></span><span id="_CPPv211SetImagPartR1TR4BaseI1TE"></span><span id="SetImagPart__TR.Base:T:R"></span>void <code class="descname">SetImagPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411SetImagPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="update-the-real-imaginary-part-of-an-element">
+<h3>Update the real/imaginary part of an element<a class="headerlink" href="#update-the-real-imaginary-part-of-an-element" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an element is non-complex, an error is thrown if an attempt is
+made to update its imaginary component.</p>
+</div>
+<div class="section" id="id4">
+<h4>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv414UpdateRealPartR1TR4BaseI1TE">
+<span id="_CPPv314UpdateRealPartR1TR4BaseI1TE"></span><span id="_CPPv214UpdateRealPartR1TR4BaseI1TE"></span><span id="UpdateRealPart__TR.Base:T:R"></span>void <code class="descname">UpdateRealPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414UpdateRealPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414UpdateImagPartR1TR4BaseI1TE">
+<span id="_CPPv314UpdateImagPartR1TR4BaseI1TE"></span><span id="_CPPv214UpdateImagPartR1TR4BaseI1TE"></span><span id="UpdateImagPart__TR.Base:T:R"></span>void <code class="descname">UpdateImagPart</code><span class="sig-paren">(</span>T &amp;<em>alpha</em>, Base&lt;T&gt; &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414UpdateImagPartR1TR4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h4>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="conjugate-an-element">
+<h3>Conjugate an element<a class="headerlink" href="#conjugate-an-element" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h4>C++ API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv44ConjRK1F">
+<span id="_CPPv34ConjRK1F"></span><span id="_CPPv24ConjRK1F"></span><span id="Conj__FCR"></span>F <code class="descname">Conj</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ConjRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h4>C API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since C does not support generic programming, it is best to directly
+manipulate the structure for complex data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="return-the-complex-argument">
+<h3>Return the complex argument<a class="headerlink" href="#return-the-complex-argument" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>C++ API<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv43ArgRK1F">
+<span id="_CPPv33ArgRK1F"></span><span id="_CPPv23ArgRK1F"></span><span id="Arg__FCR"></span><a class="reference internal" href="environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">Arg</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43ArgRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h4>C API<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElArg_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElArg_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElArg_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElArg_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElArg_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElArg_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="construct-a-complex-number-from-its-polar-coordinates">
+<h3>Construct a complex number from its polar coordinates<a class="headerlink" href="#construct-a-complex-number-from-its-polar-coordinates" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h4>C++ API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv45PolarRK1RRK1R">
+<span id="_CPPv35PolarRK1RRK1R"></span><span id="_CPPv25PolarRK1RRK1R"></span><span id="Polar__RCR.RCR"></span><a class="reference internal" href="environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <code class="descname">Polar</code><span class="sig-paren">(</span><em class="property">const</em> R &amp;<em>r</em>, <em class="property">const</em> R &amp;<em>theta</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarRK1RRK1R" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id11">
+<h4>C API<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElComplexFromPolar_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElComplexFromPolar_c</code><span class="sig-paren">(</span>float<em> r</em>, float<em> theta</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElComplexFromPolar_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElComplexFromPolar_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElComplexFromPolar_z</code><span class="sig-paren">(</span>double<em> r</em>, double<em> theta</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElComplexFromPolar_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="magnitude-and-sign">
+<h2>Magnitude and sign<a class="headerlink" href="#magnitude-and-sign" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id12">
+<h3>C++ API<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43AbsRK1F">
+<span id="_CPPv33AbsRK1F"></span><span id="_CPPv23AbsRK1F"></span><span id="Abs__FCR"></span><a class="reference internal" href="environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">Abs</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43AbsRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Use the naive algorithm for computing the absolute value
+(note that unnecessary overflow may occur for complex values, please see <a class="reference internal" href="#_CPPv47SafeAbsRK7ComplexI4RealE" title="SafeAbs"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SafeAbs()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47SafeAbsRK7ComplexI4RealE">
+<span id="_CPPv37SafeAbsRK7ComplexI4RealE"></span><span id="_CPPv27SafeAbsRK7ComplexI4RealE"></span><span id="SafeAbs__Complex:Real:CR"></span>Real <code class="descname">SafeAbs</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47SafeAbsRK7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Carefully avoid overflow via <code class="docutils literal notranslate"><span class="pre">slapy2</span></code> or <code class="docutils literal notranslate"><span class="pre">dlapy2</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47FastAbsRK7ComplexI4RealE">
+<span id="_CPPv37FastAbsRK7ComplexI4RealE"></span><span id="_CPPv27FastAbsRK7ComplexI4RealE"></span><span id="FastAbs__Complex:Real:CR"></span>Real <code class="descname">FastAbs</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47FastAbsRK7ComplexI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the sum of the absolute values of the real and imaginary components</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SgnRK4Realb">
+<span id="_CPPv33SgnRK4Realb"></span><span id="_CPPv23SgnRK4Realb"></span><span id="Sgn__RealCR.b"></span>Real <code class="descname">Sgn</code><span class="sig-paren">(</span><em class="property">const</em> Real &amp;<em>alpha</em>, bool <em>symmetric</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SgnRK4Realb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <span class="math notranslate nohighlight">\(\alpha \neq 0\)</span>, <span class="math notranslate nohighlight">\(\alpha/|\alpha|\)</span> is returned.
+If <cite>symmetric</cite> is true, <span class="math notranslate nohighlight">\(\text{sgn}(0)=0\)</span>, otherwise,
+<span class="math notranslate nohighlight">\(\text{sgn}(0)=1\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id13">
+<h3>C API<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElAbs_i">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAbs_i</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAbs_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAbs_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAbs_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAbs_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAbs_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAbs_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAbs_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAbs_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAbs_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAbs_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAbs_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAbs_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAbs_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeAbs_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeAbs_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeAbs_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeAbs_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeAbs_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeAbs_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFastAbs_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFastAbs_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFastAbs_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFastAbs_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFastAbs_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFastAbs_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSgn_i">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSgn_i</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, bool<em> symmetric</em>, <a class="reference internal" href="environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSgn_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSgn_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSgn_s</code><span class="sig-paren">(</span>float<em> alpha</em>, bool<em> symmetric</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSgn_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSgn_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSgn_d</code><span class="sig-paren">(</span>double<em> alpha</em>, bool<em> symmetric</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSgn_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="exponentiation">
+<h2>Exponentiation<a class="headerlink" href="#exponentiation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id14">
+<h3>C++ API<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43ExpRK1F">
+<span id="_CPPv33ExpRK1F"></span><span id="_CPPv23ExpRK1F"></span><span id="Exp__FCR"></span>F <code class="descname">Exp</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43ExpRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the exponential of a scalar</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43PowRK1FRK1T">
+<span id="_CPPv33PowRK1FRK1T"></span><span id="_CPPv23PowRK1FRK1T"></span><span id="Pow__FCR.TCR"></span>F <code class="descname">Pow</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em>, <em class="property">const</em> T &amp;<em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43PowRK1FRK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <span class="math notranslate nohighlight">\(\alpha^\beta\)</span> for scalar <span class="math notranslate nohighlight">\(\alpha\)</span> and scalar or integer <span class="math notranslate nohighlight">\(\beta\)</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43LogRK1F">
+<span id="_CPPv33LogRK1F"></span><span id="_CPPv23LogRK1F"></span><span id="Log__FCR"></span>F <code class="descname">Log</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LogRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the natural logarithm of a scalar</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SqrtRK1F">
+<span id="_CPPv34SqrtRK1F"></span><span id="_CPPv24SqrtRK1F"></span><span id="Sqrt__FCR"></span>F <code class="descname">Sqrt</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SqrtRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the square-root of a scalar</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id15">
+<h3>C API<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElExp_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElExp_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElExp_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElExp_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElExp_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElExp_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElExp_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElExp_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElExp_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElExp_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElExp_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElExp_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPow_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPow_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float<em> beta</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPow_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPow_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPow_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double<em> beta</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPow_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPow_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPow_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> beta</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPow_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPow_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPow_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> beta</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPow_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLog_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLog_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLog_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLog_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLog_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLog_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLog_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLog_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLog_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLog_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLog_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLog_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSqrt_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSqrt_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSqrt_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSqrt_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSqrt_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSqrt_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSqrt_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSqrt_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSqrt_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSqrt_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSqrt_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSqrt_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="trigonometric-functions">
+<h2>Trigonometric functions<a class="headerlink" href="#trigonometric-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id16">
+<h3>C++ API<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43CosRK1F">
+<span id="_CPPv33CosRK1F"></span><span id="_CPPv23CosRK1F"></span><span id="Cos__FCR"></span>F <code class="descname">Cos</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43CosRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SinRK1F">
+<span id="_CPPv33SinRK1F"></span><span id="_CPPv23SinRK1F"></span><span id="Sin__FCR"></span>F <code class="descname">Sin</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SinRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43TanRK1F">
+<span id="_CPPv33TanRK1F"></span><span id="_CPPv23TanRK1F"></span><span id="Tan__FCR"></span>F <code class="descname">Tan</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43TanRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Trigonometric functions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44AcosRK1F">
+<span id="_CPPv34AcosRK1F"></span><span id="_CPPv24AcosRK1F"></span><span id="Acos__FCR"></span><code class="descname">Acos</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44AcosRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44AsinRK1F">
+<span id="_CPPv34AsinRK1F"></span><span id="_CPPv24AsinRK1F"></span><span id="Asin__FCR"></span><code class="descname">Asin</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44AsinRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44AtanRK1F">
+<span id="_CPPv34AtanRK1F"></span><span id="_CPPv24AtanRK1F"></span><span id="Atan__FCR"></span><code class="descname">Atan</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44AtanRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inverse trigonometric functions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45Atan2RK4RealRK4Real">
+<span id="_CPPv35Atan2RK4RealRK4Real"></span><span id="_CPPv25Atan2RK4RealRK4Real"></span><span id="Atan2__RealCR.RealCR"></span>Real <code class="descname">Atan2</code><span class="sig-paren">(</span><em class="property">const</em> Real &amp;<em>y</em>, <em class="property">const</em> Real &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Atan2RK4RealRK4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the inverse tangent of <span class="math notranslate nohighlight">\(x+iy\)</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="id17">
+<h3>C API<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCos_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCos_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCos_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCos_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCos_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCos_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCos_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCos_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCos_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCos_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCos_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCos_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSin_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSin_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSin_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSin_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSin_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSin_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSin_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSin_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSin_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSin_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSin_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSin_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTan_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTan_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTan_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTan_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTan_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTan_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTan_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTan_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTan_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTan_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTan_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTan_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigonometric functions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcos_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcos_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcos_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcos_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcos_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcos_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcos_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcos_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcos_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcos_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcos_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcos_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsin_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsin_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsin_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsin_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsin_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsin_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsin_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsin_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsin_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsin_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsin_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsin_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtan_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtan_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtan_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtan_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtan_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtan_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtan_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtan_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtan_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtan_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtan_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtan_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse trigonometric functions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtan2_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtan2_s</code><span class="sig-paren">(</span>float<em> y</em>, float<em> x</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtan2_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtan2_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtan2_d</code><span class="sig-paren">(</span>double<em> y</em>, double<em> x</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtan2_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the inverse tangent of the point <span class="math notranslate nohighlight">\(x + i y\)</span></p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="hyperbolic-functions">
+<h2>Hyperbolic functions<a class="headerlink" href="#hyperbolic-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id18">
+<h3>C++ API<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv44CoshRK1F">
+<span id="_CPPv34CoshRK1F"></span><span id="_CPPv24CoshRK1F"></span><span id="Cosh__FCR"></span>F <code class="descname">Cosh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44CoshRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SinhRK1F">
+<span id="_CPPv34SinhRK1F"></span><span id="_CPPv24SinhRK1F"></span><span id="Sinh__FCR"></span>F <code class="descname">Sinh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SinhRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44TanhRK1F">
+<span id="_CPPv34TanhRK1F"></span><span id="_CPPv24TanhRK1F"></span><span id="Tanh__FCR"></span>F <code class="descname">Tanh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44TanhRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Hyperbolic functions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45AcoshRK1F">
+<span id="_CPPv35AcoshRK1F"></span><span id="_CPPv25AcoshRK1F"></span><span id="Acosh__FCR"></span><code class="descname">Acosh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45AcoshRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45AsinhRK1F">
+<span id="_CPPv35AsinhRK1F"></span><span id="_CPPv25AsinhRK1F"></span><span id="Asinh__FCR"></span><code class="descname">Asinh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45AsinhRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45AtanhRK1F">
+<span id="_CPPv35AtanhRK1F"></span><span id="_CPPv25AtanhRK1F"></span><span id="Atanh__FCR"></span><code class="descname">Atanh</code><span class="sig-paren">(</span><em class="property">const</em> F &amp;<em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45AtanhRK1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inverse hyperbolic functions</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id19">
+<h3>C API<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCosh_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCosh_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCosh_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCosh_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCosh_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCosh_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCosh_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCosh_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCosh_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCosh_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCosh_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCosh_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSinh_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSinh_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSinh_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSinh_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSinh_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSinh_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSinh_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSinh_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSinh_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSinh_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSinh_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSinh_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTanh_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTanh_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTanh_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTanh_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTanh_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTanh_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTanh_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTanh_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTanh_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTanh_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTanh_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTanh_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hyperbolic functions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcosh_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcosh_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcosh_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcosh_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcosh_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcosh_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcosh_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcosh_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcosh_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAcosh_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAcosh_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAcosh_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsinh_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsinh_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsinh_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsinh_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsinh_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsinh_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsinh_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsinh_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsinh_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAsinh_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAsinh_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAsinh_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtanh_s">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtanh_s</code><span class="sig-paren">(</span>float<em> alpha</em>, float*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtanh_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtanh_d">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtanh_d</code><span class="sig-paren">(</span>double<em> alpha</em>, double*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtanh_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtanh_c">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtanh_c</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtanh_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAtanh_z">
+<a class="reference internal" href="environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAtanh_z</code><span class="sig-paren">(</span><a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, <a class="reference internal" href="environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAtanh_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse hyperbolic functions</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

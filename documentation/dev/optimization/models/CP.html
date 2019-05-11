@@ -1,0 +1,400 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Chebyshev point &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Dantzig selector" href="DS.html" />
+    <link rel="prev" title="Basis pursuit denoising / Lasso" href="BPDN.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../models.html">Models</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="BP.html">Basis pursuit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BPDN.html">Basis pursuit denoising / Lasso</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Chebyshev point</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="DS.html">Dantzig selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="EN.html">Elastic net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LAV.html">Least Absolute Value regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LogisticRegression.html">Logistic regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ModelFit.html">Model fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NMF.html">Non-negative matrix factorizations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NNLS.html">Non-negative least squares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="RPCA.html">Robust principal component analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SparseInvCov.html">Sparse inverse covariance selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SVM.html">Support vector machines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TV.html">Total variation denoising</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../prox.html">Proximal maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../models.html">Models</a> &raquo;</li>
+        
+      <li>Chebyshev point</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/optimization/models/CP.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="chebyshev-point">
+<h1>Chebyshev point<a class="headerlink" href="#chebyshev-point" title="Permalink to this headline">¶</a></h1>
+<p>A Chebyshev point (CP) minimizes <span class="math notranslate nohighlight">\(b - A x\)</span> in a pointwise sense, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[\min_x \| A x - b \|_{\infty},\]</div>
+<p>and is known to be the solution of a linear program when <span class="math notranslate nohighlight">\(A\)</span> and
+<span class="math notranslate nohighlight">\(b\)</span> are real. In particular, we may solve</p>
+<div class="math notranslate nohighlight">
+\[\min_{x,t} \{\; t \; | \; -t \le A x - b \le t \; \},\]</div>
+<p>which, in affine conic form, becomes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\min_{x,t} \{\; \begin{pmatrix} 0 \\ 1 \end{pmatrix}^T \begin{pmatrix} x \\ t \end{pmatrix} \; | \; \begin{pmatrix} A &amp; -1 \\ -A &amp; -1 \end{pmatrix} \begin{pmatrix} x \\ t \end{pmatrix} \le \begin{pmatrix} b \\ -b \end{pmatrix} \; \}.\end{split}\]</div>
+<p>By default, Elemental solves this linear program via a Mehrotra
+Predictor-Corrector primal-dual Interior Point Method.</p>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="CP">
+<code class="descname">CP</code><span class="sig-paren">(</span><em>A</em>, <em>b</em><span class="optional">[</span>, <em>ctrl=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#CP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – dense or sparse, sequential or distributed matrix</p></li>
+<li><p><strong>b</strong> – dense right-hand side vector (with type compatible to <code class="docutils literal notranslate"><span class="pre">A</span></code>)</p></li>
+<li><p><strong>ctrl</strong> – (optional) <code class="xref py py-class docutils literal notranslate"><span class="pre">LPAffineCtrl</span></code> instance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dense solution vector (with type matching that of <code class="docutils literal notranslate"><span class="pre">b</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv42CPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32CPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22CPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="CP__Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">CP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42CPRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42CPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32CPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22CPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="CP__ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">CP</code><span class="sig-paren">(</span><em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>b</em>, ElementalMatrix&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42CPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42CPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32CPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22CPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="CP__SparseMatrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">CP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI4RealE" title="SparseMatrix&lt;Real&gt;">SparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42CPRK12SparseMatrixI4RealERK6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42CPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32CPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22CPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="CP__DistSparseMatrix:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">CP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI4RealE" title="DistSparseMatrix&lt;Real&gt;">DistSparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42CPRK16DistSparseMatrixI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCP_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCP_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCP_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> b</em>, ElDistMatrix_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistMultiVec_s<em> b</em>, ElDistMultiVec_s<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCP_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCP_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCP_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> b</em>, ElDistMatrix_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistMultiVec_d<em> b</em>, ElDistMultiVec_d<em> x</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="expert-interface">
+<h4>Expert interface<a class="headerlink" href="#expert-interface" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Single-precision<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCPX_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPX_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPXDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPXDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> b</em>, ElDistMatrix_s<em> x</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPXSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPXSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> x</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPXSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPXDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPXDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistMultiVec_s<em> b</em>, ElDistMultiVec_s<em> x</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPXDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>Double-precision<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCPX_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPX_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPXDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPXDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> b</em>, ElDistMatrix_d<em> x</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPXSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPXSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> x</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPXSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCPXDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCPXDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistMultiVec_d<em> b</em>, ElDistMultiVec_d<em> x</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCPXDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="DS.html" class="btn btn-neutral float-right" title="Dantzig selector" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="BPDN.html" class="btn btn-neutral float-left" title="Basis pursuit denoising / Lasso" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

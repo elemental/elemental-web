@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Linear solvers &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utilities" href="util.html" />
+    <link rel="prev" title="Matrix properties" href="props.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="linear-solvers">
+<h1>Linear solvers<a class="headerlink" href="#linear-solvers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hpd-solve">
+<h2>HPD solve<a class="headerlink" href="#hpd-solve" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/HPDSolve.hpp">Implementation</a></p>
+<p>Solves <span class="math notranslate nohighlight">\(AX=B\)</span>, <span class="math notranslate nohighlight">\(A^T X = B\)</span>, or <span class="math notranslate nohighlight">\(A^H X=B\)</span> for <span class="math notranslate nohighlight">\(X\)</span> given
+Hermitian positive-definite (HPD) <span class="math notranslate nohighlight">\(A\)</span> and right-hand side matrix
+<span class="math notranslate nohighlight">\(B\)</span> (note that these options are all identical except for when <span class="math notranslate nohighlight">\(A\)</span>.
+is complex).
+The solution is computed by first finding the Cholesky factorization of
+<span class="math notranslate nohighlight">\(A\)</span> and then performing two successive triangular solves against
+<span class="math notranslate nohighlight">\(B\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv48HPDSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv38HPDSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv28HPDSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE"></span><span id="HPDSolve__UpperOrLower.Orientation.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HPDSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48HPDSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48HPDSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv38HPDSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv28HPDSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="HPDSolve__UpperOrLower.Orientation.DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">HPDSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48HPDSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <cite>B</cite> with the solution to <span class="math notranslate nohighlight">\(AX=B\)</span> or <span class="math notranslate nohighlight">\(A^T X=B\)</span>,
+where <cite>A</cite> is Hermitian positive-definite and only the triangle of <cite>A</cite>
+specified by <cite>uplo</cite> is accessed.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="symmetric-solve">
+<h2>Symmetric solve<a class="headerlink" href="#symmetric-solve" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/SymmetricSolve.hpp">Implementation</a></p>
+<p>Solve <span class="math notranslate nohighlight">\(AX=B\)</span>, <span class="math notranslate nohighlight">\(A^T X = B\)</span>, or <span class="math notranslate nohighlight">\(A^H X = B\)</span> for <span class="math notranslate nohighlight">\(X\)</span>
+given a symmetric or Hermitian matrix <span class="math notranslate nohighlight">\(A\)</span> and a right-hand side matrix
+<span class="math notranslate nohighlight">\(B\)</span> using Bunch-Kaufman.</p>
+<dl class="function">
+<dt id="_CPPv414SymmetricSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FEb12LDLPivotType">
+<span id="_CPPv314SymmetricSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FEb12LDLPivotType"></span><span id="_CPPv214SymmetricSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FEb12LDLPivotType"></span><span id="SymmetricSolve__UpperOrLower.Orientation.Matrix:F:R.Matrix:F:R.b.LDLPivotType"></span>void <code class="descname">SymmetricSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugate</em> = false, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414SymmetricSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FEb12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414SymmetricSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FEb12LDLPivotType">
+<span id="_CPPv314SymmetricSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FEb12LDLPivotType"></span><span id="_CPPv214SymmetricSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FEb12LDLPivotType"></span><span id="SymmetricSolve__UpperOrLower.Orientation.DistMatrix:F:R.DistMatrix:F:R.b.LDLPivotType"></span>void <code class="descname">SymmetricSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugate</em> = false, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414SymmetricSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FEb12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites <span class="math notranslate nohighlight">\(B\)</span> with the solution to the linear system. <span class="math notranslate nohighlight">\(A\)</span>
+is assumed symmetric if <code class="docutils literal notranslate"><span class="pre">conjugate</span></code> is false, and Hermitian otherwise.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the lower-storage case is currently supported.</p>
+</div>
+</div>
+<div class="section" id="hermitian-solve">
+<h2>Hermitian solve<a class="headerlink" href="#hermitian-solve" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/HermitianSolve.hpp">Implementation</a></p>
+<p>Solve <span class="math notranslate nohighlight">\(AX=B\)</span>, <span class="math notranslate nohighlight">\(A^T X = B\)</span>, or <span class="math notranslate nohighlight">\(A^H X = B\)</span> for <span class="math notranslate nohighlight">\(X\)</span>
+given a Hermitian matrix <span class="math notranslate nohighlight">\(A\)</span> and a right-hand side matrix
+<span class="math notranslate nohighlight">\(B\)</span> using Bunch-Kaufman.</p>
+<dl class="function">
+<dt id="_CPPv414HermitianSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE12LDLPivotType">
+<span id="_CPPv314HermitianSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE12LDLPivotType"></span><span id="_CPPv214HermitianSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE12LDLPivotType"></span><span id="HermitianSolve__UpperOrLower.Orientation.Matrix:F:R.Matrix:F:R.LDLPivotType"></span>void <code class="descname">HermitianSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE12LDLPivotType">
+<span id="_CPPv314HermitianSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE12LDLPivotType"></span><span id="_CPPv214HermitianSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE12LDLPivotType"></span><span id="HermitianSolve__UpperOrLower.Orientation.DistMatrix:F:R.DistMatrix:F:R.LDLPivotType"></span>void <code class="descname">HermitianSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="factor.html#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="factor.html#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianSolve12UpperOrLower11OrientationR10DistMatrixI1FER10DistMatrixI1FE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites <span class="math notranslate nohighlight">\(B\)</span> with the solution to the linear system.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the lower-storage case is currently supported, as this is a simple
+wrapper around <a class="reference internal" href="#_CPPv414SymmetricSolve12UpperOrLower11OrientationR6MatrixI1FER6MatrixI1FEb12LDLPivotType" title="SymmetricSolve"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SymmetricSolve()</span></code></a>.</p>
+</div>
+</div>
+<div class="section" id="gaussian-elimination">
+<h2>Gaussian elimination<a class="headerlink" href="#gaussian-elimination" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/GaussianElimination.hpp">Implementation</a></p>
+<p>Solves <span class="math notranslate nohighlight">\(AX=B\)</span> for <span class="math notranslate nohighlight">\(X\)</span> given a general square nonsingular matrix
+<span class="math notranslate nohighlight">\(A\)</span> and right-hand side matrix <span class="math notranslate nohighlight">\(B\)</span>. The solution is computed through
+(partially pivoted) Gaussian elimination.</p>
+<dl class="function">
+<dt id="_CPPv419GaussianEliminationR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv319GaussianEliminationR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv219GaussianEliminationR6MatrixI1FER6MatrixI1FE"></span><span id="GaussianElimination__Matrix:F:R.Matrix:F:R"></span>void <code class="descname">GaussianElimination</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419GaussianEliminationR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419GaussianEliminationR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv319GaussianEliminationR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv219GaussianEliminationR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="GaussianElimination__DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">GaussianElimination</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419GaussianEliminationR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Upon completion, <span class="math notranslate nohighlight">\(A\)</span> will have been overwritten with Gaussian
+elimination and <span class="math notranslate nohighlight">\(B\)</span> will be overwritten with <span class="math notranslate nohighlight">\(X\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="least-squares">
+<h2>Least Squares<a class="headerlink" href="#least-squares" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/LeastSquares.hpp">Implementation</a></p>
+<p>Given <span class="math notranslate nohighlight">\(A \in \mathbb{F}^{m \times n}\)</span> and a right-hand side
+<span class="math notranslate nohighlight">\(b \in \mathbb{F}^m\)</span>, a <em>least-squares</em> method solves
+<span class="math notranslate nohighlight">\(A x \approx b\)</span> differently depending upon whether <span class="math notranslate nohighlight">\(m \ge n\)</span>.</p>
+<p>When <span class="math notranslate nohighlight">\(m \ge n\)</span>, there are at least as many constraints as degrees of freedom, and
+so a solution is sought for</p>
+<div class="math notranslate nohighlight">
+\[\min_x \| A x - b \|_2\]</div>
+<p>This problem is solved through the use of <a class="reference internal" href="factor.html#_CPPv42QRR6MatrixI1FE" title="QR"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">QR()</span></code></a>.</p>
+<p>When <span class="math notranslate nohighlight">\(m &lt; n\)</span>, the problem is under-constrained and a solution is sought for the
+problem</p>
+<div class="math notranslate nohighlight">
+\[\min_x \| x \|_2 \;\;\; \text{such that } A x = b.\]</div>
+<p>This problem is solved through the use of <a class="reference internal" href="factor.html#_CPPv42LQR6MatrixI1FE" title="LQ"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LQ()</span></code></a>.</p>
+<p>The above optimization problems can be readily generalized to multiple right-hand
+sides by switching to Frobenius norms.</p>
+<dl class="function">
+<dt id="_CPPv412LeastSquares11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv312LeastSquares11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv212LeastSquares11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="LeastSquares__Orientation.Matrix:F:R.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">LeastSquares</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LeastSquares11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412LeastSquares11OrientationR10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv312LeastSquares11OrientationR10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv212LeastSquares11OrientationR10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE"></span><span id="LeastSquares__Orientation.DistMatrix:F:R.DistMatrix:F:CR.DistMatrix:F:R"></span>void <code class="descname">LeastSquares</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LeastSquares11OrientationR10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <cite>orientation</cite> is set to <code class="docutils literal notranslate"><span class="pre">NORMAL</span></code>, then solve <span class="math notranslate nohighlight">\(AX=B\)</span>, otherwise
+<cite>orientation</cite> must be equal to <code class="docutils literal notranslate"><span class="pre">ADJOINT</span></code> and <span class="math notranslate nohighlight">\(A^H X=B\)</span> will
+be solved. Upon completion, <span class="math notranslate nohighlight">\(A\)</span> is overwritten with its QR or LQ
+factorization, and each column of <span class="math notranslate nohighlight">\(X\)</span> is overwritten with a solution vector.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="general-gauss-markov-linear-model-glm">
+<h2>General (Gauss-Markov) Linear Model (GLM)<a class="headerlink" href="#general-gauss-markov-linear-model-glm" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/GLM.hpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/examples/lapack-like/GLM.cpp">Example driver</a></p>
+<div class="math notranslate nohighlight">
+\[\min_{X,Y} \| Y \|_F \;\;\; \text{subject to } A X + B Y = D.\]</div>
+<dl class="function">
+<dt id="_CPPv43GLMR6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv33GLMR6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv23GLMR6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="GLM__Matrix:F:R.Matrix:F:R.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">GLM</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GLMR6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43GLMR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv33GLMR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv23GLMR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="GLM__DistMatrix:F:R.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">GLM</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GLMR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="equality-constrained-least-squares-lse">
+<h2>Equality-constrained Least Squares (LSE)<a class="headerlink" href="#equality-constrained-least-squares-lse" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/LSE.hpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/examples/lapack-like/LSE.cpp">Example driver</a></p>
+<div class="math notranslate nohighlight">
+\[\min_X \| A X - C \|_F \;\;\; \text{subject to } B X = D.\]</div>
+<dl class="function">
+<dt id="_CPPv43LSER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FEb">
+<span id="_CPPv33LSER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FEb"></span><span id="_CPPv23LSER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FEb"></span><span id="LSE__Matrix:F:R.Matrix:F:R.Matrix:F:R.Matrix:F:R.Matrix:F:R.b"></span>void <code class="descname">LSE</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, bool <em>computeResidual</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LSER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43LSER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FEb">
+<span id="_CPPv33LSER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="_CPPv23LSER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="LSE__DistMatrix:F:R.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:F:R.b"></span>void <code class="descname">LSE</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, bool <em>computeResidual</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LSER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="multi-shift-hessenberg-solves">
+<h2>Multi-shift Hessenberg solves<a class="headerlink" href="#multi-shift-hessenberg-solves" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/solve/MultiShiftHessSolve.hpp">Implementation</a></p>
+<p>Solve for <span class="math notranslate nohighlight">\(X\)</span> in the system</p>
+<div class="math notranslate nohighlight">
+\[H^\# X - X D^\# = Y\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is Hessenberg, <span class="math notranslate nohighlight">\(D\)</span> is diagonal, and <span class="math notranslate nohighlight">\(A^\#\)</span>
+is defined to be one of <span class="math notranslate nohighlight">\(\{A,A^T,A^H\}\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv419MultiShiftHessSolve12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv319MultiShiftHessSolve12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv219MultiShiftHessSolve12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="MultiShiftHessSolve__UpperOrLower.Orientation.F.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">MultiShiftHessSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419MultiShiftHessSolve12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419MultiShiftHessSolve12UpperOrLower11Orientation1FRK10DistMatrixI1F2UH2VHERK10DistMatrixI1F2VX4STARER10DistMatrixI1F4STAR2VXE">
+<span id="_CPPv319MultiShiftHessSolve12UpperOrLower11Orientation1FRK10DistMatrixI1F2UH2VHERK10DistMatrixI1F2VX4STARER10DistMatrixI1F4STAR2VXE"></span><span id="_CPPv219MultiShiftHessSolve12UpperOrLower11Orientation1FRK10DistMatrixI1F2UH2VHERK10DistMatrixI1F2VX4STARER10DistMatrixI1F4STAR2VXE"></span><span id="MultiShiftHessSolve__UpperOrLower.Orientation.F.DistMatrix:F.UH.VH:CR.DistMatrix:F.VX.STAR:CR.DistMatrix:F.STAR.VX:R"></span>void <code class="descname">MultiShiftHessSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;F, UH, VH&gt; &amp;<em>H</em>, <em class="property">const</em> DistMatrix&lt;F, VX, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>shifts</em>, DistMatrix&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, VX&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419MultiShiftHessSolve12UpperOrLower11Orientation1FRK10DistMatrixI1F2UH2VHERK10DistMatrixI1F2VX4STARER10DistMatrixI1F4STAR2VXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of <cite>X</cite> with the solutions to shifted linear systems.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only a few subcases are currently supported, as this was added as part of
+<a class="reference internal" href="props.html#_CPPv424HessenbergPseudospectrumRK6MatrixI1FERK6MatrixI7ComplexI4BaseI1FEEER6MatrixI4BaseI1FEE14PseudospecCtrlI4BaseI1FEE" title="HessenbergPseudospectrum"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HessenbergPseudospectrum()</span></code></a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>11/24/2013: Elemental 0.82 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="07/24/2013: Elemental 0.81" href="../0.81/index.html" />
+    <link rel="prev" title="11/25/2013: Elemental 0.82-p1" href="../0.82-p1/index.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-82">
+<span id="release-0-82"></span><h1>11/24/2013: Elemental 0.82<a class="headerlink" href="#elemental-0-82" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://libelemental.org/pub/releases/elemental-0.82.tgz">elemental-0.82.tgz</a></p>
+<p>Documentation: <a class="reference external" href="http://libelemental.org/documentation/0.82/">[HTML]</a> <a class="reference external" href="http://libelemental.org/documentation/elem-0.82.pdf">[PDF]</a></p>
+<div class="section" id="new-functionality">
+<h2>New Functionality<a class="headerlink" href="#new-functionality" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fundamental-additions">
+<h3>Fundamental additions<a class="headerlink" href="#fundamental-additions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>LU with full pivoting</p></li>
+<li><p>Various (blocked when possible) pivoted LDL factorizations</p></li>
+<li><p>Accurate symmetric/Hermitian inversion</p></li>
+<li><p>Hermitian inertia</p></li>
+<li><p>Blocked pivoted Cholesky factorization</p></li>
+<li><p>Two-norm estimation</p></li>
+<li><p>Preliminary Spectral Divide and Conquer algorithm for Schur decomposition</p></li>
+<li><p>Preliminary Spectral Divide and Conquer algorithm for Hermitian EVD</p></li>
+<li><p>Preliminary TSQR and TS-SVT implementations</p></li>
+</ul>
+</div>
+<div class="section" id="minor-incremental-improvements">
+<h3>Minor/incremental improvements<a class="headerlink" href="#minor-incremental-improvements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added Gaussian, Wigner, and Haar matrices</p></li>
+<li><p>Added UpdateDiagonal for adding a constant to the diagonal of a matrix</p></li>
+<li><p>Added move semantics for Matrix and DistMatrix</p></li>
+<li><p>Added QuasiDiagonal{Scale,Solve}</p></li>
+<li><p>Added SymmetricSwap</p></li>
+<li><p>Added support for relative thresholding in SVD and SVT</p></li>
+<li><p>Extended condition number support, see Condition</p></li>
+<li><p>Extended sorting to allow for ascending or descending, see Sort</p></li>
+<li><p>Axpy now supports arbitrary distributions</p></li>
+<li><p>All distributions now connected via operator=</p></li>
+<li><p>DistMatrix redesigned in terms of {Row,Col,Dist,Redundant,Cross}Comm’s</p></li>
+<li><p>Higher-quality random number generation through std::mt19937 Mersenne twister</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="maintenance">
+<h2>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="library-bugfixes">
+<h3>Library bugfixes<a class="headerlink" href="#library-bugfixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Avoiding implicit int -&gt; MPI_Comm conversions in Grid constructors</p></li>
+<li><p>{Hermitian,Normal}UniformSpectrum now rotate diagonal matrix through a
+Haar similarity instead of a random Householder transformation</p></li>
+<li><p>Fixed mistake in matrix sign function</p></li>
+<li><p>Fixed mistake in unaligned AxpyTriangle</p></li>
+</ul>
+</div>
+<div class="section" id="instrumentation-visualization-testing">
+<h3>Instrumentation/visualization/testing<a class="headerlink" href="#instrumentation-visualization-testing" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Higher-quality timers via std::chrono</p></li>
+</ul>
+</div>
+<div class="section" id="maintenance-syntax">
+<h3>Maintenance/syntax<a class="headerlink" href="#maintenance-syntax" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Base&lt;F&gt; template alias</p></li>
+<li><p>elem::Complex is now a template alias for the improved std::complex</p></li>
+<li><p>Using _Pragma to simplify OpenMP directives</p></li>
+<li><p>Switched away from integer templates to typedefs, i.e., Int and Unsigned</p></li>
+<li><p>Added {Logic,Runtime}Error shortcuts for ‘throw std::{logic,runtime}_error’</p></li>
+<li><p>Modified partially-pivoted LU and GaussianElimination to use ValueInt</p></li>
+<li><p>Removed obsolete TwoNorm{Lower,Upper}Bound</p></li>
+<li><p>Renamed ‘Trtrsm’ to ‘Trstrm’ (TRiangular Solve with TRiangular Matrix)</p></li>
+<li><p>Renamed ‘SingularValueSoftThresholding’ to ‘SVT’</p></li>
+<li><p>Renamed ‘Alignment’ to ‘Align’ in most of the library</p></li>
+<li><p>Moved pivoting routines from lapack-like/ to blas-like/ folder</p></li>
+<li><p>Simplified ApplyPackedReflectors, HermitianEig, and Transpose implementations</p></li>
+<li><p>Simplified LDL and avoided modification of above-diagonal entries</p></li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added README to almost every directory</p></li>
+<li><p>Greatly improved TODO list</p></li>
+<li><p>Moved Sphinx documentation to elemental-web repository</p></li>
+</ul>
+</div>
+<div class="section" id="build-system">
+<h3>Build system<a class="headerlink" href="#build-system" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>C++11 is now required</p></li>
+<li><p>Added support for Qt5 into elemvariables</p></li>
+<li><p>Fixed mistakes in compilation of sample code during configuration</p></li>
+<li><p>Directly testing for ‘collapse’ OpenMP directive to avoid Clang issue</p></li>
+<li><p>Improved toolchains for Vesta, and added GNU toolchain for Stampede</p></li>
+</ul>
+</div>
+<div class="section" id="python-interface">
+<h3>Python interface<a class="headerlink" href="#python-interface" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Functioning but not yet supporting all additions since 0.81</p></li>
+</ul>
+</div>
+<div class="section" id="mpi-and-threading">
+<h3>MPI and Threading<a class="headerlink" href="#mpi-and-threading" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added simplified MPI wrappers and prefixed versions which use tags with ‘Tagged’, e.g., ‘TaggedSend’</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="thanks">
+<h2>Thanks<a class="headerlink" href="#thanks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Jed Brown for contributing a patch which removed several unused variables</p></li>
+<li><p>Michael Grant for updating the Python interface to handle integer typedef’ing</p></li>
+<li><p>Jeff Hammond for contributing toolchain file updates for Blue Gene/Q</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

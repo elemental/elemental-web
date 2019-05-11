@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Input/output &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Indices" href="indices.html" />
+    <link rel="prev" title="Random" href="matrices/random.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="input-output">
+<h1>Input/output<a class="headerlink" href="#input-output" title="Permalink to this headline">¶</a></h1>
+<dl class="enum">
+<dt id="_CPPv410FileFormat">
+<span id="_CPPv310FileFormat"></span><span id="_CPPv210FileFormat"></span><em class="property">enum </em><code class="descname">FileFormat</code><a class="headerlink" href="#_CPPv410FileFormat" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N10FileFormat4AUTOE">
+<span id="_CPPv3N10FileFormat4AUTOE"></span><span id="_CPPv2N10FileFormat4AUTOE"></span><em class="property">enumerator </em><code class="descname">AUTO</code><a class="headerlink" href="#_CPPv4N10FileFormat4AUTOE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attempt to detect format from filename extension</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat5ASCIIE">
+<span id="_CPPv3N10FileFormat5ASCIIE"></span><span id="_CPPv2N10FileFormat5ASCIIE"></span><em class="property">enumerator </em><code class="descname">ASCII</code><a class="headerlink" href="#_CPPv4N10FileFormat5ASCIIE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simple ASCII text file</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat12ASCII_MATLABE">
+<span id="_CPPv3N10FileFormat12ASCII_MATLABE"></span><span id="_CPPv2N10FileFormat12ASCII_MATLABE"></span><em class="property">enumerator </em><code class="descname">ASCII_MATLAB</code><a class="headerlink" href="#_CPPv4N10FileFormat12ASCII_MATLABE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>MATLAB-ready ASCII text file</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat6BINARYE">
+<span id="_CPPv3N10FileFormat6BINARYE"></span><span id="_CPPv2N10FileFormat6BINARYE"></span><em class="property">enumerator </em><code class="descname">BINARY</code><a class="headerlink" href="#_CPPv4N10FileFormat6BINARYE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column-major binary file with integer height and width header</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat11BINARY_FLATE">
+<span id="_CPPv3N10FileFormat11BINARY_FLATE"></span><span id="_CPPv2N10FileFormat11BINARY_FLATE"></span><em class="property">enumerator </em><code class="descname">BINARY_FLAT</code><a class="headerlink" href="#_CPPv4N10FileFormat11BINARY_FLATE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column-major binary file with no header data</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat3BMPE">
+<span id="_CPPv3N10FileFormat3BMPE"></span><span id="_CPPv2N10FileFormat3BMPE"></span><em class="property">enumerator </em><code class="descname">BMP</code><a class="headerlink" href="#_CPPv4N10FileFormat3BMPE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Bitmap image format (requires Qt5)</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat3JPGE">
+<span id="_CPPv3N10FileFormat3JPGE"></span><span id="_CPPv2N10FileFormat3JPGE"></span><em class="property">enumerator </em><code class="descname">JPG</code><a class="headerlink" href="#_CPPv4N10FileFormat3JPGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>JPG image format (requires Qt5)</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat4JPEGE">
+<span id="_CPPv3N10FileFormat4JPEGE"></span><span id="_CPPv2N10FileFormat4JPEGE"></span><em class="property">enumerator </em><code class="descname">JPEG</code><a class="headerlink" href="#_CPPv4N10FileFormat4JPEGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>JPEG image format (requires Qt5)</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat3PNGE">
+<span id="_CPPv3N10FileFormat3PNGE"></span><span id="_CPPv2N10FileFormat3PNGE"></span><em class="property">enumerator </em><code class="descname">PNG</code><a class="headerlink" href="#_CPPv4N10FileFormat3PNGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>PNG image format (requires Qt5)</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat3PPME">
+<span id="_CPPv3N10FileFormat3PPME"></span><span id="_CPPv2N10FileFormat3PPME"></span><em class="property">enumerator </em><code class="descname">PPM</code><a class="headerlink" href="#_CPPv4N10FileFormat3PPME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>PPM image format (requires Qt5)</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat3XBME">
+<span id="_CPPv3N10FileFormat3XBME"></span><span id="_CPPv2N10FileFormat3XBME"></span><em class="property">enumerator </em><code class="descname">XBM</code><a class="headerlink" href="#_CPPv4N10FileFormat3XBME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>XBM image format (requires Qt5)</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N10FileFormat3XPME">
+<span id="_CPPv3N10FileFormat3XPME"></span><span id="_CPPv2N10FileFormat3XPME"></span><em class="property">enumerator </em><code class="descname">XPM</code><a class="headerlink" href="#_CPPv4N10FileFormat3XPME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>XPM image format (requires Qt5)</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="display">
+<h2>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47DisplayRK6MatrixI1TENSt6stringE">
+<span id="_CPPv37DisplayRK6MatrixI1TENSt6stringE"></span><span id="_CPPv27DisplayRK6MatrixI1TENSt6stringE"></span><span id="Display__Matrix:T:CR.ss"></span>void <code class="descname">Display</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, std::string <em>title</em> = &quot;Default&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47DisplayRK6MatrixI1TENSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47DisplayRK10DistMatrixI1T1U1VENSt6stringE">
+<span id="_CPPv37DisplayRK10DistMatrixI1T1U1VENSt6stringE"></span><span id="_CPPv27DisplayRK10DistMatrixI1T1U1VENSt6stringE"></span><span id="Display__DistMatrix:T.U.V:CR.ss"></span>void <code class="descname">Display</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, std::string <em>title</em> = &quot;Default&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47DisplayRK10DistMatrixI1T1U1VENSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If Qt5 was detected during configuration, display the matrix on screen.
+Otherwise, print it to the console.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="print">
+<h2>Print<a class="headerlink" href="#print" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv45PrintRK6MatrixI1TENSt6stringERNSt7ostreamE">
+<span id="_CPPv35PrintRK6MatrixI1TENSt6stringERNSt7ostreamE"></span><span id="_CPPv25PrintRK6MatrixI1TENSt6stringERNSt7ostreamE"></span><span id="Print__Matrix:T:CR.ss.osR"></span>void <code class="descname">Print</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, std::string <em>title</em> = &quot;&quot;, std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PrintRK6MatrixI1TENSt6stringERNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PrintRK10DistMatrixI1T1U1VENSt6stringERNSt7ostreamE">
+<span id="_CPPv35PrintRK10DistMatrixI1T1U1VENSt6stringERNSt7ostreamE"></span><span id="_CPPv25PrintRK10DistMatrixI1T1U1VENSt6stringERNSt7ostreamE"></span><span id="Print__DistMatrix:T.U.V:CR.ss.osR"></span>void <code class="descname">Print</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, std::string <em>title</em> = &quot;&quot;, std::ostream &amp;<em>os</em> = std::cout<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PrintRK10DistMatrixI1T1U1VENSt6stringERNSt7ostreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Prints the matrix to the console.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="spy">
+<h2>Spy<a class="headerlink" href="#spy" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv43SpyRK6MatrixI1TENSt6stringE4BaseI1TE">
+<span id="_CPPv33SpyRK6MatrixI1TENSt6stringE4BaseI1TE"></span><span id="_CPPv23SpyRK6MatrixI1TENSt6stringE4BaseI1TE"></span><span id="Spy__Matrix:T:CR.ss.Base:T:"></span>void <code class="descname">Spy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, std::string <em>title</em> = &quot;Default&quot;, Base&lt;T&gt; <em>tol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SpyRK6MatrixI1TENSt6stringE4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SpyRK10DistMatrixI1T1U1VENSt6stringE4BaseI1TE">
+<span id="_CPPv33SpyRK10DistMatrixI1T1U1VENSt6stringE4BaseI1TE"></span><span id="_CPPv23SpyRK10DistMatrixI1T1U1VENSt6stringE4BaseI1TE"></span><span id="Spy__DistMatrix:T.U.V:CR.ss.Base:T:"></span>void <code class="descname">Spy</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, std::string <em>title</em> = &quot;Default&quot;, Base&lt;T&gt; <em>tol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SpyRK10DistMatrixI1T1U1VENSt6stringE4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Only available if Qt5 was detected during configuration. A spy plot of
+the elements with absolute values greater than or equal to <code class="docutils literal notranslate"><span class="pre">tol</span></code> is
+displayed on screen.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="read">
+<h2>Read<a class="headerlink" href="#read" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44ReadR6MatrixI1TENSt6stringE10FileFormat">
+<span id="_CPPv34ReadR6MatrixI1TENSt6stringE10FileFormat"></span><span id="_CPPv24ReadR6MatrixI1TENSt6stringE10FileFormat"></span><span id="Read__Matrix:T:R.ss.FileFormat"></span>void <code class="descname">Read</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, std::string <em>filename</em>, <a class="reference internal" href="#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <em>format</em> = <a class="reference internal" href="#_CPPv4N10FileFormat4AUTOE" title="AUTO">AUTO</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ReadR6MatrixI1TENSt6stringE10FileFormat" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ReadR10DistMatrixI1T1U1VENSt6stringE10FileFormatb">
+<span id="_CPPv34ReadR10DistMatrixI1T1U1VENSt6stringE10FileFormatb"></span><span id="_CPPv24ReadR10DistMatrixI1T1U1VENSt6stringE10FileFormatb"></span><span id="Read__DistMatrix:T.U.V:R.ss.FileFormat.b"></span>void <code class="descname">Read</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, std::string <em>filename</em>, <a class="reference internal" href="#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <em>format</em> = <a class="reference internal" href="#_CPPv4N10FileFormat4AUTOE" title="AUTO">AUTO</a>, bool <em>sequential</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ReadR10DistMatrixI1T1U1VENSt6stringE10FileFormatb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Read the specified matrix from a file with a supported format. As of now,
+only the <code class="docutils literal notranslate"><span class="pre">BINARY</span></code> format is supported In the distributed case, the
+<code class="docutils literal notranslate"><span class="pre">sequential</span></code> flag determines whether or not the data should be read from
+a single process and then scattered to the other processes as necessary.</p>
+</dd></dl>
+
+<div class="section" id="read-namespace">
+<h3>read namespace<a class="headerlink" href="#read-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N4read10BinaryFlatER6MatrixI1TEiiNSt6stringE">
+<span id="_CPPv3N4read10BinaryFlatER6MatrixI1TEiiNSt6stringE"></span><span id="_CPPv2N4read10BinaryFlatER6MatrixI1TEiiNSt6stringE"></span><span id="read::BinaryFlat__Matrix:T:R.i.i.ss"></span>void <code class="descclassname">read<code class="descclassname">::</code></code><code class="descname">BinaryFlat</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>height</em>, int <em>width</em>, std::string <em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4read10BinaryFlatER6MatrixI1TEiiNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4read10BinaryFlatER10DistMatrixI1T1U1VEiiNSt6stringE">
+<span id="_CPPv3N4read10BinaryFlatER10DistMatrixI1T1U1VEiiNSt6stringE"></span><span id="_CPPv2N4read10BinaryFlatER10DistMatrixI1T1U1VEiiNSt6stringE"></span><span id="read::BinaryFlat__DistMatrix:T.U.V:R.i.i.ss"></span>void <code class="descclassname">read<code class="descclassname">::</code></code><code class="descname">BinaryFlat</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, int <em>height</em>, int <em>width</em>, std::string <em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4read10BinaryFlatER10DistMatrixI1T1U1VEiiNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Read the matrix of the specified dimensions from the specified flat binary
+file.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="write">
+<h2>Write<a class="headerlink" href="#write" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv45WriteRK6MatrixI1TENSt6stringE10FileFormatNSt6stringE">
+<span id="_CPPv35WriteRK6MatrixI1TENSt6stringE10FileFormatNSt6stringE"></span><span id="_CPPv25WriteRK6MatrixI1TENSt6stringE10FileFormatNSt6stringE"></span><span id="Write__Matrix:T:CR.ss.FileFormat.ss"></span>void <code class="descname">Write</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, std::string <em>basename</em> = &quot;matrix&quot;, <a class="reference internal" href="#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <em>format</em> = <a class="reference internal" href="#_CPPv4N10FileFormat6BINARYE" title="BINARY">BINARY</a>, std::string <em>title</em> = &quot;&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45WriteRK6MatrixI1TENSt6stringE10FileFormatNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45WriteRK10DistMatrixI1T1U1VENSt6stringE10FileFormatNSt6stringE">
+<span id="_CPPv35WriteRK10DistMatrixI1T1U1VENSt6stringE10FileFormatNSt6stringE"></span><span id="_CPPv25WriteRK10DistMatrixI1T1U1VENSt6stringE10FileFormatNSt6stringE"></span><span id="Write__DistMatrix:T.U.V:CR.ss.FileFormat.ss"></span>void <code class="descname">Write</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, std::string <em>basename</em> = &quot;matrix&quot;, <a class="reference internal" href="#_CPPv410FileFormat" title="FileFormat">FileFormat</a> <em>format</em> = <a class="reference internal" href="#_CPPv4N10FileFormat6BINARYE" title="BINARY">BINARY</a>, std::string <em>title</em> = &quot;&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45WriteRK10DistMatrixI1T1U1VENSt6stringE10FileFormatNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The matrix is written to a file (the given basename plus the appropriate extension) in the specified format. Note that Qt5 is required for the image formats.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

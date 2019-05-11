@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DistMultiVec (C++ interface) &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DistMultiVec (C interface)" href="c.html" />
+    <link rel="prev" title="DistMultiVec (Python interface)" href="python.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="python.html">DistMultiVec (Python interface)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DistMultiVec (C++ interface)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#special-cases-used-in-elemental">Special cases used in Elemental</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="c.html">DistMultiVec (C interface)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../dist_multi_vec.html">DistMultiVec</a> &raquo;</li>
+        
+      <li>DistMultiVec (C++ interface)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/dist_multi_vec/cxx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="distmultivec-c-interface">
+<h1>DistMultiVec (C++ interface)<a class="headerlink" href="#distmultivec-c-interface" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv4IE12DistMultiVecI1TE">
+<span id="_CPPv3IE12DistMultiVecI1TE"></span><span id="_CPPv2IE12DistMultiVecI1TE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMultiVec</code>&lt;T&gt;<a class="headerlink" href="#_CPPv4IE12DistMultiVecI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE12DistMultiVecEN3mpi4CommE">
+<span id="_CPPv3N12DistMultiVecI1TE12DistMultiVecEN3mpi4CommE"></span><span id="_CPPv2N12DistMultiVecI1TE12DistMultiVecEN3mpi4CommE"></span><span id="DistMultiVec:T:::DistMultiVec__mpi::Comm"></span><code class="descname">DistMultiVec</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em> = mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD">COMM_WORLD</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE12DistMultiVecEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE12DistMultiVecE3Int3IntN3mpi4CommE">
+<span id="_CPPv3N12DistMultiVecI1TE12DistMultiVecE3Int3IntN3mpi4CommE"></span><span id="_CPPv2N12DistMultiVecI1TE12DistMultiVecE3Int3IntN3mpi4CommE"></span><span id="DistMultiVec:T:::DistMultiVec__Int.Int.mpi::Comm"></span><code class="descname">DistMultiVec</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em> = mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD">COMM_WORLD</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE12DistMultiVecE3Int3IntN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TED0Ev">
+<span id="_CPPv3N12DistMultiVecI1TED0Ev"></span><span id="_CPPv2N12DistMultiVecI1TED0Ev"></span><span id="DistMultiVec:T:::~DistMultiVec"></span><code class="descname">~DistMultiVec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TEclE5RangeI3IntE5RangeI3IntE">
+<span id="_CPPv3NK12DistMultiVecI1TEclE5RangeI3IntE5RangeI3IntE"></span><span id="_CPPv2NK12DistMultiVecI1TEclE5RangeI3IntE5RangeI3IntE"></span><span id="DistMultiVec:T:::call-operator__Range:Int:.Range:Int:C"></span><a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TEclE5RangeI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TEclE5RangeI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK12DistMultiVecI1TEclE5RangeI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK12DistMultiVecI1TEclE5RangeI3IntERK6vectorI3IntE"></span><span id="DistMultiVec:T:::call-operator__Range:Int:.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TEclE5RangeI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TEclERK6vectorI3IntE5RangeI3IntE">
+<span id="_CPPv3NK12DistMultiVecI1TEclERK6vectorI3IntE5RangeI3IntE"></span><span id="_CPPv2NK12DistMultiVecI1TEclERK6vectorI3IntE5RangeI3IntE"></span><span id="DistMultiVec:T:::call-operator__vector:Int:CR.Range:Int:C"></span><a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <a class="reference internal" href="../View/HalfOpen.html#_CPPv4IE5RangeI3IntE" title="Range&lt;Int&gt;">Range</a>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; <em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TEclERK6vectorI3IntE5RangeI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TEclERK6vectorI3IntERK6vectorI3IntE">
+<span id="_CPPv3NK12DistMultiVecI1TEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="_CPPv2NK12DistMultiVecI1TEclERK6vectorI3IntERK6vectorI3IntE"></span><span id="DistMultiVec:T:::call-operator__vector:Int:CR.vector:Int:CRC"></span><a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>I</em>, <em class="property">const</em> vector&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>J</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TEclERK6vectorI3IntERK6vectorI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make a copy of a submatrix</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TEaSERK12DistMultiVecI1TE">
+<span id="_CPPv3N12DistMultiVecI1TEaSERK12DistMultiVecI1TE"></span><span id="_CPPv2N12DistMultiVecI1TEaSERK12DistMultiVecI1TE"></span><span id="DistMultiVec:T:::assign-operator__DistMultiVec:T:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TEaSERK12DistMultiVecI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TEaSERK18AbstractDistMatrixI1TE">
+<span id="_CPPv3N12DistMultiVecI1TEaSERK18AbstractDistMatrixI1TE"></span><span id="_CPPv2N12DistMultiVecI1TEaSERK18AbstractDistMatrixI1TE"></span><span id="DistMultiVec:T:::assign-operator__AbstractDistMatrix:T:CR"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;">DistMultiVec</a>&lt;T&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TEaSERK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE5EmptyEv">
+<span id="_CPPv3N12DistMultiVecI1TE5EmptyEv"></span><span id="_CPPv2N12DistMultiVecI1TE5EmptyEv"></span><span id="DistMultiVec:T:::Empty"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE5EmptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix to <span class="math notranslate nohighlight">\(0 \times 0\)</span> and frees any owned resources.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE6ResizeE3Int3Int">
+<span id="_CPPv3N12DistMultiVecI1TE6ResizeE3Int3Int"></span><span id="_CPPv2N12DistMultiVecI1TE6ResizeE3Int3Int"></span><span id="DistMultiVec:T:::Resize__Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE6ResizeE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigures the matrix to be <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE7SetCommEN3mpi4CommE">
+<span id="_CPPv3N12DistMultiVecI1TE7SetCommEN3mpi4CommE"></span><span id="_CPPv2N12DistMultiVecI1TE7SetCommEN3mpi4CommE"></span><span id="DistMultiVec:T:::SetComm__mpi::Comm"></span>void <code class="descname">SetComm</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE7SetCommEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE6HeightEv">
+<span id="_CPPv3NK12DistMultiVecI1TE6HeightEv"></span><span id="_CPPv2NK12DistMultiVecI1TE6HeightEv"></span><span id="DistMultiVec:T:::HeightC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE6HeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE5WidthEv">
+<span id="_CPPv3NK12DistMultiVecI1TE5WidthEv"></span><span id="_CPPv2NK12DistMultiVecI1TE5WidthEv"></span><span id="DistMultiVec:T:::WidthC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE5WidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height/width of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE13FirstLocalRowEv">
+<span id="_CPPv3NK12DistMultiVecI1TE13FirstLocalRowEv"></span><span id="_CPPv2NK12DistMultiVecI1TE13FirstLocalRowEv"></span><span id="DistMultiVec:T:::FirstLocalRowC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">FirstLocalRow</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE13FirstLocalRowEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE11LocalHeightEv">
+<span id="_CPPv3NK12DistMultiVecI1TE11LocalHeightEv"></span><span id="_CPPv2NK12DistMultiVecI1TE11LocalHeightEv"></span><span id="DistMultiVec:T:::LocalHeightC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LocalHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE11LocalHeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE6MatrixEv">
+<span id="_CPPv3N12DistMultiVecI1TE6MatrixEv"></span><span id="_CPPv2N12DistMultiVecI1TE6MatrixEv"></span><span id="DistMultiVec:T:::Matrix"></span>El::Matrix&lt;T&gt; &amp;<code class="descname">Matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE6MatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE12LockedMatrixEv">
+<span id="_CPPv3NK12DistMultiVecI1TE12LockedMatrixEv"></span><span id="_CPPv2NK12DistMultiVecI1TE12LockedMatrixEv"></span><span id="DistMultiVec:T:::LockedMatrixC"></span><em class="property">const</em> El::Matrix&lt;T&gt; &amp;<code class="descname">LockedMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE12LockedMatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE4CommEv">
+<span id="_CPPv3NK12DistMultiVecI1TE4CommEv"></span><span id="_CPPv2NK12DistMultiVecI1TE4CommEv"></span><span id="DistMultiVec:T:::CommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">Comm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE4CommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE9BlocksizeEv">
+<span id="_CPPv3NK12DistMultiVecI1TE9BlocksizeEv"></span><span id="_CPPv2NK12DistMultiVecI1TE9BlocksizeEv"></span><span id="DistMultiVec:T:::BlocksizeC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Blocksize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE9BlocksizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE8RowOwnerE3Int">
+<span id="_CPPv3NK12DistMultiVecI1TE8RowOwnerE3Int"></span><span id="_CPPv2NK12DistMultiVecI1TE8RowOwnerE3Int"></span><span id="DistMultiVec:T:::RowOwner__IntC"></span>int <code class="descname">RowOwner</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE8RowOwnerE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE9GlobalRowE3Int">
+<span id="_CPPv3NK12DistMultiVecI1TE9GlobalRowE3Int"></span><span id="_CPPv2NK12DistMultiVecI1TE9GlobalRowE3Int"></span><span id="DistMultiVec:T:::GlobalRow__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">GlobalRow</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE9GlobalRowE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Single-entry manipulation</p>
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE3GetE3Int3Int">
+<span id="_CPPv3NK12DistMultiVecI1TE3GetE3Int3Int"></span><span id="_CPPv2NK12DistMultiVecI1TE3GetE3Int3Int"></span><span id="DistMultiVec:T:::Get__Int.IntC"></span>T <code class="descname">Get</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE3GetE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK12DistMultiVecI1TE8GetLocalE3Int3Int">
+<span id="_CPPv3NK12DistMultiVecI1TE8GetLocalE3Int3Int"></span><span id="_CPPv2NK12DistMultiVecI1TE8GetLocalE3Int3Int"></span><span id="DistMultiVec:T:::GetLocal__Int.IntC"></span>T <code class="descname">GetLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK12DistMultiVecI1TE8GetLocalE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a global/local entry</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE3SetE3Int3Int1T">
+<span id="_CPPv3N12DistMultiVecI1TE3SetE3Int3Int1T"></span><span id="_CPPv2N12DistMultiVecI1TE3SetE3Int3Int1T"></span><span id="DistMultiVec:T:::Set__Int.Int.T"></span>void <code class="descname">Set</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE3SetE3Int3Int1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE8SetLocalE3Int3Int1T">
+<span id="_CPPv3N12DistMultiVecI1TE8SetLocalE3Int3Int1T"></span><span id="_CPPv2N12DistMultiVecI1TE8SetLocalE3Int3Int1T"></span><span id="DistMultiVec:T:::SetLocal__Int.Int.T"></span>void <code class="descname">SetLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE8SetLocalE3Int3Int1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set entry a global/local entry</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE6UpdateE3Int3Int1T">
+<span id="_CPPv3N12DistMultiVecI1TE6UpdateE3Int3Int1T"></span><span id="_CPPv2N12DistMultiVecI1TE6UpdateE3Int3Int1T"></span><span id="DistMultiVec:T:::Update__Int.Int.T"></span>void <code class="descname">Update</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE6UpdateE3Int3Int1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12DistMultiVecI1TE11UpdateLocalE3Int3Int1T">
+<span id="_CPPv3N12DistMultiVecI1TE11UpdateLocalE3Int3Int1T"></span><span id="_CPPv2N12DistMultiVecI1TE11UpdateLocalE3Int3Int1T"></span><span id="DistMultiVec:T:::UpdateLocal__Int.Int.T"></span>void <code class="descname">UpdateLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12DistMultiVecI1TE11UpdateLocalE3Int3Int1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add a specifc value to a global/local entry</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="special-cases-used-in-elemental">
+<h2>Special cases used in Elemental<a class="headerlink" href="#special-cases-used-in-elemental" title="Permalink to this headline">¶</a></h2>
+<p>This list of special cases is here to help clarify the notation used throughout
+Elemental’s source (as well as this documentation). These are all special
+cases of <a class="reference internal" href="#_CPPv4IE12DistMultiVecI1TE" title="DistMultiVec&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMultiVec&lt;T&gt;</span></code></a>.</p>
+<dl class="class">
+<dt id="_CPPv4IE12DistMultiVecI4RealE">
+<span id="_CPPv3IE12DistMultiVecI4RealE"></span><span id="_CPPv2IE12DistMultiVecI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMultiVec</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE12DistMultiVecI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>Real</cite> is real.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE12DistMultiVecI7ComplexI4RealEE">
+<span id="_CPPv3IE12DistMultiVecI7ComplexI4RealEE"></span><span id="_CPPv2IE12DistMultiVecI7ComplexI4RealEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMultiVec</code>&lt;<a class="reference internal" href="../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt;<a class="headerlink" href="#_CPPv4IE12DistMultiVecI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <a class="reference internal" href="../environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Complex&lt;Real&gt;</span></code></a> is
+complex with base type <cite>Real</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE12DistMultiVecI1FE">
+<span id="_CPPv3IE12DistMultiVecI1FE"></span><span id="_CPPv2IE12DistMultiVecI1FE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMultiVec</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE12DistMultiVecI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used to denote that the underlying datatype <cite>F</cite> is a field.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE12DistMultiVecI3IntE">
+<span id="_CPPv3IE12DistMultiVecI3IntE"></span><span id="_CPPv2IE12DistMultiVecI3IntE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">DistMultiVec</code>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt;<a class="headerlink" href="#_CPPv4IE12DistMultiVecI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When the underlying datatype is a signed integer.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="c.html" class="btn btn-neutral float-right" title="DistMultiVec (C interface)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="python.html" class="btn btn-neutral float-left" title="DistMultiVec (Python interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

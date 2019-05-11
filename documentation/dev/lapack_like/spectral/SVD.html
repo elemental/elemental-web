@@ -1,0 +1,557 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SVD &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Polar decomposition" href="Polar.html" />
+    <link rel="prev" title="Hermitian SVD" href="HermitianSVD.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../spectral.html">Spectral analysis</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="HermitianTridiagEig.html">Hermitian tridiagonal eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianEig.html">Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SkewHermitianEig.html">Skew-Hermitian eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianGenDefEig.html">Hermitian generalized-definite eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianSVD.html">Hermitian SVD</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SVD</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#computing-singular-values">Computing singular values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#computing-singular-value-decompositions">Computing Singular Value Decompositions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control-structures">Control structures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Polar.html">Polar decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Schur.html">Schur decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specialized.html">Specialized eigensolvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pseudospectra.html">Pseudospectra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spectral.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../spectral.html">Spectral analysis</a> &raquo;</li>
+        
+      <li>SVD</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/spectral/SVD.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="svd">
+<h1>SVD<a class="headerlink" href="#svd" title="Permalink to this headline">¶</a></h1>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span>, a <em>Singular Value Decomposition</em>
+is a triplet <span class="math notranslate nohighlight">\((U,\Sigma,V)\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[A = U \Sigma V^H,\]</div>
+<p>where <span class="math notranslate nohighlight">\(U^H U = I\)</span>, <span class="math notranslate nohighlight">\(V^H V = I\)</span>, and <span class="math notranslate nohighlight">\(\Sigma\)</span> is diagonal with
+non-negative entries. The columns of <span class="math notranslate nohighlight">\(U\)</span> are called
+<em>left singular vectors</em>, the columns of <span class="math notranslate nohighlight">\(V\)</span> are called
+<em>right singular vectors</em>, and the first <span class="math notranslate nohighlight">\(\text{min}(m,n)\)</span> diagonal
+entries of <span class="math notranslate nohighlight">\(\Sigma\)</span> are called <em>singular values</em>.</p>
+<p>The above constraints allow for a number of different
+configurations:</p>
+<ol class="arabic simple">
+<li><p>A <em>full</em> SVD requires a square, <span class="math notranslate nohighlight">\(m \times m\)</span> <span class="math notranslate nohighlight">\(U\)</span>, a square,
+<span class="math notranslate nohighlight">\(n \times n\)</span>, <span class="math notranslate nohighlight">\(V\)</span>, and an <span class="math notranslate nohighlight">\(m \times n\)</span> <span class="math notranslate nohighlight">\(\Sigma\)</span>.</p></li>
+<li><p>A <em>thin</em> SVD only involves an <span class="math notranslate nohighlight">\(m \times \text{min}(m,n)\)</span> <span class="math notranslate nohighlight">\(U\)</span>,
+an <span class="math notranslate nohighlight">\(\text{min}(m,n) \times n\)</span> <span class="math notranslate nohighlight">\(V\)</span>, and a
+<span class="math notranslate nohighlight">\(\min(m,n) \times \min(m,n)\)</span> <span class="math notranslate nohighlight">\(\Sigma\)</span>.</p></li>
+<li><p>A <em>compact</em> SVD only keeps the singular triplets corresponding to nonzero
+singular values, and so its size is bounded by that of the thin SVD.</p></li>
+<li><p>A <em>thresholded</em> SVD only keeps the singular triplets with singular values
+which are sufficiently large. Thus, <em>compact</em> SVDs are a special case of
+thresholded SVDs.</p></li>
+</ol>
+<p>Elemental currently provides support for thin and thresholded SVDs as well as
+allowing for only the singular values to be computed.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/SVD.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/spectral/SVD">Subroutines</a></p>
+<div class="section" id="computing-singular-values">
+<h2>Computing singular values<a class="headerlink" href="#computing-singular-values" title="Permalink to this headline">¶</a></h2>
+<p>The following routines form the singular values of <span class="math notranslate nohighlight">\(A\)</span> in <cite>s</cite>. Note that
+<cite>A</cite> is overwritten in order to compute the singular values.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEE">
+<span id="_CPPv33SVDR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="_CPPv23SVDR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="SVD__Matrix:F:R.Matrix:Base:F::R"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEERK7SVDCtrlI4BaseI1FEE">
+<span id="_CPPv33SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEERK7SVDCtrlI4BaseI1FEE"></span><span id="_CPPv23SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEERK7SVDCtrlI4BaseI1FEE"></span><span id="SVD__AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.SVDCtrl:Base:F::CR"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE7SVDCtrlI4BaseI1FEE" title="SVDCtrl&lt;Base&lt;F&gt;&gt;">SVDCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE7SVDCtrlI4BaseI1FEE" title="SVDCtrl&lt;Base&lt;F&gt;&gt;">SVDCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEERK7SVDCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSingularValues_s">
+<code class="descname">ElSingularValues_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValues_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSingularValues_d">
+<code class="descname">ElSingularValues_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValues_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSingularValues_c">
+<code class="descname">ElSingularValues_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValues_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSingularValues_z">
+<code class="descname">ElSingularValues_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValues_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSingularValuesDist_s">
+<code class="descname">ElSingularValuesDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValuesDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSingularValuesDist_d">
+<code class="descname">ElSingularValuesDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValuesDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSingularValuesDist_c">
+<code class="descname">ElSingularValuesDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValuesDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSingularValuesDist_z">
+<code class="descname">ElSingularValuesDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSingularValuesDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><strong>TODO: Expert interfaces</strong></p>
+</div>
+</div>
+<div class="section" id="computing-singular-value-decompositions">
+<h2>Computing Singular Value Decompositions<a class="headerlink" href="#computing-singular-value-decompositions" title="Permalink to this headline">¶</a></h2>
+<p>The following routines overwrite <cite>A</cite> with <span class="math notranslate nohighlight">\(U\)</span>, <cite>s</cite> with the diagonal
+entries of <span class="math notranslate nohighlight">\(\Sigma\)</span>, and <cite>V</cite> with <span class="math notranslate nohighlight">\(V\)</span>.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FERK7SVDCtrlI4BaseI1FEE">
+<span id="_CPPv33SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FERK7SVDCtrlI4BaseI1FEE"></span><span id="_CPPv23SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FERK7SVDCtrlI4BaseI1FEE"></span><span id="SVD__Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.SVDCtrl:Base:F::CR"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE7SVDCtrlI4BaseI1FEE" title="SVDCtrl&lt;Base&lt;F&gt;&gt;">SVDCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE7SVDCtrlI4BaseI1FEE" title="SVDCtrl&lt;Base&lt;F&gt;&gt;">SVDCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FERK7SVDCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FERK7SVDCtrlI4BaseI1FEE">
+<span id="_CPPv33SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FERK7SVDCtrlI4BaseI1FEE"></span><span id="_CPPv23SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FERK7SVDCtrlI4BaseI1FEE"></span><span id="SVD__AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.AbstractDistMatrix:F:R.SVDCtrl:Base:F::CR"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>V</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE7SVDCtrlI4BaseI1FEE" title="SVDCtrl&lt;Base&lt;F&gt;&gt;">SVDCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE7SVDCtrlI4BaseI1FEE" title="SVDCtrl&lt;Base&lt;F&gt;&gt;">SVDCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FERK7SVDCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSVD_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVD_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> s</em>, ElMatrix_s<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVD_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVD_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVD_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> s</em>, ElMatrix_d<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVD_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVD_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVD_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_s<em> s</em>, ElMatrix_c<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVD_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVD_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVD_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_d<em> s</em>, ElMatrix_z<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVD_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVDDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVDDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> s</em>, ElDistMatrix_s<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVDDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVDDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVDDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> s</em>, ElDistMatrix_d<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVDDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVDDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVDDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_s<em> s</em>, ElDistMatrix_c<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVDDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVDDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVDDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_d<em> s</em>, ElDistMatrix_z<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVDDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><strong>TODO: Expert interfaces</strong></p>
+</div>
+</div>
+<div class="section" id="control-structures">
+<h2>Control structures<a class="headerlink" href="#control-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv4IE7SVDCtrlI4RealE">
+<span id="_CPPv3IE7SVDCtrlI4RealE"></span><span id="_CPPv2IE7SVDCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SVDCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE7SVDCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N7SVDCtrlI4RealE5seqQRE">
+<span id="_CPPv3N7SVDCtrlI4RealE5seqQRE"></span><span id="_CPPv2N7SVDCtrlI4RealE5seqQRE"></span><span id="SVDCtrl:Real:::seqQR__b"></span>bool <code class="descname">seqQR</code><a class="headerlink" href="#_CPPv4N7SVDCtrlI4RealE5seqQRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether or not sequential implementations should use the QR algorithm
+instead of a Divide and Conquer when computing singular vectors.
+When only singular values are requested, a bidiagonal DQDS algorithms is
+always run.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SVDCtrlI4RealE12valChanRatioE">
+<span id="_CPPv3N7SVDCtrlI4RealE12valChanRatioE"></span><span id="_CPPv2N7SVDCtrlI4RealE12valChanRatioE"></span><span id="SVDCtrl:Real:::valChanRatio__double"></span>double <code class="descname">valChanRatio</code><a class="headerlink" href="#_CPPv4N7SVDCtrlI4RealE12valChanRatioE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The minimum height/width ratio before preprocessing with a QR
+decomposition when only computing singular values.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SVDCtrlI4RealE13fullChanRatioE">
+<span id="_CPPv3N7SVDCtrlI4RealE13fullChanRatioE"></span><span id="_CPPv2N7SVDCtrlI4RealE13fullChanRatioE"></span><span id="SVDCtrl:Real:::fullChanRatio__double"></span>double <code class="descname">fullChanRatio</code><a class="headerlink" href="#_CPPv4N7SVDCtrlI4RealE13fullChanRatioE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The minimum height/width ratio before preprocessing with a QR
+decomposition when computing a full SVD.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SVDCtrlI4RealE11thresholdedE">
+<span id="_CPPv3N7SVDCtrlI4RealE11thresholdedE"></span><span id="_CPPv2N7SVDCtrlI4RealE11thresholdedE"></span><span id="SVDCtrl:Real:::thresholded__b"></span>bool <code class="descname">thresholded</code><a class="headerlink" href="#_CPPv4N7SVDCtrlI4RealE11thresholdedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If the sufficiently small singular triplets should be thrown away.
+When thresholded, a cross-product algorithm is used. This is often
+advantageous since tridiagonal eigensolvers tend to have faster
+parallel implementations than bidiagonal SVD’s.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SVDCtrlI4RealE8relativeE">
+<span id="_CPPv3N7SVDCtrlI4RealE8relativeE"></span><span id="_CPPv2N7SVDCtrlI4RealE8relativeE"></span><span id="SVDCtrl:Real:::relative__b"></span>bool <code class="descname">relative</code><a class="headerlink" href="#_CPPv4N7SVDCtrlI4RealE8relativeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If the tolerance should be relative to the largest singular value.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SVDCtrlI4RealE3tolE">
+<span id="_CPPv3N7SVDCtrlI4RealE3tolE"></span><span id="_CPPv2N7SVDCtrlI4RealE3tolE"></span><span id="SVDCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N7SVDCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The numerical tolerance for the thresholding. If this value is kept at
+zero, then a value is automatically chosen based upon the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N7SVDCtrlI4RealE7SVDCtrlEv">
+<span id="_CPPv3N7SVDCtrlI4RealE7SVDCtrlEv"></span><span id="_CPPv2N7SVDCtrlI4RealE7SVDCtrlEv"></span><span id="SVDCtrl:Real:::SVDCtrl"></span><code class="descname">SVDCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7SVDCtrlI4RealE7SVDCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets <code class="docutils literal notranslate"><span class="pre">seqQR=false</span></code>, <code class="docutils literal notranslate"><span class="pre">valChanRatio=1.2</span></code>, <code class="docutils literal notranslate"><span class="pre">fullChanRatio=1.5</span></code>,
+<code class="docutils literal notranslate"><span class="pre">thresholded=false</span></code>, <code class="docutils literal notranslate"><span class="pre">relative=true</span></code>, and <code class="docutils literal notranslate"><span class="pre">tol=0</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE7SVDCtrlI4BaseI1FEE">
+<span id="_CPPv3IE7SVDCtrlI4BaseI1FEE"></span><span id="_CPPv2IE7SVDCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SVDCtrl</code>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE7SVDCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="c.ElSVDCtrl_s">
+<code class="descname">ElSVDCtrl_s</code><a class="headerlink" href="#c.ElSVDCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElSVDCtrl_s.seqQR">
+bool <code class="descname">seqQR</code><a class="headerlink" href="#c.ElSVDCtrl_s.seqQR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_s.valChanRatio">
+double <code class="descname">valChanRatio</code><a class="headerlink" href="#c.ElSVDCtrl_s.valChanRatio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_s.fullChanRatio">
+double <code class="descname">fullChanRatio</code><a class="headerlink" href="#c.ElSVDCtrl_s.fullChanRatio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_s.thresholded">
+bool <code class="descname">thresholded</code><a class="headerlink" href="#c.ElSVDCtrl_s.thresholded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_s.relative">
+bool <code class="descname">relative</code><a class="headerlink" href="#c.ElSVDCtrl_s.relative" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_s.tol">
+float <code class="descname">tol</code><a class="headerlink" href="#c.ElSVDCtrl_s.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElSVDCtrl_d">
+<code class="descname">ElSVDCtrl_d</code><a class="headerlink" href="#c.ElSVDCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElSVDCtrl_d.seqQR">
+bool <code class="descname">seqQR</code><a class="headerlink" href="#c.ElSVDCtrl_d.seqQR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_d.valChanRatio">
+double <code class="descname">valChanRatio</code><a class="headerlink" href="#c.ElSVDCtrl_d.valChanRatio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_d.fullChanRatio">
+double <code class="descname">fullChanRatio</code><a class="headerlink" href="#c.ElSVDCtrl_d.fullChanRatio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_d.thresholded">
+bool <code class="descname">thresholded</code><a class="headerlink" href="#c.ElSVDCtrl_d.thresholded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_d.relative">
+bool <code class="descname">relative</code><a class="headerlink" href="#c.ElSVDCtrl_d.relative" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSVDCtrl_d.tol">
+double <code class="descname">tol</code><a class="headerlink" href="#c.ElSVDCtrl_d.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVDCtrlDefault_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVDCtrlDefault_s</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElSVDCtrl_s" title="ElSVDCtrl_s">ElSVDCtrl_s</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVDCtrlDefault_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVDCtrlDefault_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVDCtrlDefault_d</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElSVDCtrl_d" title="ElSVDCtrl_d">ElSVDCtrl_d</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVDCtrlDefault_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the default values for the control structure
+(<code class="docutils literal notranslate"><span class="pre">seqQR=false</span></code>, <code class="docutils literal notranslate"><span class="pre">valChanRatio=1.2</span></code>, <code class="docutils literal notranslate"><span class="pre">fullChanRatio=1.5</span></code>,
+<code class="docutils literal notranslate"><span class="pre">thresholded=false</span></code>, <code class="docutils literal notranslate"><span class="pre">relative=true</span></code>, and <code class="docutils literal notranslate"><span class="pre">tol=0</span></code>)</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Polar.html" class="btn btn-neutral float-right" title="Polar decomposition" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="HermitianSVD.html" class="btn btn-neutral float-left" title="Hermitian SVD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

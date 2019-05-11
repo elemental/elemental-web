@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Reduction to condensed form &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Hermitian to tridiagonal" href="condense/HermitianTridiag.html" />
+    <link rel="prev" title="LAPACK-like linear algebra" href="../lapack_like.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Reduction to condensed form</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="condense/HermitianTridiag.html">Hermitian to tridiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="condense/Hessenberg.html">Square to Hessenberg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="condense/Bidiag.html">General to bidiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+      <li>Reduction to condensed form</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/lapack_like/condense.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="reduction-to-condensed-form">
+<h1>Reduction to condensed form<a class="headerlink" href="#reduction-to-condensed-form" title="Permalink to this headline">¶</a></h1>
+<p>Computing the eigenvalues or singular values of a matrix, as a general rule,
+boils down to an iterative procedure. Naive applications of this iterative
+algorithm would often both require <span class="math notranslate nohighlight">\(O(n^4)\)</span> work for <span class="math notranslate nohighlight">\(n \times n\)</span>
+matrices and be less numerically stable than first spending <span class="math notranslate nohighlight">\(O(n^3)\)</span> work
+to <em>condense</em> the matrix to a form where each of roughly <span class="math notranslate nohighlight">\(O(n)\)</span> iterations
+requires at most <span class="math notranslate nohighlight">\(O(n^2)\)</span> work. In the case of a full eigenvalue
+decomposition of a Hermitian matrix, a similarity transformation composed of
+Householder transformations is applied to condense the matrix down to
+real symmetric tridiagonal form, where an iterative algorithm can be quickly
+(read: in at most cubic time) applied.
+Similarly, it is standard practice to condense a general matrix to bidiagonal
+form in order to compute its Singular Value Decomposition, and to reduce a
+general square matrix to upper Hessenberg form in order to compute its Schur
+decomposition. In each of these cases, it is possible cast a significant portion
+of the reduction to condensed form into high-performance
+matrix-matrix multiplications <a class="reference internal" href="condense/Hessenberg.html#dsh1989" id="id1"><span>[DSH1989]</span></a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="condense/HermitianTridiag.html">Hermitian to tridiagonal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="condense/Hessenberg.html">Square to Hessenberg</a></li>
+<li class="toctree-l1"><a class="reference internal" href="condense/Bidiag.html">General to bidiagonal</a></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/condense.hpp">C++ Header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/condense.h">C Header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/python/lapack_like/condense.py">Python wrappers</a></p>
+<dl class="citation">
+<dt class="label" id="dsh1989"><span class="brackets"><a class="fn-backref" href="#id1">DSH1989</a></span></dt>
+<dd><p>Jack J. Dongarra, Danny C. Sorensen, and Sven J. Hammarling, <em>Block reduction of matrices to condensed forms for eigenvalue computations</em>, Journal of Computational and Applied Mathematics, Vol. 27, Issues 1–2, pp. 215–227, 1989. DOI: <a class="reference external" href="http://dx.doi.org/10.1016/0377-0427(89)90367-1">http://dx.doi.org/10.1016/0377-0427(89)90367-1</a></p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="condense/HermitianTridiag.html" class="btn btn-neutral float-right" title="Hermitian to tridiagonal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../lapack_like.html" class="btn btn-neutral float-left" title="LAPACK-like linear algebra" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

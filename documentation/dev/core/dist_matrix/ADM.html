@@ -1,0 +1,1172 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AbstractDistMatrix &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DistMatrix" href="DM.html" />
+    <link rel="prev" title="DistMatrix" href="../dist_matrix.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AbstractDistMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DM.html">DistMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Element.html">ElementalMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Block.html">BlockMatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../dist_matrix.html">DistMatrix</a> &raquo;</li>
+        
+      <li>AbstractDistMatrix</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/dist_matrix/ADM.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="abstractdistmatrix">
+<h1>AbstractDistMatrix<a class="headerlink" href="#abstractdistmatrix" title="Permalink to this headline">¶</a></h1>
+<p>This abstract class defines the list of member functions that are guaranteed
+to be available for all matrix distributions and whose prototype does not
+depend upon the particular matrix distribution.</p>
+<p>One of the many conveniences provided by
+:cpp:class::<cite>AbstractDistMatrix&lt;scalarType&gt;</cite>
+is the ability for individual processes to easily modify arbitrary
+(possibly non-local) entries of the distribute matrix using a combination of
+<code class="docutils literal notranslate"><span class="pre">Reserve</span></code>, <code class="docutils literal notranslate"><span class="pre">QueueUpdate</span></code>, and <code class="docutils literal notranslate"><span class="pre">ProcessQueues</span></code>. For example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">El</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="n">DistMatrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">;</span>
+<span class="n">Zeros</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span> <span class="p">);</span>
+<span class="k">if</span><span class="p">(</span> <span class="n">A</span><span class="p">.</span><span class="n">DistRank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">Reserve</span><span class="p">(</span> <span class="mi">3</span> <span class="p">);</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">1.</span> <span class="p">);</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mf">2.</span> <span class="p">);</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mf">3.</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">A</span><span class="p">.</span><span class="n">DistRank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">Reserve</span><span class="p">(</span> <span class="mi">2</span> <span class="p">);</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">17.</span> <span class="p">);</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">QueueUpdate</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">18.</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="n">A</span><span class="p">.</span><span class="n">ProcessQueues</span><span class="p">();</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="_CPPv4IE18AbstractDistMatrixI10scalarTypeE">
+<span id="_CPPv3IE18AbstractDistMatrixI10scalarTypeE"></span><span id="_CPPv2IE18AbstractDistMatrixI10scalarTypeE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AbstractDistMatrix</code>&lt;scalarType&gt;<a class="headerlink" href="#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE18AbstractDistMatrixERR18AbstractDistMatrixI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE18AbstractDistMatrixERR18AbstractDistMatrixI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE18AbstractDistMatrixERR18AbstractDistMatrixI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::AbstractDistMatrix__AbstractDistMatrix:scalarType:RR"></span><code class="descname">AbstractDistMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE18AbstractDistMatrixERR18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;::AbstractDistMatrix">AbstractDistMatrix</a>&lt;scalarType&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE18AbstractDistMatrixERR18AbstractDistMatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move constructor which transfers the metadata from the specified
+matrix over to the new matrix as a means of cheaply transferring
+resources.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeED0Ev">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeED0Ev"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeED0Ev"></span><span id="AbstractDistMatrix:scalarType:::~AbstractDistMatrix"></span><code class="descname">~AbstractDistMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeEaSERR18AbstractDistMatrixI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeEaSERR18AbstractDistMatrixI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeEaSERR18AbstractDistMatrixI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::assign-operator__AbstractDistMatrix:scalarType:RR"></span><a class="reference internal" href="#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;">AbstractDistMatrix</a>&lt;scalarType&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;">AbstractDistMatrix</a>&lt;scalarType&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeEaSERR18AbstractDistMatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move assignment which swaps the metadata between the two matrices
+as a means of cheaply swapping the resources assigned to each matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeEmLE1T">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeEmLE1T"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeEmLE1T"></span><span id="AbstractDistMatrix:scalarType:::mul-assign-operator__T"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;">AbstractDistMatrix</a>&lt;scalarType&gt; &amp;<code class="descname">operator*=</code><span class="sig-paren">(</span>T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeEmLE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Multiply every entry in the matrix by <cite>alpha</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE5EmptyEv">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE5EmptyEv"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE5EmptyEv"></span><span id="AbstractDistMatrix:scalarType:::Empty"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE5EmptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Empties the data and frees all alignments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE9EmptyDataEv">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE9EmptyDataEv"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE9EmptyDataEv"></span><span id="AbstractDistMatrix:scalarType:::EmptyData"></span>void <code class="descname">EmptyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE9EmptyDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix size to zero and frees associated memory
+(the alignments are left unchanged).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE7SetGridERK4Grid">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE7SetGridERK4Grid"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE7SetGridERK4Grid"></span><span id="AbstractDistMatrix:scalarType:::SetGrid__GridCR"></span>void <code class="descname">SetGrid</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="AbstractDistMatrix&lt;scalarType&gt;::Grid">Grid</a> &amp;<em>grid</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE7SetGridERK4Grid" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Clear the distributed matrix’s contents and reconfigure for the new
+process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Resize__Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Resize__Int.Int.Int"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6ResizeE3Int3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure the matrix so that it is <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite>.
+Optionally, the local leading dimension may also be specified.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE14MakeConsistentEv">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE14MakeConsistentEv"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE14MakeConsistentEv"></span><span id="AbstractDistMatrix:scalarType:::MakeConsistent"></span>void <code class="descname">MakeConsistent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE14MakeConsistentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gives every non-participating process a copy of the metadata stored
+by the root process in the distribution communicator.</p>
+</dd></dl>
+
+<p class="rubric">Realignment</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE5AlignE3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE5AlignE3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE5AlignE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Align__Int.Int"></span>void <code class="descname">Align</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE5AlignE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE9AlignColsE3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE9AlignColsE3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE9AlignColsE3Int"></span><span id="AbstractDistMatrix:scalarType:::AlignCols__Int"></span>void <code class="descname">AlignCols</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE9AlignColsE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE9AlignRowsE3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE9AlignRowsE3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE9AlignRowsE3Int"></span><span id="AbstractDistMatrix:scalarType:::AlignRows__Int"></span>void <code class="descname">AlignRows</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE9AlignRowsE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Aligns the row or column distribution (or both).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE14FreeAlignmentsEv">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE14FreeAlignmentsEv"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE14FreeAlignmentsEv"></span><span id="AbstractDistMatrix:scalarType:::FreeAlignments"></span>void <code class="descname">FreeAlignments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE14FreeAlignmentsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Free all alignment constaints.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE7SetRootE3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE7SetRootE3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE7SetRootE3Int"></span><span id="AbstractDistMatrix:scalarType:::SetRoot__Int"></span>void <code class="descname">SetRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>root</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE7SetRootE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For querying and changing the process rank in the cross communicator which
+owns the data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE9AlignWithERK8DistData">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE9AlignWithERK8DistData"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE9AlignWithERK8DistData"></span><span id="AbstractDistMatrix:scalarType:::AlignWith__DistDataCR"></span>void <code class="descname">AlignWith</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv48DistData" title="DistData">DistData</a> &amp;<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE9AlignWithERK8DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE13AlignColsWithERK8DistData">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE13AlignColsWithERK8DistData"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE13AlignColsWithERK8DistData"></span><span id="AbstractDistMatrix:scalarType:::AlignColsWith__DistDataCR"></span>void <code class="descname">AlignColsWith</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv48DistData" title="DistData">DistData</a> &amp;<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE13AlignColsWithERK8DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE13AlignRowsWithERK8DistData">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE13AlignRowsWithERK8DistData"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE13AlignRowsWithERK8DistData"></span><span id="AbstractDistMatrix:scalarType:::AlignRowsWith__DistDataCR"></span>void <code class="descname">AlignRowsWith</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv48DistData" title="DistData">DistData</a> &amp;<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE13AlignRowsWithERK8DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Aligns the row or column distribution (or both) as necessary to conform
+with the specified distribution data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE14AlignAndResizeE3Int3Int3Int3Intb">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE14AlignAndResizeE3Int3Int3Int3Intb"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE14AlignAndResizeE3Int3Int3Int3Intb"></span><span id="AbstractDistMatrix:scalarType:::AlignAndResize__Int.Int.Int.Int.b"></span>void <code class="descname">AlignAndResize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, bool <em>force</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE14AlignAndResizeE3Int3Int3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE18AlignColsAndResizeE3Int3Int3Intb">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE18AlignColsAndResizeE3Int3Int3Intb"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE18AlignColsAndResizeE3Int3Int3Intb"></span><span id="AbstractDistMatrix:scalarType:::AlignColsAndResize__Int.Int.Int.b"></span>void <code class="descname">AlignColsAndResize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, bool <em>force</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE18AlignColsAndResizeE3Int3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE18AlignRowsAndResizeE3Int3Int3Intb">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE18AlignRowsAndResizeE3Int3Int3Intb"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE18AlignRowsAndResizeE3Int3Int3Intb"></span><span id="AbstractDistMatrix:scalarType:::AlignRowsAndResize__Int.Int.Int.b"></span>void <code class="descname">AlignRowsAndResize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, bool <em>force</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE18AlignRowsAndResizeE3Int3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attempt to realign the row or column distribution (or both), with
+the realignment being optionally <em>forced</em>, and then resize the distributed
+matrix to the specified size.</p>
+</dd></dl>
+
+<p class="rubric">Buffer attachment</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntP10scalarType3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntP10scalarType3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntP10scalarType3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Attach__Int.Int.GridCR.Int.Int.scalarTypeP.Int.Int"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="AbstractDistMatrix&lt;scalarType&gt;::Grid">Grid</a> &amp;<em>grid</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em>, scalarType *<em>buffer</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntP10scalarType3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntPK10scalarType3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntPK10scalarType3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntPK10scalarType3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::LockedAttach__Int.Int.GridCR.Int.Int.scalarTypeCP.Int.Int"></span>void <code class="descname">LockedAttach</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="AbstractDistMatrix&lt;scalarType&gt;::Grid">Grid</a> &amp;<em>grid</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em>, <em class="property">const</em> scalarType *<em>buffer</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ldim</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntPK10scalarType3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure around the (immutable) buffer of an implicit distributed
+matrix with the specified dimensions, alignments, process grid, and
+local leading dimension.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntR6MatrixI10scalarTypeE3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntR6MatrixI10scalarTypeE3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntR6MatrixI10scalarTypeE3Int"></span><span id="AbstractDistMatrix:scalarType:::Attach__Int.Int.GridCR.Int.Int.Matrix:scalarType:R.Int"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="AbstractDistMatrix&lt;scalarType&gt;::Grid">Grid</a> &amp;<em>grid</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em>, <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6MatrixEv" title="AbstractDistMatrix&lt;scalarType&gt;::Matrix">Matrix</a>&lt;scalarType&gt; &amp;<em>A</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6AttachE3Int3IntRK4Grid3Int3IntR6MatrixI10scalarTypeE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntRK6MatrixI10scalarTypeE3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntRK6MatrixI10scalarTypeE3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntRK6MatrixI10scalarTypeE3Int"></span><span id="AbstractDistMatrix:scalarType:::LockedAttach__Int.Int.GridCR.Int.Int.Matrix:scalarType:CR.Int"></span>void <code class="descname">LockedAttach</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="AbstractDistMatrix&lt;scalarType&gt;::Grid">Grid</a> &amp;<em>grid</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>colAlign</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>rowAlign</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6MatrixEv" title="AbstractDistMatrix&lt;scalarType&gt;::Matrix">Matrix</a>&lt;scalarType&gt; &amp;<em>A</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE12LockedAttachE3Int3IntRK4Grid3Int3IntRK6MatrixI10scalarTypeE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure around the (immutable) local matrix of an implicit distributed
+matrix with the specified alignments, process grid, and local leading
+dimension.</p>
+</dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE6HeightEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE6HeightEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE6HeightEv"></span><span id="AbstractDistMatrix:scalarType:::HeightC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE6HeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE5WidthEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE5WidthEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE5WidthEv"></span><span id="AbstractDistMatrix:scalarType:::WidthC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE5WidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height (width) of the distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14DiagonalLengthE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14DiagonalLengthE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14DiagonalLengthE3Int"></span><span id="AbstractDistMatrix:scalarType:::DiagonalLength__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">DiagonalLength</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14DiagonalLengthE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the length of the specified diagonal of the distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ViewingEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE7ViewingEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE7ViewingEv"></span><span id="AbstractDistMatrix:scalarType:::ViewingC"></span>bool <code class="descname">Viewing</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ViewingEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if this matrix is viewing another.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE6LockedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE6LockedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE6LockedEv"></span><span id="AbstractDistMatrix:scalarType:::LockedC"></span>bool <code class="descname">Locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE6LockedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if this matrix is viewing another in a manner that does not
+allow for modifying the viewed data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE11LocalHeightEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE11LocalHeightEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE11LocalHeightEv"></span><span id="AbstractDistMatrix:scalarType:::LocalHeightC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LocalHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE11LocalHeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE10LocalWidthEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE10LocalWidthEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE10LocalWidthEv"></span><span id="AbstractDistMatrix:scalarType:::LocalWidthC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LocalWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE10LocalWidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height (width) of the local matrix stored by a particular
+process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE4LDimEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE4LDimEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE4LDimEv"></span><span id="AbstractDistMatrix:scalarType:::LDimC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LDim</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4LDimEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the leading dimension of the local matrix stored by a particular
+process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6MatrixEv">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6MatrixEv"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6MatrixEv"></span><span id="AbstractDistMatrix:scalarType:::Matrix"></span><a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6MatrixEv" title="AbstractDistMatrix&lt;scalarType&gt;::Matrix">Matrix</a>&lt;scalarType&gt; &amp;<code class="descname">Matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6MatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE12LockedMatrixEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE12LockedMatrixEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE12LockedMatrixEv"></span><span id="AbstractDistMatrix:scalarType:::LockedMatrixC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6MatrixEv" title="AbstractDistMatrix&lt;scalarType&gt;::Matrix">Matrix</a>&lt;scalarType&gt; &amp;<code class="descname">LockedMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE12LockedMatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an (immutable) reference to the local matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE15AllocatedMemoryEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE15AllocatedMemoryEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE15AllocatedMemoryEv"></span><span id="AbstractDistMatrix:scalarType:::AllocatedMemoryC"></span>size_t <code class="descname">AllocatedMemory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE15AllocatedMemoryEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of entries of type <cite>scalarType</cite> that we have locally allocated
+space for.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6BufferEv">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6BufferEv"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6BufferEv"></span><span id="AbstractDistMatrix:scalarType:::Buffer"></span>scalarType *<code class="descname">Buffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6BufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE12LockedBufferEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE12LockedBufferEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE12LockedBufferEv"></span><span id="AbstractDistMatrix:scalarType:::LockedBufferC"></span><em class="property">const</em> scalarType *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE12LockedBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an (immutable) pointer to the local matrix’s buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6BufferE3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6BufferE3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6BufferE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Buffer__Int.Int"></span>scalarType *<code class="descname">Buffer</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6BufferE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE12LockedBufferE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE12LockedBufferE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE12LockedBufferE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::LockedBuffer__Int.IntC"></span><em class="property">const</em> scalarType *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE12LockedBufferE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an (immutable) pointer to the portion of the local buffer that
+stores entry <cite>(iLoc,jLoc)</cite>.</p>
+</dd></dl>
+
+<p class="rubric">Distribution information</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE4GridEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE4GridEv"></span><span id="AbstractDistMatrix:scalarType:::GridC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="AbstractDistMatrix&lt;scalarType&gt;::Grid">Grid</a> &amp;<code class="descname">Grid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the grid that this distributed matrix is distributed over.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE4WrapEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE4WrapEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE4WrapEv"></span><span id="AbstractDistMatrix:scalarType:::WrapC"></span>DistWrap <code class="descname">Wrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4WrapEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether the matrix is distributed element-wise (<cite>ELEMENT</cite>) or
+block-wise (<cite>BLOCK</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE11BlockHeightEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE11BlockHeightEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE11BlockHeightEv"></span><span id="AbstractDistMatrix:scalarType:::BlockHeightC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">BlockHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE11BlockHeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE10BlockWidthEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE10BlockWidthEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE10BlockWidthEv"></span><span id="AbstractDistMatrix:scalarType:::BlockWidthC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">BlockWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE10BlockWidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the height (width) of the distribution block
+(which is always one for element-wise distributions).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE6ColCutEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE6ColCutEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE6ColCutEv"></span><span id="AbstractDistMatrix:scalarType:::ColCutC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ColCut</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE6ColCutEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE6RowCutEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE6RowCutEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE6RowCutEv"></span><span id="AbstractDistMatrix:scalarType:::RowCutC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RowCut</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE6RowCutEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the number of rows down (number of columns right) in a
+distribution that the upper-left corner of the matrix occurs.
+For element-wise distributed matrices, this must always be zero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14ColConstrainedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14ColConstrainedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14ColConstrainedEv"></span><span id="AbstractDistMatrix:scalarType:::ColConstrainedC"></span>bool <code class="descname">ColConstrained</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14ColConstrainedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14RowConstrainedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14RowConstrainedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14RowConstrainedEv"></span><span id="AbstractDistMatrix:scalarType:::RowConstrainedC"></span>bool <code class="descname">RowConstrained</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14RowConstrainedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the column (row) alignment is constrained.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE15RootConstrainedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE15RootConstrainedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE15RootConstrainedEv"></span><span id="AbstractDistMatrix:scalarType:::RootConstrainedC"></span>bool <code class="descname">RootConstrained</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE15RootConstrainedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return if the root (the alignment with respect to the
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>) is constrained.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8ColAlignEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8ColAlignEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8ColAlignEv"></span><span id="AbstractDistMatrix:scalarType:::ColAlignC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ColAlign</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8ColAlignEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8RowAlignEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8RowAlignEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8RowAlignEv"></span><span id="AbstractDistMatrix:scalarType:::RowAlignC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RowAlign</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8RowAlignEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank of the member of our <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a> or
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a> assigned to the top-left entry of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8ColShiftEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8ColShiftEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8ColShiftEv"></span><span id="AbstractDistMatrix:scalarType:::ColShiftC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ColShift</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8ColShiftEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8RowShiftEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8RowShiftEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8RowShiftEv"></span><span id="AbstractDistMatrix:scalarType:::RowShiftC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RowShift</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8RowShiftEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the first row or column to be locally assigned to this process,
+respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE7ColCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE7ColCommEv"></span><span id="AbstractDistMatrix:scalarType:::ColCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">ColComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator used to distribute each column of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE7RowCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE7RowCommEv"></span><span id="AbstractDistMatrix:scalarType:::RowCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">RowComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator used to distribute each row of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialColCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14PartialColCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14PartialColCommEv"></span><span id="AbstractDistMatrix:scalarType:::PartialColCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialColComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialColCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColCommEv"></span><span id="AbstractDistMatrix:scalarType:::PartialUnionColCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialUnionColComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColComm()</span></code></a> is a (not necessarily strict) subset of
+the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>; an
+element-wise distribution of each column over this communicator
+can be reached by unioning the local data from a distribution over the
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a> (via an <code class="docutils literal notranslate"><span class="pre">AllGather</span></code>) over the
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionColComm()</span></code></a>. One nontrivial example is for
+<a class="reference internal" href="Element/VC_STAR.html#_CPPv4IE10DistMatrixI10scalarType2VC4STARE" title="DistMatrix&lt;scalarType, VC, STAR&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,VC,STAR&gt;</span></code></a>, where the column communicator is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::VCComm()</span></code>, the partial column communicator is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::MCComm()</span></code>, and the partial union column communicator is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::MRComm()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialRowCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14PartialRowCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14PartialRowCommEv"></span><span id="AbstractDistMatrix:scalarType:::PartialRowCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialRowComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialRowCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowCommEv"></span><span id="AbstractDistMatrix:scalarType:::PartialUnionRowCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialUnionRowComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These are the same as <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColComm()</span></code></a> and
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionColComm()</span></code></a>, except that they correspond to
+distributions of the rows of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8DistCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8DistCommEv"></span><span id="AbstractDistMatrix:scalarType:::DistCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">DistComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator used to distribute the entire set of entries of the
+matrix (in a particular precise sense, the product of <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>
+and <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv"></span><span id="AbstractDistMatrix:scalarType:::CrossCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">CrossComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The orthogonal complement of the product of <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DistComm()</span></code></a> and
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::RedundantComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RedundantComm()</span></code></a> with respect to the process grid. For instance,
+for <a class="reference internal" href="Element/CIRC_CIRC.html#_CPPv4IE10DistMatrixI10scalarType4CIRC4CIRCE" title="DistMatrix&lt;scalarType, CIRC, CIRC&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,CIRC,CIRC&gt;</span></code></a>, this is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::VCComm()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE13RedundantCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE13RedundantCommEv"></span><span id="AbstractDistMatrix:scalarType:::RedundantCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">RedundantComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator over which data is redundantly stored. For instance,
+for <a class="reference internal" href="Element/MC_STAR.html#_CPPv4IE10DistMatrixI10scalarType2MC4STARE" title="DistMatrix&lt;scalarType, MC, STAR&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,MC,STAR&gt;</span></code></a>, this is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::RowComm()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE7ColRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE7ColRankEv"></span><span id="AbstractDistMatrix:scalarType:::ColRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ColRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE7RowRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE7RowRankEv"></span><span id="AbstractDistMatrix:scalarType:::RowRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RowRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialColRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14PartialColRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14PartialColRankEv"></span><span id="AbstractDistMatrix:scalarType:::PartialColRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialColRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialColRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialRowRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14PartialRowRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14PartialRowRankEv"></span><span id="AbstractDistMatrix:scalarType:::PartialRowRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialRowRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialRowRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColRankEv"></span><span id="AbstractDistMatrix:scalarType:::PartialUnionColRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialUnionColRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowRankEv"></span><span id="AbstractDistMatrix:scalarType:::PartialUnionRowRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialUnionRowRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8DistRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8DistRankEv"></span><span id="AbstractDistMatrix:scalarType:::DistRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">DistRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9CrossRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9CrossRankEv"></span><span id="AbstractDistMatrix:scalarType:::CrossRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">CrossRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE13RedundantRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE13RedundantRankEv"></span><span id="AbstractDistMatrix:scalarType:::RedundantRankC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RedundantRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our rank in our <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a>,
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14PartialRowCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialRowComm()</span></code></a>,
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionColComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE19PartialUnionRowCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::PartialUnionRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionRowComm()</span></code></a>,
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DistComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>, or <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::RedundantComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RedundantComm()</span></code></a>,
+respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9ColStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9ColStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9ColStrideEv"></span><span id="AbstractDistMatrix:scalarType:::ColStrideC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ColStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9ColStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9RowStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9RowStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9RowStrideEv"></span><span id="AbstractDistMatrix:scalarType:::RowStrideC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RowStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9RowStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE16PartialColStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE16PartialColStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE16PartialColStrideEv"></span><span id="AbstractDistMatrix:scalarType:::PartialColStrideC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialColStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE16PartialColStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE16PartialRowStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE16PartialRowStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE16PartialRowStrideEv"></span><span id="AbstractDistMatrix:scalarType:::PartialRowStrideC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialRowStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE16PartialRowStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE21PartialUnionColStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE21PartialUnionColStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE21PartialUnionColStrideEv"></span><span id="AbstractDistMatrix:scalarType:::PartialUnionColStrideC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialUnionColStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE21PartialUnionColStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE21PartialUnionRowStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE21PartialUnionRowStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE21PartialUnionRowStrideEv"></span><span id="AbstractDistMatrix:scalarType:::PartialUnionRowStrideC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">PartialUnionRowStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE21PartialUnionRowStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistSizeEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8DistSizeEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8DistSizeEv"></span><span id="AbstractDistMatrix:scalarType:::DistSizeC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">DistSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossSizeEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9CrossSizeEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9CrossSizeEv"></span><span id="AbstractDistMatrix:scalarType:::CrossSizeC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">CrossSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantSizeEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE13RedundantSizeEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE13RedundantSizeEv"></span><span id="AbstractDistMatrix:scalarType:::RedundantSizeC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RedundantSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE13RedundantSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of processes within a particular communicator associated
+with the distributed matrix. For communicators associated with
+distributions of either the rows or columns of a matrix, the communicator
+size is equal to the distance (or <em>stride</em>) between successive row or
+column indices assigned to a particular process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE4RootEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE4RootEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE4RootEv"></span><span id="AbstractDistMatrix:scalarType:::RootC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Root</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4RootEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank of the member of our cross communicator
+(<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>) which can store data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE13ParticipatingEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE13ParticipatingEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE13ParticipatingEv"></span><span id="AbstractDistMatrix:scalarType:::ParticipatingC"></span>bool <code class="descname">Participating</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE13ParticipatingEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if this process can be assigned matrix data (that is, if
+this process is both in the process grid and the root of
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8RowOwnerE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8RowOwnerE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8RowOwnerE3Int"></span><span id="AbstractDistMatrix:scalarType:::RowOwner__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">RowOwner</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8RowOwnerE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank (in <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>) of the process which owns
+row <cite>i</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8ColOwnerE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8ColOwnerE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8ColOwnerE3Int"></span><span id="AbstractDistMatrix:scalarType:::ColOwner__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ColOwner</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8ColOwnerE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank (in <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a>) of the process which owns
+column <cite>j</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE5OwnerE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE5OwnerE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE5OwnerE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Owner__Int.IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Owner</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE5OwnerE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank (in <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8DistCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DistComm()</span></code></a>) of the process which owns entry
+<cite>(i,j)</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9GlobalRowE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9GlobalRowE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9GlobalRowE3Int"></span><span id="AbstractDistMatrix:scalarType:::GlobalRow__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">GlobalRow</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9GlobalRowE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9GlobalColE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9GlobalColE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9GlobalColE3Int"></span><span id="AbstractDistMatrix:scalarType:::GlobalCol__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">GlobalCol</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9GlobalColE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the global row (column) index corresponding to the given local row
+(column) index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8LocalRowE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8LocalRowE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8LocalRowE3Int"></span><span id="AbstractDistMatrix:scalarType:::LocalRow__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LocalRow</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8LocalRowE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8LocalColE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8LocalColE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8LocalColE3Int"></span><span id="AbstractDistMatrix:scalarType:::LocalCol__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LocalCol</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8LocalColE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the local row (column) index for row <cite>i</cite> (<cite>j</cite>); if this process
+is not assigned row <cite>i</cite> (column <cite>j</cite>), then throw an exception.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14LocalRowOffsetE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14LocalRowOffsetE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14LocalRowOffsetE3Int"></span><span id="AbstractDistMatrix:scalarType:::LocalRowOffset__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LocalRowOffset</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14LocalRowOffsetE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14LocalColOffsetE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14LocalColOffsetE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14LocalColOffsetE3Int"></span><span id="AbstractDistMatrix:scalarType:::LocalColOffset__IntC"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">LocalColOffset</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14LocalColOffsetE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of local rows (columns) occurring before the given
+global row (column) index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE10IsLocalRowE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE10IsLocalRowE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE10IsLocalRowE3Int"></span><span id="AbstractDistMatrix:scalarType:::IsLocalRow__IntC"></span>bool <code class="descname">IsLocalRow</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE10IsLocalRowE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE10IsLocalColE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE10IsLocalColE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE10IsLocalColE3Int"></span><span id="AbstractDistMatrix:scalarType:::IsLocalCol__IntC"></span>bool <code class="descname">IsLocalCol</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE10IsLocalColE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE7IsLocalE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE7IsLocalE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE7IsLocalE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::IsLocal__Int.IntC"></span>bool <code class="descname">IsLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7IsLocalE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the row, column, or entry, respectively, is assigned to
+this process.</p>
+</dd></dl>
+
+<p class="rubric">Single-entry manipulation (global)</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE3GetE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE3GetE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE3GetE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Get__Int.IntC"></span>scalarType <code class="descname">Get</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE3GetE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE11GetRealPartE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE11GetRealPartE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE11GetRealPartE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::GetRealPart__Int.IntC"></span>Base&lt;scalarType&gt; <code class="descname">GetRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE11GetRealPartE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE11GetImagPartE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE11GetImagPartE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE11GetImagPartE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::GetImagPart__Int.IntC"></span>Base&lt;scalarType&gt; <code class="descname">GetImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE11GetImagPartE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <cite>(i,j)</cite> entry (or its real or imaginary part) of the global
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE3SetE3Int3Int10scalarType">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE3SetE3Int3Int10scalarType"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE3SetE3Int3Int10scalarType"></span><span id="AbstractDistMatrix:scalarType:::Set__Int.Int.scalarType"></span>void <code class="descname">Set</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, scalarType <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE3SetE3Int3Int10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::SetRealPart__Int.Int.Base:scalarType:"></span>void <code class="descname">SetRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE11SetRealPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::SetImagPart__Int.Int.Base:scalarType:"></span>void <code class="descname">SetImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE11SetImagPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the <cite>(i,j)</cite> entry (or its real or imaginary part) of the global
+matrix to <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE6UpdateE3Int3Int10scalarType">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE6UpdateE3Int3Int10scalarType"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE6UpdateE3Int3Int10scalarType"></span><span id="AbstractDistMatrix:scalarType:::Update__Int.Int.scalarType"></span>void <code class="descname">Update</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, scalarType <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE6UpdateE3Int3Int10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::UpdateRealPart__Int.Int.Base:scalarType:"></span>void <code class="descname">UpdateRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE14UpdateRealPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::UpdateImagPart__Int.Int.Base:scalarType:"></span>void <code class="descname">UpdateImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE14UpdateImagPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add <span class="math notranslate nohighlight">\(\alpha\)</span> to the <cite>(i,j)</cite> entry (or its real or imaginary part)
+of the global matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE8MakeRealE3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE8MakeRealE3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE8MakeRealE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::MakeReal__Int.Int"></span>void <code class="descname">MakeReal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE8MakeRealE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the <span class="math notranslate nohighlight">\((i,j)\)</span> entry of the global matrix to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE9ConjugateE3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE9ConjugateE3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE9ConjugateE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::Conjugate__Int.Int"></span>void <code class="descname">Conjugate</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE9ConjugateE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the <span class="math notranslate nohighlight">\((i,j)\)</span> entry of the global matrix.</p>
+</dd></dl>
+
+<p class="rubric">Batch remote entry updates</p>
+<p>The following set of routines provide a convenient mechanism for allowing
+all processes to contribute updates to arbitrary entries of the
+distributed matrix. Each process should begin by calling <code class="docutils literal notranslate"><span class="pre">Reserve</span></code> with
+an upper bound on the number of remote entries to contribute, followed
+by calling <code class="docutils literal notranslate"><span class="pre">QueueUpdate</span></code> for each (potentially remote) update, and then
+all processes must collectively call <code class="docutils literal notranslate"><span class="pre">ProcessQueues</span></code>.</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE7ReserveE3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE7ReserveE3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE7ReserveE3Int"></span><span id="AbstractDistMatrix:scalarType:::Reserve__Int"></span>void <code class="descname">Reserve</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numRemoteEntries</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE7ReserveE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE11QueueUpdateERK5EntryI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE11QueueUpdateERK5EntryI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE11QueueUpdateERK5EntryI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::QueueUpdate__Entry:scalarType:CR"></span>void <code class="descname">QueueUpdate</code><span class="sig-paren">(</span><em class="property">const</em> Entry&lt;scalarType&gt; &amp;<em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE11QueueUpdateERK5EntryI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE11QueueUpdateE3Int3Int10scalarType">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE11QueueUpdateE3Int3Int10scalarType"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE11QueueUpdateE3Int3Int10scalarType"></span><span id="AbstractDistMatrix:scalarType:::QueueUpdate__Int.Int.scalarType"></span>void <code class="descname">QueueUpdate</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, scalarType <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE11QueueUpdateE3Int3Int10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE13ProcessQueuesEv">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE13ProcessQueuesEv"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE13ProcessQueuesEv"></span><span id="AbstractDistMatrix:scalarType:::ProcessQueues"></span>void <code class="descname">ProcessQueues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE13ProcessQueuesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>The following routines provide a mechanism for extracting (potentially)
+remote entries of a distributed matrix from each process. While each process
+can independently call <code class="docutils literal notranslate"><span class="pre">ReservePulls</span></code> and <code class="docutils literal notranslate"><span class="pre">QueuePull</span></code>, they must
+collectively call <code class="docutils literal notranslate"><span class="pre">ProcessPullQueue</span></code> since it involves an <code class="docutils literal notranslate"><span class="pre">mpi::AllToAll</span></code>
+communication pattern.</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE12ReservePullsE3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE12ReservePullsE3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE12ReservePullsE3Int"></span><span id="AbstractDistMatrix:scalarType:::ReservePulls__IntC"></span>void <code class="descname">ReservePulls</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numPulls</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE12ReservePullsE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE9QueuePullE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE9QueuePullE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE9QueuePullE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::QueuePull__Int.IntC"></span>void <code class="descname">QueuePull</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9QueuePullE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueEP10scalarType">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueEP10scalarType"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueEP10scalarType"></span><span id="AbstractDistMatrix:scalarType:::ProcessPullQueue__scalarTypePC"></span>void <code class="descname">ProcessPullQueue</code><span class="sig-paren">(</span>scalarType *<em>pullBuf</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueEP10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueER6vectorI10scalarTypeE">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueER6vectorI10scalarTypeE"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueER6vectorI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::ProcessPullQueue__vector:scalarType:RC"></span>void <code class="descname">ProcessPullQueue</code><span class="sig-paren">(</span>vector&lt;scalarType&gt; &amp;<em>pullBuf</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE16ProcessPullQueueER6vectorI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Single-entry manipulation (local)</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE8GetLocalE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE8GetLocalE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE8GetLocalE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::GetLocal__Int.IntC"></span>scalarType <code class="descname">GetLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE8GetLocalE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE16GetRealPartLocalE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE16GetRealPartLocalE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE16GetRealPartLocalE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::GetRealPartLocal__Int.IntC"></span>Base&lt;scalarType&gt; <code class="descname">GetRealPartLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE16GetRealPartLocalE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE16GetLocalImagPartE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE16GetLocalImagPartE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE16GetLocalImagPartE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::GetLocalImagPart__Int.IntC"></span>Base&lt;scalarType&gt; <code class="descname">GetLocalImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE16GetLocalImagPartE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <span class="math notranslate nohighlight">\((iLoc,jLoc)\)</span> entry (or its real or imaginary part) of
+our local matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE8SetLocalE3Int3Int10scalarType">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE8SetLocalE3Int3Int10scalarType"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE8SetLocalE3Int3Int10scalarType"></span><span id="AbstractDistMatrix:scalarType:::SetLocal__Int.Int.scalarType"></span>void <code class="descname">SetLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em>, scalarType <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE8SetLocalE3Int3Int10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE16SetLocalRealPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE16SetLocalRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE16SetLocalRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::SetLocalRealPart__Int.Int.Base:scalarType:"></span>void <code class="descname">SetLocalRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE16SetLocalRealPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE16SetLocalImagPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE16SetLocalImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE16SetLocalImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::SetLocalImagPart__Int.Int.Base:scalarType:"></span>void <code class="descname">SetLocalImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE16SetLocalImagPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the <cite>(iLoc,jLoc)</cite> entry (or its real or imaginary part) of our
+local matrix to <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE11UpdateLocalE3Int3Int10scalarType">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE11UpdateLocalE3Int3Int10scalarType"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE11UpdateLocalE3Int3Int10scalarType"></span><span id="AbstractDistMatrix:scalarType:::UpdateLocal__Int.Int.scalarType"></span>void <code class="descname">UpdateLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em>, scalarType <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE11UpdateLocalE3Int3Int10scalarType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE19UpdateLocalRealPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE19UpdateLocalRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE19UpdateLocalRealPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::UpdateLocalRealPart__Int.Int.Base:scalarType:"></span>void <code class="descname">UpdateLocalRealPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE19UpdateLocalRealPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE19UpdateLocalImagPartE3Int3Int4BaseI10scalarTypeE">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE19UpdateLocalImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE19UpdateLocalImagPartE3Int3Int4BaseI10scalarTypeE"></span><span id="AbstractDistMatrix:scalarType:::UpdateLocalImagPart__Int.Int.Base:scalarType:"></span>void <code class="descname">UpdateLocalImagPart</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em>, Base&lt;scalarType&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE19UpdateLocalImagPartE3Int3Int4BaseI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add <span class="math notranslate nohighlight">\(\alpha\)</span> to the <cite>(iLoc,jLoc)</cite> entry (or its real or
+imaginary part) of our local matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE13MakeLocalRealE3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE13MakeLocalRealE3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE13MakeLocalRealE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::MakeLocalReal__Int.Int"></span>void <code class="descname">MakeLocalReal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE13MakeLocalRealE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the <cite>(iLoc,jLoc)</cite> entry of our local matrix to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI10scalarTypeE14ConjugateLocalE3Int3Int">
+<span id="_CPPv3N18AbstractDistMatrixI10scalarTypeE14ConjugateLocalE3Int3Int"></span><span id="_CPPv2N18AbstractDistMatrixI10scalarTypeE14ConjugateLocalE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::ConjugateLocal__Int.Int"></span>void <code class="descname">ConjugateLocal</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>iLoc</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>jLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI10scalarTypeE14ConjugateLocalE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the <cite>(iLoc,jLoc)</cite> entry of our local matrix.</p>
+</dd></dl>
+
+<p class="rubric">Assertions</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14ComplainIfRealEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14ComplainIfRealEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14ComplainIfRealEv"></span><span id="AbstractDistMatrix:scalarType:::ComplainIfRealC"></span>void <code class="descname">ComplainIfReal</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14ComplainIfRealEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE15AssertNotLockedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE15AssertNotLockedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE15AssertNotLockedEv"></span><span id="AbstractDistMatrix:scalarType:::AssertNotLockedC"></span>void <code class="descname">AssertNotLocked</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE15AssertNotLockedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE20AssertNotStoringDataEv">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE20AssertNotStoringDataEv"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE20AssertNotStoringDataEv"></span><span id="AbstractDistMatrix:scalarType:::AssertNotStoringDataC"></span>void <code class="descname">AssertNotStoringData</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE20AssertNotStoringDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE16AssertValidEntryE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE16AssertValidEntryE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE16AssertValidEntryE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::AssertValidEntry__Int.IntC"></span>void <code class="descname">AssertValidEntry</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE16AssertValidEntryE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE20AssertValidSubmatrixE3Int3Int3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE20AssertValidSubmatrixE3Int3Int3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE20AssertValidSubmatrixE3Int3Int3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::AssertValidSubmatrix__Int.Int.Int.IntC"></span>void <code class="descname">AssertValidSubmatrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>i</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>j</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE20AssertValidSubmatrixE3Int3Int3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14AssertSameGridERK4Grid">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14AssertSameGridERK4Grid"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14AssertSameGridERK4Grid"></span><span id="AbstractDistMatrix:scalarType:::AssertSameGrid__GridCRC"></span>void <code class="descname">AssertSameGrid</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE4GridEv" title="AbstractDistMatrix&lt;scalarType&gt;::Grid">Grid</a> &amp;<em>grid</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14AssertSameGridERK4Grid" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI10scalarTypeE14AssertSameSizeE3Int3Int">
+<span id="_CPPv3NK18AbstractDistMatrixI10scalarTypeE14AssertSameSizeE3Int3Int"></span><span id="_CPPv2NK18AbstractDistMatrixI10scalarTypeE14AssertSameSizeE3Int3Int"></span><span id="AbstractDistMatrix:scalarType:::AssertSameSize__Int.IntC"></span>void <code class="descname">AssertSameSize</code><span class="sig-paren">(</span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>width</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE14AssertSameSizeE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE18AbstractDistMatrixI1FE">
+<span id="_CPPv3IE18AbstractDistMatrixI1FE"></span><span id="_CPPv2IE18AbstractDistMatrixI1FE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AbstractDistMatrix</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An instance of <cite>AbstractDistMatrix</cite> where the underlying datatype is
+assumed to be a field.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE18AbstractDistMatrixI4RealE">
+<span id="_CPPv3IE18AbstractDistMatrixI4RealE"></span><span id="_CPPv2IE18AbstractDistMatrixI4RealE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AbstractDistMatrix</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE18AbstractDistMatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An instance of <cite>AbstractDistMatrix</cite> where the underlying datatype is real
+(e.g., <code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">double</span></code>).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE18AbstractDistMatrixI4BaseI1FEE">
+<span id="_CPPv3IE18AbstractDistMatrixI4BaseI1FEE"></span><span id="_CPPv2IE18AbstractDistMatrixI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AbstractDistMatrix</code>&lt;<a class="reference internal" href="../environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An instance of <cite>AbstractDistMatrix</cite> where the underlying datatype is the
+underlying real datatype from a field (e.g., <code class="docutils literal notranslate"><span class="pre">double</span></code> is the base type
+of <code class="docutils literal notranslate"><span class="pre">Complex&lt;double&gt;</span></code>).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE">
+<span id="_CPPv3IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE"></span><span id="_CPPv2IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AbstractDistMatrix</code>&lt;Complex&lt;<a class="reference internal" href="../environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt;<a class="headerlink" href="#_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An instance of <cite>AbstractDistMatrix</cite> where the underlying datatype is the
+complex extension of the base type of the field <cite>F</cite> (
+(e.g., <code class="docutils literal notranslate"><span class="pre">Complex&lt;double&gt;</span></code> is the complex extension of both <code class="docutils literal notranslate"><span class="pre">double</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Complex&lt;double&gt;</span></code>).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE18AbstractDistMatrixI3IntE">
+<span id="_CPPv3IE18AbstractDistMatrixI3IntE"></span><span id="_CPPv2IE18AbstractDistMatrixI3IntE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AbstractDistMatrix</code>&lt;<a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt;<a class="headerlink" href="#_CPPv4IE18AbstractDistMatrixI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An instance of <cite>AbstractDistMatrix</cite> where the underlying datatype is
+an <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48DistData">
+<span id="_CPPv38DistData"></span><span id="_CPPv28DistData"></span><span id="DistData"></span><em class="property">class </em><code class="descname">DistData</code><a class="headerlink" href="#_CPPv48DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8DistData7colDistE">
+<span id="_CPPv3N8DistData7colDistE"></span><span id="_CPPv2N8DistData7colDistE"></span><span id="DistData::colDist__Distribution"></span>Distribution <code class="descname">colDist</code><a class="headerlink" href="#_CPPv4N8DistData7colDistE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code> scheme used within each column of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData7rowDistE">
+<span id="_CPPv3N8DistData7rowDistE"></span><span id="_CPPv2N8DistData7rowDistE"></span><span id="DistData::rowDist__Distribution"></span>Distribution <code class="descname">rowDist</code><a class="headerlink" href="#_CPPv4N8DistData7rowDistE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code> scheme used within each row of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData8colAlignE">
+<span id="_CPPv3N8DistData8colAlignE"></span><span id="_CPPv2N8DistData8colAlignE"></span><span id="DistData::colAlign__Int"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">colAlign</code><a class="headerlink" href="#_CPPv4N8DistData8colAlignE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The rank in the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7ColCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;scalarType&gt;::ColComm()</span></code></a> which is
+assigned the top-left entry of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData8rowAlignE">
+<span id="_CPPv3N8DistData8rowAlignE"></span><span id="_CPPv2N8DistData8rowAlignE"></span><span id="DistData::rowAlign__Int"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">rowAlign</code><a class="headerlink" href="#_CPPv4N8DistData8rowAlignE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The rank in the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE7RowCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;scalarType&gt;::RowComm()</span></code></a> which
+is assigned the top-left entry of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData4rootE">
+<span id="_CPPv3N8DistData4rootE"></span><span id="_CPPv2N8DistData4rootE"></span><span id="DistData::root__Int"></span><a class="reference internal" href="../environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">root</code><a class="headerlink" href="#_CPPv4N8DistData4rootE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The member of the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI10scalarTypeE9CrossCommEv" title="AbstractDistMatrix&lt;scalarType&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;scalarType&gt;::CrossComm()</span></code></a> which
+is assigned ownership of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData4gridE">
+<span id="_CPPv3N8DistData4gridE"></span><span id="_CPPv2N8DistData4gridE"></span><span id="DistData::grid__GridCP"></span><em class="property">const</em> <a class="reference internal" href="../grid/cxx.html#_CPPv44Grid" title="Grid">Grid</a> *<code class="descname">grid</code><a class="headerlink" href="#_CPPv4N8DistData4gridE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An immutable pointer to the underlying process grid of the distributed
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8DistData8DistDataERK18AbstractDistMatrixI10scalarTypeE">
+<span id="_CPPv3N8DistData8DistDataERK18AbstractDistMatrixI10scalarTypeE"></span><span id="_CPPv2N8DistData8DistDataERK18AbstractDistMatrixI10scalarTypeE"></span><span id="DistData::DistData__AbstractDistMatrix:scalarType:CR"></span><code class="descname">DistData</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;">AbstractDistMatrix</a>&lt;scalarType&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8DistData8DistDataERK18AbstractDistMatrixI10scalarTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct the distribution data of any instance of
+<a class="reference internal" href="#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;scalarType&gt;</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="DM.html" class="btn btn-neutral float-right" title="DistMatrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../dist_matrix.html" class="btn btn-neutral float-left" title="DistMatrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Condition number &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Determinant" href="Determinant.html" />
+    <link rel="prev" title="Matrix properties" href="../props.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="condition-number">
+<h1>Condition number<a class="headerlink" href="#condition-number" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/props/Condition.hpp">Main header file</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/El/lapack_like/props/Condition">Subroutines</a></p>
+<p>The condition number of a matrix with respect to a particular norm is</p>
+<div class="math notranslate nohighlight">
+\[\kappa(A) = \|A\| \|A^{-1}\|,\]</div>
+<p>with the most common choice being the matrix two-norm.</p>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p>Returns the condition number with respect to the specified norm
+(one, two, or Frobenius).</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv49ConditionRK6MatrixI1FE8NormType">
+<span id="_CPPv39ConditionRK6MatrixI1FE8NormType"></span><span id="_CPPv29ConditionRK6MatrixI1FE8NormType"></span><span id="Condition__Matrix:F:CR.NormType"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">Condition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv48NormType" title="NormType">NormType</a> <em>type</em> = TWO_NORM<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49ConditionRK6MatrixI1FE8NormType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49ConditionRK18AbstractDistMatrixI1FE8NormType">
+<span id="_CPPv39ConditionRK18AbstractDistMatrixI1FE8NormType"></span><span id="_CPPv29ConditionRK18AbstractDistMatrixI1FE8NormType"></span><span id="Condition__AbstractDistMatrix:F:CR.NormType"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">Condition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv48NormType" title="NormType">NormType</a> <em>type</em> = TWO_NORM<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49ConditionRK18AbstractDistMatrixI1FE8NormType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCondition_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCondition_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCondition_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCondition_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCondition_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCondition_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCondition_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCondition_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCondition_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCondition_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCondition_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCondition_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElConditionDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElConditionDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElConditionDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElConditionDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElConditionDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElConditionDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElConditionDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElConditionDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElConditionDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElConditionDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElConditionDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElNormType" title="ElNormType">ElNormType</a><em> normType</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElConditionDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="frobenius-norm">
+<h2>Frobenius norm<a class="headerlink" href="#frobenius-norm" title="Permalink to this headline">¶</a></h2>
+<p>Returns the condition number with respect to the Frobenius norm.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv418FrobeniusConditionRK6MatrixI1FE">
+<span id="_CPPv318FrobeniusConditionRK6MatrixI1FE"></span><span id="_CPPv218FrobeniusConditionRK6MatrixI1FE"></span><span id="FrobeniusCondition__Matrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">FrobeniusCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418FrobeniusConditionRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418FrobeniusConditionRK18AbstractDistMatrixI1FE">
+<span id="_CPPv318FrobeniusConditionRK18AbstractDistMatrixI1FE"></span><span id="_CPPv218FrobeniusConditionRK18AbstractDistMatrixI1FE"></span><span id="FrobeniusCondition__AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">FrobeniusCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418FrobeniusConditionRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElFrobeniusCondition_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusCondition_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusCondition_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFrobeniusCondition_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusCondition_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusCondition_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFrobeniusCondition_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusCondition_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusCondition_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFrobeniusCondition_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusCondition_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusCondition_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFrobeniusConditionDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusConditionDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusConditionDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFrobeniusConditionDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusConditionDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusConditionDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFrobeniusConditionDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusConditionDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusConditionDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElFrobeniusConditionDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFrobeniusConditionDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFrobeniusConditionDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="infinity-norm">
+<h2>Infinity norm<a class="headerlink" href="#infinity-norm" title="Permalink to this headline">¶</a></h2>
+<p>Returns the condition number with respect to the infinity norm.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv417InfinityConditionRK6MatrixI1FE">
+<span id="_CPPv317InfinityConditionRK6MatrixI1FE"></span><span id="_CPPv217InfinityConditionRK6MatrixI1FE"></span><span id="InfinityCondition__Matrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">InfinityCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417InfinityConditionRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417InfinityConditionRK18AbstractDistMatrixI1FE">
+<span id="_CPPv317InfinityConditionRK18AbstractDistMatrixI1FE"></span><span id="_CPPv217InfinityConditionRK18AbstractDistMatrixI1FE"></span><span id="InfinityCondition__AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">InfinityCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417InfinityConditionRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElInfinityCondition_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityCondition_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityCondition_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInfinityCondition_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityCondition_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityCondition_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInfinityCondition_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityCondition_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityCondition_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInfinityCondition_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityCondition_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityCondition_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInfinityConditionDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityConditionDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityConditionDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInfinityConditionDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityConditionDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityConditionDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInfinityConditionDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityConditionDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityConditionDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInfinityConditionDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInfinityConditionDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInfinityConditionDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="max-norm">
+<h2>Max norm<a class="headerlink" href="#max-norm" title="Permalink to this headline">¶</a></h2>
+<p>Returns the condition number with respect to the entrywise maximum norm.</p>
+<div class="section" id="id6">
+<h3>C++ API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412MaxConditionRK6MatrixI1FE">
+<span id="_CPPv312MaxConditionRK6MatrixI1FE"></span><span id="_CPPv212MaxConditionRK6MatrixI1FE"></span><span id="MaxCondition__Matrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">MaxCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412MaxConditionRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412MaxConditionRK18AbstractDistMatrixI1FE">
+<span id="_CPPv312MaxConditionRK18AbstractDistMatrixI1FE"></span><span id="_CPPv212MaxConditionRK18AbstractDistMatrixI1FE"></span><span id="MaxCondition__AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">MaxCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412MaxConditionRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h3>C API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElMaxCondition_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxCondition_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxCondition_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxCondition_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxCondition_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxCondition_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxCondition_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxCondition_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxCondition_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxCondition_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxCondition_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxCondition_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxConditionDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxConditionDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxConditionDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxConditionDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxConditionDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxConditionDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxConditionDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxConditionDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxConditionDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxConditionDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxConditionDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxConditionDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="one-norm">
+<h2>One norm<a class="headerlink" href="#one-norm" title="Permalink to this headline">¶</a></h2>
+<p>Returns the condition number with respect to the one norm.</p>
+<div class="section" id="id8">
+<h3>C++ API<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412OneConditionRK6MatrixI1FE">
+<span id="_CPPv312OneConditionRK6MatrixI1FE"></span><span id="_CPPv212OneConditionRK6MatrixI1FE"></span><span id="OneCondition__Matrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">OneCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412OneConditionRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412OneConditionRK18AbstractDistMatrixI1FE">
+<span id="_CPPv312OneConditionRK18AbstractDistMatrixI1FE"></span><span id="_CPPv212OneConditionRK18AbstractDistMatrixI1FE"></span><span id="OneCondition__AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">OneCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412OneConditionRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h3>C API<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElOneCondition_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneCondition_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneCondition_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElOneCondition_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneCondition_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneCondition_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElOneCondition_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneCondition_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneCondition_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElOneCondition_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneCondition_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneCondition_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElOneConditionDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneConditionDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneConditionDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElOneConditionDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneConditionDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneConditionDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElOneConditionDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneConditionDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneConditionDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElOneConditionDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElOneConditionDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElOneConditionDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="two-norm">
+<h2>Two norm<a class="headerlink" href="#two-norm" title="Permalink to this headline">¶</a></h2>
+<p>Returns the condition number with respect to the two norm.</p>
+<div class="section" id="id10">
+<h3>C++ API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412TwoConditionRK6MatrixI1FE">
+<span id="_CPPv312TwoConditionRK6MatrixI1FE"></span><span id="_CPPv212TwoConditionRK6MatrixI1FE"></span><span id="TwoCondition__Matrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">TwoCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoConditionRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412TwoConditionRK18AbstractDistMatrixI1FE">
+<span id="_CPPv312TwoConditionRK18AbstractDistMatrixI1FE"></span><span id="_CPPv212TwoConditionRK18AbstractDistMatrixI1FE"></span><span id="TwoCondition__AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">TwoCondition</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoConditionRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id11">
+<h2>C API<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElTwoCondition_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoCondition_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoCondition_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoCondition_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoCondition_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoCondition_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoCondition_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoCondition_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoCondition_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoCondition_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoCondition_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoCondition_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoConditionDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoConditionDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoConditionDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoConditionDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoConditionDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoConditionDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoConditionDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoConditionDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, float*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoConditionDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoConditionDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoConditionDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, double*<em> cond</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoConditionDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

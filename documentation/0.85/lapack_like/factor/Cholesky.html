@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cholesky factorization &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LDL factorization" href="LDL.html" />
+    <link rel="prev" title="Factorizations" href="../factor.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cholesky-factorization">
+<h1>Cholesky factorization<a class="headerlink" href="#cholesky-factorization" title="Permalink to this headline">¶</a></h1>
+<p>It is well-known that Hermitian positive-definite (HPD) matrices can be
+decomposed into the form <span class="math notranslate nohighlight">\(A = L L^H\)</span> or <span class="math notranslate nohighlight">\(A = U^H U\)</span>, where
+<span class="math notranslate nohighlight">\(L=U^H\)</span> is lower triangular, and Cholesky factorization provides such an
+<span class="math notranslate nohighlight">\(L\)</span> (or <span class="math notranslate nohighlight">\(U\)</span>) given an HPD <span class="math notranslate nohighlight">\(A\)</span>. If <span class="math notranslate nohighlight">\(A\)</span> is found to be
+numerically indefinite, then a <a class="reference internal" href="../../core/environment.html#_CPPv421NonHPDMatrixException" title="NonHPDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPDMatrixException</span></code></a> will be
+thrown.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/Cholesky.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/Cholesky">Subroutines</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/Cholesky.cpp">Test driver</a></p>
+<div class="section" id="without-pivoting">
+<h2>Without pivoting<a class="headerlink" href="#without-pivoting" title="Permalink to this headline">¶</a></h2>
+<p>The following routines overwrite the <cite>uplo</cite> triangle of the Hermitian
+positive-definite matrix <cite>A</cite> with its Cholesky factor without performing any
+pivoting.</p>
+<div class="section" id="factorization">
+<h3>Factorization<a class="headerlink" href="#factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="c-api">
+<h4>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv38Cholesky12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv28Cholesky12UpperOrLowerR6MatrixI1FE"></span><span id="Cholesky__UpperOrLower.Matrix:F:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR18AbstractDistMatrixI1FE">
+<span id="_CPPv38Cholesky12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="_CPPv28Cholesky12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="Cholesky__UpperOrLower.AbstractDistMatrix:F:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h4>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElCholesky_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholesky_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholesky_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholesky_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholesky_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholesky_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholesky_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholesky_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholesky_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholesky_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholesky_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholesky_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="solving-linear-systems-with-the-factorization">
+<h3>Solving linear systems with the factorization<a class="headerlink" href="#solving-linear-systems-with-the-factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h4>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElSolveAfterCholesky_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholesky_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholesky_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholesky_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholesky_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholesky_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholesky_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholesky_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholesky_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholesky_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholesky_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholesky_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="full-pivoting">
+<h2>Full pivoting<a class="headerlink" href="#full-pivoting" title="Permalink to this headline">¶</a></h2>
+<p>The following routines perform Cholesky factorization with diagonal pivoting,
+which can be shown to be equivalent to full pivoting for Hermitian
+positive-definite matrices. On exit, the vector <span class="math notranslate nohighlight">\(p\)</span> consists of the
+nonzero column indices of the permutation matrix <span class="math notranslate nohighlight">\(P\)</span> such that either
+<span class="math notranslate nohighlight">\(P A P^T = L L^H\)</span> or <span class="math notranslate nohighlight">\(P A P^T = U^H U\)</span>.</p>
+<div class="section" id="id4">
+<h3>Factorization<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h4>C++ API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE">
+<span id="_CPPv38Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE"></span><span id="_CPPv28Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE"></span><span id="Cholesky__UpperOrLower.Matrix:F:R.Matrix:i:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixIiE">
+<span id="_CPPv38Cholesky12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixIiE"></span><span id="_CPPv28Cholesky12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixIiE"></span><span id="Cholesky__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:i:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h4>C API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElCholeskyPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPiv_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPiv_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPiv_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPiv_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPivDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPivDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPivDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyPivDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id7">
+<h3>Solving linear systems with the factorization<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>C++ API<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:R.Matrix:i:R"></span>void <code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.AbstractDistMatrix:i:R"></span>void <code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h4>C API<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPiv_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPiv_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPiv_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPiv_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPivDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPivDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPivDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterCholeskyPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterCholeskyPivDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterCholeskyPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="low-rank-updates-to-a-factorization">
+<h2>Low-rank updates to a factorization<a class="headerlink" href="#low-rank-updates-to-a-factorization" title="Permalink to this headline">¶</a></h2>
+<p>The following routines update an existing Cholesky factorization to incorporate
+the modification <span class="math notranslate nohighlight">\(\alpha V V^H\)</span> to the original matrix. The current
+algorithm uses Householder transformations for updates (<span class="math notranslate nohighlight">\(\alpha \ge 0\)</span>)
+and hyperbolic Householder transformations for downdates.</p>
+<div class="section" id="id10">
+<h3>C++ API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv411CholeskyMod12UpperOrLowerR6MatrixI1FER4BaseI1FER6MatrixI1FE">
+<span id="_CPPv311CholeskyMod12UpperOrLowerR6MatrixI1FER4BaseI1FER6MatrixI1FE"></span><span id="_CPPv211CholeskyMod12UpperOrLowerR6MatrixI1FER4BaseI1FER6MatrixI1FE"></span><span id="CholeskyMod__UpperOrLower.Matrix:F:R.Base:F:R.Matrix:F:R"></span>void <code class="descname">CholeskyMod</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>T</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; &amp;<em>alpha</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411CholeskyMod12UpperOrLowerR6MatrixI1FER4BaseI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411CholeskyMod12UpperOrLowerR18AbstractDistMatrixI1FER4BaseI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv311CholeskyMod12UpperOrLowerR18AbstractDistMatrixI1FER4BaseI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv211CholeskyMod12UpperOrLowerR18AbstractDistMatrixI1FER4BaseI1FER18AbstractDistMatrixI1FE"></span><span id="CholeskyMod__UpperOrLower.AbstractDistMatrix:F:R.Base:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">CholeskyMod</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>T</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; &amp;<em>alpha</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411CholeskyMod12UpperOrLowerR18AbstractDistMatrixI1FER4BaseI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id11">
+<h3>C API<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElCholeskyMod_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyMod_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> T</em>, float<em> alpha</em>, ElMatrix_s<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyMod_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyMod_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyMod_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> T</em>, double<em> alpha</em>, ElMatrix_d<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyMod_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyMod_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyMod_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> T</em>, float<em> alpha</em>, ElMatrix_c<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyMod_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyMod_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyMod_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> T</em>, double<em> alpha</em>, ElMatrix_z<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyMod_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyModDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyModDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> T</em>, float<em> alpha</em>, ElDistMatrix_s<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyModDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyModDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyModDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> T</em>, double<em> alpha</em>, ElDistMatrix_d<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyModDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyModDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyModDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> T</em>, float<em> alpha</em>, ElDistMatrix_c<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyModDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElCholeskyModDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElCholeskyModDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> T</em>, double<em> alpha</em>, ElDistMatrix_z<em> V</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElCholeskyModDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="rank-deficient-factorization">
+<h2>Rank-deficient factorization<a class="headerlink" href="#rank-deficient-factorization" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to compute the Cholesky factor of a Hermitian positive
+semi-definite (HPSD) matrix through its eigenvalue decomposition, though it
+is significantly more expensive than the HPD case: Let <span class="math notranslate nohighlight">\(A = U \Lambda U^H\)</span>
+be the eigenvalue decomposition of <span class="math notranslate nohighlight">\(A\)</span>, where all entries of
+<span class="math notranslate nohighlight">\(\Lambda\)</span> are non-negative. Then <span class="math notranslate nohighlight">\(B = U \sqrt \Lambda U^H\)</span> is the
+matrix square root of <span class="math notranslate nohighlight">\(A\)</span>, i.e., <span class="math notranslate nohighlight">\(B B = A\)</span>, and it follows that the
+QR and LQ factorizations of <span class="math notranslate nohighlight">\(B\)</span> yield Cholesky factors of <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[A = B B = B^H B = (Q R)^H (Q R) = R^H Q^H Q R = R^H R,\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[A = B B = B B^H = (L Q) (L Q)^H = L Q Q^H L^H = L L^H.\]</div>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> is found to have eigenvalues less than
+<span class="math notranslate nohighlight">\(-n \epsilon \| A \|_2\)</span>, then a <a class="reference internal" href="../../core/environment.html#_CPPv422NonHPSDMatrixException" title="NonHPSDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPSDMatrixException</span></code></a> will
+be thrown.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/HPSDCholesky.cpp">Example driver</a></p>
+<p>The following routines overwrite the <cite>uplo</cite> triangle of the potentially
+singular matrix <cite>A</cite> with its Cholesky factor.</p>
+<div class="section" id="id12">
+<h3>C++ API<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HPSDCholesky12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv312HPSDCholesky12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv212HPSDCholesky12UpperOrLowerR6MatrixI1FE"></span><span id="HPSDCholesky__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HPSDCholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HPSDCholesky12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HPSDCholesky12UpperOrLowerR18AbstractDistMatrixI1FE">
+<span id="_CPPv312HPSDCholesky12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="_CPPv212HPSDCholesky12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="HPSDCholesky__UpperOrLower.AbstractDistMatrix:F:R"></span>void <code class="descname">HPSDCholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HPSDCholesky12UpperOrLowerR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id13">
+<h3>C API<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHPSDCholesky_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholesky_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholesky_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDCholesky_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholesky_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholesky_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDCholesky_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholesky_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholesky_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDCholesky_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholesky_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholesky_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDCholeskyDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholeskyDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholeskyDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDCholeskyDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholeskyDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholeskyDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDCholeskyDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholeskyDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholeskyDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDCholeskyDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDCholeskyDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDCholeskyDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

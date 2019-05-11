@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>07/24/2013: Elemental 0.81 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="06/13/2013: Elemental 0.80" href="../0.80/index.html" />
+    <link rel="prev" title="11/24/2013: Elemental 0.82" href="../0.82/index.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-81">
+<span id="release-0-81"></span><h1>07/24/2013: Elemental 0.81<a class="headerlink" href="#elemental-0-81" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://libelemental.org/pub/releases/elemental-0.81.tgz">elemental-0.81.tgz</a></p>
+<p>Documentation: <a class="reference external" href="http://libelemental.org/documentation/0.81/">[HTML]</a> <a class="reference external" href="http://libelemental.org/documentation/elem-0.81.pdf">[PDF]</a></p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Matrix sign and square-root functions</p></li>
+<li><p>Reverse Cholesky and RQ factorizations</p></li>
+<li><p>Progress towards general-purpose spectral divide and conquer</p></li>
+<li><p>Lyapunov, Sylvester, and (algebraic) Ricatti solvers</p></li>
+<li><p>{Hermitian,Normal}FromEVD routines</p></li>
+<li><p>Greatly simplified packed Householder application, e.g., qr::ApplyQ</p></li>
+<li><p>“[o ,o ]”, or “CIRC,CIRC” distribution for easily moving between sequential and distributed matrices</p></li>
+<li><p>MakeConsistent() allows non-owning processes to synchronize after the
+distributed matrix state changed</p></li>
+<li><p>An instrumented Gemm example driver to benchmark Allgather and local Gemm performance</p></li>
+<li><p>Improved experimental F90 interface</p></li>
+</ul>
+</div>
+<div class="section" id="fixed-bugs">
+<h2>Fixed Bugs<a class="headerlink" href="#fixed-bugs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Avoiding accidental allocation when shrinking matrix with ResizeTo</p></li>
+<li><p>Fixed subtle bug when repeatedly calling routine such as QR(A,t)</p></li>
+</ul>
+</div>
+<div class="section" id="maintenance">
+<h2>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Git SHA1 now stored in config file, and relevant version and build information
+can be printed with –version and –build command-line arguments</p></li>
+<li><p>Print and Write are now members of io/</p></li>
+<li><p>Modularized SWIG interface (Michael Grant)</p></li>
+<li><p>Extended set of view types so that local matrix manipulations are safer (Michael Grant)</p></li>
+<li><p>EnsurePMRRR() is now used so that stubs are always available</p></li>
+<li><p>std::bad_alloc’s are now handled a bit more carefully</p></li>
+<li><p>Eliminated elem-dummy-lib, experimental-c, and experimental-f90</p></li>
+<li><p>Greatly simplified exception handling</p></li>
+<li><p>Greatly simplified Householder transform usages</p></li>
+<li><p>FreeAlignments() is now almost-never needed</p></li>
+<li><p>Simplified MpiMap</p></li>
+<li><p>Include guards are now prefixed with “ELEM” in order to avoid collisions</p></li>
+</ul>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The cmake/elemvariables Makefile include is still behind and is known to not yet work when Qt5 support is enabled (as well as in various other corner cases). There would be value in laying out precisely what development cycle is expected of Elemental users (e.g., if/how to install with CMake, what the easiest way to compile and link a new executable is).</p></li>
+</ul>
+</div>
+<div class="section" id="thanks">
+<h2>Thanks<a class="headerlink" href="#thanks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Wolfgang Bangerth for suggesting the MpiMap simplification</p></li>
+<li><p>Scott Rabidoux for mentioning several mistakes in the eigensolver documentation</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

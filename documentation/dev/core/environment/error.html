@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Error handling &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Call stack manipulation" href="call_stack.html" />
+    <link rel="prev" title="Boiler plate" href="boiler.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../environment.html">Environment</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="boiler.html">Boiler plate</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Error handling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="call_stack.html">Call stack manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="default_grid.html">Default process grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blocksize.html">Blocksize manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="typedefs_and_enums.html">Other typedefs and enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex.html">Complex data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="indexing.html">Indexing utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">Version and configuration information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../environment.html">Environment</a> &raquo;</li>
+        
+      <li>Error handling</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/environment/error.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="error-handling">
+<h1>Error handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv423SingularMatrixException">
+<span id="_CPPv323SingularMatrixException"></span><span id="_CPPv223SingularMatrixException"></span><span id="SingularMatrixException"></span><em class="property">class </em><code class="descname">SingularMatrixException</code><a class="headerlink" href="#_CPPv423SingularMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a singular matrix is unexpectedly encountered.</p>
+<dl class="function">
+<dt id="_CPPv4N23SingularMatrixException23SingularMatrixExceptionEPKc">
+<span id="_CPPv3N23SingularMatrixException23SingularMatrixExceptionEPKc"></span><span id="_CPPv2N23SingularMatrixException23SingularMatrixExceptionEPKc"></span><span id="SingularMatrixException::SingularMatrixException__cCP"></span><code class="descname">SingularMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was singular&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N23SingularMatrixException23SingularMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">El</span><span class="o">::</span><span class="n">SingularMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv421NonHPDMatrixException">
+<span id="_CPPv321NonHPDMatrixException"></span><span id="_CPPv221NonHPDMatrixException"></span><span id="NonHPDMatrixException"></span><em class="property">class </em><code class="descname">NonHPDMatrixException</code><a class="headerlink" href="#_CPPv421NonHPDMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a non positive-definite Hermitian matrix is unexpectedly encountered
+(e.g., during Cholesky factorization).</p>
+<dl class="function">
+<dt id="_CPPv4N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc">
+<span id="_CPPv3N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc"></span><span id="_CPPv2N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc"></span><span id="NonHPDMatrixException::NonHPDMatrixException__cCP"></span><code class="descname">NonHPDMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was not HPD&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N21NonHPDMatrixException21NonHPDMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">El</span><span class="o">::</span><span class="n">NonHPDMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv422NonHPSDMatrixException">
+<span id="_CPPv322NonHPSDMatrixException"></span><span id="_CPPv222NonHPSDMatrixException"></span><span id="NonHPSDMatrixException"></span><em class="property">class </em><code class="descname">NonHPSDMatrixException</code><a class="headerlink" href="#_CPPv422NonHPSDMatrixException" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An extension of <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> which is meant to be thrown when
+a non positive semi-definite Hermitian matrix is unexpectedly encountered
+(e.g., during computation of the square root of a Hermitian matrix).</p>
+<dl class="function">
+<dt id="_CPPv4N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc">
+<span id="_CPPv3N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc"></span><span id="_CPPv2N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc"></span><span id="NonHPSDMatrixException::NonHPSDMatrixException__cCP"></span><code class="descname">NonHPSDMatrixException</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>msg</em> = &quot;Matrix was not HPSD&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N22NonHPSDMatrixException22NonHPSDMatrixExceptionEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Builds an instance of the exception which allows one to optionally
+specify the error message.</p>
+</dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">throw</span> <span class="n">El</span><span class="o">::</span><span class="n">NonHPSDMatrixException</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="c.ElError">
+<code class="descname">ElError</code><a class="headerlink" href="#c.ElError" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum which can be set to one of the following values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_SUCCESS</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ALLOC_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_OUT_OF_BOUNDS_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ARG_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_LOGIC_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_RUNTIME_ERROR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ERROR</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElErrorString">
+const char* <code class="descname">ElErrorString</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElError" title="ElError">ElError</a><em> error</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElErrorString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the error code into a (hopefully) descriptive message</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="call_stack.html" class="btn btn-neutral float-right" title="Call stack manipulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="boiler.html" class="btn btn-neutral float-left" title="Boiler plate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

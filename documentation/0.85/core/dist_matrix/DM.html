@@ -1,0 +1,1278 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>DistMatrix &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Viewing submatrices" href="../View.html" />
+    <link rel="prev" title="GeneralDistMatrix" href="GDM.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="distmatrix">
+<h1>DistMatrix<a class="headerlink" href="#distmatrix" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code></a> class, which is the final product from the
+succession from <a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a> and
+<a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, is specialized for each
+of the thirteen different legal distribution pairs.
+Each specialization involves choosing a
+sensical pairing of distributions for the rows and columns of the matrix:</p>
+<ul class="simple">
+<li><p><cite>CIRC</cite> : Only give the data to a single process</p></li>
+<li><p><cite>STAR</cite> : Give the data to every process</p></li>
+<li><p><cite>MC</cite> : Distribute round-robin within each column of the 2D process grid (<em>M</em> atrix <em>C</em> olumn)</p></li>
+<li><p><cite>MR</cite>: Distribute round-robin within each row of the 2D process grid (<em>M</em> atrix <em>R</em> ow)</p></li>
+<li><p><cite>VC</cite>: Distribute round-robin within a column-major ordering of the entire 2D process grid (<em>V</em> ector <em>C</em> olumn)</p></li>
+<li><p><cite>VR</cite>: Distribute round-robin within a row-major ordering of the entire 2D process grid (<em>V</em> ector <em>R</em> ow)</p></li>
+<li><p><cite>MD</cite>: Distribute round-robin over a diagonal of the tiling of the 2D process grid (<em>M</em> atrix <em>D</em> iagonal)</p></li>
+</ul>
+<p>The valid pairings are:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 15%" />
+<col style="width: 21%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ColDist</p></th>
+<th class="head"><p>RowDist</p></th>
+<th class="head"><p>ColComm</p></th>
+<th class="head"><p>RowComm</p></th>
+<th class="head"><p>DistComm</p></th>
+<th class="head"><p>RedundantComm</p></th>
+<th class="head"><p>CrossComm</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CIRC</p></td>
+<td><p>CIRC</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+<td><p>VC</p></td>
+</tr>
+<tr class="row-odd"><td><p>MC</p></td>
+<td><p>MR</p></td>
+<td><p>MC</p></td>
+<td><p>MR</p></td>
+<td><p>VC</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-even"><td><p>MC</p></td>
+<td><p>STAR</p></td>
+<td><p>MC</p></td>
+<td><p>self</p></td>
+<td><p>MC</p></td>
+<td><p>MR</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-odd"><td><p>MD</p></td>
+<td><p>STAR</p></td>
+<td><p>MD</p></td>
+<td><p>self</p></td>
+<td><p>MD</p></td>
+<td><p>self</p></td>
+<td><p>MDPerp</p></td>
+</tr>
+<tr class="row-even"><td><p>MR</p></td>
+<td><p>MC</p></td>
+<td><p>MR</p></td>
+<td><p>MC</p></td>
+<td><p>VR</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-odd"><td><p>MR</p></td>
+<td><p>STAR</p></td>
+<td><p>MR</p></td>
+<td><p>self</p></td>
+<td><p>MR</p></td>
+<td><p>MC</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-even"><td><p>STAR</p></td>
+<td><p>MC</p></td>
+<td><p>self</p></td>
+<td><p>MC</p></td>
+<td><p>MC</p></td>
+<td><p>MR</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-odd"><td><p>STAR</p></td>
+<td><p>MD</p></td>
+<td><p>self</p></td>
+<td><p>MD</p></td>
+<td><p>MD</p></td>
+<td><p>self</p></td>
+<td><p>MDPerp</p></td>
+</tr>
+<tr class="row-even"><td><p>STAR</p></td>
+<td><p>MR</p></td>
+<td><p>self</p></td>
+<td><p>MR</p></td>
+<td><p>MR</p></td>
+<td><p>MC</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-odd"><td><p>STAR</p></td>
+<td><p>STAR</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+<td><p>VC</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-even"><td><p>STAR</p></td>
+<td><p>VC</p></td>
+<td><p>self</p></td>
+<td><p>VC</p></td>
+<td><p>VC</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-odd"><td><p>STAR</p></td>
+<td><p>VR</p></td>
+<td><p>self</p></td>
+<td><p>VR</p></td>
+<td><p>VR</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-even"><td><p>VC</p></td>
+<td><p>STAR</p></td>
+<td><p>VC</p></td>
+<td><p>self</p></td>
+<td><p>VC</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+</tr>
+<tr class="row-odd"><td><p>VR</p></td>
+<td><p>STAR</p></td>
+<td><p>VR</p></td>
+<td><p>self</p></td>
+<td><p>VR</p></td>
+<td><p>self</p></td>
+<td><p>self</p></td>
+</tr>
+</tbody>
+</table>
+<p>where <cite>DistComm</cite> refers to the communicator that the entire matrix (rather than
+just the rows or columns) is distributed over. When the matrix is distributed
+over a communicator which only involves only a subset of the processes, it is
+possible to either assign the data to just that subset or redundantly store
+the entire matrix on each such subset of processes (e.g., within each row of a
+2D arrangement of the set of processes). The <cite>RedundantComm</cite> refers to the
+communicator where each member process stores the same information, and the
+<cite>CrossComm</cite> is the communicator where only a single process (the <em>root</em>) is
+assigned any data.</p>
+<p>To make this discussion more precise, each valid matrix distribution for
+<cite>DistMatrix</cite> logically arranges the set of <cite>p</cite> processes of the <cite>r</cite> by <cite>c</cite>
+process grid into a 4D mesh: <cite>ColComm</cite> x <cite>RowComm</cite> x <cite>RedundantComm</cite> x <cite>CrossComm</cite>, where <cite>DistComm</cite> is equal to <cite>ColComm</cite> x <cite>RowComm</cite>.</p>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T1U1VE">
+<span id="_CPPv3IE10DistMatrixI1T1U1VE"></span><span id="_CPPv2IE10DistMatrixI1T1U1VE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, U, V&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The following routines are available for each legal pairing of row and column
+distributions.</p>
+<p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERK4Grid3Int">
+<span id="_CPPv3N10DistMatrixI1T1U1VE10DistMatrixERK4Grid3Int"></span><span id="_CPPv2N10DistMatrixI1T1U1VE10DistMatrixERK4Grid3Int"></span><span id="DistMatrix:T.U.V:::DistMatrix__GridCR.Int"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../grid.html#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>grid</em> = <a class="reference internal" href="../environment.html#_CPPv411DefaultGridv" title="DefaultGrid">DefaultGrid</a>(), <a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERK4Grid3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct an empty (<span class="math notranslate nohighlight">\(0 \times 0\)</span>) distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T1U1VE10DistMatrixE3Int3IntRK4Grid3Int">
+<span id="_CPPv3N10DistMatrixI1T1U1VE10DistMatrixE3Int3IntRK4Grid3Int"></span><span id="_CPPv2N10DistMatrixI1T1U1VE10DistMatrixE3Int3IntRK4Grid3Int"></span><span id="DistMatrix:T.U.V:::DistMatrix__Int.Int.GridCR.Int"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a> <em>height</em>, <a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a> <em>width</em>, <em class="property">const</em> <a class="reference internal" href="../grid.html#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>grid</em> = <a class="reference internal" href="../environment.html#_CPPv411DefaultGridv" title="DefaultGrid">DefaultGrid</a>(), <a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a> <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T1U1VE10DistMatrixE3Int3IntRK4Grid3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite> distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERK10DistMatrixI1T1Y1ZE">
+<span id="_CPPv3N10DistMatrixI1T1U1VE10DistMatrixERK10DistMatrixI1T1Y1ZE"></span><span id="_CPPv2N10DistMatrixI1T1U1VE10DistMatrixERK10DistMatrixI1T1Y1ZE"></span><span id="DistMatrix:T.U.V:::DistMatrix__DistMatrix:T.Y.Z:CR"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERK4Grid3Int" title="DistMatrix&lt;T, U, V&gt;::DistMatrix">DistMatrix</a>&lt;T, Y, Z&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERK10DistMatrixI1T1Y1ZE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct the current matrix to be a redistributed copy of the input
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERRK10DistMatrixI1T1U1VE">
+<span id="_CPPv3N10DistMatrixI1T1U1VE10DistMatrixERRK10DistMatrixI1T1U1VE"></span><span id="_CPPv2N10DistMatrixI1T1U1VE10DistMatrixERRK10DistMatrixI1T1U1VE"></span><span id="DistMatrix:T.U.V:::DistMatrix__DistMatrix:T.U.V:CRR"></span><code class="descname">DistMatrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERK4Grid3Int" title="DistMatrix&lt;T, U, V&gt;::DistMatrix">DistMatrix</a>&lt;T, U, V&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERRK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Use C++11 move semantics to construct the current matrix in a way which
+transfers the resources from the input matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T1U1VED0Ev">
+<span id="_CPPv3N10DistMatrixI1T1U1VED0Ev"></span><span id="_CPPv2N10DistMatrixI1T1U1VED0Ev"></span><span id="DistMatrix:T.U.V:::~DistMatrix"></span><code class="descname">~DistMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T1U1VED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All resources owned by the <cite>DistMatrix</cite> are freed upon destruction.</p>
+</dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T1U1VEaSERK10DistMatrixI1T1Y1ZE">
+<span id="_CPPv3N10DistMatrixI1T1U1VEaSERK10DistMatrixI1T1Y1ZE"></span><span id="_CPPv2N10DistMatrixI1T1U1VEaSERK10DistMatrixI1T1Y1ZE"></span><span id="DistMatrix:T.U.V:::assign-operator__DistMatrix:T.Y.Z:CR"></span><a class="reference internal" href="#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N10DistMatrixI1T1U1VE10DistMatrixERK4Grid3Int" title="DistMatrix&lt;T, U, V&gt;::DistMatrix">DistMatrix</a>&lt;T, Y, Z&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T1U1VEaSERK10DistMatrixI1T1Y1ZE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the current distributed matrix equal to the matrix <cite>A</cite> redistributed
+into the appropriate form.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T1U1VEaSERR10DistMatrixI1T1U1VE">
+<span id="_CPPv3N10DistMatrixI1T1U1VEaSERR10DistMatrixI1T1U1VE"></span><span id="_CPPv2N10DistMatrixI1T1U1VEaSERR10DistMatrixI1T1U1VE"></span><span id="DistMatrix:T.U.V:::assign-operator__DistMatrix:T.U.V:RR"></span><a class="reference internal" href="#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T1U1VEaSERR10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move assignment which cheaply transfers the resources from <cite>A</cite>
+to the current matrix by swapping metadata.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="the-standard-matrix-distribution-mc-mr">
+<h2>The standard matrix distribution (<code class="docutils literal notranslate"><span class="pre">[MC,MR]</span></code>)<a class="headerlink" href="#the-standard-matrix-distribution-mc-mr" title="Permalink to this headline">¶</a></h2>
+<p>This is by far the most important matrix distribution in Elemental, as the vast
+majority of parallel routines expect the input to be in this form. For a
+<span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix distributed over a <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid,
+individual entries would be owned by the following processes (assuming the
+column and row alignments are both 0):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4 &amp; 0 \\
+  1 &amp; 3 &amp; 5 &amp; 1 &amp; 3 &amp; 5 &amp; 1 \\
+  0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4 &amp; 0 \\
+  1 &amp; 3 &amp; 5 &amp; 1 &amp; 3 &amp; 5 &amp; 1 \\
+  0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4 &amp; 0 \\
+  1 &amp; 3 &amp; 5 &amp; 1 &amp; 3 &amp; 5 &amp; 1 \\
+  0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<p>Similarly, if the column alignment is kept at 0 and the row alignment is changed
+to 2 (meaning that the third process column owns the first column of the
+matrix), the individual entries would be owned as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  4 &amp; 0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4 \\
+  5 &amp; 1 &amp; 3 &amp; 5 &amp; 1 &amp; 3 &amp; 5 \\
+  4 &amp; 0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4 \\
+  5 &amp; 1 &amp; 3 &amp; 5 &amp; 1 &amp; 3 &amp; 5 \\
+  4 &amp; 0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4 \\
+  5 &amp; 1 &amp; 3 &amp; 5 &amp; 1 &amp; 3 &amp; 5 \\
+  4 &amp; 0 &amp; 2 &amp; 4 &amp; 0 &amp; 2 &amp; 4
+\end{array}\right)\end{split}\]</div>
+<p>It should also be noted that this is the default distribution format for the
+<a class="reference internal" href="#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code></a> class, as <a class="reference internal" href="#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T&gt;</span></code></a> defaults to
+<a class="reference internal" href="#_CPPv4IE10DistMatrixI1T2MC2MRE" title="DistMatrix&lt;T, MC, MR&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,MC,MR&gt;</span></code></a>.</p>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1TE">
+<span id="_CPPv3IE10DistMatrixI1TE"></span><span id="_CPPv2IE10DistMatrixI1TE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T2MC2MRE">
+<span id="_CPPv3IE10DistMatrixI1T2MC2MRE"></span><span id="_CPPv2IE10DistMatrixI1T2MC2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, MC, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="mc-star">
+<h2><code class="docutils literal notranslate"><span class="pre">[MC,STAR]</span></code><a class="headerlink" href="#mc-star" title="Permalink to this headline">¶</a></h2>
+<p>This distribution is often used as part of matrix-matrix multiplication. For a
+<span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix distributed over a <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid,
+individual entries would be owned by the following processes (assuming the
+column alignment is 0):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp;
+  \{0,2,4\} &amp; \{0,2,4\} \\
+  \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp;
+  \{1,3,5\} &amp; \{1,3,5\} \\
+  \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp;
+  \{0,2,4\} &amp; \{0,2,4\} \\
+  \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp;
+  \{1,3,5\} &amp; \{1,3,5\} \\
+  \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp;
+  \{0,2,4\} &amp; \{0,2,4\} \\
+  \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp; \{1,3,5\} &amp;
+  \{1,3,5\} &amp; \{1,3,5\} \\
+  \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp; \{0,2,4\} &amp;
+  \{0,2,4\} &amp; \{0,2,4\}
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T2MC4STARE">
+<span id="_CPPv3IE10DistMatrixI1T2MC4STARE"></span><span id="_CPPv2IE10DistMatrixI1T2MC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, MC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T2MC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="star-mr">
+<h2><code class="docutils literal notranslate"><span class="pre">[STAR,MR]</span></code><a class="headerlink" href="#star-mr" title="Permalink to this headline">¶</a></h2>
+<p>This distribution is also frequently used for matrix-matrix multiplication.
+For a <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix distributed over a <span class="math notranslate nohighlight">\(2 \times 3\)</span> process
+grid, individual entries would be owned by the following processes (assuming
+the row alignment is 0):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} \\
+  \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} \\
+  \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} \\
+  \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} \\
+  \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} \\
+  \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} \\
+  \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\} &amp; \{2,3\} &amp; \{4,5\} &amp; \{0,1\}
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T4STAR2MRE">
+<span id="_CPPv3IE10DistMatrixI1T4STAR2MRE"></span><span id="_CPPv2IE10DistMatrixI1T4STAR2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, STAR, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T4STAR2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="mr-mc">
+<h2><code class="docutils literal notranslate"><span class="pre">[MR,MC]</span></code><a class="headerlink" href="#mr-mc" title="Permalink to this headline">¶</a></h2>
+<p>This is essentially the transpose of the standard matrix distribution,
+<code class="docutils literal notranslate"><span class="pre">[MC,MR]</span></code>. For a
+<span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix distributed over a <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid,
+individual entries would be owned by the following processes (assuming the
+column and row alignments are both 0):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 \\
+  2 &amp; 3 &amp; 2 &amp; 3 &amp; 2 &amp; 3 &amp; 2 \\
+  4 &amp; 5 &amp; 4 &amp; 5 &amp; 4 &amp; 5 &amp; 4 \\
+  0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 \\
+  2 &amp; 3 &amp; 2 &amp; 3 &amp; 2 &amp; 3 &amp; 2 \\
+  4 &amp; 5 &amp; 4 &amp; 5 &amp; 4 &amp; 5 &amp; 4 \\
+  0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 &amp; 1 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T2MR2MCE">
+<span id="_CPPv3IE10DistMatrixI1T2MR2MCE"></span><span id="_CPPv2IE10DistMatrixI1T2MR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, MR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T2MR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="mr-star">
+<h2><code class="docutils literal notranslate"><span class="pre">[MR,STAR]</span></code><a class="headerlink" href="#mr-star" title="Permalink to this headline">¶</a></h2>
+<p>This is the transpose of the <code class="docutils literal notranslate"><span class="pre">[*</span> <span class="pre">,MR]</span></code> distribution and is, like many of
+the previous distributions, useful for matrix-matrix multiplication.
+For a <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix distributed over a <span class="math notranslate nohighlight">\(2 \times 3\)</span> process
+grid, individual entries would be owned by the following processes (assuming
+the column alignment is 0):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} \\
+  \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} \\
+  \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} \\
+  \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} \\
+  \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} &amp; \{2,3\} \\
+  \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} &amp; \{4,5\} \\
+  \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\} &amp; \{0,1\}
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T2MR4STARE">
+<span id="_CPPv3IE10DistMatrixI1T2MR4STARE"></span><span id="_CPPv2IE10DistMatrixI1T2MR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, MR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T2MR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="star-mc">
+<h2><code class="docutils literal notranslate"><span class="pre">[STAR,MC]</span></code><a class="headerlink" href="#star-mc" title="Permalink to this headline">¶</a></h2>
+<p>This is the transpose of the <code class="docutils literal notranslate"><span class="pre">[MC,*]</span></code> distribution and is, like many of
+the previous distributions, useful for matrix-matrix multiplication.
+For a <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix distributed over a <span class="math notranslate nohighlight">\(2 \times 3\)</span> process
+grid, individual entries would be owned by the following processes (assuming
+the column alignment is 0):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp;
+  \{0,2,4\} \\
+  \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp;
+  \{0,2,4\} \\
+  \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp;
+  \{0,2,4\} \\
+  \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp;
+  \{0,2,4\} \\
+  \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp;
+  \{0,2,4\} \\
+  \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp;
+  \{0,2,4\} \\
+  \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp; \{0,2,4\} &amp; \{1,3,5\} &amp;
+  \{0,2,4\}
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T4STAR2MCE">
+<span id="_CPPv3IE10DistMatrixI1T4STAR2MCE"></span><span id="_CPPv2IE10DistMatrixI1T4STAR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, STAR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T4STAR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="md-star">
+<h2><code class="docutils literal notranslate"><span class="pre">[MD,STAR]</span></code><a class="headerlink" href="#md-star" title="Permalink to this headline">¶</a></h2>
+<p>In the case of our <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid, each diagonal of the tesselation
+of the process grid will contain the entire set of processes, for instance, in the
+order <span class="math notranslate nohighlight">\(0,3,4,1,2,5\)</span>. This would result in the following overlay for the
+owning processes of the entries of our <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix example:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 \\
+  4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 \\
+  1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\
+  2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 \\
+  5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<p>Notice that each column of this matrix is distributed like a diagonal of a
+<code class="docutils literal notranslate"><span class="pre">[MC,MR]</span></code> distribution.</p>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T2MD4STARE">
+<span id="_CPPv3IE10DistMatrixI1T2MD4STARE"></span><span id="_CPPv2IE10DistMatrixI1T2MD4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, MD, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="star-md">
+<h2><code class="docutils literal notranslate"><span class="pre">[STAR,MD]</span></code><a class="headerlink" href="#star-md" title="Permalink to this headline">¶</a></h2>
+<p>In the case of our <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid, each diagonal of the tesselation
+of the process grid will contain the entire set of processes, for instance, in the
+order <span class="math notranslate nohighlight">\(0,3,4,1,2,5\)</span>. This would result in the following overlay for the
+owning processes of the entries of our <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix example:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  0 &amp; 3 &amp; 4 &amp; 1 &amp; 2 &amp; 5 &amp; 0 \\
+  0 &amp; 3 &amp; 4 &amp; 1 &amp; 2 &amp; 5 &amp; 0 \\
+  0 &amp; 3 &amp; 4 &amp; 1 &amp; 2 &amp; 5 &amp; 0 \\
+  0 &amp; 3 &amp; 4 &amp; 1 &amp; 2 &amp; 5 &amp; 0 \\
+  0 &amp; 3 &amp; 4 &amp; 1 &amp; 2 &amp; 5 &amp; 0 \\
+  0 &amp; 3 &amp; 4 &amp; 1 &amp; 2 &amp; 5 &amp; 0 \\
+  0 &amp; 3 &amp; 4 &amp; 1 &amp; 2 &amp; 5 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<p>Notice that each <em>row</em> of this matrix is distributed like a diagonal of a
+<code class="docutils literal notranslate"><span class="pre">[MC,MR]</span></code> distribution.</p>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T4STAR2MDE">
+<span id="_CPPv3IE10DistMatrixI1T4STAR2MDE"></span><span id="_CPPv2IE10DistMatrixI1T4STAR2MDE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, STAR, MD&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T4STAR2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="vc-star">
+<h2><code class="docutils literal notranslate"><span class="pre">[VC,STAR]</span></code><a class="headerlink" href="#vc-star" title="Permalink to this headline">¶</a></h2>
+<p>This distribution makes use of a 1d distribution which uses a column-major
+ordering of the entire process grid. Since 1d distributions are useful for
+distributing <em>vectors</em>, and a <em>column-major</em> ordering is used, the distribution
+symbol is <code class="docutils literal notranslate"><span class="pre">VC</span></code>. Again using the simple <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid,
+with a zero column alignment, each entry of a <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix
+would be owned by the following sets of processes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\
+  2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 \\
+  3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 \\
+  4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 \\
+  5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T2VC4STARE">
+<span id="_CPPv3IE10DistMatrixI1T2VC4STARE"></span><span id="_CPPv2IE10DistMatrixI1T2VC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, VC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="star-vc">
+<h2><code class="docutils literal notranslate"><span class="pre">[STAR,VC]</span></code><a class="headerlink" href="#star-vc" title="Permalink to this headline">¶</a></h2>
+<p>This is the transpose of the above <code class="docutils literal notranslate"><span class="pre">[VC,*</span> <span class="pre">]</span></code> distribution. On the standard
+<span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid with a row alignment of zero, a
+<span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix would be distributed as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 0 \\
+0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 0 \\
+0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 0 \\
+0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 0 \\
+0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 0 \\
+0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 0 \\
+0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T4STAR2VCE">
+<span id="_CPPv3IE10DistMatrixI1T4STAR2VCE"></span><span id="_CPPv2IE10DistMatrixI1T4STAR2VCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, STAR, VC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T4STAR2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="vr-star">
+<h2><code class="docutils literal notranslate"><span class="pre">[VR,STAR]</span></code><a class="headerlink" href="#vr-star" title="Permalink to this headline">¶</a></h2>
+<p>This distribution makes use of a 1d distribution which uses a row-major
+ordering of the entire process grid. Since 1d distributions are useful for
+distributing <em>vectors</em>, and a <em>row-major</em> ordering is used, the distribution
+symbol is <code class="docutils literal notranslate"><span class="pre">VR</span></code>. Again using the simple <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid,
+with a zero column alignment, each entry of a <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix
+would be owned by the following sets of processes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 &amp; 2 \\
+  4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 &amp; 4 \\
+  1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\
+  3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 &amp; 3 \\
+  5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 &amp; 5 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T2VR4STARE">
+<span id="_CPPv3IE10DistMatrixI1T2VR4STARE"></span><span id="_CPPv2IE10DistMatrixI1T2VR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, VR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="star-vr">
+<h2><code class="docutils literal notranslate"><span class="pre">[STAR,VR]</span></code><a class="headerlink" href="#star-vr" title="Permalink to this headline">¶</a></h2>
+<p>This is the transpose of the above <code class="docutils literal notranslate"><span class="pre">[VR,*</span> <span class="pre">]</span></code> distribution. On the standard
+<span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid with a row alignment of zero, a
+<span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix would be distributed as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+0 &amp; 2 &amp; 4 &amp; 1 &amp; 3 &amp; 5 &amp; 0 \\
+0 &amp; 2 &amp; 4 &amp; 1 &amp; 3 &amp; 5 &amp; 0 \\
+0 &amp; 2 &amp; 4 &amp; 1 &amp; 3 &amp; 5 &amp; 0 \\
+0 &amp; 2 &amp; 4 &amp; 1 &amp; 3 &amp; 5 &amp; 0 \\
+0 &amp; 2 &amp; 4 &amp; 1 &amp; 3 &amp; 5 &amp; 0 \\
+0 &amp; 2 &amp; 4 &amp; 1 &amp; 3 &amp; 5 &amp; 0 \\
+0 &amp; 2 &amp; 4 &amp; 1 &amp; 3 &amp; 5 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T4STAR2VRE">
+<span id="_CPPv3IE10DistMatrixI1T4STAR2VRE"></span><span id="_CPPv2IE10DistMatrixI1T4STAR2VRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, STAR, VR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T4STAR2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="star-star">
+<h2><code class="docutils literal notranslate"><span class="pre">[STAR,STAR]</span></code><a class="headerlink" href="#star-star" title="Permalink to this headline">¶</a></h2>
+<p>This “distribution” actually redundantly stores every entry of the associated
+matrix on every process. Again using a <span class="math notranslate nohighlight">\(2 \times 3\)</span> process grid,
+the entries of a <span class="math notranslate nohighlight">\(7 \times 7\)</span> matrix would be owned by the following
+sets of processes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp;
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} \\
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp;
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} \\
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp;
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} \\
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp;
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} \\
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp;
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} \\
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp;
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} \\
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\} &amp;
+\{0,1,...,5\} &amp; \{0,1,...,5\} &amp; \{0,1,...,5\}
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T4STAR4STARE">
+<span id="_CPPv3IE10DistMatrixI1T4STAR4STARE"></span><span id="_CPPv2IE10DistMatrixI1T4STAR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, STAR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All public member functions have been described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="circ-circ">
+<h2><code class="docutils literal notranslate"><span class="pre">[CIRC,CIRC]</span></code><a class="headerlink" href="#circ-circ" title="Permalink to this headline">¶</a></h2>
+<p>This <code class="docutils literal notranslate"><span class="pre">distribution</span></code> stores the entire matrix on a single process. For instance,
+if the root process is process 0 with respect to a column-major ordering of the
+process grid, then the corresponding overlay for the owners of each entry of our
+7 x 7 matrix example would be:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{ccccccc}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{array}\right)\end{split}\]</div>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1T4CIRC4CIRCE">
+<span id="_CPPv3IE10DistMatrixI1T4CIRC4CIRCE"></span><span id="_CPPv2IE10DistMatrixI1T4CIRC4CIRCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;T, CIRC, CIRC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1T4CIRC4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Only two public member functions were not described as part of
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>, and
+<code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code>.</p>
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T4CIRC4CIRCE12CopyFromRootERK6MatrixI1TE">
+<span id="_CPPv3N10DistMatrixI1T4CIRC4CIRCE12CopyFromRootERK6MatrixI1TE"></span><span id="_CPPv2N10DistMatrixI1T4CIRC4CIRCE12CopyFromRootERK6MatrixI1TE"></span><span id="DistMatrix:T.CIRC.CIRC:::CopyFromRoot__Matrix:T:CR"></span>void <code class="descname">CopyFromRoot</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T4CIRC4CIRCE12CopyFromRootERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>To be called from the root process in order to assign a sequential matrix to
+a <code class="docutils literal notranslate"><span class="pre">[CIRC,CIRC]</span></code> “distributed” matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10DistMatrixI1T4CIRC4CIRCE15CopyFromNonRootEv">
+<span id="_CPPv3N10DistMatrixI1T4CIRC4CIRCE15CopyFromNonRootEv"></span><span id="_CPPv2N10DistMatrixI1T4CIRC4CIRCE15CopyFromNonRootEv"></span><span id="DistMatrix:T.CIRC.CIRC:::CopyFromNonRoot"></span>void <code class="descname">CopyFromNonRoot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DistMatrixI1T4CIRC4CIRCE15CopyFromNonRootEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>To be called from non-root processes at the same time that the root process
+is calling <a class="reference internal" href="#_CPPv4N10DistMatrixI1T4CIRC4CIRCE12CopyFromRootERK6MatrixI1TE" title="DistMatrix&lt;T, CIRC, CIRC&gt;::CopyFromRoot"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CopyFromRoot()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="some-special-cases-used-in-elemental">
+<h2>Some special cases used in Elemental<a class="headerlink" href="#some-special-cases-used-in-elemental" title="Permalink to this headline">¶</a></h2>
+<p>This list of special cases is here to help clarify the notation used throughout
+Elemental’s source (as well as this documentation). These are all special
+cases of <a class="reference internal" href="#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code></a>.</p>
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId1U1VE">
+<span id="_CPPv3IE10DistMatrixId1U1VE"></span><span id="_CPPv2IE10DistMatrixId1U1VE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, U, V&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixIdE">
+<span id="_CPPv3IE10DistMatrixIdE"></span><span id="_CPPv2IE10DistMatrixIdE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId4CIRC4CIRCE">
+<span id="_CPPv3IE10DistMatrixId4CIRC4CIRCE"></span><span id="_CPPv2IE10DistMatrixId4CIRC4CIRCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, CIRC, CIRC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId4CIRC4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId2MC2MRE">
+<span id="_CPPv3IE10DistMatrixId2MC2MRE"></span><span id="_CPPv2IE10DistMatrixId2MC2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, MC, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId2MC4STARE">
+<span id="_CPPv3IE10DistMatrixId2MC4STARE"></span><span id="_CPPv2IE10DistMatrixId2MC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, MC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId2MC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId2MD4STARE">
+<span id="_CPPv3IE10DistMatrixId2MD4STARE"></span><span id="_CPPv2IE10DistMatrixId2MD4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, MD, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId2MR2MCE">
+<span id="_CPPv3IE10DistMatrixId2MR2MCE"></span><span id="_CPPv2IE10DistMatrixId2MR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, MR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId2MR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId2MR4STARE">
+<span id="_CPPv3IE10DistMatrixId2MR4STARE"></span><span id="_CPPv2IE10DistMatrixId2MR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, MR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId2MR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId4STAR2MCE">
+<span id="_CPPv3IE10DistMatrixId4STAR2MCE"></span><span id="_CPPv2IE10DistMatrixId4STAR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, STAR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId4STAR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId4STAR2MDE">
+<span id="_CPPv3IE10DistMatrixId4STAR2MDE"></span><span id="_CPPv2IE10DistMatrixId4STAR2MDE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, STAR, MD&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId4STAR2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId4STAR2MRE">
+<span id="_CPPv3IE10DistMatrixId4STAR2MRE"></span><span id="_CPPv2IE10DistMatrixId4STAR2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, STAR, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId4STAR2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId4STAR4STARE">
+<span id="_CPPv3IE10DistMatrixId4STAR4STARE"></span><span id="_CPPv2IE10DistMatrixId4STAR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, STAR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId4STAR2VCE">
+<span id="_CPPv3IE10DistMatrixId4STAR2VCE"></span><span id="_CPPv2IE10DistMatrixId4STAR2VCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, STAR, VC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId4STAR2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId4STAR2VRE">
+<span id="_CPPv3IE10DistMatrixId4STAR2VRE"></span><span id="_CPPv2IE10DistMatrixId4STAR2VRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, STAR, VR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId4STAR2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId2VC4STARE">
+<span id="_CPPv3IE10DistMatrixId2VC4STARE"></span><span id="_CPPv2IE10DistMatrixId2VC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, VC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixId2VR4STARE">
+<span id="_CPPv3IE10DistMatrixId2VR4STARE"></span><span id="_CPPv2IE10DistMatrixId2VR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;double, VR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixId2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype is the set of double-precision real numbers.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE1U1VE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE1U1VE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE1U1VE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, U, V&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdEE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdEE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE4CIRC4CIRCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE4CIRC4CIRCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE4CIRC4CIRCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, CIRC, CIRC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE4CIRC4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE2MC2MRE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE2MC2MRE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE2MC2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, MC, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE2MC4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE2MC4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE2MC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, MC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE2MC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE2MD4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE2MD4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE2MD4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, MD, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE2MR2MCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE2MR2MCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE2MR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, MR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE2MR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE2MR4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE2MR4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE2MR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, MR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE2MR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE4STAR2MCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE4STAR2MCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE4STAR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, STAR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE4STAR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE4STAR2MDE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE4STAR2MDE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE4STAR2MDE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, STAR, MD&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE4STAR2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE4STAR2MRE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE4STAR2MRE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE4STAR2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, STAR, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE4STAR2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE4STAR4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE4STAR4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE4STAR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, STAR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE4STAR2VCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE4STAR2VCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE4STAR2VCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, STAR, VC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE4STAR2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE4STAR2VRE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE4STAR2VRE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE4STAR2VRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, STAR, VR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE4STAR2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE2VC4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE2VC4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE2VC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, VC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexIdE2VR4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexIdE2VR4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexIdE2VR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Complex&lt;double&gt;, VR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexIdE2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype is the set of double-precision complex numbers.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real1U1VE">
+<span id="_CPPv3IE10DistMatrixI4Real1U1VE"></span><span id="_CPPv2IE10DistMatrixI4Real1U1VE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, U, V&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4RealE">
+<span id="_CPPv3IE10DistMatrixI4RealE"></span><span id="_CPPv2IE10DistMatrixI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real4CIRC4CIRCE">
+<span id="_CPPv3IE10DistMatrixI4Real4CIRC4CIRCE"></span><span id="_CPPv2IE10DistMatrixI4Real4CIRC4CIRCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, CIRC, CIRC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4CIRC4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real2MC2MRE">
+<span id="_CPPv3IE10DistMatrixI4Real2MC2MRE"></span><span id="_CPPv2IE10DistMatrixI4Real2MC2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, MC, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real2MC4STARE">
+<span id="_CPPv3IE10DistMatrixI4Real2MC4STARE"></span><span id="_CPPv2IE10DistMatrixI4Real2MC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, MC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real2MD4STARE">
+<span id="_CPPv3IE10DistMatrixI4Real2MD4STARE"></span><span id="_CPPv2IE10DistMatrixI4Real2MD4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, MD, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real2MR2MCE">
+<span id="_CPPv3IE10DistMatrixI4Real2MR2MCE"></span><span id="_CPPv2IE10DistMatrixI4Real2MR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, MR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real2MR4STARE">
+<span id="_CPPv3IE10DistMatrixI4Real2MR4STARE"></span><span id="_CPPv2IE10DistMatrixI4Real2MR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, MR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2MR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2MCE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2MCE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, STAR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2MDE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2MDE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2MDE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, STAR, MD&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2MRE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2MRE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, STAR, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR4STARE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR4STARE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, STAR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2VCE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2VCE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2VCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, STAR, VC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real4STAR2VRE">
+<span id="_CPPv3IE10DistMatrixI4Real4STAR2VRE"></span><span id="_CPPv2IE10DistMatrixI4Real4STAR2VRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, STAR, VR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real4STAR2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real2VC4STARE">
+<span id="_CPPv3IE10DistMatrixI4Real2VC4STARE"></span><span id="_CPPv2IE10DistMatrixI4Real2VC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, VC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI4Real2VR4STARE">
+<span id="_CPPv3IE10DistMatrixI4Real2VR4STARE"></span><span id="_CPPv2IE10DistMatrixI4Real2VR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;Real, VR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI4Real2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype, <cite>Real</cite>, is real (as opposed to complex).</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE1U1VE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE1U1VE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE1U1VE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, U, V&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealEE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealEE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4CIRC4CIRCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4CIRC4CIRCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4CIRC4CIRCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, CIRC, CIRC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4CIRC4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MC2MRE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MC2MRE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MC2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, MC, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MC4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MC4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, MC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MD4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MD4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MD4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, MD, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MR2MCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MR2MCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, MR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2MR4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2MR4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2MR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, MR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2MR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2MCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, STAR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MDE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2MDE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2MDE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, STAR, MD&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MRE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2MRE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, STAR, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, STAR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VCE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2VCE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2VCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, STAR, VC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VRE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE4STAR2VRE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE4STAR2VRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, STAR, VR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE4STAR2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2VC4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2VC4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2VC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, VC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI7ComplexI4RealE2VR4STARE">
+<span id="_CPPv3IE10DistMatrixI7ComplexI4RealE2VR4STARE"></span><span id="_CPPv2IE10DistMatrixI7ComplexI4RealE2VR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, VR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI7ComplexI4RealE2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype, <a class="reference internal" href="../environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">Complex&lt;Real&gt;</span></code></a>, is complex with base type
+<cite>Real</cite>.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F1U1VE">
+<span id="_CPPv3IE10DistMatrixI1F1U1VE"></span><span id="_CPPv2IE10DistMatrixI1F1U1VE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, U, V&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1FE">
+<span id="_CPPv3IE10DistMatrixI1FE"></span><span id="_CPPv2IE10DistMatrixI1FE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F4CIRC4CIRCE">
+<span id="_CPPv3IE10DistMatrixI1F4CIRC4CIRCE"></span><span id="_CPPv2IE10DistMatrixI1F4CIRC4CIRCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, CIRC, CIRC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4CIRC4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F2MC2MRE">
+<span id="_CPPv3IE10DistMatrixI1F2MC2MRE"></span><span id="_CPPv2IE10DistMatrixI1F2MC2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, MC, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F2MC4STARE">
+<span id="_CPPv3IE10DistMatrixI1F2MC4STARE"></span><span id="_CPPv2IE10DistMatrixI1F2MC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, MC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F2MD4STARE">
+<span id="_CPPv3IE10DistMatrixI1F2MD4STARE"></span><span id="_CPPv2IE10DistMatrixI1F2MD4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, MD, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F2MR2MCE">
+<span id="_CPPv3IE10DistMatrixI1F2MR2MCE"></span><span id="_CPPv2IE10DistMatrixI1F2MR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, MR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F2MR4STARE">
+<span id="_CPPv3IE10DistMatrixI1F2MR4STARE"></span><span id="_CPPv2IE10DistMatrixI1F2MR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, MR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2MR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2MCE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2MCE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, STAR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2MDE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2MDE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2MDE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, STAR, MD&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2MRE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2MRE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, STAR, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR4STARE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR4STARE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, STAR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2VCE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2VCE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2VCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, STAR, VC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F4STAR2VRE">
+<span id="_CPPv3IE10DistMatrixI1F4STAR2VRE"></span><span id="_CPPv2IE10DistMatrixI1F4STAR2VRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, STAR, VR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F4STAR2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F2VC4STARE">
+<span id="_CPPv3IE10DistMatrixI1F2VC4STARE"></span><span id="_CPPv2IE10DistMatrixI1F2VC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, VC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI1F2VR4STARE">
+<span id="_CPPv3IE10DistMatrixI1F2VR4STARE"></span><span id="_CPPv2IE10DistMatrixI1F2VR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;F, VR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI1F2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype, <cite>F</cite>, is a field.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int1U1VE">
+<span id="_CPPv3IE10DistMatrixI3Int1U1VE"></span><span id="_CPPv2IE10DistMatrixI3Int1U1VE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, U, V&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3IntE">
+<span id="_CPPv3IE10DistMatrixI3IntE"></span><span id="_CPPv2IE10DistMatrixI3IntE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3IntE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int4CIRC4CIRCE">
+<span id="_CPPv3IE10DistMatrixI3Int4CIRC4CIRCE"></span><span id="_CPPv2IE10DistMatrixI3Int4CIRC4CIRCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, CIRC, CIRC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4CIRC4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int2MC2MRE">
+<span id="_CPPv3IE10DistMatrixI3Int2MC2MRE"></span><span id="_CPPv2IE10DistMatrixI3Int2MC2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, MC, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int2MC4STARE">
+<span id="_CPPv3IE10DistMatrixI3Int2MC4STARE"></span><span id="_CPPv2IE10DistMatrixI3Int2MC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, MC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int2MD4STARE">
+<span id="_CPPv3IE10DistMatrixI3Int2MD4STARE"></span><span id="_CPPv2IE10DistMatrixI3Int2MD4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, MD, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int2MR2MCE">
+<span id="_CPPv3IE10DistMatrixI3Int2MR2MCE"></span><span id="_CPPv2IE10DistMatrixI3Int2MR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, MR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int2MR4STARE">
+<span id="_CPPv3IE10DistMatrixI3Int2MR4STARE"></span><span id="_CPPv2IE10DistMatrixI3Int2MR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, MR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2MR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2MCE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2MCE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2MCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, STAR, MC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2MDE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2MDE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2MDE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, STAR, MD&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2MRE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2MRE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2MRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, STAR, MR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR4STARE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR4STARE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, STAR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2VCE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2VCE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2VCE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, STAR, VC&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int4STAR2VRE">
+<span id="_CPPv3IE10DistMatrixI3Int4STAR2VRE"></span><span id="_CPPv2IE10DistMatrixI3Int4STAR2VRE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, STAR, VR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int4STAR2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int2VC4STARE">
+<span id="_CPPv3IE10DistMatrixI3Int2VC4STARE"></span><span id="_CPPv2IE10DistMatrixI3Int2VC4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, VC, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE10DistMatrixI3Int2VR4STARE">
+<span id="_CPPv3IE10DistMatrixI3Int2VR4STARE"></span><span id="_CPPv2IE10DistMatrixI3Int2VR4STARE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">DistMatrix</code>&lt;<a class="reference internal" href="../environment.html#_CPPv43Int" title="Int">Int</a>, VR, STAR&gt;<a class="headerlink" href="#_CPPv4IE10DistMatrixI3Int2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying datatype is a signed integer (of standard size).</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

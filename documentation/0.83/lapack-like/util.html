@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Utilities &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tuning parameters" href="tuning.html" />
+    <link rel="prev" title="Linear solvers" href="solve.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="utilities">
+<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="householder-reflectors">
+<h2>Householder reflectors<a class="headerlink" href="#householder-reflectors" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO:</strong> Describe major difference from LAPACK’s conventions (i.e., we do not
+treat the identity matrix as a Householder transform since it requires the
+<span class="math notranslate nohighlight">\(u\)</span> in <span class="math notranslate nohighlight">\(H=I-2uu'\)</span> to have norm zero rather than one).</p>
+<dl class="function">
+<dt id="_CPPv413LeftReflectorR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv313LeftReflectorR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv213LeftReflectorR6MatrixI1FER6MatrixI1FE"></span><span id="LeftReflector__Matrix:F:R.Matrix:F:R"></span>F <code class="descname">LeftReflector</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>chi</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LeftReflectorR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LeftReflectorR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv313LeftReflectorR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv213LeftReflectorR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="LeftReflector__DistMatrix:F:R.DistMatrix:F:R"></span>F <code class="descname">LeftReflector</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>chi</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LeftReflectorR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9reflector3ColER10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv3N9reflector3ColER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv2N9reflector3ColER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="reflector::Col__DistMatrix:F:R.DistMatrix:F:R"></span>F <code class="descclassname">reflector<code class="descclassname">::</code></code><code class="descname">Col</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>chi</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9reflector3ColER10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414RightReflectorR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv314RightReflectorR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv214RightReflectorR6MatrixI1FER6MatrixI1FE"></span><span id="RightReflector__Matrix:F:R.Matrix:F:R"></span>F <code class="descname">RightReflector</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>chi</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414RightReflectorR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414RightReflectorR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv314RightReflectorR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv214RightReflectorR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="RightReflector__DistMatrix:F:R.DistMatrix:F:R"></span>F <code class="descname">RightReflector</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>chi</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414RightReflectorR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9reflector3RowER10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv3N9reflector3RowER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv2N9reflector3RowER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="reflector::Row__DistMatrix:F:R.DistMatrix:F:R"></span>F <code class="descclassname">reflector<code class="descclassname">::</code></code><code class="descname">Row</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>chi</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9reflector3RowER10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv321ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv221ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="ApplyPackedReflectors__LeftOrRight.UpperOrLower.VerticalOrHorizontal.ForwardOrBackward.Conjugation.i.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">ApplyPackedReflectors</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv420VerticalOrHorizontal" title="VerticalOrHorizontal">VerticalOrHorizontal</a> <em>dir</em>, <a class="reference internal" href="../core/environment.html#_CPPv417ForwardOrBackward" title="ForwardOrBackward">ForwardOrBackward</a> <em>order</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Conjugation" title="Conjugation">Conjugation</a> <em>conjugation</em>, int <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv321ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv221ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="ApplyPackedReflectors__LeftOrRight.UpperOrLower.VerticalOrHorizontal.ForwardOrBackward.Conjugation.i.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descname">ApplyPackedReflectors</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv420VerticalOrHorizontal" title="VerticalOrHorizontal">VerticalOrHorizontal</a> <em>dir</em>, <a class="reference internal" href="../core/environment.html#_CPPv417ForwardOrBackward" title="ForwardOrBackward">ForwardOrBackward</a> <em>order</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Conjugation" title="Conjugation">Conjugation</a> <em>conjugation</em>, int <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv321ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv221ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="ApplyPackedReflectors__LeftOrRight.UpperOrLower.VerticalOrHorizontal.ForwardOrBackward.Conjugation.i.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descname">ApplyPackedReflectors</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv420VerticalOrHorizontal" title="VerticalOrHorizontal">VerticalOrHorizontal</a> <em>dir</em>, <a class="reference internal" href="../core/environment.html#_CPPv417ForwardOrBackward" title="ForwardOrBackward">ForwardOrBackward</a> <em>order</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Conjugation" title="Conjugation">Conjugation</a> <em>conjugation</em>, int <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ApplyPackedReflectors11LeftOrRight12UpperOrLower20VerticalOrHorizontal17ForwardOrBackward11ConjugationiRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv422ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR6MatrixI1FERK6MatrixI1FE">
+<span id="_CPPv322ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR6MatrixI1FERK6MatrixI1FE"></span><span id="_CPPv222ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR6MatrixI1FERK6MatrixI1FE"></span><span id="ExpandPackedReflectors__UpperOrLower.VerticalOrHorizontal.Conjugation.i.Matrix:F:R.Matrix:F:CR"></span>void <code class="descname">ExpandPackedReflectors</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv420VerticalOrHorizontal" title="VerticalOrHorizontal">VerticalOrHorizontal</a> <em>dir</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Conjugation" title="Conjugation">Conjugation</a> <em>conjugation</em>, int <em>offset</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR6MatrixI1FERK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv422ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F2MD4STARE">
+<span id="_CPPv322ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F2MD4STARE"></span><span id="_CPPv222ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F2MD4STARE"></span><span id="ExpandPackedReflectors__UpperOrLower.VerticalOrHorizontal.Conjugation.i.DistMatrix:F:R.DistMatrix:F.MD.STAR:CR"></span>void <code class="descname">ExpandPackedReflectors</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv420VerticalOrHorizontal" title="VerticalOrHorizontal">VerticalOrHorizontal</a> <em>dir</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Conjugation" title="Conjugation">Conjugation</a> <em>conjugation</em>, int <em>offset</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv422ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F4STAR4STARE">
+<span id="_CPPv322ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F4STAR4STARE"></span><span id="_CPPv222ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F4STAR4STARE"></span><span id="ExpandPackedReflectors__UpperOrLower.VerticalOrHorizontal.Conjugation.i.DistMatrix:F:R.DistMatrix:F.STAR.STAR:CR"></span>void <code class="descname">ExpandPackedReflectors</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv420VerticalOrHorizontal" title="VerticalOrHorizontal">VerticalOrHorizontal</a> <em>dir</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Conjugation" title="Conjugation">Conjugation</a> <em>conjugation</em>, int <em>offset</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>H</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422ExpandPackedReflectors12UpperOrLower20VerticalOrHorizontal11ConjugationiR10DistMatrixI1FERK10DistMatrixI1F4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="sorting">
+<h2>Sorting<a class="headerlink" href="#sorting" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44SortR6MatrixI4RealE8SortType">
+<span id="_CPPv34SortR6MatrixI4RealE8SortType"></span><span id="_CPPv24SortR6MatrixI4RealE8SortType"></span><span id="Sort__Matrix:Real:R.SortType"></span>void <code class="descname">Sort</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SortR6MatrixI4RealE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SortR10DistMatrixI4Real1U1VE8SortType">
+<span id="_CPPv34SortR10DistMatrixI4Real1U1VE8SortType"></span><span id="_CPPv24SortR10DistMatrixI4Real1U1VE8SortType"></span><span id="Sort__DistMatrix:Real.U.V:R.SortType"></span>void <code class="descname">Sort</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4Real1U1VE" title="DistMatrix&lt;Real, U, V&gt;">DistMatrix</a>&lt;Real, U, V&gt; &amp;<em>X</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SortR10DistMatrixI4Real1U1VE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410TaggedSortRK6MatrixI4RealE8SortType">
+<span id="_CPPv310TaggedSortRK6MatrixI4RealE8SortType"></span><span id="_CPPv210TaggedSortRK6MatrixI4RealE8SortType"></span><span id="TaggedSort__Matrix:Real:CR.SortType"></span>std::vector&lt;ValueInt&lt;Real&gt;&gt; <code class="descname">TaggedSort</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410TaggedSortRK6MatrixI4RealE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410TaggedSortRK10DistMatrixI4Real1U1VE8SortType">
+<span id="_CPPv310TaggedSortRK10DistMatrixI4Real1U1VE8SortType"></span><span id="_CPPv210TaggedSortRK10DistMatrixI4Real1U1VE8SortType"></span><span id="TaggedSort__DistMatrix:Real.U.V:CR.SortType"></span>std::vector&lt;ValueInt&lt;Real&gt;&gt; <code class="descname">TaggedSort</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4Real1U1VE" title="DistMatrix&lt;Real, U, V&gt;">DistMatrix</a>&lt;Real, U, V&gt; &amp;<em>X</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType9ASCENDINGE" title="ASCENDING">ASCENDING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410TaggedSortRK10DistMatrixI4Real1U1VE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46MedianRK6MatrixI4RealE">
+<span id="_CPPv36MedianRK6MatrixI4RealE"></span><span id="_CPPv26MedianRK6MatrixI4RealE"></span><span id="Median__Matrix:Real:CR"></span>ValueInt&lt;Real&gt; <code class="descname">Median</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46MedianRK6MatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46MedianRK10DistMatrixI4Real1U1VE">
+<span id="_CPPv36MedianRK10DistMatrixI4Real1U1VE"></span><span id="_CPPv26MedianRK10DistMatrixI4Real1U1VE"></span><span id="Median__DistMatrix:Real.U.V:CR"></span>ValueInt&lt;Real&gt; <code class="descname">Median</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4Real1U1VE" title="DistMatrix&lt;Real, U, V&gt;">DistMatrix</a>&lt;Real, U, V&gt; &amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46MedianRK10DistMatrixI4Real1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

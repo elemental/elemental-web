@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Robust principal component analysis &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sparse inverse covariance selection" href="SparseInvCov.html" />
+    <link rel="prev" title="Quadratic programs" href="QuadraticProgram.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="robust-principal-component-analysis">
+<h1>Robust principal component analysis<a class="headerlink" href="#robust-principal-component-analysis" title="Permalink to this headline">¶</a></h1>
+<p><em>Robust principal component analysis</em> (RPCA) seeks a decomposition of a matrix
+as a sum of a low-rank and sparse matrix, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[M = L + S,\]</div>
+<p>where a balance is sought between the rank of <span class="math notranslate nohighlight">\(L\)</span> and the number of
+nonzeros in <span class="math notranslate nohighlight">\(S\)</span>. Such a balance is (weakly) imposed via convex
+relaxations of penalties on the number of nonzero singular values of <span class="math notranslate nohighlight">\(L\)</span>
+and entries of <span class="math notranslate nohighlight">\(S\)</span> to their <span class="math notranslate nohighlight">\(\ell_1\)</span> counterparts. In particular,
+a solution is sought for the problem</p>
+<div class="math notranslate nohighlight">
+\[\min_{L,S} \| L \|_* + \| \text{vec}(S) \|_1 \text{ such that } M = L + S,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\| \cdot \|_*\)</span> denotes the nuclear norm and
+<span class="math notranslate nohighlight">\(\| \text{vec}(\cdot) \|_1\)</span> denotes the entrywise one-norm.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv48RPCACtrl">
+<span id="_CPPv38RPCACtrl"></span><span id="_CPPv28RPCACtrl"></span><span id="RPCACtrl"></span><em class="property">class </em><code class="descname">RPCACtrl</code><a class="headerlink" href="#_CPPv48RPCACtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8RPCACtrl6useALME">
+<span id="_CPPv3N8RPCACtrl6useALME"></span><span id="_CPPv2N8RPCACtrl6useALME"></span><span id="RPCACtrl::useALM__b"></span>bool <code class="descname">useALM</code><a class="headerlink" href="#_CPPv4N8RPCACtrl6useALME" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl8usePivQRE">
+<span id="_CPPv3N8RPCACtrl8usePivQRE"></span><span id="_CPPv2N8RPCACtrl8usePivQRE"></span><span id="RPCACtrl::usePivQR__b"></span>bool <code class="descname">usePivQR</code><a class="headerlink" href="#_CPPv4N8RPCACtrl8usePivQRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl8progressE">
+<span id="_CPPv3N8RPCACtrl8progressE"></span><span id="_CPPv2N8RPCACtrl8progressE"></span><span id="RPCACtrl::progress__b"></span>bool <code class="descname">progress</code><a class="headerlink" href="#_CPPv4N8RPCACtrl8progressE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl11numPivStepsE">
+<span id="_CPPv3N8RPCACtrl11numPivStepsE"></span><span id="_CPPv2N8RPCACtrl11numPivStepsE"></span><span id="RPCACtrl::numPivSteps__Int"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">numPivSteps</code><a class="headerlink" href="#_CPPv4N8RPCACtrl11numPivStepsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl6maxItsE">
+<span id="_CPPv3N8RPCACtrl6maxItsE"></span><span id="_CPPv2N8RPCACtrl6maxItsE"></span><span id="RPCACtrl::maxIts__Int"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxIts</code><a class="headerlink" href="#_CPPv4N8RPCACtrl6maxItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl3tauE">
+<span id="_CPPv3N8RPCACtrl3tauE"></span><span id="_CPPv2N8RPCACtrl3tauE"></span><span id="RPCACtrl::tau__Real"></span>Real <code class="descname">tau</code><a class="headerlink" href="#_CPPv4N8RPCACtrl3tauE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl4betaE">
+<span id="_CPPv3N8RPCACtrl4betaE"></span><span id="_CPPv2N8RPCACtrl4betaE"></span><span id="RPCACtrl::beta__Real"></span>Real <code class="descname">beta</code><a class="headerlink" href="#_CPPv4N8RPCACtrl4betaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl3rhoE">
+<span id="_CPPv3N8RPCACtrl3rhoE"></span><span id="_CPPv2N8RPCACtrl3rhoE"></span><span id="RPCACtrl::rho__Real"></span>Real <code class="descname">rho</code><a class="headerlink" href="#_CPPv4N8RPCACtrl3rhoE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8RPCACtrl3tolE">
+<span id="_CPPv3N8RPCACtrl3tolE"></span><span id="_CPPv2N8RPCACtrl3tolE"></span><span id="RPCACtrl::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N8RPCACtrl3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8RPCACtrl8RPCACtrlEv">
+<span id="_CPPv3N8RPCACtrl8RPCACtrlEv"></span><span id="_CPPv2N8RPCACtrl8RPCACtrlEv"></span><span id="RPCACtrl::RPCACtrl"></span><code class="descname">RPCACtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8RPCACtrl8RPCACtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44RPCARK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK8RPCACtrlI4BaseI1FEE">
+<span id="_CPPv34RPCARK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK8RPCACtrlI4BaseI1FEE"></span><span id="_CPPv24RPCARK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK8RPCACtrlI4BaseI1FEE"></span><span id="RPCA__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.RPCACtrl:Base:F::CR"></span>void <code class="descname">RPCA</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>M</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>L</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>S</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv48RPCACtrl" title="RPCACtrl">RPCACtrl</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv48RPCACtrl" title="RPCACtrl">RPCACtrl</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44RPCARK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK8RPCACtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElRPCADist_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRPCADist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> M</em>, ElDistMatrix_s<em> L</em>, ElDistMatrix_s<em> S</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRPCADist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRPCADist_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRPCADist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> M</em>, ElDistMatrix_d<em> L</em>, ElDistMatrix_d<em> S</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRPCADist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRPCADist_c">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRPCADist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> M</em>, ElDistMatrix_c<em> L</em>, ElDistMatrix_c<em> S</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRPCADist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRPCADist_z">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRPCADist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> M</em>, ElDistMatrix_z<em> L</em>, ElDistMatrix_z<em> S</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRPCADist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

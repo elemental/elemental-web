@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Process grids &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Distributed matrices" href="dist_matrix.html" />
+    <link rel="prev" title="Sequential matrices" href="matrix.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="process-grids">
+<h1>Process grids<a class="headerlink" href="#process-grids" title="Permalink to this headline">¶</a></h1>
+<p>Th <a class="reference internal" href="#_CPPv44Grid" title="Grid"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class is responsible for converting MPI communicators into
+a two-dimensional process grid meant for distributing matrices (ala the
+soon-to-be-discussed <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code></a> class).</p>
+<dl class="class">
+<dt id="_CPPv44Grid">
+<span id="_CPPv34Grid"></span><span id="_CPPv24Grid"></span><span id="Grid"></span><em class="property">class </em><code class="descname">Grid</code><a class="headerlink" href="#_CPPv44Grid" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="function">
+<dt id="_CPPv4N4Grid4GridEN3mpi4CommE">
+<span id="_CPPv3N4Grid4GridEN3mpi4CommE"></span><span id="_CPPv2N4Grid4GridEN3mpi4CommE"></span><span id="Grid::Grid__mpi::Comm"></span><code class="descname">Grid</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em> = mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi10COMM_WORLDE" title="mpi::COMM_WORLD">COMM_WORLD</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Grid4GridEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a process grid over the specified communicator and let Elemental
+decide the process grid dimensions. If no communicator is specified,
+mpi::COMM_WORLD is used.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4Grid4GridEN3mpi4CommEi">
+<span id="_CPPv3N4Grid4GridEN3mpi4CommEi"></span><span id="_CPPv2N4Grid4GridEN3mpi4CommEi"></span><span id="Grid::Grid__mpi::Comm.i"></span><code class="descname">Grid</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em>, int <em>height</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Grid4GridEN3mpi4CommEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a process grid over the specified communicator with the
+given height. Note that the size of the communicator must be divisible
+by <cite>height</cite>.</p>
+</dd></dl>
+
+<p class="rubric">Simple interface (simpler version of distribution-based interface)</p>
+<dl class="function">
+<dt id="_CPPv4NK4Grid3RowEv">
+<span id="_CPPv3NK4Grid3RowEv"></span><span id="_CPPv2NK4Grid3RowEv"></span><span id="Grid::RowC"></span>int <code class="descname">Row</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid3RowEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the index of the row of the process grid that this process lies in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid3ColEv">
+<span id="_CPPv3NK4Grid3ColEv"></span><span id="_CPPv2NK4Grid3ColEv"></span><span id="Grid::ColC"></span>int <code class="descname">Col</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid3ColEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the index of the column of the process grid that this process lies
+in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid4RankEv">
+<span id="_CPPv3NK4Grid4RankEv"></span><span id="_CPPv2NK4Grid4RankEv"></span><span id="Grid::RankC"></span>int <code class="descname">Rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid4RankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank in the grid. The result is equivalent to the
+<code class="docutils literal notranslate"><span class="pre">VCRank()</span></code> function described below, but this interface is provided for
+simplicity.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6HeightEv">
+<span id="_CPPv3NK4Grid6HeightEv"></span><span id="_CPPv2NK4Grid6HeightEv"></span><span id="Grid::HeightC"></span>int <code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6HeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid5WidthEv">
+<span id="_CPPv3NK4Grid5WidthEv"></span><span id="_CPPv2NK4Grid5WidthEv"></span><span id="Grid::WidthC"></span>int <code class="descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid5WidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the width of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid4SizeEv">
+<span id="_CPPv3NK4Grid4SizeEv"></span><span id="_CPPv2NK4Grid4SizeEv"></span><span id="Grid::SizeC"></span>int <code class="descname">Size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid4SizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of active processes in the process grid. This number
+is equal to <code class="docutils literal notranslate"><span class="pre">Height()</span></code> <span class="math notranslate nohighlight">\(\times\)</span> <code class="docutils literal notranslate"><span class="pre">Width()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid7ColCommEv">
+<span id="_CPPv3NK4Grid7ColCommEv"></span><span id="_CPPv2NK4Grid7ColCommEv"></span><span id="Grid::ColCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">ColComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid7ColCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the communicator for this process’s column of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid7RowCommEv">
+<span id="_CPPv3NK4Grid7RowCommEv"></span><span id="_CPPv2NK4Grid7RowCommEv"></span><span id="Grid::RowCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">RowComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid7RowCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the communicator for this process’s row of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid4CommEv">
+<span id="_CPPv3NK4Grid4CommEv"></span><span id="_CPPv2NK4Grid4CommEv"></span><span id="Grid::CommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">Comm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid4CommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the communicator for the process grid.</p>
+</dd></dl>
+
+<p class="rubric">Distribution-based interface</p>
+<dl class="function">
+<dt id="_CPPv4NK4Grid6MCRankEv">
+<span id="_CPPv3NK4Grid6MCRankEv"></span><span id="_CPPv2NK4Grid6MCRankEv"></span><span id="Grid::MCRankC"></span>int <code class="descname">MCRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6MCRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank in the <code class="docutils literal notranslate"><span class="pre">MC</span></code> (Matrix Column) communicator. This
+corresponds to our row in the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6MRRankEv">
+<span id="_CPPv3NK4Grid6MRRankEv"></span><span id="_CPPv2NK4Grid6MRRankEv"></span><span id="Grid::MRRankC"></span>int <code class="descname">MRRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6MRRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank in the <code class="docutils literal notranslate"><span class="pre">MR</span></code> (Matrix Row) communicator. This
+corresponds to our column in the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6VCRankEv">
+<span id="_CPPv3NK4Grid6VCRankEv"></span><span id="_CPPv2NK4Grid6VCRankEv"></span><span id="Grid::VCRankC"></span>int <code class="descname">VCRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6VCRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank in the <code class="docutils literal notranslate"><span class="pre">VC</span></code> (Vector Column) communicator. This
+corresponds to our rank in a column-major ordering of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6VRRankEv">
+<span id="_CPPv3NK4Grid6VRRankEv"></span><span id="_CPPv2NK4Grid6VRRankEv"></span><span id="Grid::VRRankC"></span>int <code class="descname">VRRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6VRRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank in the <code class="docutils literal notranslate"><span class="pre">VR</span></code> (Vector Row) communicator. This
+corresponds to our rank in a row-major ordering of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6MCSizeEv">
+<span id="_CPPv3NK4Grid6MCSizeEv"></span><span id="_CPPv2NK4Grid6MCSizeEv"></span><span id="Grid::MCSizeC"></span>int <code class="descname">MCSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6MCSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the size of the <code class="docutils literal notranslate"><span class="pre">MC</span></code> (Matrix Column) communicator, which is
+equivalent to the height of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6MRSizeEv">
+<span id="_CPPv3NK4Grid6MRSizeEv"></span><span id="_CPPv2NK4Grid6MRSizeEv"></span><span id="Grid::MRSizeC"></span>int <code class="descname">MRSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6MRSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the size of the <code class="docutils literal notranslate"><span class="pre">MR</span></code> (Matrix Row) communicator, which is
+equivalent to the width of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6VCSizeEv">
+<span id="_CPPv3NK4Grid6VCSizeEv"></span><span id="_CPPv2NK4Grid6VCSizeEv"></span><span id="Grid::VCSizeC"></span>int <code class="descname">VCSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6VCSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the size of the <code class="docutils literal notranslate"><span class="pre">VC</span></code> (Vector Column) communicator, which is
+equivalent to the size of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6VRSizeEv">
+<span id="_CPPv3NK4Grid6VRSizeEv"></span><span id="_CPPv2NK4Grid6VRSizeEv"></span><span id="Grid::VRSizeC"></span>int <code class="descname">VRSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6VRSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the size of the <code class="docutils literal notranslate"><span class="pre">VR</span></code> (Vector Row) communicator, which is
+equivalent to the size of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6MCCommEv">
+<span id="_CPPv3NK4Grid6MCCommEv"></span><span id="_CPPv2NK4Grid6MCCommEv"></span><span id="Grid::MCCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">MCComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6MCCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">MC</span></code> (Matrix Column) communicator. This consists of the set
+of processes within our column of the grid (ordered top-to-bottom).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6MRCommEv">
+<span id="_CPPv3NK4Grid6MRCommEv"></span><span id="_CPPv2NK4Grid6MRCommEv"></span><span id="Grid::MRCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">MRComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6MRCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">MR</span></code> (Matrix Row) communicator. This consists of the set of
+processes within our row of the grid (ordered left-to-right).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6VCCommEv">
+<span id="_CPPv3NK4Grid6VCCommEv"></span><span id="_CPPv2NK4Grid6VCCommEv"></span><span id="Grid::VCCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">VCComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6VCCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">VC</span></code> (Vector Column) communicator. This consists of the entire
+set of processes in the grid, but ordered in a column-major fashion.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6VRCommEv">
+<span id="_CPPv3NK4Grid6VRCommEv"></span><span id="_CPPv2NK4Grid6VRCommEv"></span><span id="Grid::VRCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">VRComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6VRCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">VR</span></code> (Vector Row) communicator. This consists of the entire
+set of processes in the grid, but ordered in a row-major fashion.</p>
+</dd></dl>
+
+<p class="rubric">Advanced routines</p>
+<dl class="function">
+<dt id="_CPPv4N4Grid4GridEN3mpi4CommEN3mpi5GroupE">
+<span id="_CPPv3N4Grid4GridEN3mpi4CommEN3mpi5GroupE"></span><span id="_CPPv2N4Grid4GridEN3mpi4CommEN3mpi5GroupE"></span><span id="Grid::Grid__mpi::Comm.mpi::Group"></span><code class="descname">Grid</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>viewingComm</em>, mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <em>owningGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4Grid4GridEN3mpi4CommEN3mpi5GroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a process grid where only a subset of the participating
+processes should actively participate in the process grid. In particular,
+<cite>viewingComm</cite> should consist of the set of all processes constructing
+this <code class="docutils literal notranslate"><span class="pre">Grid</span></code> instance, and <cite>owningGroup</cite> should define a subset of the
+processes in <cite>viewingComm</cite>. Elemental then chooses the grid dimensions.
+Most users should not call this routine, as this type of grid is only
+supported for a few <code class="docutils literal notranslate"><span class="pre">DistMatrix</span></code> types.
+The size of <cite>owningGroup</cite> must be divisible by <cite>height</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid3GCDEv">
+<span id="_CPPv3NK4Grid3GCDEv"></span><span id="_CPPv2NK4Grid3GCDEv"></span><span id="Grid::GCDC"></span>int <code class="descname">GCD</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid3GCDEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the greatest common denominator of the height and width of the
+process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid3LCMEv">
+<span id="_CPPv3NK4Grid3LCMEv"></span><span id="_CPPv2NK4Grid3LCMEv"></span><span id="Grid::LCMC"></span>int <code class="descname">LCM</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid3LCMEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the lowest common multiple of the height and width of the process
+grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid6InGridEv">
+<span id="_CPPv3NK4Grid6InGridEv"></span><span id="_CPPv2NK4Grid6InGridEv"></span><span id="Grid::InGridC"></span>bool <code class="descname">InGrid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid6InGridEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return whether or not our process is actively participating in the process
+grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid10OwningRankEv">
+<span id="_CPPv3NK4Grid10OwningRankEv"></span><span id="_CPPv2NK4Grid10OwningRankEv"></span><span id="Grid::OwningRankC"></span>int <code class="descname">OwningRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid10OwningRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank within the set of processes that are actively
+participating in the grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid11ViewingRankEv">
+<span id="_CPPv3NK4Grid11ViewingRankEv"></span><span id="_CPPv2NK4Grid11ViewingRankEv"></span><span id="Grid::ViewingRankC"></span>int <code class="descname">ViewingRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid11ViewingRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank within the entire set of processes that
+constructed this grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid14VCToViewingMapEv">
+<span id="_CPPv3NK4Grid14VCToViewingMapEv"></span><span id="_CPPv2NK4Grid14VCToViewingMapEv"></span><span id="Grid::VCToViewingMapC"></span>int <code class="descname">VCToViewingMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid14VCToViewingMapEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Map the given column-major grid rank to the rank in the (potentially)
+larger set of processes which constructed the grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid11OwningGroupEv">
+<span id="_CPPv3NK4Grid11OwningGroupEv"></span><span id="_CPPv2NK4Grid11OwningGroupEv"></span><span id="Grid::OwningGroupC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi5GroupE" title="mpi::Group">Group</a> <code class="descname">OwningGroup</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid11OwningGroupEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the group of processes which is actively participating in the
+grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid10OwningCommEv">
+<span id="_CPPv3NK4Grid10OwningCommEv"></span><span id="_CPPv2NK4Grid10OwningCommEv"></span><span id="Grid::OwningCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">OwningComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid10OwningCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the communicator for the set of processes actively participating
+in the grid. Note that this can only be valid if the calling process
+is an active member of the grid!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid11ViewingCommEv">
+<span id="_CPPv3NK4Grid11ViewingCommEv"></span><span id="_CPPv2NK4Grid11ViewingCommEv"></span><span id="Grid::ViewingCommC"></span>mpi::<a class="reference internal" href="imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">ViewingComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid11ViewingCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the communicator for the entire set of processes which constructed
+the grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid8DiagPathEv">
+<span id="_CPPv3NK4Grid8DiagPathEv"></span><span id="_CPPv2NK4Grid8DiagPathEv"></span><span id="Grid::DiagPathC"></span>int <code class="descname">DiagPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid8DiagPathEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our unique diagonal index in an tesselation of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid8DiagPathEi">
+<span id="_CPPv3NK4Grid8DiagPathEi"></span><span id="_CPPv2NK4Grid8DiagPathEi"></span><span id="Grid::DiagPath__iC"></span>int <code class="descname">DiagPath</code><span class="sig-paren">(</span>int <em>vectorColRank</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid8DiagPathEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the unique diagonal index of the process with the given
+column-major vector rank in an tesselation of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid12DiagPathRankEv">
+<span id="_CPPv3NK4Grid12DiagPathRankEv"></span><span id="_CPPv2NK4Grid12DiagPathRankEv"></span><span id="Grid::DiagPathRankC"></span>int <code class="descname">DiagPathRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid12DiagPathRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our process’s rank out of the set of processes lying in our
+diagonal of the tesselation of the process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4Grid12DiagPathRankEi">
+<span id="_CPPv3NK4Grid12DiagPathRankEi"></span><span id="_CPPv2NK4Grid12DiagPathRankEi"></span><span id="Grid::DiagPathRank__iC"></span>int <code class="descname">DiagPathRank</code><span class="sig-paren">(</span>int <em>vectorColRank</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4Grid12DiagPathRankEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank of the given process out of the set of processes in its
+diagonal of the tesselation of the process grid.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p class="rubric">Grid comparison functions</p>
+<dl class="function">
+<dt id="_CPPv4eqRK4GridRK4Grid">
+<span id="_CPPv3eqRK4GridRK4Grid"></span><span id="_CPPv2eqRK4GridRK4Grid"></span><span id="eq-operator__GridCR.GridCR"></span>bool <code class="descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4eqRK4GridRK4Grid" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether or not !A! and !B! are the same process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4neRK4GridRK4Grid">
+<span id="_CPPv3neRK4GridRK4Grid"></span><span id="_CPPv2neRK4GridRK4Grid"></span><span id="neq-operator__GridCR.GridCR"></span>bool <code class="descname">operator!=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv44Grid" title="Grid">Grid</a> &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4neRK4GridRK4Grid" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether or not !A! and !B! are different process grids.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

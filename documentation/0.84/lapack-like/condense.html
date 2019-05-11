@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Reduction to condensed form &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Matrix decompositions" href="decomp.html" />
+    <link rel="prev" title="High-level linear algebra" href="../lapack-like.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="reduction-to-condensed-form">
+<h1>Reduction to condensed form<a class="headerlink" href="#reduction-to-condensed-form" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hermitian-to-tridiagonal">
+<h2>Hermitian to tridiagonal<a class="headerlink" href="#hermitian-to-tridiagonal" title="Permalink to this headline">¶</a></h2>
+<p>The currently best-known algorithms for computing eigenpairs of dense Hermitian
+matrices begin by performing a unitary similarity transformation which reduces
+the matrix to real symmetric tridiagonal form (usually through Householder
+transformations). This routine performs said reduction on a Hermitian matrix
+and stores the scaled Householder vectors in place of the introduced zeroes.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/src/lapack-like/HermitianTridiag.cpp">Main source file</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack-like/HermitianTridiag">Subroutine implementations</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/tests/lapack-like/HermitianTridiag.cpp">Test driver</a></p>
+<dl class="class">
+<dt id="_CPPv420HermitianTridiagCtrl">
+<span id="_CPPv320HermitianTridiagCtrl"></span><span id="_CPPv220HermitianTridiagCtrl"></span><span id="HermitianTridiagCtrl"></span><em class="property">class </em><code class="descname">HermitianTridiagCtrl</code><a class="headerlink" href="#_CPPv420HermitianTridiagCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N20HermitianTridiagCtrl8approachE">
+<span id="_CPPv3N20HermitianTridiagCtrl8approachE"></span><span id="_CPPv2N20HermitianTridiagCtrl8approachE"></span><span id="HermitianTridiagCtrl::approach__HermitianTridiagApproach"></span><a class="reference internal" href="tuning.html#_CPPv424HermitianTridiagApproach" title="HermitianTridiagApproach">HermitianTridiagApproach</a> <code class="descname">approach</code><a class="headerlink" href="#_CPPv4N20HermitianTridiagCtrl8approachE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N20HermitianTridiagCtrl5orderE">
+<span id="_CPPv3N20HermitianTridiagCtrl5orderE"></span><span id="_CPPv2N20HermitianTridiagCtrl5orderE"></span><span id="HermitianTridiagCtrl::order__GridOrder"></span><a class="reference internal" href="../core/environment.html#_CPPv49GridOrder" title="GridOrder">GridOrder</a> <code class="descname">order</code><a class="headerlink" href="#_CPPv4N20HermitianTridiagCtrl5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N20HermitianTridiagCtrl20HermitianTridiagCtrlEv">
+<span id="_CPPv3N20HermitianTridiagCtrl20HermitianTridiagCtrlEv"></span><span id="_CPPv2N20HermitianTridiagCtrl20HermitianTridiagCtrlEv"></span><span id="HermitianTridiagCtrl::HermitianTridiagCtrl"></span><code class="descname">HermitianTridiagCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N20HermitianTridiagCtrl20HermitianTridiagCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets <cite>approach</cite> to <code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_SQUARE</span></code> and <cite>order</cite> to
+<code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please see the <a class="reference internal" href="tuning.html#lapack-tuning"><span class="std std-ref">Tuning parameters</span></a> section for extensive information on
+maximizing the performance of Householder tridiagonalization.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv316HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv216HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="HermitianTridiag__UpperOrLower.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HermitianTridiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianTridiag12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARERK20HermitianTridiagCtrl">
+<span id="_CPPv316HermitianTridiag12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARERK20HermitianTridiagCtrl"></span><span id="_CPPv216HermitianTridiag12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARERK20HermitianTridiagCtrl"></span><span id="HermitianTridiag__UpperOrLower.DistMatrix:F:R.DistMatrix:F.STAR.STAR:R.HermitianTridiagCtrlCR"></span>void <code class="descname">HermitianTridiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTridiag12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARERK20HermitianTridiagCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites the main and sub (super) diagonal of the real matrix
+<cite>A</cite> with its similar symmetric tridiagonal matrix and stores the scaled
+Householder vectors below (above) its tridiagonal entries.
+Complex Hermitian reductions have the added complication of needing to
+also store the scalings for the Householder vectors (the scaling can
+be inferred since the Householder vectors must be unit length) if they are
+to be applied (in the column vector <cite>t</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv316HermitianTridiag12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv216HermitianTridiag12UpperOrLowerR6MatrixI1FE"></span><span id="HermitianTridiag__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HermitianTridiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianTridiag12UpperOrLowerR10DistMatrixI1FERK20HermitianTridiagCtrl">
+<span id="_CPPv316HermitianTridiag12UpperOrLowerR10DistMatrixI1FERK20HermitianTridiagCtrl"></span><span id="_CPPv216HermitianTridiag12UpperOrLowerR10DistMatrixI1FERK20HermitianTridiagCtrl"></span><span id="HermitianTridiag__UpperOrLower.DistMatrix:F:R.HermitianTridiagCtrlCR"></span>void <code class="descname">HermitianTridiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTridiag12UpperOrLowerR10DistMatrixI1FERK20HermitianTridiagCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns just the (appropriate triangle of the) resulting tridiagonal matrix.</p>
+</dd></dl>
+
+<div class="section" id="hermitian-tridiag-namespace">
+<h3>hermitian_tridiag namespace<a class="headerlink" href="#hermitian-tridiag-namespace" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/condense/HermitianTridiag/ApplyQ.hpp">Implementations</a></p>
+<dl class="function">
+<dt id="_CPPv4N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="hermitian_tridiag::ApplyQ__LeftOrRight.UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">hermitian_tridiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv3N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv2N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="hermitian_tridiag::ApplyQ__LeftOrRight.UpperOrLower.Orientation.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">hermitian_tridiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="hermitian_tridiag::ApplyQ__LeftOrRight.UpperOrLower.Orientation.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">hermitian_tridiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17hermitian_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply (from the left or right) the implicitly defined unitary matrix
+(or its adjoint) represented by the Householder transformations stored within
+the specified triangle of <cite>A</cite> and their scalings are stored in the vector
+<cite>t</cite>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="square-to-hessenberg">
+<h2>Square to Hessenberg<a class="headerlink" href="#square-to-hessenberg" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/condense/Hessenberg.hpp">Main header file</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/condense/Hessenberg">Subroutine header files</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/tests/lapack-like/Hessenberg.cpp">Test driver</a></p>
+<dl class="function">
+<dt id="_CPPv410Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv310Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv210Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="Hessenberg__UpperOrLower.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">Hessenberg</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410Hessenberg12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410Hessenberg12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARE">
+<span id="_CPPv310Hessenberg12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARE"></span><span id="_CPPv210Hessenberg12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARE"></span><span id="Hessenberg__UpperOrLower.DistMatrix:F:R.DistMatrix:F.STAR.STAR:R"></span>void <code class="descname">Hessenberg</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410Hessenberg12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1F4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the in-place reduction of the matrix A to lower-/upper-Hessenberg
+form. The vector <cite>t</cite> contains the scalings for the Householder
+reflectors, which are stored in the locations of the zeros that they
+introduced.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410Hessenberg12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv310Hessenberg12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv210Hessenberg12UpperOrLowerR6MatrixI1FE"></span><span id="Hessenberg__UpperOrLower.Matrix:F:R"></span>void <code class="descname">Hessenberg</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410Hessenberg12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410Hessenberg12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv310Hessenberg12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv210Hessenberg12UpperOrLowerR10DistMatrixI1FE"></span><span id="Hessenberg__UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">Hessenberg</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410Hessenberg12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns just the Hessenberg matrix.</p>
+</dd></dl>
+
+<div class="section" id="hessenberg-namespace">
+<h3>hessenberg namespace<a class="headerlink" href="#hessenberg-namespace" title="Permalink to this headline">¶</a></h3>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv4N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="hessenberg::ApplyQ__UpperOrLower.LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">hessenberg<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>H</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv3N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv2N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="hessenberg::ApplyQ__UpperOrLower.LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">hessenberg<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>H</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="hessenberg::ApplyQ__UpperOrLower.LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">hessenberg<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>H</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10hessenberg6ApplyQE12UpperOrLower11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="general-to-bidiagonal">
+<h2>General to bidiagonal<a class="headerlink" href="#general-to-bidiagonal" title="Permalink to this headline">¶</a></h2>
+<p>Reduces a general fully-populated <span class="math notranslate nohighlight">\(m \times n\)</span> matrix to bidiagonal form
+through two-sided Householder transformations; when the <span class="math notranslate nohighlight">\(m \ge n\)</span>, the
+result is upper bidiagonal, otherwise it is lower bidiagonal. This routine is
+most commonly used as a preprocessing step in computing the SVD of a general
+matrix.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/include/elemental/lapack-like/condense/Bidiag.hpp">Main header file</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/elemental/lapack-like/condense/Bidiag">Subroutine implementations</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/3cef6bb7a8103db4648055378cdd7174b19b9e96/tests/lapack-like/Bidiag.cpp">Test driver</a></p>
+<dl class="function">
+<dt id="_CPPv46BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv36BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv26BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="Bidiag__Matrix:F:R.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">Bidiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>tP</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46BidiagR6MatrixI1FER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46BidiagR10DistMatrixI1FER10DistMatrixI1F4STAR4STARER10DistMatrixI1F4STAR4STARE">
+<span id="_CPPv36BidiagR10DistMatrixI1FER10DistMatrixI1F4STAR4STARER10DistMatrixI1F4STAR4STARE"></span><span id="_CPPv26BidiagR10DistMatrixI1FER10DistMatrixI1F4STAR4STARER10DistMatrixI1F4STAR4STARE"></span><span id="Bidiag__DistMatrix:F:R.DistMatrix:F.STAR.STAR:R.DistMatrix:F.STAR.STAR:R"></span>void <code class="descname">Bidiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>tP</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>tQ</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46BidiagR10DistMatrixI1FER10DistMatrixI1F4STAR4STARER10DistMatrixI1F4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites the main and sub (or super) diagonal of the real matrix <cite>A</cite> with
+the resulting bidiagonal matrix and stores the scaled Householder vectors in
+the remainder of the matrix.
+The complex case must also store the scalings of the Householder
+transformations (in <cite>tP</cite> and <cite>tQ</cite>) if they are to be applied.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46BidiagR6MatrixI1FE">
+<span id="_CPPv36BidiagR6MatrixI1FE"></span><span id="_CPPv26BidiagR6MatrixI1FE"></span><span id="Bidiag__Matrix:F:R"></span>void <code class="descname">Bidiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46BidiagR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46BidiagR10DistMatrixI1FE">
+<span id="_CPPv36BidiagR10DistMatrixI1FE"></span><span id="_CPPv26BidiagR10DistMatrixI1FE"></span><span id="Bidiag__DistMatrix:F:R"></span>void <code class="descname">Bidiag</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46BidiagR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns just the resulting bidiagonal matrix.</p>
+</dd></dl>
+
+<div class="section" id="bidiag-namespace">
+<h3>bidiag namespace<a class="headerlink" href="#bidiag-namespace" title="Permalink to this headline">¶</a></h3>
+<p><strong>TODO</strong></p>
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="bidiag::ApplyQ__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="bidiag::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="bidiag::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="bidiag::ApplyP__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyP</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="bidiag::ApplyP__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyP</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="bidiag::ApplyP__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">bidiag<code class="descclassname">::</code></code><code class="descname">ApplyP</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6bidiag6ApplyPE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

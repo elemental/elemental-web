@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DistMatrix &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AbstractDistMatrix" href="dist_matrix/ADM.html" />
+    <link rel="prev" title="Grid (C interface)" href="grid/c.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="grid.html">Grid</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DistMatrix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dist_matrix/ADM.html">AbstractDistMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dist_matrix/DM.html">DistMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dist_matrix/Element.html">ElementalMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dist_matrix/Block.html">BlockMatrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../core.html">Core functionality</a> &raquo;</li>
+        
+      <li>DistMatrix</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/core/dist_matrix.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="distmatrix">
+<h1>DistMatrix<a class="headerlink" href="#distmatrix" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,colDist,rowDist,wrapType&gt;</span></code>
+class is meant to provide a distributed-memory analogue of the
+<a class="reference internal" href="matrix/cxx.html#_CPPv4IE6MatrixI10scalarTypeE" title="Matrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Matrix&lt;scalarType&gt;</span></code></a> class.
+In a manner similar to PLAPACK, roughly ten different matrix
+distributions are provided and it is trivial (in the sense that it requires a
+single command) to redistribute from one to another: in PLAPACK, one would
+simply call <code class="docutils literal notranslate"><span class="pre">PLA_Copy</span></code>, whereas, in Elemental, it is handled through
+overloading the <span class="math notranslate nohighlight">\(=\)</span> operator (or instead calling the <a class="reference internal" href="../blas_like/level1/Copy.html#_CPPv44CopyRK6MatrixI1SER6MatrixI1TE" title="Copy"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Copy()</span></code></a>
+function).</p>
+<p>Since it is crucial to know not only how many
+processes to distribute the data over, but <em>which</em> processes, and in what
+manner they should be decomposed into a logical two-dimensional grid, an
+instance of the <a class="reference internal" href="grid/cxx.html#_CPPv44Grid" title="Grid"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class must be passed into the constructor of
+the <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,colDist,rowDist,wrapType&gt;</span></code> class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since the <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,colDist,rowDist&gt;</span></code> class makes
+use of MPI for message passing, custom interfaces must be written for
+nonstandard datatypes.
+As of now, the following datatypes are fully supported for
+<code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,colDist,rowDist&gt;</span></code>:
+<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code>, <code class="docutils literal notranslate"><span class="pre">Complex&lt;float&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">Complex&lt;double&gt;</span></code>.</p>
+</div>
+<p>The <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,colDist,rowDist&gt;</span></code> class is implemented
+in a manner which
+attempts to expose as many symmetries within the various member functions and
+redistributions as possible. In particular, there are there is a hierarchy of
+three increasingly-specific distributed matrix classes:
+<a class="reference internal" href="dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI10scalarTypeE" title="AbstractDistMatrix&lt;scalarType&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;scalarType&gt;</span></code></a>, which contains every member
+function which
+whose prototype does not depend upon the exact matrix distribution, and
+<code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;scalarType,colDist,rowDist&gt;</span></code>, which contains
+implementations of member
+functions which are specific to a particular matrix distribution.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dist_matrix/ADM.html">AbstractDistMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dist_matrix/DM.html">DistMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dist_matrix/Element.html">ElementalMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dist_matrix/Block.html">BlockMatrix</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dist_matrix/ADM.html" class="btn btn-neutral float-right" title="AbstractDistMatrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="grid/c.html" class="btn btn-neutral float-left" title="Grid (C interface)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

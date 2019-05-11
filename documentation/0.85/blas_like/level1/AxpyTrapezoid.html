@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>AxpyTrapezoid &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Conjugate" href="Conjugate.html" />
+    <link rel="prev" title="Axpy" href="Axpy.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="axpytrapezoid">
+<h1>AxpyTrapezoid<a class="headerlink" href="#axpytrapezoid" title="Permalink to this headline">¶</a></h1>
+<p>Performs the trapezoidal portion of an axpy <span class="math notranslate nohighlight">\(Y := \alpha X + Y\)</span>;
+the trapezoid is defined by the <code class="docutils literal notranslate"><span class="pre">uplo</span></code> and <code class="docutils literal notranslate"><span class="pre">offset</span></code> parameters, where
+<code class="docutils literal notranslate"><span class="pre">offset</span></code> determines which sub or superdiagonal to use as the cutoff for the
+upper or lower-trapezoidal portion of the update.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv413AxpyTrapezoid12UpperOrLower1SRK6MatrixI1TER6MatrixI1TE5ElInt">
+<span id="_CPPv313AxpyTrapezoid12UpperOrLower1SRK6MatrixI1TER6MatrixI1TE5ElInt"></span><span id="_CPPv213AxpyTrapezoid12UpperOrLower1SRK6MatrixI1TER6MatrixI1TE5ElInt"></span><span id="AxpyTrapezoid__UpperOrLower.S.Matrix:T:CR.Matrix:T:R.ElInt"></span>void <code class="descname">AxpyTrapezoid</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, S <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>X</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>Y</em>, ElInt <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413AxpyTrapezoid12UpperOrLower1SRK6MatrixI1TER6MatrixI1TE5ElInt" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413AxpyTrapezoid12UpperOrLower1SRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE5ElInt">
+<span id="_CPPv313AxpyTrapezoid12UpperOrLower1SRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE5ElInt"></span><span id="_CPPv213AxpyTrapezoid12UpperOrLower1SRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE5ElInt"></span><span id="AxpyTrapezoid__UpperOrLower.S.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:R.ElInt"></span>void <code class="descname">AxpyTrapezoid</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, S <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>X</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>Y</em>, ElInt <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413AxpyTrapezoid12UpperOrLower1SRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE5ElInt" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413AxpyTrapezoid12UpperOrLower1SRK12SparseMatrixI1TER12SparseMatrixI1TE5ElInt">
+<span id="_CPPv313AxpyTrapezoid12UpperOrLower1SRK12SparseMatrixI1TER12SparseMatrixI1TE5ElInt"></span><span id="_CPPv213AxpyTrapezoid12UpperOrLower1SRK12SparseMatrixI1TER12SparseMatrixI1TE5ElInt"></span><span id="AxpyTrapezoid__UpperOrLower.S.SparseMatrix:T:CR.SparseMatrix:T:R.ElInt"></span>void <code class="descname">AxpyTrapezoid</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, S <em>alpha</em>, <em class="property">const</em> SparseMatrix&lt;T&gt; &amp;<em>X</em>, SparseMatrix&lt;T&gt; &amp;<em>Y</em>, ElInt <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413AxpyTrapezoid12UpperOrLower1SRK12SparseMatrixI1TER12SparseMatrixI1TE5ElInt" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413AxpyTrapezoid12UpperOrLower1SRK16DistSparseMatrixI1TER16DistSparseMatrixI1TE5ElInt">
+<span id="_CPPv313AxpyTrapezoid12UpperOrLower1SRK16DistSparseMatrixI1TER16DistSparseMatrixI1TE5ElInt"></span><span id="_CPPv213AxpyTrapezoid12UpperOrLower1SRK16DistSparseMatrixI1TER16DistSparseMatrixI1TE5ElInt"></span><span id="AxpyTrapezoid__UpperOrLower.S.DistSparseMatrix:T:CR.DistSparseMatrix:T:R.ElInt"></span>void <code class="descname">AxpyTrapezoid</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, S <em>alpha</em>, <em class="property">const</em> DistSparseMatrix&lt;T&gt; &amp;<em>X</em>, DistSparseMatrix&lt;T&gt; &amp;<em>Y</em>, ElInt <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413AxpyTrapezoid12UpperOrLower1SRK16DistSparseMatrixI1TER16DistSparseMatrixI1TE5ElInt" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413AxpyTrapezoid12UpperOrLower1TRK8MultiVecI1TER8MultiVecI1TE5ElInt">
+<span id="_CPPv313AxpyTrapezoid12UpperOrLower1TRK8MultiVecI1TER8MultiVecI1TE5ElInt"></span><span id="_CPPv213AxpyTrapezoid12UpperOrLower1TRK8MultiVecI1TER8MultiVecI1TE5ElInt"></span><span id="AxpyTrapezoid__UpperOrLower.T.MultiVec:T:CR.MultiVec:T:R.ElInt"></span>void <code class="descname">AxpyTrapezoid</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, T <em>alpha</em>, <em class="property">const</em> MultiVec&lt;T&gt; &amp;<em>X</em>, MultiVec&lt;T&gt; &amp;<em>Y</em>, ElInt <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413AxpyTrapezoid12UpperOrLower1TRK8MultiVecI1TER8MultiVecI1TE5ElInt" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413AxpyTrapezoid12UpperOrLower1TRK12DistMultiVecI1TER12DistMultiVecI1TE5ElInt">
+<span id="_CPPv313AxpyTrapezoid12UpperOrLower1TRK12DistMultiVecI1TER12DistMultiVecI1TE5ElInt"></span><span id="_CPPv213AxpyTrapezoid12UpperOrLower1TRK12DistMultiVecI1TER12DistMultiVecI1TE5ElInt"></span><span id="AxpyTrapezoid__UpperOrLower.T.DistMultiVec:T:CR.DistMultiVec:T:R.ElInt"></span>void <code class="descname">AxpyTrapezoid</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, T <em>alpha</em>, <em class="property">const</em> DistMultiVec&lt;T&gt; &amp;<em>X</em>, DistMultiVec&lt;T&gt; &amp;<em>Y</em>, ElInt <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413AxpyTrapezoid12UpperOrLower1TRK12DistMultiVecI1TER12DistMultiVecI1TE5ElInt" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElAxpyTrapezoid_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoid_i</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElConstMatrix_i<em> X</em>, ElMatrix_i<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoid_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoid_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoid_s</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, float<em> alpha</em>, ElConstMatrix_s<em> X</em>, ElMatrix_s<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoid_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoid_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoid_d</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, double<em> alpha</em>, ElConstMatrix_d<em> X</em>, ElMatrix_d<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoid_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoid_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoid_c</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElConstMatrix_c<em> X</em>, ElMatrix_c<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoid_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoid_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoid_z</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElConstMatrix_z<em> X</em>, ElMatrix_z<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoid_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDist_i</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElConstMatrix_i<em> X</em>, ElMatrix_i<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDist_s</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, float<em> alpha</em>, ElConstMatrix_s<em> X</em>, ElMatrix_s<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDist_d</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, double<em> alpha</em>, ElConstMatrix_d<em> X</em>, ElMatrix_d<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDist_c</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElConstMatrix_c<em> X</em>, ElMatrix_c<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDist_z</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElConstMatrix_z<em> X</em>, ElMatrix_z<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidSparse_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidSparse_i</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElConstMatrix_i<em> X</em>, ElMatrix_i<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidSparse_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidSparse_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidSparse_s</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, float<em> alpha</em>, ElConstMatrix_s<em> X</em>, ElMatrix_s<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidSparse_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidSparse_d</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, double<em> alpha</em>, ElConstMatrix_d<em> X</em>, ElMatrix_d<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidSparse_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidSparse_c</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElConstMatrix_c<em> X</em>, ElMatrix_c<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidSparse_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidSparse_z</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElConstMatrix_z<em> X</em>, ElMatrix_z<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistSparse_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistSparse_i</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElConstMatrix_i<em> X</em>, ElMatrix_i<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistSparse_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistSparse_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistSparse_s</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, float<em> alpha</em>, ElConstMatrix_s<em> X</em>, ElMatrix_s<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistSparse_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistSparse_d</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, double<em> alpha</em>, ElConstMatrix_d<em> X</em>, ElMatrix_d<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistSparse_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistSparse_c</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElConstMatrix_c<em> X</em>, ElMatrix_c<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistSparse_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistSparse_z</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElConstMatrix_z<em> X</em>, ElMatrix_z<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistMultiVec_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistMultiVec_i</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> alpha</em>, ElConstMatrix_i<em> X</em>, ElMatrix_i<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistMultiVec_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistMultiVec_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistMultiVec_s</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, float<em> alpha</em>, ElConstMatrix_s<em> X</em>, ElMatrix_s<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistMultiVec_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistMultiVec_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistMultiVec_d</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, double<em> alpha</em>, ElConstMatrix_d<em> X</em>, ElMatrix_d<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistMultiVec_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistMultiVec_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistMultiVec_c</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElConstMatrix_c<em> X</em>, ElMatrix_c<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistMultiVec_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElAxpyTrapezoidDistMultiVec_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElAxpyTrapezoidDistMultiVec_z</code><span class="sig-paren">(</span>UpperOrLower<em> uplo</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElConstMatrix_z<em> X</em>, ElMatrix_z<em> Y</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElAxpyTrapezoidDistMultiVec_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="AxpyTrapezoid">
+<code class="descname">AxpyTrapezoid</code><span class="sig-paren">(</span><em>uplo</em>, <em>alpha</em>, <em>X</em>, <em>Y</em>, <em>offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#AxpyTrapezoid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

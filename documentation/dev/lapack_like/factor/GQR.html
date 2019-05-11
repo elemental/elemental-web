@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Generalized QR factorization &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Generalized RQ factorization" href="GRQ.html" />
+    <link rel="prev" title="RQ factorization" href="RQ.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../factor.html">Factorizations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Cholesky.html">Cholesky factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LDL.html">LDL factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LU.html">LU factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LQ.html">LQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="QR.html">QR factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="RQ.html">RQ factorization</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Generalized QR factorization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GRQ.html">Generalized RQ factorization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ID.html">Interpolative Decomposition (ID)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Skeleton.html">Skeleton decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../factor.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../factor.html">Factorizations</a> &raquo;</li>
+        
+      <li>Generalized QR factorization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/factor/GQR.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="generalized-qr-factorization">
+<h1>Generalized QR factorization<a class="headerlink" href="#generalized-qr-factorization" title="Permalink to this headline">¶</a></h1>
+<p>The <em>generalized QR factorization</em> of a pair of matrices <span class="math notranslate nohighlight">\((A,B)\)</span> is
+analogous to a QR factorization of <span class="math notranslate nohighlight">\(B^{-1} A\)</span> but does not require that
+<span class="math notranslate nohighlight">\(B\)</span> is square or invertible:
+unitary matrices <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(Z\)</span>, and (right) upper-triangular matrices
+<span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(T\)</span>, are computed such that</p>
+<div class="math notranslate nohighlight">
+\[A = Q R\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[B = Q T Z.\]</div>
+<p>Thus, if <span class="math notranslate nohighlight">\(B\)</span> was square and invertible, then the QR factorization of
+<span class="math notranslate nohighlight">\(B^{-1} A\)</span> would be given by <span class="math notranslate nohighlight">\(Z^H (T^{-1} R)\)</span>.</p>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<p>The style of factorization is encoded within a pseudo-enum which takes on one of four values:</p>
+<dl class="data">
+<dt>
+<code class="descname">GQR_IMPLICIT=0</code></dt>
+<dd><p>Form the implicit, packed factorization</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<code class="descname">GQR_EXPLICIT=1</code></dt>
+<dd><p>Explicitly return the individual factors (not yet supported)</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<code class="descname">GQR_EXPLICIT_TRIANG=2</code></dt>
+<dd><p>Explicitly return the triangular factors, <span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(T\)</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<code class="descname">GQR_EXPLICIT_UNITARY=3</code></dt>
+<dd><p>Explicitly return the unitary factors, <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(Z\)</span>
+(not yet supported)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GQR">
+<code class="descname">GQR</code><span class="sig-paren">(</span><em>A</em>, <em>B</em><span class="optional">[</span>, <em>factType=GQR_IMPLICIT</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#GQR" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – </p></li>
+<li><p><strong>B</strong> – </p></li>
+<li><p><strong>factType</strong> – (optional)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">factType</span></code> is <code class="xref py py-data docutils literal notranslate"><span class="pre">GQR_IMPLICIT</span></code>, <span class="math notranslate nohighlight">\((t_A,d_A,t_B,d_b)\)</span>, …</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv43GQRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE">
+<span id="_CPPv33GQRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="_CPPv23GQRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="GQR__Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R"></span>void <code class="descname">GQR</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>tA</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dA</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>tB</em>, Matrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GQRR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43GQRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE">
+<span id="_CPPv33GQRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE"></span><span id="_CPPv23GQRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE"></span><span id="GQR__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:Base:F::R"></span>void <code class="descname">GQR</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>tA</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dA</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>tB</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>dB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GQRR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <cite>A</cite> with both <cite>R</cite> and the (scaled) Householder vectors
+which, along with the scalings <cite>tA</cite> and sign changes <cite>dA</cite>, define
+<cite>Q</cite>. Likewise, <cite>B</cite> is overwritten with both <cite>T</cite> and the (scaled) Householder
+vectors which define <cite>Z</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3gqr14ExplicitTriangER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N3gqr14ExplicitTriangER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N3gqr14ExplicitTriangER6MatrixI1FER6MatrixI1FE"></span><span id="gqr::ExplicitTriang__Matrix:F:R.Matrix:F:R"></span>void <code class="descclassname">gqr<code class="descclassname">::</code></code><code class="descname">ExplicitTriang</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3gqr14ExplicitTriangER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3gqr14ExplicitTriangER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N3gqr14ExplicitTriangER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N3gqr14ExplicitTriangER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="gqr::ExplicitTriang__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descclassname">gqr<code class="descclassname">::</code></code><code class="descname">ExplicitTriang</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3gqr14ExplicitTriangER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <cite>A</cite> with <cite>R</cite> and <cite>B</cite> with <cite>T</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElGQR_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQR_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> tA</em>, ElMatrix_s<em> dA</em>, ElMatrix_s<em> B</em>, ElMatrix_s<em> tB</em>, ElMatrix_s<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQR_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> tA</em>, ElDistMatrix_s<em> dA</em>, ElDistMatrix_s<em> B</em>, ElDistMatrix_s<em> tB</em>, ElDistMatrix_s<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with both <cite>R</cite> and the (scaled) Householder vectors
+which, along with the scalings <cite>tA</cite> and sign changes <cite>dA</cite>, define
+<cite>Q</cite>. Likewise, <cite>B</cite> is overwritten with both <cite>T</cite> and the (scaled) Householder
+vectors which define <cite>Z</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriang_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriang_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriang_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriangDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriangDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriangDist_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with <cite>R</cite> and <cite>B</cite> with <cite>T</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElGQR_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQR_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> tA</em>, ElMatrix_d<em> dA</em>, ElMatrix_d<em> B</em>, ElMatrix_d<em> tB</em>, ElMatrix_d<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQR_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> tA</em>, ElDistMatrix_d<em> dA</em>, ElDistMatrix_d<em> B</em>, ElDistMatrix_d<em> tB</em>, ElDistMatrix_d<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with both <cite>R</cite> and the (scaled) Householder vectors
+which, along with the scalings <cite>tA</cite> and sign changes <cite>dA</cite>, define
+<cite>Q</cite>. Likewise, <cite>B</cite> is overwritten with both <cite>T</cite> and the (scaled) Householder
+vectors which define <cite>Z</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriang_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriang_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriang_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriangDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriangDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriangDist_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with <cite>R</cite> and <cite>B</cite> with <cite>T</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h3>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElGQR_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQR_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> tA</em>, ElMatrix_s<em> dA</em>, ElMatrix_c<em> B</em>, ElMatrix_c<em> tB</em>, ElMatrix_s<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQR_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> tA</em>, ElDistMatrix_s<em> dA</em>, ElDistMatrix_c<em> B</em>, ElDistMatrix_c<em> tB</em>, ElDistMatrix_s<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with both <cite>R</cite> and the (scaled) Householder vectors
+which, along with the scalings <cite>tA</cite> and sign changes <cite>dA</cite>, define
+<cite>Q</cite>. Likewise, <cite>B</cite> is overwritten with both <cite>T</cite> and the (scaled) Householder
+vectors which define <cite>Z</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriang_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriang_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriang_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriangDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriangDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriangDist_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with <cite>R</cite> and <cite>B</cite> with <cite>T</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h3>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElGQR_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQR_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> tA</em>, ElMatrix_d<em> dA</em>, ElMatrix_z<em> B</em>, ElMatrix_z<em> tB</em>, ElMatrix_d<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQR_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> tA</em>, ElDistMatrix_d<em> dA</em>, ElDistMatrix_z<em> B</em>, ElDistMatrix_z<em> tB</em>, ElDistMatrix_d<em> dB</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with both <cite>R</cite> and the (scaled) Householder vectors
+which, along with the scalings <cite>tA</cite> and sign changes <cite>dA</cite>, define
+<cite>Q</cite>. Likewise, <cite>B</cite> is overwritten with both <cite>T</cite> and the (scaled) Householder
+vectors which define <cite>Z</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriang_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriang_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriang_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGQRExplicitTriangDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGQRExplicitTriangDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGQRExplicitTriangDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <cite>A</cite> with <cite>R</cite> and <cite>B</cite> with <cite>T</cite></p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/GQR.cpp">C++11 implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.hpp">C++11 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor-C.cpp">C99 wrappers</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/factor.h">C99 header</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/python/lapack_like/factor.py">Python wrappers</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="GRQ.html" class="btn btn-neutral float-right" title="Generalized RQ factorization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="RQ.html" class="btn btn-neutral float-left" title="RQ factorization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

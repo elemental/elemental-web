@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Boiler plate &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Error handling" href="error.html" />
+    <link rel="prev" title="Environment" href="../environment.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../environment.html">Environment</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Boiler plate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#initialization">Initialization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#finalization">Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-for-initialization">Testing for initialization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#exception-handling">Exception handling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="error.html">Error handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="call_stack.html">Call stack manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="default_grid.html">Default process grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blocksize.html">Blocksize manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="typedefs_and_enums.html">Other typedefs and enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex.html">Complex data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="indexing.html">Indexing utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">Version and configuration information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../environment.html">Environment</a> &raquo;</li>
+        
+      <li>Boiler plate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/environment/boiler.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="boiler-plate">
+<h1>Boiler plate<a class="headerlink" href="#boiler-plate" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<p>Initializes Elemental and (if necessary) MPI. The usage is very similar to
+<code class="docutils literal notranslate"><span class="pre">MPI_Init</span></code>, but the <cite>argc</cite> and <cite>argv</cite> can be directly passed in.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv410Initializev">
+<span id="_CPPv310Initializev"></span><span id="_CPPv210Initializev"></span><span id="Initialize"></span>void <code class="descname">Initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410Initializev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410InitializeRiRPPc">
+<span id="_CPPv310InitializeRiRPPc"></span><span id="_CPPv210InitializeRiRPPc"></span><span id="Initialize__iR.cPPR"></span>void <code class="descname">Initialize</code><span class="sig-paren">(</span>int &amp;<em>argc</em>, char **&amp;<em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410InitializeRiRPPc" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Initialize</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span> <span class="p">);</span>
+    <span class="c1">// ...</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Finalize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElInitialize">
+<a class="reference internal" href="error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInitialize</code><span class="sig-paren">(</span>int*<em> argc</em>, char***<em> argv</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInitialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="finalization">
+<h2>Finalization<a class="headerlink" href="#finalization" title="Permalink to this headline">¶</a></h2>
+<p>The following routines free all resources allocated by Elemental and
+(if necessary) MPI.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv48Finalizev">
+<span id="_CPPv38Finalizev"></span><span id="_CPPv28Finalizev"></span><span id="Finalize"></span>void <code class="descname">Finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Finalizev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElFinalize">
+<a class="reference internal" href="error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElFinalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.ElFinalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="testing-for-initialization">
+<h2>Testing for initialization<a class="headerlink" href="#testing-for-initialization" title="Permalink to this headline">¶</a></h2>
+<p>Several routines are provided for querying whether or not Elemental is
+currently initialized.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv411Initializedv">
+<span id="_CPPv311Initializedv"></span><span id="_CPPv211Initializedv"></span><span id="Initialized"></span>bool <code class="descname">Initialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411Initializedv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElInitialized">
+<a class="reference internal" href="error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInitialized</code><span class="sig-paren">(</span>bool*<em> initialized</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInitialized" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="exception-handling">
+<h2>Exception handling<a class="headerlink" href="#exception-handling" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>C++ API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv415ReportExceptionRNSt9exceptionE">
+<span id="_CPPv315ReportExceptionRNSt9exceptionE"></span><span id="_CPPv215ReportExceptionRNSt9exceptionE"></span><span id="ReportException__std::exceptionR"></span>void <code class="descname">ReportException</code><span class="sig-paren">(</span>std::exception &amp;<em>e</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415ReportExceptionRNSt9exceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Used for handling Elemental’s various exceptions, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;El.hpp&quot;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Initialize</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span> <span class="p">);</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span> <span class="k">catch</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span> <span class="p">)</span> <span class="p">{</span> <span class="n">ReportException</span><span class="p">(</span><span class="n">e</span><span class="p">);</span> <span class="p">}</span>
+    <span class="n">El</span><span class="o">::</span><span class="n">Finalize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h3>C API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>Please see the :c:type::<cite>ElError</cite> enum.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="error.html" class="btn btn-neutral float-right" title="Error handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../environment.html" class="btn btn-neutral float-left" title="Environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

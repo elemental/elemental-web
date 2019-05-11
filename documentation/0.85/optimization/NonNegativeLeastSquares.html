@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Non-negative least squares &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Non-negative matrix factorizations" href="NMF.html" />
+    <link rel="prev" title="Model fit" href="ModelFit.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="non-negative-least-squares">
+<h1>Non-negative least squares<a class="headerlink" href="#non-negative-least-squares" title="Permalink to this headline">¶</a></h1>
+<p>A <em>non-negative least squares problem</em> seeks a solution to the problem</p>
+<div class="math notranslate nohighlight">
+\[\min_x \| A z - y \|_2 \text{ such that } z \ge 0.\]</div>
+<p>The following routines attempt to solve such problems by recognizing the
+equivalence to the quadratic program</p>
+<div class="math notranslate nohighlight">
+\[\min_z \frac{1}{2} z^T P z + q^T z \text{ such that } z \ge 0\]</div>
+<p>with <span class="math notranslate nohighlight">\(P = A^T A\)</span> and <span class="math notranslate nohighlight">\(q = -A^T y\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv423NonNegativeLeastSquaresRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv323NonNegativeLeastSquaresRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv223NonNegativeLeastSquaresRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="NonNegativeLeastSquares__Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.Real.Real.Int.Real.Real.b.b"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NonNegativeLeastSquares</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>Y</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>Z</em>, Real <em>rho</em> = 1, Real <em>alpha</em> = 1.2, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = true, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423NonNegativeLeastSquaresRK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423NonNegativeLeastSquaresRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb">
+<span id="_CPPv323NonNegativeLeastSquaresRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="_CPPv223NonNegativeLeastSquaresRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb"></span><span id="NonNegativeLeastSquares__AbstractDistMatrix:Real:CR.AbstractDistMatrix:Real:CR.AbstractDistMatrix:Real:R.Real.Real.Int.Real.Real.b.b"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">NonNegativeLeastSquares</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>Y</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>Z</em>, Real <em>rho</em> = 1, Real <em>alpha</em> = 1.2, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 500, Real <em>absTol</em> = 1e-6, Real <em>relTol</em> = 1e-4, bool <em>inv</em> = true, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423NonNegativeLeastSquaresRK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real4Real3Int4Real4Realbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElNonNegativeLeastSquares_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElNonNegativeLeastSquares_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> Y</em>, ElMatrix_s<em> Z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElNonNegativeLeastSquares_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElNonNegativeLeastSquares_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElNonNegativeLeastSquares_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> Y</em>, ElMatrix_d<em> Z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElNonNegativeLeastSquares_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElNonNegativeLeastSquaresDist_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElNonNegativeLeastSquaresDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> Y</em>, ElDistMatrix_s<em> Z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElNonNegativeLeastSquaresDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElNonNegativeLeastSquaresDist_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElNonNegativeLeastSquaresDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> Y</em>, ElDistMatrix_d<em> Z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElNonNegativeLeastSquaresDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

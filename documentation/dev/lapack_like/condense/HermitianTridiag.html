@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hermitian to tridiagonal &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Square to Hessenberg" href="Hessenberg.html" />
+    <link rel="prev" title="Reduction to condensed form" href="../condense.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../condense.html">Reduction to condensed form</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Hermitian to tridiagonal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reduction">Reduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applying-the-change-of-basis">Applying the change of basis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Hessenberg.html">Square to Hessenberg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Bidiag.html">General to bidiagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../condense.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../condense.html">Reduction to condensed form</a> &raquo;</li>
+        
+      <li>Hermitian to tridiagonal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/condense/HermitianTridiag.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hermitian-to-tridiagonal">
+<h1>Hermitian to tridiagonal<a class="headerlink" href="#hermitian-to-tridiagonal" title="Permalink to this headline">¶</a></h1>
+<p>The standard approach for computing eigenpairs of dense Hermitian
+matrices begins by performing a unitary similarity transformation which reduces
+the matrix to real symmetric tridiagonal form (usually through Householder
+transformations). The following routines perform said reduction on a Hermitian
+matrix and store the scaled Householder vectors in place of the introduced
+zeroes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While so-called <em>Successive Band Reduction</em> approaches, which reduce the
+matrix to tridiagonal form using a two-stage process, are sometimes
+preferred, they are not yet supported within Elemental. Please see
+<a class="reference internal" href="#elpa2011" id="id1"><span>[ELPA2011]</span></a> for such an implementation.</p>
+</div>
+<div class="section" id="reduction">
+<h2>Reduction<a class="headerlink" href="#reduction" title="Permalink to this headline">¶</a></h2>
+<p>Elemental currently provides two different basic strategies for the reduction of
+a Hermitian matrix to tridiagonal form via unitary similarity:</p>
+<ol class="arabic simple">
+<li><p>Run a pipelined algorithm designed for general (rectangular) process grids.</p></li>
+<li><p>Redistribute the matrix so that it is owned by a perfect square number of
+processes, perform a fast reduction to tridiaogal form, and redistribute
+the data back to the original process grid. This algorithm is nearly
+identical to that of <a class="reference internal" href="#hjs1999" id="id2"><span>[HJS1999]</span></a> and <a class="reference internal" href="#stanley1997" id="id3"><span>[Stanley1997]</span></a>.</p></li>
+</ol>
+<p>There is clearly a small penalty associated with the extra redistributions
+necessary for the second approach, but the benefit from using a square process
+grid is usually quite signficant. By default, <a class="reference internal" href="#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="HermitianTridiag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianTridiag()</span></code></a> will
+run the standard algorithm (approach 1) unless the matrix is already distributed
+over a square process grid. The reasoning is that good performance depends upon
+a “good” ordering of the square (say, <span class="math notranslate nohighlight">\(\hat p \times \hat p\)</span>) subgrid,
+though usually either a row-major or column-major ordering of the first
+<span class="math notranslate nohighlight">\(\hat p^2\)</span> processes suffices.</p>
+<dl class="enum">
+<dt id="_CPPv424HermitianTridiagApproach">
+<span id="_CPPv324HermitianTridiagApproach"></span><span id="_CPPv224HermitianTridiagApproach"></span><em class="property">enum </em><code class="descname">HermitianTridiagApproach</code><a class="headerlink" href="#_CPPv424HermitianTridiagApproach" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_NORMALE">
+<span id="_CPPv3N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_NORMALE"></span><span id="_CPPv2N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_NORMALE"></span><em class="property">enumerator </em><code class="descname">HERMITIAN_TRIDIAG_NORMAL</code><a class="headerlink" href="#_CPPv4N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_NORMALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Run the pipelined rectangular algorithm.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_SQUAREE">
+<span id="_CPPv3N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_SQUAREE"></span><span id="_CPPv2N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_SQUAREE"></span><em class="property">enumerator </em><code class="descname">HERMITIAN_TRIDIAG_SQUARE</code><a class="headerlink" href="#_CPPv4N24HermitianTridiagApproach24HERMITIAN_TRIDIAG_SQUAREE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Run the square grid algorithm on the largest possible square process grid.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N24HermitianTridiagApproach25HERMITIAN_TRIDIAG_DEFAULTE">
+<span id="_CPPv3N24HermitianTridiagApproach25HERMITIAN_TRIDIAG_DEFAULTE"></span><span id="_CPPv2N24HermitianTridiagApproach25HERMITIAN_TRIDIAG_DEFAULTE"></span><em class="property">enumerator </em><code class="descname">HERMITIAN_TRIDIAG_DEFAULT</code><a class="headerlink" href="#_CPPv4N24HermitianTridiagApproach25HERMITIAN_TRIDIAG_DEFAULTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If the given process grid is already square, run the square grid
+algorithm, otherwise use the pipelined non-square approach.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A properly tuned <code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_SQUARE</span></code> approach is almost always
+fastest, so it is worthwhile to test it with both the <code class="docutils literal notranslate"><span class="pre">COLUMN_MAJOR</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code> subgrid orderings, as described below.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The first algorithm heavily depends upon the performance of distributed
+<a class="reference internal" href="../../blas_like/level2/Symv.html#_CPPv44Symv12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TEb" title="Symv"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Symv()</span></code></a>, so users interested in maximizing the performance of the
+first algorithm will likely want to investigate different values for the
+local blocksizes through the routine
+<code class="docutils literal notranslate"><span class="pre">SetLocalSymvBlocksize&lt;T&gt;(</span> <span class="pre">int</span> <span class="pre">blocksize</span> <span class="pre">)</span></code>; the default value is 64.</p>
+</div>
+</dd></dl>
+
+<div class="section" id="python-api">
+<h3>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="HermitianTridiag">
+<code class="descname">HermitianTridiag</code><span class="sig-paren">(</span><em>uplo</em>, <em>A</em><span class="optional">[</span>, <em>onlyTridiag=False</em>, <em>ctrl=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#HermitianTridiag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv316HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv216HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="HermitianTridiag__UpperOrLower.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HermitianTridiag</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianTridiag12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK20HermitianTridiagCtrl">
+<span id="_CPPv316HermitianTridiag12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK20HermitianTridiagCtrl"></span><span id="_CPPv216HermitianTridiag12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK20HermitianTridiagCtrl"></span><span id="HermitianTridiag__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.HermitianTridiagCtrlCR"></span>void <code class="descname">HermitianTridiag</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTridiag12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FERK20HermitianTridiagCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites the main and sub (super) diagonal of the real matrix
+<cite>A</cite> with its similar symmetric tridiagonal matrix and stores the scaled
+Householder vectors below (above) its tridiagonal entries.
+Complex Hermitian reductions have the added complication of needing to
+also store the scalings for the Householder vectors (the scaling can
+be inferred since the Householder vectors must be unit length) if they are
+to be applied (in the column vector <cite>t</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv3N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv2N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE"></span><span id="herm_tridiag::ExplicitCondensed__UpperOrLower.Matrix:F:R"></span>void <code class="descclassname">herm_tridiag<code class="descclassname">::</code></code><code class="descname">ExplicitCondensed</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FERK20HermitianTridiagCtrl">
+<span id="_CPPv3N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FERK20HermitianTridiagCtrl"></span><span id="_CPPv2N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FERK20HermitianTridiagCtrl"></span><span id="herm_tridiag::ExplicitCondensed__UpperOrLower.AbstractDistMatrix:F:R.HermitianTridiagCtrlCR"></span>void <code class="descclassname">herm_tridiag<code class="descclassname">::</code></code><code class="descname">ExplicitCondensed</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv420HermitianTridiagCtrl" title="HermitianTridiagCtrl">HermitianTridiagCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12herm_tridiag17ExplicitCondensedE12UpperOrLowerR18AbstractDistMatrixI1FERK20HermitianTridiagCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns just the (appropriate triangle of the) resulting tridiagonal matrix.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv420HermitianTridiagCtrl">
+<span id="_CPPv320HermitianTridiagCtrl"></span><span id="_CPPv220HermitianTridiagCtrl"></span><span id="HermitianTridiagCtrl"></span><em class="property">class </em><code class="descname">HermitianTridiagCtrl</code><a class="headerlink" href="#_CPPv420HermitianTridiagCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N20HermitianTridiagCtrl8approachE">
+<span id="_CPPv3N20HermitianTridiagCtrl8approachE"></span><span id="_CPPv2N20HermitianTridiagCtrl8approachE"></span><span id="HermitianTridiagCtrl::approach__HermitianTridiagApproach"></span><a class="reference internal" href="#_CPPv424HermitianTridiagApproach" title="HermitianTridiagApproach">HermitianTridiagApproach</a> <code class="descname">approach</code><a class="headerlink" href="#_CPPv4N20HermitianTridiagCtrl8approachE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N20HermitianTridiagCtrl5orderE">
+<span id="_CPPv3N20HermitianTridiagCtrl5orderE"></span><span id="_CPPv2N20HermitianTridiagCtrl5orderE"></span><span id="HermitianTridiagCtrl::order__GridOrder"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv49GridOrder" title="GridOrder">GridOrder</a> <code class="descname">order</code><a class="headerlink" href="#_CPPv4N20HermitianTridiagCtrl5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N20HermitianTridiagCtrl20HermitianTridiagCtrlEv">
+<span id="_CPPv3N20HermitianTridiagCtrl20HermitianTridiagCtrlEv"></span><span id="_CPPv2N20HermitianTridiagCtrl20HermitianTridiagCtrlEv"></span><span id="HermitianTridiagCtrl::HermitianTridiagCtrl"></span><code class="descname">HermitianTridiagCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N20HermitianTridiagCtrl20HermitianTridiagCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets <cite>approach</cite> to <code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_SQUARE</span></code> and <cite>order</cite> to
+<code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h3>C API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="c.ElHermitianTridiagCtrl">
+<code class="descname">ElHermitianTridiagCtrl</code><a class="headerlink" href="#c.ElHermitianTridiagCtrl" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="_CPPv48approach">
+<span id="_CPPv38approach"></span><span id="_CPPv28approach"></span><span id="approach__ElHermitianTridiagApproach"></span>ElHermitianTridiagApproach <code class="descname">approach</code><a class="headerlink" href="#_CPPv48approach" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv45order">
+<span id="_CPPv35order"></span><span id="_CPPv25order"></span><span id="order__ElGridOrder"></span>ElGridOrder <code class="descname">order</code><a class="headerlink" href="#_CPPv45order" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagCtrlDefault">
+<code class="descname">ElHermitianTridiagCtrlDefault</code><span class="sig-paren">(</span><a class="reference internal" href="#c.ElHermitianTridiagCtrl" title="ElHermitianTridiagCtrl">ElHermitianTridiagCtrl</a>*<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagCtrlDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets <cite>approach</cite> to <code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_SQUARE</span></code> and <cite>order</cite> to <code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code>.</p>
+</dd></dl>
+
+<div class="section" id="single-precision">
+<h4>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHermitianTridiag_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiag_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiag_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagXDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagXDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> t</em>, <a class="reference internal" href="#c.ElHermitianTridiagCtrl" title="ElHermitianTridiagCtrl">ElHermitianTridiagCtrl</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensed_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensed_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensed_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedXDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedXDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElHermitianTridiag<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h4>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHermitianTridiag_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiag_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiag_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagXDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagXDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> t</em>, <a class="reference internal" href="#c.ElHermitianTridiagCtrl" title="ElHermitianTridiagCtrl">ElHermitianTridiagCtrl</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensed_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensed_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensed_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedXDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedXDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElHermitianTridiag<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h4>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHermitianTridiag_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiag_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiag_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagXDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagXDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> t</em>, <a class="reference internal" href="#c.ElHermitianTridiagCtrl" title="ElHermitianTridiagCtrl">ElHermitianTridiagCtrl</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagXDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensed_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensed_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensed_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedXDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedXDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElHermitianTridiag<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedXDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h4>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElHermitianTridiag_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiag_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiag_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> t</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagXDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagXDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> t</em>, <a class="reference internal" href="#c.ElHermitianTridiagCtrl" title="ElHermitianTridiagCtrl">ElHermitianTridiagCtrl</a><em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagXDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensed_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensed_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensed_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTridiagExplicitCondensedXDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTridiagExplicitCondensedXDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElHermitianTridiag<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTridiagExplicitCondensedXDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="applying-the-change-of-basis">
+<h2>Applying the change of basis<a class="headerlink" href="#applying-the-change-of-basis" title="Permalink to this headline">¶</a></h2>
+<p>Apply (from the left or right) the implicitly defined unitary matrix
+(or its adjoint) represented by the Householder transformations stored within
+the specified triangle of <cite>A</cite> and their scalings are stored in the vector
+<cite>t</cite>.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/condense/HermitianTridiag/ApplyQ.hpp">Implementation</a></p>
+<div class="section" id="id5">
+<h3>Python API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ApplyQAfterHermitianTridiag">
+<code class="descname">ApplyQAfterHermitianTridiag</code><span class="sig-paren">(</span><em>side</em>, <em>uplo</em>, <em>orient</em>, <em>A</em>, <em>t</em>, <em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#ApplyQAfterHermitianTridiag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h3>C++ API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="herm_tridiag::ApplyQ__LeftOrRight.UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">herm_tridiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="herm_tridiag::ApplyQ__LeftOrRight.UpperOrLower.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">herm_tridiag<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12herm_tridiag6ApplyQE11LeftOrRight12UpperOrLower11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h3>C API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>Single-precision<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterHermitianTridiag_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiag_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> t</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHermitianTridiag_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterHermitianTridiagDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiagDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> t</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHermitianTridiagDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h4>Double-precision<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterHermitianTridiag_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiag_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> t</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHermitianTridiag_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterHermitianTridiagDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiagDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> t</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHermitianTridiagDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id10">
+<h4>Single-precision complex<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElApplyQAfterHermitianTridiag_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiag_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> t</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHermitianTridiag_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElApplyQAfterHermitianTridiagDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiagDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> t</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElApplyQAfterHermitianTridiagDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id11">
+<h4>Double-precision complex<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt>
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiag_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> t</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt>
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElApplyQAfterHermitianTridiagDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> t</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/condense/HermitianTridiag.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/condense/HermitianTridiag">Subroutine implementations</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/HermitianTridiag.cpp">Test driver</a></p>
+<dl class="citation">
+<dt class="label" id="elpa2011"><span class="brackets"><a class="fn-backref" href="#id1">ELPA2011</a></span></dt>
+<dd><ol class="upperalpha simple" start="20">
+<li><p>Auckenthaler, V. Blum, H.-J. Bungartz, T. Huckle, R. Johanni, L. Kramer, B. Lang, H. Lederer, and P.R. Willems, <em>Parallel solution of partial symmetric eigenvalue problems from electronic structure calculations</em>, Parallel Computing, Vol. 37, Issue 12, pp. 783–794, 2011. DOI: <a class="reference external" href="http://dx.doi.org/10.1016/j.parco.2011.05.002">http://dx.doi.org/10.1016/j.parco.2011.05.002</a></p></li>
+</ol>
+</dd>
+<dt class="label" id="hjs1999"><span class="brackets"><a class="fn-backref" href="#id2">HJS1999</a></span></dt>
+<dd><p>Bruce Hendrickson, Elizabeth Jessup, and Christopher Smith, <em>Towards an efficient parallel eigensolver for dense symmetric matrices</em>, SIAM Journal on Scientific Computing, Vol. 20, No. 3, pp. 1132–1154, 1999. DOI: <a class="reference external" href="http://dx.doi.org/10.1137/S1064827596300681">http://dx.doi.org/10.1137/S1064827596300681</a></p>
+</dd>
+<dt class="label" id="stanley1997"><span class="brackets"><a class="fn-backref" href="#id3">Stanley1997</a></span></dt>
+<dd><p>Kendall S. Stanley, <em>Execution time of symmetric eigensolvers</em>, EECS Department, UC Berkeley, Technical Report No. UCB/CSD-98-992, 1997. Accessed from: <a class="reference external" href="http://www.eecs.berkeley.edu/Pubs/TechRpts/1999/5365.html">http://www.eecs.berkeley.edu/Pubs/TechRpts/1999/5365.html</a></p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Hessenberg.html" class="btn btn-neutral float-right" title="Square to Hessenberg" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../condense.html" class="btn btn-neutral float-left" title="Reduction to condensed form" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

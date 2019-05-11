@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BLAS &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LAPACK" href="lapack.html" />
+    <link rel="prev" title="Imported library routines" href="../imports.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="blas">
+<h1>BLAS<a class="headerlink" href="#blas" title="Permalink to this headline">¶</a></h1>
+<p>The Basic Linear Algebra Subprograms (BLAS) are heavily exploited within
+Elemental in order to achieve high performance whenever possible. Since the
+official BLAS interface uses different routine names for different datatypes,
+the following interfaces are built directly on top of the datatype-specific
+versions.</p>
+<p>The prototypes can be found in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/elemental/core/imports/blas.hpp">include/elemental/core/imports/blas.hpp</a>,
+while the implementations are in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/imports/blas.cpp">src/imports/blas.cpp</a>.</p>
+<div class="section" id="level-1">
+<h2>Level 1<a class="headerlink" href="#level-1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N4blas4AxpyEi1TPK1TiP1Ti">
+<span id="_CPPv3N4blas4AxpyEi1TPK1TiP1Ti"></span><span id="_CPPv2N4blas4AxpyEi1TPK1TiP1Ti"></span><span id="blas::Axpy__i.T.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Axpy</code><span class="sig-paren">(</span>int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4AxpyEi1TPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs <span class="math notranslate nohighlight">\(y := \alpha x + y\)</span> for vectors <span class="math notranslate nohighlight">\(x,y \in T^n\)</span> and
+scalar <span class="math notranslate nohighlight">\(\alpha \in T\)</span>. <cite>x</cite> and <cite>y</cite> must be stored such that
+<span class="math notranslate nohighlight">\(x_i\)</span> occurs at <code class="docutils literal notranslate"><span class="pre">x[i*incx]</span></code> (and likewise for <cite>y</cite>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas3DotEiPK1TiP1Ti">
+<span id="_CPPv3N4blas3DotEiPK1TiP1Ti"></span><span id="_CPPv2N4blas3DotEiPK1TiP1Ti"></span><span id="blas::Dot__i.TCP.i.TP.i"></span>T <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Dot</code><span class="sig-paren">(</span>int <em>n</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas3DotEiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns <span class="math notranslate nohighlight">\(\alpha := x^H y\)</span>, where <cite>x</cite> and <cite>y</cite> are stored in the
+same manner as in <code class="docutils literal notranslate"><span class="pre">blas::Axpy</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4DotcEiPK1TiP1Ti">
+<span id="_CPPv3N4blas4DotcEiPK1TiP1Ti"></span><span id="_CPPv2N4blas4DotcEiPK1TiP1Ti"></span><span id="blas::Dotc__i.TCP.i.TP.i"></span>T <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Dotc</code><span class="sig-paren">(</span>int <em>n</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4DotcEiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">blas::Dot</span></code>, but this name is kept for historical purposes
+(the BLAS provide <code class="docutils literal notranslate"><span class="pre">?dotc</span></code> and <code class="docutils literal notranslate"><span class="pre">?dotu</span></code> for complex datatypes).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4DotuEiPK1TiP1Ti">
+<span id="_CPPv3N4blas4DotuEiPK1TiP1Ti"></span><span id="_CPPv2N4blas4DotuEiPK1TiP1Ti"></span><span id="blas::Dotu__i.TCP.i.TP.i"></span>T <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Dotu</code><span class="sig-paren">(</span>int <em>n</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4DotuEiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">blas::Dot</span></code>, but this routine instead returns
+<span class="math notranslate nohighlight">\(\alpha := x^T y\)</span> (<cite>x</cite> is not conjugated).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4Nrm2EiPK1Ti">
+<span id="_CPPv3N4blas4Nrm2EiPK1Ti"></span><span id="_CPPv2N4blas4Nrm2EiPK1Ti"></span><span id="blas::Nrm2__i.TCP.i"></span>Base&lt;T&gt; <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Nrm2</code><span class="sig-paren">(</span>int <em>n</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4Nrm2EiPK1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the Euclidean two-norm of the vector <cite>x</cite>, where
+<span class="math notranslate nohighlight">\(||x||_2 = \sqrt{\sum_{i=0}^{n-1} |x_i|^2}\)</span>. Note that if <cite>T</cite>
+represents a complex field, then the return type is the underlying real field
+(e.g., <code class="docutils literal notranslate"><span class="pre">T=Complex&lt;double&gt;</span></code> results in a return type of <cite>double</cite>),
+otherwise <cite>T</cite> equals the return type.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas3RotEiP1FiP1Fi4BaseI1FE1F">
+<span id="_CPPv3N4blas3RotEiP1FiP1Fi4BaseI1FE1F"></span><span id="_CPPv2N4blas3RotEiP1FiP1Fi4BaseI1FE1F"></span><span id="blas::Rot__i.FP.i.FP.i.Base:F:.F"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Rot</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>x</em>, int <em>incx</em>, F *<em>y</em>, int <em>incy</em>, <a class="reference internal" href="../environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>c</em>, F <em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas3RotEiP1FiP1Fi4BaseI1FE1F" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply a Givens rotation to the length <cite>n</cite> vectors <cite>x</cite> and <cite>y</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4ScalEi1TP1Ti">
+<span id="_CPPv3N4blas4ScalEi1TP1Ti"></span><span id="_CPPv2N4blas4ScalEi1TP1Ti"></span><span id="blas::Scal__i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Scal</code><span class="sig-paren">(</span>int <em>n</em>, T <em>alpha</em>, T *<em>x</em>, int <em>incx</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4ScalEi1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs <span class="math notranslate nohighlight">\(x := \alpha x\)</span>, where <span class="math notranslate nohighlight">\(x \in T^n\)</span> is stored in the
+manner described in <code class="docutils literal notranslate"><span class="pre">blas::Axpy</span></code>, and <span class="math notranslate nohighlight">\(\alpha \in T\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4SwapEiP1TiP1Ti">
+<span id="_CPPv3N4blas4SwapEiP1TiP1Ti"></span><span id="_CPPv2N4blas4SwapEiP1TiP1Ti"></span><span id="blas::Swap__i.TP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Swap</code><span class="sig-paren">(</span>int <em>n</em>, T *<em>x</em>, int <em>incx</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4SwapEiP1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Swap the length <cite>n</cite> vectors <cite>x</cite> and <cite>y</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="level-2">
+<h2>Level 2<a class="headerlink" href="#level-2" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N4blas4GemvEcii1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4GemvEcii1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4GemvEcii1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Gemv__c.i.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Gemv</code><span class="sig-paren">(</span>char <em>trans</em>, int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T <em>beta</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4GemvEcii1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Updates <span class="math notranslate nohighlight">\(y := \alpha \mbox{op}(A) x + \beta y\)</span>, where
+<span class="math notranslate nohighlight">\(A \in T^{m \times n}\)</span> and
+<span class="math notranslate nohighlight">\(\mbox{op}(A) \in \left\{A,A^T,A^H\right\}\)</span> is chosen by choosing
+<cite>trans</cite> from <span class="math notranslate nohighlight">\(\{N,T,C\}\)</span>, respectively. Note that <cite>x</cite> is stored
+in the manner repeatedly described in the Level 1 routines, e.g.,
+<code class="docutils literal notranslate"><span class="pre">blas::Axpy</span></code>, but <cite>A</cite> is stored such that <span class="math notranslate nohighlight">\(A(i,j)\)</span> is located
+at <code class="docutils literal notranslate"><span class="pre">A[i+j*lda]</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas3GerEii1TPK1TiPK1TiP1Ti">
+<span id="_CPPv3N4blas3GerEii1TPK1TiPK1TiP1Ti"></span><span id="_CPPv2N4blas3GerEii1TPK1TiPK1TiP1Ti"></span><span id="blas::Ger__i.i.T.TCP.i.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Ger</code><span class="sig-paren">(</span>int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, <em class="property">const</em> T *<em>y</em>, int <em>incy</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas3GerEii1TPK1TiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Updates <span class="math notranslate nohighlight">\(A := \alpha x y^H + A\)</span>, where <span class="math notranslate nohighlight">\(A \in T^{m \times n}\)</span> and
+<cite>x</cite>, <cite>y</cite>, and <cite>A</cite> are stored in the manner described in <code class="docutils literal notranslate"><span class="pre">blas::Gemv</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4GercEii1TPK1TiPK1TiP1Ti">
+<span id="_CPPv3N4blas4GercEii1TPK1TiPK1TiP1Ti"></span><span id="_CPPv2N4blas4GercEii1TPK1TiPK1TiP1Ti"></span><span id="blas::Gerc__i.i.T.TCP.i.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Gerc</code><span class="sig-paren">(</span>int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, <em class="property">const</em> T *<em>y</em>, int <em>incy</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4GercEii1TPK1TiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">blas::Ger</span></code>, but the name is provided for historical
+reasons (the BLAS provides <code class="docutils literal notranslate"><span class="pre">?gerc</span></code> and <code class="docutils literal notranslate"><span class="pre">?geru</span></code> for complex datatypes).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4GeruEii1TPK1TiPK1TiP1Ti">
+<span id="_CPPv3N4blas4GeruEii1TPK1TiPK1TiP1Ti"></span><span id="_CPPv2N4blas4GeruEii1TPK1TiPK1TiP1Ti"></span><span id="blas::Geru__i.i.T.TCP.i.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Geru</code><span class="sig-paren">(</span>int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, <em class="property">const</em> T *<em>y</em>, int <em>incy</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4GeruEii1TPK1TiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">blas::Ger</span></code>, but instead perform <span class="math notranslate nohighlight">\(A := \alpha x y^T + A\)</span>
+(<cite>y</cite> is not conjugated).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4HemvEci1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4HemvEci1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4HemvEci1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Hemv__c.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Hemv</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>m</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T <em>beta</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4HemvEci1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs <span class="math notranslate nohighlight">\(y := \alpha A x + \beta y\)</span>, where
+<span class="math notranslate nohighlight">\(A \in T^{m \times n}\)</span> is assumed to be Hermitian with the data stored
+in either the lower or upper triangle of <cite>A</cite> (depending upon whether
+<cite>uplo</cite> is equal to ‘L’ or ‘U’, respectively).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas3HerEci1TPK1TiP1Ti">
+<span id="_CPPv3N4blas3HerEci1TPK1TiP1Ti"></span><span id="_CPPv2N4blas3HerEci1TPK1TiP1Ti"></span><span id="blas::Her__c.i.T.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Her</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>m</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas3HerEci1TPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs <span class="math notranslate nohighlight">\(A := \alpha x x^H + A\)</span>, where <span class="math notranslate nohighlight">\(A \in T^{m \times m}\)</span>
+is assumed to be Hermitian, with the data stored in the triangle specified
+by <cite>uplo</cite> (depending upon whether <cite>uplo</cite> is equal to ‘L’ or ‘U’,
+respectively).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4Her2Eci1TPK1TiPK1TiP1Ti">
+<span id="_CPPv3N4blas4Her2Eci1TPK1TiPK1TiP1Ti"></span><span id="_CPPv2N4blas4Her2Eci1TPK1TiPK1TiP1Ti"></span><span id="blas::Her2__c.i.T.TCP.i.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Her2</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>m</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, <em class="property">const</em> T *<em>y</em>, int <em>incy</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4Her2Eci1TPK1TiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs <span class="math notranslate nohighlight">\(A := \alpha ( x y^H + y x^H ) + A\)</span>, where
+<span class="math notranslate nohighlight">\(A \in T^{m \times m}\)</span> is assumed to be Hermitian, with the data
+stored in the triangle specified by <cite>uplo</cite> (depending upon whether <cite>uplo</cite>
+is equal to ‘L’ or ‘U’, respectively).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4SymvEci1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4SymvEci1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4SymvEci1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Symv__c.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Symv</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>m</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T <em>beta</em>, T *<em>y</em>, int <em>incy</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4SymvEci1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The same as <code class="docutils literal notranslate"><span class="pre">blas::Hemv</span></code>, but <span class="math notranslate nohighlight">\(A \in T^{m \times m}\)</span> is instead
+assumed to be <em>symmetric</em>, and the update is
+<span class="math notranslate nohighlight">\(y := \alpha A x + \beta y\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The single and double precision complex interfaces, <code class="docutils literal notranslate"><span class="pre">csymv</span></code> and <code class="docutils literal notranslate"><span class="pre">zsymv</span></code>,
+are technically a part of LAPACK and not BLAS.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas3SyrEci1TPK1TiP1Ti">
+<span id="_CPPv3N4blas3SyrEci1TPK1TiP1Ti"></span><span id="_CPPv2N4blas3SyrEci1TPK1TiP1Ti"></span><span id="blas::Syr__c.i.T.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Syr</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>m</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas3SyrEci1TPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The same as <code class="docutils literal notranslate"><span class="pre">blas::Her</span></code>, but <span class="math notranslate nohighlight">\(A \in T^{m \times m}\)</span> is instead
+assumed to be <em>symmetric</em>, and the update is <span class="math notranslate nohighlight">\(A := \alpha x x^T + A\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The single and double precision complex interfaces, <code class="docutils literal notranslate"><span class="pre">csyr</span></code> and <code class="docutils literal notranslate"><span class="pre">zsyr</span></code>,
+are technically a part of LAPACK and not BLAS.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4Syr2Eci1TPK1TiPK1TiP1Ti">
+<span id="_CPPv3N4blas4Syr2Eci1TPK1TiPK1TiP1Ti"></span><span id="_CPPv2N4blas4Syr2Eci1TPK1TiPK1TiP1Ti"></span><span id="blas::Syr2__c.i.T.TCP.i.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Syr2</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>m</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>x</em>, int <em>incx</em>, <em class="property">const</em> T *<em>y</em>, int <em>incy</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4Syr2Eci1TPK1TiPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The same as <code class="docutils literal notranslate"><span class="pre">blas::Her2</span></code>, but <span class="math notranslate nohighlight">\(A \in T^{m \times m}\)</span> is instead
+assumed to be <em>symmetric</em>, and the update is
+<span class="math notranslate nohighlight">\(A := \alpha ( x y^T + y x^T ) + A\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The single and double precision complex interfaces do not exist in BLAS
+or LAPACK, so Elemental instead calls <code class="docutils literal notranslate"><span class="pre">csyr2k</span></code> or <code class="docutils literal notranslate"><span class="pre">zsyr2k</span></code> with k=1.
+This is likely far from optimal, though <code class="docutils literal notranslate"><span class="pre">Syr2</span></code> is not used very commonly
+in Elemental.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4TrmvEccciPK1TiP1Ti">
+<span id="_CPPv3N4blas4TrmvEccciPK1TiP1Ti"></span><span id="_CPPv2N4blas4TrmvEccciPK1TiP1Ti"></span><span id="blas::Trmv__c.c.c.i.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Trmv</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, char <em>diag</em>, int <em>m</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, T *<em>x</em>, int <em>incx</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4TrmvEccciPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform the update <span class="math notranslate nohighlight">\(x := \alpha \mbox{op}(A) x\)</span>,
+where <span class="math notranslate nohighlight">\(A \in T^{m \times m}\)</span> is assumed to be either lower or upper
+triangular (depending on whether <cite>uplo</cite> is ‘L’ or ‘U’), unit diagonal if
+<cite>diag</cite> equals ‘U’, and <span class="math notranslate nohighlight">\(\mbox{op}(A) \in \left\{A,A^T,A^H\right\}\)</span>
+is determined by <cite>trans</cite> being chosen as ‘N’, ‘T’, or ‘C’, respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4TrsvEccciPK1TiP1Ti">
+<span id="_CPPv3N4blas4TrsvEccciPK1TiP1Ti"></span><span id="_CPPv2N4blas4TrsvEccciPK1TiP1Ti"></span><span id="blas::Trsv__c.c.c.i.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Trsv</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, char <em>diag</em>, int <em>m</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, T *<em>x</em>, int <em>incx</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4TrsvEccciPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform the update <span class="math notranslate nohighlight">\(x := \alpha \mbox{op}(A)^{-1} x\)</span>,
+where <span class="math notranslate nohighlight">\(A \in T^{m \times m}\)</span> is assumed to be either lower or upper
+triangular (depending on whether <cite>uplo</cite> is ‘L’ or ‘U’), unit diagonal if
+<cite>diag</cite> equals ‘U’, and <span class="math notranslate nohighlight">\(\mbox{op}(A) \in \left\{A,A^T,A^H\right\}\)</span>
+is determined by <cite>trans</cite> being chosen as ‘N’, ‘T’, or ‘C’, respectively.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="level-3">
+<h2>Level 3<a class="headerlink" href="#level-3" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N4blas4GemmEcciii1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4GemmEcciii1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4GemmEcciii1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Gemm__c.c.i.i.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Gemm</code><span class="sig-paren">(</span>char <em>transA</em>, char <em>transB</em>, int <em>m</em>, int <em>n</em>, int <em>k</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>B</em>, int <em>ldb</em>, T <em>beta</em>, T *<em>C</em>, int <em>ldc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4GemmEcciii1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform the update
+<span class="math notranslate nohighlight">\(C := \alpha \mbox{op}_A(A) \mbox{op}_B(B) + \beta C\)</span>,
+where <span class="math notranslate nohighlight">\(\mbox{op}_A\)</span> and <span class="math notranslate nohighlight">\(\mbox{op}_B\)</span> are each determined
+(according to <cite>transA</cite> and <cite>transB</cite>) in the manner described for
+<code class="docutils literal notranslate"><span class="pre">blas::Trmv</span></code>; it is required that <span class="math notranslate nohighlight">\(C \in T^{m \times n}\)</span> and that
+the inner dimension of <span class="math notranslate nohighlight">\(\mbox{op}_A(A) \mbox{op}_B(B)\)</span> is <cite>k</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4HemmEccii1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4HemmEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4HemmEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Hemm__c.c.i.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Hemm</code><span class="sig-paren">(</span>char <em>side</em>, char <em>uplo</em>, int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>B</em>, int <em>ldb</em>, T <em>beta</em>, T *<em>C</em>, int <em>ldc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4HemmEccii1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform either <span class="math notranslate nohighlight">\(C := \alpha A B + \beta C\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha B A + \beta C\)</span>
+(depending upon whether <cite>side</cite> is respectively ‘L’ or ‘R’) where
+<span class="math notranslate nohighlight">\(A\)</span> is assumed to be Hermitian with its data stored in either the
+lower or upper triangle (depending upon whether <cite>uplo</cite> is set to ‘L’ or
+‘U’, respectively) and <span class="math notranslate nohighlight">\(C \in T^{m \times n}\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas5Her2kEccii1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas5Her2kEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas5Her2kEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Her2k__c.c.i.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Her2k</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, int <em>n</em>, int <em>k</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>B</em>, int <em>ldb</em>, T <em>beta</em>, T *<em>C</em>, int <em>ldc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas5Her2kEccii1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform either <span class="math notranslate nohighlight">\(C := \alpha ( A B^H + B A^H ) \beta C\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha ( A^H B + B^H A ) \beta C\)</span> (depending upon whether
+<cite>trans</cite> is respectively ‘N’ or ‘C’), where <span class="math notranslate nohighlight">\(C \in T^{n \times n}\)</span>
+is assumed to be Hermitian, with the data stored in the triangle specified
+by <cite>uplo</cite> (see <code class="docutils literal notranslate"><span class="pre">blas::Hemv</span></code>) and the inner dimension of <span class="math notranslate nohighlight">\(A B^H\)</span> or
+<span class="math notranslate nohighlight">\(A^H B\)</span> is equal to <cite>k</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4HerkEccii1TPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4HerkEccii1TPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4HerkEccii1TPK1Ti1TP1Ti"></span><span id="blas::Herk__c.c.i.i.T.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Herk</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, int <em>n</em>, int <em>k</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, T <em>beta</em>, T *<em>C</em>, int <em>ldc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4HerkEccii1TPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform either <span class="math notranslate nohighlight">\(C := \alpha A A^H + \beta C\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha A^H A + \beta C\)</span> (depending upon whether <cite>trans</cite> is
+respectively ‘N’ or ‘C’), where <span class="math notranslate nohighlight">\(C \in T^{n \times n}\)</span> is assumed to
+be Hermitian with the data stored in the triangle specified by <cite>uplo</cite>
+(see <code class="docutils literal notranslate"><span class="pre">blas::Hemv</span></code>) and the inner dimension of <span class="math notranslate nohighlight">\(A A^H\)</span> or
+<span class="math notranslate nohighlight">\(A^H A\)</span> equal to <cite>k</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas6HetrmmEciP1Ti">
+<span id="_CPPv3N4blas6HetrmmEciP1Ti"></span><span id="_CPPv2N4blas6HetrmmEciP1Ti"></span><span id="blas::Hetrmm__c.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Hetrmm</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, T *<em>A</em>, int <em>lda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas6HetrmmEciP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Form either <span class="math notranslate nohighlight">\(A := L^H L\)</span> or <span class="math notranslate nohighlight">\(A := U U^H\)</span>, depending upon the
+choice of <cite>uplo</cite>: if <cite>uplo</cite> equals ‘L’, then <span class="math notranslate nohighlight">\(L \in T^{n \times n}\)</span>
+is equal to the lower triangle of <cite>A</cite>, otherwise <span class="math notranslate nohighlight">\(U\)</span> is read from
+the upper triangle of <cite>A</cite>. In both cases, the relevant triangle of <cite>A</cite>
+is overwritten in order to store the Hermitian product.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This routine is built on top of the LAPACK routines <code class="docutils literal notranslate"><span class="pre">slauum</span></code>, <code class="docutils literal notranslate"><span class="pre">dlauum</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clauum</span></code>, and <code class="docutils literal notranslate"><span class="pre">zlauum</span></code>; it in the BLAS section since its functionality
+is extremely BLAS-like.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4SymmEccii1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4SymmEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4SymmEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Symm__c.c.i.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Symm</code><span class="sig-paren">(</span>char <em>side</em>, char <em>uplo</em>, int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>B</em>, int <em>ldb</em>, T <em>beta</em>, T *<em>C</em>, int <em>ldc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4SymmEccii1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform either <span class="math notranslate nohighlight">\(C := \alpha A B + \beta C\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha B A + \beta C\)</span>
+(depending upon whether <cite>side</cite> is respectively ‘L’ or ‘R’) where
+<span class="math notranslate nohighlight">\(A\)</span> is assumed to be symmetric with its data stored in either the
+lower or upper triangle (depending upon whether <cite>uplo</cite> is set to ‘L’ or
+‘U’, respectively) and <span class="math notranslate nohighlight">\(C \in T^{m \times n}\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas5Syr2kEccii1TPK1TiPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas5Syr2kEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas5Syr2kEccii1TPK1TiPK1Ti1TP1Ti"></span><span id="blas::Syr2k__c.c.i.i.T.TCP.i.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Syr2k</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, int <em>n</em>, int <em>k</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, <em class="property">const</em> T *<em>B</em>, int <em>ldb</em>, T <em>beta</em>, T *<em>C</em>, int <em>ldc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas5Syr2kEccii1TPK1TiPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform either <span class="math notranslate nohighlight">\(C := \alpha ( A B^T + B A^T ) \beta C\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha ( A^T B + B^T A ) \beta C\)</span> (depending upon whether
+<cite>trans</cite> is respectively ‘N’ or ‘T’), where <span class="math notranslate nohighlight">\(C \in T^{n \times n}\)</span>
+is assumed to be symmetric, with the data stored in the triangle specified
+by <cite>uplo</cite> (see <code class="docutils literal notranslate"><span class="pre">blas::Symv</span></code>) and the inner dimension of <span class="math notranslate nohighlight">\(A B^T\)</span> or
+<span class="math notranslate nohighlight">\(A^T B\)</span> is equal to <cite>k</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4SyrkEccii1TPK1Ti1TP1Ti">
+<span id="_CPPv3N4blas4SyrkEccii1TPK1Ti1TP1Ti"></span><span id="_CPPv2N4blas4SyrkEccii1TPK1Ti1TP1Ti"></span><span id="blas::Syrk__c.c.i.i.T.TCP.i.T.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Syrk</code><span class="sig-paren">(</span>char <em>uplo</em>, char <em>trans</em>, int <em>n</em>, int <em>k</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, T <em>beta</em>, T *<em>C</em>, int <em>ldc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4SyrkEccii1TPK1Ti1TP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Perform either <span class="math notranslate nohighlight">\(C := \alpha A A^T + \beta C\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha A^T A + \beta C\)</span> (depending upon whether <cite>trans</cite> is
+respectively ‘N’ or ‘T’), where <span class="math notranslate nohighlight">\(C \in T^{n \times n}\)</span> is assumed to
+be symmetric with the data stored in the triangle specified by <cite>uplo</cite>
+(see <code class="docutils literal notranslate"><span class="pre">blas::Symv</span></code>) and the inner dimension of <span class="math notranslate nohighlight">\(A A^T\)</span> or
+<span class="math notranslate nohighlight">\(A^T A\)</span> equal to <cite>k</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4TrmmEccccii1TPK1TiP1Ti">
+<span id="_CPPv3N4blas4TrmmEccccii1TPK1TiP1Ti"></span><span id="_CPPv2N4blas4TrmmEccccii1TPK1TiP1Ti"></span><span id="blas::Trmm__c.c.c.c.i.i.T.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Trmm</code><span class="sig-paren">(</span>char <em>side</em>, char <em>uplo</em>, char <em>trans</em>, char <em>unit</em>, int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, T *<em>B</em>, int <em>ldb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4TrmmEccccii1TPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs <span class="math notranslate nohighlight">\(C := \alpha \mbox{op}(A) B\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha B \mbox{op}(A)\)</span>, depending upon whether <cite>side</cite> was
+chosen as ‘L’ or ‘R’, respectively. Whether <span class="math notranslate nohighlight">\(A\)</span> is treated as lower
+or upper triangular is determined by whether <cite>uplo</cite> is ‘L’ or ‘U’ (setting
+<cite>unit</cite> equal to ‘U’ treats <span class="math notranslate nohighlight">\(A\)</span> as unit diagonal, otherwise it should
+be set to ‘N’). <span class="math notranslate nohighlight">\(\mbox{op}\)</span> is determined in the same manner as in
+<code class="docutils literal notranslate"><span class="pre">blas::Trmv</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4blas4TrsmEccccii1TPK1TiP1Ti">
+<span id="_CPPv3N4blas4TrsmEccccii1TPK1TiP1Ti"></span><span id="_CPPv2N4blas4TrsmEccccii1TPK1TiP1Ti"></span><span id="blas::Trsm__c.c.c.c.i.i.T.TCP.i.TP.i"></span>void <code class="descclassname">blas<code class="descclassname">::</code></code><code class="descname">Trsm</code><span class="sig-paren">(</span>char <em>side</em>, char <em>uplo</em>, char <em>trans</em>, char <em>unit</em>, int <em>m</em>, int <em>n</em>, T <em>alpha</em>, <em class="property">const</em> T *<em>A</em>, int <em>lda</em>, T *<em>B</em>, int <em>ldb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4blas4TrsmEccccii1TPK1TiP1Ti" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs <span class="math notranslate nohighlight">\(C := \alpha \mbox{op}(A)^{-1} B\)</span> or
+<span class="math notranslate nohighlight">\(C := \alpha B \mbox{op}(A)^{-1}\)</span>, depending upon whether <cite>side</cite> was
+chosen as ‘L’ or ‘R’, respectively. Whether <span class="math notranslate nohighlight">\(A\)</span> is treated as lower
+or upper triangular is determined by whether <cite>uplo</cite> is ‘L’ or ‘U’ (setting
+<cite>unit</cite> equal to ‘U’ treats <span class="math notranslate nohighlight">\(A\)</span> as unit diagonal, otherwise it should
+be set to ‘N’). <span class="math notranslate nohighlight">\(\mbox{op}\)</span> is determined in the same manner as in
+<code class="docutils literal notranslate"><span class="pre">blas::Trmv</span></code>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

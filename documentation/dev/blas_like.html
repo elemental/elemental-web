@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BLAS-like linear algebra &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Level 1" href="blas_like/level1.html" />
+    <link rel="prev" title="Up a diagonal" href="core/flame_part/SlidePartition/UpDiag.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core functionality</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">BLAS-like linear algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1.html">Level 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2.html">Level 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3.html">Level 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/tuning.html">Tuning parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>BLAS-like linear algebra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/blas_like.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="blas-like-linear-algebra">
+<h1>BLAS-like linear algebra<a class="headerlink" href="#blas-like-linear-algebra" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes Elemental’s support for basic linear algebra routines,
+such as matrix-matrix multiplication, triangular solves, and matrix-vector
+multiplication. Most of these routines have counterparts in the Basic Linear
+Algebra Subprograms (BLAS).</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="blas_like/level1.html">Level 1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Adjoint.html">Adjoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/AdjointContract.html">AdjointContract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/AdjointAxpy.html">AdjointAxpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/AdjointAxpyContract.html">AdjointAxpyContract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/AllReduce.html">AllReduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Axpy.html">Axpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/AxpyTrapezoid.html">AxpyTrapezoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Broadcast.html">Broadcast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Conjugate.html">Conjugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/ConjugateDiagonal.html">ConjugateDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/ConjugateSubmatrix.html">ConjugateSubmatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Copy.html">Copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/DiagonalScale.html">DiagonalScale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/DiagonalScaleTrapezoid.html">DiagonalScaleTrapezoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/DiagonalSolve.html">DiagonalSolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Dot.html">Dot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Dotu.html">Dotu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/EntrywiseFill.html">EntrywiseFill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/EntrywiseMap.html">EntrywiseMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Fill.html">Fill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/FillDiagonal.html">FillDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/GetDiagonal.html">GetDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/GetMappedDiagonal.html">GetMappedDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/GetSubmatrix.html">GetSubmatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Hadamard.html">Hadamard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/HilbertSchmidt.html">HilbertSchmidt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/IndexDependentFill.html">IndexDependentFill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/IndexDependentMap.html">IndexDependentMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/MakeTrapezoidal.html">MakeTrapezoidal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Max.html">Max</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/MaxAbs.html">MaxAbs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Min.html">Min</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/MinAbs.html">MinAbs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Nrm2.html">Nrm2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/QuasiDiagonalScale.html">QuasiDiagonalScale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/QuasiDiagonalSolve.html">QuasiDiagonalSolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Reshape.html">Reshape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Scale.html">Scale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/ScaleTrapezoid.html">ScaleTrapezoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/SetDiagonal.html">SetDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/SetSubmatrix.html">SetSubmatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/ShiftDiagonal.html">ShiftDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Swap.html">Swap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Symmetric2x2Scale.html">Symmetric2x2Scale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Symmetric2x2Solve.html">Symmetric2x2Solve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Transpose.html">Transpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/TransposeAxpyContract.html">TransposeAxpyContract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/TransposeContract.html">TransposeContract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/UpdateDiagonal.html">UpdateDiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/UpdateSubmatrix.html">UpdateSubmatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level1/Zero.html">Zero</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blas_like/level2.html">Level 2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Gemv.html">Gemv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Ger.html">Ger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Geru.html">Geru</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Hemv.html">Hemv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Her.html">Her</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Her2.html">Her2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/QuasiTrsv.html">QuasiTrsv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Symv.html">Symv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Syr.html">Syr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Syr2.html">Syr2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Trmv.html">Trmv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Trr.html">Trr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Trr2.html">Trr2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level2/Trsv.html">Trsv</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blas_like/level3.html">Level 3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Gemm.html">Gemm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Hemm.html">Hemm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Herk.html">Herk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Her2k.html">Her2k</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/MultiShiftQuasiTrsm.html">Multi-shift QuasiTrsm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/MultiShiftTrsm.html">Multi-shift Trsm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/QuasiTrsm.html">QuasiTrsm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Symm.html">Symm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Syrk.html">Syrk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Syr2k.html">Syr2k</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Trdtrmm.html">Trdtrmm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Trmm.html">Trmm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Trrk.html">Trrk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Trr2k.html">Trr2k</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Trsm.html">Trsm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Trtrmm.html">Trtrmm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/Trstrm.html">Trstrm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/TwoSidedTrmm.html">Two-sided Trmm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/level3/TwoSidedTrsm.html">Two-sided Trsm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blas_like/tuning.html">Tuning parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/tuning.html#localsymvblocksize">LocalSymvBlocksize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/tuning.html#localtrrkblocksize">LocalTrrkBlocksize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blas_like/tuning.html#localtrr2kblocksize">LocalTrr2kBlocksize</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="blas_like/level1.html" class="btn btn-neutral float-right" title="Level 1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="core/flame_part/SlidePartition/UpDiag.html" class="btn btn-neutral float-left" title="Up a diagonal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

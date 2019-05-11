@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>High-level linear algebra &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reduction to condensed form" href="lapack-like/condense.html" />
+    <link rel="prev" title="Tuning parameters" href="blas-like/tuning.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="high-level-linear-algebra">
+<h1>High-level linear algebra<a class="headerlink" href="#high-level-linear-algebra" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes all of the linear algebra operations which are not basic
+enough to fall within the BLAS (Basic Linear Algebra Subprograms) framework.
+In particular, algorithms which would traditionally have fallen into the
+domain of LAPACK (Linear Algebra PACKage), such as factorizations and
+matrix decompositions, are placed here.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/condense.html">Reduction to condensed form</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/condense.html#hermitian-to-tridiagonal">Hermitian to tridiagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/condense.html#square-to-hessenberg">Square to Hessenberg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/condense.html#general-to-bidiagonal">General to bidiagonal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/decomp.html">Matrix decompositions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#hermitian-eigensolver">Hermitian eigensolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#skew-hermitian-eigensolver">Skew-Hermitian eigensolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#hermitian-generalized-definite-eigensolvers">Hermitian generalized-definite eigensolvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#unitary-eigensolver">Unitary eigensolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#normal-eigensolver">Normal eigensolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#schur-decomposition">Schur decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#hermitian-svd">Hermitian SVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#polar-decomposition">Polar decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/decomp.html#svd">SVD</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/factor.html">Factorizations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#cholesky-factorization">Cholesky factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#ldl-factorization">LDL factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#lu-factorization">LU factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#lq-factorization">LQ factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#qr-factorization">QR factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#generalized-qr-factorization">Generalized QR factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#rq-factorization">RQ factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#generalized-rq-factorization">Generalized RQ factorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#interpolative-decomposition-id">Interpolative Decomposition (ID)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/factor.html#skeleton-decomposition">Skeleton decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/funcs.html">Matrix functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/funcs.html#direct-inversion">Direct inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/funcs.html#hermitian-functions">Hermitian functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/funcs.html#pseudoinverse">Pseudoinverse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/funcs.html#square-root">Square root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/funcs.html#sign">Sign</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/perm.html">Permutations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/perm.html#permutation-vectors">Permutation vectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/perm.html#pivot-sequences">Pivot sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/perm.html#converting-pivot-sequences-to-permutations">Converting pivot sequences to permutations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/props.html">Matrix properties</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/props.html#condition-number">Condition number</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/props.html#determinant">Determinant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/props.html#matrix-norms">Matrix norms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/props.html#pseudospectra">Pseudospectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/props.html#trace">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/props.html#inertia">Inertia</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/solve.html">Linear solvers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#hpd-solve">HPD solve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#symmetric-solve">Symmetric solve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#hermitian-solve">Hermitian solve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#gaussian-elimination">Gaussian elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#least-squares">Least Squares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#general-gauss-markov-linear-model-glm">General (Gauss-Markov) Linear Model (GLM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#equality-constrained-least-squares-lse">Equality-constrained Least Squares (LSE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/solve.html#multi-shift-hessenberg-solves">Multi-shift Hessenberg solves</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/util.html">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/util.html#householder-reflectors">Householder reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/util.html#sorting">Sorting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lapack-like/tuning.html">Tuning parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lapack-like/tuning.html#hermitian-to-tridiagonal">Hermitian to tridiagonal</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

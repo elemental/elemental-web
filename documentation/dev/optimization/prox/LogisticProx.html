@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Logistic prox &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Singular-value soft-thresholding" href="SVT.html" />
+    <link rel="prev" title="Hinge-loss prox" href="HingeLossProx.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models.html">Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../prox.html">Proximal maps</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Clip.html">Clip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="FrobeniusProx.html">Frobenius prox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HingeLossProx.html">Hinge-loss prox</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Logistic prox</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SVT.html">Singular-value soft-thresholding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SoftThreshold.html">Soft-thresholding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../prox.html">Proximal maps</a> &raquo;</li>
+        
+      <li>Logistic prox</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/optimization/prox/LogisticProx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="logistic-prox">
+<h1>Logistic prox<a class="headerlink" href="#logistic-prox" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv412LogisticProxR6MatrixI4RealE4Real">
+<span id="_CPPv312LogisticProxR6MatrixI4RealE4Real"></span><span id="_CPPv212LogisticProxR6MatrixI4RealE4Real"></span><span id="LogisticProx__Matrix:Real:R.Real"></span>void <code class="descname">LogisticProx</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, Real <em>rho</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LogisticProxR6MatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412LogisticProxR18AbstractDistMatrixI4RealE4Real">
+<span id="_CPPv312LogisticProxR18AbstractDistMatrixI4RealE4Real"></span><span id="_CPPv212LogisticProxR18AbstractDistMatrixI4RealE4Real"></span><span id="LogisticProx__AbstractDistMatrix:Real:R.Real"></span>void <code class="descname">LogisticProx</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>A</em>, Real <em>rho</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LogisticProxR18AbstractDistMatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElLogisticProx_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLogisticProx_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, float<em> rho</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLogisticProx_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLogisticProx_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLogisticProx_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, double<em> rho</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLogisticProx_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLogisticProxDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLogisticProxDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, float<em> rho</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLogisticProxDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLogisticProxDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLogisticProxDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, double<em> rho</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLogisticProxDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="SVT.html" class="btn btn-neutral float-right" title="Singular-value soft-thresholding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="HingeLossProx.html" class="btn btn-neutral float-left" title="Hinge-loss prox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

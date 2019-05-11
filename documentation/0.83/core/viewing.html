@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Matrix views &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Matrix partitions" href="partitioning.html" />
+    <link rel="prev" title="DistMatrix" href="dist_matrix/DM.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="matrix-views">
+<h1>Matrix views<a class="headerlink" href="#matrix-views" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="view-a-full-matrix">
+<h2>View a full matrix<a class="headerlink" href="#view-a-full-matrix" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44ViewR6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv34ViewR6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv24ViewR6MatrixI1TER6MatrixI1TE"></span><span id="View__Matrix:T:R.Matrix:T:R"></span>void <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv34ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv24ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="View__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span>void <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a view of the matrix <cite>B</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR6MatrixI1TE">
+<span id="_CPPv34ViewR6MatrixI1TE"></span><span id="_CPPv24ViewR6MatrixI1TE"></span><span id="View__Matrix:T:R"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR10DistMatrixI1T1U1VE">
+<span id="_CPPv34ViewR10DistMatrixI1T1U1VE"></span><span id="_CPPv24ViewR10DistMatrixI1T1U1VE"></span><span id="View__DistMatrix:T.U.V:R"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of the matrix <cite>B</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewR6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv310LockedViewR6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv210LockedViewR6MatrixI1TERK6MatrixI1TE"></span><span id="LockedView__Matrix:T:R.Matrix:T:CR"></span>void <code class="descname">LockedView</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewR6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv310LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv210LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedView__DistMatrix:T.U.V:R.DistMatrix:T.U.V:CR"></span>void <code class="descname">LockedView</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a non-mutable view of the matrix <cite>B</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewRK6MatrixI1TE">
+<span id="_CPPv310LockedViewRK6MatrixI1TE"></span><span id="_CPPv210LockedViewRK6MatrixI1TE"></span><span id="LockedView__Matrix:T:CR"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">LockedView</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewRK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewRK10DistMatrixI1T1U1VE">
+<span id="_CPPv310LockedViewRK10DistMatrixI1T1U1VE"></span><span id="_CPPv210LockedViewRK10DistMatrixI1T1U1VE"></span><span id="LockedView__DistMatrix:T.U.V:CR"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">LockedView</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewRK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of the matrix <cite>B</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="view-a-submatrix">
+<h2>View a submatrix<a class="headerlink" href="#view-a-submatrix" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44ViewR6MatrixI1TER6MatrixI1TEiiii">
+<span id="_CPPv34ViewR6MatrixI1TER6MatrixI1TEiiii"></span><span id="_CPPv24ViewR6MatrixI1TER6MatrixI1TEiiii"></span><span id="View__Matrix:T:R.Matrix:T:R.i.i.i.i"></span>void <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR6MatrixI1TER6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv34ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv24ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii"></span><span id="View__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i.i.i.i"></span>void <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a view of the <cite>height x width</cite> submatrix of <cite>B</cite> starting at
+coordinate <code class="docutils literal notranslate"><span class="pre">(i,j)</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR6MatrixI1TEiiii">
+<span id="_CPPv34ViewR6MatrixI1TEiiii"></span><span id="_CPPv24ViewR6MatrixI1TEiiii"></span><span id="View__Matrix:T:R.i.i.i.i"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ViewR10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv34ViewR10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv24ViewR10DistMatrixI1T1U1VEiiii"></span><span id="View__DistMatrix:T.U.V:R.i.i.i.i"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">View</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ViewR10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of the specified submatrix of <cite>B</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewR6MatrixI1TERK6MatrixI1TEiiii">
+<span id="_CPPv310LockedViewR6MatrixI1TERK6MatrixI1TEiiii"></span><span id="_CPPv210LockedViewR6MatrixI1TERK6MatrixI1TEiiii"></span><span id="LockedView__Matrix:T:R.Matrix:T:CR.i.i.i.i"></span>void <code class="descname">LockedView</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewR6MatrixI1TERK6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv310LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv210LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii"></span><span id="LockedView__DistMatrix:T.U.V:R.DistMatrix:T.U.V:CR.i.i.i.i"></span>void <code class="descname">LockedView</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewR10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a non-mutable view of the <cite>height x width</cite> submatrix of <cite>B</cite>
+starting at coordinate <code class="docutils literal notranslate"><span class="pre">(i,j)</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewRK6MatrixI1TEiiii">
+<span id="_CPPv310LockedViewRK6MatrixI1TEiiii"></span><span id="_CPPv210LockedViewRK6MatrixI1TEiiii"></span><span id="LockedView__Matrix:T:CR.i.i.i.i"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">LockedView</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewRK6MatrixI1TEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LockedViewRK10DistMatrixI1T1U1VEiiii">
+<span id="_CPPv310LockedViewRK10DistMatrixI1T1U1VEiiii"></span><span id="_CPPv210LockedViewRK10DistMatrixI1T1U1VEiiii"></span><span id="LockedView__DistMatrix:T.U.V:CR.i.i.i.i"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">LockedView</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>B</em>, int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LockedViewRK10DistMatrixI1T1U1VEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an immutable view of the specified submatrix of <cite>B</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="view-1x2-matrices">
+<h2>View 1x2 matrices<a class="headerlink" href="#view-1x2-matrices" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47View1x2R6MatrixI1TER6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv37View1x2R6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv27View1x2R6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="View1x2__Matrix:T:R.Matrix:T:R.Matrix:T:R"></span>void <code class="descname">View1x2</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View1x2R6MatrixI1TER6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv37View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv27View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="View1x2__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span>void <code class="descname">View1x2</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a view of the matrix
+<span class="math notranslate nohighlight">\(\left(\begin{array}{cc} B_L &amp; B_R \end{array}\right)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View1x2R6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv37View1x2R6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv27View1x2R6MatrixI1TER6MatrixI1TE"></span><span id="View1x2__Matrix:T:R.Matrix:T:R"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">View1x2</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View1x2R6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv37View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv27View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="View1x2__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">View1x2</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View1x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of the merged matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView1x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv313LockedView1x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv213LockedView1x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedView1x2__Matrix:T:R.Matrix:T:CR.Matrix:T:CR"></span>void <code class="descname">LockedView1x2</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BL</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView1x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView1x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv313LockedView1x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv213LockedView1x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedView1x2__DistMatrix:T.U.V:R.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR"></span>void <code class="descname">LockedView1x2</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BL</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView1x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a non-mutable view of the matrix
+<span class="math notranslate nohighlight">\(\left(\begin{array}{cc} B_L &amp; B_R \end{array}\right)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView1x2RK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv313LockedView1x2RK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv213LockedView1x2RK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedView1x2__Matrix:T:CR.Matrix:T:CR"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">LockedView1x2</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BL</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView1x2RK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView1x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv313LockedView1x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv213LockedView1x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedView1x2__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">LockedView1x2</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BL</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView1x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an immutable view of the merged matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="view-2x1-matrices">
+<h2>View 2x1 matrices<a class="headerlink" href="#view-2x1-matrices" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47View2x1R6MatrixI1TER6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv37View2x1R6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv27View2x1R6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="View2x1__Matrix:T:R.Matrix:T:R.Matrix:T:R"></span>void <code class="descname">View2x1</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BT</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x1R6MatrixI1TER6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv37View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv27View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="View2x1__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span>void <code class="descname">View2x1</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BT</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a view of the matrix
+<span class="math notranslate nohighlight">\(\left(\begin{array}{c} B_T \\ B_B \end{array}\right)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View2x1R6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv37View2x1R6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv27View2x1R6MatrixI1TER6MatrixI1TE"></span><span id="View2x1__Matrix:T:R.Matrix:T:R"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">View2x1</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BT</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x1R6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv37View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv27View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="View2x1__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">View2x1</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BT</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x1R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of the merged matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x1R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv313LockedView2x1R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv213LockedView2x1R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedView2x1__Matrix:T:R.Matrix:T:CR.Matrix:T:CR"></span>void <code class="descname">LockedView2x1</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BT</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x1R6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x1R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv313LockedView2x1R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv213LockedView2x1R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedView2x1__DistMatrix:T.U.V:R.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR"></span>void <code class="descname">LockedView2x1</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BT</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x1R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a non-mutable view of the matrix
+<span class="math notranslate nohighlight">\(\left(\begin{array}{c} B_T \\ B_B \end{array}\right)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x1RK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv313LockedView2x1RK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv213LockedView2x1RK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedView2x1__Matrix:T:CR.Matrix:T:CR"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">LockedView2x1</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BT</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x1RK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x1RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv313LockedView2x1RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv213LockedView2x1RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedView2x1__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">LockedView2x1</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BT</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BB</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x1RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of the merged matrix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="view-2x2-matrices">
+<h2>View 2x2 matrices<a class="headerlink" href="#view-2x2-matrices" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv37View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv27View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="View2x2__Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R"></span>void <code class="descname">View2x2</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv37View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv27View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="View2x2__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span>void <code class="descname">View2x2</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a view of the matrix
+<span class="math notranslate nohighlight">\(\left(\begin{array}{cc} B_{TL} &amp; B_{TR} \\ B_{BB} &amp; B_{BR} \end{array}\right)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv37View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv27View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="View2x2__Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">View2x2</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv37View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv27View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="View2x2__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">View2x2</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47View2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a view of the merged matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv313LockedView2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv213LockedView2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedView2x2__Matrix:T:R.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR"></span>void <code class="descname">LockedView2x2</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv313LockedView2x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv213LockedView2x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedView2x2__DistMatrix:T.U.V:R.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR"></span>void <code class="descname">LockedView2x2</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x2R10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Make <cite>A</cite> a non-mutable view of the matrix
+<span class="math notranslate nohighlight">\(\left(\begin{array}{cc} B_{TL} &amp; B_{TR} \\ B_{BB} &amp; B_{BR} \end{array}\right)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv313LockedView2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv213LockedView2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedView2x2__Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR"></span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">LockedView2x2</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413LockedView2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv313LockedView2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv213LockedView2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedView2x2__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR"></span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">LockedView2x2</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413LockedView2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an immutable view of the merged matrix.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

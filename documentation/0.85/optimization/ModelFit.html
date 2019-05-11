@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Model fit &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Non-negative least squares" href="NonNegativeLeastSquares.html" />
+    <link rel="prev" title="Logistic regression" href="LogisticRegression.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="model-fit">
+<h1>Model fit<a class="headerlink" href="#model-fit" title="Permalink to this headline">¶</a></h1>
+<p>Rather than fitting a model</p>
+<div class="math notranslate nohighlight">
+\[\min_z l(A z + b) + r(z),\]</div>
+<p>via a specific choice of a <em>loss</em> function, <span class="math notranslate nohighlight">\(l\)</span>, and regularization
+function, <span class="math notranslate nohighlight">\(r\)</span>, such as for a support vector machine or logistic
+regression, the following routines accept function wrappers for the proximal
+maps said functions and execute an Alternating Direction Method of Multipliers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While sometimes functional, this implementation is still very much a
+work-in-progress.</p>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv48ModelFitNSt8functionIFvR6MatrixI4RealE4RealEEENSt8functionIFvR6MatrixI4RealE4RealEEERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real3Intbb">
+<span id="_CPPv38ModelFitNSt8functionIFvR6MatrixI4RealE4RealEEENSt8functionIFvR6MatrixI4RealE4RealEEERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real3Intbb"></span><span id="_CPPv28ModelFitNSt8functionIFvR6MatrixI4RealE4RealEEENSt8functionIFvR6MatrixI4RealE4RealEEERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real3Intbb"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ModelFit</code><span class="sig-paren">(</span>std::function&lt;void<span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt;&amp;, Real<span class="sig-paren">)</span>&gt; <em>lossProx</em>, std::function&lt;void<span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt;&amp;, Real<span class="sig-paren">)</span>&gt; <em>regProx</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>w</em>, Real <em>rho</em>, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 1000, bool <em>inv</em> = true, bool <em>progress</em> = true, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ModelFitNSt8functionIFvR6MatrixI4RealE4RealEEENSt8functionIFvR6MatrixI4RealE4RealEEERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealE4Real3Intbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48ModelFitNSt8functionIFvR10DistMatrixI4RealE4RealEEENSt8functionIFvR10DistMatrixI4RealE4RealEEERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real3Intbb">
+<span id="_CPPv38ModelFitNSt8functionIFvR10DistMatrixI4RealE4RealEEENSt8functionIFvR10DistMatrixI4RealE4RealEEERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real3Intbb"></span><span id="_CPPv28ModelFitNSt8functionIFvR10DistMatrixI4RealE4RealEEENSt8functionIFvR10DistMatrixI4RealE4RealEEERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real3Intbb"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">ModelFit</code><span class="sig-paren">(</span>std::function&lt;void<span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt;&amp;, Real<span class="sig-paren">)</span>&gt; <em>lossProx</em>, std::function&lt;void<span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt;&amp;, Real<span class="sig-paren">)</span>&gt; <em>regProx</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>b</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>w</em>, Real <em>rho</em>, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 1000, bool <em>inv</em> = true, bool <em>progress</em> = true, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48ModelFitNSt8functionIFvR10DistMatrixI4RealE4RealEEENSt8functionIFvR10DistMatrixI4RealE4RealEEERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE4Real3Intbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElModelFit_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElModelFit_s</code><span class="sig-paren">(</span>void (<em>*lossProx</em>)(ElMatrix_s,float), void (*regProx)(ElMatrix_s,float), ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, ElMatrix_s<em> w</em>, float<em> rho</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElModelFit_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElModelFit_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElModelFit_d</code><span class="sig-paren">(</span>void (<em>*lossProx</em>)(ElMatrix_d,double), void (*regProx)(ElMatrix_d,double), ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, ElMatrix_d<em> w</em>, double<em> rho</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElModelFit_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElModelFitDist_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElModelFitDist_s</code><span class="sig-paren">(</span>void (<em>*lossProx</em>)(ElDistMatrix_s,float), void (*regProx)(ElDistMatrix_s,float), ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> b</em>, ElDistMatrix_s<em> w</em>, float<em> rho</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElModelFitDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElModelFitDist_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElModelFitDist_d</code><span class="sig-paren">(</span>void (<em>*lossProx</em>)(ElDistMatrix_d,double), void (*regProx)(ElDistMatrix_d,double), ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> b</em>, ElDistMatrix_d<em> w</em>, double<em> rho</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElModelFitDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

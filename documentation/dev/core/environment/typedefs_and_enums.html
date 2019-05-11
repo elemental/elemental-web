@@ -1,0 +1,647 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Other typedefs and enums &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Complex data" href="complex.html" />
+    <link rel="prev" title="Blocksize manipulation" href="blocksize.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../imports.html">Imported library routines</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../environment.html">Environment</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="boiler.html">Boiler plate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="error.html">Error handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="call_stack.html">Call stack manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="default_grid.html">Default process grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blocksize.html">Blocksize manipulation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Other typedefs and enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="complex.html">Complex data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="indexing.html">Indexing utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">Version and configuration information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../environment.html">Environment</a> &raquo;</li>
+        
+      <li>Other typedefs and enums</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/core/environment/typedefs_and_enums.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="other-typedefs-and-enums">
+<h1>Other typedefs and enums<a class="headerlink" href="#other-typedefs-and-enums" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv44byte">
+<span id="_CPPv34byte"></span><span id="_CPPv24byte"></span><span id="byte"></span><em class="property">type </em><code class="descname">byte</code><a class="headerlink" href="#_CPPv44byte" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">unsigned</span> <span class="pre">char</span> <span class="pre">byte;</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv43Int">
+<span id="_CPPv33Int"></span><span id="_CPPv23Int"></span><span id="Int"></span><em class="property">type </em><code class="descname">Int</code><a class="headerlink" href="#_CPPv43Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">int</span></code>, but if the experimental <code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code>
+compilation mode is enabled, it becomes a typedef to <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">int</span></code>,
+which is guaranteed to be at least 64-bit by C++11</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48Unsigned">
+<span id="_CPPv38Unsigned"></span><span id="_CPPv28Unsigned"></span><span id="Unsigned"></span><em class="property">type </em><code class="descname">Unsigned</code><a class="headerlink" href="#_CPPv48Unsigned" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">unsigned</span></code>, but if the experimental
+<code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code> compilation mode is enabled, it becomes a typedef to
+<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">unsigned</span></code>, which is guaranteed to be at least 64-bit by C++11</p>
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv411Conjugation">
+<span id="_CPPv311Conjugation"></span><span id="_CPPv211Conjugation"></span><em class="property">enum </em><code class="descname">Conjugation</code><a class="headerlink" href="#_CPPv411Conjugation" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N11Conjugation10CONJUGATEDE">
+<span id="_CPPv3N11Conjugation10CONJUGATEDE"></span><span id="_CPPv2N11Conjugation10CONJUGATEDE"></span><em class="property">enumerator </em><code class="descname">CONJUGATED</code><a class="headerlink" href="#_CPPv4N11Conjugation10CONJUGATEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11Conjugation12UNCONJUGATEDE">
+<span id="_CPPv3N11Conjugation12UNCONJUGATEDE"></span><span id="_CPPv2N11Conjugation12UNCONJUGATEDE"></span><em class="property">enumerator </em><code class="descname">UNCONJUGATED</code><a class="headerlink" href="#_CPPv4N11Conjugation12UNCONJUGATEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv44Dist">
+<span id="_CPPv34Dist"></span><span id="_CPPv24Dist"></span><em class="property">enum </em><code class="descname">Dist</code><a class="headerlink" href="#_CPPv44Dist" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For specifying the distribution of a row or column of a distributed matrix:</p>
+<dl class="enumerator">
+<dt id="_CPPv4N4Dist2MCE">
+<span id="_CPPv3N4Dist2MCE"></span><span id="_CPPv2N4Dist2MCE"></span><em class="property">enumerator </em><code class="descname">MC</code><a class="headerlink" href="#_CPPv4N4Dist2MCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column of a standard matrix distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N4Dist2MDE">
+<span id="_CPPv3N4Dist2MDE"></span><span id="_CPPv2N4Dist2MDE"></span><em class="property">enumerator </em><code class="descname">MD</code><a class="headerlink" href="#_CPPv4N4Dist2MDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Diagonal of a standard matrix distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N4Dist2MRE">
+<span id="_CPPv3N4Dist2MRE"></span><span id="_CPPv2N4Dist2MRE"></span><em class="property">enumerator </em><code class="descname">MR</code><a class="headerlink" href="#_CPPv4N4Dist2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Row of a standard matrix distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N4Dist2VCE">
+<span id="_CPPv3N4Dist2VCE"></span><span id="_CPPv2N4Dist2VCE"></span><em class="property">enumerator </em><code class="descname">VC</code><a class="headerlink" href="#_CPPv4N4Dist2VCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column-major vector distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N4Dist2VRE">
+<span id="_CPPv3N4Dist2VRE"></span><span id="_CPPv2N4Dist2VRE"></span><em class="property">enumerator </em><code class="descname">VR</code><a class="headerlink" href="#_CPPv4N4Dist2VRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Row-major vector distribution</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N4Dist4STARE">
+<span id="_CPPv3N4Dist4STARE"></span><span id="_CPPv2N4Dist4STARE"></span><em class="property">enumerator </em><code class="descname">STAR</code><a class="headerlink" href="#_CPPv4N4Dist4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Redundantly stored on every process</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N4Dist4CIRCE">
+<span id="_CPPv3N4Dist4CIRCE"></span><span id="_CPPv2N4Dist4CIRCE"></span><em class="property">enumerator </em><code class="descname">CIRC</code><a class="headerlink" href="#_CPPv4N4Dist4CIRCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Stored on a single process</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv417ForwardOrBackward">
+<span id="_CPPv317ForwardOrBackward"></span><span id="_CPPv217ForwardOrBackward"></span><em class="property">enum </em><code class="descname">ForwardOrBackward</code><a class="headerlink" href="#_CPPv417ForwardOrBackward" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N17ForwardOrBackward7FORWARDE">
+<span id="_CPPv3N17ForwardOrBackward7FORWARDE"></span><span id="_CPPv2N17ForwardOrBackward7FORWARDE"></span><em class="property">enumerator </em><code class="descname">FORWARD</code><a class="headerlink" href="#_CPPv4N17ForwardOrBackward7FORWARDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N17ForwardOrBackward8BACKWARDE">
+<span id="_CPPv3N17ForwardOrBackward8BACKWARDE"></span><span id="_CPPv2N17ForwardOrBackward8BACKWARDE"></span><em class="property">enumerator </em><code class="descname">BACKWARD</code><a class="headerlink" href="#_CPPv4N17ForwardOrBackward8BACKWARDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv49GridOrder">
+<span id="_CPPv39GridOrder"></span><span id="_CPPv29GridOrder"></span><em class="property">enum </em><code class="descname">GridOrder</code><a class="headerlink" href="#_CPPv49GridOrder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For specifying either a <code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code> or <code class="docutils literal notranslate"><span class="pre">COLUMN_MAJOR</span></code> ordering;
+it is used to decide how to construct process grids and is also useful for
+tuning one of the algorithms in <a class="reference internal" href="../../lapack_like/condense/HermitianTridiag.html#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="HermitianTridiag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianTridiag()</span></code></a>
+which requires building a smaller square process grid from a rectangular
+process grid, as the ordering of the processes can greatly impact
+performance. See <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SetHermitianTridiagGridOrder()</span></code>.</p>
+<dl class="enumerator">
+<dt id="_CPPv4N9GridOrder9ROW_MAJORE">
+<span id="_CPPv3N9GridOrder9ROW_MAJORE"></span><span id="_CPPv2N9GridOrder9ROW_MAJORE"></span><em class="property">enumerator </em><code class="descname">ROW_MAJOR</code><a class="headerlink" href="#_CPPv4N9GridOrder9ROW_MAJORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N9GridOrder12COLUMN_MAJORE">
+<span id="_CPPv3N9GridOrder12COLUMN_MAJORE"></span><span id="_CPPv2N9GridOrder12COLUMN_MAJORE"></span><em class="property">enumerator </em><code class="descname">COLUMN_MAJOR</code><a class="headerlink" href="#_CPPv4N9GridOrder12COLUMN_MAJORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv411LeftOrRight">
+<span id="_CPPv311LeftOrRight"></span><span id="_CPPv211LeftOrRight"></span><em class="property">enum </em><code class="descname">LeftOrRight</code><a class="headerlink" href="#_CPPv411LeftOrRight" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N11LeftOrRight4LEFTE">
+<span id="_CPPv3N11LeftOrRight4LEFTE"></span><span id="_CPPv2N11LeftOrRight4LEFTE"></span><em class="property">enumerator </em><code class="descname">LEFT</code><a class="headerlink" href="#_CPPv4N11LeftOrRight4LEFTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11LeftOrRight5RIGHTE">
+<span id="_CPPv3N11LeftOrRight5RIGHTE"></span><span id="_CPPv2N11LeftOrRight5RIGHTE"></span><em class="property">enumerator </em><code class="descname">RIGHT</code><a class="headerlink" href="#_CPPv4N11LeftOrRight5RIGHTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv48SortType">
+<span id="_CPPv38SortType"></span><span id="_CPPv28SortType"></span><em class="property">enum </em><code class="descname">SortType</code><a class="headerlink" href="#_CPPv48SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N8SortType8UNSORTEDE">
+<span id="_CPPv3N8SortType8UNSORTEDE"></span><span id="_CPPv2N8SortType8UNSORTEDE"></span><em class="property">enumerator </em><code class="descname">UNSORTED</code><a class="headerlink" href="#_CPPv4N8SortType8UNSORTEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Do not sort.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8SortType10DESCENDINGE">
+<span id="_CPPv3N8SortType10DESCENDINGE"></span><span id="_CPPv2N8SortType10DESCENDINGE"></span><em class="property">enumerator </em><code class="descname">DESCENDING</code><a class="headerlink" href="#_CPPv4N8SortType10DESCENDINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Smallest values first.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8SortType9ASCENDINGE">
+<span id="_CPPv3N8SortType9ASCENDINGE"></span><span id="_CPPv2N8SortType9ASCENDINGE"></span><em class="property">enumerator </em><code class="descname">ASCENDING</code><a class="headerlink" href="#_CPPv4N8SortType9ASCENDINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Largest values first.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv48NormType">
+<span id="_CPPv38NormType"></span><span id="_CPPv28NormType"></span><em class="property">enum </em><code class="descname">NormType</code><a class="headerlink" href="#_CPPv48NormType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N8NormType8ONE_NORME">
+<span id="_CPPv3N8NormType8ONE_NORME"></span><span id="_CPPv2N8NormType8ONE_NORME"></span><em class="property">enumerator </em><code class="descname">ONE_NORM</code><a class="headerlink" href="#_CPPv4N8NormType8ONE_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_1 = \max_{\|x\|_1=1} \|Ax\|_1
+        = \max_j \sum_{i=0}^{m-1} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType13INFINITY_NORME">
+<span id="_CPPv3N8NormType13INFINITY_NORME"></span><span id="_CPPv2N8NormType13INFINITY_NORME"></span><em class="property">enumerator </em><code class="descname">INFINITY_NORM</code><a class="headerlink" href="#_CPPv4N8NormType13INFINITY_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_{\infty} = \max_{\|x\|_{\infty}=1} \|Ax\|_{\infty}
+               = \max_i \sum_{j=0}^{n-1} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType18ENTRYWISE_ONE_NORME">
+<span id="_CPPv3N8NormType18ENTRYWISE_ONE_NORME"></span><span id="_CPPv2N8NormType18ENTRYWISE_ONE_NORME"></span><em class="property">enumerator </em><code class="descname">ENTRYWISE_ONE_NORM</code><a class="headerlink" href="#_CPPv4N8NormType18ENTRYWISE_ONE_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|\text{vec}(A)\|_1 = \sum_{i,j} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType8MAX_NORME">
+<span id="_CPPv3N8NormType8MAX_NORME"></span><span id="_CPPv2N8NormType8MAX_NORME"></span><em class="property">enumerator </em><code class="descname">MAX_NORM</code><a class="headerlink" href="#_CPPv4N8NormType8MAX_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_{\mbox{max}} = \max_{i,j} |\alpha_{i,j}|\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType12NUCLEAR_NORME">
+<span id="_CPPv3N8NormType12NUCLEAR_NORME"></span><span id="_CPPv2N8NormType12NUCLEAR_NORME"></span><em class="property">enumerator </em><code class="descname">NUCLEAR_NORM</code><a class="headerlink" href="#_CPPv4N8NormType12NUCLEAR_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_* = \sum_{i=0}^{\min(m,n)} \sigma_i(A)\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType14FROBENIUS_NORME">
+<span id="_CPPv3N8NormType14FROBENIUS_NORME"></span><span id="_CPPv2N8NormType14FROBENIUS_NORME"></span><em class="property">enumerator </em><code class="descname">FROBENIUS_NORM</code><a class="headerlink" href="#_CPPv4N8NormType14FROBENIUS_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_F = \sqrt{\sum_{i=0}^{m-1} \sum_{j=0}^{n-1} |\alpha_{i,j}|^2}
+        = \sum_{i=0}^{\min(m,n)} \sigma_i(A)^2\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8NormType8TWO_NORME">
+<span id="_CPPv3N8NormType8TWO_NORME"></span><span id="_CPPv2N8NormType8TWO_NORME"></span><em class="property">enumerator </em><code class="descname">TWO_NORM</code><a class="headerlink" href="#_CPPv4N8NormType8TWO_NORME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[\|A\|_2 = \max_i \sigma_i(A)\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv411Orientation">
+<span id="_CPPv311Orientation"></span><span id="_CPPv211Orientation"></span><em class="property">enum </em><code class="descname">Orientation</code><a class="headerlink" href="#_CPPv411Orientation" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N11Orientation6NORMALE">
+<span id="_CPPv3N11Orientation6NORMALE"></span><span id="_CPPv2N11Orientation6NORMALE"></span><em class="property">enumerator </em><code class="descname">NORMAL</code><a class="headerlink" href="#_CPPv4N11Orientation6NORMALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Do not transpose or conjugate</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11Orientation9TRANSPOSEE">
+<span id="_CPPv3N11Orientation9TRANSPOSEE"></span><span id="_CPPv2N11Orientation9TRANSPOSEE"></span><em class="property">enumerator </em><code class="descname">TRANSPOSE</code><a class="headerlink" href="#_CPPv4N11Orientation9TRANSPOSEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Transpose without conjugation</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N11Orientation7ADJOINTE">
+<span id="_CPPv3N11Orientation7ADJOINTE"></span><span id="_CPPv2N11Orientation7ADJOINTE"></span><em class="property">enumerator </em><code class="descname">ADJOINT</code><a class="headerlink" href="#_CPPv4N11Orientation7ADJOINTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Transpose and conjugate</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv413UnitOrNonUnit">
+<span id="_CPPv313UnitOrNonUnit"></span><span id="_CPPv213UnitOrNonUnit"></span><em class="property">enum </em><code class="descname">UnitOrNonUnit</code><a class="headerlink" href="#_CPPv413UnitOrNonUnit" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N13UnitOrNonUnit4UNITE">
+<span id="_CPPv3N13UnitOrNonUnit4UNITE"></span><span id="_CPPv2N13UnitOrNonUnit4UNITE"></span><em class="property">enumerator </em><code class="descname">UNIT</code><a class="headerlink" href="#_CPPv4N13UnitOrNonUnit4UNITE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N13UnitOrNonUnit8NON_UNITE">
+<span id="_CPPv3N13UnitOrNonUnit8NON_UNITE"></span><span id="_CPPv2N13UnitOrNonUnit8NON_UNITE"></span><em class="property">enumerator </em><code class="descname">NON_UNIT</code><a class="headerlink" href="#_CPPv4N13UnitOrNonUnit8NON_UNITE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv412UpperOrLower">
+<span id="_CPPv312UpperOrLower"></span><span id="_CPPv212UpperOrLower"></span><em class="property">enum </em><code class="descname">UpperOrLower</code><a class="headerlink" href="#_CPPv412UpperOrLower" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N12UpperOrLower5LOWERE">
+<span id="_CPPv3N12UpperOrLower5LOWERE"></span><span id="_CPPv2N12UpperOrLower5LOWERE"></span><em class="property">enumerator </em><code class="descname">LOWER</code><a class="headerlink" href="#_CPPv4N12UpperOrLower5LOWERE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12UpperOrLower5UPPERE">
+<span id="_CPPv3N12UpperOrLower5UPPERE"></span><span id="_CPPv2N12UpperOrLower5UPPERE"></span><em class="property">enumerator </em><code class="descname">UPPER</code><a class="headerlink" href="#_CPPv4N12UpperOrLower5UPPERE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="_CPPv420VerticalOrHorizontal">
+<span id="_CPPv320VerticalOrHorizontal"></span><span id="_CPPv220VerticalOrHorizontal"></span><em class="property">enum </em><code class="descname">VerticalOrHorizontal</code><a class="headerlink" href="#_CPPv420VerticalOrHorizontal" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N20VerticalOrHorizontal8VERTICALE">
+<span id="_CPPv3N20VerticalOrHorizontal8VERTICALE"></span><span id="_CPPv2N20VerticalOrHorizontal8VERTICALE"></span><em class="property">enumerator </em><code class="descname">VERTICAL</code><a class="headerlink" href="#_CPPv4N20VerticalOrHorizontal8VERTICALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N20VerticalOrHorizontal10HORIZONTALE">
+<span id="_CPPv3N20VerticalOrHorizontal10HORIZONTALE"></span><span id="_CPPv2N20VerticalOrHorizontal10HORIZONTALE"></span><em class="property">enumerator </em><code class="descname">HORIZONTAL</code><a class="headerlink" href="#_CPPv4N20VerticalOrHorizontal10HORIZONTALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The following are analogues to the above C++ definitions.</p>
+<dl class="type">
+<dt id="c.ElByte">
+<code class="descname">ElByte</code><a class="headerlink" href="#c.ElByte" title="Permalink to this definition">¶</a></dt>
+<dd><p>A typedef to <code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">char</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElInt">
+<code class="descname">ElInt</code><a class="headerlink" href="#c.ElInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">int</span></code>, but if the experimental <code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code>
+compilation mode is enabled, it becomes a typedef to <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">int</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElUnsigned">
+<code class="descname">ElUnsigned</code><a class="headerlink" href="#c.ElUnsigned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Typically a typedef to <code class="docutils literal notranslate"><span class="pre">unsigned</span></code>, but if the experimental
+<code class="docutils literal notranslate"><span class="pre">EL_USE_64BIT_INTS</span></code> compilation mode is enabled, it becomes a typedef to
+<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span> <span class="pre">unsigned</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElConjugation">
+<code class="descname">ElConjugation</code><a class="headerlink" href="#c.ElConjugation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_CONJUGATED</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_UNCONJUGATED</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElDist">
+<code class="descname">ElDist</code><a class="headerlink" href="#c.ElDist" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to one of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MC</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MD</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_STAR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_VC</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_VR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_CIRC</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElForwardOrBackward">
+<code class="descname">ElForwardOrBackward</code><a class="headerlink" href="#c.ElForwardOrBackward" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_FORWARD</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_BACKWARD</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElGridOrder">
+<code class="descname">ElGridOrder</code><a class="headerlink" href="#c.ElGridOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_ROW_MAJOR</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_COLUMN_MAJOR</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLeftOrRight">
+<code class="descname">ElLeftOrRight</code><a class="headerlink" href="#c.ElLeftOrRight" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_LEFT</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_RIGHT</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElSortType">
+<code class="descname">ElSortType</code><a class="headerlink" href="#c.ElSortType" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to <code class="docutils literal notranslate"><span class="pre">EL_UNSORTED</span></code>, <code class="docutils literal notranslate"><span class="pre">EL_ASCENDING</span></code>, or <code class="docutils literal notranslate"><span class="pre">EL_DESCENDING</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElNormType">
+<code class="descname">ElNormType</code><a class="headerlink" href="#c.ElNormType" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to one of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ONE_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_INFINITY_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_ENTRYWISE_ONE_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_MAX_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_NUCLEAR_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_FROBENIUS_NORM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_TWO_NORM</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElOrientation">
+<code class="descname">ElOrientation</code><a class="headerlink" href="#c.ElOrientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to <code class="docutils literal notranslate"><span class="pre">EL_NORMAL</span></code>, <code class="docutils literal notranslate"><span class="pre">EL_TRANSPOSE</span></code>, or <code class="docutils literal notranslate"><span class="pre">EL_ADJOINT</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElUnitOrNonUnit">
+<code class="descname">ElUnitOrNonUnit</code><a class="headerlink" href="#c.ElUnitOrNonUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_UNIT</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_NON_UNIT</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElUpperOrLower">
+<code class="descname">ElUpperOrLower</code><a class="headerlink" href="#c.ElUpperOrLower" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_UPPER</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_LOWER</span></code></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElVerticalOrHorizontal">
+<code class="descname">ElVerticalOrHorizontal</code><a class="headerlink" href="#c.ElVerticalOrHorizontal" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum equal to either <code class="docutils literal notranslate"><span class="pre">EL_VERTICAL</span></code> or <code class="docutils literal notranslate"><span class="pre">EL_HORIZONTAL</span></code></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="complex.html" class="btn btn-neutral float-right" title="Complex data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="blocksize.html" class="btn btn-neutral float-left" title="Blocksize manipulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

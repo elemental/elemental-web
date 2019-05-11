@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>GeneralDistMatrix &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DistMatrix" href="DM.html" />
+    <link rel="prev" title="AbstractDistMatrix" href="ADM.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="generaldistmatrix">
+<h1>GeneralDistMatrix<a class="headerlink" href="#generaldistmatrix" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a> class, which inherits from
+<a class="reference internal" href="ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;</span></code></a>, provides a mechanism for
+defining member functions of the <a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code></a> class which
+can be implemented in a templated way over the matrix distribution. Since
+a small number of member functions of <a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T,U,V&gt;</span></code></a> must be
+specialized for each particular distribution (choice of the pair <cite>U</cite> and <cite>V</cite>),
+a parent class is required in order to support both general and specialized
+implementations of member functions whose prototype depends upon the matrix
+distribution.</p>
+<dl class="class">
+<dt id="_CPPv4IE17GeneralDistMatrixI1T1U1VE">
+<span id="_CPPv3IE17GeneralDistMatrixI1T1U1VE"></span><span id="_CPPv2IE17GeneralDistMatrixI1T1U1VE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">GeneralDistMatrix</code>&lt;T, U, V&gt;<a class="headerlink" href="#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p class="rubric">Related row and column distributions</p>
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5UDiagE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5UDiagE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5UDiagE"></span><span id="GeneralDistMatrix:T.U.V:::UDiag__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">UDiag</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UDiagE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5VDiagE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5VDiagE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5VDiagE"></span><span id="GeneralDistMatrix:T.U.V:::VDiag__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">VDiag</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VDiagE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The column and row <a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code></a>’s of the diagonal of the
+matrix if it is stored as a column vector.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5UGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5UGathE"></span><span id="GeneralDistMatrix:T.U.V:::UGath__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">UGath</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The resulting <a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code></a> from unioning distribution <cite>U</cite> over
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::ColComm()</span></code></a>. For most matrix distributions
+this will be <code class="docutils literal notranslate"><span class="pre">STAR</span></code>, but for
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE17GeneralDistMatrixERR17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::GeneralDistMatrix"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,CIRC,CIRC&gt;</span></code></a>
+it will be <code class="docutils literal notranslate"><span class="pre">CIRC</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5VGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::VGath__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">VGath</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The resulting <a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code></a> from unioning distribution <cite>V</cite> over
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::RowComm()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5UPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5UPartE"></span><span id="GeneralDistMatrix:T.U.V:::UPart__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">UPart</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5VPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5VPartE"></span><span id="GeneralDistMatrix:T.U.V:::VPart__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">VPart</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The resulting <a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code></a> from unioning distribution <cite>U</cite> over
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionColComm()</span></code></a>, or
+<cite>V</cite> over <a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm()</span></code></a>,
+respectively.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5UScatE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5UScatE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5UScatE"></span><span id="GeneralDistMatrix:T.U.V:::UScat__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">UScat</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UScatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE5VScatE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE5VScatE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE5VScatE"></span><span id="GeneralDistMatrix:T.U.V:::VScat__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">VScat</code><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VScatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The result of scattering <a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code></a> <cite>U</cite> over
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm()</span></code></a>, or
+<cite>V</cite> over <a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionColComm()</span></code></a>,
+respectively.</p>
+</dd></dl>
+
+<p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE17GeneralDistMatrixERR17GeneralDistMatrixI1T1U1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE17GeneralDistMatrixERR17GeneralDistMatrixI1T1U1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE17GeneralDistMatrixERR17GeneralDistMatrixI1T1U1VE"></span><span id="GeneralDistMatrix:T.U.V:::GeneralDistMatrix__GeneralDistMatrix:T.U.V:RR"></span><code class="descname">GeneralDistMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE17GeneralDistMatrixERR17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::GeneralDistMatrix">GeneralDistMatrix</a>&lt;T, U, V&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE17GeneralDistMatrixERR17GeneralDistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move constructor which cheaply transfers resources from <cite>A</cite> to
+the new matrix by swapping metadata.</p>
+</dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VEaSERR17GeneralDistMatrixI1T1U1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VEaSERR17GeneralDistMatrixI1T1U1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VEaSERR17GeneralDistMatrixI1T1U1VE"></span><span id="GeneralDistMatrix:T.U.V:::assign-operator__GeneralDistMatrix:T.U.V:RR"></span><a class="reference internal" href="#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;">GeneralDistMatrix</a>&lt;T, U, V&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;">GeneralDistMatrix</a>&lt;T, U, V&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VEaSERR17GeneralDistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move assignment which cheaply transfers resources from <cite>A</cite> to
+this matrix by swapping metadata.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE9AllGatherER10DistMatrixI1T5UGath5VGathE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE9AllGatherER10DistMatrixI1T5UGath5VGathE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE9AllGatherER10DistMatrixI1T5UGath5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::AllGather__DistMatrix:T.UGath.VGath:RC"></span>void <code class="descname">AllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE9AllGatherER10DistMatrixI1T5UGath5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE12ColAllGatherER10DistMatrixI1T5UGath1VE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE12ColAllGatherER10DistMatrixI1T5UGath1VE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE12ColAllGatherER10DistMatrixI1T5UGath1VE"></span><span id="GeneralDistMatrix:T.U.V:::ColAllGather__DistMatrix:T.UGath.V:RC"></span>void <code class="descname">ColAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE12ColAllGatherER10DistMatrixI1T5UGath1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE12RowAllGatherER10DistMatrixI1T1U5VGathE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE12RowAllGatherER10DistMatrixI1T1U5VGathE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE12RowAllGatherER10DistMatrixI1T1U5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::RowAllGather__DistMatrix:T.U.VGath:RC"></span>void <code class="descname">RowAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE12RowAllGatherER10DistMatrixI1T1U5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE19PartialColAllGatherER10DistMatrixI1T5UPart1VE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE19PartialColAllGatherER10DistMatrixI1T5UPart1VE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE19PartialColAllGatherER10DistMatrixI1T5UPart1VE"></span><span id="GeneralDistMatrix:T.U.V:::PartialColAllGather__DistMatrix:T.UPart.V:RC"></span>void <code class="descname">PartialColAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE19PartialColAllGatherER10DistMatrixI1T5UPart1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE19PartialRowAllGatherER10DistMatrixI1T1U5VPartE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE19PartialRowAllGatherER10DistMatrixI1T1U5VPartE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE19PartialRowAllGatherER10DistMatrixI1T1U5VPartE"></span><span id="GeneralDistMatrix:T.U.V:::PartialRowAllGather__DistMatrix:T.U.VPart:RC"></span>void <code class="descname">PartialRowAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE19PartialRowAllGatherER10DistMatrixI1T1U5VPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Form the distributed matrix which results from unioning the local data
+over <a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv" title="AbstractDistMatrix&lt;T&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::DistComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::ColComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::RowComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionColComm()</span></code></a>, or
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm()</span></code></a>, respectively.
+Each of these is accomplished via a call to <a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi9AllGatherEPK1TiP1TiN3mpi4CommE" title="mpi::AllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">mpi::AllGather()</span></code></a>
+over the appropriate communicator.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE12ColAllGatherER10DistMatrixI1T5UGath1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::ColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColAllGather()</span></code></a> and (to a lesser degree)
+<a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE19PartialColAllGatherER10DistMatrixI1T5UPart1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::PartialColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColAllGather()</span></code></a> both
+require accessing large amounts of data with a non-uniform stride.
+They therefore do not make efficient usage of cache lines and should
+be avoided in favor of <a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE21TransposeColAllGatherER10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColAllGather()</span></code></a> and
+<a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE28TransposePartialColAllGatherER10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColAllGather()</span></code></a>, respectively.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE10FilterFromERK10DistMatrixI1T5UGath5VGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE10FilterFromERK10DistMatrixI1T5UGath5VGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE10FilterFromERK10DistMatrixI1T5UGath5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::FilterFrom__DistMatrix:T.UGath.VGath:CR"></span>void <code class="descname">FilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE10FilterFromERK10DistMatrixI1T5UGath5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE13ColFilterFromERK10DistMatrixI1T5UGath1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE13ColFilterFromERK10DistMatrixI1T5UGath1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE13ColFilterFromERK10DistMatrixI1T5UGath1VE"></span><span id="GeneralDistMatrix:T.U.V:::ColFilterFrom__DistMatrix:T.UGath.V:CR"></span>void <code class="descname">ColFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE13ColFilterFromERK10DistMatrixI1T5UGath1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE13RowFilterFromERK10DistMatrixI1T1U5VGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE13RowFilterFromERK10DistMatrixI1T1U5VGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE13RowFilterFromERK10DistMatrixI1T1U5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::RowFilterFrom__DistMatrix:T.U.VGath:CR"></span>void <code class="descname">RowFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE13RowFilterFromERK10DistMatrixI1T1U5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE20PartialColFilterFromERK10DistMatrixI1T5UPart1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE20PartialColFilterFromERK10DistMatrixI1T5UPart1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE20PartialColFilterFromERK10DistMatrixI1T5UPart1VE"></span><span id="GeneralDistMatrix:T.U.V:::PartialColFilterFrom__DistMatrix:T.UPart.V:CR"></span>void <code class="descname">PartialColFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE20PartialColFilterFromERK10DistMatrixI1T5UPart1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE20PartialRowFilterFromERK10DistMatrixI1T1U5VPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE20PartialRowFilterFromERK10DistMatrixI1T1U5VPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE20PartialRowFilterFromERK10DistMatrixI1T1U5VPartE"></span><span id="GeneralDistMatrix:T.U.V:::PartialRowFilterFrom__DistMatrix:T.U.VPart:CR"></span>void <code class="descname">PartialRowFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE20PartialRowFilterFromERK10DistMatrixI1T1U5VPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the current matrix equal to the appropriate subset of a distributed
+matrix which would have resulted from unioning our local data over a
+particular communicator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE22PartialColAllToAllFromERK10DistMatrixI1T5UPart5VScatE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE22PartialColAllToAllFromERK10DistMatrixI1T5UPart5VScatE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE22PartialColAllToAllFromERK10DistMatrixI1T5UPart5VScatE"></span><span id="GeneralDistMatrix:T.U.V:::PartialColAllToAllFrom__DistMatrix:T.UPart.VScat:CR"></span>void <code class="descname">PartialColAllToAllFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VScatE" title="GeneralDistMatrix&lt;T, U, V&gt;::VScat">VScat</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE22PartialColAllToAllFromERK10DistMatrixI1T5UPart5VScatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE22PartialRowAllToAllFromERK10DistMatrixI1T5UScat5VPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE22PartialRowAllToAllFromERK10DistMatrixI1T5UScat5VPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE22PartialRowAllToAllFromERK10DistMatrixI1T5UScat5VPartE"></span><span id="GeneralDistMatrix:T.U.V:::PartialRowAllToAllFrom__DistMatrix:T.UScat.VPart:CR"></span>void <code class="descname">PartialRowAllToAllFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UScatE" title="GeneralDistMatrix&lt;T, U, V&gt;::UScat">UScat</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE22PartialRowAllToAllFromERK10DistMatrixI1T5UScat5VPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set this matrix to the result of scattering columns (rows) and unioning
+rows (columns) of <cite>A</cite> over
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionColComm()</span></code></a>
+(<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE18PartialColAllToAllER10DistMatrixI1T5UPart5VScatE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE18PartialColAllToAllER10DistMatrixI1T5UPart5VScatE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE18PartialColAllToAllER10DistMatrixI1T5UPart5VScatE"></span><span id="GeneralDistMatrix:T.U.V:::PartialColAllToAll__DistMatrix:T.UPart.VScat:RC"></span>void <code class="descname">PartialColAllToAll</code><span class="sig-paren">(</span>DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VScatE" title="GeneralDistMatrix&lt;T, U, V&gt;::VScat">VScat</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE18PartialColAllToAllER10DistMatrixI1T5UPart5VScatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE18PartialRowAllToAllER10DistMatrixI1T5UScat5VPartE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE18PartialRowAllToAllER10DistMatrixI1T5UScat5VPartE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE18PartialRowAllToAllER10DistMatrixI1T5UScat5VPartE"></span><span id="GeneralDistMatrix:T.U.V:::PartialRowAllToAll__DistMatrix:T.UScat.VPart:RC"></span>void <code class="descname">PartialRowAllToAll</code><span class="sig-paren">(</span>DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UScatE" title="GeneralDistMatrix&lt;T, U, V&gt;::UScat">UScat</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE18PartialRowAllToAllER10DistMatrixI1T5UScat5VPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set <cite>A</cite> to the result of unioning columns (rows) and scattering
+rows (columns) of this matrix over
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionColComm()</span></code></a>
+(<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE14SumScatterFromERK10DistMatrixI1T5UGath5VGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE14SumScatterFromERK10DistMatrixI1T5UGath5VGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE14SumScatterFromERK10DistMatrixI1T5UGath5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::SumScatterFrom__DistMatrix:T.UGath.VGath:CR"></span>void <code class="descname">SumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE14SumScatterFromERK10DistMatrixI1T5UGath5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE17RowSumScatterFromERK10DistMatrixI1T1U5VGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE17RowSumScatterFromERK10DistMatrixI1T1U5VGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE17RowSumScatterFromERK10DistMatrixI1T1U5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::RowSumScatterFrom__DistMatrix:T.U.VGath:CR"></span>void <code class="descname">RowSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE17RowSumScatterFromERK10DistMatrixI1T1U5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE17ColSumScatterFromERK10DistMatrixI1T5UGath1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE17ColSumScatterFromERK10DistMatrixI1T5UGath1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE17ColSumScatterFromERK10DistMatrixI1T5UGath1VE"></span><span id="GeneralDistMatrix:T.U.V:::ColSumScatterFrom__DistMatrix:T.UGath.V:CR"></span>void <code class="descname">ColSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE17ColSumScatterFromERK10DistMatrixI1T5UGath1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE24PartialRowSumScatterFromERK10DistMatrixI1T1U5VPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE24PartialRowSumScatterFromERK10DistMatrixI1T1U5VPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE24PartialRowSumScatterFromERK10DistMatrixI1T1U5VPartE"></span><span id="GeneralDistMatrix:T.U.V:::PartialRowSumScatterFrom__DistMatrix:T.U.VPart:CR"></span>void <code class="descname">PartialRowSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE24PartialRowSumScatterFromERK10DistMatrixI1T1U5VPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE24PartialColSumScatterFromERK10DistMatrixI1T5UPart1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE24PartialColSumScatterFromERK10DistMatrixI1T5UPart1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE24PartialColSumScatterFromERK10DistMatrixI1T5UPart1VE"></span><span id="GeneralDistMatrix:T.U.V:::PartialColSumScatterFrom__DistMatrix:T.UPart.V:CR"></span>void <code class="descname">PartialColSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE24PartialColSumScatterFromERK10DistMatrixI1T5UPart1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simultaneously sum and scatter each process’s local matrix from <cite>A</cite> over
+the <a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv" title="AbstractDistMatrix&lt;T&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::DistComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::RowComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::ColComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE14PartialRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialRowComm()</span></code></a>, or
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE14PartialColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialColComm()</span></code></a> communicator,
+respectively, and set the current matrix equal to the result.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE17ColSumScatterFromERK10DistMatrixI1T5UGath1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::ColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColSumScatterFrom()</span></code></a> and (to a lesser degree)
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE24PartialColSumScatterFromERK10DistMatrixI1T5UPart1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::PartialColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColSumScatterFrom()</span></code></a> both require accessing large
+amounts of data with a non-uniform stride. They therefore do not make
+efficient usage of cache lines and should be avoided in favor of
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26TransposeColSumScatterFromERK10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColSumScatterFrom()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE33TransposePartialColSumScatterFromERK10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColSumScatterFrom()</span></code></a>, respectively.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE16SumScatterUpdateE1TRK10DistMatrixI1T5UGath5VGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE16SumScatterUpdateE1TRK10DistMatrixI1T5UGath5VGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE16SumScatterUpdateE1TRK10DistMatrixI1T5UGath5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::SumScatterUpdate__T.DistMatrix:T.UGath.VGath:CR"></span>void <code class="descname">SumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE16SumScatterUpdateE1TRK10DistMatrixI1T5UGath5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE19RowSumScatterUpdateE1TRK10DistMatrixI1T1U5VGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE19RowSumScatterUpdateE1TRK10DistMatrixI1T1U5VGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE19RowSumScatterUpdateE1TRK10DistMatrixI1T1U5VGathE"></span><span id="GeneralDistMatrix:T.U.V:::RowSumScatterUpdate__T.DistMatrix:T.U.VGath:CR"></span>void <code class="descname">RowSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE19RowSumScatterUpdateE1TRK10DistMatrixI1T1U5VGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE19ColSumScatterUpdateE1TRK10DistMatrixI1T5UGath1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE19ColSumScatterUpdateE1TRK10DistMatrixI1T5UGath1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE19ColSumScatterUpdateE1TRK10DistMatrixI1T5UGath1VE"></span><span id="GeneralDistMatrix:T.U.V:::ColSumScatterUpdate__T.DistMatrix:T.UGath.V:CR"></span>void <code class="descname">ColSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE19ColSumScatterUpdateE1TRK10DistMatrixI1T5UGath1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE26PartialRowSumScatterUpdateE1TRK10DistMatrixI1T1U5VPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE26PartialRowSumScatterUpdateE1TRK10DistMatrixI1T1U5VPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE26PartialRowSumScatterUpdateE1TRK10DistMatrixI1T1U5VPartE"></span><span id="GeneralDistMatrix:T.U.V:::PartialRowSumScatterUpdate__T.DistMatrix:T.U.VPart:CR"></span>void <code class="descname">PartialRowSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, U, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26PartialRowSumScatterUpdateE1TRK10DistMatrixI1T1U5VPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE26PartialColSumScatterUpdateE1TRK10DistMatrixI1T5UPart1VE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE26PartialColSumScatterUpdateE1TRK10DistMatrixI1T5UPart1VE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE26PartialColSumScatterUpdateE1TRK10DistMatrixI1T5UPart1VE"></span><span id="GeneralDistMatrix:T.U.V:::PartialColSumScatterUpdate__T.DistMatrix:T.UPart.V:CR"></span>void <code class="descname">PartialColSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26PartialColSumScatterUpdateE1TRK10DistMatrixI1T5UPart1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simultaneously sum and scatter each process’s local matrix from <cite>A</cite> over
+the <a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv" title="AbstractDistMatrix&lt;T&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::DistComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::RowComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::ColComm()</span></code></a>,
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE14PartialRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialRowComm()</span></code></a>, or
+<a class="reference internal" href="ADM.html#_CPPv4NK18AbstractDistMatrixI1TE14PartialColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::PartialColComm()</span></code></a> communicator,
+respectively, and add <cite>alpha</cite> times the result to the current matrix.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE19ColSumScatterUpdateE1TRK10DistMatrixI1T5UGath1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::ColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColSumScatterUpdate()</span></code></a> and (to a lesser degree)
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26PartialColSumScatterUpdateE1TRK10DistMatrixI1T5UPart1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::PartialColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColSumScatterUpdate()</span></code></a> both require accessing large
+amounts of data with a non-uniform stride. They therefore do not make
+efficient usage of cache lines and should be avoided in favor of
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE28TransposeColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColSumScatterUpdate()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE35TransposePartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColSumScatterUpdate()</span></code></a>, respectively.</p>
+</div>
+</dd></dl>
+
+<p class="rubric">Transpose redistributions</p>
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE21TransposeColAllGatherER10DistMatrixI1T1V5UGathEb">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE21TransposeColAllGatherER10DistMatrixI1T1V5UGathEb"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE21TransposeColAllGatherER10DistMatrixI1T1V5UGathEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposeColAllGather__DistMatrix:T.V.UGath:R.bC"></span>void <code class="descname">TransposeColAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE21TransposeColAllGatherER10DistMatrixI1T1V5UGathEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE28TransposePartialColAllGatherER10DistMatrixI1T1V5UPartEb">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE28TransposePartialColAllGatherER10DistMatrixI1T1V5UPartEb"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE28TransposePartialColAllGatherER10DistMatrixI1T1V5UPartEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposePartialColAllGather__DistMatrix:T.V.UPart:R.bC"></span>void <code class="descname">TransposePartialColAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE28TransposePartialColAllGatherER10DistMatrixI1T1V5UPartEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Since <a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE12ColAllGatherER10DistMatrixI1T5UGath1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::ColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColAllGather()</span></code></a> and <a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE19PartialColAllGatherER10DistMatrixI1T5UPart1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::PartialColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColAllGather()</span></code></a> make
+poor usage of cache lines due to filling up columns of the result in an
+interleaved manner, forming the transposed result, by transposing the
+data before calling <a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi9AllGatherEPK1TiP1TiN3mpi4CommE" title="mpi::AllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">mpi::AllGather()</span></code></a>, allows for the expensive
+unpacking step to copy entire contiguous rows of the input at a time.
+The optional <cite>conjugate</cite> parameter determines whether or not the result
+should be conjugated in addition to transposed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE19AdjointColAllGatherER10DistMatrixI1T1V5UGathE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE19AdjointColAllGatherER10DistMatrixI1T1V5UGathE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE19AdjointColAllGatherER10DistMatrixI1T1V5UGathE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointColAllGather__DistMatrix:T.V.UGath:RC"></span>void <code class="descname">AdjointColAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE19AdjointColAllGatherER10DistMatrixI1T1V5UGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK17GeneralDistMatrixI1T1U1VE26AdjointPartialColAllGatherER10DistMatrixI1T1V5UPartE">
+<span id="_CPPv3NK17GeneralDistMatrixI1T1U1VE26AdjointPartialColAllGatherER10DistMatrixI1T1V5UPartE"></span><span id="_CPPv2NK17GeneralDistMatrixI1T1U1VE26AdjointPartialColAllGatherER10DistMatrixI1T1V5UPartE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointPartialColAllGather__DistMatrix:T.V.UPart:RC"></span>void <code class="descname">AdjointPartialColAllGather</code><span class="sig-paren">(</span>DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE26AdjointPartialColAllGatherER10DistMatrixI1T1V5UPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These routines correspond to <a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE21TransposeColAllGatherER10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColAllGather()</span></code></a> and
+<a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE28TransposePartialColAllGatherER10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColAllGather()</span></code></a> with conjugation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE22TransposeColFilterFromERK10DistMatrixI1T1V5UGathEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE22TransposeColFilterFromERK10DistMatrixI1T1V5UGathEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE22TransposeColFilterFromERK10DistMatrixI1T1V5UGathEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposeColFilterFrom__DistMatrix:T.V.UGath:CR.b"></span>void <code class="descname">TransposeColFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE22TransposeColFilterFromERK10DistMatrixI1T1V5UGathEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE22TransposeRowFilterFromERK10DistMatrixI1T5VGath1UEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE22TransposeRowFilterFromERK10DistMatrixI1T5VGath1UEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE22TransposeRowFilterFromERK10DistMatrixI1T5VGath1UEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposeRowFilterFrom__DistMatrix:T.VGath.U:CR.b"></span>void <code class="descname">TransposeRowFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>, U&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE22TransposeRowFilterFromERK10DistMatrixI1T5VGath1UEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE29TransposePartialColFilterFromERK10DistMatrixI1T1V5UPartEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE29TransposePartialColFilterFromERK10DistMatrixI1T1V5UPartEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE29TransposePartialColFilterFromERK10DistMatrixI1T1V5UPartEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposePartialColFilterFrom__DistMatrix:T.V.UPart:CR.b"></span>void <code class="descname">TransposePartialColFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE29TransposePartialColFilterFromERK10DistMatrixI1T1V5UPartEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE29TransposePartialRowFilterFromERK10DistMatrixI1T5VPart1UEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE29TransposePartialRowFilterFromERK10DistMatrixI1T5VPart1UEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE29TransposePartialRowFilterFromERK10DistMatrixI1T5VPart1UEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposePartialRowFilterFrom__DistMatrix:T.VPart.U:CR.b"></span>void <code class="descname">TransposePartialRowFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>, U&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE29TransposePartialRowFilterFromERK10DistMatrixI1T5VPart1UEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>After performing computations with the results of
+<a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE21TransposeColAllGatherER10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColAllGather()</span></code></a> or
+<a class="reference internal" href="#_CPPv4NK17GeneralDistMatrixI1T1U1VE28TransposePartialColAllGatherER10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColAllGather"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColAllGather()</span></code></a>, it is frequently necessary to
+form a subset of the transposed result.
+The result can be optionally conjugated.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE20AdjointColFilterFromERK10DistMatrixI1T1V5UGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE20AdjointColFilterFromERK10DistMatrixI1T1V5UGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE20AdjointColFilterFromERK10DistMatrixI1T1V5UGathE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointColFilterFrom__DistMatrix:T.V.UGath:CR"></span>void <code class="descname">AdjointColFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE20AdjointColFilterFromERK10DistMatrixI1T1V5UGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE20AdjointRowFilterFromERK10DistMatrixI1T5VGath1UE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE20AdjointRowFilterFromERK10DistMatrixI1T5VGath1UE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE20AdjointRowFilterFromERK10DistMatrixI1T5VGath1UE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointRowFilterFrom__DistMatrix:T.VGath.U:CR"></span>void <code class="descname">AdjointRowFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::VGath">VGath</a>, U&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE20AdjointRowFilterFromERK10DistMatrixI1T5VGath1UE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE27AdjointPartialColFilterFromERK10DistMatrixI1T1V5UPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE27AdjointPartialColFilterFromERK10DistMatrixI1T1V5UPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE27AdjointPartialColFilterFromERK10DistMatrixI1T1V5UPartE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointPartialColFilterFrom__DistMatrix:T.V.UPart:CR"></span>void <code class="descname">AdjointPartialColFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE27AdjointPartialColFilterFromERK10DistMatrixI1T1V5UPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE27AdjointPartialRowFilterFromERK10DistMatrixI1T5VPart1UE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE27AdjointPartialRowFilterFromERK10DistMatrixI1T5VPart1UE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE27AdjointPartialRowFilterFromERK10DistMatrixI1T5VPart1UE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointPartialRowFilterFrom__DistMatrix:T.VPart.U:CR"></span>void <code class="descname">AdjointPartialRowFilterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5VPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::VPart">VPart</a>, U&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE27AdjointPartialRowFilterFromERK10DistMatrixI1T5VPart1UE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These routines correspond to the conjugated versions of
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE22TransposeColFilterFromERK10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColFilterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColFilterFrom()</span></code></a>, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE22TransposeRowFilterFromERK10DistMatrixI1T5VGath1UEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeRowFilterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeRowFilterFrom()</span></code></a>,
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE29TransposePartialColFilterFromERK10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColFilterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColFilterFrom()</span></code></a>, and
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE29TransposePartialRowFilterFromERK10DistMatrixI1T5VPart1UEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialRowFilterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialRowFilterFrom()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE26TransposeColSumScatterFromERK10DistMatrixI1T1V5UGathEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE26TransposeColSumScatterFromERK10DistMatrixI1T1V5UGathEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE26TransposeColSumScatterFromERK10DistMatrixI1T1V5UGathEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposeColSumScatterFrom__DistMatrix:T.V.UGath:CR.b"></span>void <code class="descname">TransposeColSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26TransposeColSumScatterFromERK10DistMatrixI1T1V5UGathEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE33TransposePartialColSumScatterFromERK10DistMatrixI1T1V5UPartEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE33TransposePartialColSumScatterFromERK10DistMatrixI1T1V5UPartEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE33TransposePartialColSumScatterFromERK10DistMatrixI1T1V5UPartEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposePartialColSumScatterFrom__DistMatrix:T.V.UPart:CR.b"></span>void <code class="descname">TransposePartialColSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE33TransposePartialColSumScatterFromERK10DistMatrixI1T1V5UPartEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Since <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE17ColSumScatterFromERK10DistMatrixI1T5UGath1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::ColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColSumScatterFrom()</span></code></a> and
+(to a lesser degree) <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE24PartialColSumScatterFromERK10DistMatrixI1T5UPart1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::PartialColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColSumScatterFrom()</span></code></a> involve
+accessing large amounts of data with a non-uniform stride, these routines
+work with the (conjugate-)transposed input in order to form the result in
+a more efficient manner which primarily moved contiguous chunks of data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE24AdjointColSumScatterFromERK10DistMatrixI1T1V5UGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE24AdjointColSumScatterFromERK10DistMatrixI1T1V5UGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE24AdjointColSumScatterFromERK10DistMatrixI1T1V5UGathE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointColSumScatterFrom__DistMatrix:T.V.UGath:CR"></span>void <code class="descname">AdjointColSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE24AdjointColSumScatterFromERK10DistMatrixI1T1V5UGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE31AdjointPartialColSumScatterFromERK10DistMatrixI1T1V5UPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE31AdjointPartialColSumScatterFromERK10DistMatrixI1T1V5UPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE31AdjointPartialColSumScatterFromERK10DistMatrixI1T1V5UPartE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointPartialColSumScatterFrom__DistMatrix:T.V.UPart:CR"></span>void <code class="descname">AdjointPartialColSumScatterFrom</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE31AdjointPartialColSumScatterFromERK10DistMatrixI1T1V5UPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These routines are the conjugated versions of
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26TransposeColSumScatterFromERK10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColSumScatterFrom()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE33TransposePartialColSumScatterFromERK10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColSumScatterFrom"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColSumScatterFrom()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE28TransposeColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE28TransposeColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE28TransposeColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposeColSumScatterUpdate__T.DistMatrix:T.V.UGath:CR.b"></span>void <code class="descname">TransposeColSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE28TransposeColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE35TransposePartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartEb">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE35TransposePartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartEb"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE35TransposePartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartEb"></span><span id="GeneralDistMatrix:T.U.V:::TransposePartialColSumScatterUpdate__T.DistMatrix:T.V.UPart:CR.b"></span>void <code class="descname">TransposePartialColSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE35TransposePartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Since <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE19ColSumScatterUpdateE1TRK10DistMatrixI1T5UGath1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::ColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColSumScatterUpdate()</span></code></a> and
+(to a lesser degree) <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26PartialColSumScatterUpdateE1TRK10DistMatrixI1T5UPart1VE" title="GeneralDistMatrix&lt;T, U, V&gt;::PartialColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColSumScatterUpdate()</span></code></a> involve
+accessing large amounts of data with a non-uniform stride, these routines
+work with the (conjugate-)transposed input in order to form the result in
+a more efficient manner which primarily moved contiguous chunks of data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE26AdjointColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE26AdjointColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE26AdjointColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointColSumScatterUpdate__T.DistMatrix:T.V.UGath:CR"></span>void <code class="descname">AdjointColSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UGathE" title="GeneralDistMatrix&lt;T, U, V&gt;::UGath">UGath</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE26AdjointColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N17GeneralDistMatrixI1T1U1VE33AdjointPartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartE">
+<span id="_CPPv3N17GeneralDistMatrixI1T1U1VE33AdjointPartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartE"></span><span id="_CPPv2N17GeneralDistMatrixI1T1U1VE33AdjointPartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartE"></span><span id="GeneralDistMatrix:T.U.V:::AdjointPartialColSumScatterUpdate__T.DistMatrix:T.V.UPart:CR"></span>void <code class="descname">AdjointPartialColSumScatterUpdate</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;T, V, <a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE5UPartE" title="GeneralDistMatrix&lt;T, U, V&gt;::UPart">UPart</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE33AdjointPartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These routines are the conjugated versions of
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE28TransposeColSumScatterUpdateE1TRK10DistMatrixI1T1V5UGathEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposeColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposeColSumScatterUpdate()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N17GeneralDistMatrixI1T1U1VE35TransposePartialColSumScatterUpdateE1TRK10DistMatrixI1T1V5UPartEb" title="GeneralDistMatrix&lt;T, U, V&gt;::TransposePartialColSumScatterUpdate"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">TransposePartialColSumScatterUpdate()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

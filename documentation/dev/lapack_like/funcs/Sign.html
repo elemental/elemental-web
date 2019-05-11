@@ -1,0 +1,614 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sign &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Matrix properties" href="../props.html" />
+    <link rel="prev" title="Square root" href="SquareRoot.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../funcs.html">Matrix functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Inverse.html">Direct inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hermitian.html">Hermitian functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pseudoinverse.html">Pseudoinverse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SquareRoot.html">Square root</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Sign</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#general">General</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hermitian">Hermitian</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../funcs.html">Matrix functions</a> &raquo;</li>
+        
+      <li>Sign</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/funcs/Sign.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sign">
+<h1>Sign<a class="headerlink" href="#sign" title="Permalink to this headline">¶</a></h1>
+<p>The matrix sign function can be written as</p>
+<div class="math notranslate nohighlight">
+\[\text{sgn}(A) = A(A^2)^{-1/2},\]</div>
+<p>as long as <span class="math notranslate nohighlight">\(A\)</span> does not have any pure-imaginary eigenvalues.</p>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p>The current implementation for <span class="math notranslate nohighlight">\(n \times n\)</span> matrices makes use of a
+globally-convergent Newton iteration with several scaling options.
+Each iteration takes the form</p>
+<div class="math notranslate nohighlight">
+\[X_{k+1} := \frac{1}{2} ( \mu_k X_k + \mu_k^{-1} X_k^{-1} ),\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu_k\)</span> is the scaling factor computed from <span class="math notranslate nohighlight">\(X_k\)</span>.
+Convergence is determined to occur when</p>
+<div class="math notranslate nohighlight">
+\[\| X_{k+1} - X_k \|_1 \le \| X_{k+1} \|_1^{q+1} \text{tol},\]</div>
+<p>where the exponent <span class="math notranslate nohighlight">\(q\)</span> is typically one, and the relative tolerance,
+<cite>tol</cite>, defaults to <span class="math notranslate nohighlight">\(n \epsilon\)</span>, where <span class="math notranslate nohighlight">\(\epsilon\)</span> is the machine
+precision. Please see Nicholas J. Higham and Awad H. Al-Mohy’s
+<em>Computing Matrix Functions</em> for more details.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv44SignR6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv34SignR6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv24SignR6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sign__Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SignR18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv34SignR18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv24SignR18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sign__AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(\text{sgn}(A)\)</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SignR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv34SignR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv24SignR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sign__Matrix:F:R.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>N</em>, <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SignR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv34SignR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv24SignR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sign__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>N</em>, <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SignR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the polar decomposition <span class="math notranslate nohighlight">\(A = S N\)</span>, where
+<span class="math notranslate nohighlight">\(S=\text{sgn}(A)\)</span>, overwriting <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(S\)</span> on exit</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv411SignScaling">
+<span id="_CPPv311SignScaling"></span><span id="_CPPv211SignScaling"></span><span id="SignScaling"></span><em class="property">type </em><code class="descname">SignScaling</code><a class="headerlink" href="#_CPPv411SignScaling" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum which can be set to one of</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SIGN_SCALE_NONE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIGN_SCALE_DET</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIGN_SCALE_FROB</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE8SignCtrlI4RealE">
+<span id="_CPPv3IE8SignCtrlI4RealE"></span><span id="_CPPv2IE8SignCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SignCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE8SignCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8SignCtrlI4RealE6maxItsE">
+<span id="_CPPv3N8SignCtrlI4RealE6maxItsE"></span><span id="_CPPv2N8SignCtrlI4RealE6maxItsE"></span><span id="SignCtrl:Real:::maxIts__i"></span>int <code class="descname">maxIts</code><a class="headerlink" href="#_CPPv4N8SignCtrlI4RealE6maxItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8SignCtrlI4RealE3tolE">
+<span id="_CPPv3N8SignCtrlI4RealE3tolE"></span><span id="_CPPv2N8SignCtrlI4RealE3tolE"></span><span id="SignCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N8SignCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8SignCtrlI4RealE5powerE">
+<span id="_CPPv3N8SignCtrlI4RealE5powerE"></span><span id="_CPPv2N8SignCtrlI4RealE5powerE"></span><span id="SignCtrl:Real:::power__Real"></span>Real <code class="descname">power</code><a class="headerlink" href="#_CPPv4N8SignCtrlI4RealE5powerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8SignCtrlI4RealE7scalingE">
+<span id="_CPPv3N8SignCtrlI4RealE7scalingE"></span><span id="_CPPv2N8SignCtrlI4RealE7scalingE"></span><span id="SignCtrl:Real:::scaling__SignScaling"></span><a class="reference internal" href="#_CPPv411SignScaling" title="SignScaling">SignScaling</a> <code class="descname">scaling</code><a class="headerlink" href="#_CPPv4N8SignCtrlI4RealE7scalingE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8SignCtrlI4RealE8progressE">
+<span id="_CPPv3N8SignCtrlI4RealE8progressE"></span><span id="_CPPv2N8SignCtrlI4RealE8progressE"></span><span id="SignCtrl:Real:::progress__b"></span>bool <code class="descname">progress</code><a class="headerlink" href="#_CPPv4N8SignCtrlI4RealE8progressE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv3IE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv2IE8SignCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SignCtrl</code>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+datatype <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSign_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSign_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSign_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSign_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSign_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSign_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSign_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSign_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSign_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSign_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSign_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSign_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(\text{sgn}(A)\)</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecomp_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecomp_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecomp_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecomp_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecomp_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecomp_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecomp_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecomp_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecomp_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecomp_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecomp_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecomp_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecompDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecompDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecompDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecompDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecompDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecompDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecompDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecompDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecompDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSignDecompDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSignDecompDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSignDecompDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the polar decomposition <span class="math notranslate nohighlight">\(A = S N\)</span>, where
+<span class="math notranslate nohighlight">\(S=\text{sgn}(A)\)</span>, overwriting <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(S\)</span> on exit</p>
+</dd></dl>
+
+<p><strong>TODO: Add an expert interface</strong></p>
+<dl class="type">
+<dt id="c.ElSignCtrl_s">
+<code class="descname">ElSignCtrl_s</code><a class="headerlink" href="#c.ElSignCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElSignCtrl_s.maxIts">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxIts</code><a class="headerlink" href="#c.ElSignCtrl_s.maxIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_s.tol">
+float <code class="descname">tol</code><a class="headerlink" href="#c.ElSignCtrl_s.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_s.power">
+float <code class="descname">power</code><a class="headerlink" href="#c.ElSignCtrl_s.power" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_s.scaling">
+<a class="reference internal" href="#c.ElSignScaling" title="ElSignScaling">ElSignScaling</a> <code class="descname">scaling</code><a class="headerlink" href="#c.ElSignCtrl_s.scaling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_s.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElSignCtrl_s.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElSignCtrl_d">
+<code class="descname">ElSignCtrl_d</code><a class="headerlink" href="#c.ElSignCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElSignCtrl_d.maxIts">
+<a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a> <code class="descname">maxIts</code><a class="headerlink" href="#c.ElSignCtrl_d.maxIts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_d.tol">
+double <code class="descname">tol</code><a class="headerlink" href="#c.ElSignCtrl_d.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_d.power">
+double <code class="descname">power</code><a class="headerlink" href="#c.ElSignCtrl_d.power" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_d.scaling">
+<a class="reference internal" href="#c.ElSignScaling" title="ElSignScaling">ElSignScaling</a> <code class="descname">scaling</code><a class="headerlink" href="#c.ElSignCtrl_d.scaling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElSignCtrl_d.progress">
+bool <code class="descname">progress</code><a class="headerlink" href="#c.ElSignCtrl_d.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElSignScaling">
+<code class="descname">ElSignScaling</code><a class="headerlink" href="#c.ElSignScaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum which can be set to one of</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_SIGN_SCALE_NONE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_SIGN_SCALE_DET</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_SIGN_SCALE_FROB</span></code></p></li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="hermitian">
+<h2>Hermitian<a class="headerlink" href="#hermitian" title="Permalink to this headline">¶</a></h2>
+<p>Compute the Hermitian EVD, replace the eigenvalues with their sign, and then
+reform the matrix. Optionally return the full decomposition, <span class="math notranslate nohighlight">\(A=SN\)</span>,
+where <span class="math notranslate nohighlight">\(A\)</span> is overwritten by <span class="math notranslate nohighlight">\(S\)</span>. Note that this will also be
+a polar decomposition.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR6MatrixI1FE"></span><span id="HermitianSign__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="HermitianSign__UpperOrLower.AbstractDistMatrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(\text{sgn}(A)\)</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="HermitianSign__UpperOrLower.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv313HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv213HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="HermitianSign__UpperOrLower.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">HermitianSign</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSign12UpperOrLowerR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the polar decomposition <span class="math notranslate nohighlight">\(A = S N\)</span>, where
+<span class="math notranslate nohighlight">\(S=\text{sgn}(A)\)</span>, overwriting <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(S\)</span> on exit</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianSign_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSign_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSign_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSign_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSign_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSign_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSign_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSign_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSign_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSign_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSign_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSign_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(\text{sgn}(A)\)</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecomp_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecomp_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecomp_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecomp_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecomp_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecomp_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecomp_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecomp_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecomp_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecomp_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecomp_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecomp_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecompDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecompDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecompDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecompDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecompDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecompDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecompDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecompDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecompDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSignDecompDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSignDecompDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> N</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSignDecompDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the polar decomposition <span class="math notranslate nohighlight">\(A = S N\)</span>, where
+<span class="math notranslate nohighlight">\(S=\text{sgn}(A)\)</span>, overwriting <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(S\)</span> on exit</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../props.html" class="btn btn-neutral float-right" title="Matrix properties" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="SquareRoot.html" class="btn btn-neutral float-left" title="Square root" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

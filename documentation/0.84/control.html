@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Control theory &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Special matrices" href="matrices.html" />
+    <link rel="prev" title="Convex optimization" href="convex.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="control-theory">
+<h1>Control theory<a class="headerlink" href="#control-theory" title="Permalink to this headline">¶</a></h1>
+<p>The following algorithms draw heavily from the second chapter of
+Nicholas J. Higham’s “Functions of Matrices: Theory and Computation” and depend
+heavily on the matrix sign function. They have only undergone cursory testing.</p>
+<div class="section" id="sylvester">
+<h2>Sylvester<a class="headerlink" href="#sylvester" title="Permalink to this headline">¶</a></h2>
+<p>As long as both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> only have eigenvalues in the open
+right-half plane, the following routines solve for <span class="math notranslate nohighlight">\(X\)</span> in the <em>Sylvester
+equation</em></p>
+<div class="math notranslate nohighlight">
+\[A X + X B = C\]</div>
+<p>via computing <span class="math notranslate nohighlight">\(\text{sgn}(W)\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}W = \begin{pmatrix} A &amp; -C \\ 0 &amp; -B \end{pmatrix}.\end{split}\]</div>
+<dl class="function">
+<dt id="_CPPv49SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49SylvesterRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesterRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesterRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__DistMatrix:F:CR.DistMatrix:F:CR.DistMatrix:F:CR.DistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesterRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>One may also directly pass in <span class="math notranslate nohighlight">\(W\)</span> in order to save space.</p>
+<dl class="function">
+<dt id="_CPPv49SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__i.Matrix:F:R.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span>int <em>m</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49SylvesteriR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesteriR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesteriR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__i.DistMatrix:F:R.DistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span>int <em>m</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesteriR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="lyapunov">
+<h2>Lyapunov<a class="headerlink" href="#lyapunov" title="Permalink to this headline">¶</a></h2>
+<p>A special case of the Sylvester solver, where <span class="math notranslate nohighlight">\(B = A^H\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv48LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv38LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv28LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Lyapunov__Matrix:F:CR.Matrix:F:CR.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Lyapunov</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48LyapunovRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv38LyapunovRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv28LyapunovRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Lyapunov__DistMatrix:F:CR.DistMatrix:F:CR.DistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Lyapunov</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48LyapunovRK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="algebraic-ricatti">
+<h2>Algebraic Ricatti<a class="headerlink" href="#algebraic-ricatti" title="Permalink to this headline">¶</a></h2>
+<p>Under suitable conditions, the following routines solve for <span class="math notranslate nohighlight">\(X\)</span> in the
+<em>algebraic Ricatti equation</em></p>
+<div class="math notranslate nohighlight">
+\[X K X - A^H X - X A = L,\]</div>
+<p>where both <span class="math notranslate nohighlight">\(K\)</span> and <span class="math notranslate nohighlight">\(L\)</span> are Hermitian.</p>
+<dl class="function">
+<dt id="_CPPv47Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__UpperOrLower.Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>K</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>L</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Ricatti12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37Ricatti12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27Ricatti12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__UpperOrLower.DistMatrix:F:CR.DistMatrix:F:CR.DistMatrix:F:CR.DistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>K</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>L</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Ricatti12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FERK10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Alternatively, one may directly fill the matrix <span class="math notranslate nohighlight">\(W\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv47RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__Matrix:F:R.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47RicattiR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37RicattiR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27RicattiR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__DistMatrix:F:R.DistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack-like/funcs.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RicattiR10DistMatrixI1FER10DistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

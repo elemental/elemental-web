@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Affine Second-Order Cone Programs &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Models" href="../../models.html" />
+    <link rel="prev" title="Direct Second-Order Cone Programs" href="direct.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../solvers.html">Solvers</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../LP.html">Linear Programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../QP.html">Quadratic Programs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../SOCP.html">Second-Order Cone Programs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="direct.html">Direct Second-Order Cone Programs</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Affine Second-Order Cone Programs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prox.html">Proximal maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../../solvers.html">Solvers</a> &raquo;</li>
+        
+          <li><a href="../SOCP.html">Second-Order Cone Programs</a> &raquo;</li>
+        
+      <li>Affine Second-Order Cone Programs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/optimization/solvers/SOCP/affine.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="affine-second-order-cone-programs">
+<h1>Affine Second-Order Cone Programs<a class="headerlink" href="#affine-second-order-cone-programs" title="Permalink to this headline">¶</a></h1>
+<div class="math notranslate nohighlight">
+\[\begin{split}\min_{x,s} &amp; \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h\;\wedge\; s \in \mathcal{K} \;\}, \\
+\max_{y,z} &amp; \{\; - b^T y - h^T z \; | \; A^T y + G^T z + c = 0 \;\wedge\; z \in \mathcal{K} \;\}\end{split}\]</div>
+<p>In order to represent that product of second-order cones, the following routines
+accept two integer vectors which are of the same length as <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(z\)</span>:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">orders</span></code>: The size of the subcone containing each entry of <span class="math notranslate nohighlight">\(s\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">firstInds</span></code>: The first index (counting from zero) of the subcone containing each entry of <span class="math notranslate nohighlight">\(s\)</span></p></li>
+</ol>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SOCPAffine">
+<code class="descname">SOCPAffine</code><span class="sig-paren">(</span><em>A</em>, <em>G</em>, <em>b</em>, <em>c</em>, <em>h</em>, <em>orders</em>, <em>firstInds</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>s</em><span class="optional">[</span>, <em>ctrl=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SOCPAffine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv44SOCPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE">
+<span id="_CPPv34SOCPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="_CPPv24SOCPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="SOCP__Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Int:CR.Matrix:Int:CR.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.socp::affine::Ctrl:Real:CR"></span>void <code class="descname">SOCP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>h</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>y</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> socp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SOCPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SOCPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN4socp6affine4CtrlI4RealEE">
+<span id="_CPPv34SOCPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="_CPPv24SOCPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="SOCP__ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Int:CR.ElementalMatrix:Int:CR.ElementalMatrix:Real:R.ElementalMatrix:Real:R.ElementalMatrix:Real:R.ElementalMatrix:Real:R.socp::affine::Ctrl:Real:CR"></span>void <code class="descname">SOCP</code><span class="sig-paren">(</span><em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>h</em>, <em class="property">const</em> ElementalMatrix&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> ElementalMatrix&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, ElementalMatrix&lt;Real&gt; &amp;<em>x</em>, ElementalMatrix&lt;Real&gt; &amp;<em>y</em>, ElementalMatrix&lt;Real&gt; &amp;<em>z</em>, ElementalMatrix&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> socp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SOCPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI3IntERK15ElementalMatrixI3IntER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN4socp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SOCPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE">
+<span id="_CPPv34SOCPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="_CPPv24SOCPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="SOCP__SparseMatrix:Real:CR.SparseMatrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.Matrix:Int:CR.Matrix:Int:CR.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.socp::affine::Ctrl:Real:CR"></span>void <code class="descname">SOCP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI4RealE" title="SparseMatrix&lt;Real&gt;">SparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI4RealE" title="SparseMatrix&lt;Real&gt;">SparseMatrix</a>&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>h</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI3IntE" title="Matrix&lt;Int&gt;">Matrix</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>y</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> socp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SOCPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealERK6MatrixI3IntERK6MatrixI3IntER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN4socp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44SOCPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI3IntERK12DistMultiVecI3IntER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN4socp6affine4CtrlI4RealEE">
+<span id="_CPPv34SOCPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI3IntERK12DistMultiVecI3IntER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="_CPPv24SOCPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI3IntERK12DistMultiVecI3IntER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN4socp6affine4CtrlI4RealEE"></span><span id="SOCP__DistSparseMatrix:Real:CR.DistSparseMatrix:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Int:CR.DistMultiVec:Int:CR.DistMultiVec:Real:R.DistMultiVec:Real:R.DistMultiVec:Real:R.DistMultiVec:Real:R.socp::affine::Ctrl:Real:CR"></span>void <code class="descname">SOCP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI4RealE" title="DistSparseMatrix&lt;Real&gt;">DistSparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI4RealE" title="DistSparseMatrix&lt;Real&gt;">DistSparseMatrix</a>&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>h</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI3IntE" title="DistMultiVec&lt;Int&gt;">DistMultiVec</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>orders</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI3IntE" title="DistMultiVec&lt;Int&gt;">DistMultiVec</a>&lt;<a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a>&gt; &amp;<em>firstInds</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>y</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> socp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = socp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44SOCPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI3IntERK12DistMultiVecI3IntER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN4socp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSOCPAffine_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffine_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffine_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_s<em> b</em>, ElConstDistMatrix_s<em> c</em>, ElConstDistMatrix_s<em> h</em>, ElConstDistMatrix_i<em> orders</em>, ElConstDistMatrix_i<em> firstInds</em>, ElDistMatrix_s<em> x</em>, ElDistMatrix_s<em> y</em>, ElDistMatrix_s<em> z</em>, ElDistMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstSparseMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineDistSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_s<em> b</em>, ElConstDistMultiVec_s<em> c</em>, ElConstDistMultiVec_s<em> h</em>, ElConstDistMultiVec_i<em> orders</em>, ElConstDistMultiVec_i<em> firstInds</em>, ElDistMultiVec_s<em> x</em>, ElDistMultiVec_s<em> y</em>, ElDistMultiVec_s<em> z</em>, ElDistMultiVec_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSOCPAffine_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffine_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffine_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_d<em> b</em>, ElConstDistMatrix_d<em> c</em>, ElConstDistMatrix_d<em> h</em>, ElConstDistMatrix_i<em> orders</em>, ElConstDistMatrix_i<em> firstInds</em>, ElDistMatrix_d<em> x</em>, ElDistMatrix_d<em> y</em>, ElDistMatrix_d<em> z</em>, ElDistMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstSparseMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineDistSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_d<em> b</em>, ElConstDistMultiVec_d<em> c</em>, ElConstDistMultiVec_d<em> h</em>, ElConstDistMultiVec_i<em> orders</em>, ElConstDistMultiVec_i<em> firstInds</em>, ElDistMultiVec_d<em> x</em>, ElDistMultiVec_d<em> y</em>, ElDistMultiVec_d<em> z</em>, ElDistMultiVec_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="expert-interfaces">
+<h4>Expert interfaces<a class="headerlink" href="#expert-interfaces" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Single-precision<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSOCPAffineX_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineX_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em>, ElSOCPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineXDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineXDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_s<em> b</em>, ElConstDistMatrix_s<em> c</em>, ElConstDistMatrix_s<em> h</em>, ElConstDistMatrix_i<em> orders</em>, ElConstDistMatrix_i<em> firstInds</em>, ElDistMatrix_s<em> x</em>, ElDistMatrix_s<em> y</em>, ElDistMatrix_s<em> z</em>, ElDistMatrix_s<em> s</em>, ElSOCPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineXSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineXSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstSparseMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em>, ElSOCPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineXSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineXDistSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineXDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_s<em> b</em>, ElConstDistMultiVec_s<em> c</em>, ElConstDistMultiVec_s<em> h</em>, ElConstDistMultiVec_i<em> orders</em>, ElConstDistMultiVec_i<em> firstInds</em>, ElDistMultiVec_s<em> x</em>, ElDistMultiVec_s<em> y</em>, ElDistMultiVec_s<em> z</em>, ElDistMultiVec_s<em> s</em>, ElSOCPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineXDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>Double-precision<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSOCPAffineX_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineX_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em>, ElSOCPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineXDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineXDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_d<em> b</em>, ElConstDistMatrix_d<em> c</em>, ElConstDistMatrix_d<em> h</em>, ElConstDistMatrix_i<em> orders</em>, ElConstDistMatrix_i<em> firstInds</em>, ElDistMatrix_d<em> x</em>, ElDistMatrix_d<em> y</em>, ElDistMatrix_d<em> z</em>, ElDistMatrix_d<em> s</em>, ElSOCPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineXSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineXSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstSparseMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElConstMatrix_i<em> orders</em>, ElConstMatrix_i<em> firstInds</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em>, ElSOCPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineXSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSOCPAffineXDistSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSOCPAffineXDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_d<em> b</em>, ElConstDistMultiVec_d<em> c</em>, ElConstDistMultiVec_d<em> h</em>, ElConstDistMultiVec_i<em> orders</em>, ElConstDistMultiVec_i<em> firstInds</em>, ElDistMultiVec_d<em> x</em>, ElDistMultiVec_d<em> y</em>, ElDistMultiVec_d<em> z</em>, ElDistMultiVec_d<em> s</em>, ElSOCPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSOCPAffineXDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="direct.html" class="btn btn-neutral float-left" title="Direct Second-Order Cone Programs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

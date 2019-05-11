@@ -1,0 +1,614 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>LU factorization &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LQ factorization" href="LQ.html" />
+    <link rel="prev" title="LDL factorization" href="LDL.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="lu-factorization">
+<h1>LU factorization<a class="headerlink" href="#lu-factorization" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LU.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/LU">Subroutines</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LU.cpp">Test driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/GaussianElimination.cpp">Example driver</a></p>
+<div class="section" id="partial-pivoting">
+<h2>Partial pivoting<a class="headerlink" href="#partial-pivoting" title="Permalink to this headline">¶</a></h2>
+<p>Since LU factorization without pivoting is known to be unstable for general
+matrices, it is standard practice to pivot the rows of <span class="math notranslate nohighlight">\(A\)</span> during the
+factorization (this is called partial pivoting since the columns are not also
+pivoted). An LU factorization with partial pivoting therefore computes
+<span class="math notranslate nohighlight">\(P\)</span>, <span class="math notranslate nohighlight">\(L\)</span>, and <span class="math notranslate nohighlight">\(U\)</span> such that <span class="math notranslate nohighlight">\(PA=LU\)</span>, where <span class="math notranslate nohighlight">\(L\)</span>
+and <span class="math notranslate nohighlight">\(U\)</span> are as described above and <span class="math notranslate nohighlight">\(P\)</span> is a permutation matrix.</p>
+<p>Overwrites the matrix <span class="math notranslate nohighlight">\(A\)</span> with the LU decomposition of
+<span class="math notranslate nohighlight">\(PA\)</span>, where <span class="math notranslate nohighlight">\(P\)</span> is represented by the permutation vector <cite>p</cite>,
+which consists of the column indices of the nonzero entry in each row of
+<span class="math notranslate nohighlight">\(P\)</span>.</p>
+<div class="section" id="factorization">
+<h3>Factorization<a class="headerlink" href="#factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="c-api">
+<h4>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv42LUR6MatrixI1FER6MatrixIiE">
+<span id="_CPPv32LUR6MatrixI1FER6MatrixIiE"></span><span id="_CPPv22LUR6MatrixI1FER6MatrixIiE"></span><span id="LU__Matrix:F:R.Matrix:i:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv32LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv22LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="LU__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h4>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLUPartialPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPiv_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUPartialPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPiv_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUPartialPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPiv_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUPartialPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPiv_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUPartialPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPivDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUPartialPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPivDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUPartialPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPivDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUPartialPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUPartialPivDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUPartialPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="solving-linear-systems-with-the-factorization">
+<h3>Solving linear systems with the factorization<a class="headerlink" href="#solving-linear-systems-with-the-factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h4>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiER6MatrixI1FE">
+<span id="_CPPv3N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiER6MatrixI1FE"></span><span id="_CPPv2N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiER6MatrixI1FE"></span><span id="lu::SolveAfter__Orientation.Matrix:F:CR.Matrix:i:CR.Matrix:F:R"></span>void <code class="descclassname">lu<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE"></span><span id="lu::SolveAfter__Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:i:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">lu<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPiv_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPiv_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPiv_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPiv_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_i<em> p</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPivDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPivDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPivDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUPartialPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUPartialPivDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUPartialPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="full-pivoting">
+<h2>Full pivoting<a class="headerlink" href="#full-pivoting" title="Permalink to this headline">¶</a></h2>
+<p>Overwrites the matrix <span class="math notranslate nohighlight">\(A\)</span> with the LU decomposition of
+<span class="math notranslate nohighlight">\(PAQ^T\)</span>, where <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> are represented by the
+permutation vectors <cite>p</cite> and <cite>q</cite>,
+which consist of the column indices of the nonzero entry in each row of
+<span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>, respectively.</p>
+<div class="section" id="id4">
+<h3>Factorization<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h4>C++ API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv42LUR6MatrixI1FER6MatrixIiER6MatrixIiE">
+<span id="_CPPv32LUR6MatrixI1FER6MatrixIiER6MatrixIiE"></span><span id="_CPPv22LUR6MatrixI1FER6MatrixIiER6MatrixIiE"></span><span id="LU__Matrix:F:R.Matrix:i:R.Matrix:i:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;int&gt; &amp;<em>p</em>, Matrix&lt;int&gt; &amp;<em>q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR6MatrixI1FER6MatrixIiER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv32LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv22LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="LU__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h4>C API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLUFullPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPiv_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUFullPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPiv_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUFullPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPiv_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUFullPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPiv_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUFullPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPivDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUFullPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPivDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUFullPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPivDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUFullPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUFullPivDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_i<em> q</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUFullPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id7">
+<h3>Solving linear systems with the factorization<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>C++ API<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiERK6MatrixIiER6MatrixI1FE">
+<span id="_CPPv3N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiERK6MatrixIiER6MatrixI1FE"></span><span id="_CPPv2N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiERK6MatrixIiER6MatrixI1FE"></span><span id="lu::SolveAfter__Orientation.Matrix:F:CR.Matrix:i:CR.Matrix:i:CR.Matrix:F:R"></span>void <code class="descclassname">lu<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>q</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lu10SolveAfterE11OrientationRK6MatrixI1FERK6MatrixIiERK6MatrixIiER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE"></span><span id="lu::SolveAfter__Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:i:CR.AbstractDistMatrix:i:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">lu<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>q</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h4>C API<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPiv_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_i<em> p</em>, ElConstMatrix_i<em> q</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPiv_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_i<em> p</em>, ElConstMatrix_i<em> q</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPiv_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_i<em> p</em>, ElConstMatrix_i<em> q</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPiv_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_i<em> p</em>, ElConstMatrix_i<em> q</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPivDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElConstDistMatrix_i<em> q</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPivDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElConstDistMatrix_i<em> q</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPivDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElConstDistMatrix_i<em> q</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUFullPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUFullPivDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_i<em> p</em>, ElConstDistMatrix_i<em> q</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUFullPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="no-pivoting">
+<h2>No pivoting<a class="headerlink" href="#no-pivoting" title="Permalink to this headline">¶</a></h2>
+<p>Given <span class="math notranslate nohighlight">\(A \in \mathbb{F}^{m \times n}\)</span>, an LU factorization
+(without pivoting) attempts to find a unit lower-trapezoidal
+<span class="math notranslate nohighlight">\(L \in \mathbb{F}^{m \times \mbox{min}(m,n)}\)</span> and upper-trapezoidal
+<span class="math notranslate nohighlight">\(U \in \mathbb{F}^{\mbox{min}(m,n) \times n}\)</span> such that <span class="math notranslate nohighlight">\(A=LU\)</span>.
+Since <span class="math notranslate nohighlight">\(L\)</span> is required to have its diaganal entries set to one: the upper
+portion of <span class="math notranslate nohighlight">\(A\)</span> can be overwritten with <cite>U</cite>, and the strictly lower
+portion of <span class="math notranslate nohighlight">\(A\)</span> can be overwritten with the strictly lower portion of
+<span class="math notranslate nohighlight">\(L\)</span>. If a numerically zero diagonal entry of <span class="math notranslate nohighlight">\(U\)</span> is created, then a
+<a class="reference internal" href="../../core/environment.html#_CPPv423SingularMatrixException" title="SingularMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">SingularMatrixException</span></code></a> will be thrown.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It might be appropriate to switch this routine to a <code class="docutils literal notranslate"><span class="pre">ZeroPivotException</span></code>,
+as it is strange to refer to non-square matrices as singular.</p>
+</div>
+<div class="section" id="id10">
+<h3>Factorization<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>The following routines overwrite <span class="math notranslate nohighlight">\(A\)</span> with its LU decomposition.</p>
+<div class="section" id="id11">
+<h4>C++ API<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv42LUR6MatrixI1FE">
+<span id="_CPPv32LUR6MatrixI1FE"></span><span id="_CPPv22LUR6MatrixI1FE"></span><span id="LU__Matrix:F:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LUR18AbstractDistMatrixI1FE">
+<span id="_CPPv32LUR18AbstractDistMatrixI1FE"></span><span id="_CPPv22LUR18AbstractDistMatrixI1FE"></span><span id="LU__AbstractDistMatrix:F:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id12">
+<h4>C API<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLU_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLU_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLU_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLU_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLU_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLU_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLU_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLU_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLU_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLU_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLU_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLU_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id13">
+<h3>Solving linear systems with the factorization<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h4>C++ API<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N2lu10SolveAfterE11OrientationRK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N2lu10SolveAfterE11OrientationRK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N2lu10SolveAfterE11OrientationRK6MatrixI1FER6MatrixI1FE"></span><span id="lu::SolveAfter__Orientation.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">lu<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lu10SolveAfterE11OrientationRK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="lu::SolveAfter__Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">lu<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lu10SolveAfterE11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id15">
+<h4>C API<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElSolveAfterLU_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLU_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLU_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLU_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLU_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLU_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLU_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLU_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLU_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLU_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLU_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLU_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLUDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLUDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLUDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="rank-one-modification-to-a-factorization">
+<h2>Rank-one modification to a factorization<a class="headerlink" href="#rank-one-modification-to-a-factorization" title="Permalink to this headline">¶</a></h2>
+<p>Modify an existing LU factorization, <span class="math notranslate nohighlight">\(A = P^T L U\)</span>, to incorporate
+the rank-one update <span class="math notranslate nohighlight">\(A + u v^T\)</span> or <span class="math notranslate nohighlight">\(A + u v^H\)</span>. This algorithm
+only requires a quadratic number of operations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The current implementation has only been tested for square matrices.</p>
+</div>
+<div class="section" id="id16">
+<h3>C++ API<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv45LUModR6MatrixI1FER6MatrixIiERK6MatrixI1FERK6MatrixI1FEb4BaseI1FE">
+<span id="_CPPv35LUModR6MatrixI1FER6MatrixIiERK6MatrixI1FERK6MatrixI1FEb4BaseI1FE"></span><span id="_CPPv25LUModR6MatrixI1FER6MatrixIiERK6MatrixI1FERK6MatrixI1FEb4BaseI1FE"></span><span id="LUMod__Matrix:F:R.Matrix:i:R.Matrix:F:CR.Matrix:F:CR.b.Base:F:"></span>void <code class="descname">LUMod</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>u</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>v</em>, bool <em>conjugate</em> = true, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em> = 0.1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45LUModR6MatrixI1FER6MatrixIiERK6MatrixI1FERK6MatrixI1FEb4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45LUModR18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb4BaseI1FE">
+<span id="_CPPv35LUModR18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb4BaseI1FE"></span><span id="_CPPv25LUModR18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb4BaseI1FE"></span><span id="LUMod__AbstractDistMatrix:F:R.AbstractDistMatrix:i:R.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.b.Base:F:"></span>void <code class="descname">LUMod</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>u</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>v</em>, bool <em>conjugate</em> = true, <a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em> = 0.1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45LUModR18AbstractDistMatrixI1FER18AbstractDistMatrixIiERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FEb4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id17">
+<h3>C API<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElLUMod_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUMod_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_i<em> p</em>, ElConstMatrix_s<em> u</em>, ElConstMatrix_s<em> v</em>, float<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUMod_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUMod_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUMod_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_i<em> p</em>, ElConstMatrix_d<em> u</em>, ElConstMatrix_d<em> v</em>, double<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUMod_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUMod_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUMod_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_i<em> p</em>, ElConstMatrix_c<em> u</em>, ElConstMatrix_c<em> v</em>, float<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUMod_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUMod_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUMod_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_i<em> p</em>, ElConstMatrix_z<em> u</em>, ElConstMatrix_z<em> v</em>, double<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUMod_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUModDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUModDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_i<em> p</em>, ElConstDistMatrix_s<em> u</em>, ElConstDistMatrix_s<em> v</em>, float<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUModDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUModDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUModDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_i<em> p</em>, ElConstDistMatrix_d<em> u</em>, ElConstDistMatrix_d<em> v</em>, double<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUModDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUModDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUModDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_i<em> p</em>, ElConstDistMatrix_c<em> u</em>, ElConstDistMatrix_c<em> v</em>, float<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUModDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLUModDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLUModDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_i<em> p</em>, ElConstDistMatrix_z<em> u</em>, ElConstDistMatrix_z<em> v</em>, double<em> tau</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLUModDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

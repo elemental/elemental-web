@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Gaussian &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Haar" href="Haar.html" />
+    <link rel="prev" title="Bernoulli" href="Bernoulli.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../matrices.html">Special matrices</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../deterministic.html">Deterministic</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../random.html">Random</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Bernoulli.html">Bernoulli</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Gaussian</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Haar.html">Haar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HatanoNelson.html">Hatano-Nelson</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianUniformSpectrum.html">Hermitian uniform spectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NormalUniformSpectrum.html">Normal uniform spectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Rademacher.html">Rademacher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ThreeValued.html">Three-valued</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Uniform.html">Uniform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UniformHelmholtzGreens.html">Uniform Helmholtz Green’s</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Wigner.html">Wigner</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../matrices.html">Special matrices</a> &raquo;</li>
+        
+          <li><a href="../random.html">Random</a> &raquo;</li>
+        
+      <li>Gaussian</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/matrices/random/Gaussian.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gaussian">
+<h1>Gaussian<a class="headerlink" href="#gaussian" title="Permalink to this headline">¶</a></h1>
+<p>An <span class="math notranslate nohighlight">\(m \times n\)</span> matrix is Gaussian if each entry is independently drawn
+from a normal distribution.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv48GaussianR6MatrixI1TE3Int3Int1T4BaseI1TE">
+<span id="_CPPv38GaussianR6MatrixI1TE3Int3Int1T4BaseI1TE"></span><span id="_CPPv28GaussianR6MatrixI1TE3Int3Int1T4BaseI1TE"></span><span id="Gaussian__Matrix:T:R.Int.Int.T.Base:T:"></span>void <code class="descname">Gaussian</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em>, T <em>mean</em> = 0, Base&lt;T&gt; <em>stddev</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48GaussianR6MatrixI1TE3Int3Int1T4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48GaussianR18AbstractDistMatrixI1TE3Int3Int1T4BaseI1TE">
+<span id="_CPPv38GaussianR18AbstractDistMatrixI1TE3Int3Int1T4BaseI1TE"></span><span id="_CPPv28GaussianR18AbstractDistMatrixI1TE3Int3Int1T4BaseI1TE"></span><span id="Gaussian__AbstractDistMatrix:T:R.Int.Int.T.Base:T:"></span>void <code class="descname">Gaussian</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em>, T <em>mean</em> = 0, Base&lt;T&gt; <em>stddev</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48GaussianR18AbstractDistMatrixI1TE3Int3Int1T4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> to an <span class="math notranslate nohighlight">\(m \times n\)</span> Gaussian matrix with the
+specified mean and standard deviation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412MakeGaussianR6MatrixI1TE1T4BaseI1TE">
+<span id="_CPPv312MakeGaussianR6MatrixI1TE1T4BaseI1TE"></span><span id="_CPPv212MakeGaussianR6MatrixI1TE1T4BaseI1TE"></span><span id="MakeGaussian__Matrix:T:R.T.Base:T:"></span>void <code class="descname">MakeGaussian</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, T <em>mean</em> = 0, Base&lt;T&gt; <em>stddev</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412MakeGaussianR6MatrixI1TE1T4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412MakeGaussianR18AbstractDistMatrixI1TE1T4BaseI1TE">
+<span id="_CPPv312MakeGaussianR18AbstractDistMatrixI1TE1T4BaseI1TE"></span><span id="_CPPv212MakeGaussianR18AbstractDistMatrixI1TE1T4BaseI1TE"></span><span id="MakeGaussian__AbstractDistMatrix:T:R.T.Base:T:"></span>void <code class="descname">MakeGaussian</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, T <em>mean</em> = 0, Base&lt;T&gt; <em>stddev</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412MakeGaussianR18AbstractDistMatrixI1TE1T4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Changes each entry to an independent sample from the specified normal
+distribution.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElGaussian_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussian_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, float<em> mean</em>, float<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussian_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGaussian_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussian_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, double<em> mean</em>, double<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussian_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGaussian_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussian_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> mean</em>, float<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussian_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGaussian_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussian_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> mean</em>, double<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussian_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGaussianDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussianDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, float<em> mean</em>, float<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussianDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGaussianDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussianDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, double<em> mean</em>, double<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussianDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGaussianDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussianDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> mean</em>, float<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussianDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGaussianDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGaussianDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> n</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> mean</em>, double<em> stddev</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGaussianDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Gaussian">
+<code class="descname">Gaussian</code><span class="sig-paren">(</span><em>A</em>, <em>m</em>, <em>n</em>, <em>mean=0</em>, <em>stddev=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Gaussian" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Haar.html" class="btn btn-neutral float-right" title="Haar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Bernoulli.html" class="btn btn-neutral float-left" title="Bernoulli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

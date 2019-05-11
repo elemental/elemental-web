@@ -1,0 +1,400 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Up a diagonal &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="BLAS-like linear algebra" href="../../../blas_like.html" />
+    <link rel="prev" title="Down a diagonal" href="DownDiag.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../flame_part.html">FLAME-like partition tracking</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../Partition.html">Partitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Repartition.html">Repartitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Merge.html">Merging submatrices</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../SlidePartition.html">Moving partition boundaries</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Down.html">Downward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Up.html">Upward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Right.html">Rightward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Left.html">Leftward</a></li>
+<li class="toctree-l4"><a class="reference internal" href="DownDiag.html">Down a diagonal</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Up a diagonal</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../../flame_part.html">FLAME-like partition tracking</a> &raquo;</li>
+        
+          <li><a href="../SlidePartition.html">Moving partition boundaries</a> &raquo;</li>
+        
+      <li>Up a diagonal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/core/flame_part/SlidePartition/UpDiag.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="up-a-diagonal">
+<h1>Up a diagonal<a class="headerlink" href="#up-a-diagonal" title="Permalink to this headline">¶</a></h1>
+<p>Simultaneously slide and merge the partition</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{cc|c} A_{00} &amp; A_{01} &amp; A_{02} \\
+                              A_{10} &amp; A_{11} &amp; A_{12} \\
+                              \hline
+                              A_{20} &amp; A_{21} &amp; A_{22} \end{array}\right)\end{split}\]</div>
+<p>into</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(\begin{array}{c|c} A_{TL} &amp; A_{TR} \\
+                         \hline
+                         A_{BL} &amp; A_{BR} \end{array}\right) =
+\left(\begin{array}{c|cc} A_{00} &amp; A_{01} &amp; A_{02} \\
+                          \hline
+                          A_{10} &amp; A_{11} &amp; A_{12} \\
+                          A_{20} &amp; A_{21} &amp; A_{22} \end{array}\right).\end{split}\]</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv424SlidePartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv324SlidePartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv224SlidePartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="SlidePartitionUpDiagonal__Matrix:T:R.Matrix:T:R.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:R.Matrix:T:R.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR"></span>void <code class="descname">SlidePartitionUpDiagonal</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>ATL</em>, Matrix&lt;T&gt; &amp;<em>ATR</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A00</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A01</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A02</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A10</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A11</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A12</em>, Matrix&lt;T&gt; &amp;<em>ABL</em>, Matrix&lt;T&gt; &amp;<em>ABR</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A20</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A21</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A22</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424SlidePartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv430SlideLockedPartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv330SlideLockedPartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv230SlideLockedPartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="SlideLockedPartitionUpDiagonal__Matrix:T:R.Matrix:T:R.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:R.Matrix:T:R.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR"></span>void <code class="descname">SlideLockedPartitionUpDiagonal</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>ATL</em>, Matrix&lt;T&gt; &amp;<em>ATR</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A00</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A01</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A02</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A10</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A11</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A12</em>, Matrix&lt;T&gt; &amp;<em>ABL</em>, Matrix&lt;T&gt; &amp;<em>ABR</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A20</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A21</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A22</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430SlideLockedPartitionUpDiagonalR6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TER6MatrixI1TER6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv424SlidePartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE">
+<span id="_CPPv324SlidePartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="_CPPv224SlidePartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="SlidePartitionUpDiagonal__AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR"></span>void <code class="descname">SlidePartitionUpDiagonal</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>ATL</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>ATR</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A00</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A01</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A02</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A10</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A11</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A12</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>ABL</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>ABR</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A20</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A21</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A22</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424SlidePartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv430SlideLockedPartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE">
+<span id="_CPPv330SlideLockedPartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="_CPPv230SlideLockedPartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="SlideLockedPartitionUpDiagonal__AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR"></span>void <code class="descname">SlideLockedPartitionUpDiagonal</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>ATL</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>ATR</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A00</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A01</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A02</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A10</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A11</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A12</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>ABL</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>ABR</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A20</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A21</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A22</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430SlideLockedPartitionUpDiagonalR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Note that the above routines are meant to be used as:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">SlidePartitionUpDiagonal</span><span class="p">(</span> <span class="n">ATL</span><span class="p">,</span> <span class="cm">/**/</span> <span class="n">ATR</span><span class="p">,</span>  <span class="n">A00</span><span class="p">,</span> <span class="cm">/**/</span> <span class="n">A01</span><span class="p">,</span> <span class="n">A02</span><span class="p">,</span>
+                         <span class="cm">/*************/</span> <span class="cm">/******************/</span>
+                               <span class="cm">/**/</span>       <span class="n">A10</span><span class="p">,</span> <span class="cm">/**/</span> <span class="n">A11</span><span class="p">,</span> <span class="n">A12</span><span class="p">,</span>
+                          <span class="n">ABL</span><span class="p">,</span> <span class="cm">/**/</span> <span class="n">ABR</span><span class="p">,</span>  <span class="n">A20</span><span class="p">,</span> <span class="cm">/**/</span> <span class="n">A21</span><span class="p">,</span> <span class="n">A22</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonal_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonal_i</code><span class="sig-paren">(</span>ElMatrix_i<em> ATL</em>, ElMatrix_i<em> ATR</em>, ElMatrix_i<em> A00</em>, ElMatrix_i<em> A01</em>, ElMatrix_i<em> A02</em>, ElMatrix_i<em> A10</em>, ElMatrix_i<em> A11</em>, ElMatrix_i<em> A12</em>, ElMatrix_i<em> ABL</em>, ElMatrix_i<em> ABR</em>, ElMatrix_i<em> A20</em>, ElMatrix_i<em> A21</em>, ElMatrix_i<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonal_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonal_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonal_s</code><span class="sig-paren">(</span>ElMatrix_s<em> ATL</em>, ElMatrix_s<em> ATR</em>, ElMatrix_s<em> A00</em>, ElMatrix_s<em> A01</em>, ElMatrix_s<em> A02</em>, ElMatrix_s<em> A10</em>, ElMatrix_s<em> A11</em>, ElMatrix_s<em> A12</em>, ElMatrix_s<em> ABL</em>, ElMatrix_s<em> ABR</em>, ElMatrix_s<em> A20</em>, ElMatrix_s<em> A21</em>, ElMatrix_s<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonal_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonal_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonal_d</code><span class="sig-paren">(</span>ElMatrix_d<em> ATL</em>, ElMatrix_d<em> ATR</em>, ElMatrix_d<em> A00</em>, ElMatrix_d<em> A01</em>, ElMatrix_d<em> A02</em>, ElMatrix_d<em> A10</em>, ElMatrix_d<em> A11</em>, ElMatrix_d<em> A12</em>, ElMatrix_d<em> ABL</em>, ElMatrix_d<em> ABR</em>, ElMatrix_d<em> A20</em>, ElMatrix_d<em> A21</em>, ElMatrix_d<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonal_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonal_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonal_c</code><span class="sig-paren">(</span>ElMatrix_c<em> ATL</em>, ElMatrix_c<em> ATR</em>, ElMatrix_c<em> A00</em>, ElMatrix_c<em> A01</em>, ElMatrix_c<em> A02</em>, ElMatrix_c<em> A10</em>, ElMatrix_c<em> A11</em>, ElMatrix_c<em> A12</em>, ElMatrix_c<em> ABL</em>, ElMatrix_c<em> ABR</em>, ElMatrix_c<em> A20</em>, ElMatrix_c<em> A21</em>, ElMatrix_c<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonal_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonal_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonal_z</code><span class="sig-paren">(</span>ElMatrix_z<em> ATL</em>, ElMatrix_z<em> ATR</em>, ElMatrix_z<em> A00</em>, ElMatrix_z<em> A01</em>, ElMatrix_z<em> A02</em>, ElMatrix_z<em> A10</em>, ElMatrix_z<em> A11</em>, ElMatrix_z<em> A12</em>, ElMatrix_z<em> ABL</em>, ElMatrix_z<em> ABR</em>, ElMatrix_z<em> A20</em>, ElMatrix_z<em> A21</em>, ElMatrix_z<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonal_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonalDist_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonalDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> ATL</em>, ElDistMatrix_i<em> ATR</em>, ElDistMatrix_i<em> A00</em>, ElDistMatrix_i<em> A01</em>, ElDistMatrix_i<em> A02</em>, ElDistMatrix_i<em> A10</em>, ElDistMatrix_i<em> A11</em>, ElDistMatrix_i<em> A12</em>, ElDistMatrix_i<em> ABL</em>, ElDistMatrix_i<em> ABR</em>, ElDistMatrix_i<em> A20</em>, ElDistMatrix_i<em> A21</em>, ElDistMatrix_i<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonalDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonalDist_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonalDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> ATL</em>, ElDistMatrix_s<em> ATR</em>, ElDistMatrix_s<em> A00</em>, ElDistMatrix_s<em> A01</em>, ElDistMatrix_s<em> A02</em>, ElDistMatrix_s<em> A10</em>, ElDistMatrix_s<em> A11</em>, ElDistMatrix_s<em> A12</em>, ElDistMatrix_s<em> ABL</em>, ElDistMatrix_s<em> ABR</em>, ElDistMatrix_s<em> A20</em>, ElDistMatrix_s<em> A21</em>, ElDistMatrix_s<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonalDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonalDist_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonalDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> ATL</em>, ElDistMatrix_d<em> ATR</em>, ElDistMatrix_d<em> A00</em>, ElDistMatrix_d<em> A01</em>, ElDistMatrix_d<em> A02</em>, ElDistMatrix_d<em> A10</em>, ElDistMatrix_d<em> A11</em>, ElDistMatrix_d<em> A12</em>, ElDistMatrix_d<em> ABL</em>, ElDistMatrix_d<em> ABR</em>, ElDistMatrix_d<em> A20</em>, ElDistMatrix_d<em> A21</em>, ElDistMatrix_d<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonalDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonalDist_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonalDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> ATL</em>, ElDistMatrix_c<em> ATR</em>, ElDistMatrix_c<em> A00</em>, ElDistMatrix_c<em> A01</em>, ElDistMatrix_c<em> A02</em>, ElDistMatrix_c<em> A10</em>, ElDistMatrix_c<em> A11</em>, ElDistMatrix_c<em> A12</em>, ElDistMatrix_c<em> ABL</em>, ElDistMatrix_c<em> ABR</em>, ElDistMatrix_c<em> A20</em>, ElDistMatrix_c<em> A21</em>, ElDistMatrix_c<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonalDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlidePartitionUpDiagonalDist_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlidePartitionUpDiagonalDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> ATL</em>, ElDistMatrix_z<em> ATR</em>, ElDistMatrix_z<em> A00</em>, ElDistMatrix_z<em> A01</em>, ElDistMatrix_z<em> A02</em>, ElDistMatrix_z<em> A10</em>, ElDistMatrix_z<em> A11</em>, ElDistMatrix_z<em> A12</em>, ElDistMatrix_z<em> ABL</em>, ElDistMatrix_z<em> ABR</em>, ElDistMatrix_z<em> A20</em>, ElDistMatrix_z<em> A21</em>, ElDistMatrix_z<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlidePartitionUpDiagonalDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonal_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonal_i</code><span class="sig-paren">(</span>ElMatrix_i<em> ATL</em>, ElMatrix_i<em> ATR</em>, ElConstMatrix_i<em> A00</em>, ElConstMatrix_i<em> A01</em>, ElConstMatrix_i<em> A02</em>, ElConstMatrix_i<em> A10</em>, ElConstMatrix_i<em> A11</em>, ElConstMatrix_i<em> A12</em>, ElMatrix_i<em> ABL</em>, ElMatrix_i<em> ABR</em>, ElConstMatrix_i<em> A20</em>, ElConstMatrix_i<em> A21</em>, ElConstMatrix_i<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonal_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonal_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonal_s</code><span class="sig-paren">(</span>ElMatrix_s<em> ATL</em>, ElMatrix_s<em> ATR</em>, ElConstMatrix_s<em> A00</em>, ElConstMatrix_s<em> A01</em>, ElConstMatrix_s<em> A02</em>, ElConstMatrix_s<em> A10</em>, ElConstMatrix_s<em> A11</em>, ElConstMatrix_s<em> A12</em>, ElMatrix_s<em> ABL</em>, ElMatrix_s<em> ABR</em>, ElConstMatrix_s<em> A20</em>, ElConstMatrix_s<em> A21</em>, ElConstMatrix_s<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonal_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonal_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonal_d</code><span class="sig-paren">(</span>ElMatrix_d<em> ATL</em>, ElMatrix_d<em> ATR</em>, ElConstMatrix_d<em> A00</em>, ElConstMatrix_d<em> A01</em>, ElConstMatrix_d<em> A02</em>, ElConstMatrix_d<em> A10</em>, ElConstMatrix_d<em> A11</em>, ElConstMatrix_d<em> A12</em>, ElMatrix_d<em> ABL</em>, ElMatrix_d<em> ABR</em>, ElConstMatrix_d<em> A20</em>, ElConstMatrix_d<em> A21</em>, ElConstMatrix_d<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonal_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonal_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonal_c</code><span class="sig-paren">(</span>ElMatrix_c<em> ATL</em>, ElMatrix_c<em> ATR</em>, ElConstMatrix_c<em> A00</em>, ElConstMatrix_c<em> A01</em>, ElConstMatrix_c<em> A02</em>, ElConstMatrix_c<em> A10</em>, ElConstMatrix_c<em> A11</em>, ElConstMatrix_c<em> A12</em>, ElMatrix_c<em> ABL</em>, ElMatrix_c<em> ABR</em>, ElConstMatrix_c<em> A20</em>, ElConstMatrix_c<em> A21</em>, ElConstMatrix_c<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonal_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonal_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonal_z</code><span class="sig-paren">(</span>ElMatrix_z<em> ATL</em>, ElMatrix_z<em> ATR</em>, ElConstMatrix_z<em> A00</em>, ElConstMatrix_z<em> A01</em>, ElConstMatrix_z<em> A02</em>, ElConstMatrix_z<em> A10</em>, ElConstMatrix_z<em> A11</em>, ElConstMatrix_z<em> A12</em>, ElMatrix_z<em> ABL</em>, ElMatrix_z<em> ABR</em>, ElConstMatrix_z<em> A20</em>, ElConstMatrix_z<em> A21</em>, ElConstMatrix_z<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonal_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonalDist_i">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonalDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> ATL</em>, ElDistMatrix_i<em> ATR</em>, ElConstDistMatrix_i<em> A00</em>, ElConstDistMatrix_i<em> A01</em>, ElConstDistMatrix_i<em> A02</em>, ElConstDistMatrix_i<em> A10</em>, ElConstDistMatrix_i<em> A11</em>, ElConstDistMatrix_i<em> A12</em>, ElDistMatrix_i<em> ABL</em>, ElDistMatrix_i<em> ABR</em>, ElConstDistMatrix_i<em> A20</em>, ElConstDistMatrix_i<em> A21</em>, ElConstDistMatrix_i<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonalDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonalDist_s">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonalDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> ATL</em>, ElDistMatrix_s<em> ATR</em>, ElConstDistMatrix_s<em> A00</em>, ElConstDistMatrix_s<em> A01</em>, ElConstDistMatrix_s<em> A02</em>, ElConstDistMatrix_s<em> A10</em>, ElConstDistMatrix_s<em> A11</em>, ElConstDistMatrix_s<em> A12</em>, ElDistMatrix_s<em> ABL</em>, ElDistMatrix_s<em> ABR</em>, ElConstDistMatrix_s<em> A20</em>, ElConstDistMatrix_s<em> A21</em>, ElConstDistMatrix_s<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonalDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonalDist_d">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonalDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> ATL</em>, ElDistMatrix_d<em> ATR</em>, ElConstDistMatrix_d<em> A00</em>, ElConstDistMatrix_d<em> A01</em>, ElConstDistMatrix_d<em> A02</em>, ElConstDistMatrix_d<em> A10</em>, ElConstDistMatrix_d<em> A11</em>, ElConstDistMatrix_d<em> A12</em>, ElDistMatrix_d<em> ABL</em>, ElDistMatrix_d<em> ABR</em>, ElConstDistMatrix_d<em> A20</em>, ElConstDistMatrix_d<em> A21</em>, ElConstDistMatrix_d<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonalDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonalDist_c">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonalDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> ATL</em>, ElDistMatrix_c<em> ATR</em>, ElConstDistMatrix_c<em> A00</em>, ElConstDistMatrix_c<em> A01</em>, ElConstDistMatrix_c<em> A02</em>, ElConstDistMatrix_c<em> A10</em>, ElConstDistMatrix_c<em> A11</em>, ElConstDistMatrix_c<em> A12</em>, ElDistMatrix_c<em> ABL</em>, ElDistMatrix_c<em> ABR</em>, ElConstDistMatrix_c<em> A20</em>, ElConstDistMatrix_c<em> A21</em>, ElConstDistMatrix_c<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonalDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSlideLockedPartitionUpDiagonalDist_z">
+<a class="reference internal" href="../../environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSlideLockedPartitionUpDiagonalDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> ATL</em>, ElDistMatrix_z<em> ATR</em>, ElConstDistMatrix_z<em> A00</em>, ElConstDistMatrix_z<em> A01</em>, ElConstDistMatrix_z<em> A02</em>, ElConstDistMatrix_z<em> A10</em>, ElConstDistMatrix_z<em> A11</em>, ElConstDistMatrix_z<em> A12</em>, ElDistMatrix_z<em> ABL</em>, ElDistMatrix_z<em> ABR</em>, ElConstDistMatrix_z<em> A20</em>, ElConstDistMatrix_z<em> A21</em>, ElConstDistMatrix_z<em> A22</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSlideLockedPartitionUpDiagonalDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../../blas_like.html" class="btn btn-neutral float-right" title="BLAS-like linear algebra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="DownDiag.html" class="btn btn-neutral float-left" title="Down a diagonal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

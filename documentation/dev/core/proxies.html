@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Read/write proxies &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FLAME-like partition tracking" href="flame_part.html" />
+    <link rel="prev" title="View a full matrix" href="View/Full.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="imports.html">Imported library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="View.html">Viewing submatrices</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Read/write proxies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#read-proxy">Read proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-write-proxy">Read-write proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#write-proxy">Write proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-the-proxy">Configuring the proxy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../core.html">Core functionality</a> &raquo;</li>
+        
+      <li>Read/write proxies</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/core/proxies.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="read-write-proxies">
+<h1>Read/write proxies<a class="headerlink" href="#read-write-proxies" title="Permalink to this headline">¶</a></h1>
+<p>Elemental provides a number of routines which provide cheap
+(<span class="math notranslate nohighlight">\(O(1)\)</span> if possible) conversion mechanisms for allowing a matrix to be
+operated on via a particular datatype and distribution.</p>
+<div class="section" id="read-proxy">
+<h2>Read proxy<a class="headerlink" href="#read-proxy" title="Permalink to this headline">¶</a></h2>
+<p>A smart pointer to a matrix with the requested datatype and distribution,
+but filled with the (distributed) contents of the input matrix, is returned.</p>
+<dl class="function">
+<dt id="_CPPv49ReadProxyPK6MatrixI1SE">
+<span id="_CPPv39ReadProxyPK6MatrixI1SE"></span><span id="_CPPv29ReadProxyPK6MatrixI1SE"></span><span id="ReadProxy__Matrix:S:CP"></span>std::shared_ptr&lt;<em class="property">const</em> Matrix&lt;T&gt;&gt; <code class="descname">ReadProxy</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;S&gt; *<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49ReadProxyPK6MatrixI1SE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49ReadProxyPK18AbstractDistMatrixI1SERK9ProxyCtrl">
+<span id="_CPPv39ReadProxyPK18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="_CPPv29ReadProxyPK18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="ReadProxy__AbstractDistMatrix:S:CP.ProxyCtrlCR"></span>std::shared_ptr&lt;<em class="property">const</em> DistMatrix&lt;T, U, V&gt;&gt; <code class="descname">ReadProxy</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;S&gt; *<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49ReadProxyPK18AbstractDistMatrixI1SERK9ProxyCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For immutable inputs, the output is also immutable</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49ReadProxyP6MatrixI1SE">
+<span id="_CPPv39ReadProxyP6MatrixI1SE"></span><span id="_CPPv29ReadProxyP6MatrixI1SE"></span><span id="ReadProxy__Matrix:S:P"></span>std::shared_ptr&lt;Matrix&lt;T&gt;&gt; <code class="descname">ReadProxy</code><span class="sig-paren">(</span>Matrix&lt;S&gt; *<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49ReadProxyP6MatrixI1SE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49ReadProxyP18AbstractDistMatrixI1SERK9ProxyCtrl">
+<span id="_CPPv39ReadProxyP18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="_CPPv29ReadProxyP18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="ReadProxy__AbstractDistMatrix:S:P.ProxyCtrlCR"></span>std::shared_ptr&lt;DistMatrix&lt;T, U, V&gt;&gt; <code class="descname">ReadProxy</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;S&gt; *<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49ReadProxyP18AbstractDistMatrixI1SERK9ProxyCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For mutable inputs, the output is also mutable</p>
+</dd></dl>
+
+</div>
+<div class="section" id="read-write-proxy">
+<h2>Read-write proxy<a class="headerlink" href="#read-write-proxy" title="Permalink to this headline">¶</a></h2>
+<p>A smart pointer to a matrix with the requested datatype and distribution,
+but filled with the (distributed) contents of the input matrix, is returned.
+When the shared pointer goes out of scope, the (modified) matrix is copied
+back into <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv414ReadWriteProxyP6MatrixI1SE">
+<span id="_CPPv314ReadWriteProxyP6MatrixI1SE"></span><span id="_CPPv214ReadWriteProxyP6MatrixI1SE"></span><span id="ReadWriteProxy__Matrix:S:P"></span>std::shared_ptr&lt;Matrix&lt;T&gt;&gt; <code class="descname">ReadWriteProxy</code><span class="sig-paren">(</span>Matrix&lt;S&gt; *<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ReadWriteProxyP6MatrixI1SE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414ReadWriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl">
+<span id="_CPPv314ReadWriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="_CPPv214ReadWriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="ReadWriteProxy__AbstractDistMatrix:S:P.ProxyCtrlCR"></span>std::shared_ptr&lt;DistMatrix&lt;T, U, V&gt;&gt; <code class="descname">ReadWriteProxy</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;S&gt; *<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ReadWriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="write-proxy">
+<h2>Write proxy<a class="headerlink" href="#write-proxy" title="Permalink to this headline">¶</a></h2>
+<p>A smart pointer to a matrix with the requested datatype and distribution
+is returned and, when the object goes out of scope, the matrix is copied into
+<span class="math notranslate nohighlight">\(A\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv410WriteProxyP6MatrixI1SE">
+<span id="_CPPv310WriteProxyP6MatrixI1SE"></span><span id="_CPPv210WriteProxyP6MatrixI1SE"></span><span id="WriteProxy__Matrix:S:P"></span>std::shared_ptr&lt;Matrix&lt;T&gt;&gt; <code class="descname">WriteProxy</code><span class="sig-paren">(</span>Matrix&lt;S&gt; *<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410WriteProxyP6MatrixI1SE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410WriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl">
+<span id="_CPPv310WriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="_CPPv210WriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl"></span><span id="WriteProxy__AbstractDistMatrix:S:P.ProxyCtrlCR"></span>std::shared_ptr&lt;DistMatrix&lt;T, U, V&gt;&gt; <code class="descname">WriteProxy</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;S&gt; *<em>A</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a> &amp;<em>ctrl</em> = <a class="reference internal" href="#_CPPv49ProxyCtrl" title="ProxyCtrl">ProxyCtrl</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410WriteProxyP18AbstractDistMatrixI1SERK9ProxyCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="configuring-the-proxy">
+<h2>Configuring the proxy<a class="headerlink" href="#configuring-the-proxy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv49ProxyCtrl">
+<span id="_CPPv39ProxyCtrl"></span><span id="_CPPv29ProxyCtrl"></span><span id="ProxyCtrl"></span><em class="property">class </em><code class="descname">ProxyCtrl</code><a class="headerlink" href="#_CPPv49ProxyCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N9ProxyCtrl12colConstrainE">
+<span id="_CPPv3N9ProxyCtrl12colConstrainE"></span><span id="_CPPv2N9ProxyCtrl12colConstrainE"></span><span id="ProxyCtrl::colConstrain__b"></span>bool <code class="descname">colConstrain</code><a class="headerlink" href="#_CPPv4N9ProxyCtrl12colConstrainE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9ProxyCtrl12rowConstrainE">
+<span id="_CPPv3N9ProxyCtrl12rowConstrainE"></span><span id="_CPPv2N9ProxyCtrl12rowConstrainE"></span><span id="ProxyCtrl::rowConstrain__b"></span>bool <code class="descname">rowConstrain</code><a class="headerlink" href="#_CPPv4N9ProxyCtrl12rowConstrainE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9ProxyCtrl13rootConstrainE">
+<span id="_CPPv3N9ProxyCtrl13rootConstrainE"></span><span id="_CPPv2N9ProxyCtrl13rootConstrainE"></span><span id="ProxyCtrl::rootConstrain__b"></span>bool <code class="descname">rootConstrain</code><a class="headerlink" href="#_CPPv4N9ProxyCtrl13rootConstrainE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9ProxyCtrl8colAlignE">
+<span id="_CPPv3N9ProxyCtrl8colAlignE"></span><span id="_CPPv2N9ProxyCtrl8colAlignE"></span><span id="ProxyCtrl::colAlign__Int"></span><a class="reference internal" href="environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">colAlign</code><a class="headerlink" href="#_CPPv4N9ProxyCtrl8colAlignE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9ProxyCtrl8rowAlignE">
+<span id="_CPPv3N9ProxyCtrl8rowAlignE"></span><span id="_CPPv2N9ProxyCtrl8rowAlignE"></span><span id="ProxyCtrl::rowAlign__Int"></span><a class="reference internal" href="environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">rowAlign</code><a class="headerlink" href="#_CPPv4N9ProxyCtrl8rowAlignE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9ProxyCtrl4rootE">
+<span id="_CPPv3N9ProxyCtrl4rootE"></span><span id="_CPPv2N9ProxyCtrl4rootE"></span><span id="ProxyCtrl::root__Int"></span><a class="reference internal" href="environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">root</code><a class="headerlink" href="#_CPPv4N9ProxyCtrl4rootE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9ProxyCtrl9ProxyCtrlEv">
+<span id="_CPPv3N9ProxyCtrl9ProxyCtrlEv"></span><span id="_CPPv2N9ProxyCtrl9ProxyCtrlEv"></span><span id="ProxyCtrl::ProxyCtrl"></span><code class="descname">ProxyCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ProxyCtrl9ProxyCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes all booleans to false and all integers to zero.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="flame_part.html" class="btn btn-neutral float-right" title="FLAME-like partition tracking" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="View/Full.html" class="btn btn-neutral float-left" title="View a full matrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

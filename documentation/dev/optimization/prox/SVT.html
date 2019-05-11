@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Singular-value soft-thresholding &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Soft-thresholding" href="SoftThreshold.html" />
+    <link rel="prev" title="Logistic prox" href="LogisticProx.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models.html">Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../prox.html">Proximal maps</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Clip.html">Clip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="FrobeniusProx.html">Frobenius prox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HingeLossProx.html">Hinge-loss prox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LogisticProx.html">Logistic prox</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Singular-value soft-thresholding</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#standard-algorithm">Standard algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#approximate-algorithm">Approximate algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tall-skinny-algorithm">Tall-skinny algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#namespace-svt">namespace svt</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SoftThreshold.html">Soft-thresholding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../prox.html">Proximal maps</a> &raquo;</li>
+        
+      <li>Singular-value soft-thresholding</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/optimization/prox/SVT.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="singular-value-soft-thresholding">
+<h1>Singular-value soft-thresholding<a class="headerlink" href="#singular-value-soft-thresholding" title="Permalink to this headline">¶</a></h1>
+<p>Overwrites <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(U S_{\tau}(\Sigma) V^H\)</span>, where <span class="math notranslate nohighlight">\(U \Sigma V^H\)</span> is the singular-value decomposition of <span class="math notranslate nohighlight">\(A\)</span> upon input and <span class="math notranslate nohighlight">\(S_{\tau}\)</span> performs soft-thresholding with parameter <span class="math notranslate nohighlight">\(\tau\)</span>.
+The return value is the rank of the soft-thresholded matrix.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/optimization/SVT.cpp">Implementation</a></p>
+<div class="section" id="standard-algorithm">
+<h2>Standard algorithm<a class="headerlink" href="#standard-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>Runs the default SVT algorithm. In the sequential case, this is currently
+<cite>svt::Normal</cite>, and, in the parallel case, it is <cite>svt::Cross</cite>.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43SVTR6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv33SVTR6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv23SVTR6MatrixI1FE4BaseI1FEb"></span><span id="SVT__Matrix:F:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR15ElementalMatrixI1FE4BaseI1FEb">
+<span id="_CPPv33SVTR15ElementalMatrixI1FE4BaseI1FEb"></span><span id="_CPPv23SVTR15ElementalMatrixI1FE4BaseI1FEb"></span><span id="SVT__ElementalMatrix:F:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">SVT</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR15ElementalMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSVT_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVT_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, float<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVT_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVT_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVT_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, double<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVT_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVT_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVT_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, float<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVT_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVT_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVT_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, double<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVT_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVTDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVTDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, float<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVTDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVTDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVTDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, double<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVTDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVTDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVTDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, float<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVTDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSVTDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSVTDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, double<em> rho</em>, bool<em> relative</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSVTDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="approximate-algorithm">
+<h2>Approximate algorithm<a class="headerlink" href="#approximate-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>Runs a faster (for small ranks), but less accurate, algorithm given an
+upper bound on the rank of the soft-thresholded matrix.
+The current implementation preprocesses via <cite>relaxedRank</cite> steps of
+(Businger-Golub) column-pivoted QR via the routine <cite>svt::PivotedQR</cite>.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43SVTR6MatrixI1FE4BaseI1FE3Intb">
+<span id="_CPPv33SVTR6MatrixI1FE4BaseI1FE3Intb"></span><span id="_CPPv23SVTR6MatrixI1FE4BaseI1FE3Intb"></span><span id="SVT__Matrix:F:R.Base:F:.Int.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>relaxedRank</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR6MatrixI1FE4BaseI1FE3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR15ElementalMatrixI1FE4BaseI1FE3Intb">
+<span id="_CPPv33SVTR15ElementalMatrixI1FE4BaseI1FE3Intb"></span><span id="_CPPv23SVTR15ElementalMatrixI1FE4BaseI1FE3Intb"></span><span id="SVT__ElementalMatrix:F:R.Base:F:.Int.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">SVT</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>relaxedRank</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR15ElementalMatrixI1FE4BaseI1FE3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><strong>TODO</strong></p>
+</div>
+</div>
+<div class="section" id="tall-skinny-algorithm">
+<h2>Tall-skinny algorithm<a class="headerlink" href="#tall-skinny-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>Runs an SVT algorithm designed for tall-skinny matrices.
+The current implementation is based on TSQR factorization and is
+<cite>svt::TSQR</cite>.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv43SVTR10DistMatrixI1F1U4STARE4BaseI1FEb">
+<span id="_CPPv33SVTR10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="_CPPv23SVTR10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="SVT__DistMatrix:F.U.STAR:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">SVT</code><span class="sig-paren">(</span>DistMatrix&lt;F, U, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv4N4Dist4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR10DistMatrixI1F1U4STARE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p><strong>TODO</strong></p>
+</div>
+</div>
+<div class="section" id="namespace-svt">
+<h2>namespace svt<a class="headerlink" href="#namespace-svt" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N3svt6NormalER6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt6NormalER6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt6NormalER6MatrixI1FE4BaseI1FEb"></span><span id="svt::Normal__Matrix:F:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Normal</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt6NormalER6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt6NormalER15ElementalMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt6NormalER15ElementalMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt6NormalER15ElementalMatrixI1FE4BaseI1FEb"></span><span id="svt::Normal__ElementalMatrix:F:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Normal</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt6NormalER15ElementalMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a standard SVD, soft-thresholds the singular values, and then reforms
+the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt5CrossER6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt5CrossER6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt5CrossER6MatrixI1FE4BaseI1FEb"></span><span id="svt::Cross__Matrix:F:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Cross</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt5CrossER6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt5CrossER15ElementalMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt5CrossER15ElementalMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt5CrossER15ElementalMatrixI1FE4BaseI1FEb"></span><span id="svt::Cross__ElementalMatrix:F:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Cross</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt5CrossER15ElementalMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms the normal matrix, computes its Hermitian EVD, soft-thresholds the
+eigenvalues, and then reforms the matrix. Note that Elemental’s parallel
+Hermitian EVD is much faster than its parallel SVD; this is typically worth
+the loss of accuracy in the computed small (truncated) singular values and
+is therefore the default choice for parallel SVT.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt9PivotedQRER6MatrixI1FE4BaseI1FE3Intb">
+<span id="_CPPv3N3svt9PivotedQRER6MatrixI1FE4BaseI1FE3Intb"></span><span id="_CPPv2N3svt9PivotedQRER6MatrixI1FE4BaseI1FE3Intb"></span><span id="svt::PivotedQR__Matrix:F:R.Base:F:.Int.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">PivotedQR</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numStepsQR</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt9PivotedQRER6MatrixI1FE4BaseI1FE3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt9PivotedQRER15ElementalMatrixI1FE4BaseI1FE3Intb">
+<span id="_CPPv3N3svt9PivotedQRER15ElementalMatrixI1FE4BaseI1FE3Intb"></span><span id="_CPPv2N3svt9PivotedQRER15ElementalMatrixI1FE4BaseI1FE3Intb"></span><span id="svt::PivotedQR__ElementalMatrix:F:R.Base:F:.Int.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">PivotedQR</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numStepsQR</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt9PivotedQRER15ElementalMatrixI1FE4BaseI1FE3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes an approximate SVT by first approximating A as the rank-<cite>numSteps</cite>
+approximation produced by <cite>numSteps</cite> iterations of column-pivoted QR.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt4TSQRER15ElementalMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt4TSQRER15ElementalMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt4TSQRER15ElementalMatrixI1FE4BaseI1FEb"></span><span id="svt::TSQR__ElementalMatrix:F:R.Base:F:.b"></span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">TSQR</code><span class="sig-paren">(</span>ElementalMatrix&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt4TSQRER15ElementalMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Since the majority of the work in a tall-skinny SVT will be in the initial
+QR factorization, this algorithm runs a TSQR factorization and then
+computes the SVT of the small R factor using a single process.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="SoftThreshold.html" class="btn btn-neutral float-right" title="Soft-thresholding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="LogisticProx.html" class="btn btn-neutral float-left" title="Logistic prox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

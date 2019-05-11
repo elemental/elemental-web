@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>General (Gauss-Markov) Linear Model &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Equality-constrained Least Squares" href="LSE.html" />
+    <link rel="prev" title="Ridge regression" href="Ridge.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="LeastSquares.html">Least Squares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tikhonov.html">Tikhonov regularization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ridge.html">Ridge regression</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">General (Gauss-Markov) Linear Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dense-algorithm">Dense algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sparse-direct-algorithm">Sparse-direct algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="LSE.html">Equality-constrained Least Squares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../euclidean_min.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../euclidean_min.html">Euclidean minimization</a> &raquo;</li>
+        
+      <li>General (Gauss-Markov) Linear Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/euclidean_min/GLM.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="general-gauss-markov-linear-model">
+<h1>General (Gauss-Markov) Linear Model<a class="headerlink" href="#general-gauss-markov-linear-model" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/euclidean_min/GLM.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/GLM.cpp">Example driver</a></p>
+<p>The following routines implement solvers for dense and sparse-direct instances
+of the <em>General Linear Model</em>,</p>
+<div class="math notranslate nohighlight">
+\[\min_{X,Y} \| Y \|_F \;\;\; \text{subject to } A X + B Y = D.\]</div>
+<div class="section" id="dense-algorithm">
+<h2>Dense algorithm<a class="headerlink" href="#dense-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>For dense instances of the problem, where <span class="math notranslate nohighlight">\(A\)</span> is <span class="math notranslate nohighlight">\(m \times n\)</span> and
+<span class="math notranslate nohighlight">\(B\)</span> is <span class="math notranslate nohighlight">\(m \times p\)</span>, we assume that <span class="math notranslate nohighlight">\(n \le m \le n+p\)</span> as well
+as that <span class="math notranslate nohighlight">\(A\)</span> has full column rank, <span class="math notranslate nohighlight">\(n\)</span>, and
+<span class="math notranslate nohighlight">\(\begin{pmatrix} A &amp; B \end{pmatrix}\)</span> has full row rank, <span class="math notranslate nohighlight">\(m\)</span>.</p>
+<p>A Generalized QR factorization of (A,B),</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = Q R = Q \begin{pmatrix} R_{1,1} \\ 0 \end{pmatrix},\quad B = Q T Z = Q \begin{pmatrix} T_{1,1} &amp; T_{1,2} \\ 0 &amp; T_{2,2} \end{pmatrix} Z,\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(Z\)</span> are unitary and <span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(T\)</span> are
+upper-trapezoidal, allows us to re-express the constraint as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}Q^H d = \begin{pmatrix} R11 \\ 0 \end{pmatrix} x + \begin{pmatrix} T_{1,1} &amp; T_{1,2} \\ 0 &amp; T_{2,2} \end{pmatrix}  (Z y).\end{split}\]</div>
+<p>which is re-written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{pmatrix} g_1 \\ g_2 \end{pmatrix} = \begin{pmatrix} R_{1,1} x + T_{1,1} c_1 + T_{1,2} c_2 \\ T_{2,2} c_2 \end{pmatrix}.\end{split}\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\| c \|_2 = \| Z y \|_2 = \| y \|_2\)</span> is to be minimized, and
+<span class="math notranslate nohighlight">\(c_2\)</span> is fixed, our only freedom is in the choice of <span class="math notranslate nohighlight">\(c_1\)</span>, which
+we set to zero. Then all that is left is to solve</p>
+<div class="math notranslate nohighlight">
+\[R_{1,1} x = g_1 - T_{1,2} c_2\]</div>
+<p>for <span class="math notranslate nohighlight">\(x\)</span>. <em>Note that essentially the same scheme is used in LAPACK’s {S,D,C,Z}GGGLM</em>.</p>
+</div>
+<div class="section" id="sparse-direct-algorithm">
+<h2>Sparse-direct algorithm<a class="headerlink" href="#sparse-direct-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>For sparse instances of the GLM problem, the symmetric quasi-semidefinite
+augmented system</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{pmatrix} 0 &amp; A &amp; B \\ A^H &amp; 0 &amp; 0 \\ B^H &amp; 0 &amp; -\alpha I \end{pmatrix} \begin{pmatrix} Z \\ X/\alpha \\ Y/\alpha \end{pmatrix} = \begin{pmatrix} D/\alpha \\ 0 \\ 0 \end{pmatrix}\end{split}\]</div>
+<p>is formed, equilibrated, and then a priori regularization is added in order
+to make the system sufficiently quasi-definite. A Cholesky-like factorization
+of this regularized system is then used as a preconditioner for FGMRES(k).</p>
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="GLM">
+<code class="descname">GLM</code><span class="sig-paren">(</span><em>A</em>, <em>B</em>, <em>D</em><span class="optional">[</span>, <em>ctrl=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#GLM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv43GLMRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv33GLMRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv23GLMRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="GLM__Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">GLM</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GLMRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43GLMRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv33GLMRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv23GLMRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="GLM__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descname">GLM</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GLMRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43GLMRK12SparseMatrixI1FERK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv33GLMRK12SparseMatrixI1FERK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv23GLMRK12SparseMatrixI1FERK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="GLM__SparseMatrix:F:CR.SparseMatrix:F:CR.Matrix:F:CR.Matrix:F:R.Matrix:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">GLM</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Y</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GLMRK12SparseMatrixI1FERK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43GLMRK16DistSparseMatrixI1FERK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv33GLMRK16DistSparseMatrixI1FERK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv23GLMRK16DistSparseMatrixI1FERK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="GLM__DistSparseMatrix:F:CR.DistSparseMatrix:F:CR.DistMultiVec:F:CR.DistMultiVec:F:R.DistMultiVec:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">GLM</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>Y</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43GLMRK16DistSparseMatrixI1FERK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="section" id="dense-versions-which-overwrite-their-input">
+<h3>Dense versions which overwrite their input<a class="headerlink" href="#dense-versions-which-overwrite-their-input" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N3glm9OverwriteER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N3glm9OverwriteER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N3glm9OverwriteER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE"></span><span id="glm::Overwrite__Matrix:F:R.Matrix:F:R.Matrix:F:R.Matrix:F:R"></span>void <code class="descclassname">glm<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3glm9OverwriteER6MatrixI1FER6MatrixI1FER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3glm9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N3glm9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N3glm9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="glm::Overwrite__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span>void <code class="descclassname">glm<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>D</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Y</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3glm9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="standard-interface">
+<h3>Standard interface<a class="headerlink" href="#standard-interface" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="single-precision">
+<h4>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLM_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLM_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, ElConstMatrix_s<em> D</em>, ElMatrix_s<em> X</em>, ElMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLM_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> B</em>, ElConstDistMatrix_s<em> D</em>, ElDistMatrix_s<em> X</em>, ElDistMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstSparseMatrix_s<em> B</em>, ElConstMatrix_s<em> D</em>, ElMatrix_s<em> X</em>, ElMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistSparseMatrix_s<em> B</em>, ElConstDistMultiVec_s<em> D</em>, ElDistMultiVec_s<em> X</em>, ElDistMultiVec_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h4>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLM_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLM_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, ElConstMatrix_d<em> D</em>, ElMatrix_d<em> X</em>, ElMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLM_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> B</em>, ElConstDistMatrix_d<em> D</em>, ElDistMatrix_d<em> X</em>, ElDistMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstSparseMatrix_d<em> B</em>, ElConstMatrix_d<em> D</em>, ElMatrix_d<em> X</em>, ElMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistSparseMatrix_d<em> B</em>, ElConstDistMultiVec_d<em> D</em>, ElDistMultiVec_d<em> X</em>, ElDistMultiVec_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h4>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLM_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLM_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, ElConstMatrix_c<em> D</em>, ElMatrix_c<em> X</em>, ElMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLM_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> B</em>, ElConstDistMatrix_c<em> D</em>, ElDistMatrix_c<em> X</em>, ElDistMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMSparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElConstSparseMatrix_c<em> B</em>, ElConstMatrix_c<em> D</em>, ElMatrix_c<em> X</em>, ElMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElConstDistSparseMatrix_c<em> B</em>, ElConstDistMultiVec_c<em> D</em>, ElDistMultiVec_c<em> X</em>, ElDistMultiVec_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h4>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLM_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLM_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, ElConstMatrix_z<em> D</em>, ElMatrix_z<em> X</em>, ElMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLM_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> B</em>, ElConstDistMatrix_z<em> D</em>, ElDistMatrix_z<em> X</em>, ElDistMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMSparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElConstSparseMatrix_z<em> B</em>, ElConstMatrix_z<em> D</em>, ElMatrix_z<em> X</em>, ElMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElConstDistSparseMatrix_z<em> B</em>, ElConstDistMultiVec_z<em> D</em>, ElDistMultiVec_z<em> X</em>, ElDistMultiVec_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="expert-versions">
+<h3>Expert versions<a class="headerlink" href="#expert-versions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h4>Single-precision<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLMXSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstSparseMatrix_s<em> B</em>, ElConstMatrix_s<em> D</em>, ElMatrix_s<em> X</em>, ElMatrix_s<em> Y</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMXDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistSparseMatrix_s<em> B</em>, ElConstDistMultiVec_s<em> D</em>, ElDistMultiVec_s<em> X</em>, ElDistMultiVec_s<em> Y</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>Double-precision<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLMXSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstSparseMatrix_d<em> B</em>, ElConstMatrix_d<em> D</em>, ElMatrix_d<em> X</em>, ElMatrix_d<em> Y</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMXDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistSparseMatrix_d<em> B</em>, ElConstDistMultiVec_d<em> D</em>, ElDistMultiVec_d<em> X</em>, ElDistMultiVec_d<em> Y</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h4>Single-precision complex<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLMXSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXSparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElConstSparseMatrix_c<em> B</em>, ElConstMatrix_c<em> D</em>, ElMatrix_c<em> X</em>, ElMatrix_c<em> Y</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMXDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElConstDistSparseMatrix_c<em> B</em>, ElConstDistMultiVec_c<em> D</em>, ElDistMultiVec_c<em> X</em>, ElDistMultiVec_c<em> Y</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h4>Double-precision complex<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElGLMXSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXSparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElConstSparseMatrix_z<em> B</em>, ElConstMatrix_z<em> D</em>, ElMatrix_z<em> X</em>, ElMatrix_z<em> Y</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElGLMXDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElGLMXDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElConstDistSparseMatrix_z<em> B</em>, ElConstDistMultiVec_z<em> D</em>, ElDistMultiVec_z<em> X</em>, ElDistMultiVec_z<em> Y</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElGLMXDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="LSE.html" class="btn btn-neutral float-right" title="Equality-constrained Least Squares" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Ridge.html" class="btn btn-neutral float-left" title="Ridge regression" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

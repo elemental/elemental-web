@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Least absolute shrinkage and selection operator &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Linear programs" href="LinearProgram.html" />
+    <link rel="prev" title="Basis pursuit" href="BasisPursuit.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="least-absolute-shrinkage-and-selection-operator">
+<h1>Least absolute shrinkage and selection operator<a class="headerlink" href="#least-absolute-shrinkage-and-selection-operator" title="Permalink to this headline">¶</a></h1>
+<p>The <em>least absolute shrinkage and selection operator</em> (lasso) solves the
+problem</p>
+<div class="math notranslate nohighlight">
+\[\min_z \frac{1}{2} \| A z - b \|_2^2 + \lambda \| z \|_1,\]</div>
+<p>where the <span class="math notranslate nohighlight">\(\ell_1\)</span> penalty coefficient, <span class="math notranslate nohighlight">\(\lambda\)</span>, provides a
+tradeoff between sparsity and fidelity.</p>
+<p>The following routines make use of Alternating Direction Method of Multipliers
+techniques for finding approximate solutions and are inspired by a simple
+<a class="reference external" href="http://www.stanford.edu/~boyd/papers/admm/lasso/lasso.html">MATLAB script</a>
+due to Boyd et al.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv45LassoRK6MatrixI1FERK6MatrixI1FE4BaseI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb">
+<span id="_CPPv35LassoRK6MatrixI1FERK6MatrixI1FE4BaseI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb"></span><span id="_CPPv25LassoRK6MatrixI1FERK6MatrixI1FE4BaseI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb"></span><span id="Lasso__Matrix:F:CR.Matrix:F:CR.Base:F:.Matrix:F:R.Base:F:.Base:F:.Int.Base:F:.Base:F:.b.b"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Lasso</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>lambda</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>rho</em> = 1, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>alpha</em> = 1.2, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 500, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 1e-6, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 1e-4, bool <em>inv</em> = true, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45LassoRK6MatrixI1FERK6MatrixI1FE4BaseI1FER6MatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45LassoRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FE4BaseI1FER18AbstractDistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb">
+<span id="_CPPv35LassoRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FE4BaseI1FER18AbstractDistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb"></span><span id="_CPPv25LassoRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FE4BaseI1FER18AbstractDistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb"></span><span id="Lasso__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.Base:F:.AbstractDistMatrix:F:R.Base:F:.Base:F:.Int.Base:F:.Base:F:.b.b"></span><a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">Lasso</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>lambda</em>, <a class="reference internal" href="../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>rho</em> = 1, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>alpha</em> = 1.2, <a class="reference internal" href="../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>maxIter</em> = 500, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>absTol</em> = 1e-6, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 1e-4, bool <em>inv</em> = true, bool <em>progress</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45LassoRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FE4BaseI1FER18AbstractDistMatrixI1FE4BaseI1FE4BaseI1FE3Int4BaseI1FE4BaseI1FEbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p><strong>TODO: Discussion of parameters</strong></p>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElLasso_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLasso_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> b</em>, float<em> lambda</em>, ElMatrix_s<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLasso_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLasso_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLasso_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> b</em>, double<em> lambda</em>, ElMatrix_d<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLasso_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLasso_c">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLasso_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> b</em>, float<em> lambda</em>, ElMatrix_c<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLasso_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLasso_z">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLasso_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> b</em>, double<em> lambda</em>, ElMatrix_z<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLasso_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLassoDist_s">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLassoDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> b</em>, float<em> lambda</em>, ElDistMatrix_s<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLassoDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLassoDist_d">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLassoDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> b</em>, double<em> lambda</em>, ElDistMatrix_d<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLassoDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLassoDist_c">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLassoDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> b</em>, float<em> lambda</em>, ElDistMatrix_c<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLassoDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLassoDist_z">
+<a class="reference internal" href="../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLassoDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> b</em>, double<em> lambda</em>, ElDistMatrix_z<em> z</em>, <a class="reference internal" href="../core/environment.html#c.ElInt" title="ElInt">ElInt</a>*<em> numIts</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLassoDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hermitian solve &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="HPD solve" href="HPD.html" />
+    <link rel="prev" title="Symmetric solve" href="Symmetric.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../solve.html">Linear solvers</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Linear.html">Linear solve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Symmetric.html">Symmetric solve</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Hermitian solve</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="HPD.html">HPD solve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiShiftHess.html">Multi-shift Hessenberg solves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../solve.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../solve.html">Linear solvers</a> &raquo;</li>
+        
+      <li>Hermitian solve</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/solve/Hermitian.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hermitian-solve">
+<h1>Hermitian solve<a class="headerlink" href="#hermitian-solve" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/solve/Hermitian.cpp">Implementation</a></p>
+<p>Solve <span class="math notranslate nohighlight">\(AX=B\)</span>, <span class="math notranslate nohighlight">\(A^T X = B\)</span>, or <span class="math notranslate nohighlight">\(A^H X = B\)</span> for <span class="math notranslate nohighlight">\(X\)</span>
+given a Hermitian matrix <span class="math notranslate nohighlight">\(A\)</span> and a right-hand side matrix
+<span class="math notranslate nohighlight">\(B\)</span>. When <span class="math notranslate nohighlight">\(A\)</span> is dense, the default algorithm is Bunch-Kaufman,
+whereas, when <span class="math notranslate nohighlight">\(A\)</span> is sparse, the default approach embeds the problem
+in the same manner as <a class="reference internal" href="Linear.html#_CPPv411LinearSolveRK6MatrixI1FER6MatrixI1FE" title="LinearSolve"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LinearSolve()</span></code></a>, though it is possible to
+override this behaviour and attempt a sparse <span class="math notranslate nohighlight">\(LDL^H\)</span> factorization which
+only dynamically pivots within supernodes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the lower-triangular storage case (<code class="docutils literal notranslate"><span class="pre">uplo=LOWER</span></code>) is supported by
+the following routines.</p>
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="HermitianSolve">
+<code class="descname">HermitianSolve</code><span class="sig-paren">(</span><em>A</em>, <em>B</em><span class="optional">[</span>, <em>tryLDL=False</em>, <em>uplo=LOWER</em>, <em>orient=NORMAL</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#HermitianSolve" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – Dense or sparse Hermitian matrix to solve against</p></li>
+<li><p><strong>B</strong> – Right-hand sides (which will be overwritten with the solution).</p></li>
+<li><p><strong>tryLDL</strong> – (optional) if a sparse <span class="math notranslate nohighlight">\(LDL^H\)</span> factorization without pivoting should be attempted instead of embedding in a QSD system</p></li>
+<li><p><strong>uplo</strong> – (optional) which triangle the data is explicitly stored in</p></li>
+<li><p><strong>orient</strong> – (optional) whether to use <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(A^T\)</span>, or <span class="math notranslate nohighlight">\(A^H\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Type of <span class="math notranslate nohighlight">\(A\)</span></p></td>
+<td><p>Type of B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AbstractDistMatrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AbstractDistMatrix</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SparseMatrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DistSparseMatrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DistMultiVec</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv414HermitianSolve12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv314HermitianSolve12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv214HermitianSolve12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="HermitianSolve__UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descname">HermitianSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianSolve12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianSolve12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv314HermitianSolve12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv214HermitianSolve12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="HermitianSolve__UpperOrLower.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descname">HermitianSolve</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianSolve12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianSolveRK12SparseMatrixI1FER6MatrixI1FEbRK10BisectCtrl">
+<span id="_CPPv314HermitianSolveRK12SparseMatrixI1FER6MatrixI1FEbRK10BisectCtrl"></span><span id="_CPPv214HermitianSolveRK12SparseMatrixI1FER6MatrixI1FEbRK10BisectCtrl"></span><span id="HermitianSolve__SparseMatrix:F:CR.Matrix:F:R.b.BisectCtrlCR"></span>void <code class="descname">HermitianSolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>tryLDL</em> = false, <em class="property">const</em> BisectCtrl &amp;<em>ctrl</em> = BisectCtrl()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianSolveRK12SparseMatrixI1FER6MatrixI1FEbRK10BisectCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FEbRK10BisectCtrl">
+<span id="_CPPv314HermitianSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FEbRK10BisectCtrl"></span><span id="_CPPv214HermitianSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FEbRK10BisectCtrl"></span><span id="HermitianSolve__DistSparseMatrix:F:CR.DistMultiVec:F:R.b.BisectCtrlCR"></span>void <code class="descname">HermitianSolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>B</em>, bool <em>tryLDL</em> = false, <em class="property">const</em> BisectCtrl &amp;<em>ctrl</em> = BisectCtrl()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FEbRK10BisectCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="section" id="dense-versions-which-factor-in-place">
+<h3>Dense versions which factor in-place<a class="headerlink" href="#dense-versions-which-factor-in-place" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N10herm_solve9OverwriteE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv3N10herm_solve9OverwriteE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv2N10herm_solve9OverwriteE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="herm_solve::Overwrite__UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descclassname">herm_solve<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10herm_solve9OverwriteE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N10herm_solve9OverwriteE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv3N10herm_solve9OverwriteE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv2N10herm_solve9OverwriteE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="herm_solve::Overwrite__UpperOrLower.Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descclassname">herm_solve<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10herm_solve9OverwriteE12UpperOrLower11OrientationRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision-complex">
+<h3>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianSolve_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolve_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolve_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSolveDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolveDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolveDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSolveSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolveSparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, bool<em> tryLDL</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolveSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSolveDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolveDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElDistMultiVec_c<em> B</em>, bool<em> tryLDL</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolveDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h3>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHermitianSolve_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolve_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolve_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSolveDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolveDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolveDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSolveSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolveSparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, bool<em> tryLDL</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolveSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSolveDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSolveDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElDistMultiVec_z<em> B</em>, bool<em> tryLDL</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSolveDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="HPD.html" class="btn btn-neutral float-right" title="HPD solve" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Symmetric.html" class="btn btn-neutral float-left" title="Symmetric solve" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

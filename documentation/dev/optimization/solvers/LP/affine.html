@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Affine Linear Programs &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Quadratic Programs" href="../QP.html" />
+    <link rel="prev" title="Direct Linear Programs" href="direct.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../solvers.html">Solvers</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../LP.html">Linear Programs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="direct.html">Direct Linear Programs</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Affine Linear Programs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../QP.html">Quadratic Programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../SOCP.html">Second-Order Cone Programs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prox.html">Proximal maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../../solvers.html">Solvers</a> &raquo;</li>
+        
+          <li><a href="../LP.html">Linear Programs</a> &raquo;</li>
+        
+      <li>Affine Linear Programs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/optimization/solvers/LP/affine.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="affine-linear-programs">
+<h1>Affine Linear Programs<a class="headerlink" href="#affine-linear-programs" title="Permalink to this headline">¶</a></h1>
+<div class="math notranslate nohighlight">
+\[\begin{split}\min_{x,s} &amp; \{\; c^T x  \; | \; A x = b \;\wedge\; G x + s = h\;\wedge\; s \ge 0 \;\}, \\
+\max_{y,z} &amp; \{\; - b^T y - h^T z \; | \; A^T y + G^T z + c = 0 \;\wedge\; z \ge 0 \;\}\end{split}\]</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="LPAffine">
+<code class="descname">LPAffine</code><span class="sig-paren">(</span><em>A</em>, <em>G</em>, <em>b</em>, <em>c</em>, <em>h</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>s</em><span class="optional">[</span>, <em>ctrl=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#LPAffine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv42LPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32LPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22LPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="LP__Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">LP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>h</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>y</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LPRK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32LPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22LPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="LP__ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:CR.ElementalMatrix:Real:R.ElementalMatrix:Real:R.ElementalMatrix:Real:R.ElementalMatrix:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">LP</code><span class="sig-paren">(</span><em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> ElementalMatrix&lt;Real&gt; &amp;<em>h</em>, ElementalMatrix&lt;Real&gt; &amp;<em>x</em>, ElementalMatrix&lt;Real&gt; &amp;<em>y</em>, ElementalMatrix&lt;Real&gt; &amp;<em>z</em>, ElementalMatrix&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LPRK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealERK15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealER15ElementalMatrixI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32LPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22LPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="LP__SparseMatrix:Real:CR.SparseMatrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:CR.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.Matrix:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">LP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI4RealE" title="SparseMatrix&lt;Real&gt;">SparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI4RealE" title="SparseMatrix&lt;Real&gt;">SparseMatrix</a>&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>h</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>y</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LPRK12SparseMatrixI4RealERK12SparseMatrixI4RealERK6MatrixI4RealERK6MatrixI4RealERK6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealER6MatrixI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE">
+<span id="_CPPv32LPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="_CPPv22LPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE"></span><span id="LP__DistSparseMatrix:Real:CR.DistSparseMatrix:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Real:CR.DistMultiVec:Real:R.DistMultiVec:Real:R.DistMultiVec:Real:R.DistMultiVec:Real:R.lp::affine::Ctrl:Real:CR"></span>void <code class="descname">LP</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI4RealE" title="DistSparseMatrix&lt;Real&gt;">DistSparseMatrix</a>&lt;Real&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI4RealE" title="DistSparseMatrix&lt;Real&gt;">DistSparseMatrix</a>&lt;Real&gt; &amp;<em>G</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>b</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>c</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>h</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>x</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>y</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>z</em>, <a class="reference internal" href="../../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI4RealE" title="DistMultiVec&lt;Real&gt;">DistMultiVec</a>&lt;Real&gt; &amp;<em>s</em>, <em class="property">const</em> lp::affine::Ctrl&lt;Real&gt; &amp;<em>ctrl</em> = lp::affine::Ctrl&lt;Real&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LPRK16DistSparseMatrixI4RealERK16DistSparseMatrixI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealERK12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealER12DistMultiVecI4RealERKN2lp6affine4CtrlI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElLPAffine_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffine_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffine_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_s<em> b</em>, ElConstDistMatrix_s<em> c</em>, ElConstDistMatrix_s<em> h</em>, ElDistMatrix_s<em> x</em>, ElDistMatrix_s<em> y</em>, ElDistMatrix_s<em> z</em>, ElDistMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstSparseMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineDistSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_s<em> b</em>, ElConstDistMultiVec_s<em> c</em>, ElConstDistMultiVec_s<em> h</em>, ElDistMultiVec_s<em> x</em>, ElDistMultiVec_s<em> y</em>, ElDistMultiVec_s<em> z</em>, ElDistMultiVec_s<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElLPAffine_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffine_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffine_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_d<em> b</em>, ElConstDistMatrix_d<em> c</em>, ElConstDistMatrix_d<em> h</em>, ElDistMatrix_d<em> x</em>, ElDistMatrix_d<em> y</em>, ElDistMatrix_d<em> z</em>, ElDistMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstSparseMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineDistSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_d<em> b</em>, ElConstDistMultiVec_d<em> c</em>, ElConstDistMultiVec_d<em> h</em>, ElDistMultiVec_d<em> x</em>, ElDistMultiVec_d<em> y</em>, ElDistMultiVec_d<em> z</em>, ElDistMultiVec_d<em> s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="expert-interfaces">
+<h4>Expert interfaces<a class="headerlink" href="#expert-interfaces" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Single-precision<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElLPAffineX_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineX_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineX_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineXDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineXDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_s<em> b</em>, ElConstDistMatrix_s<em> c</em>, ElConstDistMatrix_s<em> h</em>, ElDistMatrix_s<em> x</em>, ElDistMatrix_s<em> y</em>, ElDistMatrix_s<em> z</em>, ElDistMatrix_s<em> s</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineXDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineXSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineXSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElConstSparseMatrix_s<em> G</em>, ElConstMatrix_s<em> b</em>, ElConstMatrix_s<em> c</em>, ElConstMatrix_s<em> h</em>, ElMatrix_s<em> x</em>, ElMatrix_s<em> y</em>, ElMatrix_s<em> z</em>, ElMatrix_s<em> s</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineXSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineXDistSparse_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineXDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_s<em> b</em>, ElConstDistMultiVec_s<em> c</em>, ElConstDistMultiVec_s<em> h</em>, ElDistMultiVec_s<em> x</em>, ElDistMultiVec_s<em> y</em>, ElDistMultiVec_s<em> z</em>, ElDistMultiVec_s<em> s</em>, ElLPAffineCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineXDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>Double-precision<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElLPAffineX_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineX_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineX_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineXDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineXDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_s<em> G</em>, ElConstDistMatrix_d<em> b</em>, ElConstDistMatrix_d<em> c</em>, ElConstDistMatrix_d<em> h</em>, ElDistMatrix_d<em> x</em>, ElDistMatrix_d<em> y</em>, ElDistMatrix_d<em> z</em>, ElDistMatrix_d<em> s</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineXDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineXSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineXSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElConstSparseMatrix_d<em> G</em>, ElConstMatrix_d<em> b</em>, ElConstMatrix_d<em> c</em>, ElConstMatrix_d<em> h</em>, ElMatrix_d<em> x</em>, ElMatrix_d<em> y</em>, ElMatrix_d<em> z</em>, ElMatrix_d<em> s</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineXSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLPAffineXDistSparse_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLPAffineXDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElConstDistSparseMatrix_s<em> G</em>, ElConstDistMultiVec_d<em> b</em>, ElConstDistMultiVec_d<em> c</em>, ElConstDistMultiVec_d<em> h</em>, ElDistMultiVec_d<em> x</em>, ElDistMultiVec_d<em> y</em>, ElDistMultiVec_d<em> z</em>, ElDistMultiVec_d<em> s</em>, ElLPAffineCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLPAffineXDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../QP.html" class="btn btn-neutral float-right" title="Quadratic Programs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="direct.html" class="btn btn-neutral float-left" title="Direct Linear Programs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

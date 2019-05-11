@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Linear solve &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Symmetric solve" href="Symmetric.html" />
+    <link rel="prev" title="Linear solvers" href="../solve.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../solve.html">Linear solvers</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Linear solve</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dense-algorithm">Dense algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sparse-direct-algorithm">Sparse-direct algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Symmetric.html">Symmetric solve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hermitian.html">Hermitian solve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HPD.html">HPD solve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiShiftHess.html">Multi-shift Hessenberg solves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../solve.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../solve.html">Linear solvers</a> &raquo;</li>
+        
+      <li>Linear solve</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/solve/Linear.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="linear-solve">
+<h1>Linear solve<a class="headerlink" href="#linear-solve" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/solve/Linear.cpp">Implementation</a></p>
+<p>Solves <span class="math notranslate nohighlight">\(AX=B\)</span> for <span class="math notranslate nohighlight">\(X\)</span> given a general square nonsingular matrix
+<span class="math notranslate nohighlight">\(A\)</span> and right-hand side matrix <span class="math notranslate nohighlight">\(B\)</span>. In all cases, on exit, the
+following routines overwrite <span class="math notranslate nohighlight">\(B\)</span> with <span class="math notranslate nohighlight">\(\text{inv}(A) B\)</span>.</p>
+<div class="section" id="dense-algorithm">
+<h2>Dense algorithm<a class="headerlink" href="#dense-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>For dense matrices, the solution is computed through Gaussian elimination with
+partial pivoting.</p>
+</div>
+<div class="section" id="sparse-direct-algorithm">
+<h2>Sparse-direct algorithm<a class="headerlink" href="#sparse-direct-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>For sparse matrices, the original problem is embedded into the augmented system</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{pmatrix} \alpha I &amp; A \\ A^H &amp; 0 \end{pmatrix} \begin{pmatrix} R/\alpha \\ X \end{pmatrix} = \begin{pmatrix} B \\ 0 \end{pmatrix},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha \approx \sigma_{\text{min}}(A)\)</span> is known to be near-optimal
+with respect to minimizing the condition number of the augmented system.
+A priori regularization is added to the linear system, a sparse-direct
+Cholesky-like factorization is performed, and the factorization is used as
+a preconditioner for Flexible GMRES.</p>
+<p>It is worth noting that this is a special case of <a class="reference internal" href="../euclidean_min/LeastSquares.html#_CPPv412LeastSquares11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="LeastSquares"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LeastSquares()</span></code></a>,
+and that, unlike cases where <span class="math notranslate nohighlight">\(A\)</span> is not invertible, it is possible for
+<a class="reference internal" href="#_CPPv411LinearSolveRK6MatrixI1FER6MatrixI1FE" title="LinearSolve"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LinearSolve()</span></code></a> to choose <span class="math notranslate nohighlight">\(\alpha=0\)</span>.</p>
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="LinearSolve">
+<code class="descname">LinearSolve</code><span class="sig-paren">(</span><em>A</em>, <em>B</em><span class="optional">[</span>, <em>ctrl=None</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#LinearSolve" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – Dense or sparse matrix to solve against</p></li>
+<li><p><strong>B</strong> – Right-hand sides (which will be overwritten with the solution).</p></li>
+<li><p><strong>ctrl</strong> – (optional) sparse-direct Least Squares control structure</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Type of <span class="math notranslate nohighlight">\(A\)</span></p></td>
+<td><p>Type of B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AbstractDistMatrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AbstractDistMatrix</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SparseMatrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DistSparseMatrix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DistMultiVec</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv411LinearSolveRK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv311LinearSolveRK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv211LinearSolveRK6MatrixI1FER6MatrixI1FE"></span><span id="LinearSolve__Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">LinearSolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411LinearSolveRK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411LinearSolveRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv311LinearSolveRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv211LinearSolveRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="LinearSolve__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descname">LinearSolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411LinearSolveRK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411LinearSolveRK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv311LinearSolveRK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv211LinearSolveRK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="LinearSolve__SparseMatrix:F:CR.Matrix:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">LinearSolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411LinearSolveRK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411LinearSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv311LinearSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv211LinearSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="LinearSolve__DistSparseMatrix:F:CR.DistMultiVec:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">LinearSolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411LinearSolveRK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="section" id="dense-in-place-alternatives">
+<h3>Dense in-place alternatives<a class="headerlink" href="#dense-in-place-alternatives" title="Permalink to this headline">¶</a></h3>
+<p>The following routines factor <span class="math notranslate nohighlight">\(A\)</span> in place.</p>
+<dl class="function">
+<dt id="_CPPv4N9lin_solve9OverwriteER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N9lin_solve9OverwriteER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N9lin_solve9OverwriteER6MatrixI1FER6MatrixI1FE"></span><span id="lin_solve::Overwrite__Matrix:F:R.Matrix:F:R"></span><code class="descclassname">lin_solve<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9lin_solve9OverwriteER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9lin_solve9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N9lin_solve9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N9lin_solve9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="lin_solve::Overwrite__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R"></span><code class="descclassname">lin_solve<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9lin_solve9OverwriteER18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="standard-interface">
+<h3>Standard interface<a class="headerlink" href="#standard-interface" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="single-precision">
+<h4>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolve_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolve_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolve_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElDistMultiVec_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h4>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolve_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolve_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolve_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElDistMultiVec_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h4>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolve_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolve_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolve_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveSparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElDistMultiVec_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h4>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolve_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolve_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolve_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveSparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElDistMultiVec_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="expert-versions">
+<h3>Expert versions<a class="headerlink" href="#expert-versions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h4>Single-precision<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolveXSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXSparse_s</code><span class="sig-paren">(</span>ElConstSparseMatrix_s<em> A</em>, ElMatrix_s<em> B</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveXDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXDistSparse_s</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_s<em> A</em>, ElDistMultiVec_s<em> B</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>Double-precision<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolveXSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXSparse_d</code><span class="sig-paren">(</span>ElConstSparseMatrix_d<em> A</em>, ElMatrix_d<em> B</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveXDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXDistSparse_d</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_d<em> A</em>, ElDistMultiVec_d<em> B</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h4>Single-precision complex<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolveXSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXSparse_c</code><span class="sig-paren">(</span>ElConstSparseMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveXDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXDistSparse_c</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_c<em> A</em>, ElDistMultiVec_c<em> B</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h4>Double-precision complex<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLinearSolveXSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXSparse_z</code><span class="sig-paren">(</span>ElConstSparseMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLinearSolveXDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLinearSolveXDistSparse_z</code><span class="sig-paren">(</span>ElConstDistSparseMatrix_z<em> A</em>, ElDistMultiVec_z<em> B</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLinearSolveXDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Symmetric.html" class="btn btn-neutral float-right" title="Symmetric solve" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../solve.html" class="btn btn-neutral float-left" title="Linear solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

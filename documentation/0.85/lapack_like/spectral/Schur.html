@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Schur decomposition &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Specialized eigensolvers" href="specialized.html" />
+    <link rel="prev" title="Polar decomposition" href="Polar.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="schur-decomposition">
+<h1>Schur decomposition<a class="headerlink" href="#schur-decomposition" title="Permalink to this headline">¶</a></h1>
+<p>Elemental contains a native prototype implementation of a spectral divide and
+conquer scheme for the Schur decomposition, but it is not yet robust enough
+to handle general matrices. For local matrices, Elemental defaults to calling
+LAPACK’s Hessenberg QR algorithm (with Aggressive Early Deflation); if
+support for ScaLAPACK was detected during configuration, Elemental defaults to
+ScaLAPACK’s Hessenberg QR algorithm (without deflation), otherwise the
+Spectral Divide and Conquer approach is attempted.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/Schur.cpp">Implementation</a></p>
+<dl class="function">
+<dt id="_CPPv45SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE">
+<span id="_CPPv35SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE"></span><span id="_CPPv25SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE"></span><span id="Schur__Matrix:F:R.Matrix:Complex:Base:F:::R.b.SchurCtrl:Base:F::C"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em>, bool <em>fullTriangle</em> = false, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE">
+<span id="_CPPv35SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE"></span><span id="_CPPv25SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE"></span><span id="Schur__AbstractDistMatrix:F:R.AbstractDistMatrix:Complex:Base:F:::R.b.SchurCtrl:Base:F::C"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="AbstractDistMatrix&lt;Complex&lt;Base&lt;F&gt;&gt;&gt;">AbstractDistMatrix</a>&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em>, bool <em>fullTriangle</em> = false, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEEbK9SchurCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbK9SchurCtrlI4BaseI1FEE">
+<span id="_CPPv35SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbK9SchurCtrlI4BaseI1FEE"></span><span id="_CPPv25SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbK9SchurCtrlI4BaseI1FEE"></span><span id="Schur__Matrix:F:R.Matrix:Complex:Base:F:::R.Matrix:F:R.b.SchurCtrl:Base:F::C"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Q</em>, bool <em>fullTriangle</em> = true, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbK9SchurCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI1FEbK9SchurCtrlI4BaseI1FEE">
+<span id="_CPPv35SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI1FEbK9SchurCtrlI4BaseI1FEE"></span><span id="_CPPv25SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI1FEbK9SchurCtrlI4BaseI1FEE"></span><span id="Schur__AbstractDistMatrix:F:R.AbstractDistMatrix:Complex:Base:F:::R.AbstractDistMatrix:F:R.b.SchurCtrl:Base:F::C"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="AbstractDistMatrix&lt;Complex&lt;Base&lt;F&gt;&gt;&gt;">AbstractDistMatrix</a>&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Q</em>, bool <em>fullTriangle</em> = true, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = <a class="reference internal" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="SchurCtrl&lt;Base&lt;F&gt;&gt;">SchurCtrl</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEER18AbstractDistMatrixI1FEbK9SchurCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="section" id="algorithmic-options">
+<h2>Algorithmic options<a class="headerlink" href="#algorithmic-options" title="Permalink to this headline">¶</a></h2>
+<p>By default, Hessenberg QR algorithms are used if possible
+(in the distributed-memory case, ScaLAPACK must have been detected), and,
+in addition to being able to configure the Hessenberg QR algorithm options,
+it is also possible to force the usage of a Spectral Divide and Conquer
+algorithm.</p>
+<dl class="type">
+<dt id="_CPPv4IE9SchurCtrlI4RealE">
+<span id="_CPPv3IE9SchurCtrlI4RealE"></span><span id="_CPPv2IE9SchurCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SchurCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE9SchurCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N9SchurCtrlI4RealE6useSDCE">
+<span id="_CPPv3N9SchurCtrlI4RealE6useSDCE"></span><span id="_CPPv2N9SchurCtrlI4RealE6useSDCE"></span><span id="SchurCtrl:Real:::useSDC__b"></span>bool <code class="descname">useSDC</code><a class="headerlink" href="#_CPPv4N9SchurCtrlI4RealE6useSDCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether or not to use Spectral Divide and Conquer</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9SchurCtrlI4RealE6qrCtrlE">
+<span id="_CPPv3N9SchurCtrlI4RealE6qrCtrlE"></span><span id="_CPPv2N9SchurCtrlI4RealE6qrCtrlE"></span><span id="SchurCtrl:Real:::qrCtrl__HessQRCtrl"></span><a class="reference internal" href="#_CPPv410HessQRCtrl" title="HessQRCtrl">HessQRCtrl</a> <code class="descname">qrCtrl</code><a class="headerlink" href="#_CPPv4N9SchurCtrlI4RealE6qrCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The control structure for the Hessenberg QR algorithm</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9SchurCtrlI4RealE7sdcCtrlE">
+<span id="_CPPv3N9SchurCtrlI4RealE7sdcCtrlE"></span><span id="_CPPv2N9SchurCtrlI4RealE7sdcCtrlE"></span><span id="SchurCtrl:Real:::sdcCtrl__SDCCtrl:Real:"></span><a class="reference internal" href="#_CPPv4IE7SDCCtrlI4RealE" title="SDCCtrl&lt;Real&gt;">SDCCtrl</a>&lt;Real&gt; <code class="descname">sdcCtrl</code><a class="headerlink" href="#_CPPv4N9SchurCtrlI4RealE7sdcCtrlE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The control structure for the Spectral Divide and Conquer algorithm</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE9SchurCtrlI4BaseI1FEE">
+<span id="_CPPv3IE9SchurCtrlI4BaseI1FEE"></span><span id="_CPPv2IE9SchurCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SchurCtrl</code>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE9SchurCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+<p><em>TODO:</em> Reference to the distributed Hessenberg QR work of Granat, Kagstrom, Kressner, et al.</p>
+<dl class="type">
+<dt id="_CPPv410HessQRCtrl">
+<span id="_CPPv310HessQRCtrl"></span><span id="_CPPv210HessQRCtrl"></span><span id="HessQRCtrl"></span><em class="property">type </em><code class="descname">HessQRCtrl</code><a class="headerlink" href="#_CPPv410HessQRCtrl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N10HessQRCtrl7distAEDE">
+<span id="_CPPv3N10HessQRCtrl7distAEDE"></span><span id="_CPPv2N10HessQRCtrl7distAEDE"></span><span id="HessQRCtrl::distAED__b"></span>bool <code class="descname">distAED</code><a class="headerlink" href="#_CPPv4N10HessQRCtrl7distAEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether or not Aggressive Early Deflation should be attempted for
+distributed matrices (due to existing bugs in the ScaLAPACK
+implementation, by default, no)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N10HessQRCtrl11blockHeightE">
+<span id="_CPPv3N10HessQRCtrl11blockHeightE"></span><span id="_CPPv2N10HessQRCtrl11blockHeightE"></span><span id="HessQRCtrl::blockHeight__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">blockHeight</code><a class="headerlink" href="#_CPPv4N10HessQRCtrl11blockHeightE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N10HessQRCtrl10blockWidthE">
+<span id="_CPPv3N10HessQRCtrl10blockWidthE"></span><span id="_CPPv2N10HessQRCtrl10blockWidthE"></span><span id="HessQRCtrl::blockWidth__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">blockWidth</code><a class="headerlink" href="#_CPPv4N10HessQRCtrl10blockWidthE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The distribution block height and width for the Hessenberg QR algorithm</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>The primary reference for the current Spectral Divide and Conquer approachh is
+<em>Fast linear algebra is stable</em>, Demmel et al. While the current
+implementation requires multiple algorithmic improvements in order to achieve
+stability, for example, better Mobius transformation selection, it often
+succeeds on random matrices.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/spectral/Schur/SDC.hpp">SDC header file</a></p>
+<dl class="type">
+<dt id="_CPPv4IE7SDCCtrlI4RealE">
+<span id="_CPPv3IE7SDCCtrlI4RealE"></span><span id="_CPPv2IE7SDCCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SDCCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE7SDCCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N7SDCCtrlI4RealE6cutoffE">
+<span id="_CPPv3N7SDCCtrlI4RealE6cutoffE"></span><span id="_CPPv2N7SDCCtrlI4RealE6cutoffE"></span><span id="SDCCtrl:Real:::cutoff__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">cutoff</code><a class="headerlink" href="#_CPPv4N7SDCCtrlI4RealE6cutoffE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SDCCtrlI4RealE11maxInnerItsE">
+<span id="_CPPv3N7SDCCtrlI4RealE11maxInnerItsE"></span><span id="_CPPv2N7SDCCtrlI4RealE11maxInnerItsE"></span><span id="SDCCtrl:Real:::maxInnerIts__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxInnerIts</code><a class="headerlink" href="#_CPPv4N7SDCCtrlI4RealE11maxInnerItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SDCCtrlI4RealE11maxOuterItsE">
+<span id="_CPPv3N7SDCCtrlI4RealE11maxOuterItsE"></span><span id="_CPPv2N7SDCCtrlI4RealE11maxOuterItsE"></span><span id="SDCCtrl:Real:::maxOuterIts__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxOuterIts</code><a class="headerlink" href="#_CPPv4N7SDCCtrlI4RealE11maxOuterItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SDCCtrlI4RealE3tolE">
+<span id="_CPPv3N7SDCCtrlI4RealE3tolE"></span><span id="_CPPv2N7SDCCtrlI4RealE3tolE"></span><span id="SDCCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N7SDCCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SDCCtrlI4RealE12spreadFactorE">
+<span id="_CPPv3N7SDCCtrlI4RealE12spreadFactorE"></span><span id="_CPPv2N7SDCCtrlI4RealE12spreadFactorE"></span><span id="SDCCtrl:Real:::spreadFactor__Real"></span>Real <code class="descname">spreadFactor</code><a class="headerlink" href="#_CPPv4N7SDCCtrlI4RealE12spreadFactorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SDCCtrlI4RealE6randomE">
+<span id="_CPPv3N7SDCCtrlI4RealE6randomE"></span><span id="_CPPv2N7SDCCtrlI4RealE6randomE"></span><span id="SDCCtrl:Real:::random__b"></span>bool <code class="descname">random</code><a class="headerlink" href="#_CPPv4N7SDCCtrlI4RealE6randomE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N7SDCCtrlI4RealE8progressE">
+<span id="_CPPv3N7SDCCtrlI4RealE8progressE"></span><span id="_CPPv2N7SDCCtrlI4RealE8progressE"></span><span id="SDCCtrl:Real:::progress__b"></span>bool <code class="descname">progress</code><a class="headerlink" href="#_CPPv4N7SDCCtrlI4RealE8progressE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE7SDCCtrlI4BaseI1FEE">
+<span id="_CPPv3IE7SDCCtrlI4BaseI1FEE"></span><span id="_CPPv2IE7SDCCtrlI4BaseI1FEE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SDCCtrl</code>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;<a class="headerlink" href="#_CPPv4IE7SDCCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A particular case where the datatype is the base of the potentially complex
+type <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="quasi-triangular-manipulation">
+<h2>Quasi-triangular manipulation<a class="headerlink" href="#quasi-triangular-manipulation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N5schur14QuasiTriangEigERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE">
+<span id="_CPPv3N5schur14QuasiTriangEigERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE"></span><span id="_CPPv2N5schur14QuasiTriangEigERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE"></span><span id="schur::QuasiTriangEig__Matrix:F:CR.Matrix:Complex:Base:F:::R"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">QuasiTriangEig</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>U</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur14QuasiTriangEigERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEE">
+<span id="_CPPv3N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEE"></span><span id="_CPPv2N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEE"></span><span id="schur::QuasiTriangEig__AbstractDistMatrix:F:CR.AbstractDistMatrix:Complex:Base:F:::R"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">QuasiTriangEig</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>U</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="AbstractDistMatrix&lt;Complex&lt;Base&lt;F&gt;&gt;&gt;">AbstractDistMatrix</a>&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FER18AbstractDistMatrixI7ComplexI4BaseI1FEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the eigenvalues of the upper quasi-triangular matrix <cite>U</cite> in the vector
+<cite>w</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur14QuasiTriangEigERK6MatrixI1FE">
+<span id="_CPPv3N5schur14QuasiTriangEigERK6MatrixI1FE"></span><span id="_CPPv2N5schur14QuasiTriangEigERK6MatrixI1FE"></span><span id="schur::QuasiTriangEig__Matrix:F:CR"></span>Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">QuasiTriangEig</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>U</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur14QuasiTriangEigERK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FE">
+<span id="_CPPv3N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FE"></span><span id="_CPPv2N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FE"></span><span id="schur::QuasiTriangEig__AbstractDistMatrix:F:CR"></span>DistMatrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;, VR, STAR&gt; <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">QuasiTriangEig</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>U</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur14QuasiTriangEigERK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the eigenvalues of the upper quasi-triangular matrix <cite>U</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur14QuasiTriangEigERK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE">
+<span id="_CPPv3N5schur14QuasiTriangEigERK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE"></span><span id="_CPPv2N5schur14QuasiTriangEigERK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE"></span><span id="schur::QuasiTriangEig__Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:Complex:Base:F:::R"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">QuasiTriangEig</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dMain</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSup</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur14QuasiTriangEigERK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The underlying computation routine for computing the eigenvalues of
+quasi-triangular matrices. The vectors <cite>dMain</cite>, <cite>dSub</cite>, and <cite>dSup</cite> should
+respectively contain the main, sub, and super-diagonals of the
+upper quasi-triangular matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur13RealToComplexERK6MatrixI4RealER6MatrixI7ComplexI4RealEE">
+<span id="_CPPv3N5schur13RealToComplexERK6MatrixI4RealER6MatrixI7ComplexI4RealEE"></span><span id="_CPPv2N5schur13RealToComplexERK6MatrixI4RealER6MatrixI7ComplexI4RealEE"></span><span id="schur::RealToComplex__Matrix:Real:CR.Matrix:Complex:Real::R"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">RealToComplex</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>UQuasi</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>U</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur13RealToComplexERK6MatrixI4RealER6MatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur13RealToComplexERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI7ComplexI4RealEE">
+<span id="_CPPv3N5schur13RealToComplexERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI7ComplexI4RealEE"></span><span id="_CPPv2N5schur13RealToComplexERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI7ComplexI4RealEE"></span><span id="schur::RealToComplex__AbstractDistMatrix:Real:CR.AbstractDistMatrix:Complex:Real::R"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">RealToComplex</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>UQuasi</em>, AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>U</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur13RealToComplexERK18AbstractDistMatrixI4RealER18AbstractDistMatrixI7ComplexI4RealEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Rotate a real upper quasi-triangular matrix into a complex upper triangular
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur14CheckRealSchurERK6MatrixI4RealEb">
+<span id="_CPPv3N5schur14CheckRealSchurERK6MatrixI4RealEb"></span><span id="_CPPv2N5schur14CheckRealSchurERK6MatrixI4RealEb"></span><span id="schur::CheckRealSchur__Matrix:Real:CR.b"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">CheckRealSchur</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>U</em>, bool <em>standardForm</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur14CheckRealSchurERK6MatrixI4RealEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur14CheckRealSchurERK18AbstractDistMatrixI4RealEb">
+<span id="_CPPv3N5schur14CheckRealSchurERK18AbstractDistMatrixI4RealEb"></span><span id="_CPPv2N5schur14CheckRealSchurERK18AbstractDistMatrixI4RealEb"></span><span id="schur::CheckRealSchur__AbstractDistMatrix:Real:CR.b"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">CheckRealSchur</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>U</em>, bool <em>standardForm</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur14CheckRealSchurERK18AbstractDistMatrixI4RealEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check whether or not the largest diagonal blocks of the upper quasi-triangular
+matrix are at most <span class="math notranslate nohighlight">\(2 \times 2\)</span> and, optionally, check if the
+<span class="math notranslate nohighlight">\(2 \times 2\)</span> diagonal blocks are in standard form
+(if so, their diagonal must be constant and the product of the off-diagonal
+entries should be negative).</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

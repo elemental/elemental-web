@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Swap &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Symmetric2x2Scale" href="Symmetric2x2Scale.html" />
+    <link rel="prev" title="SetDiagonal" href="SetDiagonal.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="swap">
+<h1>Swap<a class="headerlink" href="#swap" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="entire-matrices">
+<h2>Entire matrices<a class="headerlink" href="#entire-matrices" title="Permalink to this headline">¶</a></h2>
+<p>The following routines replace <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> with each other,
+their transpose, or their adjoint.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv44Swap11OrientationR6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv34Swap11OrientationR6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv24Swap11OrientationR6MatrixI1TER6MatrixI1TE"></span><span id="Swap__Orientation.Matrix:T:R.Matrix:T:R"></span>void <code class="descname">Swap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Swap11OrientationR6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Swap11OrientationR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE">
+<span id="_CPPv34Swap11OrientationR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE"></span><span id="_CPPv24Swap11OrientationR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE"></span><span id="Swap__Orientation.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R"></span>void <code class="descname">Swap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Swap11OrientationR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSwap_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwap_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElMatrix_i<em> X</em>, ElMatrix_i<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwap_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwap_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwap_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElMatrix_s<em> X</em>, ElMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwap_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwap_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwap_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElMatrix_d<em> X</em>, ElMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwap_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwap_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwap_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElMatrix_c<em> X</em>, ElMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwap_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwap_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwap_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElMatrix_z<em> X</em>, ElMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwap_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwapDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwapDist_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElDistMatrix_i<em> X</em>, ElDistMatrix_i<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwapDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwapDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwapDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElDistMatrix_s<em> X</em>, ElDistMatrix_s<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwapDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwapDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwapDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElDistMatrix_d<em> X</em>, ElDistMatrix_d<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwapDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwapDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwapDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElDistMatrix_c<em> X</em>, ElDistMatrix_c<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwapDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSwapDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSwapDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElDistMatrix_z<em> X</em>, ElDistMatrix_z<em> Y</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSwapDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="pairs-of-rows">
+<h2>Pairs of rows<a class="headerlink" href="#pairs-of-rows" title="Permalink to this headline">¶</a></h2>
+<p>Swap rows <cite>to</cite> and <cite>from</cite> in the matrix.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv47RowSwapR6MatrixI1TE3Int3Int">
+<span id="_CPPv37RowSwapR6MatrixI1TE3Int3Int"></span><span id="_CPPv27RowSwapR6MatrixI1TE3Int3Int"></span><span id="RowSwap__Matrix:T:R.Int.Int"></span>void <code class="descname">RowSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RowSwapR6MatrixI1TE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47RowSwapR18AbstractDistMatrixI1TE3Int3Int">
+<span id="_CPPv37RowSwapR18AbstractDistMatrixI1TE3Int3Int"></span><span id="_CPPv27RowSwapR18AbstractDistMatrixI1TE3Int3Int"></span><span id="RowSwap__AbstractDistMatrix:T:R.Int.Int"></span>void <code class="descname">RowSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RowSwapR18AbstractDistMatrixI1TE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElRowSwap_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwap_i</code><span class="sig-paren">(</span>ElMatrix_i<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwap_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwap_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwap_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwap_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwap_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwap_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwap_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwap_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwap_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwap_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwap_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwap_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwap_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwapDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwapDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwapDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwapDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwapDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwapDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwapDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwapDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwapDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwapDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwapDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwapDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRowSwapDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRowSwapDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRowSwapDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="pairs-of-columns">
+<h2>Pairs of columns<a class="headerlink" href="#pairs-of-columns" title="Permalink to this headline">¶</a></h2>
+<p>Swap columns <cite>to</cite> and <cite>from</cite> in the matrix.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv47ColSwapR6MatrixI1TE3Int3Int">
+<span id="_CPPv37ColSwapR6MatrixI1TE3Int3Int"></span><span id="_CPPv27ColSwapR6MatrixI1TE3Int3Int"></span><span id="ColSwap__Matrix:T:R.Int.Int"></span>void <code class="descname">ColSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47ColSwapR6MatrixI1TE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47ColSwapR18AbstractDistMatrixI1TE3Int3Int">
+<span id="_CPPv37ColSwapR18AbstractDistMatrixI1TE3Int3Int"></span><span id="_CPPv27ColSwapR18AbstractDistMatrixI1TE3Int3Int"></span><span id="ColSwap__AbstractDistMatrix:T:R.Int.Int"></span>void <code class="descname">ColSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47ColSwapR18AbstractDistMatrixI1TE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElColSwap_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwap_i</code><span class="sig-paren">(</span>ElMatrix_i<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwap_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwap_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwap_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwap_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwap_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwap_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwap_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwap_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwap_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwap_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwap_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwap_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwap_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwapDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwapDist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwapDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwapDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwapDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwapDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwapDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwapDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwapDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwapDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwapDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwapDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElColSwapDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElColSwapDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElColSwapDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="symmetric-hermitian-swap">
+<h2>Symmetric/Hermitian swap<a class="headerlink" href="#symmetric-hermitian-swap" title="Permalink to this headline">¶</a></h2>
+<p>Symmetrically permute the <cite>to</cite> and <cite>from</cite> degrees of freedom within the
+implicitly symmetric (Hermitian) matrix <span class="math notranslate nohighlight">\(A\)</span> which stores its data
+in the specified triangle.</p>
+<div class="section" id="id6">
+<h3>C++ API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv413SymmetricSwap12UpperOrLowerR6MatrixI1TE3Int3Intb">
+<span id="_CPPv313SymmetricSwap12UpperOrLowerR6MatrixI1TE3Int3Intb"></span><span id="_CPPv213SymmetricSwap12UpperOrLowerR6MatrixI1TE3Int3Intb"></span><span id="SymmetricSwap__UpperOrLower.Matrix:T:R.Int.Int.b"></span>void <code class="descname">SymmetricSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SymmetricSwap12UpperOrLowerR6MatrixI1TE3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413SymmetricSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Intb">
+<span id="_CPPv313SymmetricSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Intb"></span><span id="_CPPv213SymmetricSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Intb"></span><span id="SymmetricSwap__UpperOrLower.AbstractDistMatrix:T:R.Int.Int.b"></span>void <code class="descname">SymmetricSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SymmetricSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Intb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSwap12UpperOrLowerR6MatrixI1TE3Int3Int">
+<span id="_CPPv313HermitianSwap12UpperOrLowerR6MatrixI1TE3Int3Int"></span><span id="_CPPv213HermitianSwap12UpperOrLowerR6MatrixI1TE3Int3Int"></span><span id="HermitianSwap__UpperOrLower.Matrix:T:R.Int.Int"></span>void <code class="descname">HermitianSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSwap12UpperOrLowerR6MatrixI1TE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413HermitianSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Int">
+<span id="_CPPv313HermitianSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Int"></span><span id="_CPPv213HermitianSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Int"></span><span id="HermitianSwap__UpperOrLower.AbstractDistMatrix:T:R.Int.Int"></span>void <code class="descname">HermitianSwap</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>to</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>from</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413HermitianSwap12UpperOrLowerR18AbstractDistMatrixI1TE3Int3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h3>C API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSymmetricSwap_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwap_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_i<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwap_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwap_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwap_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwap_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwap_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwap_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwap_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwap_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwap_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwap_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwap_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwap_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwap_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwapDist_i">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwapDist_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_i<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwapDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwapDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwapDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwapDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwapDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwapDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwapDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwapDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwapDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwapDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricSwapDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricSwapDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricSwapDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSwap_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSwap_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSwap_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSwap_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSwap_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSwap_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSwapDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSwapDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSwapDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianSwapDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianSwapDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> to</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> from</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianSwapDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Level 3 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tuning parameters" href="tuning.html" />
+    <link rel="prev" title="Level 2" href="level2.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="level-3">
+<h1>Level 3<a class="headerlink" href="#level-3" title="Permalink to this headline">¶</a></h1>
+<p>The prototypes for the following routines can be found at
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like/decl.hpp">include/elemental/blas-like/decl.hpp</a>, while the
+implementations are in
+<a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/elemental/blas-like/level3">include/elemental/blas-like/level3/</a>.</p>
+<div class="section" id="gemm">
+<h2>Gemm<a class="headerlink" href="#gemm" title="Permalink to this headline">¶</a></h2>
+<p>General matrix-matrix multiplication: updates
+<span class="math notranslate nohighlight">\(C := \alpha A^\# B^\sharp + \beta C\)</span>,
+where <span class="math notranslate nohighlight">\(M^\#\)</span> and <span class="math notranslate nohighlight">\(M^\sharp\)</span> are individually defined to be one of
+<span class="math notranslate nohighlight">\(\{M,M^T,M^H\}\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv44Gemm11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv34Gemm11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv24Gemm11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Gemm__Orientation.Orientation.T.Matrix:T:CR.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Gemm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfA</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfB</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Gemm11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Gemm11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv34Gemm11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv24Gemm11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Gemm__Orientation.Orientation.T.DistMatrix:T:CR.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Gemm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfA</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfB</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Gemm11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="hemm">
+<h2>Hemm<a class="headerlink" href="#hemm" title="Permalink to this headline">¶</a></h2>
+<p>Hermitian matrix-matrix multiplication: updates
+<span class="math notranslate nohighlight">\(C := \alpha A B + \beta C\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha B A + \beta C\)</span>, depending upon whether <cite>side</cite> is set to
+<code class="docutils literal notranslate"><span class="pre">LEFT</span></code> or <code class="docutils literal notranslate"><span class="pre">RIGHT</span></code>, respectively. In both of these types of updates,
+<span class="math notranslate nohighlight">\(A\)</span> is implicitly Hermitian and only the triangle specified by <cite>uplo</cite> is
+accessed.</p>
+<dl class="function">
+<dt id="_CPPv44Hemm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv34Hemm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv24Hemm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Hemm__LeftOrRight.UpperOrLower.T.Matrix:T:CR.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Hemm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Hemm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Hemm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv34Hemm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv24Hemm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Hemm__LeftOrRight.UpperOrLower.T.DistMatrix:T:CR.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Hemm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Hemm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="her2k">
+<h2>Her2k<a class="headerlink" href="#her2k" title="Permalink to this headline">¶</a></h2>
+<p>Hermitian rank-2K update: updates
+<span class="math notranslate nohighlight">\(C := \alpha (A B^H + B A^H) + \beta C\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha (A^H B + B^H A) + \beta C\)</span>, depending upon whether
+<cite>orientation</cite> is set to <code class="docutils literal notranslate"><span class="pre">NORMAL</span></code> or <code class="docutils literal notranslate"><span class="pre">ADJOINT</span></code>, respectively. Only the
+triangle of <span class="math notranslate nohighlight">\(C\)</span> specified by the <cite>uplo</cite> parameter is modified.</p>
+<dl class="function">
+<dt id="_CPPv45Her2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv35Her2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv25Her2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Her2k__UpperOrLower.Orientation.T.Matrix:T:CR.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Her2k</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Her2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45Her2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv35Her2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv25Her2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Her2k__UpperOrLower.Orientation.T.DistMatrix:T:CR.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Her2k</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Her2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Please see <a class="reference internal" href="tuning.html#_CPPv4IE22SetLocalTrr2kBlocksizeI1TEvi" title="SetLocalTrr2kBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SetLocalTrr2kBlocksize&lt;T&gt;()</span></code></a>
+and <a class="reference internal" href="tuning.html#_CPPv4IE19LocalTrr2kBlocksizeI1TEiv" title="LocalTrr2kBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LocalTrr2kBlocksize&lt;T&gt;()</span></code></a> in the
+<a class="reference internal" href="tuning.html#blas-tuning"><span class="std std-ref">Tuning parameters</span></a> section for information on tuning the distributed
+<a class="reference internal" href="#_CPPv45Her2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Her2k"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Her2k()</span></code></a>.</p>
+</div>
+<div class="section" id="herk">
+<h2>Herk<a class="headerlink" href="#herk" title="Permalink to this headline">¶</a></h2>
+<p>Hermitian rank-K update: updates
+<span class="math notranslate nohighlight">\(C := \alpha A A^H + \beta C\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha A^H A + \beta C\)</span>, depending upon whether <cite>orientation</cite> is
+set to <code class="docutils literal notranslate"><span class="pre">NORMAL</span></code> or <code class="docutils literal notranslate"><span class="pre">ADJOINT</span></code>, respectively. Only the triangle of <span class="math notranslate nohighlight">\(C\)</span>
+specified by the <cite>uplo</cite> parameter is modified.</p>
+<dl class="function">
+<dt id="_CPPv44Herk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv34Herk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv24Herk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Herk__UpperOrLower.Orientation.T.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Herk</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Herk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Herk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv34Herk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv24Herk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Herk__UpperOrLower.Orientation.T.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Herk</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Herk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Please see <a class="reference internal" href="tuning.html#_CPPv4IE21SetLocalTrrkBlocksizeI1TEvi" title="SetLocalTrrkBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SetLocalTrrkBlocksize&lt;T&gt;()</span></code></a>
+and <a class="reference internal" href="tuning.html#_CPPv4IE18LocalTrrkBlocksizeI1TEiv" title="LocalTrrkBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LocalTrrkBlocksize&lt;T&gt;()</span></code></a> in the <a class="reference internal" href="tuning.html#blas-tuning"><span class="std std-ref">Tuning parameters</span></a>
+section for information on tuning the distributed <a class="reference internal" href="#_CPPv44Herk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE" title="Herk"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Herk()</span></code></a>.</p>
+</div>
+<div class="section" id="multi-shift-quasitrsm">
+<h2>Multi-shift QuasiTrsm<a class="headerlink" href="#multi-shift-quasitrsm" title="Permalink to this headline">¶</a></h2>
+<p>Solve for <span class="math notranslate nohighlight">\(X\)</span> in the linear system</p>
+<div class="math notranslate nohighlight">
+\[T^\# X - X D^\# = Y\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[X T^\# - D^\# X = Y\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is <em>quasi-triangular</em>, <span class="math notranslate nohighlight">\(D\)</span> is diagonal, and
+<span class="math notranslate nohighlight">\(A^\#\)</span> is defined to be one of <span class="math notranslate nohighlight">\(\{A,A^T,A^H\}\)</span>.
+The data movement requires almost no modification from that of
+<a class="reference internal" href="#_CPPv49QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FEb" title="QuasiTrsm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">QuasiTrsm()</span></code></a>.</p>
+<p>Note that the term <em>quasi-triangular</em> is in the context of real Schur
+decompositions, which produce triangular matrices with mixes of
+<span class="math notranslate nohighlight">\(1 \times 1\)</span> and <span class="math notranslate nohighlight">\(2 \times 2\)</span> diagonal blocks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no corresponding BLAS routine, but it is a natural extension of
+Trsm.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv319MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv219MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="MultiShiftQuasiTrsm__LeftOrRight.UpperOrLower.Orientation.F.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">MultiShiftQuasiTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE">
+<span id="_CPPv319MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE"></span><span id="_CPPv219MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE"></span><span id="MultiShiftQuasiTrsm__LeftOrRight.UpperOrLower.Orientation.F.DistMatrix:F:CR.DistMatrix:F.VR.STAR:CR.DistMatrix:F:R"></span>void <code class="descname">MultiShiftQuasiTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2VR4STARE" title="DistMatrix&lt;F, VR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of <cite>X</cite> with the solutions to the shifted linear
+systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE">
+<span id="_CPPv319MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE"></span><span id="_CPPv219MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE"></span><span id="MultiShiftQuasiTrsm__LeftOrRight.UpperOrLower.Orientation.Complex:Real:.Matrix:Real:CR.Matrix:Complex:Real::CR.Matrix:Real:R.Matrix:Real:R"></span>void <code class="descname">MultiShiftQuasiTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>XReal</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>XImag</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE">
+<span id="_CPPv319MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE"></span><span id="_CPPv219MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE"></span><span id="MultiShiftQuasiTrsm__LeftOrRight.UpperOrLower.Orientation.Complex:Real:.DistMatrix:Real:CR.DistMatrix:Complex:Real:.VR.STAR:CR.DistMatrix:Real:R.DistMatrix:Real:R"></span>void <code class="descname">MultiShiftQuasiTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealE2VR4STARE" title="DistMatrix&lt;Complex&lt;Real&gt;, VR, STAR&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>XReal</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>XImag</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419MultiShiftQuasiTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of the real and imaginary parts of <cite>X</cite> with the
+solutions to the shifted linear systems.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="multi-shift-trsm">
+<h2>Multi-shift Trsm<a class="headerlink" href="#multi-shift-trsm" title="Permalink to this headline">¶</a></h2>
+<p>Solve for <span class="math notranslate nohighlight">\(X\)</span> in the linear system</p>
+<div class="math notranslate nohighlight">
+\[T^\# X - X D^\# = Y\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[X T^\# - D^\# X = Y\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is triangular, <span class="math notranslate nohighlight">\(D\)</span> is diagonal, and
+<span class="math notranslate nohighlight">\(A^\#\)</span> is defined to be one of <span class="math notranslate nohighlight">\(\{A,A^T,A^H\}\)</span>.
+The data movement requires almost no modification from that of <a class="reference internal" href="#_CPPv44Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FE" title="Trsm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Trsm()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no corresponding BLAS routine, but it is a natural modification
+of Trsm.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.F.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.F.DistMatrix:F:CR.DistMatrix:F.VR.STAR:CR.DistMatrix:F:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2VR4STARE" title="DistMatrix&lt;F, VR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of <cite>X</cite> with the solutions to the shifted linear
+systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.Complex:Real:.Matrix:Real:CR.Matrix:Complex:Real::CR.Matrix:Real:R.Matrix:Real:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>XReal</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>XImag</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.Complex:Real:.DistMatrix:Real:CR.DistMatrix:Complex:Real:.VR.STAR:CR.DistMatrix:Real:R.DistMatrix:Real:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI7ComplexI4RealE2VR4STARE" title="DistMatrix&lt;Complex&lt;Real&gt;, VR, STAR&gt;">DistMatrix</a>&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>XReal</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI4RealE" title="DistMatrix&lt;Real&gt;">DistMatrix</a>&lt;Real&gt; &amp;<em>XImag</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK10DistMatrixI4RealERK10DistMatrixI7ComplexI4RealE2VR4STARER10DistMatrixI4RealER10DistMatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of the real and imaginary parts of <cite>X</cite> with the
+solutions to the shifted linear systems.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="quasitrsm">
+<h2>QuasiTrsm<a class="headerlink" href="#quasitrsm" title="Permalink to this headline">¶</a></h2>
+<p>Solve for <span class="math notranslate nohighlight">\(X\)</span> in the linear system</p>
+<div class="math notranslate nohighlight">
+\[T^\# X = Y\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[X T^\# = Y\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is <em>quasi-triangular</em> and
+<span class="math notranslate nohighlight">\(A^\#\)</span> is defined to be one of <span class="math notranslate nohighlight">\(\{A,A^T,A^H\}\)</span>.
+The algorithm is very similar to that of <a class="reference internal" href="#_CPPv44Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FE" title="Trsm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Trsm()</span></code></a>.</p>
+<p>Note that the term <em>quasi-triangular</em> is in the context of real Schur
+decompositions, which produce triangular matrices with mixes of
+<span class="math notranslate nohighlight">\(1 \times 1\)</span> and <span class="math notranslate nohighlight">\(2 \times 2\)</span> diagonal blocks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no corresponding BLAS routine, but it is a natural extension of
+Trsm.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv49QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FEb">
+<span id="_CPPv39QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FEb"></span><span id="_CPPv29QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FEb"></span><span id="QuasiTrsm__LeftOrRight.UpperOrLower.Orientation.F.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.b"></span>void <code class="descname">QuasiTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, bool <em>checkIfSingular</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FEb">
+<span id="_CPPv39QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FEb"></span><span id="_CPPv29QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FEb"></span><span id="QuasiTrsm__LeftOrRight.UpperOrLower.Orientation.F.DistMatrix:F:CR.DistMatrix:F.VR.STAR:CR.DistMatrix:F:R.b"></span>void <code class="descname">QuasiTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2VR4STARE" title="DistMatrix&lt;F, VR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, bool <em>checkIfSingular</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49QuasiTrsm11LeftOrRight12UpperOrLower11Orientation1FRK10DistMatrixI1FERK10DistMatrixI1F2VR4STARER10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of <cite>X</cite> with the solutions to the shifted linear
+systems.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="symm">
+<h2>Symm<a class="headerlink" href="#symm" title="Permalink to this headline">¶</a></h2>
+<p>Symmetric matrix-matrix multiplication: updates
+<span class="math notranslate nohighlight">\(C := \alpha A B + \beta C\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha B A + \beta C\)</span>, depending upon whether <cite>side</cite> is set to
+<code class="docutils literal notranslate"><span class="pre">LEFT</span></code> or <code class="docutils literal notranslate"><span class="pre">RIGHT</span></code>, respectively. In both of these types of updates,
+<span class="math notranslate nohighlight">\(A\)</span> is implicitly symmetric and only the triangle specified by <cite>uplo</cite>
+is accessed.</p>
+<dl class="function">
+<dt id="_CPPv44Symm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TEb">
+<span id="_CPPv34Symm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TEb"></span><span id="_CPPv24Symm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TEb"></span><span id="Symm__LeftOrRight.UpperOrLower.T.Matrix:T:CR.Matrix:T:CR.T.Matrix:T:R.b"></span>void <code class="descname">Symm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Symm11LeftOrRight12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Symm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TEb">
+<span id="_CPPv34Symm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TEb"></span><span id="_CPPv24Symm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TEb"></span><span id="Symm__LeftOrRight.UpperOrLower.T.DistMatrix:T:CR.DistMatrix:T:CR.T.DistMatrix:T:R.b"></span>void <code class="descname">Symm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Symm11LeftOrRight12UpperOrLower1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="syr2k">
+<h2>Syr2k<a class="headerlink" href="#syr2k" title="Permalink to this headline">¶</a></h2>
+<p>Symmetric rank-2K update: updates
+<span class="math notranslate nohighlight">\(C := \alpha (A B^T + B A^T) + \beta C\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha (A^T B + B^T A) + \beta C\)</span>, depending upon whether
+<cite>orientation</cite> is set to <code class="docutils literal notranslate"><span class="pre">NORMAL</span></code> or <code class="docutils literal notranslate"><span class="pre">TRANSPOSE</span></code>, respectively. Only the
+triangle of <span class="math notranslate nohighlight">\(C\)</span> specified by the <cite>uplo</cite> parameter is modified.</p>
+<dl class="function">
+<dt id="_CPPv45Syr2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv35Syr2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv25Syr2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Syr2k__UpperOrLower.Orientation.T.Matrix:T:CR.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Syr2k</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Syr2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45Syr2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv35Syr2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv25Syr2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Syr2k__UpperOrLower.Orientation.T.DistMatrix:T:CR.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Syr2k</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Syr2k12UpperOrLower11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Please see <a class="reference internal" href="tuning.html#_CPPv4IE22SetLocalTrr2kBlocksizeI1TEvi" title="SetLocalTrr2kBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SetLocalTrr2kBlocksize&lt;T&gt;()</span></code></a>
+and <a class="reference internal" href="tuning.html#_CPPv4IE19LocalTrr2kBlocksizeI1TEiv" title="LocalTrr2kBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LocalTrr2kBlocksize&lt;T&gt;()</span></code></a> in the
+<a class="reference internal" href="tuning.html#blas-tuning"><span class="std std-ref">Tuning parameters</span></a> section for information on tuning the distributed
+<a class="reference internal" href="#_CPPv45Syr2k12UpperOrLower11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Syr2k"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Syr2k()</span></code></a>.</p>
+</div>
+<div class="section" id="syrk">
+<h2>Syrk<a class="headerlink" href="#syrk" title="Permalink to this headline">¶</a></h2>
+<p>Symmetric rank-K update: updates
+<span class="math notranslate nohighlight">\(C := \alpha A A^T + \beta C\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha A^T A + \beta C\)</span>, depending upon whether <cite>orientation</cite> is
+set to <code class="docutils literal notranslate"><span class="pre">NORMAL</span></code> or <code class="docutils literal notranslate"><span class="pre">TRANSPOSE</span></code>, respectively. Only the triangle of <span class="math notranslate nohighlight">\(C\)</span>
+specified by the <cite>uplo</cite> parameter is modified.</p>
+<dl class="function">
+<dt id="_CPPv44Syrk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv34Syrk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv24Syrk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Syrk__UpperOrLower.Orientation.T.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Syrk</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Syrk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Syrk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv34Syrk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv24Syrk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Syrk__UpperOrLower.Orientation.T.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Syrk</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Syrk12UpperOrLower11Orientation1TRK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p>Please see <a class="reference internal" href="tuning.html#_CPPv4IE21SetLocalTrrkBlocksizeI1TEvi" title="SetLocalTrrkBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SetLocalTrrkBlocksize&lt;T&gt;()</span></code></a>
+and <a class="reference internal" href="tuning.html#_CPPv4IE18LocalTrrkBlocksizeI1TEiv" title="LocalTrrkBlocksize&lt;T&gt;"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LocalTrrkBlocksize&lt;T&gt;()</span></code></a> in the <a class="reference internal" href="tuning.html#blas-tuning"><span class="std std-ref">Tuning parameters</span></a>
+section for information on tuning the distributed <a class="reference internal" href="#_CPPv44Syrk12UpperOrLower11Orientation1TRK6MatrixI1TE1TR6MatrixI1TE" title="Syrk"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Syrk()</span></code></a>.</p>
+</div>
+<div class="section" id="trmm">
+<h2>Trmm<a class="headerlink" href="#trmm" title="Permalink to this headline">¶</a></h2>
+<p>Triangular matrix-matrix multiplication: performs
+<span class="math notranslate nohighlight">\(C := \alpha A^\# B\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha B A^\#\)</span>, depending upon whether <cite>side</cite> was chosen
+to be <code class="docutils literal notranslate"><span class="pre">LEFT</span></code> or <code class="docutils literal notranslate"><span class="pre">RIGHT</span></code>, respectively. Whether <span class="math notranslate nohighlight">\(A\)</span> is treated as
+lower or upper triangular is determined by <cite>uplo</cite>, and <span class="math notranslate nohighlight">\(A^\#\)</span> is defined to
+be one of <span class="math notranslate nohighlight">\(\{A,A^T,A^H\}\)</span> (and <cite>diag</cite> determines
+whether <span class="math notranslate nohighlight">\(A\)</span> is treated as unit-diagonal or not).</p>
+<dl class="function">
+<dt id="_CPPv44Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv34Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv24Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK6MatrixI1TER6MatrixI1TE"></span><span id="Trmm__LeftOrRight.UpperOrLower.Orientation.UnitOrNonUnit.T.Matrix:T:CR.Matrix:T:R"></span>void <code class="descname">Trmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK10DistMatrixI1TER10DistMatrixI1TE">
+<span id="_CPPv34Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK10DistMatrixI1TER10DistMatrixI1TE"></span><span id="_CPPv24Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK10DistMatrixI1TER10DistMatrixI1TE"></span><span id="Trmm__LeftOrRight.UpperOrLower.Orientation.UnitOrNonUnit.T.DistMatrix:T:CR.DistMatrix:T:R"></span>void <code class="descname">Trmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Trmm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1TRK10DistMatrixI1TER10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trr2k">
+<h2>Trr2k<a class="headerlink" href="#trr2k" title="Permalink to this headline">¶</a></h2>
+<p>Triangular rank-2k update: performs
+<span class="math notranslate nohighlight">\(E := \alpha ( A^\# B^\sharp + C^\Diamond D^\triangle ) + \beta E\)</span>,
+where only the triangle of <cite>E</cite> specified by <cite>uplo</cite> is modified, and
+the orientation of each input matrix, e.g., <span class="math notranslate nohighlight">\(A^\# \in \{A,A^T,A^H\}\)</span>, is determined
+by <cite>orientationOfX</cite> for each <span class="math notranslate nohighlight">\(X \in \left\{A,B,C,D\right\}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no corresponding BLAS routine, but it is a natural generalization
+of “symmetric” and “Hermitian” updates.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv45Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv35Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv25Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Trr2k__UpperOrLower.Orientation.Orientation.Orientation.Orientation.T.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Trr2k</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfA</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfB</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfC</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfD</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>D</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>E</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv35Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv25Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Trr2k__UpperOrLower.Orientation.Orientation.Orientation.Orientation.T.DistMatrix:T:CR.DistMatrix:T:CR.DistMatrix:T:CR.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Trr2k</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfA</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfB</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfC</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfD</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>D</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>E</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45Trr2k12UpperOrLower11Orientation11Orientation11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trrk">
+<h2>Trrk<a class="headerlink" href="#trrk" title="Permalink to this headline">¶</a></h2>
+<p>Triangular rank-k update: performs
+<span class="math notranslate nohighlight">\(C := \alpha A^\# B^\sharp + \beta C\)</span>, where only the
+triangle of <cite>C</cite> specified by <cite>uplo</cite> is modified, and the orientations <span class="math notranslate nohighlight">\(A^\#\)</span> and
+<span class="math notranslate nohighlight">\(B^\sharp\)</span> are determined by <cite>orientationOfA</cite> and <cite>orientationOfB</cite>,
+respectively.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no corresponding BLAS routine, but this type of update is frequently
+encountered, even in serial. For instance, the symmetric rank-k update
+performed during an LDL factorization is symmetric but one of the
+two update matrices is scaled by D.</p>
+</div>
+<dl class="function">
+<dt id="_CPPv44Trrk12UpperOrLower11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE">
+<span id="_CPPv34Trrk12UpperOrLower11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="_CPPv24Trrk12UpperOrLower11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE"></span><span id="Trrk__UpperOrLower.Orientation.Orientation.T.Matrix:T:CR.Matrix:T:CR.T.Matrix:T:R"></span>void <code class="descname">Trrk</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfA</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfB</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Trrk12UpperOrLower11Orientation11Orientation1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Trrk12UpperOrLower11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE">
+<span id="_CPPv34Trrk12UpperOrLower11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="_CPPv24Trrk12UpperOrLower11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE"></span><span id="Trrk__UpperOrLower.Orientation.Orientation.T.DistMatrix:T:CR.DistMatrix:T:CR.T.DistMatrix:T:R"></span>void <code class="descname">Trrk</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfA</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientationOfB</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em>, T <em>beta</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Trrk12UpperOrLower11Orientation11Orientation1TRK10DistMatrixI1TERK10DistMatrixI1TE1TR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trtrmm">
+<h2>Trtrmm<a class="headerlink" href="#trtrmm" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This routine loosely corresponds with the LAPACK routines ?lauum.</p>
+</div>
+<p>Symmetric/Hermitian triangular matrix-matrix multiply: performs
+<span class="math notranslate nohighlight">\(L := L^T L\)</span>, <span class="math notranslate nohighlight">\(L := L^H L\)</span>, <span class="math notranslate nohighlight">\(U := U U^T\)</span>, or
+<span class="math notranslate nohighlight">\(U := U U^H\)</span>, depending upon the choice of the <cite>orientation</cite> and
+<cite>uplo</cite> parameters.</p>
+<dl class="function">
+<dt id="_CPPv46Trtrmm11Orientation12UpperOrLowerR6MatrixI1TE">
+<span id="_CPPv36Trtrmm11Orientation12UpperOrLowerR6MatrixI1TE"></span><span id="_CPPv26Trtrmm11Orientation12UpperOrLowerR6MatrixI1TE"></span><span id="Trtrmm__Orientation.UpperOrLower.Matrix:T:R"></span>void <code class="descname">Trtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Trtrmm11Orientation12UpperOrLowerR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46Trtrmm11Orientation12UpperOrLowerR10DistMatrixI1TE">
+<span id="_CPPv36Trtrmm11Orientation12UpperOrLowerR10DistMatrixI1TE"></span><span id="_CPPv26Trtrmm11Orientation12UpperOrLowerR10DistMatrixI1TE"></span><span id="Trtrmm__Orientation.UpperOrLower.DistMatrix:T:R"></span>void <code class="descname">Trtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Trtrmm11Orientation12UpperOrLowerR10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trdtrmm">
+<h2>Trdtrmm<a class="headerlink" href="#trdtrmm" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a modification of Trtrmm for LDL factorizations.</p>
+</div>
+<p>Symmetric/Hermitian triangular matrix-matrix multiply (with diagonal scaling):
+performs <span class="math notranslate nohighlight">\(L := L^T D^{-1} L\)</span>, <span class="math notranslate nohighlight">\(L := L^H D^{-1} L\)</span>,
+<span class="math notranslate nohighlight">\(U := U D^{-1} U^T\)</span>, or <span class="math notranslate nohighlight">\(U := U D^{-1} U^H\)</span>,
+depending upon the choice of the <cite>orientation</cite> and <cite>uplo</cite> parameters.
+Note that <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span> are unit-diagonal and their diagonal is
+overwritten with <span class="math notranslate nohighlight">\(D\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv47Trdtrmm11Orientation12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv37Trdtrmm11Orientation12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv27Trdtrmm11Orientation12UpperOrLowerR6MatrixI1FE"></span><span id="Trdtrmm__Orientation.UpperOrLower.Matrix:F:R"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm11Orientation12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Trdtrmm11Orientation12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv37Trdtrmm11Orientation12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv27Trdtrmm11Orientation12UpperOrLowerR10DistMatrixI1FE"></span><span id="Trdtrmm__Orientation.UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">Trdtrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Trdtrmm11Orientation12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trsm">
+<h2>Trsm<a class="headerlink" href="#trsm" title="Permalink to this headline">¶</a></h2>
+<p>Triangular solve with multiple right-hand sides: performs
+<span class="math notranslate nohighlight">\(C := \alpha A^{-\#} B\)</span>, or
+<span class="math notranslate nohighlight">\(C := \alpha B A^{-\#}\)</span>, depending upon whether <cite>side</cite> was
+chosen to be <code class="docutils literal notranslate"><span class="pre">LEFT</span></code> or <code class="docutils literal notranslate"><span class="pre">RIGHT</span></code>, respectively. Whether <span class="math notranslate nohighlight">\(A\)</span> is treated
+as lower or upper triangular is determined by <cite>uplo</cite>, and <span class="math notranslate nohighlight">\(A^{-\#}\)</span>
+can be <span class="math notranslate nohighlight">\(A^{-1}\)</span>, <span class="math notranslate nohighlight">\(A^{-T}\)</span>, or <span class="math notranslate nohighlight">\(A^{-H}\)</span> (and <cite>diag</cite> determines
+whether <span class="math notranslate nohighlight">\(A\)</span> is treated as unit-diagonal or not).</p>
+<dl class="function">
+<dt id="_CPPv44Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv34Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv24Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FE"></span><span id="Trsm__LeftOrRight.UpperOrLower.Orientation.UnitOrNonUnit.F.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">Trsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv34Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv24Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FE"></span><span id="Trsm__LeftOrRight.UpperOrLower.Orientation.UnitOrNonUnit.F.DistMatrix:F:CR.DistMatrix:F:R"></span>void <code class="descname">Trsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="trstrm">
+<h2>Trstrm<a class="headerlink" href="#trstrm" title="Permalink to this headline">¶</a></h2>
+<p>Performs a triangular solve against a triangular matrix. Only the Left Lower
+Normal option is currently supported.</p>
+<dl class="function">
+<dt id="_CPPv46Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FEb">
+<span id="_CPPv36Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FEb"></span><span id="_CPPv26Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FEb"></span><span id="Trstrm__LeftOrRight.UpperOrLower.Orientation.UnitOrNonUnit.F.Matrix:F:CR.Matrix:F:R.b"></span>void <code class="descname">Trstrm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, bool <em>checkIfSingular</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FEb">
+<span id="_CPPv36Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="_CPPv26Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="Trstrm__LeftOrRight.UpperOrLower.Orientation.UnitOrNonUnit.F.DistMatrix:F:CR.DistMatrix:F:R.b"></span>void <code class="descname">Trstrm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>X</em>, bool <em>checkIfSingular</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46Trstrm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK10DistMatrixI1FER10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="two-sided-trmm">
+<h2>Two-sided Trmm<a class="headerlink" href="#two-sided-trmm" title="Permalink to this headline">¶</a></h2>
+<p>Performs a two-sided triangular multiplication with multiple right-hand sides
+which preserves the symmetry of the input matrix,
+either <span class="math notranslate nohighlight">\(A := L^H A L\)</span> or <span class="math notranslate nohighlight">\(A := U A U^H\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv412TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv312TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv212TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR6MatrixI1TERK6MatrixI1TE"></span><span id="TwoSidedTrmm__UpperOrLower.UnitOrNonUnit.Matrix:T:R.Matrix:T:CR"></span>void <code class="descname">TwoSidedTrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1TERK10DistMatrixI1TE">
+<span id="_CPPv312TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1TERK10DistMatrixI1TE"></span><span id="_CPPv212TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1TERK10DistMatrixI1TE"></span><span id="TwoSidedTrmm__UpperOrLower.UnitOrNonUnit.DistMatrix:T:R.DistMatrix:T:CR"></span>void <code class="descname">TwoSidedTrmm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1TE" title="DistMatrix&lt;T&gt;">DistMatrix</a>&lt;T&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoSidedTrmm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1TERK10DistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="two-sided-trsm">
+<h2>Two-sided Trsm<a class="headerlink" href="#two-sided-trsm" title="Permalink to this headline">¶</a></h2>
+<p>Performs a two-sided triangular solves with multiple right-hand sides which
+preserves the symmetry of the input matrix,
+either <span class="math notranslate nohighlight">\(A := L^{-1} A L^{-H}\)</span> or <span class="math notranslate nohighlight">\(A := U^{-H} A U^{-1}\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv412TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR6MatrixI1FERK6MatrixI1FE">
+<span id="_CPPv312TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR6MatrixI1FERK6MatrixI1FE"></span><span id="_CPPv212TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR6MatrixI1FERK6MatrixI1FE"></span><span id="TwoSidedTrsm__UpperOrLower.UnitOrNonUnit.Matrix:F:R.Matrix:F:CR"></span>void <code class="descname">TwoSidedTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR6MatrixI1FERK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FERK10DistMatrixI1FE">
+<span id="_CPPv312TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FERK10DistMatrixI1FE"></span><span id="_CPPv212TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FERK10DistMatrixI1FE"></span><span id="TwoSidedTrsm__UpperOrLower.UnitOrNonUnit.DistMatrix:F:R.DistMatrix:F:CR"></span>void <code class="descname">TwoSidedTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv413UnitOrNonUnit" title="UnitOrNonUnit">UnitOrNonUnit</a> <em>diag</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoSidedTrsm12UpperOrLower13UnitOrNonUnitR10DistMatrixI1FERK10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

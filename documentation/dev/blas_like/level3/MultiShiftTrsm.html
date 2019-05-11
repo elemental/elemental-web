@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Multi-shift Trsm &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="QuasiTrsm" href="QuasiTrsm.html" />
+    <link rel="prev" title="Multi-shift QuasiTrsm" href="MultiShiftQuasiTrsm.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../level1.html">Level 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../level2.html">Level 2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../level3.html">Level 3</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Gemm.html">Gemm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hemm.html">Hemm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Herk.html">Herk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Her2k.html">Her2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MultiShiftQuasiTrsm.html">Multi-shift QuasiTrsm</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Multi-shift Trsm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="QuasiTrsm.html">QuasiTrsm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Symm.html">Symm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Syrk.html">Syrk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Syr2k.html">Syr2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trdtrmm.html">Trdtrmm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trmm.html">Trmm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trrk.html">Trrk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trr2k.html">Trr2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trsm.html">Trsm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trtrmm.html">Trtrmm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Trstrm.html">Trstrm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TwoSidedTrmm.html">Two-sided Trmm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TwoSidedTrsm.html">Two-sided Trsm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tuning.html">Tuning parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../blas_like.html">BLAS-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../level3.html">Level 3</a> &raquo;</li>
+        
+      <li>Multi-shift Trsm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/blas_like/level3/MultiShiftTrsm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="multi-shift-trsm">
+<h1>Multi-shift Trsm<a class="headerlink" href="#multi-shift-trsm" title="Permalink to this headline">¶</a></h1>
+<p>Solve for <span class="math notranslate nohighlight">\(X\)</span> in the linear system</p>
+<div class="math notranslate nohighlight">
+\[T^\# X - X D^\# = Y\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[X T^\# - D^\# X = Y\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is triangular, <span class="math notranslate nohighlight">\(D\)</span> is diagonal, and
+<span class="math notranslate nohighlight">\(A^\#\)</span> is defined to be one of <span class="math notranslate nohighlight">\(\{A,A^T,A^H\}\)</span>.
+The data movement requires almost no modification from that of <a class="reference internal" href="Trsm.html#_CPPv44Trsm11LeftOrRight12UpperOrLower11Orientation13UnitOrNonUnit1FRK6MatrixI1FER6MatrixI1FE" title="Trsm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Trsm()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no corresponding BLAS routine, but it is a natural modification
+of Trsm.</p>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.F.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.F.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, F <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation1FRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of <cite>X</cite> with the solutions to the shifted linear
+systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.Complex:Real:.Matrix:Real:CR.Matrix:Complex:Real::CR.Matrix:Real:R.Matrix:Real:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>T</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>XReal</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>XImag</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK6MatrixI4RealERK6MatrixI7ComplexI4RealEER6MatrixI4RealER6MatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE">
+<span id="_CPPv314MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE"></span><span id="_CPPv214MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE"></span><span id="MultiShiftTrsm__LeftOrRight.UpperOrLower.Orientation.Complex:Real:.AbstractDistMatrix:Real:CR.AbstractDistMatrix:Complex:Real::CR.AbstractDistMatrix:Real:R.AbstractDistMatrix:Real:R"></span>void <code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>T</em>, <em class="property">const</em> AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>shifts</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>XReal</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>XImag</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414MultiShiftTrsm11LeftOrRight12UpperOrLower11Orientation7ComplexI4RealERK18AbstractDistMatrixI4RealERK18AbstractDistMatrixI7ComplexI4RealEER18AbstractDistMatrixI4RealER18AbstractDistMatrixI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the columns of the real and imaginary parts of <cite>X</cite> with the
+solutions to the shifted linear systems.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElMultiShiftTrsm_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsm_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, float<em> alpha</em>, ElMatrix_s<em> A</em>, ElConstMatrix_s<em> shifts</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsm_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiShiftTrsm_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsm_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, double<em> alpha</em>, ElMatrix_d<em> A</em>, ElConstMatrix_d<em> shifts</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsm_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiShiftTrsm_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsm_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElMatrix_c<em> A</em>, ElConstMatrix_c<em> shifts</em>, ElMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiShiftTrsm_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsm_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElMatrix_z<em> A</em>, ElConstMatrix_z<em> shifts</em>, ElMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiShiftTrsmDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsmDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, float<em> alpha</em>, ElDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> shifts</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsmDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiShiftTrsmDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsmDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, double<em> alpha</em>, ElDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> shifts</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsmDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiShiftTrsmDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsmDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> alpha</em>, ElDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> shifts</em>, ElDistMatrix_c<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsmDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiShiftTrsmDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiShiftTrsmDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElLeftOrRight" title="ElLeftOrRight">ElLeftOrRight</a><em> side</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> alpha</em>, ElDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> shifts</em>, ElDistMatrix_z<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiShiftTrsmDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="MultiShiftTrsm">
+<code class="descname">MultiShiftTrsm</code><span class="sig-paren">(</span><em>side</em>, <em>uplo</em>, <em>orient</em>, <em>alpha</em>, <em>A</em>, <em>shifts</em>, <em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#MultiShiftTrsm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="QuasiTrsm.html" class="btn btn-neutral float-right" title="QuasiTrsm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="MultiShiftQuasiTrsm.html" class="btn btn-neutral float-left" title="Multi-shift QuasiTrsm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

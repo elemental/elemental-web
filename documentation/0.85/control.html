@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Control theory &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Special matrices" href="matrices.html" />
+    <link rel="prev" title="Soft-thresholding" href="optimization/utilities/SoftThreshold.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="control-theory">
+<h1>Control theory<a class="headerlink" href="#control-theory" title="Permalink to this headline">¶</a></h1>
+<p>The following algorithms draw heavily from the second chapter of
+Nicholas J. Higham’s “Functions of Matrices: Theory and Computation” and depend
+heavily on the matrix sign function. They have only undergone cursory testing.</p>
+<div class="section" id="sylvester">
+<h2>Sylvester<a class="headerlink" href="#sylvester" title="Permalink to this headline">¶</a></h2>
+<p>As long as both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> only have eigenvalues in the open
+right-half plane, the following routines solve for <span class="math notranslate nohighlight">\(X\)</span> in the <em>Sylvester
+equation</em></p>
+<div class="math notranslate nohighlight">
+\[A X + X B = C\]</div>
+<p>via computing <span class="math notranslate nohighlight">\(\text{sgn}(W)\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}W = \begin{pmatrix} A &amp; -C \\ 0 &amp; -B \end{pmatrix}.\end{split}\]</div>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv49SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesterRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49SylvesterRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesterRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesterRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesterRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Versions where the individual matrices are passed in</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__i.Matrix:F:R.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span>int <em>m</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesteriR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49SylvesteriR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv39SylvesteriR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv29SylvesteriR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Sylvester__i.AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Sylvester</code><span class="sig-paren">(</span>int <em>m</em>, <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49SylvesteriR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Versions which saves space by accepting the preformed <span class="math notranslate nohighlight">\(W\)</span> matrix</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSylvester_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvester_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, ElConstMatrix_s<em> C</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvester_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvester_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvester_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, ElConstMatrix_d<em> C</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvester_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvester_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvester_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, ElConstMatrix_c<em> C</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvester_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvester_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvester_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, ElConstMatrix_z<em> C</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvester_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterDist_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> B</em>, ElConstDistMatrix_s<em> C</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterDist_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> B</em>, ElConstDistMatrix_d<em> C</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterDist_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> B</em>, ElConstDistMatrix_c<em> C</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterDist_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> B</em>, ElConstDistMatrix_z<em> C</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions where the individual matrices are passed in</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformed_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformed_s</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_s<em> W</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformed_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformed_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformed_d</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_d<em> W</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformed_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformed_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformed_c</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_c<em> W</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformed_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformed_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformed_z</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_z<em> W</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformed_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformedDist_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformedDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_s<em> W</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformedDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformedDist_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformedDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_d<em> W</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformedDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformedDist_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformedDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_c<em> W</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformedDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSylvesterPreformedDist_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSylvesterPreformedDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> m</em>, ElMatrix_z<em> W</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSylvesterPreformedDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which save memory by accepting the preformed <span class="math notranslate nohighlight">\(W\)</span> matrix</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="lyapunov">
+<h2>Lyapunov<a class="headerlink" href="#lyapunov" title="Permalink to this headline">¶</a></h2>
+<p>A special case of the Sylvester solver, where <span class="math notranslate nohighlight">\(B = A^H\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If minimizing memory usage is of importance, then the “preformed” Sylvester
+interface should be used instead.</p>
+</div>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv48LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv38LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv28LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Lyapunov__Matrix:F:CR.Matrix:F:CR.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Lyapunov</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48LyapunovRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48LyapunovRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv38LyapunovRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv28LyapunovRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Lyapunov__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Lyapunov</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>C</em>, <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48LyapunovRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElLyapunov_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunov_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> C</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunov_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLyapunov_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunov_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> C</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunov_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLyapunov_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunov_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> C</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunov_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLyapunov_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunov_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> C</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunov_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLyapunovDist_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunovDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> C</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunovDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLyapunovDist_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunovDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> C</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunovDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLyapunovDist_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunovDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> C</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunovDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLyapunovDist_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLyapunovDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> C</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLyapunovDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An “expert” C interface needs to be added and documented.</p>
+</div>
+</div>
+</div>
+<div class="section" id="algebraic-ricatti">
+<h2>Algebraic Ricatti<a class="headerlink" href="#algebraic-ricatti" title="Permalink to this headline">¶</a></h2>
+<p>Under suitable conditions, the following routines solve for <span class="math notranslate nohighlight">\(X\)</span> in the
+<em>algebraic Ricatti equation</em></p>
+<div class="math notranslate nohighlight">
+\[X K X - A^H X - X A = L,\]</div>
+<p>where both <span class="math notranslate nohighlight">\(K\)</span> and <span class="math notranslate nohighlight">\(L\)</span> are Hermitian.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv47Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__UpperOrLower.Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>K</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>L</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Ricatti12UpperOrLowerRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__UpperOrLower.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>K</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>L</em>, <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47Ricatti12UpperOrLowerRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Versions which accept the individual matrices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__Matrix:F:R.Matrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RicattiR6MatrixI1FER6MatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE">
+<span id="_CPPv37RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="_CPPv27RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE"></span><span id="Ricatti__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.SignCtrl:Base:F::"></span>void <code class="descname">Ricatti</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>W</em>, <a class="reference internal" href="core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>signCtrl</em> = <a class="reference internal" href="lapack_like/funcs/Sign.html#_CPPv4IE8SignCtrlI4BaseI1FEE" title="SignCtrl&lt;Base&lt;F&gt;&gt;">SignCtrl</a>&lt;<a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47RicattiR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE8SignCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Versions which save memory by directly accepting the preformed <span class="math notranslate nohighlight">\(W\)</span>
+matrix</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElRicatti_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_s</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> K</em>, ElConstMatrix_s<em> L</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicatti_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_d</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> K</em>, ElConstMatrix_d<em> L</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicatti_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_c</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> K</em>, ElConstMatrix_c<em> L</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicatti_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicatti_z</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> K</em>, ElConstMatrix_z<em> L</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicatti_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> K</em>, ElConstDistMatrix_s<em> L</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> K</em>, ElConstDistMatrix_d<em> L</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> K</em>, ElConstDistMatrix_c<em> L</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiDist_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> K</em>, ElConstDistMatrix_z<em> L</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the individual matrices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_s</code><span class="sig-paren">(</span>ElMatrix_s<em> W</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_d</code><span class="sig-paren">(</span>ElMatrix_d<em> W</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_c</code><span class="sig-paren">(</span>ElMatrix_c<em> W</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformed_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformed_z</code><span class="sig-paren">(</span>ElMatrix_z<em> W</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformed_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_s">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> W</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_d">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> W</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_c">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> W</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElRicattiPreformedDist_z">
+<a class="reference internal" href="core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElRicattiPreformedDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> W</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElRicattiPreformedDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Versions which accept the preformed <span class="math notranslate nohighlight">\(W\)</span> matrix</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

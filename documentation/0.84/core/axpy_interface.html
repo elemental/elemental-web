@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>The “Axpy” interface &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic linear algebra" href="../blas-like.html" />
+    <link rel="prev" title="Moving partitions" href="slide_partition.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="the-axpy-interface">
+<h1>The “Axpy” interface<a class="headerlink" href="#the-axpy-interface" title="Permalink to this headline">¶</a></h1>
+<p>The Axpy interface is Elemental’s version of the PLAPACK Axpy interface, where
+<em>Axpy</em>  is derived from the BLAS shorthand for <span class="math notranslate nohighlight">\(Y := \alpha X + Y\)</span>
+(Alpha X Plus Y). Rather than always requiring users to manually fill their
+distributed matrix, this interface provides a mechanism so that individual processes
+can independently submit local submatrices which will be automatically redistributed
+and added onto the global distributed matrix
+(this would be <code class="docutils literal notranslate"><span class="pre">LOCAL_TO_GLOBAL</span></code> mode). The interface also allows for the reverse:
+each process may asynchronously request arbitrary subset of the global distributed
+matrix (<code class="docutils literal notranslate"><span class="pre">GLOBAL_TO_LOCAL</span></code> mode).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The catch is that, in order for this behavior to be possible, all of the
+processes that share a particular distributed matrix must synchronize at the
+beginning and end of the Axpy interface usage (these synchronizations correspond
+to the <code class="docutils literal notranslate"><span class="pre">Attach</span></code> and <code class="docutils literal notranslate"><span class="pre">Detach</span></code> member functions). The distributed matrix
+should <strong>not</strong> be manually modified between the <code class="docutils literal notranslate"><span class="pre">Attach</span></code> and <code class="docutils literal notranslate"><span class="pre">Detach</span></code> calls.</p>
+</div>
+<p>An example usage might be:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;elemental.hpp&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">elem</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="c1">// Create an 8 x 8 distributed matrix over the given grid</span>
+<span class="n">DistMatrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">grid</span> <span class="p">);</span>
+
+<span class="c1">// Set every entry of A to zero</span>
+<span class="n">MakeZeros</span><span class="p">(</span> <span class="n">A</span> <span class="p">);</span>
+
+<span class="c1">// Open up a LOCAL_TO_GLOBAL interface to A</span>
+<span class="n">AxpyInterface</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">interface</span><span class="p">;</span>
+<span class="n">interface</span><span class="p">.</span><span class="n">Attach</span><span class="p">(</span> <span class="n">LOCAL_TO_GLOBAL</span><span class="p">,</span> <span class="n">A</span> <span class="p">);</span>
+
+<span class="c1">// If we are process 0, then create a 3 x 3 identity matrix, B,</span>
+<span class="c1">// and Axpy it into the bottom-right of A (using alpha=2)</span>
+<span class="c1">// NOTE: The bottom-right 3 x 3 submatrix starts at the (5,5)</span>
+<span class="c1">//       entry of A.</span>
+<span class="c1">// NOTE: Every process is free to Axpy as many submatrices as they</span>
+<span class="c1">//       desire at this point.</span>
+<span class="k">if</span><span class="p">(</span> <span class="n">grid</span><span class="p">.</span><span class="n">VCRank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">B</span><span class="p">;</span>
+    <span class="n">Identity</span><span class="p">(</span> <span class="n">B</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span> <span class="p">);</span>
+    <span class="n">interface</span><span class="p">.</span><span class="n">Axpy</span><span class="p">(</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Have all processes collectively detach from A</span>
+<span class="n">interface</span><span class="p">.</span><span class="n">Detach</span><span class="p">();</span>
+
+<span class="c1">// Print the updated A</span>
+<span class="n">Print</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="s">&quot;Distributed A&quot;</span> <span class="p">);</span>
+
+<span class="c1">// Reattach to A, but in the GLOBAL_TO_LOCAL direction</span>
+<span class="n">interface</span><span class="p">.</span><span class="n">Attach</span><span class="p">(</span> <span class="n">GLOBAL_TO_LOCAL</span><span class="p">,</span> <span class="n">A</span> <span class="p">);</span>
+
+<span class="c1">// Have process 0 request a copy of the entire distributed matrix</span>
+<span class="c1">//</span>
+<span class="c1">// NOTE: Every process is free to Axpy as many submatrices as they</span>
+<span class="c1">//       desire at this point.</span>
+<span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">C</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span> <span class="n">grid</span><span class="p">.</span><span class="n">VCRank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Zeros</span><span class="p">(</span> <span class="n">C</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span> <span class="p">);</span>
+    <span class="n">interface</span><span class="p">.</span><span class="n">Axpy</span><span class="p">(</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Collectively detach in order to finish filling process 0&#39;s request</span>
+<span class="n">interface</span><span class="p">.</span><span class="n">Detach</span><span class="p">();</span>
+
+<span class="c1">// Process 0 can now locally print its copy of A</span>
+<span class="k">if</span><span class="p">(</span> <span class="n">g</span><span class="p">.</span><span class="n">VCRank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="n">Print</span><span class="p">(</span> <span class="n">C</span><span class="p">,</span> <span class="s">&quot;Process 0&#39;s local copy of A&quot;</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>The output would be</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Distributed</span> <span class="n">A</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">2</span>
+
+<span class="n">Process</span> <span class="mi">0</span><span class="s1">&#39;s local copy of A</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">0</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<dl class="enum">
+<dt id="_CPPv48AxpyType">
+<span id="_CPPv38AxpyType"></span><span id="_CPPv28AxpyType"></span><em class="property">enum </em><code class="descname">AxpyType</code><a class="headerlink" href="#_CPPv48AxpyType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N8AxpyType15LOCAL_TO_GLOBALE">
+<span id="_CPPv3N8AxpyType15LOCAL_TO_GLOBALE"></span><span id="_CPPv2N8AxpyType15LOCAL_TO_GLOBALE"></span><em class="property">enumerator </em><code class="descname">LOCAL_TO_GLOBAL</code><a class="headerlink" href="#_CPPv4N8AxpyType15LOCAL_TO_GLOBALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N8AxpyType15GLOBAL_TO_LOCALE">
+<span id="_CPPv3N8AxpyType15GLOBAL_TO_LOCALE"></span><span id="_CPPv2N8AxpyType15GLOBAL_TO_LOCALE"></span><em class="property">enumerator </em><code class="descname">GLOBAL_TO_LOCAL</code><a class="headerlink" href="#_CPPv4N8AxpyType15GLOBAL_TO_LOCALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE13AxpyInterfaceI1TE">
+<span id="_CPPv3IE13AxpyInterfaceI1TE"></span><span id="_CPPv2IE13AxpyInterfaceI1TE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AxpyInterface</code>&lt;T&gt;<a class="headerlink" href="#_CPPv4IE13AxpyInterfaceI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE13AxpyInterfaceEv">
+<span id="_CPPv3N13AxpyInterfaceI1TE13AxpyInterfaceEv"></span><span id="_CPPv2N13AxpyInterfaceI1TE13AxpyInterfaceEv"></span><span id="AxpyInterface:T:::AxpyInterface"></span><code class="descname">AxpyInterface</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE13AxpyInterfaceEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initialize a blank instance of the interface class. It will need to later be
+attached to a distributed matrix before any Axpy’s can occur.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeR10DistMatrixI1T2MC2MRE">
+<span id="_CPPv3N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeR10DistMatrixI1T2MC2MRE"></span><span id="_CPPv2N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeR10DistMatrixI1T2MC2MRE"></span><span id="AxpyInterface:T:::AxpyInterface__AxpyType.DistMatrix:T.MC.MR:R"></span><code class="descname">AxpyInterface</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48AxpyType" title="AxpyType">AxpyType</a> <em>type</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T2MC2MRE" title="DistMatrix&lt;T, MC, MR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MCE" title="MC">MC</a>, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MRE" title="MR">MR</a>&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeR10DistMatrixI1T2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initialize an interface to the distributed matrix <code class="docutils literal notranslate"><span class="pre">Z</span></code>, where <code class="docutils literal notranslate"><span class="pre">type</span></code>
+can be either <code class="docutils literal notranslate"><span class="pre">LOCAL_TO_GLOBAL</span></code> or <code class="docutils literal notranslate"><span class="pre">GLOBAL_TO_LOCAL</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeRK10DistMatrixI1T2MC2MRE">
+<span id="_CPPv3N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeRK10DistMatrixI1T2MC2MRE"></span><span id="_CPPv2N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeRK10DistMatrixI1T2MC2MRE"></span><span id="AxpyInterface:T:::AxpyInterface__AxpyType.DistMatrix:T.MC.MR:CR"></span><code class="descname">AxpyInterface</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48AxpyType" title="AxpyType">AxpyType</a> <em>type</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T2MC2MRE" title="DistMatrix&lt;T, MC, MR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MCE" title="MC">MC</a>, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MRE" title="MR">MR</a>&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE13AxpyInterfaceE8AxpyTypeRK10DistMatrixI1T2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initialize an interface to the (unmodifiable) distributed matrix <code class="docutils literal notranslate"><span class="pre">Z</span></code>;
+since <code class="docutils literal notranslate"><span class="pre">Z</span></code> cannot be modified, the only sensical <code class="docutils literal notranslate"><span class="pre">AxpyType</span></code> is
+<code class="docutils literal notranslate"><span class="pre">GLOBAL_TO_LOCAL</span></code>. The <code class="docutils literal notranslate"><span class="pre">AxpyType</span></code> argument was kept in order to be
+consistent with the previous routine.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE6AttachE8AxpyTypeR10DistMatrixI1T2MC2MRE">
+<span id="_CPPv3N13AxpyInterfaceI1TE6AttachE8AxpyTypeR10DistMatrixI1T2MC2MRE"></span><span id="_CPPv2N13AxpyInterfaceI1TE6AttachE8AxpyTypeR10DistMatrixI1T2MC2MRE"></span><span id="AxpyInterface:T:::Attach__AxpyType.DistMatrix:T.MC.MR:R"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48AxpyType" title="AxpyType">AxpyType</a> <em>type</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T2MC2MRE" title="DistMatrix&lt;T, MC, MR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MCE" title="MC">MC</a>, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MRE" title="MR">MR</a>&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE6AttachE8AxpyTypeR10DistMatrixI1T2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attach to the distributed matrix <code class="docutils literal notranslate"><span class="pre">Z</span></code>, where <code class="docutils literal notranslate"><span class="pre">type</span></code> can be either
+<code class="docutils literal notranslate"><span class="pre">LOCAL_TO_GLOBAL</span></code> or <code class="docutils literal notranslate"><span class="pre">GLOBAL_TO_LOCAL</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE6AttachE8AxpyTypeRK10DistMatrixI1T2MC2MRE">
+<span id="_CPPv3N13AxpyInterfaceI1TE6AttachE8AxpyTypeRK10DistMatrixI1T2MC2MRE"></span><span id="_CPPv2N13AxpyInterfaceI1TE6AttachE8AxpyTypeRK10DistMatrixI1T2MC2MRE"></span><span id="AxpyInterface:T:::Attach__AxpyType.DistMatrix:T.MC.MR:CR"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48AxpyType" title="AxpyType">AxpyType</a> <em>type</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T2MC2MRE" title="DistMatrix&lt;T, MC, MR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MCE" title="MC">MC</a>, <a class="reference internal" href="environment.html#_CPPv4N12Distribution2MRE" title="MR">MR</a>&gt; &amp;<em>Z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE6AttachE8AxpyTypeRK10DistMatrixI1T2MC2MRE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attach to the (unmodifiable) distributed matrix <code class="docutils literal notranslate"><span class="pre">Z</span></code>; as mentioned above,
+the only sensical value of <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">GLOBAL_TO_LOCAL</span></code>, but the
+<code class="docutils literal notranslate"><span class="pre">AxpyType</span></code> argument was kept for consistency.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE4AxpyE1TR6MatrixI1TEii">
+<span id="_CPPv3N13AxpyInterfaceI1TE4AxpyE1TR6MatrixI1TEii"></span><span id="_CPPv2N13AxpyInterfaceI1TE4AxpyE1TR6MatrixI1TEii"></span><span id="AxpyInterface:T:::Axpy__T.Matrix:T:R.i.i"></span>void <code class="descname">Axpy</code><span class="sig-paren">(</span>T <em>alpha</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>Z</em>, int <em>i</em>, int <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE4AxpyE1TR6MatrixI1TEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If the interface was previously attached in the <code class="docutils literal notranslate"><span class="pre">LOCAL_TO_GLOBAL</span></code>
+direction, then the matrix <code class="docutils literal notranslate"><span class="pre">\alpha</span> <span class="pre">Z</span></code> will be added onto the associated
+distributed matrix starting at the <span class="math notranslate nohighlight">\((i,j)\)</span> global index; otherwise
+<span class="math notranslate nohighlight">\(\alpha\)</span> times the submatrix of the associated distributed matrix,
+which starts at index <span class="math notranslate nohighlight">\((i,j)\)</span> and is of the same size as <code class="docutils literal notranslate"><span class="pre">Z</span></code>, will
+be added onto <code class="docutils literal notranslate"><span class="pre">Z</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE4AxpyE1TRK6MatrixI1TEii">
+<span id="_CPPv3N13AxpyInterfaceI1TE4AxpyE1TRK6MatrixI1TEii"></span><span id="_CPPv2N13AxpyInterfaceI1TE4AxpyE1TRK6MatrixI1TEii"></span><span id="AxpyInterface:T:::Axpy__T.Matrix:T:CR.i.i"></span>void <code class="descname">Axpy</code><span class="sig-paren">(</span>T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>Z</em>, int <em>i</em>, int <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE4AxpyE1TRK6MatrixI1TEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as above, but since <code class="docutils literal notranslate"><span class="pre">Z</span></code> is unmodifiable, the attachment must have
+been in the <code class="docutils literal notranslate"><span class="pre">LOCAL_TO_GLOBAL</span></code> direction.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13AxpyInterfaceI1TE6DetachEv">
+<span id="_CPPv3N13AxpyInterfaceI1TE6DetachEv"></span><span id="_CPPv2N13AxpyInterfaceI1TE6DetachEv"></span><span id="AxpyInterface:T:::Detach"></span>void <code class="descname">Detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13AxpyInterfaceI1TE6DetachEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All processes collectively finish handling each others requests and then
+detach from the associated distributed matrix.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

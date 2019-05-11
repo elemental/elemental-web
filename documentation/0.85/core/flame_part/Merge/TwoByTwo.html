@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>2x2 matrix of blocks &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Moving partition boundaries" href="../SlidePartition.html" />
+    <link rel="prev" title="2x1 matrix of blocks" href="TwoByOne.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="x2-matrix-of-blocks">
+<h1>2x2 matrix of blocks<a class="headerlink" href="#x2-matrix-of-blocks" title="Permalink to this headline">¶</a></h1>
+<p>The following routines merge a two-by-two set of contiguous submatrices which
+have conformal leading dimensions, sizes, and, if applicable, alignments.
+That is to say, if the inputs are consistent, a view of
+<span class="math notranslate nohighlight">\(\begin{pmatrix} B_{TL} &amp; B_{TR} \\ B_{BL} &amp; B_{BR} \end{pmatrix}\)</span> is
+returned.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The constraints described above for horizontally and vertically merging
+submatrices both apply here.</p>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv48Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv38Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv28Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="Merge2x2__Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R"></span>void <code class="descname">Merge2x2</code><span class="sig-paren">(</span><a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414LockedMerge2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv314LockedMerge2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv214LockedMerge2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedMerge2x2__Matrix:T:R.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR"></span>void <code class="descname">LockedMerge2x2</code><span class="sig-paren">(</span><a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414LockedMerge2x2R6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Merge2x2R18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE">
+<span id="_CPPv38Merge2x2R18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE"></span><span id="_CPPv28Merge2x2R18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE"></span><span id="Merge2x2__AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R"></span>void <code class="descname">Merge2x2</code><span class="sig-paren">(</span><a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BTL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BTR</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BBL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Merge2x2R18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414LockedMerge2x2R18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE">
+<span id="_CPPv314LockedMerge2x2R18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="_CPPv214LockedMerge2x2R18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE"></span><span id="LockedMerge2x2__AbstractDistMatrix:T:R.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:CR"></span>void <code class="descname">LockedMerge2x2</code><span class="sig-paren">(</span><a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414LockedMerge2x2R18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TERK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The view is returned in <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE">
+<span id="_CPPv38Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="_CPPv28Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE"></span><span id="Merge2x2__Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R"></span><a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">Merge2x2</code><span class="sig-paren">(</span><a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Merge2x2R6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414LockedMerge2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE">
+<span id="_CPPv314LockedMerge2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="_CPPv214LockedMerge2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE"></span><span id="LockedMerge2x2__Matrix:T:CR.Matrix:T:CR.Matrix:T:CR.Matrix:T:CR"></span><a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; <code class="descname">LockedMerge2x2</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414LockedMerge2x2RK6MatrixI1TERK6MatrixI1TERK6MatrixI1TERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Merge2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE">
+<span id="_CPPv38Merge2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="_CPPv28Merge2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE"></span><span id="Merge2x2__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R"></span><a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">Merge2x2</code><span class="sig-paren">(</span><a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTL</em>, <a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTR</em>, <a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBL</em>, <a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Merge2x2R10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414LockedMerge2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE">
+<span id="_CPPv314LockedMerge2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="_CPPv214LockedMerge2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE"></span><span id="LockedMerge2x2__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:CR"></span><a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; <code class="descname">LockedMerge2x2</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTL</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BTR</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBL</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414LockedMerge2x2RK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VERK10DistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The view is the return value of the function</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElMerge2x2_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2_i</code><span class="sig-paren">(</span>ElMatrix_i<em> A</em>, ElMatrix_i<em> BTL</em>, ElMatrix_i<em> BTR</em>, ElMatrix_i<em> BBL</em>, ElMatrix_i<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> BTL</em>, ElMatrix_s<em> BTR</em>, ElMatrix_s<em> BBL</em>, ElMatrix_s<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> BTL</em>, ElMatrix_d<em> BTR</em>, ElMatrix_d<em> BBL</em>, ElMatrix_d<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> BTL</em>, ElMatrix_c<em> BTR</em>, ElMatrix_c<em> BBL</em>, ElMatrix_c<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> BTL</em>, ElMatrix_z<em> BTR</em>, ElMatrix_z<em> BBL</em>, ElMatrix_z<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2Dist_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2Dist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> A</em>, ElDistMatrix_i<em> BTL</em>, ElDistMatrix_i<em> BTR</em>, ElDistMatrix_i<em> BBL</em>, ElDistMatrix_i<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2Dist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2Dist_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2Dist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> BTL</em>, ElDistMatrix_s<em> BTR</em>, ElDistMatrix_s<em> BBL</em>, ElDistMatrix_s<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2Dist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2Dist_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2Dist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> BTL</em>, ElDistMatrix_d<em> BTR</em>, ElDistMatrix_d<em> BBL</em>, ElDistMatrix_d<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2Dist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2Dist_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2Dist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> BTL</em>, ElDistMatrix_c<em> BTR</em>, ElDistMatrix_c<em> BBL</em>, ElDistMatrix_c<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2Dist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMerge2x2Dist_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMerge2x2Dist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> BTL</em>, ElDistMatrix_z<em> BTR</em>, ElDistMatrix_z<em> BBL</em>, ElDistMatrix_z<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMerge2x2Dist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2_i</code><span class="sig-paren">(</span>ElMatrix_i<em> A</em>, ElConstMatrix_i<em> BTL</em>, ElConstMatrix_i<em> BTR</em>, ElConstMatrix_i<em> BBL</em>, ElConstMatrix_i<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElConstMatrix_s<em> BTL</em>, ElConstMatrix_s<em> BTR</em>, ElConstMatrix_s<em> BBL</em>, ElConstMatrix_s<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElConstMatrix_d<em> BTL</em>, ElConstMatrix_d<em> BTR</em>, ElConstMatrix_d<em> BBL</em>, ElConstMatrix_d<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElConstMatrix_c<em> BTL</em>, ElConstMatrix_c<em> BTR</em>, ElConstMatrix_c<em> BBL</em>, ElConstMatrix_c<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElConstMatrix_z<em> BTL</em>, ElConstMatrix_z<em> BTR</em>, ElConstMatrix_z<em> BBL</em>, ElConstMatrix_z<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2Dist_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2Dist_i</code><span class="sig-paren">(</span>ElDistMatrix_i<em> A</em>, ElConstDistMatrix_i<em> BTL</em>, ElConstDistMatrix_i<em> BTR</em>, ElConstDistMatrix_i<em> BBL</em>, ElConstDistMatrix_i<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2Dist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2Dist_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2Dist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> BTL</em>, ElConstDistMatrix_s<em> BTR</em>, ElConstDistMatrix_s<em> BBL</em>, ElConstDistMatrix_s<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2Dist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2Dist_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2Dist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> BTL</em>, ElConstDistMatrix_d<em> BTR</em>, ElConstDistMatrix_d<em> BBL</em>, ElConstDistMatrix_d<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2Dist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2Dist_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2Dist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> BTL</em>, ElConstDistMatrix_c<em> BTR</em>, ElConstDistMatrix_c<em> BBL</em>, ElConstDistMatrix_c<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2Dist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedMerge2x2Dist_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedMerge2x2Dist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> BTL</em>, ElConstDistMatrix_z<em> BTR</em>, ElConstDistMatrix_z<em> BBL</em>, ElConstDistMatrix_z<em> BBR</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedMerge2x2Dist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

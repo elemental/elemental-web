@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Tuning parameters &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimization" href="../optimization.html" />
+    <link rel="prev" title="Utilities" href="util.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tuning-parameters">
+<span id="lapack-tuning"></span><h1>Tuning parameters<a class="headerlink" href="#tuning-parameters" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hermitian-to-tridiagonal">
+<h2>Hermitian to tridiagonal<a class="headerlink" href="#hermitian-to-tridiagonal" title="Permalink to this headline">¶</a></h2>
+<p>Two different basic strategies are available for the reduction to tridiagonal
+form:</p>
+<ol class="arabic simple">
+<li><p>Run a pipelined algorithm designed for general (rectangular) process grids.</p></li>
+<li><p>Redistribute the matrix so that it is owned by a perfect square number of
+processes, perform a fast reduction to tridiaogal form, and redistribute
+the data back to the original process grid. This algorithm is essentially
+an evolution of the HJS tridiagonalization approach
+(see “<em>Towards an efficient parallel eigensolver for dense symmetric
+matrices</em>” by Bruce Hendrickson, Elizabeth Jessup, and Christopher Smith)
+which is described in detail in Ken Stanley’s dissertation, “<em>Execution time
+of symmetric eigensolvers</em>”.</p></li>
+</ol>
+<p>There is clearly a small penalty associated with the extra redistributions
+necessary for the second approach, but the benefit from using a square process
+grid is usually quite signficant. By default, <a class="reference internal" href="condense/HermitianTridiag.html#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="HermitianTridiag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianTridiag()</span></code></a> will
+run the standard algorithm (approach 1) unless the matrix is already distributed
+over a square process grid. The reasoning is that good performance depends upon
+a “good” ordering of the square (say, <span class="math notranslate nohighlight">\(\hat p \times \hat p\)</span>) subgrid,
+though usually either a row-major or column-major ordering of the first
+<span class="math notranslate nohighlight">\(\hat p^2\)</span> processes suffices.</p>
+<dl class="type">
+<dt id="_CPPv424HermitianTridiagApproach">
+<span id="_CPPv324HermitianTridiagApproach"></span><span id="_CPPv224HermitianTridiagApproach"></span><span id="HermitianTridiagApproach"></span><em class="property">type </em><code class="descname">HermitianTridiagApproach</code><a class="headerlink" href="#_CPPv424HermitianTridiagApproach" title="Permalink to this definition">¶</a><br /></dt>
+<dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_NORMAL</span></code>: Run the pipelined rectangular algorithm.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_SQUARE</span></code>: Run the square grid algorithm on the largest
+possible square process grid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_DEFAULT</span></code>: If the given process grid is already square,
+run the square grid algorithm, otherwise use the pipelined non-square
+approach.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A properly tuned <code class="docutils literal notranslate"><span class="pre">HERMITIAN_TRIDIAG_SQUARE</span></code> approach is almost always
+fastest, so it is worthwhile to test it with both the <code class="docutils literal notranslate"><span class="pre">COLUMN_MAJOR</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ROW_MAJOR</span></code> subgrid orderings, as described below.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The first algorithm heavily depends upon the performance of distributed
+<a class="reference internal" href="../blas_like/level2/Symv.html#_CPPv44Symv12UpperOrLower1TRK6MatrixI1TERK6MatrixI1TE1TR6MatrixI1TEb" title="Symv"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Symv()</span></code></a>, so users interested in maximizing the performance of the
+first algorithm will likely want to investigate different values for the
+local blocksizes through the routine
+<code class="docutils literal notranslate"><span class="pre">SetLocalSymvBlocksize&lt;T&gt;(</span> <span class="pre">int</span> <span class="pre">blocksize</span> <span class="pre">)</span></code>; the default value is 64.</p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

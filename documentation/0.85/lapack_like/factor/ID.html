@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Interpolative Decomposition (ID) &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Skeleton decomposition" href="Skeleton.html" />
+    <link rel="prev" title="Generalized RQ factorization" href="GRQ.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="interpolative-decomposition-id">
+<h1>Interpolative Decomposition (ID)<a class="headerlink" href="#interpolative-decomposition-id" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/ID.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/ID.cpp">Example driver</a></p>
+<p>Interpolative Decompositions (ID’s) are closely related to pivoted QR
+factorizations and are useful for representing (approximately) low-rank
+matrices in terms of linear combinations of a few of their columns, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[A P = \hat{A} \begin{pmatrix} I &amp; Z \end{pmatrix},\]</div>
+<p>where <span class="math notranslate nohighlight">\(P\)</span> is a permutation matrix, <span class="math notranslate nohighlight">\(\hat{A}\)</span> is a small set of
+columns of <span class="math notranslate nohighlight">\(A\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> is an interpolation matrix responsible for
+representing the remaining columns in terms of the selected columns of
+<span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p>The following routines use column-pivoted QR factorizations to return an
+Interpolative Decomposition.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv42IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv32IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv22IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEE"></span><span id="ID__Matrix:F:CR.Matrix:i:R.Matrix:F:R.QRCtrl:Base:F::C"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42IDRK18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEE">
+<span id="_CPPv32IDRK18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEE"></span><span id="_CPPv22IDRK18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEE"></span><span id="ID__AbstractDistMatrix:F:CR.AbstractDistMatrix:i:R.AbstractDistMatrix:F:R.QRCtrl:Base:F::C"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDRK18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The matrix <span class="math notranslate nohighlight">\(A\)</span> is not modified.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42IDR6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEEb">
+<span id="_CPPv32IDR6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEEb"></span><span id="_CPPv22IDR6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEEb"></span><span id="ID__Matrix:F:R.Matrix:i:R.Matrix:F:R.QRCtrl:Base:F::C.b"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDR6MatrixI1FER6MatrixIiER6MatrixI1FEK6QRCtrlI4BaseI1FEEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42IDR18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEEb">
+<span id="_CPPv32IDR18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEEb"></span><span id="_CPPv22IDR18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEEb"></span><span id="ID__AbstractDistMatrix:F:R.AbstractDistMatrix:i:R.AbstractDistMatrix:F:R.QRCtrl:Base:F::C.b"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <em class="property">const</em> QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = QRCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;(), bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDR18AbstractDistMatrixI1FER18AbstractDistMatrixIiER18AbstractDistMatrixI1FEK6QRCtrlI4BaseI1FEEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The matrix <span class="math notranslate nohighlight">\(A\)</span> is optionally allowed to be modified.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElID_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElID_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_s<em> Z</em>, ElQRCtrl_s<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElID_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElID_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElID_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_d<em> Z</em>, ElQRCtrl_d<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElID_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElID_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElID_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_c<em> Z</em>, ElQRCtrl_s<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElID_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElID_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElID_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_i<em> p</em>, ElMatrix_z<em> Z</em>, ElQRCtrl_d<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElID_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElIDDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElIDDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_s<em> Z</em>, ElQRCtrl_s<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElIDDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElIDDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElIDDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_d<em> Z</em>, ElQRCtrl_d<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElIDDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElIDDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElIDDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_c<em> Z</em>, ElQRCtrl_s<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElIDDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElIDDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElIDDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_i<em> p</em>, ElDistMatrix_z<em> Z</em>, ElQRCtrl_d<em> ctrl</em>, bool<em> canOverwrite</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElIDDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>The matrix <span class="math notranslate nohighlight">\(A\)</span> is optionally allowed to be modified.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

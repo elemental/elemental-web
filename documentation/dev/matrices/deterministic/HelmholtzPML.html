@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Helmholtz with PML &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Hermitian from EVD" href="HermitianFromEVD.html" />
+    <link rel="prev" title="Helmholtz" href="Helmholtz.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../matrices.html">Special matrices</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../deterministic.html">Deterministic</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="BullsHead.html">Bull’s Head</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Cauchy.html">Cauchy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CauchyLike.html">Cauchy-like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Circulant.html">Circulant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Demmel.html">Demmel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Diagonal.html">Diagonal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DruinskyToledo.html">Druinsky-Toledo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Egorov.html">Egorov</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ehrenfest.html">Ehrenfest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ExtendedKahan.html">Extended Kahan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Fiedler.html">Fiedler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Forsythe.html">Forsythe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Fourier.html">Fourier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="FourierIdentity.html">Fourier-Identity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GCDMatrix.html">GCDMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Gear.html">Gear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEPPGrowth.html">GEPP Growth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GKS.html">Golub/Klema/Stewart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Grcar.html">Grcar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hankel.html">Hankel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hanowa.html">Hanowa</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Helmholtz.html">Helmholtz</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Helmholtz with PML</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="HermitianFromEVD.html">Hermitian from EVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Hilbert.html">Hilbert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Identity.html">Identity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Jordan.html">Jordan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Kahan.html">Kahan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="KMS.html">KMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Laplacian.html">Laplacian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Lauchli.html">Lauchli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Legendre.html">Legendre</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Lehmer.html">Lehmer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Lotkin.html">Lotkin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MinIJ.html">MinIJ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NormalFromEVD.html">NormalFromEVD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ones.html">Ones</a></li>
+<li class="toctree-l3"><a class="reference internal" href="OneTwoOne.html">OneTwoOne</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Parter.html">Parter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pei.html">Pei</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Redheffer.html">Redheffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Riffle.html">Riffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ris.html">Ris</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Toeplitz.html">Toeplitz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrefethenEmbree.html">Trefethen-Embree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Triangle.html">Triangle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TriW.html">TriW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Walsh.html">Walsh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Whale.html">Whale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Wilkinson.html">Wilkinson</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Zeros.html">Zeros</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../random.html">Random</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../matrices.html">Special matrices</a> &raquo;</li>
+        
+          <li><a href="../deterministic.html">Deterministic</a> &raquo;</li>
+        
+      <li>Helmholtz with PML</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/matrices/deterministic/HelmholtzPML.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="helmholtz-with-pml">
+<h1>Helmholtz with PML<a class="headerlink" href="#helmholtz-with-pml" title="Permalink to this headline">¶</a></h1>
+<p>The following routines return a simple second-order discretization of the
+constant coefficient Helmholtz equation over <span class="math notranslate nohighlight">\([0,1]^d\)</span> with Perfectly
+Matched Layer boundary conditions with profile defined by the amplitude
+<span class="math notranslate nohighlight">\(\sigma\)</span> and exponent <cite>pmlExp</cite>, discretized over <cite>numPmlPoints</cite> grid
+points.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__Matrix:Complex:Real::R.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__AbstractDistMatrix:Complex:Real::R.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>n</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>1D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__Matrix:Complex:Real::R.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__AbstractDistMatrix:Complex:Real::R.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>2D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__Matrix:Complex:Real::R.Int.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>nz</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__AbstractDistMatrix:Complex:Real::R.Int.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>nz</em>, <a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>3D Helmholtz</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElHelmholtzPML1D_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1D_c</code><span class="sig-paren">(</span>ElMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1D_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML1D_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1D_z</code><span class="sig-paren">(</span>ElMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1D_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML1DDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1DDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1DDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML1DDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1DDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1DDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>1D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2D_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2D_c</code><span class="sig-paren">(</span>ElMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2D_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2D_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2D_z</code><span class="sig-paren">(</span>ElMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2D_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2DDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2DDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2DDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2DDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2DDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2DDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>2D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3D_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3D_c</code><span class="sig-paren">(</span>ElMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3D_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3D_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3D_z</code><span class="sig-paren">(</span>ElMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3D_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3DDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3DDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3DDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3DDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3DDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment/complex.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3DDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>3D Helmholtz</p>
+</dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="HelmholtzPML1D">
+<code class="descname">HelmholtzPML1D</code><span class="sig-paren">(</span><em>H</em>, <em>nx</em>, <em>omega</em>, <em>numPmlPoints</em>, <em>sigma</em>, <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#HelmholtzPML1D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="HelmholtzPML2D">
+<code class="descname">HelmholtzPML2D</code><span class="sig-paren">(</span><em>H</em>, <em>nx</em>, <em>ny</em>, <em>omega</em>, <em>numPmlPoints</em>, <em>sigma</em>, <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#HelmholtzPML2D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="HelmholtzPML3D">
+<code class="descname">HelmholtzPML3D</code><span class="sig-paren">(</span><em>H</em>, <em>nx</em>, <em>ny</em>, <em>nz</em>, <em>omega</em>, <em>numPmlPoints</em>, <em>sigma</em>, <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#HelmholtzPML3D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="HermitianFromEVD.html" class="btn btn-neutral float-right" title="Hermitian from EVD" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Helmholtz.html" class="btn btn-neutral float-left" title="Helmholtz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

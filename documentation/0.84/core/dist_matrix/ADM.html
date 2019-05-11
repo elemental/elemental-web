@@ -1,0 +1,1119 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>AbstractDistMatrix &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="GeneralDistMatrix" href="GDM.html" />
+    <link rel="prev" title="Distributed matrices" href="../dist_matrix.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="abstractdistmatrix">
+<h1>AbstractDistMatrix<a class="headerlink" href="#abstractdistmatrix" title="Permalink to this headline">¶</a></h1>
+<p>This abstract class defines the list of member functions that are guaranteed
+to be available for all matrix distributions and whose prototype does not
+depend upon the particular matrix distribution; the
+<a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a> class exists for general routines whose
+prototype <em>does</em> depend upon the particular matrix distribution.</p>
+<dl class="class">
+<dt id="_CPPv4IE18AbstractDistMatrixI1TE">
+<span id="_CPPv3IE18AbstractDistMatrixI1TE"></span><span id="_CPPv2IE18AbstractDistMatrixI1TE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">AbstractDistMatrix</code>&lt;T&gt;<a class="headerlink" href="#_CPPv4IE18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p class="rubric">Constructors and destructors</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE18AbstractDistMatrixERR18AbstractDistMatrixI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE18AbstractDistMatrixERR18AbstractDistMatrixI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE18AbstractDistMatrixERR18AbstractDistMatrixI1TE"></span><span id="AbstractDistMatrix:T:::AbstractDistMatrix__AbstractDistMatrix:T:RR"></span><code class="descname">AbstractDistMatrix</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE18AbstractDistMatrixERR18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;::AbstractDistMatrix">AbstractDistMatrix</a>&lt;T&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE18AbstractDistMatrixERR18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move constructor which transfers the metadata from the specified
+matrix over to the new matrix as a means of cheaply transferring
+resources.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TED0Ev">
+<span id="_CPPv3N18AbstractDistMatrixI1TED0Ev"></span><span id="_CPPv2N18AbstractDistMatrixI1TED0Ev"></span><span id="AbstractDistMatrix:T:::~AbstractDistMatrix"></span><code class="descname">~AbstractDistMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Assignment and reconfiguration</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TEaSERR18AbstractDistMatrixI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TEaSERR18AbstractDistMatrixI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TEaSERR18AbstractDistMatrixI1TE"></span><span id="AbstractDistMatrix:T:::assign-operator__AbstractDistMatrix:T:RR"></span><a class="reference internal" href="#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;&amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TEaSERR18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A C++11 move assignment which swaps the metadata between the two matrices
+as a means of cheaply swapping the resources assigned to each matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE5EmptyEv">
+<span id="_CPPv3N18AbstractDistMatrixI1TE5EmptyEv"></span><span id="_CPPv2N18AbstractDistMatrixI1TE5EmptyEv"></span><span id="AbstractDistMatrix:T:::Empty"></span>void <code class="descname">Empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE5EmptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Empties the data and frees all alignments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE9EmptyDataEv">
+<span id="_CPPv3N18AbstractDistMatrixI1TE9EmptyDataEv"></span><span id="_CPPv2N18AbstractDistMatrixI1TE9EmptyDataEv"></span><span id="AbstractDistMatrix:T:::EmptyData"></span>void <code class="descname">EmptyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE9EmptyDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the matrix size to zero and frees associated memory
+(the alignments are left unchanged).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE7SetGridERK4Grid">
+<span id="_CPPv3N18AbstractDistMatrixI1TE7SetGridERK4Grid"></span><span id="_CPPv2N18AbstractDistMatrixI1TE7SetGridERK4Grid"></span><span id="AbstractDistMatrix:T:::SetGrid__GridCR"></span>void <code class="descname">SetGrid</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="AbstractDistMatrix&lt;T&gt;::Grid">Grid</a> &amp;<em>grid</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE7SetGridERK4Grid" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Clear the distributed matrix’s contents and reconfigure for the new
+process grid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6ResizeEii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6ResizeEii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6ResizeEii"></span><span id="AbstractDistMatrix:T:::Resize__i.i"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6ResizeEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6ResizeEiii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6ResizeEiii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6ResizeEiii"></span><span id="AbstractDistMatrix:T:::Resize__i.i.i"></span>void <code class="descname">Resize</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, int <em>ldim</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6ResizeEiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure the matrix so that it is <cite>height</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>width</cite>.
+Optionally, the local leading dimension may also be specified.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE14MakeConsistentEv">
+<span id="_CPPv3N18AbstractDistMatrixI1TE14MakeConsistentEv"></span><span id="_CPPv2N18AbstractDistMatrixI1TE14MakeConsistentEv"></span><span id="AbstractDistMatrix:T:::MakeConsistent"></span>void <code class="descname">MakeConsistent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE14MakeConsistentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gives every non-participating process a copy of the metadata stored
+by the root process in the distribution communicator.</p>
+</dd></dl>
+
+<p class="rubric">Realignment</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE5AlignEii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE5AlignEii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE5AlignEii"></span><span id="AbstractDistMatrix:T:::Align__i.i"></span>void <code class="descname">Align</code><span class="sig-paren">(</span>int <em>colAlign</em>, int <em>rowAlign</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE5AlignEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE9AlignColsEi">
+<span id="_CPPv3N18AbstractDistMatrixI1TE9AlignColsEi"></span><span id="_CPPv2N18AbstractDistMatrixI1TE9AlignColsEi"></span><span id="AbstractDistMatrix:T:::AlignCols__i"></span>void <code class="descname">AlignCols</code><span class="sig-paren">(</span>int <em>colAlign</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE9AlignColsEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE9AlignRowsEi">
+<span id="_CPPv3N18AbstractDistMatrixI1TE9AlignRowsEi"></span><span id="_CPPv2N18AbstractDistMatrixI1TE9AlignRowsEi"></span><span id="AbstractDistMatrix:T:::AlignRows__i"></span>void <code class="descname">AlignRows</code><span class="sig-paren">(</span>int <em>rowAlign</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE9AlignRowsEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Aligns the row or column distribution (or both).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE14FreeAlignmentsEv">
+<span id="_CPPv3N18AbstractDistMatrixI1TE14FreeAlignmentsEv"></span><span id="_CPPv2N18AbstractDistMatrixI1TE14FreeAlignmentsEv"></span><span id="AbstractDistMatrix:T:::FreeAlignments"></span>void <code class="descname">FreeAlignments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE14FreeAlignmentsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Free all alignment constaints.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE7SetRootEi">
+<span id="_CPPv3N18AbstractDistMatrixI1TE7SetRootEi"></span><span id="_CPPv2N18AbstractDistMatrixI1TE7SetRootEi"></span><span id="AbstractDistMatrix:T:::SetRoot__i"></span>void <code class="descname">SetRoot</code><span class="sig-paren">(</span>int <em>root</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE7SetRootEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For querying and changing the process rank in the cross communicator which
+owns the data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE9AlignWithERK8DistData">
+<span id="_CPPv3N18AbstractDistMatrixI1TE9AlignWithERK8DistData"></span><span id="_CPPv2N18AbstractDistMatrixI1TE9AlignWithERK8DistData"></span><span id="AbstractDistMatrix:T:::AlignWith__DistDataCR"></span>void <code class="descname">AlignWith</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistDataEv" title="AbstractDistMatrix&lt;T&gt;::DistData">DistData</a> &amp;<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE9AlignWithERK8DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE13AlignColsWithERK8DistData">
+<span id="_CPPv3N18AbstractDistMatrixI1TE13AlignColsWithERK8DistData"></span><span id="_CPPv2N18AbstractDistMatrixI1TE13AlignColsWithERK8DistData"></span><span id="AbstractDistMatrix:T:::AlignColsWith__DistDataCR"></span>void <code class="descname">AlignColsWith</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistDataEv" title="AbstractDistMatrix&lt;T&gt;::DistData">DistData</a> &amp;<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE13AlignColsWithERK8DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE13AlignRowsWithERK8DistData">
+<span id="_CPPv3N18AbstractDistMatrixI1TE13AlignRowsWithERK8DistData"></span><span id="_CPPv2N18AbstractDistMatrixI1TE13AlignRowsWithERK8DistData"></span><span id="AbstractDistMatrix:T:::AlignRowsWith__DistDataCR"></span>void <code class="descname">AlignRowsWith</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistDataEv" title="AbstractDistMatrix&lt;T&gt;::DistData">DistData</a> &amp;<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE13AlignRowsWithERK8DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Aligns the row or column distribution (or both) as necessary to conform
+with the specified distribution data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE14AlignAndResizeEiiiib">
+<span id="_CPPv3N18AbstractDistMatrixI1TE14AlignAndResizeEiiiib"></span><span id="_CPPv2N18AbstractDistMatrixI1TE14AlignAndResizeEiiiib"></span><span id="AbstractDistMatrix:T:::AlignAndResize__i.i.i.i.b"></span>void <code class="descname">AlignAndResize</code><span class="sig-paren">(</span>int <em>colAlign</em>, int <em>rowAlign</em>, int <em>height</em>, int <em>width</em>, bool <em>force</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE14AlignAndResizeEiiiib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE18AlignColsAndResizeEiiib">
+<span id="_CPPv3N18AbstractDistMatrixI1TE18AlignColsAndResizeEiiib"></span><span id="_CPPv2N18AbstractDistMatrixI1TE18AlignColsAndResizeEiiib"></span><span id="AbstractDistMatrix:T:::AlignColsAndResize__i.i.i.b"></span>void <code class="descname">AlignColsAndResize</code><span class="sig-paren">(</span>int <em>colAlign</em>, int <em>height</em>, int <em>width</em>, bool <em>force</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE18AlignColsAndResizeEiiib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE18AlignRowsAndResizeEiiib">
+<span id="_CPPv3N18AbstractDistMatrixI1TE18AlignRowsAndResizeEiiib"></span><span id="_CPPv2N18AbstractDistMatrixI1TE18AlignRowsAndResizeEiiib"></span><span id="AbstractDistMatrix:T:::AlignRowsAndResize__i.i.i.b"></span>void <code class="descname">AlignRowsAndResize</code><span class="sig-paren">(</span>int <em>rowAlign</em>, int <em>height</em>, int <em>width</em>, bool <em>force</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE18AlignRowsAndResizeEiiib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attempt to realign the row or column distribution (or both), with
+the realignment being optionally <em>forced</em>, and then resize the distributed
+matrix to the specified size.</p>
+</dd></dl>
+
+<p class="rubric">Buffer attachment</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiP1Tii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiP1Tii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiP1Tii"></span><span id="AbstractDistMatrix:T:::Attach__i.i.GridCR.i.i.TP.i.i"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="AbstractDistMatrix&lt;T&gt;::Grid">Grid</a> &amp;<em>grid</em>, int <em>colAlign</em>, int <em>rowAlign</em>, T *<em>buffer</em>, int <em>ldim</em>, int <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiP1Tii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiPK1Tii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiPK1Tii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiPK1Tii"></span><span id="AbstractDistMatrix:T:::LockedAttach__i.i.GridCR.i.i.TCP.i.i"></span>void <code class="descname">LockedAttach</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="AbstractDistMatrix&lt;T&gt;::Grid">Grid</a> &amp;<em>grid</em>, int <em>colAlign</em>, int <em>rowAlign</em>, <em class="property">const</em> T *<em>buffer</em>, int <em>ldim</em>, int <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiPK1Tii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure around the (immutable) buffer of an implicit distributed
+matrix with the specified dimensions, alignments, process grid, and
+local leading dimension.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiR6MatrixI1TEi">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiR6MatrixI1TEi"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiR6MatrixI1TEi"></span><span id="AbstractDistMatrix:T:::Attach__i.i.GridCR.i.i.Matrix:T:R.i"></span>void <code class="descname">Attach</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="AbstractDistMatrix&lt;T&gt;::Grid">Grid</a> &amp;<em>grid</em>, int <em>colAlign</em>, int <em>rowAlign</em>, <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6AttachEiiRK4GridiiR6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiRK6MatrixI1TEi">
+<span id="_CPPv3N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiRK6MatrixI1TEi"></span><span id="_CPPv2N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiRK6MatrixI1TEi"></span><span id="AbstractDistMatrix:T:::LockedAttach__i.i.GridCR.i.i.Matrix:T:CR.i"></span>void <code class="descname">LockedAttach</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="AbstractDistMatrix&lt;T&gt;::Grid">Grid</a> &amp;<em>grid</em>, int <em>colAlign</em>, int <em>rowAlign</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<em>A</em>, int <em>root</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE12LockedAttachEiiRK4GridiiRK6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reconfigure around the (immutable) local matrix of an implicit distributed
+matrix with the specified alignments, process grid, and local leading
+dimension.</p>
+</dd></dl>
+
+<p class="rubric">Basic queries</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE6HeightEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE6HeightEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE6HeightEv"></span><span id="AbstractDistMatrix:T:::HeightC"></span>int <code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE6HeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE5WidthEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE5WidthEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE5WidthEv"></span><span id="AbstractDistMatrix:T:::WidthC"></span>int <code class="descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE5WidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height (width) of the distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14DiagonalLengthEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14DiagonalLengthEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14DiagonalLengthEi"></span><span id="AbstractDistMatrix:T:::DiagonalLength__iC"></span>int <code class="descname">DiagonalLength</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14DiagonalLengthEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the length of the specified diagonal of the distributed matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE7ViewingEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE7ViewingEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE7ViewingEv"></span><span id="AbstractDistMatrix:T:::ViewingC"></span>bool <code class="descname">Viewing</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE7ViewingEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if this matrix is viewing another.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE6LockedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE6LockedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE6LockedEv"></span><span id="AbstractDistMatrix:T:::LockedC"></span>bool <code class="descname">Locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE6LockedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if this matrix is viewing another in a manner that does not
+allow for modifying the viewed data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE11LocalHeightEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE11LocalHeightEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE11LocalHeightEv"></span><span id="AbstractDistMatrix:T:::LocalHeightC"></span>int <code class="descname">LocalHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE11LocalHeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE10LocalWidthEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE10LocalWidthEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE10LocalWidthEv"></span><span id="AbstractDistMatrix:T:::LocalWidthC"></span>int <code class="descname">LocalWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE10LocalWidthEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the height (width) of the local matrix stored by a particular
+process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE4LDimEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE4LDimEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE4LDimEv"></span><span id="AbstractDistMatrix:T:::LDimC"></span>int <code class="descname">LDim</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE4LDimEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the leading dimension of the local matrix stored by a particular
+process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6MatrixEv">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6MatrixEv"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6MatrixEv"></span><span id="AbstractDistMatrix:T:::Matrix"></span><a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<code class="descname">Matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE12LockedMatrixEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE12LockedMatrixEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE12LockedMatrixEv"></span><span id="AbstractDistMatrix:T:::LockedMatrixC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<code class="descname">LockedMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE12LockedMatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an (immutable) reference to the local matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE15AllocatedMemoryEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE15AllocatedMemoryEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE15AllocatedMemoryEv"></span><span id="AbstractDistMatrix:T:::AllocatedMemoryC"></span>size_t <code class="descname">AllocatedMemory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE15AllocatedMemoryEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of entries of type <cite>T</cite> that we have locally allocated
+space for.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6BufferEv">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6BufferEv"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6BufferEv"></span><span id="AbstractDistMatrix:T:::Buffer"></span>T *<code class="descname">Buffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6BufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE12LockedBufferEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE12LockedBufferEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE12LockedBufferEv"></span><span id="AbstractDistMatrix:T:::LockedBufferC"></span><em class="property">const</em> T *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE12LockedBufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an (immutable) pointer to the local matrix’s buffer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6BufferEii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6BufferEii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6BufferEii"></span><span id="AbstractDistMatrix:T:::Buffer__i.i"></span>T *<code class="descname">Buffer</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6BufferEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE12LockedBufferEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE12LockedBufferEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE12LockedBufferEii"></span><span id="AbstractDistMatrix:T:::LockedBuffer__i.iC"></span><em class="property">const</em> T *<code class="descname">LockedBuffer</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE12LockedBufferEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return an (immutable) pointer to the portion of the local buffer that
+stores entry <cite>(iLoc,jLoc)</cite>.</p>
+</dd></dl>
+
+<p class="rubric">Distribution information</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE4GridEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE4GridEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE4GridEv"></span><span id="AbstractDistMatrix:T:::GridC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="AbstractDistMatrix&lt;T&gt;::Grid">Grid</a> &amp;<code class="descname">Grid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the grid that this distributed matrix is distributed over.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14ColConstrainedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14ColConstrainedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14ColConstrainedEv"></span><span id="AbstractDistMatrix:T:::ColConstrainedC"></span>bool <code class="descname">ColConstrained</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14ColConstrainedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14RowConstrainedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14RowConstrainedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14RowConstrainedEv"></span><span id="AbstractDistMatrix:T:::RowConstrainedC"></span>bool <code class="descname">RowConstrained</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14RowConstrainedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the column (row) alignment is constrained.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE15RootConstrainedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE15RootConstrainedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE15RootConstrainedEv"></span><span id="AbstractDistMatrix:T:::RootConstrainedC"></span>bool <code class="descname">RootConstrained</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE15RootConstrainedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return if the root (the alignment with respect to the
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossCommEv" title="AbstractDistMatrix&lt;T&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>) is constrained.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8ColAlignEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8ColAlignEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8ColAlignEv"></span><span id="AbstractDistMatrix:T:::ColAlignC"></span>int <code class="descname">ColAlign</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8ColAlignEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8RowAlignEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8RowAlignEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8RowAlignEv"></span><span id="AbstractDistMatrix:T:::RowAlignC"></span>int <code class="descname">RowAlign</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8RowAlignEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank of the member of our <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a> or
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a> assigned to the top-left entry of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8ColShiftEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8ColShiftEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8ColShiftEv"></span><span id="AbstractDistMatrix:T:::ColShiftC"></span>int <code class="descname">ColShift</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8ColShiftEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8RowShiftEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8RowShiftEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8RowShiftEv"></span><span id="AbstractDistMatrix:T:::RowShiftC"></span>int <code class="descname">RowShift</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8RowShiftEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the first row or column to be locally assigned to this process,
+respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE7ColCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE7ColCommEv"></span><span id="AbstractDistMatrix:T:::ColCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">ColComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator used to distribute each column of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE7RowCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE7RowCommEv"></span><span id="AbstractDistMatrix:T:::RowCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">RowComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator used to distribute each row of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14PartialColCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14PartialColCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14PartialColCommEv"></span><span id="AbstractDistMatrix:T:::PartialColCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialColComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialColCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE19PartialUnionColCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE19PartialUnionColCommEv"></span><span id="AbstractDistMatrix:T:::PartialUnionColCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialUnionColComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColComm()</span></code></a> is a (not necessarily strict) subset of
+the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>; an
+element-wise distribution of each column over this communicator
+can be reached by unioning the local data from a distribution over the
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a> (via an <code class="docutils literal notranslate"><span class="pre">AllGather</span></code>) over the
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionColComm()</span></code></a>. One nontrivial example is for
+<a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T2VC4STARE" title="DistMatrix&lt;T, VC, STAR&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T,VC,STAR&gt;</span></code></a>, where the column communicator is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::VCComm()</span></code>, the partial column communicator is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::MCComm()</span></code>, and the partial union column communicator is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::MRComm()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14PartialRowCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14PartialRowCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14PartialRowCommEv"></span><span id="AbstractDistMatrix:T:::PartialRowCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialRowComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialRowCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv"></span><span id="AbstractDistMatrix:T:::PartialUnionRowCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">PartialUnionRowComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These are the same as <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColComm()</span></code></a> and
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionColComm()</span></code></a>, except that they correspond to
+distributions of the rows of the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8DistCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8DistCommEv"></span><span id="AbstractDistMatrix:T:::DistCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">DistComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator used to distribute the entire set of entries of the
+matrix (in a particular precise sense, the product of <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>
+and <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE9CrossCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE9CrossCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE9CrossCommEv"></span><span id="AbstractDistMatrix:T:::CrossCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">CrossComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The orthogonal complement of the product of <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv" title="AbstractDistMatrix&lt;T&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DistComm()</span></code></a> and
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE13RedundantCommEv" title="AbstractDistMatrix&lt;T&gt;::RedundantComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RedundantComm()</span></code></a> with respect to the process grid. For instance,
+for <a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T4CIRC4CIRCE" title="DistMatrix&lt;T, CIRC, CIRC&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T,CIRC,CIRC&gt;</span></code></a>, this is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::VCComm()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE13RedundantCommEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE13RedundantCommEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE13RedundantCommEv"></span><span id="AbstractDistMatrix:T:::RedundantCommC"></span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">RedundantComm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE13RedundantCommEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The communicator over which data is redundantly stored. For instance,
+for <a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T2MC4STARE" title="DistMatrix&lt;T, MC, STAR&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DistMatrix&lt;T,MC,STAR&gt;</span></code></a>, this is
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Grid::RowComm()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE7ColRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE7ColRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE7ColRankEv"></span><span id="AbstractDistMatrix:T:::ColRankC"></span>int <code class="descname">ColRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE7RowRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE7RowRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE7RowRankEv"></span><span id="AbstractDistMatrix:T:::RowRankC"></span>int <code class="descname">RowRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE7RowRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14PartialColRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14PartialColRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14PartialColRankEv"></span><span id="AbstractDistMatrix:T:::PartialColRankC"></span>int <code class="descname">PartialColRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialColRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14PartialRowRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14PartialRowRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14PartialRowRankEv"></span><span id="AbstractDistMatrix:T:::PartialRowRankC"></span>int <code class="descname">PartialRowRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialRowRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE19PartialUnionColRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE19PartialUnionColRankEv"></span><span id="AbstractDistMatrix:T:::PartialUnionColRankC"></span>int <code class="descname">PartialUnionColRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE19PartialUnionRowRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE19PartialUnionRowRankEv"></span><span id="AbstractDistMatrix:T:::PartialUnionRowRankC"></span>int <code class="descname">PartialUnionRowRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8DistRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8DistRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8DistRankEv"></span><span id="AbstractDistMatrix:T:::DistRankC"></span>int <code class="descname">DistRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE9CrossRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE9CrossRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE9CrossRankEv"></span><span id="AbstractDistMatrix:T:::CrossRankC"></span>int <code class="descname">CrossRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE13RedundantRankEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE13RedundantRankEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE13RedundantRankEv"></span><span id="AbstractDistMatrix:T:::RedundantRankC"></span>int <code class="descname">RedundantRank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE13RedundantRankEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return our rank in our <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a>,
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialColComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE14PartialRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialRowComm()</span></code></a>,
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionColCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionColComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE19PartialUnionRowCommEv" title="AbstractDistMatrix&lt;T&gt;::PartialUnionRowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">PartialUnionRowComm()</span></code></a>,
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv" title="AbstractDistMatrix&lt;T&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DistComm()</span></code></a>, <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossCommEv" title="AbstractDistMatrix&lt;T&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>, or <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE13RedundantCommEv" title="AbstractDistMatrix&lt;T&gt;::RedundantComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RedundantComm()</span></code></a>,
+respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE9ColStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE9ColStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE9ColStrideEv"></span><span id="AbstractDistMatrix:T:::ColStrideC"></span>int <code class="descname">ColStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE9ColStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE9RowStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE9RowStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE9RowStrideEv"></span><span id="AbstractDistMatrix:T:::RowStrideC"></span>int <code class="descname">RowStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE9RowStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE16PartialColStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE16PartialColStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE16PartialColStrideEv"></span><span id="AbstractDistMatrix:T:::PartialColStrideC"></span>int <code class="descname">PartialColStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE16PartialColStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE16PartialRowStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE16PartialRowStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE16PartialRowStrideEv"></span><span id="AbstractDistMatrix:T:::PartialRowStrideC"></span>int <code class="descname">PartialRowStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE16PartialRowStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE21PartialUnionColStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE21PartialUnionColStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE21PartialUnionColStrideEv"></span><span id="AbstractDistMatrix:T:::PartialUnionColStrideC"></span>int <code class="descname">PartialUnionColStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE21PartialUnionColStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE21PartialUnionRowStrideEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE21PartialUnionRowStrideEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE21PartialUnionRowStrideEv"></span><span id="AbstractDistMatrix:T:::PartialUnionRowStrideC"></span>int <code class="descname">PartialUnionRowStride</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE21PartialUnionRowStrideEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8DistSizeEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8DistSizeEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8DistSizeEv"></span><span id="AbstractDistMatrix:T:::DistSizeC"></span>int <code class="descname">DistSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE9CrossSizeEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE9CrossSizeEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE9CrossSizeEv"></span><span id="AbstractDistMatrix:T:::CrossSizeC"></span>int <code class="descname">CrossSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE13RedundantSizeEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE13RedundantSizeEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE13RedundantSizeEv"></span><span id="AbstractDistMatrix:T:::RedundantSizeC"></span>int <code class="descname">RedundantSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE13RedundantSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of processes within a particular communicator associated
+with the distributed matrix. For communicators associated with
+distributions of either the rows or columns of a matrix, the communicator
+size is equal to the distance (or <em>stride</em>) between successive row or
+column indices assigned to a particular process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE4RootEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE4RootEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE4RootEv"></span><span id="AbstractDistMatrix:T:::RootC"></span>int <code class="descname">Root</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE4RootEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank of the member of our cross communicator
+(<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossCommEv" title="AbstractDistMatrix&lt;T&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>) which can store data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE13ParticipatingEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE13ParticipatingEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE13ParticipatingEv"></span><span id="AbstractDistMatrix:T:::ParticipatingC"></span>bool <code class="descname">Participating</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE13ParticipatingEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if this process can be assigned matrix data (that is, if
+this process is both in the process grid and the root of
+<a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossCommEv" title="AbstractDistMatrix&lt;T&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrossComm()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8RowOwnerEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8RowOwnerEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8RowOwnerEi"></span><span id="AbstractDistMatrix:T:::RowOwner__iC"></span>int <code class="descname">RowOwner</code><span class="sig-paren">(</span>int <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8RowOwnerEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank (in <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColComm()</span></code></a>) of the process which owns
+row <cite>i</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8ColOwnerEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8ColOwnerEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8ColOwnerEi"></span><span id="AbstractDistMatrix:T:::ColOwner__iC"></span>int <code class="descname">ColOwner</code><span class="sig-paren">(</span>int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8ColOwnerEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank (in <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RowComm()</span></code></a>) of the process which owns
+column <cite>j</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE5OwnerEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE5OwnerEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE5OwnerEii"></span><span id="AbstractDistMatrix:T:::Owner__i.iC"></span>int <code class="descname">Owner</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE5OwnerEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the rank (in <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistCommEv" title="AbstractDistMatrix&lt;T&gt;::DistComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">DistComm()</span></code></a>) of the process which owns entry
+<cite>(i,j)</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE9GlobalRowEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE9GlobalRowEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE9GlobalRowEi"></span><span id="AbstractDistMatrix:T:::GlobalRow__iC"></span>int <code class="descname">GlobalRow</code><span class="sig-paren">(</span>int <em>iLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE9GlobalRowEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE9GlobalColEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE9GlobalColEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE9GlobalColEi"></span><span id="AbstractDistMatrix:T:::GlobalCol__iC"></span>int <code class="descname">GlobalCol</code><span class="sig-paren">(</span>int <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE9GlobalColEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the global row (column) index corresponding to the given local row
+(column) index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8LocalRowEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8LocalRowEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8LocalRowEi"></span><span id="AbstractDistMatrix:T:::LocalRow__iC"></span>int <code class="descname">LocalRow</code><span class="sig-paren">(</span>int <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8LocalRowEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8LocalColEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8LocalColEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8LocalColEi"></span><span id="AbstractDistMatrix:T:::LocalCol__iC"></span>int <code class="descname">LocalCol</code><span class="sig-paren">(</span>int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8LocalColEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the local row (column) index for row <cite>i</cite> (<cite>j</cite>); if this process
+is not assigned row <cite>i</cite> (column <cite>j</cite>), then throw an exception.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14LocalRowOffsetEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14LocalRowOffsetEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14LocalRowOffsetEi"></span><span id="AbstractDistMatrix:T:::LocalRowOffset__iC"></span>int <code class="descname">LocalRowOffset</code><span class="sig-paren">(</span>int <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14LocalRowOffsetEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14LocalColOffsetEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14LocalColOffsetEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14LocalColOffsetEi"></span><span id="AbstractDistMatrix:T:::LocalColOffset__iC"></span>int <code class="descname">LocalColOffset</code><span class="sig-paren">(</span>int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14LocalColOffsetEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the number of local rows (columns) occurring before the given
+global row (column) index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE10IsLocalRowEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE10IsLocalRowEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE10IsLocalRowEi"></span><span id="AbstractDistMatrix:T:::IsLocalRow__iC"></span>bool <code class="descname">IsLocalRow</code><span class="sig-paren">(</span>int <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE10IsLocalRowEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE10IsLocalColEi">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE10IsLocalColEi"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE10IsLocalColEi"></span><span id="AbstractDistMatrix:T:::IsLocalCol__iC"></span>bool <code class="descname">IsLocalCol</code><span class="sig-paren">(</span>int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE10IsLocalColEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE7IsLocalEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE7IsLocalEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE7IsLocalEii"></span><span id="AbstractDistMatrix:T:::IsLocal__i.iC"></span>bool <code class="descname">IsLocal</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE7IsLocalEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the row, column, or entry, respectively, is assigned to
+this process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8DistDataEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8DistDataEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8DistDataEv"></span><span id="AbstractDistMatrix:T:::DistDataC"></span><a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistDataEv" title="AbstractDistMatrix&lt;T&gt;::DistData">DistData</a> <code class="descname">DistData</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8DistDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a description of the distribution and alignment information</p>
+</dd></dl>
+
+<p class="rubric">Single-entry manipulation (global)</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE3GetEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE3GetEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE3GetEii"></span><span id="AbstractDistMatrix:T:::Get__i.iC"></span>T <code class="descname">Get</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE3GetEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE11GetRealPartEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE11GetRealPartEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE11GetRealPartEii"></span><span id="AbstractDistMatrix:T:::GetRealPart__i.iC"></span>Base&lt;T&gt; <code class="descname">GetRealPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE11GetRealPartEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE11GetImagPartEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE11GetImagPartEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE11GetImagPartEii"></span><span id="AbstractDistMatrix:T:::GetImagPart__i.iC"></span>Base&lt;T&gt; <code class="descname">GetImagPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE11GetImagPartEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <cite>(i,j)</cite> entry (or its real or imaginary part) of the global
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE3SetEii1T">
+<span id="_CPPv3N18AbstractDistMatrixI1TE3SetEii1T"></span><span id="_CPPv2N18AbstractDistMatrixI1TE3SetEii1T"></span><span id="AbstractDistMatrix:T:::Set__i.i.T"></span>void <code class="descname">Set</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE3SetEii1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE11SetRealPartEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE11SetRealPartEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE11SetRealPartEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::SetRealPart__i.i.Base:T:"></span>void <code class="descname">SetRealPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE11SetRealPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE11SetImagPartEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE11SetImagPartEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE11SetImagPartEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::SetImagPart__i.i.Base:T:"></span>void <code class="descname">SetImagPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE11SetImagPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the <cite>(i,j)</cite> entry (or its real or imaginary part) of the global
+matrix to <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE6UpdateEii1T">
+<span id="_CPPv3N18AbstractDistMatrixI1TE6UpdateEii1T"></span><span id="_CPPv2N18AbstractDistMatrixI1TE6UpdateEii1T"></span><span id="AbstractDistMatrix:T:::Update__i.i.T"></span>void <code class="descname">Update</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE6UpdateEii1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE14UpdateRealPartEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE14UpdateRealPartEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE14UpdateRealPartEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::UpdateRealPart__i.i.Base:T:"></span>void <code class="descname">UpdateRealPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE14UpdateRealPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE14UpdateImagPartEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE14UpdateImagPartEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE14UpdateImagPartEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::UpdateImagPart__i.i.Base:T:"></span>void <code class="descname">UpdateImagPart</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE14UpdateImagPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add <span class="math notranslate nohighlight">\(\alpha\)</span> to the <cite>(i,j)</cite> entry (or its real or imaginary part)
+of the global matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE8MakeRealEii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE8MakeRealEii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE8MakeRealEii"></span><span id="AbstractDistMatrix:T:::MakeReal__i.i"></span>void <code class="descname">MakeReal</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE8MakeRealEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the <span class="math notranslate nohighlight">\((i,j)\)</span> entry of the global matrix to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE9ConjugateEii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE9ConjugateEii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE9ConjugateEii"></span><span id="AbstractDistMatrix:T:::Conjugate__i.i"></span>void <code class="descname">Conjugate</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE9ConjugateEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the <span class="math notranslate nohighlight">\((i,j)\)</span> entry of the global matrix.</p>
+</dd></dl>
+
+<p class="rubric">Single-entry manipulation (local)</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE8GetLocalEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE8GetLocalEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE8GetLocalEii"></span><span id="AbstractDistMatrix:T:::GetLocal__i.iC"></span>T <code class="descname">GetLocal</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE8GetLocalEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE16GetRealPartLocalEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE16GetRealPartLocalEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE16GetRealPartLocalEii"></span><span id="AbstractDistMatrix:T:::GetRealPartLocal__i.iC"></span>Base&lt;T&gt; <code class="descname">GetRealPartLocal</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE16GetRealPartLocalEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE16GetLocalImagPartEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE16GetLocalImagPartEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE16GetLocalImagPartEii"></span><span id="AbstractDistMatrix:T:::GetLocalImagPart__i.iC"></span>Base&lt;T&gt; <code class="descname">GetLocalImagPart</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE16GetLocalImagPartEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the <span class="math notranslate nohighlight">\((iLoc,jLoc)\)</span> entry (or its real or imaginary part) of
+our local matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE8SetLocalEii1T">
+<span id="_CPPv3N18AbstractDistMatrixI1TE8SetLocalEii1T"></span><span id="_CPPv2N18AbstractDistMatrixI1TE8SetLocalEii1T"></span><span id="AbstractDistMatrix:T:::SetLocal__i.i.T"></span>void <code class="descname">SetLocal</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE8SetLocalEii1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE16SetLocalRealPartEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE16SetLocalRealPartEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE16SetLocalRealPartEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::SetLocalRealPart__i.i.Base:T:"></span>void <code class="descname">SetLocalRealPart</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE16SetLocalRealPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE16SetLocalImagPartEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE16SetLocalImagPartEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE16SetLocalImagPartEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::SetLocalImagPart__i.i.Base:T:"></span>void <code class="descname">SetLocalImagPart</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE16SetLocalImagPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the <cite>(iLoc,jLoc)</cite> entry (or its real or imaginary part) of our
+local matrix to <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE11UpdateLocalEii1T">
+<span id="_CPPv3N18AbstractDistMatrixI1TE11UpdateLocalEii1T"></span><span id="_CPPv2N18AbstractDistMatrixI1TE11UpdateLocalEii1T"></span><span id="AbstractDistMatrix:T:::UpdateLocal__i.i.T"></span>void <code class="descname">UpdateLocal</code><span class="sig-paren">(</span>int <em>iLoca</em>, int <em>jLoc</em>, T <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE11UpdateLocalEii1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE19UpdateRealPartLocalEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE19UpdateRealPartLocalEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE19UpdateRealPartLocalEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::UpdateRealPartLocal__i.i.Base:T:"></span>void <code class="descname">UpdateRealPartLocal</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE19UpdateRealPartLocalEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE19UpdateLocalImagPartEii4BaseI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE19UpdateLocalImagPartEii4BaseI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE19UpdateLocalImagPartEii4BaseI1TE"></span><span id="AbstractDistMatrix:T:::UpdateLocalImagPart__i.i.Base:T:"></span>void <code class="descname">UpdateLocalImagPart</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em>, Base&lt;T&gt; <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE19UpdateLocalImagPartEii4BaseI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add <span class="math notranslate nohighlight">\(\alpha\)</span> to the <cite>(iLoc,jLoc)</cite> entry (or its real or
+imaginary part) of our local matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE13MakeLocalRealEii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE13MakeLocalRealEii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE13MakeLocalRealEii"></span><span id="AbstractDistMatrix:T:::MakeLocalReal__i.i"></span>void <code class="descname">MakeLocalReal</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE13MakeLocalRealEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the <cite>(iLoc,jLoc)</cite> entry of our local matrix to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE14ConjugateLocalEii">
+<span id="_CPPv3N18AbstractDistMatrixI1TE14ConjugateLocalEii"></span><span id="_CPPv2N18AbstractDistMatrixI1TE14ConjugateLocalEii"></span><span id="AbstractDistMatrix:T:::ConjugateLocal__i.i"></span>void <code class="descname">ConjugateLocal</code><span class="sig-paren">(</span>int <em>iLoc</em>, int <em>jLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE14ConjugateLocalEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the <cite>(iLoc,jLoc)</cite> entry of our local matrix.</p>
+</dd></dl>
+
+<p class="rubric">Diagonal manipulation</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE16MakeDiagonalRealEi">
+<span id="_CPPv3N18AbstractDistMatrixI1TE16MakeDiagonalRealEi"></span><span id="_CPPv2N18AbstractDistMatrixI1TE16MakeDiagonalRealEi"></span><span id="AbstractDistMatrix:T:::MakeDiagonalReal__i"></span>void <code class="descname">MakeDiagonalReal</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE16MakeDiagonalRealEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the specified diagonal to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE17ConjugateDiagonalEi">
+<span id="_CPPv3N18AbstractDistMatrixI1TE17ConjugateDiagonalEi"></span><span id="_CPPv2N18AbstractDistMatrixI1TE17ConjugateDiagonalEi"></span><span id="AbstractDistMatrix:T:::ConjugateDiagonal__i"></span>void <code class="descname">ConjugateDiagonal</code><span class="sig-paren">(</span>int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE17ConjugateDiagonalEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the specified diagonal.</p>
+</dd></dl>
+
+<p class="rubric">Arbitrary-submatrix manipulation (global)</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI1T4STAR4STARE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI1T4STAR4STARE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI1T4STAR4STARE"></span><span id="AbstractDistMatrix:T:::GetSubmatrix__std::vector:i:CR.std::vector:i:CR.DistMatrix:T.STAR.STAR:RC"></span>void <code class="descname">GetSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T4STAR4STARE" title="DistMatrix&lt;T, STAR, STAR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI1T4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="AbstractDistMatrix:T:::GetRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.DistMatrix:Base:T:.STAR.STAR:RC"></span>void <code class="descname">GetRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="AbstractDistMatrix:T:::GetImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.DistMatrix:Base:T:.STAR.STAR:RC"></span>void <code class="descname">GetImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER10DistMatrixI4BaseI1TE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the submatrix (or its real or imaginary part) with the specified
+row and column indices via <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::GetSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span><a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T4STAR4STARE" title="DistMatrix&lt;T, STAR, STAR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; <code class="descname">GetSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE12GetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::GetRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span>DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; <code class="descname">GetRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE22GetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::GetImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span>DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; <code class="descname">GetImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE22GetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the submatrix (or its real or imaginary part) with the specified
+row and column indices via C++11 move semantics.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI1T4STAR4STARE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI1T4STAR4STARE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI1T4STAR4STARE"></span><span id="AbstractDistMatrix:T:::SetSubmatrix__std::vector:i:CR.std::vector:i:CR.DistMatrix:T.STAR.STAR:CR"></span>void <code class="descname">SetSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <em class="property">const</em> <a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T4STAR4STARE" title="DistMatrix&lt;T, STAR, STAR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE12SetSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI1T4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="AbstractDistMatrix:T:::SetRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.DistMatrix:Base:T:.STAR.STAR:CR"></span>void <code class="descname">SetRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <em class="property">const</em> DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE22SetRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="AbstractDistMatrix:T:::SetImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.DistMatrix:Base:T:.STAR.STAR:CR"></span>void <code class="descname">SetImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, <em class="property">const</em> DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE22SetImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK10DistMatrixI4BaseI1TE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the submatrix (or its real or imaginary part) with the specified
+row and column indices equal to the matrix <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK10DistMatrixI1T4STAR4STARE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK10DistMatrixI1T4STAR4STARE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK10DistMatrixI1T4STAR4STARE"></span><span id="AbstractDistMatrix:T:::UpdateSubmatrix__std::vector:i:CR.std::vector:i:CR.T.DistMatrix:T.STAR.STAR:CR"></span>void <code class="descname">UpdateSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="DM.html#_CPPv4IE10DistMatrixI1T4STAR4STARE" title="DistMatrix&lt;T, STAR, STAR&gt;">DistMatrix</a>&lt;T, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE15UpdateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK10DistMatrixI1T4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="AbstractDistMatrix:T:::UpdateRealPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Base:T:.DistMatrix:Base:T:.STAR.STAR:CR"></span>void <code class="descname">UpdateRealPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, Base&lt;T&gt; <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE25UpdateRealPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE"></span><span id="AbstractDistMatrix:T:::UpdateImagPartOfSubmatrix__std::vector:i:CR.std::vector:i:CR.Base:T:.DistMatrix:Base:T:.STAR.STAR:CR"></span>void <code class="descname">UpdateImagPartOfSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em>, Base&lt;T&gt; <em>alpha</em>, <em class="property">const</em> DistMatrix&lt;Base&lt;T&gt;, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE25UpdateImagPartOfSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK10DistMatrixI4BaseI1TE4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update the submatrix (or its real or imaginary part) with the specified
+row and column indices with <cite>alpha</cite> times <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::MakeSubmatrixReal__std::vector:i:CR.std::vector:i:CR"></span>void <code class="descname">MakeSubmatrixReal</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE17MakeSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the submatrix with the specified row and column indices to be real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::ConjugateSubmatrix__std::vector:i:CR.std::vector:i:CR"></span>void <code class="descname">ConjugateSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowInd</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colInd</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE18ConjugateSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the entries in the submatrix with the specified row and column
+indices.</p>
+</dd></dl>
+
+<p class="rubric">Arbitrary-submatrix manipulation (local)</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE"></span><span id="AbstractDistMatrix:T:::GetLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:T:RC"></span>void <code class="descname">GetLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="AbstractDistMatrix:T:::GetRealPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::RC"></span>void <code class="descname">GetRealPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE"></span><span id="AbstractDistMatrix:T:::GetImagPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::RC"></span>void <code class="descname">GetImagPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEER6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the local submatrix (or its real or imaginary part) with the specified
+row and column indices via <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::GetLocalSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span><a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; <code class="descname">GetLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE17GetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::GetRealPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span><a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; <code class="descname">GetRealPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE27GetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::GetImagPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CRC"></span><a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; <code class="descname">GetImagPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE27GetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the local submatrix (or its real or imaginary part) with the
+specified row and column indices via C++11 move semantics.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE17SetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE17SetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE17SetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE"></span><span id="AbstractDistMatrix:T:::SetLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:T:CR"></span>void <code class="descname">SetLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE17SetLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE27SetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE27SetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE27SetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="AbstractDistMatrix:T:::SetRealPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::CR"></span>void <code class="descname">SetRealPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE27SetRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE27SetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE27SetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE27SetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE"></span><span id="AbstractDistMatrix:T:::SetImagPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Matrix:Base:T::CR"></span>void <code class="descname">SetImagPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE27SetImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the local submatrix (or its real or imaginary part) with the specified
+row and column indices equal to the matrix <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE20UpdateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE20UpdateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE20UpdateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE"></span><span id="AbstractDistMatrix:T:::UpdateLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.T.Matrix:T:CR"></span>void <code class="descname">UpdateLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, T <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;T&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE20UpdateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE1TRK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE30UpdateRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE30UpdateRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE30UpdateRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="AbstractDistMatrix:T:::UpdateRealPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Base:T:.Matrix:Base:T::CR"></span>void <code class="descname">UpdateRealPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, Base&lt;T&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE30UpdateRealPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE30UpdateImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE30UpdateImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE30UpdateImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE"></span><span id="AbstractDistMatrix:T:::UpdateImagPartOfLocalSubmatrix__std::vector:i:CR.std::vector:i:CR.Base:T:.Matrix:Base:T::CR"></span>void <code class="descname">UpdateImagPartOfLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em>, Base&lt;T&gt; <em>alpha</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N18AbstractDistMatrixI1TE6MatrixEv" title="AbstractDistMatrix&lt;T&gt;::Matrix">Matrix</a>&lt;Base&lt;T&gt;&gt; &amp;<em>ASub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE30UpdateImagPartOfLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE4BaseI1TERK6MatrixI4BaseI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update the local submatrix (or its real or imaginary part) with the
+specified row and column indices with <cite>alpha</cite> times <cite>ASub</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE22MakeLocalSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE22MakeLocalSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE22MakeLocalSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::MakeLocalSubmatrixReal__std::vector:i:CR.std::vector:i:CR"></span>void <code class="descname">MakeLocalSubmatrixReal</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE22MakeLocalSubmatrixRealERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force the local submatrix with the specified row and column indices to be
+real.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE23ConjugateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE23ConjugateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE23ConjugateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE"></span><span id="AbstractDistMatrix:T:::ConjugateLocalSubmatrix__std::vector:i:CR.std::vector:i:CR"></span>void <code class="descname">ConjugateLocalSubmatrix</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;int&gt; &amp;<em>rowIndLoc</em>, <em class="property">const</em> std::vector&lt;int&gt; &amp;<em>colIndLoc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE23ConjugateLocalSubmatrixERKNSt6vectorIiEERKNSt6vectorIiEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Conjugate the entries in the local submatrix with the specified row and
+column indices.</p>
+</dd></dl>
+
+<p class="rubric">Sum over a specified communicator</p>
+<dl class="function">
+<dt id="_CPPv4N18AbstractDistMatrixI1TE7SumOverEN3mpi4CommE">
+<span id="_CPPv3N18AbstractDistMatrixI1TE7SumOverEN3mpi4CommE"></span><span id="_CPPv2N18AbstractDistMatrixI1TE7SumOverEN3mpi4CommE"></span><span id="AbstractDistMatrix:T:::SumOver__mpi::Comm"></span>void <code class="descname">SumOver</code><span class="sig-paren">(</span>mpi::<a class="reference internal" href="../imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <em>comm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18AbstractDistMatrixI1TE7SumOverEN3mpi4CommE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<p class="rubric">Assertions</p>
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14ComplainIfRealEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14ComplainIfRealEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14ComplainIfRealEv"></span><span id="AbstractDistMatrix:T:::ComplainIfRealC"></span>void <code class="descname">ComplainIfReal</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14ComplainIfRealEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE15AssertNotLockedEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE15AssertNotLockedEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE15AssertNotLockedEv"></span><span id="AbstractDistMatrix:T:::AssertNotLockedC"></span>void <code class="descname">AssertNotLocked</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE15AssertNotLockedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE20AssertNotStoringDataEv">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE20AssertNotStoringDataEv"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE20AssertNotStoringDataEv"></span><span id="AbstractDistMatrix:T:::AssertNotStoringDataC"></span>void <code class="descname">AssertNotStoringData</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE20AssertNotStoringDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE16AssertValidEntryEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE16AssertValidEntryEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE16AssertValidEntryEii"></span><span id="AbstractDistMatrix:T:::AssertValidEntry__i.iC"></span>void <code class="descname">AssertValidEntry</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE16AssertValidEntryEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE20AssertValidSubmatrixEiiii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE20AssertValidSubmatrixEiiii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE20AssertValidSubmatrixEiiii"></span><span id="AbstractDistMatrix:T:::AssertValidSubmatrix__i.i.i.iC"></span>void <code class="descname">AssertValidSubmatrix</code><span class="sig-paren">(</span>int <em>i</em>, int <em>j</em>, int <em>height</em>, int <em>width</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE20AssertValidSubmatrixEiiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14AssertSameGridERK4Grid">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14AssertSameGridERK4Grid"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14AssertSameGridERK4Grid"></span><span id="AbstractDistMatrix:T:::AssertSameGrid__GridCRC"></span>void <code class="descname">AssertSameGrid</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE4GridEv" title="AbstractDistMatrix&lt;T&gt;::Grid">Grid</a> &amp;<em>grid</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14AssertSameGridERK4Grid" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK18AbstractDistMatrixI1TE14AssertSameSizeEii">
+<span id="_CPPv3NK18AbstractDistMatrixI1TE14AssertSameSizeEii"></span><span id="_CPPv2NK18AbstractDistMatrixI1TE14AssertSameSizeEii"></span><span id="AbstractDistMatrix:T:::AssertSameSize__i.iC"></span>void <code class="descname">AssertSameSize</code><span class="sig-paren">(</span>int <em>height</em>, int <em>width</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK18AbstractDistMatrixI1TE14AssertSameSizeEii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48DistData">
+<span id="_CPPv38DistData"></span><span id="_CPPv28DistData"></span><span id="DistData"></span><em class="property">class </em><code class="descname">DistData</code><a class="headerlink" href="#_CPPv48DistData" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8DistData7colDistE">
+<span id="_CPPv3N8DistData7colDistE"></span><span id="_CPPv2N8DistData7colDistE"></span><span id="DistData::colDist__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">colDist</code><a class="headerlink" href="#_CPPv4N8DistData7colDistE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code></a> scheme used within each column of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData7rowDistE">
+<span id="_CPPv3N8DistData7rowDistE"></span><span id="_CPPv2N8DistData7rowDistE"></span><span id="DistData::rowDist__Distribution"></span><a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution">Distribution</a> <code class="descname">rowDist</code><a class="headerlink" href="#_CPPv4N8DistData7rowDistE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <a class="reference internal" href="../environment.html#_CPPv412Distribution" title="Distribution"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">Distribution</span></code></a> scheme used within each row of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData8colAlignE">
+<span id="_CPPv3N8DistData8colAlignE"></span><span id="_CPPv2N8DistData8colAlignE"></span><span id="DistData::colAlign__i"></span>int <code class="descname">colAlign</code><a class="headerlink" href="#_CPPv4N8DistData8colAlignE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The rank in the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7ColCommEv" title="AbstractDistMatrix&lt;T&gt;::ColComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::ColComm()</span></code></a> which is
+assigned the top-left entry of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData8rowAlignE">
+<span id="_CPPv3N8DistData8rowAlignE"></span><span id="_CPPv2N8DistData8rowAlignE"></span><span id="DistData::rowAlign__i"></span>int <code class="descname">rowAlign</code><a class="headerlink" href="#_CPPv4N8DistData8rowAlignE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The rank in the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE7RowCommEv" title="AbstractDistMatrix&lt;T&gt;::RowComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::RowComm()</span></code></a> which
+is assigned the top-left entry of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData4rootE">
+<span id="_CPPv3N8DistData4rootE"></span><span id="_CPPv2N8DistData4rootE"></span><span id="DistData::root__i"></span>int <code class="descname">root</code><a class="headerlink" href="#_CPPv4N8DistData4rootE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The member of the <a class="reference internal" href="#_CPPv4NK18AbstractDistMatrixI1TE9CrossCommEv" title="AbstractDistMatrix&lt;T&gt;::CrossComm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AbstractDistMatrix&lt;T&gt;::CrossComm()</span></code></a> which
+is assigned ownership of the matrix.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8DistData4gridE">
+<span id="_CPPv3N8DistData4gridE"></span><span id="_CPPv2N8DistData4gridE"></span><span id="DistData::grid__GridCP"></span><em class="property">const</em> <a class="reference internal" href="../grid.html#_CPPv44Grid" title="Grid">Grid</a> *<code class="descname">grid</code><a class="headerlink" href="#_CPPv4N8DistData4gridE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An immutable pointer to the underlying process grid of the distributed
+matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8DistData8DistDataERK17GeneralDistMatrixI1T1U1VE">
+<span id="_CPPv3N8DistData8DistDataERK17GeneralDistMatrixI1T1U1VE"></span><span id="_CPPv2N8DistData8DistDataERK17GeneralDistMatrixI1T1U1VE"></span><span id="DistData::DistData__GeneralDistMatrix:T.U.V:CR"></span><code class="descname">DistData</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;">GeneralDistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8DistData8DistDataERK17GeneralDistMatrixI1T1U1VE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct the distribution data of any instance of
+<a class="reference internal" href="GDM.html#_CPPv4IE17GeneralDistMatrixI1T1U1VE" title="GeneralDistMatrix&lt;T, U, V&gt;"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">GeneralDistMatrix&lt;T,U,V&gt;</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

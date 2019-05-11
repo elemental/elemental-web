@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>06/04/2014: Elemental 0.84 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="02/20/2014: Elemental 0.83" href="../0.83/index.html" />
+    <link rel="prev" title="11/08/2014: Elemental 0.85" href="../0.85/index.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-84">
+<span id="release-0-84"></span><h1>06/04/2014: Elemental 0.84<a class="headerlink" href="#elemental-0-84" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://libelemental.org/pub/releases/Elemental-0.84-p1.tgz">Elemental-0.84-p1.tgz</a> (patch applied on 06/13/2014)</p>
+<p>Documentation: <a class="reference external" href="http://libelemental.org/documentation/0.84/">[HTML]</a> <a class="reference external" href="http://libelemental.org/documentation/elem-0.84.pdf">[PDF]</a></p>
+<p>The significant changes since release 0.83 are listed below.</p>
+<div class="section" id="new-functionality">
+<h2>New Functionality<a class="headerlink" href="#new-functionality" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fundamental-additions">
+<h3>Fundamental additions<a class="headerlink" href="#fundamental-additions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Low-rank Cholesky up-/down-dating (CholMod)</p></li>
+<li><p>Rank-one updates to LU factorizations (LUMod)</p></li>
+<li><p>Added Generalized RQ and QR factorizations and associated General Linear Model (GLM) and Equality-constrained Least Squares (LSE) solvers</p></li>
+<li><p>Pseudospectral computations can now be driven by various kernels, including
+multi-shift Hessenberg/(quasi-)triangular solves. There is also now support a
+variety of configurations for outputting snapshots of the results</p></li>
+<li><p>Multi-shift Hessenberg solves (MultiShiftHessSolve)</p></li>
+<li><p>Multi-shift quasi-triangular solves (MultiShiftQuasiTrsm)</p></li>
+<li><p>Quasi-triangular solves (QuasiTrsv/QuasiTrsm)</p></li>
+<li><p>Hyperbolic Householder transforms</p></li>
+<li><p>Basic support for a block version of DistMatrix (BlockDistMatrix)</p></li>
+<li><p>Support for parallel Schur decompositions via ScaLAPACK’s Hessenberg QR algs.</p></li>
+<li><p>Support for redistributing between DistMatrix and BlockDistMatrix [MC,MR] dists.</p></li>
+<li><p>All user-level routines now use permutation vectors instead of pivot vectors</p></li>
+<li><p>Alternating Direction Method of Multipliers (ADMM) implementations of Basis Pursuit, Linear and Quadratic Programs, and Sparse Inverse Covariance Selection</p></li>
+</ul>
+</div>
+<div class="section" id="minor-incremental-improvements">
+<h3>Minor/incremental improvements<a class="headerlink" href="#minor-incremental-improvements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added {lq,rq,qr}::SolveAfter</p></li>
+<li><p>Added SymmetricSolve and HermitianSolve</p></li>
+<li><p>Support for converting real (quasi-triangular) Schur forms to complex
+(triangular) form</p></li>
+<li><p>Support for computing the eigenvalues of quasi-triangular matrices</p></li>
+<li><p>LQ/QR/RQ factorizations now force positive (or zero) diagonal entries in the
+resulting triangular matrix</p></li>
+<li><p>Grid now supports both row-major and column-major orderings</p></li>
+<li><p>Support for diagonal scalings of trapezoidal matrices (DiagonalScaleTrapezoid)</p></li>
+<li><p>Added Global{Col,Row} and Local{Col,Row}Offset member functions to DistMatrix</p></li>
+<li><p>Norm and Max now support more data distributions</p></li>
+<li><p>Min and Max implementations (which do not use the absolute values)</p></li>
+<li><p>Added Bull’s Head, Hatano-Nelson, random Helmholtz Green’s, Trefethen,
+Triangle, and Whale matrices.</p></li>
+</ul>
+</div>
+<div class="section" id="instrumentation-visualization-testing">
+<h3>Instrumentation/visualization/testing<a class="headerlink" href="#instrumentation-visualization-testing" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>More file formats for Read and Write (e.g., ASCII and MATRIX_MARKET)</p></li>
+<li><p>Display windows are now strictly sized according to the size of the matrix</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="maintenance">
+<h2>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="library-bugfixes">
+<h3>Library bugfixes<a class="headerlink" href="#library-bugfixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed several small memory leaks in Grid</p></li>
+<li><p>AbstractDistMatrix::Empty() now recomputes shifts to ensure the matrix is kept
+in a legal state</p></li>
+<li><p>Moves of non-views to views are now converted to copies</p></li>
+<li><p>Fixed deflation bug in PMRRR when no eigenvectors are requested</p></li>
+<li><p>Fixed bugs in ApplyPackedReflectors, QuasiDiagonalScale, TriangularInverse, Trr, and Trsv</p></li>
+</ul>
+</div>
+<div class="section" id="maintenance-syntax">
+<h3>Maintenance/syntax<a class="headerlink" href="#maintenance-syntax" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Algorithmic options are now handled via control structures with default
+constructors</p></li>
+<li><p>Preprocessor definitions and macros now namespaced with “ELEM”</p></li>
+<li><p>Grid argument to DistMatrix::[Locked]Attach was moved before the dependent
+alignment arguments</p></li>
+<li><p>Added a ‘Mod’ routine which supports modular arithmetic with negative integers</p></li>
+<li><p>Copy assignments now return non-const references</p></li>
+<li><p>Move constructors are now “noexcept”</p></li>
+<li><p>Checks were added to ensure DistMatrix views are not improperly aligned</p></li>
+<li><p>PMRRR (and therefore Elemental) no longer requires a Fortran compiler to build</p></li>
+<li><p>Renamed “ShiftedTrsm” to “MultiShiftTrsm” and placed in BLAS3</p></li>
+<li><p>Renamed “Min” and “Max” to “MinAbs” and “MaxAbs”</p></li>
+<li><p>Renamed “Inertia” to “InertiaType” and “HermitianInertia” to “Inertia”</p></li>
+<li><p>The unnecessary Orientation arguments were removed from QuasiDiagonal{Scale,Solve}</p></li>
+<li><p>All interfaces now assume the usage of ‘left’ diagonals, which use an offset relative to the diagonal which contains the upper-left entry</p></li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Documentation for BlockDistMatrix is currently missing</p></li>
+</ul>
+</div>
+<div class="section" id="build-system">
+<h3>Build system<a class="headerlink" href="#build-system" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Several bugs fixed in detection of support for C++11 random number generation</p></li>
+<li><p>Configuration tests moved into separate files</p></li>
+</ul>
+</div>
+<div class="section" id="python-interface">
+<h3>Python interface<a class="headerlink" href="#python-interface" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The python interface was removed due to SWIG’s lack of C++11 support,
+the lack of a maintainer for the interface, and the fact that a manual
+C interface is planned.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="thanks">
+<h2>Thanks<a class="headerlink" href="#thanks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Jed Brown for suggesting the preprocessor namespacing</p></li>
+<li><p>Drew Lewis for reporting the TriangularInverse bug</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tikhonov regularization &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ridge regression" href="Ridge.html" />
+    <link rel="prev" title="Least Squares" href="LeastSquares.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="LeastSquares.html">Least Squares</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tikhonov regularization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Ridge.html">Ridge regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GLM.html">General (Gauss-Markov) Linear Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LSE.html">Equality-constrained Least Squares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../euclidean_min.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../euclidean_min.html">Euclidean minimization</a> &raquo;</li>
+        
+      <li>Tikhonov regularization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/euclidean_min/Tikhonov.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tikhonov-regularization">
+<h1>Tikhonov regularization<a class="headerlink" href="#tikhonov-regularization" title="Permalink to this headline">¶</a></h1>
+<p><em>Tikhonov regularization</em> involves the solution of either a <em>Regularized
+Least Squares</em> problem,</p>
+<div class="math notranslate nohighlight">
+\[\min_X \| A X - B \|_F^2 + \| G X \|_F^2,\]</div>
+<p>where <span class="math notranslate nohighlight">\(G\)</span> is the regularization matrix, or a <em>Regularized Minimum Length</em>
+problem</p>
+<div class="math notranslate nohighlight">
+\begin{eqnarray*}
+&amp;&amp; \min_{X,S} \| X \|_F^2 + \| S \|_F^2 \\
+&amp;&amp; \text{s.t. } A X + G S = B.
+\end{eqnarray*}</div><p>Each of these problems is equivalent to a larger standard Least Squares or
+Minimum Length problems, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\min_X \left\| \begin{pmatrix} A \\ G \end{pmatrix} X - \begin{pmatrix} B \\ 0 \end{pmatrix} \right\|_F^2\end{split}\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\begin{eqnarray*}
+&amp;&amp; \min_{\begin{pmatrix} X \\ S \end{pmatrix}} \left\| \begin{pmatrix} X \\ S \end{pmatrix} \right\|_F^2 \\
+&amp;&amp; \text{s.t. } \begin{pmatrix} A &amp; G \end{pmatrix} \begin{pmatrix} X \\ S \end{pmatrix} = B.
+\end{eqnarray*}</div><p>Elemental explicitly exploits this equivalence for sparse matrices so that
+its sparse <a class="reference internal" href="LeastSquares.html#_CPPv412LeastSquares11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="LeastSquares"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">LeastSquares()</span></code></a> solver can be directly leveraged; for
+dense matrices, the embedding is used implicitly to avoid large unncessary
+memory usage.</p>
+<p>Lastly, Elemental in fact allows for slight generalizations of the above
+problems: <span class="math notranslate nohighlight">\(A^T\)</span> or <span class="math notranslate nohighlight">\(A^H\)</span> may also be used in the above equations
+rather than only <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Tikhonov">
+<code class="descname">Tikhonov</code><span class="sig-paren">(</span><em>A</em>, <em>B</em>, <em>Gamma</em><span class="optional">[</span>, <em>alg=TIKHONOV_CHOLESKY</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Tikhonov" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv411TikhonovAlg">
+<span id="_CPPv311TikhonovAlg"></span><span id="_CPPv211TikhonovAlg"></span><span id="TikhonovAlg"></span><em class="property">type </em><code class="descname">TikhonovAlg</code><a class="headerlink" href="#_CPPv411TikhonovAlg" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum that can take on the values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TIKHONOV_CHOLESKY</span></code>: Run a less accurate, but often faster, Cholesky-based algorithm</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TIKHONOV_QR</span></code>: Run a QR-based algorithm</p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Tikhonov11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE11TikhonovAlg">
+<span id="_CPPv38Tikhonov11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE11TikhonovAlg"></span><span id="_CPPv28Tikhonov11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE11TikhonovAlg"></span><span id="Tikhonov__Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:CR.Matrix:F:R.TikhonovAlg"></span>void <code class="descname">Tikhonov</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Gamma</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="#_CPPv411TikhonovAlg" title="TikhonovAlg">TikhonovAlg</a> <em>alg</em> = TIKHONOV_CHOLESKY<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Tikhonov11OrientationRK6MatrixI1FERK6MatrixI1FERK6MatrixI1FER6MatrixI1FE11TikhonovAlg" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Tikhonov11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE11TikhonovAlg">
+<span id="_CPPv38Tikhonov11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE11TikhonovAlg"></span><span id="_CPPv28Tikhonov11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE11TikhonovAlg"></span><span id="Tikhonov__Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.TikhonovAlg"></span>void <code class="descname">Tikhonov</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>Gamma</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em>, <a class="reference internal" href="#_CPPv411TikhonovAlg" title="TikhonovAlg">TikhonovAlg</a> <em>alg</em> = TIKHONOV_CHOLESKY<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Tikhonov11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE11TikhonovAlg" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Tikhonov11OrientationRK12SparseMatrixI1FERK6MatrixI1FERK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv38Tikhonov11OrientationRK12SparseMatrixI1FERK6MatrixI1FERK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv28Tikhonov11OrientationRK12SparseMatrixI1FERK6MatrixI1FERK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="Tikhonov__Orientation.SparseMatrix:F:CR.Matrix:F:CR.SparseMatrix:F:CR.Matrix:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">Tikhonov</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>G</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Tikhonov11OrientationRK12SparseMatrixI1FERK6MatrixI1FERK12SparseMatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Tikhonov11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FERK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv38Tikhonov11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FERK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv28Tikhonov11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FERK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="Tikhonov__Orientation.DistSparseMatrix:F:CR.DistMultiVec:F:CR.DistSparseMatrix:F:CR.DistMultiVec:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">Tikhonov</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>B</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>G</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>X</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Tikhonov11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FERK16DistSparseMatrixI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="c.ElTikhonovAlg">
+<code class="descname">ElTikhonovAlg</code><a class="headerlink" href="#c.ElTikhonovAlg" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum which can take on the values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_TIKHONOV_CHOLESKY</span></code>: Run a less accurate, but often faster, Cholesky-based algorithm</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_TIKHONOV_QR</span></code>: Run a QR-based algorithm</p></li>
+</ul>
+</dd></dl>
+
+<div class="section" id="single-precision">
+<h3>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElTikhonov_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonov_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, ElConstMatrix_s<em> Gamma</em>, ElMatrix_s<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonov_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> B</em>, ElConstDistMatrix_s<em> Gamma</em>, ElDistMatrix_s<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovSparse_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, ElConstSparseMatrix_s<em> G</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDistSparse_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_s<em> A</em>, ElConstDistMultiVec_s<em> B</em>, ElConstDistSparseMatrix_s<em> G</em>, ElDistMultiVec_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h3>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElTikhonov_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonov_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, ElConstMatrix_d<em> Gamma</em>, ElMatrix_d<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonov_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> B</em>, ElConstDistMatrix_d<em> Gamma</em>, ElDistMatrix_d<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovSparse_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, ElConstSparseMatrix_d<em> G</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDistSparse_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_d<em> A</em>, ElConstDistMultiVec_d<em> B</em>, ElConstDistSparseMatrix_d<em> G</em>, ElDistMultiVec_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h3>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElTikhonov_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonov_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, ElConstMatrix_c<em> Gamma</em>, ElMatrix_c<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonov_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> B</em>, ElConstDistMatrix_c<em> Gamma</em>, ElDistMatrix_c<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, ElConstSparseMatrix_c<em> G</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDistSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_c<em> A</em>, ElConstDistMultiVec_c<em> B</em>, ElConstDistSparseMatrix_c<em> G</em>, ElDistMultiVec_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h3>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElTikhonov_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonov_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, ElConstMatrix_z<em> Gamma</em>, ElMatrix_z<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonov_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> B</em>, ElConstDistMatrix_z<em> Gamma</em>, ElDistMatrix_z<em> X</em>, <a class="reference internal" href="#c.ElTikhonovAlg" title="ElTikhonovAlg">ElTikhonovAlg</a><em> alg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, ElConstSparseMatrix_z<em> G</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTikhonovDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTikhonovDistSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_z<em> A</em>, ElConstDistMultiVec_z<em> B</em>, ElConstDistSparseMatrix_z<em> G</em>, ElDistMultiVec_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTikhonovDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Ridge.html" class="btn btn-neutral float-right" title="Ridge regression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="LeastSquares.html" class="btn btn-neutral float-left" title="Least Squares" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

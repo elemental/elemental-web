@@ -1,0 +1,491 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Least Squares &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tikhonov regularization" href="Tikhonov.html" />
+    <link rel="prev" title="Euclidean minimization" href="../euclidean_min.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../solve.html">Linear solvers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../euclidean_min.html">Euclidean minimization</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Least Squares</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dense-algorithm">Dense algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sparse-direct-algorithm">Sparse-direct algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-api">C++ API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">C API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Tikhonov.html">Tikhonov regularization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ridge.html">Ridge regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GLM.html">General (Gauss-Markov) Linear Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LSE.html">Equality-constrained Least Squares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../euclidean_min.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../euclidean_min.html">Euclidean minimization</a> &raquo;</li>
+        
+      <li>Least Squares</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/lapack_like/euclidean_min/LeastSquares.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="least-squares">
+<h1>Least Squares<a class="headerlink" href="#least-squares" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/euclidean_min/LeastSquares.cpp">Implementation</a></p>
+<p>A <em>Least Squares</em> problem involves the solution of</p>
+<div class="math notranslate nohighlight">
+\[\min_X \| A X - B \|_F^2\]</div>
+<p>and is applicable for overdetermined (as well as square) linear system. Whenever
+the system is underdetermined, it is more appropriate to solve a
+<em>Minimum Length</em> problem,</p>
+<div class="math notranslate nohighlight">
+\begin{eqnarray*}
+&amp;&amp; \min_X \| X \|_F^2 \\
+&amp;&amp; \text{s.t. } A X  = B.
+\end{eqnarray*}</div><div class="section" id="dense-algorithm">
+<h2>Dense algorithm<a class="headerlink" href="#dense-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>Elemental solves dense instances of these problems in a straight-forward
+manner using QR and LQ factorizations, respectively.</p>
+</div>
+<div class="section" id="sparse-direct-algorithm">
+<h2>Sparse-direct algorithm<a class="headerlink" href="#sparse-direct-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>Sparse instances are solved via applying a priori regularization to the
+symmetric quasi-semidefinite <em>augmented systems</em></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{pmatrix} \alpha I &amp; A \\ A^H &amp; 0 \end{pmatrix} \begin{pmatrix} R/\alpha \\ X \end{pmatrix} = \begin{pmatrix} B \\ 0 \end{pmatrix}\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{pmatrix} \alpha I &amp; A^H \\ A &amp; 0 \end{pmatrix} \begin{pmatrix} X \\ \alpha Y \end{pmatrix} = \begin{pmatrix} 0 \\ B \end{pmatrix},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> should ideally be chosen near <span class="math notranslate nohighlight">\(\sigma_{\text{min}}(A)\)</span> in order to minimize the condition number (relative to both the augmented system and the solution for <span class="math notranslate nohighlight">\(X\)</span> <a class="reference internal" href="#bjorck92" id="id1"><span>[Bjorck92]</span></a> <a class="reference internal" href="#bjorck96" id="id2"><span>[Bjorck96]</span></a>).
+The augmented systems are of interest because they have nearby quasi-definite
+<a class="reference internal" href="#vanderbei95" id="id3"><span>[Vanderbei95]</span></a> matrices which  be factored with a Cholesky-like sparse-direct
+solver (and can therefore be effectively preconditioned) <a class="reference internal" href="#saunders96" id="id4"><span>[Saunders96]</span></a>.</p>
+<p>Lastly, Elemental in fact allows for slight generalizations of the above
+problems: <span class="math notranslate nohighlight">\(A^T\)</span> or <span class="math notranslate nohighlight">\(A^H\)</span> may also be used in the above equations
+rather than only <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="LeastSquares">
+<code class="descname">LeastSquares</code><span class="sig-paren">(</span><em>A</em>, <em>B</em><span class="optional">[</span>, <em>ctrl=None</em>, <em>orient=NORMAL</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#LeastSquares" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv412LeastSquares11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv312LeastSquares11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv212LeastSquares11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="LeastSquares__Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descname">LeastSquares</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LeastSquares11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412LeastSquares11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv312LeastSquares11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv212LeastSquares11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="LeastSquares__Orientation.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descname">LeastSquares</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LeastSquares11OrientationRK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412LeastSquares11OrientationRK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv312LeastSquares11OrientationRK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv212LeastSquares11OrientationRK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="LeastSquares__Orientation.SparseMatrix:F:CR.Matrix:F:CR.Matrix:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">LeastSquares</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1FE" title="SparseMatrix&lt;F&gt;">SparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LeastSquares11OrientationRK12SparseMatrixI1FERK6MatrixI1FER6MatrixI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412LeastSquares11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE">
+<span id="_CPPv312LeastSquares11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="_CPPv212LeastSquares11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE"></span><span id="LeastSquares__Orientation.DistSparseMatrix:F:CR.DistMultiVec:F:CR.DistMultiVec:F:R.LeastSquaresCtrl:Base:F::CR"></span>void <code class="descname">LeastSquares</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1FE" title="DistSparseMatrix&lt;F&gt;">DistSparseMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_multi_vec/cxx.html#_CPPv4IE12DistMultiVecI1FE" title="DistMultiVec&lt;F&gt;">DistMultiVec</a>&lt;F&gt; &amp;<em>X</em>, <em class="property">const</em> LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LeastSquaresCtrl&lt;<a class="reference internal" href="../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412LeastSquares11OrientationRK16DistSparseMatrixI1FERK12DistMultiVecI1FER12DistMultiVecI1FERK16LeastSquaresCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<div class="section" id="dense-versions-which-overwrite-some-of-the-input">
+<h3>Dense versions which overwrite some of the input<a class="headerlink" href="#dense-versions-which-overwrite-some-of-the-input" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N2ls9OverwriteE11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N2ls9OverwriteE11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N2ls9OverwriteE11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="ls::Overwrite__Orientation.Matrix:F:R.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">ls<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2ls9OverwriteE11OrientationR6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2ls9OverwriteE11OrientationR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE">
+<span id="_CPPv3N2ls9OverwriteE11OrientationR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="_CPPv2N2ls9OverwriteE11OrientationR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE"></span><span id="ls::Overwrite__Orientation.AbstractDistMatrix:F:R.AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R"></span>void <code class="descclassname">ls<code class="descclassname">::</code></code><code class="descname">Overwrite</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2ls9OverwriteE11OrientationR18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id5">
+<h2>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="standard-interface">
+<h3>Standard interface<a class="headerlink" href="#standard-interface" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="single-precision">
+<h4>Single-precision<a class="headerlink" href="#single-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquares_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquares_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquares_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> B</em>, ElDistMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresSparse_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, ElMatrix_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDistSparse_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_s<em> A</em>, ElConstDistMultiVec_s<em> B</em>, ElDistMultiVec_s<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision">
+<h4>Double-precision<a class="headerlink" href="#double-precision" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquares_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquares_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquares_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> B</em>, ElDistMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresSparse_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, ElMatrix_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDistSparse_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_d<em> A</em>, ElConstDistMultiVec_d<em> B</em>, ElDistMultiVec_d<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="single-precision-complex">
+<h4>Single-precision complex<a class="headerlink" href="#single-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquares_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquares_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquares_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDist_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> B</em>, ElDistMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, ElMatrix_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDistSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_c<em> A</em>, ElConstDistMultiVec_c<em> B</em>, ElDistMultiVec_c<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="double-precision-complex">
+<h4>Double-precision complex<a class="headerlink" href="#double-precision-complex" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquares_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquares_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquares_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDist_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> B</em>, ElDistMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, ElMatrix_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresDistSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_z<em> A</em>, ElConstDistMultiVec_z<em> B</em>, ElDistMultiVec_z<em> X</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="expert-versions">
+<h3>Expert versions<a class="headerlink" href="#expert-versions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h4>Single-precision<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquaresXSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXSparse_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_s<em> A</em>, ElConstMatrix_s<em> B</em>, ElMatrix_s<em> X</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresXDistSparse_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXDistSparse_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_s<em> A</em>, ElConstDistMultiVec_s<em> B</em>, ElDistMultiVec_s<em> X</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXDistSparse_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h4>Double-precision<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquaresXSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXSparse_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_d<em> A</em>, ElConstMatrix_d<em> B</em>, ElMatrix_d<em> X</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresXDistSparse_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXDistSparse_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_d<em> A</em>, ElConstDistMultiVec_d<em> B</em>, ElDistMultiVec_d<em> X</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXDistSparse_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id8">
+<h4>Single-precision complex<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquaresXSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_c<em> A</em>, ElConstMatrix_c<em> B</em>, ElMatrix_c<em> X</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresXDistSparse_c">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXDistSparse_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_c<em> A</em>, ElConstDistMultiVec_c<em> B</em>, ElDistMultiVec_c<em> X</em>, ElLeastSquaresCtrl_s<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXDistSparse_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id9">
+<h4>Double-precision complex<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLeastSquaresXSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstSparseMatrix_z<em> A</em>, ElConstMatrix_z<em> B</em>, ElMatrix_z<em> X</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLeastSquaresXDistSparse_z">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLeastSquaresXDistSparse_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment/typedefs_and_enums.html#c.ElOrientation" title="ElOrientation">ElOrientation</a><em> orientation</em>, ElConstDistSparseMatrix_z<em> A</em>, ElConstDistMultiVec_z<em> B</em>, ElDistMultiVec_z<em> X</em>, ElLeastSquaresCtrl_d<em> ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLeastSquaresXDistSparse_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="citation">
+<dt class="label" id="bjorck92"><span class="brackets"><a class="fn-backref" href="#id1">Bjorck92</a></span></dt>
+<dd><p>Ake Bjorck, <em>Pivoting and stability in the augmented system method</em>. In D.F. Griffiths and G.A. Watson (eds.), Proc. 14th Dundee Conf., Pitman Research Notes in Math., pp. 1–16, 1992.</p>
+</dd>
+<dt class="label" id="bjorck96"><span class="brackets"><a class="fn-backref" href="#id2">Bjorck96</a></span></dt>
+<dd><p>Ake Bjorck, <em>Numerical methods for least squares problems</em>, SIAM, Philadelphia, 1996. <a class="reference external" href="http://epubs.siam.org/doi/book/10.1137/1.9781611971484">DOI</a></p>
+</dd>
+<dt class="label" id="saunders96"><span class="brackets"><a class="fn-backref" href="#id4">Saunders96</a></span></dt>
+<dd><p>Michael Saunders, <em>Chapter 8, Cholesky-based Methods for Sparse Least Squares: The Benefits of Regularization</em>, in L. Adams and J.L. Nazareth (eds.), Linear and Nonlinear Conjugate Gradient-Related Methods, SIAM, Philadelphia, pp. 92–100, 1996. <a class="reference external" href="http://web.stanford.edu/group/SOL/papers/seattleproc.pdf">Currently available here</a></p>
+</dd>
+<dt class="label" id="vanderbei95"><span class="brackets"><a class="fn-backref" href="#id3">Vanderbei95</a></span></dt>
+<dd><p>R.J. Vanderbei, <em>Symmetric quasi-definite matrices</em>, SIAM J. Optim., 5(1), pp. 100–113, 1995. <a class="reference external" href="http://www.princeton.edu/~rvdb/tex/myPapers/sqd6.pdf">Preprint available here</a></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Tikhonov.html" class="btn btn-neutral float-right" title="Tikhonov regularization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../euclidean_min.html" class="btn btn-neutral float-left" title="Euclidean minimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

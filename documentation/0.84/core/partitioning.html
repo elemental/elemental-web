@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Matrix partitions &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Repartitioning matrices" href="repartitioning.html" />
+    <link rel="prev" title="Matrix views" href="viewing.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="matrix-partitions">
+<h1>Matrix partitions<a class="headerlink" href="#matrix-partitions" title="Permalink to this headline">¶</a></h1>
+<p>The following routines are slight tweaks of the FLAME project’s
+(as well as PLAPACK’s) approach to submatrix tracking; the difference is that
+they have “locked” versions, which are meant for creating partitionings where
+the submatrices cannot be modified.</p>
+<div class="section" id="partitionup">
+<h2>PartitionUp<a class="headerlink" href="#partitionup" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>AT</cite> and <cite>AB</cite> to view the local data of <cite>A</cite> corresponding to the partition</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{c}A_T \\ A_B \end{array}\right),\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_B\)</span> is of a specified height.</p>
+<dl class="function">
+<dt id="_CPPv411PartitionUpR6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv311PartitionUpR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv211PartitionUpR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionUp__Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionUp</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AT</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AB</em>, int <em>heightAB</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PartitionUpR6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417LockedPartitionUpRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv317LockedPartitionUpRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv217LockedPartitionUpRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionUp__Matrix:T:CR.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionUp</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AT</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AB</em>, int <em>heightAB</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417LockedPartitionUpRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PartitionUpR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv311PartitionUpR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv211PartitionUpR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionUp__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionUp</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AT</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AB</em>, int <em>heightAB</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PartitionUpR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417LockedPartitionUpRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv317LockedPartitionUpRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv217LockedPartitionUpRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionUp__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionUp</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AT</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AB</em>, int <em>heightAB</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417LockedPartitionUpRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="partitiondown">
+<h2>PartitionDown<a class="headerlink" href="#partitiondown" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>AT</cite> and <cite>AB</cite> to view the local data of <cite>A</cite> corresponding to the partition</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{c}A_T \\ A_B \end{array}\right),\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_T\)</span> is of a specified height.</p>
+<dl class="function">
+<dt id="_CPPv413PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv313PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv213PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionDown__Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionDown</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AT</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AB</em>, int <em>heightAT</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PartitionDownR6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv319LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv219LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionDown__Matrix:T:CR.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionDown</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AT</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AB</em>, int <em>heightAT</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419LockedPartitionDownRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413PartitionDownR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv313PartitionDownR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv213PartitionDownR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionDown__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionDown</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AT</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AB</em>, int <em>heightAT</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PartitionDownR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419LockedPartitionDownRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv319LockedPartitionDownRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv219LockedPartitionDownRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionDown__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionDown</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AT</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AB</em>, int <em>heightAT</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419LockedPartitionDownRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="partitionleft">
+<h2>PartitionLeft<a class="headerlink" href="#partitionleft" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>AL</cite> and <cite>AR</cite> to view the local data of <cite>A</cite> corresponding to the partition</p>
+<div class="math notranslate nohighlight">
+\[A = \left(\begin{array}{cc} A_L &amp; A_R \end{array}\right),\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_R\)</span> is of a specified width.</p>
+<dl class="function">
+<dt id="_CPPv413PartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv313PartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv213PartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionLeft__Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionLeft</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AR</em>, int <em>widthAR</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PartitionLeftR6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419LockedPartitionLeftRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv319LockedPartitionLeftRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv219LockedPartitionLeftRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionLeft__Matrix:T:CR.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionLeft</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AR</em>, int <em>widthAR</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419LockedPartitionLeftRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413PartitionLeftR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv313PartitionLeftR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv213PartitionLeftR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionLeft__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionLeft</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AR</em>, int <em>widthAR</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413PartitionLeftR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419LockedPartitionLeftRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv319LockedPartitionLeftRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv219LockedPartitionLeftRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionLeft__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionLeft</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AR</em>, int <em>widthAR</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419LockedPartitionLeftRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and the distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="partitionright">
+<h2>PartitionRight<a class="headerlink" href="#partitionright" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>AL</cite> and <cite>AR</cite> to view the local data of <cite>A</cite> corresponding to the partition</p>
+<div class="math notranslate nohighlight">
+\[A = \left(\begin{array}{cc} A_L &amp; A_R \end{array}\right),\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_L\)</span> is of a specified width.</p>
+<dl class="function">
+<dt id="_CPPv414PartitionRightR6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv314PartitionRightR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv214PartitionRightR6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionRight__Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionRight</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AR</em>, int <em>widthAL</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414PartitionRightR6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv420LockedPartitionRightRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv320LockedPartitionRightRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv220LockedPartitionRightRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionRight__Matrix:T:CR.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionRight</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>AR</em>, int <em>widthAL</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420LockedPartitionRightRK6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414PartitionRightR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv314PartitionRightR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv214PartitionRightR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionRight__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionRight</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AR</em>, int <em>widthAL</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414PartitionRightR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv420LockedPartitionRightRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv320LockedPartitionRightRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv220LockedPartitionRightRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionRight__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionRight</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>AR</em>, int <em>widthAL</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420LockedPartitionRightRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and the distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="partitionupdiagonal">
+<h2>PartitionUpDiagonal<a class="headerlink" href="#partitionupdiagonal" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>ATL</cite>, <cite>ATR</cite>, <cite>ABL</cite>, and <cite>ABR</cite> to view the local data of <cite>A</cite> corresponding to the partitioning</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{cc} A_{TL} &amp; A_{TR} \\ A_{BL} &amp; A_{BR} \end{array}\right),\end{split}\]</div>
+<p>where the diagonal of <span class="math notranslate nohighlight">\(A_{BR}\)</span> lies on the main diagonal
+(aka, the <em>left</em> diagonal) of <span class="math notranslate nohighlight">\(A\)</span> and is of the specified height/width.</p>
+<dl class="function">
+<dt id="_CPPv419PartitionUpDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv319PartitionUpDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv219PartitionUpDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionUpDiagonal__Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionUpDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419PartitionUpDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv425LockedPartitionUpDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv325LockedPartitionUpDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv225LockedPartitionUpDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionUpDiagonal__Matrix:T:CR.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionUpDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425LockedPartitionUpDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419PartitionUpDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv319PartitionUpDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv219PartitionUpDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionUpDiagonal__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionUpDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419PartitionUpDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv425LockedPartitionUpDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv325LockedPartitionUpDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv225LockedPartitionUpDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionUpDiagonal__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionUpDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425LockedPartitionUpDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and the distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="partitionupoffsetdiagonal">
+<h2>PartitionUpOffsetDiagonal<a class="headerlink" href="#partitionupoffsetdiagonal" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>ATL</cite>, <cite>ATR</cite>, <cite>ABL</cite>, and <cite>ABR</cite> to view the local data of <cite>A</cite> corresponding to the partitioning</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{cc} A_{TL} &amp; A_{TR} \\ A_{BL} &amp; A_{BR} \end{array}\right),\end{split}\]</div>
+<p>where the diagonal of <span class="math notranslate nohighlight">\(A_{BR}\)</span> lies on the <code class="docutils literal notranslate"><span class="pre">offset</span></code> diagonal of
+<span class="math notranslate nohighlight">\(A\)</span>, where the main diagonal corresponds to an offset of 0, the
+subdiagonal is an offset of <span class="math notranslate nohighlight">\(-1\)</span>, the superdiagonal is an offset of
+<span class="math notranslate nohighlight">\(1\)</span>, etc. The length of the diagonal of <span class="math notranslate nohighlight">\(A_{BR}\)</span> is specified as
+<code class="docutils literal notranslate"><span class="pre">diagDist</span></code>.</p>
+<dl class="function">
+<dt id="_CPPv425PartitionUpOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv325PartitionUpOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv225PartitionUpOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionUpOffsetDiagonal__i.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionUpOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425PartitionUpOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv431LockedPartitionUpOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv331LockedPartitionUpOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv231LockedPartitionUpOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionUpOffsetDiagonal__i.Matrix:T:CR.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionUpOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431LockedPartitionUpOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv425PartitionUpOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv325PartitionUpOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv225PartitionUpOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionUpOffsetDiagonal__i.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionUpOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425PartitionUpOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv431LockedPartitionUpOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv331LockedPartitionUpOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv231LockedPartitionUpOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionUpOffsetDiagonal__i.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionUpOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431LockedPartitionUpOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and the distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="partitiondowndiagonal">
+<h2>PartitionDownDiagonal<a class="headerlink" href="#partitiondowndiagonal" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>ATL</cite>, <cite>ATR</cite>, <cite>ABL</cite>, and <cite>ABR</cite> to view the local data of <span class="math notranslate nohighlight">\(A\)</span> corresponding to the partitioning</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{cc} A_{TL} &amp; A_{TR} \\ A_{BL} &amp; A_{BR} \end{array}\right),\end{split}\]</div>
+<p>where the diagonal of <span class="math notranslate nohighlight">\(A_{TL}\)</span> is of the specified length and lies on
+the main diagonal (aka, the <em>left</em> diagonal) of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv421PartitionDownDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv321PartitionDownDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv221PartitionDownDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionDownDiagonal__Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionDownDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421PartitionDownDiagonalR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv427LockedPartitionDownDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv327LockedPartitionDownDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv227LockedPartitionDownDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionDownDiagonal__Matrix:T:CR.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionDownDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427LockedPartitionDownDiagonalRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421PartitionDownDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv321PartitionDownDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv221PartitionDownDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionDownDiagonal__DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionDownDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421PartitionDownDiagonalR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv427LockedPartitionDownDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv327LockedPartitionDownDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv227LockedPartitionDownDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionDownDiagonal__DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionDownDiagonal</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427LockedPartitionDownDiagonalRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and the distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="partitiondownoffsetdiagonal">
+<h2>PartitionDownOffsetDiagonal<a class="headerlink" href="#partitiondownoffsetdiagonal" title="Permalink to this headline">¶</a></h2>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>ATL</cite>, <cite>ATR</cite>, <cite>ABL</cite>, and <cite>ABR</cite> to view the local data of <cite>A</cite> corresponding to the partitioning</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{cc} A_{TL} &amp; A_{TR} \\ A_{BL} &amp; A_{BR} \end{array}\right),\end{split}\]</div>
+<p>where the diagonal of <span class="math notranslate nohighlight">\(A_{BR}\)</span> lies on the <code class="docutils literal notranslate"><span class="pre">offset</span></code> diagonal of
+<span class="math notranslate nohighlight">\(A\)</span>, where the main diagonal corresponds to an offset of 0, the
+subdiagonal is an offset of <span class="math notranslate nohighlight">\(-1\)</span>, the superdiagonal is an offset of
+<span class="math notranslate nohighlight">\(1\)</span>, etc. The length of the diagonal of <span class="math notranslate nohighlight">\(A_{TL}\)</span> is specified as
+<code class="docutils literal notranslate"><span class="pre">diagDist</span></code>.</p>
+<dl class="function">
+<dt id="_CPPv427PartitionDownOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv327PartitionDownOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv227PartitionDownOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="PartitionDownOffsetDiagonal__i.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">PartitionDownOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427PartitionDownOffsetDiagonaliR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv433LockedPartitionDownOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi">
+<span id="_CPPv333LockedPartitionDownOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="_CPPv233LockedPartitionDownOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi"></span><span id="LockedPartitionDownOffsetDiagonal__i.Matrix:T:CR.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.i"></span>void <code class="descname">LockedPartitionDownOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433LockedPartitionDownOffsetDiagonaliRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, of the serial matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv427PartitionDownOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv327PartitionDownOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv227PartitionDownOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="PartitionDownOffsetDiagonal__i.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">PartitionDownOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427PartitionDownOffsetDiagonaliR10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv433LockedPartitionDownOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi">
+<span id="_CPPv333LockedPartitionDownOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="_CPPv233LockedPartitionDownOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi"></span><span id="LockedPartitionDownOffsetDiagonal__i.DistMatrix:T.U.V:CR.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.DistMatrix:T.U.V:R.i"></span>void <code class="descname">LockedPartitionDownOffsetDiagonal</code><span class="sig-paren">(</span>int <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>A</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ATR</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABL</em>, <a class="reference internal" href="dist_matrix/DM.html#_CPPv4IE10DistMatrixI1T1U1VE" title="DistMatrix&lt;T, U, V&gt;">DistMatrix</a>&lt;T, U, V&gt; &amp;<em>ABR</em>, int <em>diagDist</em> = <a class="reference internal" href="environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433LockedPartitionDownOffsetDiagonaliRK10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VER10DistMatrixI1T1U1VEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Templated over the datatype, <cite>T</cite>, and the distribution scheme, <cite>(U,V)</cite>,
+of the distributed matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

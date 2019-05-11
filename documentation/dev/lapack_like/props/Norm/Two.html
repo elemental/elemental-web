@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Two norms &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Two-norm estimates" href="TwoEstimate.html" />
+    <link rel="prev" title="Schatten norms" href="Schatten.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../props.html">Matrix properties</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../Condition.html">Condition number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Determinant.html">Determinant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Inertia.html">Inertia</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../Norm.html">Matrix norms</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../Norm.html#specialized-interfaces">Specialized interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Norm.html#vanilla-interface">Vanilla interface</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Trace.html">Trace</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../../props.html">Matrix properties</a> &raquo;</li>
+        
+          <li><a href="../Norm.html">Matrix norms</a> &raquo;</li>
+        
+      <li>Two norms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/lapack_like/props/Norm/Two.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="two-norms">
+<h1>Two norms<a class="headerlink" href="#two-norms" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/props.hpp">Header file</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/props/Norm/Two.cpp">Implementation</a></p>
+<p>The following routines compute the maximum singular value. This is equivalent
+to the KyFan norm with <cite>k</cite> equal to one and the Schatten norm with
+<span class="math notranslate nohighlight">\(p=\infty\)</span>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47TwoNormRK6MatrixI1FE">
+<span id="_CPPv37TwoNormRK6MatrixI1FE"></span><span id="_CPPv27TwoNormRK6MatrixI1FE"></span><span id="TwoNorm__Matrix:F:CR"></span><a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">TwoNorm</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47TwoNormRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47TwoNormRK18AbstractDistMatrixI1FE">
+<span id="_CPPv37TwoNormRK18AbstractDistMatrixI1FE"></span><span id="_CPPv27TwoNormRK18AbstractDistMatrixI1FE"></span><span id="TwoNorm__AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">TwoNorm</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47TwoNormRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SymmetricTwoNorm12UpperOrLowerRK6MatrixI1FE">
+<span id="_CPPv316SymmetricTwoNorm12UpperOrLowerRK6MatrixI1FE"></span><span id="_CPPv216SymmetricTwoNorm12UpperOrLowerRK6MatrixI1FE"></span><span id="SymmetricTwoNorm__UpperOrLower.Matrix:F:CR"></span><a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">SymmetricTwoNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricTwoNorm12UpperOrLowerRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SymmetricTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE">
+<span id="_CPPv316SymmetricTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="_CPPv216SymmetricTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="SymmetricTwoNorm__UpperOrLower.AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">SymmetricTwoNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianTwoNorm12UpperOrLowerRK6MatrixI1FE">
+<span id="_CPPv316HermitianTwoNorm12UpperOrLowerRK6MatrixI1FE"></span><span id="_CPPv216HermitianTwoNorm12UpperOrLowerRK6MatrixI1FE"></span><span id="HermitianTwoNorm__UpperOrLower.Matrix:F:CR"></span><a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">HermitianTwoNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/matrix/cxx.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTwoNorm12UpperOrLowerRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE">
+<span id="_CPPv316HermitianTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="_CPPv216HermitianTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="HermitianTwoNorm__UpperOrLower.AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../../core/environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">HermitianTwoNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianTwoNorm12UpperOrLowerRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElTwoNorm_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNorm_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNorm_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoNorm_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNorm_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNorm_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoNorm_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNorm_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNorm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoNorm_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNorm_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNorm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoNormDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNormDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNormDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoNormDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNormDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNormDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoNormDist_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNormDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNormDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElTwoNormDist_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElTwoNormDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElTwoNormDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNorm_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNorm_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNorm_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNorm_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNorm_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNorm_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNorm_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNorm_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNorm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNorm_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNorm_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNorm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNormDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNormDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNormDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNormDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNormDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNormDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNormDist_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNormDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNormDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricTwoNormDist_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricTwoNormDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricTwoNormDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTwoNorm_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTwoNorm_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTwoNorm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTwoNorm_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTwoNorm_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTwoNorm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTwoNormDist_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTwoNormDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTwoNormDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianTwoNormDist_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianTwoNormDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianTwoNormDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="TwoEstimate.html" class="btn btn-neutral float-right" title="Two-norm estimates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Schatten.html" class="btn btn-neutral float-left" title="Schatten norms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

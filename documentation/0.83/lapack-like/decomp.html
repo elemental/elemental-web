@@ -1,0 +1,851 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Matrix decompositions &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Factorizations" href="factor.html" />
+    <link rel="prev" title="Reduction to condensed form" href="condense.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="matrix-decompositions">
+<h1>Matrix decompositions<a class="headerlink" href="#matrix-decompositions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hermitian-eigensolver">
+<h2>Hermitian eigensolver<a class="headerlink" href="#hermitian-eigensolver" title="Permalink to this headline">¶</a></h2>
+<p>Elemental provides a collection of routines for both full and partial
+solution of the Hermitian eigenvalue problem</p>
+<div class="math notranslate nohighlight">
+\[A Z = Z \Lambda,\]</div>
+<p>where <cite>A</cite> is the given Hermitian matrix, and unitary <cite>Z</cite> and real diagonal
+<span class="math notranslate nohighlight">\(\Lambda\)</span> are sought. In particular, with the eigenvalues and
+corresponding eigenpairs labeled in non-decreasing order, the three basic
+modes are:</p>
+<ol class="arabic simple">
+<li><p>Compute all eigenvalues or eigenpairs, <span class="math notranslate nohighlight">\(\{\lambda_i\}_{i=0}^{n-1}\)</span> or
+<span class="math notranslate nohighlight">\(\{(z_i,\lambda_i)\}_{i=0}^{n-1}\)</span>.</p></li>
+<li><p>Compute the eigenvalues or eigenpairs with a given range of indices, say
+<span class="math notranslate nohighlight">\(\{\lambda_i\}_{i=a}^b\)</span> or <span class="math notranslate nohighlight">\(\{(z_i,\lambda_i)\}_{i=a}^b\)</span>,
+with <span class="math notranslate nohighlight">\(0 \le a \le b &lt; n\)</span>.</p></li>
+<li><p>Compute all eigenpairs (or just eigenvalues) with eigenvalues lying in a
+particular half-open interval, either
+<span class="math notranslate nohighlight">\(\{\lambda_i \;|\; \lambda_i \in (a,b] \}\)</span> or
+<span class="math notranslate nohighlight">\(\{ (z_i,\lambda_i) \;|\; \lambda_i \in (a,b] \}\)</span>.</p></li>
+</ol>
+<p>As of now, all three approaches start with Householder tridiagonalization
+(ala <a class="reference internal" href="condense.html#_CPPv416HermitianTridiag12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="HermitianTridiag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianTridiag()</span></code></a>) and then call Matthias Petschow and
+Paolo Bientinesi’s PMRRR for the tridiagonal eigenvalue problem.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unfortunately, PMRRR currently only supports double-precision problems, and
+so the parallel versions of these routines are limited to real and complex
+double-precision matrices.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please see the <a class="reference internal" href="tuning.html#lapack-tuning"><span class="std std-ref">Tuning parameters</span></a> section for information on optimizing
+the reduction to tridiagonal form, as it is the dominant cost in all of
+Elemental’s Hermitian eigensolvers.</p>
+</div>
+<div class="section" id="full-spectrum-computation">
+<h3>Full spectrum computation<a class="headerlink" href="#full-spectrum-computation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the full set of eigenvalues of the Hermitian matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the full set of eigenpairs of the Hermitian matrix <cite>A</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="index-based-subset-computation">
+<h3>Index-based subset computation<a class="headerlink" href="#index-based-subset-computation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.i.i.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.i.i.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues of a Hermitian matrix <cite>A</cite> with indices in the range
+<span class="math notranslate nohighlight">\(a,a+1,...,b\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.i.i.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.i.i.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenpairs of a Hermitian matrix <cite>A</cite> with indices in the range
+<span class="math notranslate nohighlight">\(a,a+1,...,b\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="range-based-subset-computation">
+<h3>Range-based subset computation<a class="headerlink" href="#range-based-subset-computation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F.STAR.STAR:R.DistMatrix:Base:F:.STAR.STAR:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues of a Hermitian matrix <cite>A</cite> lying in the half-open
+interval <span class="math notranslate nohighlight">\((a,b]\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARER10DistMatrixI1F4STAR4STARE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARER10DistMatrixI1F4STAR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARER10DistMatrixI1F4STAR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F.STAR.STAR:R.DistMatrix:Base:F:.STAR.STAR:R.DistMatrix:F.STAR.STAR:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1F4STAR4STARER10DistMatrixI4BaseI1FE4STAR4STARER10DistMatrixI1F4STAR4STARE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv312HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv212HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenpairs of a Hermitian matrix <cite>A</cite> with eigenvalues lying in
+the half-open interval <span class="math notranslate nohighlight">\((a,b]\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="spectral-divide-and-conquer">
+<h3>Spectral divide and conquer<a class="headerlink" href="#spectral-divide-and-conquer" title="Permalink to this headline">¶</a></h3>
+<p>The primary references for this approach is Demmel et al.’s <em>Fast linear algebra
+is stable</em> and Nakatsukasa et al.’s <em>Stable and efficient spectral divide and conquer algorithms for the symmetric eigenvalue problem</em>.</p>
+<dl class="function">
+<dt id="_CPPv4N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEEiii4BaseI1FE">
+<span id="_CPPv3N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEEiii4BaseI1FE"></span><span id="_CPPv2N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEEiii4BaseI1FE"></span><span id="hermitian_eig::SDC__Matrix:F:R.Matrix:Base:F::R.i.i.i.Base:F:"></span>void <code class="descclassname">hermitian_eig<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEEiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREiii4BaseI1FE">
+<span id="_CPPv3N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREiii4BaseI1FE"></span><span id="_CPPv2N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREiii4BaseI1FE"></span><span id="hermitian_eig::SDC__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.i.i.i.Base:F:"></span>void <code class="descclassname">hermitian_eig<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues of the matrix <span class="math notranslate nohighlight">\(A\)</span> via a QDWH-based spectral
+divide and conquer process.</p>
+<p>The cutoff controls when the problem is sufficiently small to switch to
+a standard algorithm, the number of inner iterations is how many attempts
+to make with the same randomized URV decomposition, and the number of outer
+iterations is how many random Mobius transformations to try for each spectral
+split before giving up.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEiii4BaseI1FE">
+<span id="_CPPv3N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEiii4BaseI1FE"></span><span id="_CPPv2N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEiii4BaseI1FE"></span><span id="hermitian_eig::SDC__Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.i.i.i.Base:F:"></span>void <code class="descclassname">hermitian_eig<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Q</em>, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13hermitian_eig3SDCER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEiii4BaseI1FE">
+<span id="_CPPv3N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEiii4BaseI1FE"></span><span id="_CPPv2N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEiii4BaseI1FE"></span><span id="hermitian_eig::SDC__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.i.i.i.Base:F:"></span>void <code class="descclassname">hermitian_eig<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Q</em>, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13hermitian_eig3SDCER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attempt to also compute the eigenvectors.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="skew-hermitian-eigensolver">
+<h2>Skew-Hermitian eigensolver<a class="headerlink" href="#skew-hermitian-eigensolver" title="Permalink to this headline">¶</a></h2>
+<p>Essentially identical to the Hermitian eigensolver, <a class="reference internal" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType" title="HermitianEig"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianEig()</span></code></a>;
+for any skew-Hermitian matrix <span class="math notranslate nohighlight">\(G\)</span>, <span class="math notranslate nohighlight">\(iG\)</span> is Hermitian, as</p>
+<div class="math notranslate nohighlight">
+\[(iG)^H = -iG^H = iG.\]</div>
+<p>This fact implies a fast method for solving skew-Hermitian eigenvalue problems:</p>
+<ol class="arabic simple">
+<li><p>Form <span class="math notranslate nohighlight">\(iG\)</span> in <span class="math notranslate nohighlight">\(O(n^2)\)</span> work
+(switching to complex arithmetic in the real case)</p></li>
+<li><p>Run a Hermitian eigensolve on <span class="math notranslate nohighlight">\(iG\)</span>, yielding <span class="math notranslate nohighlight">\(iG=Z \Lambda Z^H\)</span>.</p></li>
+<li><p>Recognize that <span class="math notranslate nohighlight">\(G=Z (-i \Lambda) Z^H\)</span> provides an EVD of <span class="math notranslate nohighlight">\(G\)</span>.</p></li>
+</ol>
+<p>Please see the <a class="reference internal" href="#_CPPv412HermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType" title="HermitianEig"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">HermitianEig()</span></code></a> documentation for more details.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unfortunately, PMRRR currently only supports double-precision problems, and
+so the parallel versions of these routines are limited to real and complex
+double-precision matrices.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please see the <a class="reference internal" href="tuning.html#lapack-tuning"><span class="std std-ref">Tuning parameters</span></a> section for information on optimizing
+the reduction to tridiagonal form, as it is the dominant cost in all of
+Elemental’s Hermitian eigensolvers.</p>
+</div>
+<div class="section" id="id1">
+<h3>Full spectrum computation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>G</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>wImag</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>G</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>wImag</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the full set of eigenvalues of the skew-Hermitian matrix <cite>G</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:Complex:Base:F:::R.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>G</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>wImag</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:Complex:Base:F:::R.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>G</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>wImag</em>, DistMatrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the full set of eigenpairs of the skew-Hermitian matrix <cite>G</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id2">
+<h3>Index-based subset computation<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType"></span><span id="SkewHermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.i.i.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>G</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>wImag</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType"></span><span id="SkewHermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.i.i.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>G</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>wImag</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues of a skew-Hermitian matrix <cite>G</cite> with
+indices in the range <span class="math notranslate nohighlight">\(a,a+1,...,b\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEEii8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEEii8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEEii8SortType"></span><span id="SkewHermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:Complex:Base:F:::R.i.i.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>G</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>wImag</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>Z</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI7ComplexI4BaseI1FEEEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEEii8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEEii8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEEii8SortType"></span><span id="SkewHermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:Complex:Base:F:::R.i.i.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>G</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>wImag</em>, DistMatrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>Z</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI7ComplexI4BaseI1FEEEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenpairs of a skew-Hermitian matrix <cite>G</cite> with
+indices in the range <span class="math notranslate nohighlight">\(a,a+1,...,b\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>Range-based subset computation<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Base:F:.Base:F:.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>G</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>wImag</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>G</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>wImag</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues of a skew-Hermitian matrix <cite>G</cite>
+lying in the half-open interval <span class="math notranslate nohighlight">\((a,b]i\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>G</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>wImag</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv316SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv216SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="SkewHermitianEig__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">SkewHermitianEig</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>G</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>wImag</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SkewHermitianEig12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenpairs of a skew-Hermitian matrix <cite>G</cite> with
+eigenvalues lying in the half-open interval <span class="math notranslate nohighlight">\((a,b]i\)</span>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="hermitian-generalized-definite-eigensolvers">
+<h2>Hermitian generalized-definite eigensolvers<a class="headerlink" href="#hermitian-generalized-definite-eigensolvers" title="Permalink to this headline">¶</a></h2>
+<p>The following Hermitian generalized-definite eigenvalue problems frequently
+appear, where both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are Hermitian, and <span class="math notranslate nohighlight">\(B\)</span> is
+additionally positive-definite.</p>
+<dl class="enum">
+<dt id="_CPPv427HermitianGenDefiniteEigType">
+<span id="_CPPv327HermitianGenDefiniteEigType"></span><span id="_CPPv227HermitianGenDefiniteEigType"></span><em class="property">enum </em><code class="descname">HermitianGenDefiniteEigType</code><a class="headerlink" href="#_CPPv427HermitianGenDefiniteEigType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="enumerator">
+<dt id="_CPPv4N27HermitianGenDefiniteEigType3ABXE">
+<span id="_CPPv3N27HermitianGenDefiniteEigType3ABXE"></span><span id="_CPPv2N27HermitianGenDefiniteEigType3ABXE"></span><em class="property">enumerator </em><code class="descname">ABX</code><a class="headerlink" href="#_CPPv4N27HermitianGenDefiniteEigType3ABXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[A B x = \lambda x\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N27HermitianGenDefiniteEigType3BAXE">
+<span id="_CPPv3N27HermitianGenDefiniteEigType3BAXE"></span><span id="_CPPv2N27HermitianGenDefiniteEigType3BAXE"></span><em class="property">enumerator </em><code class="descname">BAX</code><a class="headerlink" href="#_CPPv4N27HermitianGenDefiniteEigType3BAXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[B A x = \lambda x\]</div>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N27HermitianGenDefiniteEigType4AXBXE">
+<span id="_CPPv3N27HermitianGenDefiniteEigType4AXBXE"></span><span id="_CPPv2N27HermitianGenDefiniteEigType4AXBXE"></span><em class="property">enumerator </em><code class="descname">AXBX</code><a class="headerlink" href="#_CPPv4N27HermitianGenDefiniteEigType4AXBXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="math notranslate nohighlight">
+\[A x = B x \lambda\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="id4">
+<h3>Full spectrum computation<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the full set of eigenvalues of a generalized EVP involving the
+Hermitian matrices <cite>A</cite> and <cite>B</cite>, where <cite>B</cite> is also positive-definite.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Matrix:Base:F::R.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI4BaseI1FEE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI4BaseI1FEE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI4BaseI1FEE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI4BaseI1FEE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:Base:F::R.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI4BaseI1FEE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the full set of eigenpairs of a generalized EVP involving the
+Hermitian matrices <cite>A</cite> and <cite>B</cite>, where <cite>B</cite> is also positive-definite.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>Index-based subset computation<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEEii8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEEii8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEEii8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.i.i.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.i.i.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues with indices in the range <span class="math notranslate nohighlight">\(a,a+1,...,b\)</span> of a
+generalized EVP involving the Hermitian matrices <cite>A</cite> and <cite>B</cite>, where <cite>B</cite> is
+also positive-definite.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.i.i.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.i.i.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, int <em>a</em>, int <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEii8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenpairs with indices in the range <span class="math notranslate nohighlight">\(a,a+1,...,b\)</span> of a
+generalized EVP involving the Hermitian matrices <cite>A</cite> and <cite>B</cite>, where <cite>B</cite> is
+also positive-definite.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h3>Range-based subset computation<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues lying in the half-open interval <span class="math notranslate nohighlight">\((a,b]\)</span> of a
+generalized EVP involving the Hermitian matrices <cite>A</cite> and <cite>B</cite>, where <cite>B</cite> is
+also positive-definite.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.Matrix:F:R.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR6MatrixI1FER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType">
+<span id="_CPPv323HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="_CPPv223HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType"></span><span id="HermitianGenDefiniteEig__HermitianGenDefiniteEigType.UpperOrLower.DistMatrix:F:R.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.Base:F:.Base:F:.SortType"></span>void <code class="descname">HermitianGenDefiniteEig</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427HermitianGenDefiniteEigType" title="HermitianGenDefiniteEigType">HermitianGenDefiniteEigType</a> <em>type</em>, <a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Z</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>a</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>b</em>, <a class="reference internal" href="../core/environment.html#_CPPv48SortType" title="SortType">SortType</a> <em>sort</em> = <a class="reference internal" href="../core/environment.html#_CPPv4N8SortType8UNSORTEDE" title="UNSORTED">UNSORTED</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423HermitianGenDefiniteEig27HermitianGenDefiniteEigType12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FE4BaseI1FE8SortType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenpairs whose eigenvalues lie in the half-open interval
+<span class="math notranslate nohighlight">\((a,b]\)</span> of a generalized EVP involving the Hermitian matrices <cite>A</cite> and
+<cite>B</cite>, where <cite>B</cite> is also positive-definite.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="unitary-eigensolver">
+<h2>Unitary eigensolver<a class="headerlink" href="#unitary-eigensolver" title="Permalink to this headline">¶</a></h2>
+<p>Not yet written, will likely be based on Ming Gu’s unitary Divide and Conquer
+algorithm for unitary Hessenberg matrices. The spectral divide and conquer
+technique described below should suffice in the meantime.</p>
+</div>
+<div class="section" id="normal-eigensolver">
+<h2>Normal eigensolver<a class="headerlink" href="#normal-eigensolver" title="Permalink to this headline">¶</a></h2>
+<p>Not yet written, will likely be based on Angelika Bunse-Gerstner et al.’s
+Jacobi-like method for simultaneous diagonalization of the commuting Hermitian
+and skew-Hermitian portions of the matrix.
+The spectral divide and conquer scheme described below should suffice in the
+meantime.</p>
+</div>
+<div class="section" id="schur-decomposition">
+<h2>Schur decomposition<a class="headerlink" href="#schur-decomposition" title="Permalink to this headline">¶</a></h2>
+<p>Only a prototype spectral divide and conquer implementation is currently
+available, though Elemental will eventually also include an implementation of
+Granat et al.’s parallel QR algorithm.</p>
+<dl class="function">
+<dt id="_CPPv45SchurR6MatrixI1FE">
+<span id="_CPPv35SchurR6MatrixI1FE"></span><span id="_CPPv25SchurR6MatrixI1FE"></span><span id="Schur__Matrix:F:R"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45SchurR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv35SchurR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv25SchurR6MatrixI1FER6MatrixI1FE"></span><span id="Schur__Matrix:F:R.Matrix:F:R"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Currently defaults to the sequential Hessenberg QR algorithm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45SchurR10DistMatrixI1FE">
+<span id="_CPPv35SchurR10DistMatrixI1FE"></span><span id="_CPPv25SchurR10DistMatrixI1FE"></span><span id="Schur__DistMatrix:F:R"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45SchurR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv35SchurR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv25SchurR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="Schur__DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">Schur</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45SchurR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Currently defaults to the prototype spectral divide and conquer approach.</p>
+</dd></dl>
+
+<div class="section" id="hessenberg-qr-algorithm">
+<h3>Hessenberg QR algorithm<a class="headerlink" href="#hessenberg-qr-algorithm" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE">
+<span id="_CPPv3N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE"></span><span id="_CPPv2N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE"></span><span id="schur::QR__Matrix:F:R.Matrix:Complex:Base:F:::R"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FE">
+<span id="_CPPv3N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FE"></span><span id="_CPPv2N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FE"></span><span id="schur::QR__Matrix:F:R.Matrix:Complex:Base:F:::R.Matrix:F:R"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur2QRER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Use a sequential QR algorithm to compute the Schur decomposition.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h3>Spectral divide and conquer<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>The primary reference for this approach is Demmel et al.’s <em>Fast linear algebra
+is stable</em>. While the current implementation needs a large number of algorithmic
+improvements, especially with respect to choosing the Mobius transformations,
+it tends to succeed on random matrices.</p>
+<dl class="function">
+<dt id="_CPPv4N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbiii4BaseI1FE">
+<span id="_CPPv3N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbiii4BaseI1FE"></span><span id="_CPPv2N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbiii4BaseI1FE"></span><span id="schur::SDC__Matrix:F:R.Matrix:Complex:Base:F:::R.b.i.i.i.Base:F:"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em>, bool <em>formATR</em> = false, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEEbiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STAREbiii4BaseI1FE">
+<span id="_CPPv3N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STAREbiii4BaseI1FE"></span><span id="_CPPv2N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STAREbiii4BaseI1FE"></span><span id="schur::SDC__DistMatrix:F:R.DistMatrix:Complex:Base:F::.VR.STAR:R.b.i.i.i.Base:F:"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, bool <em>formATR</em> = false, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STAREbiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the eigenvalues of the matrix <span class="math notranslate nohighlight">\(A\)</span> via a spectral divide and
+conquer process. On exit, the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span> will be stored on its
+diagonal, and, if <code class="docutils literal notranslate"><span class="pre">formATR</span></code> was set to true, the upper triangle of
+<span class="math notranslate nohighlight">\(A\)</span> will be its corresponding upper-triangular Schur factor.</p>
+<p>The cutoff controls when the problem is sufficiently small to switch to
+a sequential Hessenberg QR algorithm, the number of inner iterations is
+how many attempts to make with the same randomized URV decomposition, and
+the number of outer iterations is how many random Mobius transformations to
+try for each spectral split before giving up.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbiii4BaseI1FE">
+<span id="_CPPv3N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbiii4BaseI1FE"></span><span id="_CPPv2N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbiii4BaseI1FE"></span><span id="schur::SDC__Matrix:F:R.Matrix:Complex:Base:F:::R.Matrix:F:R.b.i.i.i.Base:F:"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Q</em>, bool <em>formATR</em> = true, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur3SDCER6MatrixI1FER6MatrixI7ComplexI4BaseI1FEEER6MatrixI1FEbiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STARER10DistMatrixI1FEbiii4BaseI1FE">
+<span id="_CPPv3N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STARER10DistMatrixI1FEbiii4BaseI1FE"></span><span id="_CPPv2N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STARER10DistMatrixI1FEbiii4BaseI1FE"></span><span id="schur::SDC__DistMatrix:F:R.DistMatrix:Complex:Base:F::.VR.STAR:R.DistMatrix:F:R.b.i.i.i.Base:F:"></span>void <code class="descclassname">schur<code class="descclassname">::</code></code><code class="descname">SDC</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;Complex&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>w</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>Q</em>, bool <em>formATR</em> = true, int <em>cutoff</em> = 256, int <em>maxInnerIts</em> = 1, int <em>maxOuterIts</em> = 10, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>relTol</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5schur3SDCER10DistMatrixI1FER10DistMatrixI7ComplexI4BaseI1FEE2VR4STARER10DistMatrixI1FEbiii4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attempt to also compute the Schur vectors.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="hermitian-svd">
+<h2>Hermitian SVD<a class="headerlink" href="#hermitian-svd" title="Permalink to this headline">¶</a></h2>
+<p>Given an eigenvalue decomposition of a Hermitian matrix <span class="math notranslate nohighlight">\(A\)</span>, say</p>
+<div class="math notranslate nohighlight">
+\[A = V \Lambda V^H,\]</div>
+<p>where <span class="math notranslate nohighlight">\(V\)</span> is unitary and <span class="math notranslate nohighlight">\(\Lambda\)</span> is diagonal and real.
+Then an SVD of <span class="math notranslate nohighlight">\(A\)</span> can easily be computed as</p>
+<div class="math notranslate nohighlight">
+\[A = U |\Lambda| V^H,\]</div>
+<p>where the columns of <span class="math notranslate nohighlight">\(U\)</span> equal the columns of <span class="math notranslate nohighlight">\(V\)</span>, modulo sign
+flips introduced by negative eigenvalues.</p>
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE"></span><span id="HermitianSVD__UpperOrLower.Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>U</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FER10DistMatrixI1FE"></span><span id="HermitianSVD__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>U</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return a vector of singular values, <span class="math notranslate nohighlight">\(s\)</span>, and the left and right
+singular vector matrices, <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span>, such that
+<span class="math notranslate nohighlight">\(A=U \mathrm{diag}(s) V^H\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="HermitianSVD__UpperOrLower.Matrix:F:R.Matrix:Base:F::R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR6MatrixI1FER6MatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE">
+<span id="_CPPv312HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE"></span><span id="_CPPv212HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE"></span><span id="HermitianSVD__UpperOrLower.DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R"></span>void <code class="descname">HermitianSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HermitianSVD12UpperOrLowerR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the singular values of <span class="math notranslate nohighlight">\(A\)</span> in <cite>s</cite>. Note that the appropriate
+triangle of <cite>A</cite> is overwritten during computation.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="polar-decomposition">
+<h2>Polar decomposition<a class="headerlink" href="#polar-decomposition" title="Permalink to this headline">¶</a></h2>
+<p>Every matrix <span class="math notranslate nohighlight">\(A\)</span> can be written as <span class="math notranslate nohighlight">\(A=QP\)</span>, where <span class="math notranslate nohighlight">\(Q\)</span> is
+unitary and <span class="math notranslate nohighlight">\(P\)</span> is Hermitian and positive semi-definite. This is known as
+the <em>polar decomposition</em> of <span class="math notranslate nohighlight">\(A\)</span> and can be constructed as
+<span class="math notranslate nohighlight">\(Q := U V^H\)</span> and <span class="math notranslate nohighlight">\(P := V \Sigma V^H\)</span>, where
+<span class="math notranslate nohighlight">\(A = U \Sigma V^H\)</span> is the SVD of <span class="math notranslate nohighlight">\(A\)</span>. Alternatively, it can be
+computed through (a dynamically-weighted) Halley iteration.</p>
+<dl class="function">
+<dt id="_CPPv45PolarR6MatrixI1FE">
+<span id="_CPPv35PolarR6MatrixI1FE"></span><span id="_CPPv25PolarR6MatrixI1FE"></span><span id="Polar__Matrix:F:R"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PolarR10DistMatrixI1FE">
+<span id="_CPPv35PolarR10DistMatrixI1FE"></span><span id="_CPPv25PolarR10DistMatrixI1FE"></span><span id="Polar__DistMatrix:F:R"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PolarR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv35PolarR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv25PolarR6MatrixI1FER6MatrixI1FE"></span><span id="Polar__Matrix:F:R.Matrix:F:R"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45PolarR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv35PolarR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv25PolarR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="Polar__DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">Polar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>P</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45PolarR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the polar decomposition of <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(A=QP\)</span>, returning
+<span class="math notranslate nohighlight">\(Q\)</span> within <cite>A</cite> and <span class="math notranslate nohighlight">\(P\)</span> within <cite>P</cite>. The current implementation
+first computes the SVD.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR6MatrixI1FE"></span><span id="HermitianPolar__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR10DistMatrixI1FE"></span><span id="HermitianPolar__UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FE"></span><span id="HermitianPolar__UpperOrLower.Matrix:F:R.Matrix:F:R"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HermitianPolar12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv314HermitianPolar12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv214HermitianPolar12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE"></span><span id="HermitianPolar__UpperOrLower.DistMatrix:F:R.DistMatrix:F:R"></span>void <code class="descname">HermitianPolar</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>P</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HermitianPolar12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the polar decomposition through a Hermitian EVD. Since this is
+equivalent to a Hermitian sign decomposition (if <span class="math notranslate nohighlight">\(\text{sgn}(0)\)</span> is
+set to 1), these routines are equivalent to <cite>HermitianSign</cite>.</p>
+</dd></dl>
+
+<div class="section" id="polar-namespace">
+<h3>polar namespace<a class="headerlink" href="#polar-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N5polar4QDWHER6MatrixI1FEbi">
+<span id="_CPPv3N5polar4QDWHER6MatrixI1FEbi"></span><span id="_CPPv2N5polar4QDWHER6MatrixI1FEbi"></span><span id="polar::QDWH__Matrix:F:R.b.i"></span>int <code class="descclassname">polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>colPiv</em> = false, int <em>maxits</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5polar4QDWHER6MatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5polar4QDWHER10DistMatrixI1FEbi">
+<span id="_CPPv3N5polar4QDWHER10DistMatrixI1FEbi"></span><span id="_CPPv2N5polar4QDWHER10DistMatrixI1FEbi"></span><span id="polar::QDWH__DistMatrix:F:R.b.i"></span>int <code class="descclassname">polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>colPiv</em> = false, int <em>maxIts</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5polar4QDWHER10DistMatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FEbi">
+<span id="_CPPv3N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FEbi"></span><span id="_CPPv2N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FEbi"></span><span id="hermitian_polar::QDWH__UpperOrLower.Matrix:F:R.b.i"></span>int <code class="descclassname">hermitian_polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>colPiv</em> = false, int <em>maxits</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FEbi">
+<span id="_CPPv3N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FEbi"></span><span id="_CPPv2N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FEbi"></span><span id="hermitian_polar::QDWH__UpperOrLower.DistMatrix:F:R.b.i"></span>int <code class="descclassname">hermitian_polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>colPiv</em> = false, int <em>maxIts</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites <span class="math notranslate nohighlight">\(A\)</span> with the <span class="math notranslate nohighlight">\(Q\)</span> from the polar decomposition using
+a QR-based dynamically weighted Halley iteration. The number of iterations
+used is returned upon completion.
+<strong>TODO: reference to Yuji’s paper</strong></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5polar4QDWHER6MatrixI1FER6MatrixI1FEbi">
+<span id="_CPPv3N5polar4QDWHER6MatrixI1FER6MatrixI1FEbi"></span><span id="_CPPv2N5polar4QDWHER6MatrixI1FER6MatrixI1FEbi"></span><span id="polar::QDWH__Matrix:F:R.Matrix:F:R.b.i"></span>int <code class="descclassname">polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, bool <em>colPiv</em> = false, int <em>maxits</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5polar4QDWHER6MatrixI1FER6MatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5polar4QDWHER10DistMatrixI1FER10DistMatrixI1FEbi">
+<span id="_CPPv3N5polar4QDWHER10DistMatrixI1FER10DistMatrixI1FEbi"></span><span id="_CPPv2N5polar4QDWHER10DistMatrixI1FER10DistMatrixI1FEbi"></span><span id="polar::QDWH__DistMatrix:F:R.DistMatrix:F:R.b.i"></span>int <code class="descclassname">polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>P</em>, bool <em>colPiv</em> = false, int <em>maxIts</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5polar4QDWHER10DistMatrixI1FER10DistMatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FER6MatrixI1FEbi">
+<span id="_CPPv3N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FER6MatrixI1FEbi"></span><span id="_CPPv2N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FER6MatrixI1FEbi"></span><span id="hermitian_polar::QDWH__UpperOrLower.Matrix:F:R.Matrix:F:R.b.i"></span>int <code class="descclassname">hermitian_polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>P</em>, bool <em>colPiv</em> = false, int <em>maxits</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR6MatrixI1FER6MatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FEbi">
+<span id="_CPPv3N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FEbi"></span><span id="_CPPv2N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FEbi"></span><span id="hermitian_polar::QDWH__UpperOrLower.DistMatrix:F:R.DistMatrix:F:R.b.i"></span>int <code class="descclassname">hermitian_polar<code class="descclassname">::</code></code><code class="descname">QDWH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>P</em>, bool <em>colPiv</em> = false, int <em>maxIts</em> = 20<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15hermitian_polar4QDWHE12UpperOrLowerR10DistMatrixI1FER10DistMatrixI1FEbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the full polar decomposition, where <span class="math notranslate nohighlight">\(P\)</span> is HPD.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="svd">
+<h2>SVD<a class="headerlink" href="#svd" title="Permalink to this headline">¶</a></h2>
+<p>Given a general matrix <span class="math notranslate nohighlight">\(A\)</span>, the <em>Singular Value Decomposition</em> is the
+triplet <span class="math notranslate nohighlight">\((U,\Sigma,V)\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[A = U \Sigma V^H,\]</div>
+<p>where <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> are unitary, and <span class="math notranslate nohighlight">\(\Sigma\)</span> is diagonal with
+non-negative entries.</p>
+<dl class="function">
+<dt id="_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE">
+<span id="_CPPv33SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="_CPPv23SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="SVD__Matrix:F:R.Matrix:Base:F::R.Matrix:F:R"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE">
+<span id="_CPPv33SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE"></span><span id="_CPPv23SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE"></span><span id="SVD__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites <cite>A</cite> with <span class="math notranslate nohighlight">\(U\)</span>, <cite>s</cite> with the diagonal entries of <span class="math notranslate nohighlight">\(\Sigma\)</span>, and <cite>V</cite> with <span class="math notranslate nohighlight">\(V\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEE">
+<span id="_CPPv33SVDR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="_CPPv23SVDR6MatrixI1FER6MatrixI4BaseI1FEE"></span><span id="SVD__Matrix:F:R.Matrix:Base:F::R"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR6MatrixI1FER6MatrixI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE">
+<span id="_CPPv33SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE"></span><span id="_CPPv23SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE"></span><span id="SVD__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R"></span>void <code class="descname">SVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVDR10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms the singular values of <span class="math notranslate nohighlight">\(A\)</span> in <cite>s</cite>. Note that <cite>A</cite> is overwritten in order to compute the singular values.</p>
+</dd></dl>
+
+<div class="section" id="svd-namespace">
+<h3>svd namespace<a class="headerlink" href="#svd-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N3svd5QRSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE">
+<span id="_CPPv3N3svd5QRSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="_CPPv2N3svd5QRSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="svd::QRSVD__Matrix:F:R.Matrix:Base:F::R.Matrix:F:R"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">QRSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd5QRSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>SVD which uses bidiagonal QR algorithm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svd19DivideAndConquerSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE">
+<span id="_CPPv3N3svd19DivideAndConquerSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="_CPPv2N3svd19DivideAndConquerSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE"></span><span id="svd::DivideAndConquerSVD__Matrix:F:R.Matrix:Base:F::R.Matrix:F:R"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">DivideAndConquerSVD</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd19DivideAndConquerSVDER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>SVD which uses a bidiagonal divide-and-conquer algorithm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREd">
+<span id="_CPPv3N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREd"></span><span id="_CPPv2N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREd"></span><span id="svd::Chan__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.double"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">Chan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em>, double <em>heightRatio</em> = 1.2<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STAREd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEd">
+<span id="_CPPv3N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEd"></span><span id="_CPPv2N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEd"></span><span id="svd::Chan__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.double"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">Chan</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>V</em>, double <em>heightRatio</em> = 1.5<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd4ChanER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>SVD which preprocesses with an initial QR decomposition if the matrix is
+sufficiently tall relative to its width.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE">
+<span id="_CPPv3N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE"></span><span id="_CPPv2N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE"></span><span id="svd::GolubReinschUpper__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">GolubReinschUpper</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE"></span><span id="svd::GolubReinschUpper__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">GolubReinschUpper</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>V</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd17GolubReinschUpperER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the singular values (and vectors) of a matrix which is taller than
+it is wide using the Golub-Reinsch algorithm, though DQDS is used when only
+the singular values are sought.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svd11ThresholdedER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svd11ThresholdedER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svd11ThresholdedER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FEb"></span><span id="svd::Thresholded__Matrix:F:R.Matrix:Base:F::R.Matrix:F:R.Base:F:.b"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">Thresholded</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, Matrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>V</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em> = 0, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd11ThresholdedER6MatrixI1FER6MatrixI4BaseI1FEER6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svd11ThresholdedER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svd11ThresholdedER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svd11ThresholdedER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FEb"></span><span id="svd::Thresholded__DistMatrix:F:R.DistMatrix:Base:F:.VR.STAR:R.DistMatrix:F:R.Base:F:.b"></span>void <code class="descclassname">svd<code class="descclassname">::</code></code><code class="descname">Thresholded</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, DistMatrix&lt;<a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>s</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>V</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em> = 0, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svd11ThresholdedER10DistMatrixI1FER10DistMatrixI4BaseI1FE2VR4STARER10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the singular triplets whose singular values are larger than a
+specified tolerance using the cross-product algorithm. This is often
+advantageous because tridiagonal eigensolvers tend to enjoy better parallel
+implementations than bidiagonal SVD’s.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,756 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>LDL factorization &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LU factorization" href="LU.html" />
+    <link rel="prev" title="Cholesky factorization" href="Cholesky.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ldl-factorization">
+<h1>LDL factorization<a class="headerlink" href="#ldl-factorization" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/lapack_like/factor/LDL.cpp">Implementation</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/factor/LDL">Subroutines</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/tests/lapack_like/LDL.cpp">Test driver</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/examples/lapack_like/LDL.cpp">Example driver</a></p>
+<div class="section" id="symmetric-pivoting">
+<h2>Symmetric pivoting<a class="headerlink" href="#symmetric-pivoting" title="Permalink to this headline">¶</a></h2>
+<p>The following routines return a pivoted LDL factorization, where the vector
+<span class="math notranslate nohighlight">\(p\)</span> contains the column indices of the nonzero entries of the permutation
+matrix <span class="math notranslate nohighlight">\(P\)</span> such that <span class="math notranslate nohighlight">\(PAP^T\)</span> equals either <span class="math notranslate nohighlight">\(LDL^T\)</span> or
+<span class="math notranslate nohighlight">\(LDL^H\)</span>, where <span class="math notranslate nohighlight">\(D\)</span> is quasi-diagonal.
+The Bunch-Kaufman pivoting rules are used within a higher-performance
+blocked algorithm, whereas the Bunch-Parlett strategy uses an unblocked, but
+typically more accurate, algorithm.</p>
+<div class="section" id="factorization">
+<h3>Factorization<a class="headerlink" href="#factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="c-api">
+<h4>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h4>
+<dl class="type">
+<dt id="_CPPv412LDLPivotType">
+<span id="_CPPv312LDLPivotType"></span><span id="_CPPv212LDLPivotType"></span><span id="LDLPivotType"></span><em class="property">type </em><code class="descname">LDLPivotType</code><a class="headerlink" href="#_CPPv412LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An enum for specifying the symmetric pivoting strategy. The current
+(not yet all supported) options include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BUNCH_KAUFMAN_A</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BUNCH_KAUFMAN_C</span></code> (not yet supported)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BUNCH_KAUFMAN_D</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BUNCH_KAUFMAN_BOUNDED</span></code> (not yet supported)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BUNCH_PARLETT</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LDL_WITHOUT_PIVOTING</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4IE16LDLPivotConstantI4RealE4Real12LDLPivotType">
+<span id="_CPPv3IE16LDLPivotConstantI4RealE12LDLPivotType"></span><span id="_CPPv2IE16LDLPivotConstantI4RealE12LDLPivotType"></span>template&lt;&gt;<br />Real <code class="descname">LDLPivotConstant</code>&lt;Real&gt;<span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IE16LDLPivotConstantI4RealE4Real12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Maps various LDL pivotings schemes to their optimal threshold constant.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE12LDLPivotCtrlI4RealE">
+<span id="_CPPv3IE12LDLPivotCtrlI4RealE"></span><span id="_CPPv2IE12LDLPivotCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">LDLPivotCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE12LDLPivotCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N12LDLPivotCtrlI4RealE9pivotTypeE">
+<span id="_CPPv3N12LDLPivotCtrlI4RealE9pivotTypeE"></span><span id="_CPPv2N12LDLPivotCtrlI4RealE9pivotTypeE"></span><span id="LDLPivotCtrl:Real:::pivotType__LDLPivotType"></span><a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <code class="descname">pivotType</code><a class="headerlink" href="#_CPPv4N12LDLPivotCtrlI4RealE9pivotTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of pivoting to perform (by default, <code class="docutils literal notranslate"><span class="pre">BUNCH_KAUFMAN_A</span></code>)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N12LDLPivotCtrlI4RealE5gammaE">
+<span id="_CPPv3N12LDLPivotCtrlI4RealE5gammaE"></span><span id="_CPPv2N12LDLPivotCtrlI4RealE5gammaE"></span><span id="LDLPivotCtrl:Real:::gamma__Real"></span>Real <code class="descname">gamma</code><a class="headerlink" href="#_CPPv4N12LDLPivotCtrlI4RealE5gammaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pivot tolerance (by default, set to <code class="docutils literal notranslate"><span class="pre">LDLPivotConstant&lt;Real&gt;(pivotType)</span></code>)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType">
+<span id="_CPPv3N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType"></span><span id="_CPPv2N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType"></span><span id="LDLPivotCtrl:Real:::LDLPivotCtrl__LDLPivotType"></span><code class="descname">LDLPivotCtrl</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>piv</em> = BUNCH_KAUFMAN_A<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12LDLPivotCtrlI4RealE12LDLPivotCtrlE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv48LDLPivot">
+<span id="_CPPv38LDLPivot"></span><span id="_CPPv28LDLPivot"></span><span id="LDLPivot"></span><em class="property">type </em><code class="descname">LDLPivot</code><a class="headerlink" href="#_CPPv48LDLPivot" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8LDLPivot2nbE">
+<span id="_CPPv3N8LDLPivot2nbE"></span><span id="_CPPv2N8LDLPivot2nbE"></span><span id="LDLPivot::nb__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">nb</code><a class="headerlink" href="#_CPPv4N8LDLPivot2nbE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether the pivot is 1x1 or 2x2.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8LDLPivot4fromE">
+<span id="_CPPv3N8LDLPivot4fromE"></span><span id="_CPPv2N8LDLPivot4fromE"></span><span id="LDLPivot::from__IntA"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">from</code>[2]<a class="headerlink" href="#_CPPv4N8LDLPivot4fromE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The source indices of the row or rows to swap with for the 1x1 or 2x2
+pivot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv33LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv23LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="LDL__Matrix:F:R.Matrix:F:R.Matrix:i:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descname">LDL</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, Matrix&lt;int&gt; &amp;<em>p</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LDLR6MatrixI1FER6MatrixI1FER6MatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE">
+<span id="_CPPv33LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="_CPPv23LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE"></span><span id="LDL__AbstractDistMatrix:F:R.AbstractDistMatrix:F:R.AbstractDistMatrix:i:R.b.LDLPivotCtrl:Base:F::CR"></span>void <code class="descname">LDL</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, bool <em>conjugate</em> = false, <em class="property">const</em> LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>ctrl</em> = LDLPivotCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43LDLR18AbstractDistMatrixI1FER18AbstractDistMatrixI1FER18AbstractDistMatrixIiEbRK12LDLPivotCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h4>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="type">
+<dt id="c.ElLDLPivotType">
+<code class="descname">ElLDLPivotType</code><a class="headerlink" href="#c.ElLDLPivotType" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enum for specifying the symmetric pivoting strategy. The current
+(not yet all supported) options include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_A</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_C</span></code> (not yet supported)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_D</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_KAUFMAN_BOUNDED</span></code> (not yet supported)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EL_BUNCH_PARLETT</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLDLPivotCtrl_s">
+<code class="descname">ElLDLPivotCtrl_s</code><a class="headerlink" href="#c.ElLDLPivotCtrl_s" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElLDLPivotCtrl_s.pivotType">
+<a class="reference internal" href="#c.ElLDLPivotType" title="ElLDLPivotType">ElLDLPivotType</a> <code class="descname">pivotType</code><a class="headerlink" href="#c.ElLDLPivotCtrl_s.pivotType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElLDLPivotCtrl_s.gamma">
+float <code class="descname">gamma</code><a class="headerlink" href="#c.ElLDLPivotCtrl_s.gamma" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLDLPivotCtrl_d">
+<code class="descname">ElLDLPivotCtrl_d</code><a class="headerlink" href="#c.ElLDLPivotCtrl_d" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElLDLPivotCtrl_d.pivotType">
+<a class="reference internal" href="#c.ElLDLPivotType" title="ElLDLPivotType">ElLDLPivotType</a> <code class="descname">pivotType</code><a class="headerlink" href="#c.ElLDLPivotCtrl_d.pivotType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="c.ElLDLPivotCtrl_d.gamma">
+double <code class="descname">gamma</code><a class="headerlink" href="#c.ElLDLPivotCtrl_d.gamma" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="c.ElLDLPivot">
+<code class="descname">ElLDLPivot</code><a class="headerlink" href="#c.ElLDLPivot" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="member">
+<dt id="c.ElLDLPivot.nb">
+Int <code class="descname">nb</code><a class="headerlink" href="#c.ElLDLPivot.nb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the pivot is 1x1 or 2x2.</p>
+</dd></dl>
+
+<dl class="member">
+<dt>
+<code class="descname">Int from[2]</code></dt>
+<dd><p>The source indices of the row or rows to swap with for the 1x1 or 2x2
+pivot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em>, ElMatrix_s<em> dSub</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em>, ElMatrix_d<em> dSub</em>, ElMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em>, ElMatrix_c<em> dSub</em>, ElMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPiv_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em>, ElMatrix_z<em> dSub</em>, ElMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> dSub</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> dSub</em>, ElDistMatrix_i<em> p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> dSub</em>, ElDistMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLPivDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> dSub</em>, ElDistMatrix_i<em> p</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><strong>TODO:: Document expert versions</strong></p>
+</div>
+<div class="section" id="python-api">
+<h4>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h4>
+<p><strong>TODO: Document</strong></p>
+</div>
+</div>
+<div class="section" id="solving-linear-systems-after-factorization">
+<h3>Solving linear systems after factorization<a class="headerlink" href="#solving-linear-systems-after-factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h4>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb"></span><span id="ldl::SolveAfter__Matrix:F:CR.Matrix:F:CR.Matrix:i:CR.Matrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb"></span><span id="ldl::SolveAfter__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:i:CR.AbstractDistMatrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPiv_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPiv_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPiv_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPiv_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPivDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPivDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPivDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLPivDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h4>Python API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p><strong>TODO: Document</strong></p>
+</div>
+</div>
+<div class="section" id="multiply-vectors-after-factorization">
+<h3>Multiply vectors after factorization<a class="headerlink" href="#multiply-vectors-after-factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h4>C++ API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N3ldl13MultiplyAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb">
+<span id="_CPPv3N3ldl13MultiplyAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb"></span><span id="_CPPv2N3ldl13MultiplyAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb"></span><span id="ldl::MultiplyAfter__Matrix:F:CR.Matrix:F:CR.Matrix:i:CR.Matrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">MultiplyAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl13MultiplyAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb">
+<span id="_CPPv3N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb"></span><span id="_CPPv2N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb"></span><span id="ldl::MultiplyAfter__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:CR.AbstractDistMatrix:i:CR.AbstractDistMatrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">MultiplyAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FERK18AbstractDistMatrixI1FERK18AbstractDistMatrixIiER18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h4>C API<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPiv_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPiv_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElConstMatrix_s<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPiv_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPiv_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPiv_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElConstMatrix_d<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPiv_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPiv_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPiv_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElConstMatrix_c<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPiv_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPiv_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPiv_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElConstMatrix_z<em> dSub</em>, ElConstMatrix_i<em> p</em>, ElMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPiv_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPivDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPivDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElConstDistMatrix_s<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPivDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPivDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPivDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElConstDistMatrix_d<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPivDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPivDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPivDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElConstDistMatrix_c<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPivDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLPivDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLPivDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElConstDistMatrix_z<em> dSub</em>, ElConstDistMatrix_i<em> p</em>, ElDistMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLPivDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="computing-inertia-after-factorization">
+<h3>Computing inertia after factorization<a class="headerlink" href="#computing-inertia-after-factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h4>C++ API<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N3ldl7InertiaERK6MatrixI4BaseI1FEERK6MatrixI1FE">
+<span id="_CPPv3N3ldl7InertiaERK6MatrixI4BaseI1FEERK6MatrixI1FE"></span><span id="_CPPv2N3ldl7InertiaERK6MatrixI4BaseI1FEERK6MatrixI1FE"></span><span id="ldl::Inertia__Matrix:Base:F::CR.Matrix:F:CR"></span><a class="reference internal" href="../props/Inertia.html#_CPPv411InertiaType" title="InertiaType">InertiaType</a> <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">Inertia</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl7InertiaERK6MatrixI4BaseI1FEERK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl7InertiaERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FE">
+<span id="_CPPv3N3ldl7InertiaERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FE"></span><span id="_CPPv2N3ldl7InertiaERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FE"></span><span id="ldl::Inertia__AbstractDistMatrix:Base:F::CR.AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../props/Inertia.html#_CPPv411InertiaType" title="InertiaType">InertiaType</a> <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">Inertia</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4BaseI1FEE" title="AbstractDistMatrix&lt;Base&lt;F&gt;&gt;">AbstractDistMatrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; &amp;<em>d</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>dSub</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl7InertiaERK18AbstractDistMatrixI4BaseI1FEERK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id8">
+<h3>C API<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElInertiaAfterLDL_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDL_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> d</em>, ElConstMatrix_s<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDL_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInertiaAfterLDL_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDL_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> d</em>, ElConstMatrix_d<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDL_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInertiaAfterLDL_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDL_c</code><span class="sig-paren">(</span>ElConstMatrix_s<em> d</em>, ElConstMatrix_c<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDL_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInertiaAfterLDL_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDL_z</code><span class="sig-paren">(</span>ElConstMatrix_d<em> d</em>, ElConstMatrix_z<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDL_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInertiaAfterLDLDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDLDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_s<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDLDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInertiaAfterLDLDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDLDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_d<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDLDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInertiaAfterLDLDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDLDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> d</em>, ElConstDistMatrix_c<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDLDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElInertiaAfterLDLDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElInertiaAfterLDLDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> d</em>, ElConstDistMatrix_z<em> dSub</em>, <a class="reference internal" href="../props/Inertia.html#c.ElInertiaType" title="ElInertiaType">ElInertiaType</a>*<em> inertia</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElInertiaAfterLDLDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="no-pivoting">
+<h2>No pivoting<a class="headerlink" href="#no-pivoting" title="Permalink to this headline">¶</a></h2>
+<p>Though Cholesky factorization is ideal for HPD matrices, unpivoted <cite>LDL</cite>
+factorization naturally applies to a slightly larger, but harder to define,
+class of matrices. Upon successful completion of the factorization,
+a lower-triangular (with unit diagonal) <span class="math notranslate nohighlight">\(L\)</span> and diagonal matrix <span class="math notranslate nohighlight">\(D\)</span>,
+such that <span class="math notranslate nohighlight">\(A = L D L^H\)</span> or <span class="math notranslate nohighlight">\(A = L D L^T\)</span>, will be returned in the
+lower triangle of <span class="math notranslate nohighlight">\(A\)</span>.
+If a zero pivot is attempted, then a <code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">ZeroPivotException</span></code> will
+be thrown.</p>
+<div class="section" id="id9">
+<h3>Factorization<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please use the following routines with caution, as pivoting should be
+employed in most cases.</p>
+</div>
+<div class="section" id="id10">
+<h4>C++ API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv44LDLTR6MatrixI1FE">
+<span id="_CPPv34LDLTR6MatrixI1FE"></span><span id="_CPPv24LDLTR6MatrixI1FE"></span><span id="LDLT__Matrix:F:R"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLTR18AbstractDistMatrixI1FE">
+<span id="_CPPv34LDLTR18AbstractDistMatrixI1FE"></span><span id="_CPPv24LDLTR18AbstractDistMatrixI1FE"></span><span id="LDLT__AbstractDistMatrix:F:R"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLHR6MatrixI1FE">
+<span id="_CPPv34LDLHR6MatrixI1FE"></span><span id="_CPPv24LDLHR6MatrixI1FE"></span><span id="LDLH__Matrix:F:R"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLHR18AbstractDistMatrixI1FE">
+<span id="_CPPv34LDLHR18AbstractDistMatrixI1FE"></span><span id="_CPPv24LDLHR18AbstractDistMatrixI1FE"></span><span id="LDLH__AbstractDistMatrix:F:R"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id11">
+<h4>C API<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElLDLT_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLT_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLT_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLT_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLT_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLT_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLTDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLTDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLTDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLH_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLH_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLH_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLH_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLH_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLH_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLHDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLHDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLHDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLDLHDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLDLHDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLDLHDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="solve-linear-systems-after-factorization">
+<h3>Solve linear systems after factorization<a class="headerlink" href="#solve-linear-systems-after-factorization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h4>C++ API<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb"></span><span id="ldl::SolveAfter__Matrix:F:CR.Matrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb"></span><span id="ldl::SolveAfter__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id13">
+<h4>C API<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="c.ElSolveAfterLDL_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDL_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDL_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDL_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDL_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDL_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDL_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDL_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDL_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDL_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDL_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDL_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSolveAfterLDLDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSolveAfterLDLDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSolveAfterLDLDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id14">
+<h3>Multiply vectors after factorization<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id15">
+<h4>C++ API<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N3ldl13MultiplyAfterERK6MatrixI1FER6MatrixI1FEb">
+<span id="_CPPv3N3ldl13MultiplyAfterERK6MatrixI1FER6MatrixI1FEb"></span><span id="_CPPv2N3ldl13MultiplyAfterERK6MatrixI1FER6MatrixI1FEb"></span><span id="ldl::MultiplyAfter__Matrix:F:CR.Matrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">MultiplyAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl13MultiplyAfterERK6MatrixI1FER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb">
+<span id="_CPPv3N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb"></span><span id="_CPPv2N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb"></span><span id="ldl::MultiplyAfter__AbstractDistMatrix:F:CR.AbstractDistMatrix:F:R.b"></span>void <code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">MultiplyAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl13MultiplyAfterERK18AbstractDistMatrixI1FER18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="id16">
+<h3>C API<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDL_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDL_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDL_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDL_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDL_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDL_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDL_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDL_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDL_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDL_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDL_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDL_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> B</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMultiplyAfterLDLDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMultiplyAfterLDLDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> B</em>, bool<em> conjugate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMultiplyAfterLDLDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

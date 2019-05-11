@@ -1,0 +1,615 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Permutations &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reflectors" href="reflect.html" />
+    <link rel="prev" title="Equality-constrained Least Squares" href="euclidean_min/LSE.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="funcs.html">Matrix functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="props.html">Matrix properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Permutations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#permutation-vectors">Permutation vectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#permutecols">PermuteCols</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#permuterows">PermuteRows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inversepermutecols">InversePermuteCols</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inversepermuterows">InversePermuteRows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#invertpermutation">InvertPermutation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#explicitpermutation">ExplicitPermutation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#permutationparity">PermutationParity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#permutationmeta">PermutationMeta</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pivot-sequences">Pivot sequences</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#applycolpivots">ApplyColPivots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applyinversecolpivots">ApplyInverseColPivots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applyrowpivots">ApplyRowPivots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applyinverserowpivots">ApplyInverseRowPivots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applysymmetricpivots">ApplySymmetricPivots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applyinversesymmetricpivots">ApplyInverseSymmetricPivots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pivotparity">PivotParity</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#converting-pivot-sequences-to-permutations">Converting pivot sequences to permutations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pivotstopermutation">PivotsToPermutation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pivotstoinversepermutation">PivotsToInversePermutation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pivotstopartialpermutation">PivotsToPartialPermutation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+      <li>Permutations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/lapack_like/perm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="permutations">
+<h1>Permutations<a class="headerlink" href="#permutations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="permutation-vectors">
+<h2>Permutation vectors<a class="headerlink" href="#permutation-vectors" title="Permalink to this headline">¶</a></h2>
+<p>In order to represent arbitrary permutations, Elemental recently switched from
+LAPACK-style pivot sequence representations to general permutation vectors,
+where entry <cite>i</cite> of the <em>permutation</em> <em>vector</em> <cite>p</cite> contains the column index of
+the nonzero entry in row <cite>i</cite> of the corresponding permutation matrix.</p>
+<div class="section" id="permutecols">
+<h3>PermuteCols<a class="headerlink" href="#permutecols" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv411PermuteColsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv311PermuteColsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv211PermuteColsR6MatrixI1TERK6MatrixIiE"></span><span id="PermuteCols__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">PermuteCols</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteColsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv311PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv211PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="PermuteCols__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">PermuteCols</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PermuteColsR6MatrixI1TERK6MatrixIiERK6MatrixIiE">
+<span id="_CPPv311PermuteColsR6MatrixI1TERK6MatrixIiERK6MatrixIiE"></span><span id="_CPPv211PermuteColsR6MatrixI1TERK6MatrixIiERK6MatrixIiE"></span><span id="PermuteCols__Matrix:T:R.Matrix:i:CR.Matrix:i:CR"></span>void <code class="descname">PermuteCols</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pInv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteColsR6MatrixI1TERK6MatrixIiERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE">
+<span id="_CPPv311PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE"></span><span id="_CPPv211PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE"></span><span id="PermuteCols__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR.AbstractDistMatrix:i:CR"></span>void <code class="descname">PermuteCols</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pInv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Provide the inverse permutations so that they do not need to be internally
+computed and discarded.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="permuterows">
+<h3>PermuteRows<a class="headerlink" href="#permuterows" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv411PermuteRowsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv311PermuteRowsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv211PermuteRowsR6MatrixI1TERK6MatrixIiE"></span><span id="PermuteRows__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">PermuteRows</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteRowsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv311PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv211PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="PermuteRows__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">PermuteRows</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PermuteRowsR6MatrixI1TERK6MatrixIiERK6MatrixIiE">
+<span id="_CPPv311PermuteRowsR6MatrixI1TERK6MatrixIiERK6MatrixIiE"></span><span id="_CPPv211PermuteRowsR6MatrixI1TERK6MatrixIiERK6MatrixIiE"></span><span id="PermuteRows__Matrix:T:R.Matrix:i:CR.Matrix:i:CR"></span>void <code class="descname">PermuteRows</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pInv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteRowsR6MatrixI1TERK6MatrixIiERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE">
+<span id="_CPPv311PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE"></span><span id="_CPPv211PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE"></span><span id="PermuteRows__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR.AbstractDistMatrix:i:CR"></span>void <code class="descname">PermuteRows</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pInv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Provide the inverse permutations so that they do not need to be internally
+computed and discarded.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="inversepermutecols">
+<h3>InversePermuteCols<a class="headerlink" href="#inversepermutecols" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv418InversePermuteColsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv318InversePermuteColsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv218InversePermuteColsR6MatrixI1TERK6MatrixIiE"></span><span id="InversePermuteCols__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">InversePermuteCols</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418InversePermuteColsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418InversePermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv318InversePermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv218InversePermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="InversePermuteCols__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">InversePermuteCols</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418InversePermuteColsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="inversepermuterows">
+<h3>InversePermuteRows<a class="headerlink" href="#inversepermuterows" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv418InversePermuteRowsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv318InversePermuteRowsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv218InversePermuteRowsR6MatrixI1TERK6MatrixIiE"></span><span id="InversePermuteRows__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">InversePermuteRows</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418InversePermuteRowsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418InversePermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv318InversePermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv218InversePermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="InversePermuteRows__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">InversePermuteRows</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418InversePermuteRowsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="invertpermutation">
+<h3>InvertPermutation<a class="headerlink" href="#invertpermutation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv417InvertPermutationRK6MatrixIiER6MatrixIiE">
+<span id="_CPPv317InvertPermutationRK6MatrixIiER6MatrixIiE"></span><span id="_CPPv217InvertPermutationRK6MatrixIiER6MatrixIiE"></span><span id="InvertPermutation__Matrix:i:CR.Matrix:i:R"></span>void <code class="descname">InvertPermutation</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, Matrix&lt;int&gt; &amp;<em>pInv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417InvertPermutationRK6MatrixIiER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417InvertPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE">
+<span id="_CPPv317InvertPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE"></span><span id="_CPPv217InvertPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE"></span><span id="InvertPermutation__AbstractDistMatrix:i:CR.AbstractDistMatrix:i:R"></span>void <code class="descname">InvertPermutation</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>pInv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417InvertPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute the inverse permutation matrix in compressed (vector) form.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="explicitpermutation">
+<h3>ExplicitPermutation<a class="headerlink" href="#explicitpermutation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv419ExplicitPermutationRK6MatrixIiER6MatrixIiE">
+<span id="_CPPv319ExplicitPermutationRK6MatrixIiER6MatrixIiE"></span><span id="_CPPv219ExplicitPermutationRK6MatrixIiER6MatrixIiE"></span><span id="ExplicitPermutation__Matrix:i:CR.Matrix:i:R"></span>void <code class="descname">ExplicitPermutation</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em>, Matrix&lt;int&gt; &amp;<em>P</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419ExplicitPermutationRK6MatrixIiER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419ExplicitPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE">
+<span id="_CPPv319ExplicitPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE"></span><span id="_CPPv219ExplicitPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE"></span><span id="ExplicitPermutation__AbstractDistMatrix:i:CR.AbstractDistMatrix:i:R"></span>void <code class="descname">ExplicitPermutation</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>P</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419ExplicitPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the full permutation matrix, <cite>P</cite>, represented by the permutation
+vector <cite>p</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="permutationparity">
+<h3>PermutationParity<a class="headerlink" href="#permutationparity" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv417PermutationParityRK6MatrixIiE">
+<span id="_CPPv317PermutationParityRK6MatrixIiE"></span><span id="_CPPv217PermutationParityRK6MatrixIiE"></span><span id="PermutationParity__Matrix:i:CR"></span>bool <code class="descname">PermutationParity</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417PermutationParityRK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417PermutationParityRK18AbstractDistMatrixIiE">
+<span id="_CPPv317PermutationParityRK18AbstractDistMatrixIiE"></span><span id="_CPPv217PermutationParityRK18AbstractDistMatrixIiE"></span><span id="PermutationParity__AbstractDistMatrix:i:CR"></span>bool <code class="descname">PermutationParity</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417PermutationParityRK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the given permutation is odd. The parity is determined in
+linear time by finding the decomposition of the inverse of the permutation
+as a product of transpositions.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="permutationmeta">
+<h3>PermutationMeta<a class="headerlink" href="#permutationmeta" title="Permalink to this headline">¶</a></h3>
+<dl class="type">
+<dt id="_CPPv415PermutationMeta">
+<span id="_CPPv315PermutationMeta"></span><span id="_CPPv215PermutationMeta"></span><span id="PermutationMeta"></span><em class="property">type </em><code class="descname">PermutationMeta</code><a class="headerlink" href="#_CPPv415PermutationMeta" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N15PermutationMeta5alignE">
+<span id="_CPPv3N15PermutationMeta5alignE"></span><span id="_CPPv2N15PermutationMeta5alignE"></span><span id="PermutationMeta::align__Int"></span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#_CPPv43Int" title="Int">Int</a> <code class="descname">align</code><a class="headerlink" href="#_CPPv4N15PermutationMeta5alignE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta4commE">
+<span id="_CPPv3N15PermutationMeta4commE"></span><span id="_CPPv2N15PermutationMeta4commE"></span><span id="PermutationMeta::comm__mpi::Comm"></span>mpi::<a class="reference internal" href="../core/imports/mpi.html#_CPPv4N3mpi4CommE" title="mpi::Comm">Comm</a> <code class="descname">comm</code><a class="headerlink" href="#_CPPv4N15PermutationMeta4commE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta10sendCountsE">
+<span id="_CPPv3N15PermutationMeta10sendCountsE"></span><span id="_CPPv2N15PermutationMeta10sendCountsE"></span><span id="PermutationMeta::sendCounts__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">sendCounts</code><a class="headerlink" href="#_CPPv4N15PermutationMeta10sendCountsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta10sendDisplsE">
+<span id="_CPPv3N15PermutationMeta10sendDisplsE"></span><span id="_CPPv2N15PermutationMeta10sendDisplsE"></span><span id="PermutationMeta::sendDispls__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">sendDispls</code><a class="headerlink" href="#_CPPv4N15PermutationMeta10sendDisplsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta7sendIdxE">
+<span id="_CPPv3N15PermutationMeta7sendIdxE"></span><span id="_CPPv2N15PermutationMeta7sendIdxE"></span><span id="PermutationMeta::sendIdx__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">sendIdx</code><a class="headerlink" href="#_CPPv4N15PermutationMeta7sendIdxE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta9sendRanksE">
+<span id="_CPPv3N15PermutationMeta9sendRanksE"></span><span id="_CPPv2N15PermutationMeta9sendRanksE"></span><span id="PermutationMeta::sendRanks__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">sendRanks</code><a class="headerlink" href="#_CPPv4N15PermutationMeta9sendRanksE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta10recvCountsE">
+<span id="_CPPv3N15PermutationMeta10recvCountsE"></span><span id="_CPPv2N15PermutationMeta10recvCountsE"></span><span id="PermutationMeta::recvCounts__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">recvCounts</code><a class="headerlink" href="#_CPPv4N15PermutationMeta10recvCountsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta10recvDisplsE">
+<span id="_CPPv3N15PermutationMeta10recvDisplsE"></span><span id="_CPPv2N15PermutationMeta10recvDisplsE"></span><span id="PermutationMeta::recvDispls__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">recvDispls</code><a class="headerlink" href="#_CPPv4N15PermutationMeta10recvDisplsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta7recvIdxE">
+<span id="_CPPv3N15PermutationMeta7recvIdxE"></span><span id="_CPPv2N15PermutationMeta7recvIdxE"></span><span id="PermutationMeta::recvIdx__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">recvIdx</code><a class="headerlink" href="#_CPPv4N15PermutationMeta7recvIdxE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15PermutationMeta9recvRanksE">
+<span id="_CPPv3N15PermutationMeta9recvRanksE"></span><span id="_CPPv2N15PermutationMeta9recvRanksE"></span><span id="PermutationMeta::recvRanks__std::vector:i:"></span>std::vector&lt;int&gt; <code class="descname">recvRanks</code><a class="headerlink" href="#_CPPv4N15PermutationMeta9recvRanksE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK15PermutationMeta9TotalSendEv">
+<span id="_CPPv3NK15PermutationMeta9TotalSendEv"></span><span id="_CPPv2NK15PermutationMeta9TotalSendEv"></span><span id="PermutationMeta::TotalSendC"></span>int <code class="descname">TotalSend</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK15PermutationMeta9TotalSendEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK15PermutationMeta9TotalRecvEv">
+<span id="_CPPv3NK15PermutationMeta9TotalRecvEv"></span><span id="_CPPv2NK15PermutationMeta9TotalRecvEv"></span><span id="PermutationMeta::TotalRecvC"></span>int <code class="descname">TotalRecv</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK15PermutationMeta9TotalRecvEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N15PermutationMeta7ScaleUpEi">
+<span id="_CPPv3N15PermutationMeta7ScaleUpEi"></span><span id="_CPPv2N15PermutationMeta7ScaleUpEi"></span><span id="PermutationMeta::ScaleUp__i"></span>void <code class="descname">ScaleUp</code><span class="sig-paren">(</span>int <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15PermutationMeta7ScaleUpEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N15PermutationMeta9ScaleDownEi">
+<span id="_CPPv3N15PermutationMeta9ScaleDownEi"></span><span id="_CPPv2N15PermutationMeta9ScaleDownEi"></span><span id="PermutationMeta::ScaleDown__i"></span>void <code class="descname">ScaleDown</code><span class="sig-paren">(</span>int <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15PermutationMeta9ScaleDownEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N15PermutationMeta15PermutationMetaERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE">
+<span id="_CPPv3N15PermutationMeta15PermutationMetaERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE"></span><span id="_CPPv2N15PermutationMeta15PermutationMetaERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE"></span><span id="PermutationMeta::PermutationMeta__AbstractDistMatrix:i:CR.AbstractDistMatrix:i:CR"></span><code class="descname">PermutationMeta</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pInv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15PermutationMeta15PermutationMetaERK18AbstractDistMatrixIiERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="pivot-sequences">
+<h2>Pivot sequences<a class="headerlink" href="#pivot-sequences" title="Permalink to this headline">¶</a></h2>
+<p>These routines make use of LAPACK-style pivot sequence vectors, where the
+<em>pivot</em> <em>sequence</em> <em>vector</em> <cite>p</cite> implies the sequence of swaps <span class="math notranslate nohighlight">\((0,p_0)\)</span>,
+<span class="math notranslate nohighlight">\((1,p_1)\)</span>, …, <span class="math notranslate nohighlight">\((n-1,p_{n-1})\)</span>. Elemental used to follow this
+convention when returning permutations from factorizations, but clearly this
+representation is somewhat restrictive, as routines which perform multiple swaps
+for each pivot (e.g., some variants of Bunch-Kaufman) cannot be handled.</p>
+<div class="section" id="applycolpivots">
+<h3>ApplyColPivots<a class="headerlink" href="#applycolpivots" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv414ApplyColPivotsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv314ApplyColPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv214ApplyColPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="ApplyColPivots__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">ApplyColPivots</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ApplyColPivotsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414ApplyColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv314ApplyColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv214ApplyColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="ApplyColPivots__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">ApplyColPivots</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ApplyColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="applyinversecolpivots">
+<h3>ApplyInverseColPivots<a class="headerlink" href="#applyinversecolpivots" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv421ApplyInverseColPivotsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv321ApplyInverseColPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv221ApplyInverseColPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="ApplyInverseColPivots__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">ApplyInverseColPivots</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ApplyInverseColPivotsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421ApplyInverseColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv321ApplyInverseColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv221ApplyInverseColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="ApplyInverseColPivots__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">ApplyInverseColPivots</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ApplyInverseColPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="applyrowpivots">
+<h3>ApplyRowPivots<a class="headerlink" href="#applyrowpivots" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv414ApplyRowPivotsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv314ApplyRowPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv214ApplyRowPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="ApplyRowPivots__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">ApplyRowPivots</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ApplyRowPivotsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414ApplyRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv314ApplyRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv214ApplyRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="ApplyRowPivots__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">ApplyRowPivots</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ApplyRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="applyinverserowpivots">
+<h3>ApplyInverseRowPivots<a class="headerlink" href="#applyinverserowpivots" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv421ApplyInverseRowPivotsR6MatrixI1TERK6MatrixIiE">
+<span id="_CPPv321ApplyInverseRowPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="_CPPv221ApplyInverseRowPivotsR6MatrixI1TERK6MatrixIiE"></span><span id="ApplyInverseRowPivots__Matrix:T:R.Matrix:i:CR"></span>void <code class="descname">ApplyInverseRowPivots</code><span class="sig-paren">(</span>Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ApplyInverseRowPivotsR6MatrixI1TERK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421ApplyInverseRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE">
+<span id="_CPPv321ApplyInverseRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="_CPPv221ApplyInverseRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE"></span><span id="ApplyInverseRowPivots__AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR"></span>void <code class="descname">ApplyInverseRowPivots</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ApplyInverseRowPivotsR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="applysymmetricpivots">
+<h3>ApplySymmetricPivots<a class="headerlink" href="#applysymmetricpivots" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv420ApplySymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb">
+<span id="_CPPv320ApplySymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb"></span><span id="_CPPv220ApplySymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb"></span><span id="ApplySymmetricPivots__UpperOrLower.Matrix:T:R.Matrix:i:CR.b"></span>void <code class="descname">ApplySymmetricPivots</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420ApplySymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv420ApplySymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb">
+<span id="_CPPv320ApplySymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb"></span><span id="_CPPv220ApplySymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb"></span><span id="ApplySymmetricPivots__UpperOrLower.AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR.b"></span>void <code class="descname">ApplySymmetricPivots</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420ApplySymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="applyinversesymmetricpivots">
+<h3>ApplyInverseSymmetricPivots<a class="headerlink" href="#applyinversesymmetricpivots" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv427ApplyInverseSymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb">
+<span id="_CPPv327ApplyInverseSymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb"></span><span id="_CPPv227ApplyInverseSymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb"></span><span id="ApplyInverseSymmetricPivots__UpperOrLower.Matrix:T:R.Matrix:i:CR.b"></span>void <code class="descname">ApplyInverseSymmetricPivots</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, Matrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427ApplyInverseSymmetricPivots12UpperOrLowerR6MatrixI1TERK6MatrixIiEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv427ApplyInverseSymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb">
+<span id="_CPPv327ApplyInverseSymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb"></span><span id="_CPPv227ApplyInverseSymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb"></span><span id="ApplyInverseSymmetricPivots__UpperOrLower.AbstractDistMatrix:T:R.AbstractDistMatrix:i:CR.b"></span>void <code class="descname">ApplyInverseSymmetricPivots</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, AbstractDistMatrix&lt;T&gt; &amp;<em>A</em>, <em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em>, bool <em>conjugate</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427ApplyInverseSymmetricPivots12UpperOrLowerR18AbstractDistMatrixI1TERK18AbstractDistMatrixIiEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="pivotparity">
+<h3>PivotParity<a class="headerlink" href="#pivotparity" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv411PivotParityRK6MatrixIiE">
+<span id="_CPPv311PivotParityRK6MatrixIiE"></span><span id="_CPPv211PivotParityRK6MatrixIiE"></span><span id="PivotParity__Matrix:i:CR"></span>bool <code class="descname">PivotParity</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PivotParityRK6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411PivotParityRK18AbstractDistMatrixIiE">
+<span id="_CPPv311PivotParityRK18AbstractDistMatrixIiE"></span><span id="_CPPv211PivotParityRK18AbstractDistMatrixIiE"></span><span id="PivotParity__AbstractDistMatrix:i:CR"></span>bool <code class="descname">PivotParity</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411PivotParityRK18AbstractDistMatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return true if the permutation implied by the pivot sequence is odd. This
+is determined by determining if an odd number of non-trivial transpositions
+are performed.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="converting-pivot-sequences-to-permutations">
+<h2>Converting pivot sequences to permutations<a class="headerlink" href="#converting-pivot-sequences-to-permutations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pivotstopermutation">
+<h3>PivotsToPermutation<a class="headerlink" href="#pivotstopermutation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv419PivotsToPermutationRK6MatrixIiER6MatrixIiEi">
+<span id="_CPPv319PivotsToPermutationRK6MatrixIiER6MatrixIiEi"></span><span id="_CPPv219PivotsToPermutationRK6MatrixIiER6MatrixIiEi"></span><span id="PivotsToPermutation__Matrix:i:CR.Matrix:i:R.i"></span>void <code class="descname">PivotsToPermutation</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em>, Matrix&lt;int&gt; &amp;<em>p</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419PivotsToPermutationRK6MatrixIiER6MatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419PivotsToPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi">
+<span id="_CPPv319PivotsToPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi"></span><span id="_CPPv219PivotsToPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi"></span><span id="PivotsToPermutation__AbstractDistMatrix:i:CR.AbstractDistMatrix:i:R.i"></span>void <code class="descname">PivotsToPermutation</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419PivotsToPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="pivotstoinversepermutation">
+<h3>PivotsToInversePermutation<a class="headerlink" href="#pivotstoinversepermutation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv426PivotsToInversePermutationRK6MatrixIiER6MatrixIiEi">
+<span id="_CPPv326PivotsToInversePermutationRK6MatrixIiER6MatrixIiEi"></span><span id="_CPPv226PivotsToInversePermutationRK6MatrixIiER6MatrixIiEi"></span><span id="PivotsToInversePermutation__Matrix:i:CR.Matrix:i:R.i"></span>void <code class="descname">PivotsToInversePermutation</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em>, Matrix&lt;int&gt; &amp;<em>pInv</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426PivotsToInversePermutationRK6MatrixIiER6MatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv426PivotsToInversePermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi">
+<span id="_CPPv326PivotsToInversePermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi"></span><span id="_CPPv226PivotsToInversePermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi"></span><span id="PivotsToInversePermutation__AbstractDistMatrix:i:CR.AbstractDistMatrix:i:R.i"></span>void <code class="descname">PivotsToInversePermutation</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>pInv</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426PivotsToInversePermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="pivotstopartialpermutation">
+<h3>PivotsToPartialPermutation<a class="headerlink" href="#pivotstopartialpermutation" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv426PivotsToPartialPermutationRK6MatrixIiER6MatrixIiER6MatrixIiEi">
+<span id="_CPPv326PivotsToPartialPermutationRK6MatrixIiER6MatrixIiER6MatrixIiEi"></span><span id="_CPPv226PivotsToPartialPermutationRK6MatrixIiER6MatrixIiER6MatrixIiEi"></span><span id="PivotsToPartialPermutation__Matrix:i:CR.Matrix:i:R.Matrix:i:R.i"></span>void <code class="descname">PivotsToPartialPermutation</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;int&gt; &amp;<em>pivots</em>, Matrix&lt;int&gt; &amp;<em>p</em>, Matrix&lt;int&gt; &amp;<em>pInv</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426PivotsToPartialPermutationRK6MatrixIiER6MatrixIiER6MatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv426PivotsToPartialPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiER18AbstractDistMatrixIiEi">
+<span id="_CPPv326PivotsToPartialPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiER18AbstractDistMatrixIiEi"></span><span id="_CPPv226PivotsToPartialPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiER18AbstractDistMatrixIiEi"></span><span id="PivotsToPartialPermutation__AbstractDistMatrix:i:CR.AbstractDistMatrix:i:R.AbstractDistMatrix:i:R.i"></span>void <code class="descname">PivotsToPartialPermutation</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;int&gt; &amp;<em>pivots</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>p</em>, AbstractDistMatrix&lt;int&gt; &amp;<em>pInv</em>, int <em>offset</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426PivotsToPartialPermutationRK18AbstractDistMatrixIiER18AbstractDistMatrixIiER18AbstractDistMatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reflect.html" class="btn btn-neutral float-right" title="Reflectors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="euclidean_min/LSE.html" class="btn btn-neutral float-left" title="Equality-constrained Least Squares" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

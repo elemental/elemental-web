@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Convex optimization &#8212; Elemental</title>
+    <link rel="stylesheet" href="_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Control theory" href="control.html" />
+    <link rel="prev" title="Tuning parameters" href="lapack-like/tuning.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="convex-optimization">
+<h1>Convex optimization<a class="headerlink" href="#convex-optimization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="logbarrier">
+<h2>LogBarrier<a class="headerlink" href="#logbarrier" title="Permalink to this headline">¶</a></h2>
+<p>Uses a careful calculation of the log of the determinant in order to return
+the <em>log barrier</em> of a Hermitian positive-definite matrix <cite>A</cite>,
+<span class="math notranslate nohighlight">\(-\log(\mbox{det}(A))\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerRK6MatrixI1FE">
+<span id="_CPPv310LogBarrier12UpperOrLowerRK6MatrixI1FE"></span><span id="_CPPv210LogBarrier12UpperOrLowerRK6MatrixI1FE"></span><span id="LogBarrier__UpperOrLower.Matrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerRK10DistMatrixI1FE">
+<span id="_CPPv310LogBarrier12UpperOrLowerRK10DistMatrixI1FE"></span><span id="_CPPv210LogBarrier12UpperOrLowerRK10DistMatrixI1FE"></span><span id="LogBarrier__UpperOrLower.DistMatrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerRK10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerR6MatrixI1FEb">
+<span id="_CPPv310LogBarrier12UpperOrLowerR6MatrixI1FEb"></span><span id="_CPPv210LogBarrier12UpperOrLowerR6MatrixI1FEb"></span><span id="LogBarrier__UpperOrLower.Matrix:F:R.b"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410LogBarrier12UpperOrLowerR10DistMatrixI1FEb">
+<span id="_CPPv310LogBarrier12UpperOrLowerR10DistMatrixI1FEb"></span><span id="_CPPv210LogBarrier12UpperOrLowerR10DistMatrixI1FEb"></span><span id="LogBarrier__UpperOrLower.DistMatrix:F:R.b"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogBarrier</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410LogBarrier12UpperOrLowerR10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="logdetdivergence">
+<h2>LogDetDivergence<a class="headerlink" href="#logdetdivergence" title="Permalink to this headline">¶</a></h2>
+<p>The <em>log-det divergence</em> of a pair of <span class="math notranslate nohighlight">\(n \times n\)</span> Hermitian
+positive-definite matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[D_{ld}(A,B) = \mbox{tr}(A B^{-1}) -\log(\mbox{det}(A B^{-1})) - n,\]</div>
+<p>which can be greatly simplified using the Cholesky factors of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>.
+In particular, if we set <span class="math notranslate nohighlight">\(Z = L_B^{-1} L_A\)</span>, where <span class="math notranslate nohighlight">\(A=L_A L_A^H\)</span> and
+<span class="math notranslate nohighlight">\(B=L_B L_B^H\)</span> are Cholesky factorizations, then</p>
+<div class="math notranslate nohighlight">
+\[D_{ld}(A,B) = \| Z \|_F^2 - 2 \log(\mbox{det}(Z)) - n.\]</div>
+<dl class="function">
+<dt id="_CPPv416LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE">
+<span id="_CPPv316LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE"></span><span id="_CPPv216LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE"></span><span id="LogDetDivergence__UpperOrLower.Matrix:F:CR.Matrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogDetDivergence</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416LogDetDivergence12UpperOrLowerRK6MatrixI1FERK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE">
+<span id="_CPPv316LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE"></span><span id="_CPPv216LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE"></span><span id="LogDetDivergence__UpperOrLower.DistMatrix:F:CR.DistMatrix:F:CR"></span><a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">LogDetDivergence</code><span class="sig-paren">(</span><a class="reference internal" href="core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416LogDetDivergence12UpperOrLowerRK10DistMatrixI1FERK10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="singular-value-soft-thresholding">
+<h2>Singular-value soft-thresholding<a class="headerlink" href="#singular-value-soft-thresholding" title="Permalink to this headline">¶</a></h2>
+<p>Overwrites <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(U S_{\tau}(\Sigma) V^H\)</span>, where <span class="math notranslate nohighlight">\(U \Sigma V^H\)</span> is the singular-value decomposition of <span class="math notranslate nohighlight">\(A\)</span> upon input and <span class="math notranslate nohighlight">\(S_{\tau}\)</span> performs soft-thresholding with parameter <span class="math notranslate nohighlight">\(\tau\)</span>.
+The return value is the rank of the soft-thresholded matrix.</p>
+<dl class="function">
+<dt id="_CPPv43SVTR6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv33SVTR6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv23SVTR6MatrixI1FE4BaseI1FEb"></span><span id="SVT__Matrix:F:R.Base:F:.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv33SVTR10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv23SVTR10DistMatrixI1FE4BaseI1FEb"></span><span id="SVT__DistMatrix:F:R.Base:F:.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs the default SVT algorithm. In the sequential case, this is currently
+<cite>svt::Normal</cite>, and, in the parallel case, it is <cite>svt::Cross</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR6MatrixI1FE4BaseI1FEib">
+<span id="_CPPv33SVTR6MatrixI1FE4BaseI1FEib"></span><span id="_CPPv23SVTR6MatrixI1FE4BaseI1FEib"></span><span id="SVT__Matrix:F:R.Base:F:.i.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>relaxedRank</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR6MatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR10DistMatrixI1FE4BaseI1FEib">
+<span id="_CPPv33SVTR10DistMatrixI1FE4BaseI1FEib"></span><span id="_CPPv23SVTR10DistMatrixI1FE4BaseI1FEib"></span><span id="SVT__DistMatrix:F:R.Base:F:.i.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>relaxedRank</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR10DistMatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a faster (for small ranks), but less accurate, algorithm given an
+upper bound on the rank of the soft-thresholded matrix.
+The current implementation preprocesses via <cite>relaxedRank</cite> steps of
+(Businger-Golub) column-pivoted QR via the routine <cite>svt::PivotedQR</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv43SVTR10DistMatrixI1F1U4STARE4BaseI1FEb">
+<span id="_CPPv33SVTR10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="_CPPv23SVTR10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="SVT__DistMatrix:F.U.STAR:R.Base:F:.b"></span>int <code class="descname">SVT</code><span class="sig-paren">(</span>DistMatrix&lt;F, U, <a class="reference internal" href="core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43SVTR10DistMatrixI1F1U4STARE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs an SVT algorithm designed for tall-skinny matrices.
+The current implementation is based on TSQR factorization and is
+<cite>svt::TSQR</cite>.</p>
+</dd></dl>
+
+<div class="section" id="namespace-svt">
+<h3>namespace svt<a class="headerlink" href="#namespace-svt" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N3svt6NormalER6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt6NormalER6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt6NormalER6MatrixI1FE4BaseI1FEb"></span><span id="svt::Normal__Matrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Normal</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt6NormalER6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt6NormalER10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt6NormalER10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt6NormalER10DistMatrixI1FE4BaseI1FEb"></span><span id="svt::Normal__DistMatrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Normal</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt6NormalER10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a standard SVD, soft-thresholds the singular values, and then reforms
+the matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt5CrossER6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt5CrossER6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt5CrossER6MatrixI1FE4BaseI1FEb"></span><span id="svt::Cross__Matrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Cross</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt5CrossER6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt5CrossER10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv3N3svt5CrossER10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv2N3svt5CrossER10DistMatrixI1FE4BaseI1FEb"></span><span id="svt::Cross__DistMatrix:F:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">Cross</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt5CrossER10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms the normal matrix, computes its Hermitian EVD, soft-thresholds the
+eigenvalues, and then reforms the matrix. Note that Elemental’s parallel
+Hermitian EVD is much faster than its parallel SVD; this is typically worth
+the loss of accuracy in the computed small (truncated) singular values and
+is therefore the default choice for parallel SVT.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib">
+<span id="_CPPv3N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib"></span><span id="_CPPv2N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib"></span><span id="svt::PivotedQR__Matrix:F:R.Base:F:.i.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">PivotedQR</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>numStepsQR</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt9PivotedQRER6MatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib">
+<span id="_CPPv3N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib"></span><span id="_CPPv2N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib"></span><span id="svt::PivotedQR__DistMatrix:F:R.Base:F:.i.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">PivotedQR</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, int <em>numStepsQR</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt9PivotedQRER10DistMatrixI1FE4BaseI1FEib" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes an approximate SVT by first approximating A as the rank-<cite>numSteps</cite>
+approximation produced by <cite>numSteps</cite> iterations of column-pivoted QR.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb">
+<span id="_CPPv3N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="_CPPv2N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb"></span><span id="svt::TSQR__DistMatrix:F.U.STAR:R.Base:F:.b"></span>int <code class="descclassname">svt<code class="descclassname">::</code></code><code class="descname">TSQR</code><span class="sig-paren">(</span>DistMatrix&lt;F, U, <a class="reference internal" href="core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3svt4TSQRER10DistMatrixI1F1U4STARE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Since the majority of the work in a tall-skinny SVT will be in the initial
+QR factorization, this algorithm runs a TSQR factorization and then
+computes the SVT of the small R factor using a single process.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="soft-thresholding">
+<h2>Soft-thresholding<a class="headerlink" href="#soft-thresholding" title="Permalink to this headline">¶</a></h2>
+<p>Overwrites each entry of <span class="math notranslate nohighlight">\(A\)</span> with its soft-thresholded value.</p>
+<dl class="function">
+<dt id="_CPPv413SoftThresholdR6MatrixI1FE4BaseI1FEb">
+<span id="_CPPv313SoftThresholdR6MatrixI1FE4BaseI1FEb"></span><span id="_CPPv213SoftThresholdR6MatrixI1FE4BaseI1FEb"></span><span id="SoftThreshold__Matrix:F:R.Base:F:.b"></span>void <code class="descname">SoftThreshold</code><span class="sig-paren">(</span><a class="reference internal" href="core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SoftThresholdR6MatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413SoftThresholdR10DistMatrixI1FE4BaseI1FEb">
+<span id="_CPPv313SoftThresholdR10DistMatrixI1FE4BaseI1FEb"></span><span id="_CPPv213SoftThresholdR10DistMatrixI1FE4BaseI1FEb"></span><span id="SoftThreshold__DistMatrix:F:R.Base:F:.b"></span>void <code class="descname">SoftThreshold</code><span class="sig-paren">(</span><a class="reference internal" href="core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tau</em>, bool <em>relative</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413SoftThresholdR10DistMatrixI1FE4BaseI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>02/20/2014: Elemental 0.83 &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="11/25/2013: Elemental 0.82-p1" href="../0.82-p1/index.html" />
+    <link rel="prev" title="06/04/2014: Elemental 0.84" href="../0.84/index.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="elemental-0-83">
+<span id="release-0-83"></span><h1>02/20/2014: Elemental 0.83<a class="headerlink" href="#elemental-0-83" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://libelemental.org/pub/releases/elemental-0.83.tgz">elemental-0.83.tgz</a></p>
+<p>Documentation: <a class="reference external" href="http://libelemental.org/documentation/0.83/">[HTML]</a> <a class="reference external" href="http://libelemental.org/documentation/elem-0.83.pdf">[PDF]</a></p>
+<div class="section" id="new-functionality">
+<h2>New Functionality<a class="headerlink" href="#new-functionality" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fundamental-additions">
+<h3>Fundamental additions<a class="headerlink" href="#fundamental-additions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Preliminary routines for the high-performance computation of pseudospectra</p></li>
+<li><p>Distributed blocked reductions to lower/upper bidiagonal/Hessenberg form
+are now both fully supported</p></li>
+<li><p>Large redesign of the Matrix and DistMatrix classes which includes support
+for arbitrary submatrix manipulation</p></li>
+</ul>
+</div>
+<div class="section" id="minor-incremental-improvements">
+<h3>Minor/incremental improvements<a class="headerlink" href="#minor-incremental-improvements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>More performant and robust SDC via: try/catch guards around the matrix-sign
+functions, avoidance of unnatural process team splits, the introduction of
+many more accuracy and convergence tuning parameters, and the ability to
+optionally print status updates</p></li>
+<li><p>Support was added for pivot metadata caching
+(this will eventually have a large effect on the performance of Clique)</p></li>
+<li><p>Row and column pivot applications now support every matrix distribution</p></li>
+<li><p>The QuasiDiagonal{Scale,Solve} routines were greatly extended</p></li>
+<li><p>AlignWith no longer has an effect when the alignments are unchanged</p></li>
+<li><p>Added Demmel, Fox-Li, and Helmholtz PML matrices</p></li>
+<li><p>HermitianTridiagEig is now a routine</p></li>
+</ul>
+</div>
+<div class="section" id="instrumentation-visualization-testing">
+<h3>Instrumentation/visualization/testing<a class="headerlink" href="#instrumentation-visualization-testing" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added support for BMP/JPG/PNG/etc. visualization via Qt5</p></li>
+<li><p>Colormaps can now be modified at runtime</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">-no-gui</span></code> option is now supported so that Qt5 can be used to write
+images to file even when no display server is running</p></li>
+<li><p>Preliminary support for reading/writing matrices to/from file</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="maintenance">
+<h2>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="library-bugfixes">
+<h3>Library bugfixes<a class="headerlink" href="#library-bugfixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed bugs in SymmetricInverse, QuasiDiagonal{Scale,Solve}, and
+HermitianInertia</p></li>
+<li><p>Fixed bug in Pseudoinverse scaling (also affected Skeleton)</p></li>
+<li><p>Fixed edgecases in TwoNormEstimate</p></li>
+<li><p>Fixed a bug in parallel one-norm computation</p></li>
+<li><p>Fixed bugs in Matrix::Conjugate and several diagonal alignments</p></li>
+<li><p>Fixed parallel Helmholtz matrix generation</p></li>
+<li><p>Avoided assumption that VCComm members have the same rank in the owning group</p></li>
+<li><p>Fixed bugs in {[VR,STAR],[STAR,VR]} &lt;- [CIRC,CIRC] and [STAR,MR] &lt;- [MC,MR]
+redistributions</p></li>
+<li><p>Fixed a bug in the Trmm driver (noticed by Hal Finkel)</p></li>
+</ul>
+</div>
+<div class="section" id="maintenance-syntax">
+<h3>Maintenance/syntax<a class="headerlink" href="#maintenance-syntax" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>“ResizeTo” was shortened to “Resize”</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">DEBUG_ONLY</span></code> macro was added to replace <code class="docutils literal notranslate"><span class="pre">#ifndef</span> <span class="pre">RELEASE</span></code> guards</p></li>
+<li><p>Variadic versions of {Logic,Runtime}Error were added</p></li>
+<li><p>The computation of Householder reflectors was greatly simplified and the
+library now further breaks with LAPACK convention for complex reflectors so
+that zeros are introduced with (I-tau v v’) rather than (I-conj(tau) v v’)</p></li>
+<li><p>Matrix view-types have been simplified</p></li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The DistMatrix class finally now has fairly complete documentation</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">lapack-like/</span></code> folder’s new organization is now reflected in the
+documentation</p></li>
+<li><p>The REFERENCES file is now in bibtex form</p></li>
+</ul>
+</div>
+<div class="section" id="build-system">
+<h3>Build system<a class="headerlink" href="#build-system" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Support for Intel compilers (&gt;= 14.0.1) has been re-enabled</p></li>
+<li><p>C++11 compiler flags are now automatically detected for most compilers</p></li>
+<li><p>The configuration test for <code class="docutils literal notranslate"><span class="pre">MPI_Comm_f2c</span></code> was fixed</p></li>
+<li><p>Drivers are now recompiled (rather than just relinked) when headers change</p></li>
+<li><p>Vagrant files were added for Ubuntu 13.10 (Saucy)</p></li>
+<li><p>Multiple toolchain files were added</p></li>
+</ul>
+</div>
+<div class="section" id="python-interface">
+<h3>Python interface<a class="headerlink" href="#python-interface" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Several more routines were added (e.g., from the qr namespace)</p></li>
+</ul>
+</div>
+<div class="section" id="mpi-and-threading">
+<h3>MPI and Threading<a class="headerlink" href="#mpi-and-threading" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Avoiding complex MPI by default due to two students running into problems
+with OpenMPI’s support for complex MPI_SUM</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="thanks">
+<h2>Thanks<a class="headerlink" href="#thanks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Hal Finkel for reporting a mistake in a Trmm driver</p></li>
+<li><p>Jed Brown and Satish Balay for reporting several instances of unused
+variables/typedefs</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

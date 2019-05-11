@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Helmholtz with PML &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Hermitian from EVD" href="HermitianFromEVD.html" />
+    <link rel="prev" title="Helmholtz" href="Helmholtz.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="helmholtz-with-pml">
+<h1>Helmholtz with PML<a class="headerlink" href="#helmholtz-with-pml" title="Permalink to this headline">¶</a></h1>
+<p>The following routines return a simple second-order discretization of the
+constant coefficient Helmholtz equation over <span class="math notranslate nohighlight">\([0,1]^d\)</span> with Perfectly
+Matched Layer boundary conditions with profile defined by the amplitude
+<span class="math notranslate nohighlight">\(\sigma\)</span> and exponent <cite>pmlExp</cite>, discretized over <cite>numPmlPoints</cite> grid
+points.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__Matrix:Complex:Real::R.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__AbstractDistMatrix:Complex:Real::R.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>n</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>1D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__Matrix:Complex:Real::R.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__AbstractDistMatrix:Complex:Real::R.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>2D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__Matrix:Complex:Real::R.Int.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI7ComplexI4RealEE" title="Matrix&lt;Complex&lt;Real&gt;&gt;">Matrix</a>&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>nz</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR6MatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real">
+<span id="_CPPv312HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="_CPPv212HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real"></span><span id="HelmholtzPML__AbstractDistMatrix:Complex:Real::R.Int.Int.Int.Complex:Real:.Int.Real.Real"></span>void <code class="descname">HelmholtzPML</code><span class="sig-paren">(</span>AbstractDistMatrix&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt;&gt; &amp;<em>H</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>nx</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>ny</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>nz</em>, <a class="reference internal" href="../../core/environment.html#_CPPv4IE7ComplexI4RealE" title="Complex&lt;Real&gt;">Complex</a>&lt;Real&gt; <em>shift</em>, <a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <em>numPmlPoints</em>, Real <em>sigma</em>, Real <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HelmholtzPMLR18AbstractDistMatrixI7ComplexI4RealEE3Int3Int3Int7ComplexI4RealE3Int4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>3D Helmholtz</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElHelmholtzPML1D_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1D_c</code><span class="sig-paren">(</span>ElMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1D_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML1D_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1D_z</code><span class="sig-paren">(</span>ElMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1D_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML1DDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1DDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1DDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML1DDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML1DDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML1DDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>1D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2D_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2D_c</code><span class="sig-paren">(</span>ElMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2D_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2D_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2D_z</code><span class="sig-paren">(</span>ElMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2D_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2DDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2DDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2DDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML2DDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML2DDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML2DDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>2D Helmholtz</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3D_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3D_c</code><span class="sig-paren">(</span>ElMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3D_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3D_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3D_z</code><span class="sig-paren">(</span>ElMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3D_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3DDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3DDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, float<em> sigma</em>, float<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3DDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHelmholtzPML3DDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHelmholtzPML3DDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> H</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nx</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> ny</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> nz</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a><em> omega</em>, <a class="reference internal" href="../../core/environment.html#c.ElInt" title="ElInt">ElInt</a><em> numPmlPoints</em>, double<em> sigma</em>, double<em> pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHelmholtzPML3DDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>3D Helmholtz</p>
+</dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="HelmholtzPML1D">
+<code class="descname">HelmholtzPML1D</code><span class="sig-paren">(</span><em>H</em>, <em>nx</em>, <em>omega</em>, <em>numPmlPoints</em>, <em>sigma</em>, <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#HelmholtzPML1D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="HelmholtzPML2D">
+<code class="descname">HelmholtzPML2D</code><span class="sig-paren">(</span><em>H</em>, <em>nx</em>, <em>ny</em>, <em>omega</em>, <em>numPmlPoints</em>, <em>sigma</em>, <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#HelmholtzPML2D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="HelmholtzPML3D">
+<code class="descname">HelmholtzPML3D</code><span class="sig-paren">(</span><em>H</em>, <em>nx</em>, <em>ny</em>, <em>nz</em>, <em>omega</em>, <em>numPmlPoints</em>, <em>sigma</em>, <em>pmlExp</em><span class="sig-paren">)</span><a class="headerlink" href="#HelmholtzPML3D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

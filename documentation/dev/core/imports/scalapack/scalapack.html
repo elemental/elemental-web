@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ScaLAPACK proper &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="METIS and ParMETIS" href="../metis_parmetis.html" />
+    <link rel="prev" title="PBLAS" href="pblas.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../core.html">Core functionality</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../imports.html">Imported library routines</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../blas.html">BLAS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../lapack.html">LAPACK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mpi.html">MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pmrrr.html">PMRRR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flame.html">libFLAME</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../scalapack.html">ScaLAPACK</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="blacs.html">BLACS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pblas.html">PBLAS</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ScaLAPACK proper</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../metis_parmetis.html">METIS and ParMETIS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../environment.html">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../element.html">Element manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grid.html">Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_matrix.html">DistMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sparse_matrix.html">SparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_graph.html">DistGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_sparse_matrix.html">DistSparseMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dist_multi_vec.html">DistMultiVec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../View.html">Viewing submatrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../proxies.html">Read/write proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flame_part.html">FLAME-like partition tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../core.html">Core functionality</a> &raquo;</li>
+        
+          <li><a href="../../imports.html">Imported library routines</a> &raquo;</li>
+        
+          <li><a href="../scalapack.html">ScaLAPACK</a> &raquo;</li>
+        
+      <li>ScaLAPACK proper</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/core/imports/scalapack/scalapack.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scalapack-proper">
+<h1>ScaLAPACK proper<a class="headerlink" href="#scalapack-proper" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="factorizations">
+<h2>Factorizations<a class="headerlink" href="#factorizations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cholesky">
+<h3>Cholesky<a class="headerlink" href="#cholesky" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N9scalapack8CholeskyEciP1FPKi">
+<span id="_CPPv3N9scalapack8CholeskyEciP1FPKi"></span><span id="_CPPv2N9scalapack8CholeskyEciP1FPKi"></span><span id="scalapack::Cholesky__c.i.FP.iCP"></span>void <code class="descclassname">scalapack<code class="descclassname">::</code></code><code class="descname">Cholesky</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, <em class="property">const</em> int *<em>desca</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9scalapack8CholeskyEciP1FPKi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="spectral-analysis">
+<h2>Spectral analysis<a class="headerlink" href="#spectral-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="reduction-of-a-generalized-hpd-evp-to-standard-form">
+<h3>Reduction of a generalized HPD EVP to standard form<a class="headerlink" href="#reduction-of-a-generalized-hpd-evp-to-standard-form" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="two-sided-trsm">
+<h4>Two-sided Trsm<a class="headerlink" href="#two-sided-trsm" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv412TwoSidedTrsmciP1FPKiPK1FPKi">
+<span id="_CPPv312TwoSidedTrsmciP1FPKiPK1FPKi"></span><span id="_CPPv212TwoSidedTrsmciP1FPKiPK1FPKi"></span><span id="TwoSidedTrsm__c.i.FP.iCP.FCP.iCP"></span>void <code class="descname">TwoSidedTrsm</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, <em class="property">const</em> F *<em>B</em>, <em class="property">const</em> int *<em>descb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoSidedTrsmciP1FPKiPK1FPKi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="two-sided-trmm">
+<h4>Two-sided Trmm<a class="headerlink" href="#two-sided-trmm" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv412TwoSidedTrmmciP1FPKiPK1FPKi">
+<span id="_CPPv312TwoSidedTrmmciP1FPKiPK1FPKi"></span><span id="_CPPv212TwoSidedTrmmciP1FPKiPK1FPKi"></span><span id="TwoSidedTrmm__c.i.FP.iCP.FCP.iCP"></span>void <code class="descname">TwoSidedTrmm</code><span class="sig-paren">(</span>char <em>uplo</em>, int <em>n</em>, F *<em>A</em>, <em class="property">const</em> int *<em>desca</em>, <em class="property">const</em> F *<em>B</em>, <em class="property">const</em> int *<em>descb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412TwoSidedTrmmciP1FPKiPK1FPKi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="hessenberg-schur-decomposition">
+<h3>Hessenberg Schur decomposition<a class="headerlink" href="#hessenberg-schur-decomposition" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEbb">
+<span id="_CPPv3N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEbb"></span><span id="_CPPv2N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEbb"></span><span id="scalapack::HessenbergSchur__i.FP.iP.Complex:Base:F::P.b.b"></span>void <code class="descclassname">scalapack<code class="descclassname">::</code></code><code class="descname">HessenbergSchur</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>H</em>, int *<em>desch</em>, Complex&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em>, bool <em>fullTriangle</em> = false, bool <em>aed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the eigenvalues (and possibly the full Schur factor) of an upper
+Hessenberg matrix using the QR algorithm. Aggressive Early Deflation may
+be optionally used for real matrices, but there are known bugs in the
+ScaLAPACK implementation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEP1FPibbb">
+<span id="_CPPv3N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEP1FPibbb"></span><span id="_CPPv2N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEP1FPibbb"></span><span id="scalapack::HessenbergSchur__i.FP.iP.Complex:Base:F::P.FP.iP.b.b.b"></span>void <code class="descclassname">scalapack<code class="descclassname">::</code></code><code class="descname">HessenbergSchur</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>H</em>, int *<em>desch</em>, Complex&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em>, F *<em>Q</em>, int *<em>descq</em>, bool <em>fullTriangle</em> = true, bool <em>multiplyQ</em> = false, bool <em>aed</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9scalapack15HessenbergSchurEiP1FPiP7ComplexI4BaseI1FEEP1FPibbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the eigenvalues (and possibly the full Schur factor) as well as
+the Schur vectors of of an upper Hessenberg matrix using the QR algorithm.
+If <cite>multiplyQ</cite> is true, then the Schur vectors are multiplied against the
+input matrix from the right. Aggressive Early Deflation may
+be optionally used for real matrices, but there are known bugs in the
+ScaLAPACK implementation.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hessenberg-eigenvalues">
+<h3>Hessenberg eigenvalues<a class="headerlink" href="#hessenberg-eigenvalues" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N9scalapack13HessenbergEigEiP1FPiP7ComplexI4BaseI1FEE">
+<span id="_CPPv3N9scalapack13HessenbergEigEiP1FPiP7ComplexI4BaseI1FEE"></span><span id="_CPPv2N9scalapack13HessenbergEigEiP1FPiP7ComplexI4BaseI1FEE"></span><span id="scalapack::HessenbergEig__i.FP.iP.Complex:Base:F::P"></span>void <code class="descclassname">scalapack<code class="descclassname">::</code></code><code class="descname">HessenbergEig</code><span class="sig-paren">(</span>int <em>n</em>, F *<em>H</em>, int *<em>desch</em>, Complex&lt;<a class="reference internal" href="../../environment/complex.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; *<em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9scalapack13HessenbergEigEiP1FPiP7ComplexI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the eigenvalues of an upper Hessenberg matrix using the QR
+algorithm.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are not yet wrappers for computing Hessenberg eigenvectors.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../metis_parmetis.html" class="btn btn-neutral float-right" title="METIS and ParMETIS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pblas.html" class="btn btn-neutral float-left" title="PBLAS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

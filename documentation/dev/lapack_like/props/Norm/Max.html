@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Max norm &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Nuclear norms" href="Nuclear.html" />
+    <link rel="prev" title="Infinity norms" href="Infinity.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../lapack_like.html">LAPACK-like linear algebra</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../condense.html">Reduction to condensed form</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../factor.html">Factorizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../spectral.html">Spectral analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../funcs.html">Matrix functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../props.html">Matrix properties</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../Condition.html">Condition number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Determinant.html">Determinant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Inertia.html">Inertia</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../Norm.html">Matrix norms</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../Norm.html#specialized-interfaces">Specialized interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Norm.html#vanilla-interface">Vanilla interface</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Trace.html">Trace</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../solve.html">Linear solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../euclidean_min.html">Euclidean minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../perm.html">Permutations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reflect.html">Reflectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../optimization.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../lapack_like.html">LAPACK-like linear algebra</a> &raquo;</li>
+        
+          <li><a href="../../props.html">Matrix properties</a> &raquo;</li>
+        
+          <li><a href="../Norm.html">Matrix norms</a> &raquo;</li>
+        
+      <li>Max norm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/lapack_like/props/Norm/Max.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="max-norm">
+<h1>Max norm<a class="headerlink" href="#max-norm" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/props.hpp">Header file</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/src/lapack_like/props/Norm/Max.cpp">Implementation</a></p>
+<p>The following routines compute the maximum absolute value of the matrix entries.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv47MaxNormRK6MatrixI1TE">
+<span id="_CPPv37MaxNormRK6MatrixI1TE"></span><span id="_CPPv27MaxNormRK6MatrixI1TE"></span><span id="MaxNorm__Matrix:T:CR"></span>Base&lt;T&gt; <code class="descname">MaxNorm</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47MaxNormRK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47MaxNormRK18AbstractDistMatrixI1TE">
+<span id="_CPPv37MaxNormRK18AbstractDistMatrixI1TE"></span><span id="_CPPv27MaxNormRK18AbstractDistMatrixI1TE"></span><span id="MaxNorm__AbstractDistMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">MaxNorm</code><span class="sig-paren">(</span><em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47MaxNormRK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47MaxNormRK12SparseMatrixI1TE">
+<span id="_CPPv37MaxNormRK12SparseMatrixI1TE"></span><span id="_CPPv27MaxNormRK12SparseMatrixI1TE"></span><span id="MaxNorm__SparseMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">MaxNorm</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47MaxNormRK12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47MaxNormRK16DistSparseMatrixI1TE">
+<span id="_CPPv37MaxNormRK16DistSparseMatrixI1TE"></span><span id="_CPPv27MaxNormRK16DistSparseMatrixI1TE"></span><span id="MaxNorm__DistSparseMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">MaxNorm</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47MaxNormRK16DistSparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SymmetricMaxNorm12UpperOrLowerRK6MatrixI1TE">
+<span id="_CPPv316SymmetricMaxNorm12UpperOrLowerRK6MatrixI1TE"></span><span id="_CPPv216SymmetricMaxNorm12UpperOrLowerRK6MatrixI1TE"></span><span id="SymmetricMaxNorm__UpperOrLower.Matrix:T:CR"></span>Base&lt;T&gt; <code class="descname">SymmetricMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricMaxNorm12UpperOrLowerRK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SymmetricMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE">
+<span id="_CPPv316SymmetricMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE"></span><span id="_CPPv216SymmetricMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE"></span><span id="SymmetricMaxNorm__UpperOrLower.AbstractDistMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">SymmetricMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SymmetricMaxNorm12UpperOrLowerRK12SparseMatrixI1TE">
+<span id="_CPPv316SymmetricMaxNorm12UpperOrLowerRK12SparseMatrixI1TE"></span><span id="_CPPv216SymmetricMaxNorm12UpperOrLowerRK12SparseMatrixI1TE"></span><span id="SymmetricMaxNorm__UpperOrLower.SparseMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">SymmetricMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricMaxNorm12UpperOrLowerRK12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416SymmetricMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE">
+<span id="_CPPv316SymmetricMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE"></span><span id="_CPPv216SymmetricMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE"></span><span id="SymmetricMaxNorm__UpperOrLower.DistSparseMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">SymmetricMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416SymmetricMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianMaxNorm12UpperOrLowerRK6MatrixI1TE">
+<span id="_CPPv316HermitianMaxNorm12UpperOrLowerRK6MatrixI1TE"></span><span id="_CPPv216HermitianMaxNorm12UpperOrLowerRK6MatrixI1TE"></span><span id="HermitianMaxNorm__UpperOrLower.Matrix:T:CR"></span>Base&lt;T&gt; <code class="descname">HermitianMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> Matrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianMaxNorm12UpperOrLowerRK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE">
+<span id="_CPPv316HermitianMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE"></span><span id="_CPPv216HermitianMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE"></span><span id="HermitianMaxNorm__UpperOrLower.AbstractDistMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">HermitianMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> AbstractDistMatrix&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianMaxNorm12UpperOrLowerRK18AbstractDistMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianMaxNorm12UpperOrLowerRK12SparseMatrixI1TE">
+<span id="_CPPv316HermitianMaxNorm12UpperOrLowerRK12SparseMatrixI1TE"></span><span id="_CPPv216HermitianMaxNorm12UpperOrLowerRK12SparseMatrixI1TE"></span><span id="HermitianMaxNorm__UpperOrLower.SparseMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">HermitianMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/sparse_matrix/cxx.html#_CPPv4IE12SparseMatrixI1TE" title="SparseMatrix&lt;T&gt;">SparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianMaxNorm12UpperOrLowerRK12SparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416HermitianMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE">
+<span id="_CPPv316HermitianMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE"></span><span id="_CPPv216HermitianMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE"></span><span id="HermitianMaxNorm__UpperOrLower.DistSparseMatrix:T:CR"></span>Base&lt;T&gt; <code class="descname">HermitianMaxNorm</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../../core/dist_sparse_matrix/cxx.html#_CPPv4IE16DistSparseMatrixI1TE" title="DistSparseMatrix&lt;T&gt;">DistSparseMatrix</a>&lt;T&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416HermitianMaxNorm12UpperOrLowerRK16DistSparseMatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElMaxNorm_i">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNorm_i</code><span class="sig-paren">(</span>ElConstMatrix_i<em> A</em>, <a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a>*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNorm_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNorm_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNorm_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNorm_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNorm_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNorm_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNorm_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNorm_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNorm_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNorm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNorm_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNorm_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNorm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNormDist_i">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNormDist_i</code><span class="sig-paren">(</span>ElConstDistMatrix_i<em> A</em>, <a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a>*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNormDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNormDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNormDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNormDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNormDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNormDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNormDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNormDist_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNormDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNormDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElMaxNormDist_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElMaxNormDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElMaxNormDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNorm_i">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNorm_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_i<em> A</em>, <a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a>*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNorm_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNorm_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNorm_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNorm_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNorm_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNorm_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNorm_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNorm_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNorm_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNorm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNorm_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNorm_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNorm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNormDist_i">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNormDist_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_i<em> A</em>, <a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElInt" title="ElInt">ElInt</a>*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNormDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNormDist_s">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNormDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_s<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNormDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNormDist_d">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNormDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_d<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNormDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNormDist_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNormDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNormDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSymmetricMaxNormDist_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSymmetricMaxNormDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSymmetricMaxNormDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianMaxNorm_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianMaxNorm_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianMaxNorm_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianMaxNorm_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianMaxNorm_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianMaxNorm_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianMaxNormDist_c">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianMaxNormDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, float*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianMaxNormDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHermitianMaxNormDist_z">
+<a class="reference internal" href="../../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHermitianMaxNormDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../../core/environment/typedefs_and_enums.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, double*<em> norm</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHermitianMaxNormDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Nuclear.html" class="btn btn-neutral float-right" title="Nuclear norms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Infinity.html" class="btn btn-neutral float-left" title="Infinity norms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

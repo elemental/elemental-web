@@ -1,0 +1,817 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Factorizations &#8212; Elemental</title>
+    <link rel="stylesheet" href="../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Matrix functions" href="funcs.html" />
+    <link rel="prev" title="Matrix decompositions" href="decomp.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="factorizations">
+<h1>Factorizations<a class="headerlink" href="#factorizations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cholesky-factorization">
+<h2>Cholesky factorization<a class="headerlink" href="#cholesky-factorization" title="Permalink to this headline">¶</a></h2>
+<p>It is well-known that Hermitian positive-definite (HPD) matrices can be
+decomposed into the form <span class="math notranslate nohighlight">\(A = L L^H\)</span> or <span class="math notranslate nohighlight">\(A = U^H U\)</span>, where
+<span class="math notranslate nohighlight">\(L=U^H\)</span> is lower triangular, and Cholesky factorization provides such an
+<span class="math notranslate nohighlight">\(L\)</span> (or <span class="math notranslate nohighlight">\(U\)</span>) given an HPD <span class="math notranslate nohighlight">\(A\)</span>. If <span class="math notranslate nohighlight">\(A\)</span> is found to be
+numerically indefinite, then a <a class="reference internal" href="../core/environment.html#_CPPv421NonHPDMatrixException" title="NonHPDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPDMatrixException</span></code></a> will be
+thrown.</p>
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv38Cholesky12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv28Cholesky12UpperOrLowerR6MatrixI1FE"></span><span id="Cholesky__UpperOrLower.Matrix:F:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv38Cholesky12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv28Cholesky12UpperOrLowerR10DistMatrixI1FE"></span><span id="Cholesky__UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the <cite>uplo</cite> triangle of the HPD matrix <cite>A</cite> with its Cholesky factor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE">
+<span id="_CPPv38Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE"></span><span id="_CPPv28Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE"></span><span id="Cholesky__UpperOrLower.Matrix:F:R.Matrix:i:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48Cholesky12UpperOrLowerR10DistMatrixI1FER6MatrixIiE">
+<span id="_CPPv38Cholesky12UpperOrLowerR10DistMatrixI1FER6MatrixIiE"></span><span id="_CPPv28Cholesky12UpperOrLowerR10DistMatrixI1FER6MatrixIiE"></span><span id="Cholesky__UpperOrLower.DistMatrix:F:R.Matrix:i:R"></span>void <code class="descname">Cholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48Cholesky12UpperOrLowerR10DistMatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performs Cholesky factorization with full (diagonal) pivoting.</p>
+</dd></dl>
+
+<p>It is possible to compute the Cholesky factor of a Hermitian positive
+semi-definite (HPSD) matrix through its eigenvalue decomposition, though it
+is significantly more expensive than the HPD case: Let <span class="math notranslate nohighlight">\(A = U \Lambda U^H\)</span>
+be the eigenvalue decomposition of <span class="math notranslate nohighlight">\(A\)</span>, where all entries of
+<span class="math notranslate nohighlight">\(\Lambda\)</span> are non-negative. Then <span class="math notranslate nohighlight">\(B = U \sqrt \Lambda U^H\)</span> is the
+matrix square root of <span class="math notranslate nohighlight">\(A\)</span>, i.e., <span class="math notranslate nohighlight">\(B B = A\)</span>, and it follows that the
+QR and LQ factorizations of <span class="math notranslate nohighlight">\(B\)</span> yield Cholesky factors of <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[A = B B = B^H B = (Q R)^H (Q R) = R^H Q^H Q R = R^H R,\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[A = B B = B B^H = (L Q) (L Q)^H = L Q Q^H L^H = L L^H.\]</div>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> is found to have eigenvalues less than
+<span class="math notranslate nohighlight">\(-n \epsilon \| A \|_2\)</span>, then a <a class="reference internal" href="../core/environment.html#_CPPv422NonHPSDMatrixException" title="NonHPSDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPSDMatrixException</span></code></a> will
+be thrown.</p>
+<dl class="function">
+<dt id="_CPPv412HPSDCholesky12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv312HPSDCholesky12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv212HPSDCholesky12UpperOrLowerR6MatrixI1FE"></span><span id="HPSDCholesky__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HPSDCholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HPSDCholesky12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412HPSDCholesky12UpperOrLowerR10DistMatrixI1FE">
+<span id="_CPPv312HPSDCholesky12UpperOrLowerR10DistMatrixI1FE"></span><span id="_CPPv212HPSDCholesky12UpperOrLowerR10DistMatrixI1FE"></span><span id="HPSDCholesky__UpperOrLower.DistMatrix:F:R"></span>void <code class="descname">HPSDCholesky</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412HPSDCholesky12UpperOrLowerR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the <cite>uplo</cite> triangle of the potentially singular matrix <cite>A</cite> with
+its Cholesky factor.</p>
+</dd></dl>
+
+<div class="section" id="cholesky-namespace">
+<h3>cholesky namespace<a class="headerlink" href="#cholesky-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:R"></span><code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.DistMatrix:F:CR.DistMatrix:F:R"></span><code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Solve linear systems using an unpivoted Cholesky factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.Matrix:F:CR.Matrix:F:R.Matrix:i:R"></span><code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK6MatrixI1FER6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixIi2VC4STARE">
+<span id="_CPPv3N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixIi2VC4STARE"></span><span id="_CPPv2N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixIi2VC4STARE"></span><span id="cholesky::SolveAfter__UpperOrLower.Orientation.DistMatrix:F:CR.DistMatrix:F:R.DistMatrix:i.VC.STAR:R"></span><code class="descclassname">cholesky<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VC4STARE" title="DistMatrix&lt;int, VC, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VCE" title="VC">VC</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8cholesky10SolveAfterE12UpperOrLower11OrientationRK10DistMatrixI1FER10DistMatrixI1FER10DistMatrixIi2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Solve linear systems using a pivoted Cholesky factorization.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="ldl-factorization">
+<h2><span class="math notranslate nohighlight">\(LDL\)</span> factorization<a class="headerlink" href="#ldl-factorization" title="Permalink to this headline">¶</a></h2>
+<dl class="enum">
+<dt id="_CPPv412LDLPivotType">
+<span id="_CPPv312LDLPivotType"></span><span id="_CPPv212LDLPivotType"></span><em class="property">enum </em><code class="descname">LDLPivotType</code><a class="headerlink" href="#_CPPv412LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For specifying a symmetric pivoting strategy.
+The current (not yet all supported) options include:</p>
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE">
+<span id="_CPPv3N12LDLPivotType15BUNCH_KAUFMAN_AE"></span><span id="_CPPv2N12LDLPivotType15BUNCH_KAUFMAN_AE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_A</code><a class="headerlink" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_CE">
+<span id="_CPPv3N12LDLPivotType15BUNCH_KAUFMAN_CE"></span><span id="_CPPv2N12LDLPivotType15BUNCH_KAUFMAN_CE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_C</code><a class="headerlink" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_CE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Not yet supported.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_DE">
+<span id="_CPPv3N12LDLPivotType15BUNCH_KAUFMAN_DE"></span><span id="_CPPv2N12LDLPivotType15BUNCH_KAUFMAN_DE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_D</code><a class="headerlink" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_DE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE">
+<span id="_CPPv3N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE"></span><span id="_CPPv2N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE"></span><em class="property">enumerator </em><code class="descname">BUNCH_KAUFMAN_BOUNDED</code><a class="headerlink" href="#_CPPv4N12LDLPivotType21BUNCH_KAUFMAN_BOUNDEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Not yet supported.</p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv4N12LDLPivotType13BUNCH_PARLETTE">
+<span id="_CPPv3N12LDLPivotType13BUNCH_PARLETTE"></span><span id="_CPPv2N12LDLPivotType13BUNCH_PARLETTE"></span><em class="property">enumerator </em><code class="descname">BUNCH_PARLETT</code><a class="headerlink" href="#_CPPv4N12LDLPivotType13BUNCH_PARLETTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48LDLPivot">
+<span id="_CPPv38LDLPivot"></span><span id="_CPPv28LDLPivot"></span><span id="LDLPivot"></span><em class="property">class </em><code class="descname">LDLPivot</code><a class="headerlink" href="#_CPPv48LDLPivot" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8LDLPivot2nbE">
+<span id="_CPPv3N8LDLPivot2nbE"></span><span id="_CPPv2N8LDLPivot2nbE"></span><span id="LDLPivot::nb__i"></span>int <code class="descname">nb</code><a class="headerlink" href="#_CPPv4N8LDLPivot2nbE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8LDLPivot4fromE">
+<span id="_CPPv3N8LDLPivot4fromE"></span><span id="_CPPv2N8LDLPivot4fromE"></span><span id="LDLPivot::from__iA"></span>int <code class="descname">from</code>[2]<a class="headerlink" href="#_CPPv4N8LDLPivot4fromE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLHR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType">
+<span id="_CPPv34LDLHR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType"></span><span id="_CPPv24LDLHR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType"></span><span id="LDLH__Matrix:F:R.Matrix:F:R.Matrix:i:R.LDLPivotType"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLTR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType">
+<span id="_CPPv34LDLTR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType"></span><span id="_CPPv24LDLTR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType"></span><span id="LDLT__Matrix:F:R.Matrix:F:R.Matrix:i:R.LDLPivotType"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR6MatrixI1FER6MatrixI1FER6MatrixIiE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLHR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType">
+<span id="_CPPv34LDLHR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType"></span><span id="_CPPv24LDLHR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType"></span><span id="LDLH__DistMatrix:F:R.DistMatrix:F.MD.STAR:R.DistMatrix:i.VC.STAR:R.LDLPivotType"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>dSub</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VC4STARE" title="DistMatrix&lt;int, VC, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VCE" title="VC">VC</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, <a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLTR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType">
+<span id="_CPPv34LDLTR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType"></span><span id="_CPPv24LDLTR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType"></span><span id="LDLT__DistMatrix:F:R.DistMatrix:F.MD.STAR:R.DistMatrix:i.VC.STAR:R.LDLPivotType"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>dSub</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VC4STARE" title="DistMatrix&lt;int, VC, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VCE" title="VC">VC</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, <a class="reference internal" href="#_CPPv412LDLPivotType" title="LDLPivotType">LDLPivotType</a> <em>pivotType</em> = <a class="reference internal" href="#_CPPv4N12LDLPivotType15BUNCH_KAUFMAN_AE" title="BUNCH_KAUFMAN_A">BUNCH_KAUFMAN_A</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VC4STARE12LDLPivotType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pivoted LDL factorization. The Bunch-Kaufman pivoting rules are used within
+a higher-performance blocked algorithm, whereas the Bunch-Parlett strategy
+uses an unblocked algorithm.</p>
+</dd></dl>
+
+<p>Though the Cholesky factorization is ideal for most HPD matrices, the
+unpivoted <cite>LDL</cite> factorizations exist as slight relaxation of the Cholesky
+factorization and compute lower-triangular (with unit diagonal) <span class="math notranslate nohighlight">\(L\)</span>
+and diagonal <span class="math notranslate nohighlight">\(D\)</span> such that <span class="math notranslate nohighlight">\(A = L D L^H\)</span> or <span class="math notranslate nohighlight">\(A = L D L^T\)</span>.
+If a zero pivot is attempted, then a <code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">ZeroPivotException</span></code> will
+be thrown.</p>
+<blockquote>
+<div><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The following routines do not pivot, so please use with caution.</p>
+</div>
+</div></blockquote>
+<dl class="function">
+<dt id="_CPPv44LDLHR6MatrixI1FE">
+<span id="_CPPv34LDLHR6MatrixI1FE"></span><span id="_CPPv24LDLHR6MatrixI1FE"></span><span id="LDLH__Matrix:F:R"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLTR6MatrixI1FE">
+<span id="_CPPv34LDLTR6MatrixI1FE"></span><span id="_CPPv24LDLTR6MatrixI1FE"></span><span id="LDLT__Matrix:F:R"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLHR10DistMatrixI1FE">
+<span id="_CPPv34LDLHR10DistMatrixI1FE"></span><span id="_CPPv24LDLHR10DistMatrixI1FE"></span><span id="LDLH__DistMatrix:F:R"></span>void <code class="descname">LDLH</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLHR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44LDLTR10DistMatrixI1FE">
+<span id="_CPPv34LDLTR10DistMatrixI1FE"></span><span id="_CPPv24LDLTR10DistMatrixI1FE"></span><span id="LDLT__DistMatrix:F:R"></span>void <code class="descname">LDLT</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44LDLTR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the strictly lower triangle of <span class="math notranslate nohighlight">\(A\)</span> with the strictly lower
+portion of <span class="math notranslate nohighlight">\(L\)</span> (<span class="math notranslate nohighlight">\(L\)</span> implicitly has ones on its diagonal) and
+the diagonal with <span class="math notranslate nohighlight">\(D\)</span>.</p>
+</dd></dl>
+
+<div class="section" id="ldl-namespace">
+<h3>ldl namespace<a class="headerlink" href="#ldl-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb"></span><span id="ldl::SolveAfter__Matrix:F:CR.Matrix:F:R.b"></span><code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK6MatrixI1FER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK10DistMatrixI1FER10DistMatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="ldl::SolveAfter__DistMatrix:F:CR.DistMatrix:F:R.b"></span><code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK10DistMatrixI1FER10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Solve linear systems using an unpivoted LDL factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb"></span><span id="ldl::SolveAfter__Matrix:F:CR.Matrix:F:CR.Matrix:i:CR.Matrix:F:R.b"></span><code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>dSub</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK6MatrixI1FERK6MatrixI1FERK6MatrixIiER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N3ldl10SolveAfterERK10DistMatrixI1FERK10DistMatrixI1F2MD4STARERK10DistMatrixIi2VC4STARER10DistMatrixI1FEb">
+<span id="_CPPv3N3ldl10SolveAfterERK10DistMatrixI1FERK10DistMatrixI1F2MD4STARERK10DistMatrixIi2VC4STARER10DistMatrixI1FEb"></span><span id="_CPPv2N3ldl10SolveAfterERK10DistMatrixI1FERK10DistMatrixI1F2MD4STARERK10DistMatrixIi2VC4STARER10DistMatrixI1FEb"></span><span id="ldl::SolveAfter__DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:i.VC.STAR:CR.DistMatrix:F:R.b"></span><code class="descclassname">ldl<code class="descclassname">::</code></code><code class="descname">SolveAfter</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>dSub</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VC4STARE" title="DistMatrix&lt;int, VC, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VCE" title="VC">VC</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em>, bool <em>conjugated</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3ldl10SolveAfterERK10DistMatrixI1FERK10DistMatrixI1F2MD4STARERK10DistMatrixIi2VC4STARER10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Solve linear systems using a pivoted LDL factorization.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="lu-factorization">
+<h2><span class="math notranslate nohighlight">\(LU\)</span> factorization<a class="headerlink" href="#lu-factorization" title="Permalink to this headline">¶</a></h2>
+<p>Given <span class="math notranslate nohighlight">\(A \in \mathbb{F}^{m \times n}\)</span>, an LU factorization
+(without pivoting) finds a unit lower-trapezoidal
+<span class="math notranslate nohighlight">\(L \in \mathbb{F}^{m \times \mbox{min}(m,n)}\)</span> and upper-trapezoidal
+<span class="math notranslate nohighlight">\(U \in \mathbb{F}^{\mbox{min}(m,n) \times n}\)</span> such that <span class="math notranslate nohighlight">\(A=LU\)</span>.
+Since <span class="math notranslate nohighlight">\(L\)</span> is required to have its diaganal entries set to one: the upper
+portion of <span class="math notranslate nohighlight">\(A\)</span> can be overwritten with <cite>U</cite>, and the strictly lower
+portion of <span class="math notranslate nohighlight">\(A\)</span> can be overwritten with the strictly lower portion of
+<span class="math notranslate nohighlight">\(L\)</span>. If <span class="math notranslate nohighlight">\(A\)</span> is found to be numerically singular, then a
+<a class="reference internal" href="../core/environment.html#_CPPv423SingularMatrixException" title="SingularMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">SingularMatrixException</span></code></a> will be thrown.</p>
+<dl class="function">
+<dt id="_CPPv42LUR6MatrixI1FE">
+<span id="_CPPv32LUR6MatrixI1FE"></span><span id="_CPPv22LUR6MatrixI1FE"></span><span id="LU__Matrix:F:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LUR10DistMatrixI1FE">
+<span id="_CPPv32LUR10DistMatrixI1FE"></span><span id="_CPPv22LUR10DistMatrixI1FE"></span><span id="LU__DistMatrix:F:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites <span class="math notranslate nohighlight">\(A\)</span> with its LU decomposition.</p>
+</dd></dl>
+
+<p>Since LU factorization without pivoting is known to be unstable for general
+matrices, it is standard practice to pivot the rows of <span class="math notranslate nohighlight">\(A\)</span> during the
+factorization (this is called partial pivoting since the columns are not also
+pivoted). An LU factorization with partial pivoting therefore computes
+<span class="math notranslate nohighlight">\(P\)</span>, <span class="math notranslate nohighlight">\(L\)</span>, and <span class="math notranslate nohighlight">\(U\)</span> such that <span class="math notranslate nohighlight">\(PA=LU\)</span>, where <span class="math notranslate nohighlight">\(L\)</span>
+and <span class="math notranslate nohighlight">\(U\)</span> are as described above and <span class="math notranslate nohighlight">\(P\)</span> is a permutation matrix.</p>
+<dl class="function">
+<dt id="_CPPv42LUR6MatrixI1FER6MatrixIiE">
+<span id="_CPPv32LUR6MatrixI1FER6MatrixIiE"></span><span id="_CPPv22LUR6MatrixI1FER6MatrixIiE"></span><span id="LU__Matrix:F:R.Matrix:i:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARE">
+<span id="_CPPv32LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARE"></span><span id="_CPPv22LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARE"></span><span id="LU__DistMatrix:F:R.DistMatrix:F.VC.STAR:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2VC4STARE" title="DistMatrix&lt;F, VC, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VCE" title="VC">VC</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites the matrix <span class="math notranslate nohighlight">\(A\)</span> with the LU decomposition of
+<span class="math notranslate nohighlight">\(PA\)</span>, where <span class="math notranslate nohighlight">\(P\)</span> is represented by the pivot vector <cite>p</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LUR6MatrixI1FER6MatrixIiER6MatrixIiE">
+<span id="_CPPv32LUR6MatrixI1FER6MatrixIiER6MatrixIiE"></span><span id="_CPPv22LUR6MatrixI1FER6MatrixIiER6MatrixIiE"></span><span id="LU__Matrix:F:R.Matrix:i:R.Matrix:i:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR6MatrixI1FER6MatrixIiER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARER10DistMatrixI1F2VC4STARE">
+<span id="_CPPv32LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARER10DistMatrixI1F2VC4STARE"></span><span id="_CPPv22LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARER10DistMatrixI1F2VC4STARE"></span><span id="LU__DistMatrix:F:R.DistMatrix:F.VC.STAR:R.DistMatrix:F.VC.STAR:R"></span>void <code class="descname">LU</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2VC4STARE" title="DistMatrix&lt;F, VC, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VCE" title="VC">VC</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2VC4STARE" title="DistMatrix&lt;F, VC, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VCE" title="VC">VC</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>q</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LUR10DistMatrixI1FER10DistMatrixI1F2VC4STARER10DistMatrixI1F2VC4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrites the matrix <span class="math notranslate nohighlight">\(A\)</span> with the LU decomposition of
+<span class="math notranslate nohighlight">\(PAQ\)</span>, where <span class="math notranslate nohighlight">\(P\)</span> is represented by the pivot vector <cite>p</cite>,
+and likewise for <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="lq-factorization">
+<h2><span class="math notranslate nohighlight">\(LQ\)</span> factorization<a class="headerlink" href="#lq-factorization" title="Permalink to this headline">¶</a></h2>
+<p>Given <span class="math notranslate nohighlight">\(A \in \mathbb{F}^{m \times n}\)</span>, an LQ factorization typically
+computes an implicit unitary matrix <span class="math notranslate nohighlight">\(\hat Q \in \mathbb{F}^{n \times n}\)</span>
+such that <span class="math notranslate nohighlight">\(\hat L \equiv A\hat Q^H\)</span> is lower trapezoidal. One can then
+form the thin factors <span class="math notranslate nohighlight">\(L \in \mathbb{F}^{m \times \mbox{min}(m,n)}\)</span> and
+<span class="math notranslate nohighlight">\(Q \in \mathbb{F}^{\mbox{min}(m,n) \times n}\)</span> by setting
+<span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> to first <span class="math notranslate nohighlight">\(\mbox{min}(m,n)\)</span> columns and rows of
+<span class="math notranslate nohighlight">\(\hat L\)</span> and <span class="math notranslate nohighlight">\(\hat Q\)</span>, respectively. Upon completion <span class="math notranslate nohighlight">\(L\)</span> is
+stored in the lower trapezoid of <span class="math notranslate nohighlight">\(A\)</span> and the Householder reflectors
+representing <span class="math notranslate nohighlight">\(\hat Q\)</span> are stored within the rows of the strictly upper
+trapezoid.</p>
+<dl class="function">
+<dt id="_CPPv42LQR6MatrixI1FE">
+<span id="_CPPv32LQR6MatrixI1FE"></span><span id="_CPPv22LQR6MatrixI1FE"></span><span id="LQ__Matrix:F:R"></span>void <code class="descname">LQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LQR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LQR10DistMatrixI1FE">
+<span id="_CPPv32LQR10DistMatrixI1FE"></span><span id="_CPPv22LQR10DistMatrixI1FE"></span><span id="LQ__DistMatrix:F:R"></span>void <code class="descname">LQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LQR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LQR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv32LQR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv22LQR6MatrixI1FER6MatrixI1FE"></span><span id="LQ__Matrix:F:R.Matrix:F:R"></span>void <code class="descname">LQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LQR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42LQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE">
+<span id="_CPPv32LQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE"></span><span id="_CPPv22LQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE"></span><span id="LQ__DistMatrix:F:R.DistMatrix:F.MD.STAR:R"></span>void <code class="descname">LQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42LQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the complex matrix <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(L\)</span> and the
+Householder reflectors representing <span class="math notranslate nohighlight">\(\hat Q\)</span>. The scalings for the
+Householder reflectors are stored in the vector <cite>t</cite>.</p>
+</dd></dl>
+
+<div class="section" id="lq-namespace">
+<h3>lq namespace<a class="headerlink" href="#lq-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N2lq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N2lq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N2lq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="lq::ApplyQ__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">lq<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv3N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv2N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="lq::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">lq<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="lq::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">lq<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2lq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the implicitly-defined <span class="math notranslate nohighlight">\(Q\)</span> (or its adjoint) stored within
+<cite>A</cite> and <cite>t</cite> from either the left or the right to <span class="math notranslate nohighlight">\(B\)</span>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="qr-factorization">
+<h2><span class="math notranslate nohighlight">\(QR\)</span> factorization<a class="headerlink" href="#qr-factorization" title="Permalink to this headline">¶</a></h2>
+<p>Given <span class="math notranslate nohighlight">\(A \in \mathbb{F}^{m \times n}\)</span>, a QR factorization typically
+computes an implicit unitary matrix <span class="math notranslate nohighlight">\(\hat Q \in \mathbb{F}^{m \times m}\)</span>
+such that <span class="math notranslate nohighlight">\(\hat R \equiv \hat Q^H A\)</span> is upper trapezoidal. One can then
+form the thin factors <span class="math notranslate nohighlight">\(Q \in \mathbb{F}^{m \times \mbox{min}(m,n)}\)</span> and
+<span class="math notranslate nohighlight">\(R \in \mathbb{F}^{\mbox{min}(m,n) \times n}\)</span> by setting
+<span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(R\)</span> to first <span class="math notranslate nohighlight">\(\mbox{min}(m,n)\)</span> columns and rows of
+<span class="math notranslate nohighlight">\(\hat Q\)</span> and <span class="math notranslate nohighlight">\(\hat R\)</span>, respectively. Upon completion <span class="math notranslate nohighlight">\(R\)</span> is
+stored in the upper trapezoid of <span class="math notranslate nohighlight">\(A\)</span> and the Householder reflectors
+representing <span class="math notranslate nohighlight">\(\hat Q\)</span> are stored within the columns of the strictly lower
+trapezoid.</p>
+<dl class="function">
+<dt id="_CPPv42QRR6MatrixI1FE">
+<span id="_CPPv32QRR6MatrixI1FE"></span><span id="_CPPv22QRR6MatrixI1FE"></span><span id="QR__Matrix:F:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR10DistMatrixI1FE">
+<span id="_CPPv32QRR10DistMatrixI1FE"></span><span id="_CPPv22QRR10DistMatrixI1FE"></span><span id="QR__DistMatrix:F:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv32QRR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv22QRR6MatrixI1FER6MatrixI1FE"></span><span id="QR__Matrix:F:R.Matrix:F:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARE">
+<span id="_CPPv32QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARE"></span><span id="_CPPv22QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARE"></span><span id="QR__DistMatrix:F:R.DistMatrix:F.MD.STAR:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the complex matrix <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(R\)</span> and the
+Householder reflectors representing <span class="math notranslate nohighlight">\(\hat Q\)</span>. The scalings for the
+Householder reflectors are stored in the vector <cite>t</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR6MatrixI1FER6MatrixIiE">
+<span id="_CPPv32QRR6MatrixI1FER6MatrixIiE"></span><span id="_CPPv22QRR6MatrixI1FER6MatrixIiE"></span><span id="QR__Matrix:F:R.Matrix:i:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR10DistMatrixI1FER10DistMatrixIi2VR4STARE">
+<span id="_CPPv32QRR10DistMatrixI1FER10DistMatrixIi2VR4STARE"></span><span id="_CPPv22QRR10DistMatrixI1FER10DistMatrixIi2VR4STARE"></span><span id="QR__DistMatrix:F:R.DistMatrix:i.VR.STAR:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR10DistMatrixI1FER10DistMatrixIi2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR6MatrixI1FER6MatrixI1FER6MatrixIiE">
+<span id="_CPPv32QRR6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="_CPPv22QRR6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="QR__Matrix:F:R.Matrix:F:R.Matrix:i:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR6MatrixI1FER6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE">
+<span id="_CPPv32QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE"></span><span id="_CPPv22QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE"></span><span id="QR__DistMatrix:F:R.DistMatrix:F.MD.STAR:R.DistMatrix:i.VR.STAR:R"></span>void <code class="descname">QR</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42QRR10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column-pivoted QR factorization. The current implementation uses
+Businger-Golub pivoting.</p>
+</dd></dl>
+
+<div class="section" id="qr-namespace">
+<h3>qr namespace<a class="headerlink" href="#qr-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER6MatrixI1FEb">
+<span id="_CPPv3N2qr8ExplicitER6MatrixI1FEb"></span><span id="_CPPv2N2qr8ExplicitER6MatrixI1FEb"></span><span id="qr::Explicit__Matrix:F:R.b"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>colPiv</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER10DistMatrixI1FEb">
+<span id="_CPPv3N2qr8ExplicitER10DistMatrixI1FEb"></span><span id="_CPPv2N2qr8ExplicitER10DistMatrixI1FEb"></span><span id="qr::Explicit__DistMatrix:F:R.b"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>colPiv</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite <span class="math notranslate nohighlight">\(A\)</span> with the orthogonal matrix from its QR factorization
+(with or without column pivoting).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER6MatrixI1FER6MatrixI1FEb">
+<span id="_CPPv3N2qr8ExplicitER6MatrixI1FER6MatrixI1FEb"></span><span id="_CPPv2N2qr8ExplicitER6MatrixI1FER6MatrixI1FEb"></span><span id="qr::Explicit__Matrix:F:R.Matrix:F:R.b"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>R</em>, bool <em>colPiv</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER6MatrixI1FER6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr8ExplicitER10DistMatrixI1FER10DistMatrixI1FEb">
+<span id="_CPPv3N2qr8ExplicitER10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="_CPPv2N2qr8ExplicitER10DistMatrixI1FER10DistMatrixI1FEb"></span><span id="qr::Explicit__DistMatrix:F:R.DistMatrix:F:R.b"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">Explicit</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>R</em>, bool <em>colPiv</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr8ExplicitER10DistMatrixI1FER10DistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Additionally explicitly return the <span class="math notranslate nohighlight">\(R\)</span> from the QR factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="qr::ApplyQ__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv3N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv2N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="qr::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="qr::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the implicitly-defined <span class="math notranslate nohighlight">\(Q\)</span> (or its adjoint) stored within
+<cite>A</cite> and <cite>t</cite> from either the left or the right to <span class="math notranslate nohighlight">\(B\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixIiE">
+<span id="_CPPv3N2qr13BusingerGolubER6MatrixI1FER6MatrixIiE"></span><span id="_CPPv2N2qr13BusingerGolubER6MatrixI1FER6MatrixIiE"></span><span id="qr::BusingerGolub__Matrix:F:R.Matrix:i:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STARE">
+<span id="_CPPv3N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STARE"></span><span id="_CPPv2N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STARE"></span><span id="qr::BusingerGolub__DistMatrix:F:R.DistMatrix:i.VR.STAR:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiE">
+<span id="_CPPv3N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="_CPPv2N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiE"></span><span id="qr::BusingerGolub__Matrix:F:R.Matrix:F:R.Matrix:i:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE">
+<span id="_CPPv3N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE"></span><span id="_CPPv2N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE"></span><span id="qr::BusingerGolub__DistMatrix:F:R.DistMatrix:F.MD.STAR:R.DistMatrix:i.VR.STAR:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Column-pivoted versions of the above routines which use the Businger/Golub
+strategy, i.e., the pivot is chosen as the remaining column with maximum
+two norm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi">
+<span id="_CPPv3N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi"></span><span id="_CPPv2N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi"></span><span id="qr::BusingerGolub__Matrix:F:R.Matrix:i:R.i"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, int <em>numSteps</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi">
+<span id="_CPPv3N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi"></span><span id="_CPPv2N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi"></span><span id="qr::BusingerGolub__DistMatrix:F:R.DistMatrix:i.VR.STAR:R.i"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, int <em>numSteps</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi">
+<span id="_CPPv3N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi"></span><span id="_CPPv2N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi"></span><span id="qr::BusingerGolub__Matrix:F:R.Matrix:F:R.Matrix:i:R.i"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, int <em>numSteps</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi">
+<span id="_CPPv3N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi"></span><span id="_CPPv2N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi"></span><span id="qr::BusingerGolub__DistMatrix:F:R.DistMatrix:F.MD.STAR:R.DistMatrix:i.VR.STAR:R.i"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, int <em>numSteps</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Same as above, but only execute a fixed number of steps of the rank-revealing
+factorization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi4BaseI1FE">
+<span id="_CPPv3N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi4BaseI1FE"></span><span id="_CPPv2N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi4BaseI1FE"></span><span id="qr::BusingerGolub__Matrix:F:R.Matrix:i:R.i.Base:F:"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixIiEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi4BaseI1FE">
+<span id="_CPPv3N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi4BaseI1FE"></span><span id="_CPPv2N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi4BaseI1FE"></span><span id="qr::BusingerGolub__DistMatrix:F:R.DistMatrix:i.VR.STAR:R.i.Base:F:"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixIi2VR4STAREi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi4BaseI1FE">
+<span id="_CPPv3N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi4BaseI1FE"></span><span id="_CPPv2N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi4BaseI1FE"></span><span id="qr::BusingerGolub__Matrix:F:R.Matrix:F:R.Matrix:i:R.i.Base:F:"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER6MatrixI1FER6MatrixI1FER6MatrixIiEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi4BaseI1FE">
+<span id="_CPPv3N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi4BaseI1FE"></span><span id="_CPPv2N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi4BaseI1FE"></span><span id="qr::BusingerGolub__DistMatrix:F:R.DistMatrix:F.MD.STAR:R.DistMatrix:i.VR.STAR:R.i.Base:F:"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">BusingerGolub</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr13BusingerGolubER10DistMatrixI1FER10DistMatrixI1F2MD4STARER10DistMatrixIi2VR4STAREi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Either execute <cite>maxSteps</cite> iterations or stop after the maximum remaining
+column norm is less than or equal to <cite>tol</cite> times the maximum original column
+norm.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IE8TreeDataI1FE">
+<span id="_CPPv3IE8TreeDataI1FE"></span><span id="_CPPv2IE8TreeDataI1FE"></span>template&lt;&gt;<br /><em class="property">class </em><code class="descname">TreeData</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE8TreeDataI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE3QR0E">
+<span id="_CPPv3N8TreeDataI1FE3QR0E"></span><span id="_CPPv2N8TreeDataI1FE3QR0E"></span><span id="TreeData:F:::QR0__Matrix:F:"></span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; <code class="descname">QR0</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE3QR0E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initial QR factorization</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE2t0E">
+<span id="_CPPv3N8TreeDataI1FE2t0E"></span><span id="_CPPv2N8TreeDataI1FE2t0E"></span><span id="TreeData:F:::t0__Matrix:F:"></span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; <code class="descname">t0</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE2t0E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Phases from initial QR factorization</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE6QRListE">
+<span id="_CPPv3N8TreeDataI1FE6QRListE"></span><span id="_CPPv2N8TreeDataI1FE6QRListE"></span><span id="TreeData:F:::QRList__std::vector:Matrix:F::"></span>std::vector&lt;<a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt;&gt; <code class="descname">QRList</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE6QRListE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factorizations within reduction tree</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N8TreeDataI1FE5tListE">
+<span id="_CPPv3N8TreeDataI1FE5tListE"></span><span id="_CPPv2N8TreeDataI1FE5tListE"></span><span id="TreeData:F:::tList__std::vector:Matrix:F::"></span>std::vector&lt;<a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt;&gt; <code class="descname">tList</code><a class="headerlink" href="#_CPPv4N8TreeDataI1FE5tListE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Phases within reduction tree</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr2TSERK10DistMatrixI1F1U4STARE">
+<span id="_CPPv3N2qr2TSERK10DistMatrixI1F1U4STARE"></span><span id="_CPPv2N2qr2TSERK10DistMatrixI1F1U4STARE"></span><span id="qr::TS__DistMatrix:F.U.STAR:CR"></span>qr::TreeData&lt;F&gt; <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">TS</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;F, U, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr2TSERK10DistMatrixI1F1U4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms an implicit tall-skinny QR decomposition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr10ExplicitTSER10DistMatrixI1F1U4STARER10DistMatrixI1F4STAR4STARE">
+<span id="_CPPv3N2qr10ExplicitTSER10DistMatrixI1F1U4STARER10DistMatrixI1F4STAR4STARE"></span><span id="_CPPv2N2qr10ExplicitTSER10DistMatrixI1F1U4STARER10DistMatrixI1F4STAR4STARE"></span><span id="qr::ExplicitTS__DistMatrix:F.U.STAR:R.DistMatrix:F.STAR.STAR:R"></span>void <code class="descclassname">qr<code class="descclassname">::</code></code><code class="descname">ExplicitTS</code><span class="sig-paren">(</span>DistMatrix&lt;F, U, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>R</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr10ExplicitTSER10DistMatrixI1F1U4STARER10DistMatrixI1F4STAR4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Forms an explicit QR decomposition using a tall-skinny algorithm:
+A is overwritten with Q.</p>
+</dd></dl>
+
+<div class="section" id="qr-ts-namespace">
+<h4>qr::ts namespace<a class="headerlink" href="#qr-ts-namespace" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv4N2qr2ts5FormRERK10DistMatrixI1F1U4STARERKN2qr8TreeDataI1FEE">
+<span id="_CPPv3N2qr2ts5FormRERK10DistMatrixI1F1U4STARERKN2qr8TreeDataI1FEE"></span><span id="_CPPv2N2qr2ts5FormRERK10DistMatrixI1F1U4STARERKN2qr8TreeDataI1FEE"></span><span id="qr::ts::FormR__DistMatrix:F.U.STAR:CR.qr::TreeData:F:CR"></span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; <code class="descclassname">qr::ts<code class="descclassname">::</code></code><code class="descname">FormR</code><span class="sig-paren">(</span><em class="property">const</em> DistMatrix&lt;F, U, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, <em class="property">const</em> qr::TreeData&lt;F&gt; &amp;<em>treeData</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr2ts5FormRERK10DistMatrixI1F1U4STARERKN2qr8TreeDataI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the R from the QR decomposition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2qr2ts5FormQER10DistMatrixI1F1U4STARERN2qr8TreeDataI1FEE">
+<span id="_CPPv3N2qr2ts5FormQER10DistMatrixI1F1U4STARERN2qr8TreeDataI1FEE"></span><span id="_CPPv2N2qr2ts5FormQER10DistMatrixI1F1U4STARERN2qr8TreeDataI1FEE"></span><span id="qr::ts::FormQ__DistMatrix:F.U.STAR:R.qr::TreeData:F:R"></span>void <code class="descclassname">qr::ts<code class="descclassname">::</code></code><code class="descname">FormQ</code><span class="sig-paren">(</span>DistMatrix&lt;F, U, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>A</em>, qr::TreeData&lt;F&gt; &amp;<em>treeData</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2qr2ts5FormQER10DistMatrixI1F1U4STARERN2qr8TreeDataI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite A with the Q from the QR decomposition.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="rq-factorization">
+<h2><span class="math notranslate nohighlight">\(RQ\)</span> factorization<a class="headerlink" href="#rq-factorization" title="Permalink to this headline">¶</a></h2>
+<p>Just like an LQ factorization, but the orthogonalization process starts from the bottom row and produces a
+much sparser triangular factor when the matrix is wider than it is tall.</p>
+<dl class="function">
+<dt id="_CPPv42RQR6MatrixI1FE">
+<span id="_CPPv32RQR6MatrixI1FE"></span><span id="_CPPv22RQR6MatrixI1FE"></span><span id="RQ__Matrix:F:R"></span>void <code class="descname">RQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42RQR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42RQR10DistMatrixI1FE">
+<span id="_CPPv32RQR10DistMatrixI1FE"></span><span id="_CPPv22RQR10DistMatrixI1FE"></span><span id="RQ__DistMatrix:F:R"></span>void <code class="descname">RQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42RQR10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42RQR6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv32RQR6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv22RQR6MatrixI1FER6MatrixI1FE"></span><span id="RQ__Matrix:F:R.Matrix:F:R"></span>void <code class="descname">RQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42RQR6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42RQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE">
+<span id="_CPPv32RQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE"></span><span id="_CPPv22RQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE"></span><span id="RQ__DistMatrix:F:R.DistMatrix:F.MD.STAR:R"></span>void <code class="descname">RQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42RQR10DistMatrixI1FER10DistMatrixI1F2MD4STARE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Overwrite the complex matrix <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(R\)</span> and the
+Householder reflectors representing <span class="math notranslate nohighlight">\(\hat Q\)</span>. The scalings for the
+Householder reflectors are stored in the vector <cite>t</cite>.</p>
+</dd></dl>
+
+<div class="section" id="rq-namespace">
+<h3>rq namespace<a class="headerlink" href="#rq-namespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv4N2rq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE">
+<span id="_CPPv3N2rq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="_CPPv2N2rq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE"></span><span id="rq::ApplyQ__LeftOrRight.Orientation.Matrix:F:CR.Matrix:F:CR.Matrix:F:R"></span>void <code class="descclassname">rq<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2rq6ApplyQE11LeftOrRight11OrientationRK6MatrixI1FERK6MatrixI1FER6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE">
+<span id="_CPPv3N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="_CPPv2N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE"></span><span id="rq::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.MD.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">rq<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F2MD4STARE" title="DistMatrix&lt;F, MD, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2MDE" title="MD">MD</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F2MD4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE">
+<span id="_CPPv3N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="_CPPv2N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE"></span><span id="rq::ApplyQ__LeftOrRight.Orientation.DistMatrix:F:CR.DistMatrix:F.STAR.STAR:CR.DistMatrix:F:R"></span>void <code class="descclassname">rq<code class="descclassname">::</code></code><code class="descname">ApplyQ</code><span class="sig-paren">(</span><a class="reference internal" href="../core/environment.html#_CPPv411LeftOrRight" title="LeftOrRight">LeftOrRight</a> <em>side</em>, <a class="reference internal" href="../core/environment.html#_CPPv411Orientation" title="Orientation">Orientation</a> <em>orientation</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR4STARE" title="DistMatrix&lt;F, STAR, STAR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>t</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>B</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2rq6ApplyQE11LeftOrRight11OrientationRK10DistMatrixI1FERK10DistMatrixI1F4STAR4STARER10DistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the implicitly-defined <span class="math notranslate nohighlight">\(Q\)</span> (or its adjoint) stored within
+<cite>A</cite> and <cite>t</cite> from either the left or the right to <span class="math notranslate nohighlight">\(B\)</span>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="interpolative-decomposition-id">
+<h2>Interpolative Decomposition (ID)<a class="headerlink" href="#interpolative-decomposition-id" title="Permalink to this headline">¶</a></h2>
+<p>Interpolative Decompositions (ID’s) are closely related to pivoted QR
+factorizations and are useful for representing (approximately) low-rank
+matrices in terms of linear combinations of a few of their columns, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[A P = \hat{A} \begin{pmatrix} I &amp; Z \end{pmatrix},\]</div>
+<p>where <span class="math notranslate nohighlight">\(P\)</span> is a permutation matrix, <span class="math notranslate nohighlight">\(\hat{A}\)</span> is a small set of
+columns of <span class="math notranslate nohighlight">\(A\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> is an interpolation matrix responsible for
+representing the remaining columns in terms of the selected columns of
+<span class="math notranslate nohighlight">\(A\)</span>.</p>
+<dl class="function">
+<dt id="_CPPv42IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi">
+<span id="_CPPv32IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi"></span><span id="_CPPv22IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi"></span><span id="ID__Matrix:F:CR.Matrix:i:R.Matrix:F:R.i"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, int <em>numSteps</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi">
+<span id="_CPPv32IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi"></span><span id="_CPPv22IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi"></span><span id="ID__DistMatrix:F:CR.DistMatrix:i.VR.STAR:R.DistMatrix:F.STAR.VR:R.i"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR2VRE" title="DistMatrix&lt;F, STAR, VR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>&gt; &amp;<em>Z</em>, int <em>numSteps</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><cite>numSteps</cite> steps of a pivoted QR factorization are used to return an
+Interpolative Decomposition of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi4BaseI1FE">
+<span id="_CPPv32IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi4BaseI1FE"></span><span id="_CPPv22IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi4BaseI1FE"></span><span id="ID__Matrix:F:CR.Matrix:i:R.Matrix:F:R.i.Base:F:"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDRK6MatrixI1FER6MatrixIiER6MatrixI1FEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv42IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi4BaseI1FE">
+<span id="_CPPv32IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi4BaseI1FE"></span><span id="_CPPv22IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi4BaseI1FE"></span><span id="ID__DistMatrix:F:CR.DistMatrix:i.VR.STAR:R.DistMatrix:F.STAR.VR:R.i.Base:F:"></span>void <code class="descname">ID</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>p</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1F4STAR2VRE" title="DistMatrix&lt;F, STAR, VR&gt;">DistMatrix</a>&lt;F, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>&gt; &amp;<em>Z</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv42IDRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixI1F4STAR2VREi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Either <cite>maxSteps</cite> steps of a pivoted QR factorization are used, or
+executation stopped after the maximum remaining column norm was less than or
+equal to <cite>tol</cite> times the maximum original column norm.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="skeleton-decomposition">
+<h2>Skeleton decomposition<a class="headerlink" href="#skeleton-decomposition" title="Permalink to this headline">¶</a></h2>
+<p>Skeleton decompositions are essentially two-sided interpolative decompositions,
+but the terminology is unfortunately extremely contested. We follow the
+convention that a skeleton decomposition is an approximation</p>
+<div class="math notranslate nohighlight">
+\[A \approx A_C Z A_R,\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_C\)</span> is a (small) selection of columns of <span class="math notranslate nohighlight">\(A\)</span>,
+<span class="math notranslate nohighlight">\(A_R\)</span> is a (small) selection of rows of <span class="math notranslate nohighlight">\(A\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> is a
+(small) square matrix. When <span class="math notranslate nohighlight">\(Z\)</span> is allowed to be rectangular, it is more
+common to call this a CUR decomposition.</p>
+<dl class="function">
+<dt id="_CPPv48SkeletonRK6MatrixI1FER6MatrixIiER6MatrixIiER6MatrixI1FEi4BaseI1FE">
+<span id="_CPPv38SkeletonRK6MatrixI1FER6MatrixIiER6MatrixIiER6MatrixI1FEi4BaseI1FE"></span><span id="_CPPv28SkeletonRK6MatrixI1FER6MatrixIiER6MatrixIiER6MatrixI1FEi4BaseI1FE"></span><span id="Skeleton__Matrix:F:CR.Matrix:i:R.Matrix:i:R.Matrix:F:R.i.Base:F:"></span>void <code class="descname">Skeleton</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>pR</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixIiE" title="Matrix&lt;int&gt;">Matrix</a>&lt;int&gt; &amp;<em>pC</em>, <a class="reference internal" href="../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>Z</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48SkeletonRK6MatrixI1FER6MatrixIiER6MatrixIiER6MatrixI1FEi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48SkeletonRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixIi2VR4STAREi4BaseI1FE">
+<span id="_CPPv38SkeletonRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixIi2VR4STAREi4BaseI1FE"></span><span id="_CPPv28SkeletonRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixIi2VR4STAREi4BaseI1FE"></span><span id="Skeleton__DistMatrix:F:CR.DistMatrix:i.VR.STAR:R.DistMatrix:i.VR.STAR:R.i.Base:F:"></span>void <code class="descname">Skeleton</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixI1FE" title="DistMatrix&lt;F&gt;">DistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>pR</em>, <a class="reference internal" href="../core/dist_matrix/DM.html#_CPPv4IE10DistMatrixIi2VR4STARE" title="DistMatrix&lt;int, VR, STAR&gt;">DistMatrix</a>&lt;int, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution2VRE" title="VR">VR</a>, <a class="reference internal" href="../core/environment.html#_CPPv4N12Distribution4STARE" title="STAR">STAR</a>&gt; &amp;<em>pC</em>, int <em>maxSteps</em>, <a class="reference internal" href="../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48SkeletonRK10DistMatrixI1FER10DistMatrixIi2VR4STARER10DistMatrixIi2VR4STAREi4BaseI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Rather than returning <span class="math notranslate nohighlight">\(A_R\)</span> and <span class="math notranslate nohighlight">\(A_C\)</span>, the permutation matrices
+which implicitly define them are returned instead. At most <cite>maxSteps</cite> steps
+of a pivoted QR decomposition will be used in order to generate the
+row/column subsets, and less steps will be taken if a pivot norm is less
+than or equal to <cite>tolerance</cite> times the first pivot norm.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Square root &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sign" href="Sign.html" />
+    <link rel="prev" title="Pseudoinverse" href="Pseudoinverse.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="square-root">
+<h1>Square root<a class="headerlink" href="#square-root" title="Permalink to this headline">¶</a></h1>
+<p>A matrix <span class="math notranslate nohighlight">\(B\)</span> satisfying</p>
+<div class="math notranslate nohighlight">
+\[B^2 = A\]</div>
+<p>is referred to as the <em>square-root</em> of the matrix <span class="math notranslate nohighlight">\(A\)</span>. Such a matrix
+can easily be seen to exist when <span class="math notranslate nohighlight">\(A\)</span> is diagonalizable: if
+<span class="math notranslate nohighlight">\(A = X \Lambda X^{-1}\)</span>, then we may put</p>
+<div class="math notranslate nohighlight">
+\[B = X \sqrt{\Lambda} X^{-1},\]</div>
+<p>where each eigenvalue <span class="math notranslate nohighlight">\(\lambda = r e^{i\theta}\)</span> maps to
+<span class="math notranslate nohighlight">\(\sqrt{\lambda} = \sqrt{r} e^{i\theta/2}\)</span>.</p>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p>The current implementation for <span class="math notranslate nohighlight">\(n \times n\)</span> matrices uses the Newton
+iteration</p>
+<div class="math notranslate nohighlight">
+\[X_{k+1} := \frac{1}{2} ( X_k + X_k^{-1} A )\]</div>
+<p>and convergence is determined to occur when</p>
+<div class="math notranslate nohighlight">
+\[\| X_{k+1} - X_k \|_1 \le \| X_{k+1} \|_1^{q+1} \text{tol},\]</div>
+<p>where the exponent <span class="math notranslate nohighlight">\(q\)</span> is typically one, and the relative tolerance,
+<cite>tol</cite>, defaults to <span class="math notranslate nohighlight">\(n \epsilon\)</span>, where <span class="math notranslate nohighlight">\(\epsilon\)</span> is the machine
+precision. Please see Nicholas J. Higham and Awad H. Al-Mohy’s
+<em>Computing Matrix Functions</em> for more details.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv410SquareRootR6MatrixI1FEK14SquareRootCtrlI4BaseI1FEE">
+<span id="_CPPv310SquareRootR6MatrixI1FEK14SquareRootCtrlI4BaseI1FEE"></span><span id="_CPPv210SquareRootR6MatrixI1FEK14SquareRootCtrlI4BaseI1FEE"></span><span id="SquareRoot__Matrix:F:R.SquareRootCtrl:Base:F::C"></span>void <code class="descname">SquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> SquareRootCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = SquareRootCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410SquareRootR6MatrixI1FEK14SquareRootCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410SquareRootR18AbstractDistMatrixI1FEK14SquareRootCtrlI4BaseI1FEE">
+<span id="_CPPv310SquareRootR18AbstractDistMatrixI1FEK14SquareRootCtrlI4BaseI1FEE"></span><span id="_CPPv210SquareRootR18AbstractDistMatrixI1FEK14SquareRootCtrlI4BaseI1FEE"></span><span id="SquareRoot__AbstractDistMatrix:F:R.SquareRootCtrl:Base:F::C"></span>void <code class="descname">SquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, <em class="property">const</em> SquareRootCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt; <em>ctrl</em> = SquareRootCtrl&lt;<a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt;&gt;()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410SquareRootR18AbstractDistMatrixI1FEK14SquareRootCtrlI4BaseI1FEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE14SquareRootCtrlI4RealE">
+<span id="_CPPv3IE14SquareRootCtrlI4RealE"></span><span id="_CPPv2IE14SquareRootCtrlI4RealE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SquareRootCtrl</code>&lt;Real&gt;<a class="headerlink" href="#_CPPv4IE14SquareRootCtrlI4RealE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="member">
+<dt id="_CPPv4N14SquareRootCtrlI4RealE6maxItsE">
+<span id="_CPPv3N14SquareRootCtrlI4RealE6maxItsE"></span><span id="_CPPv2N14SquareRootCtrlI4RealE6maxItsE"></span><span id="SquareRootCtrl:Real:::maxIts__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">maxIts</code><a class="headerlink" href="#_CPPv4N14SquareRootCtrlI4RealE6maxItsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum number of Newton iterations</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14SquareRootCtrlI4RealE3tolE">
+<span id="_CPPv3N14SquareRootCtrlI4RealE3tolE"></span><span id="_CPPv2N14SquareRootCtrlI4RealE3tolE"></span><span id="SquareRootCtrl:Real:::tol__Real"></span>Real <code class="descname">tol</code><a class="headerlink" href="#_CPPv4N14SquareRootCtrlI4RealE3tolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The relative tolerance for convergence of the Newton iteration</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14SquareRootCtrlI4RealE5powerE">
+<span id="_CPPv3N14SquareRootCtrlI4RealE5powerE"></span><span id="_CPPv2N14SquareRootCtrlI4RealE5powerE"></span><span id="SquareRootCtrl:Real:::power__Real"></span>Real <code class="descname">power</code><a class="headerlink" href="#_CPPv4N14SquareRootCtrlI4RealE5powerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The power of the one norm of the new iterate that should be used to
+scale the error when checking for convergence</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N14SquareRootCtrlI4RealE8progressE">
+<span id="_CPPv3N14SquareRootCtrlI4RealE8progressE"></span><span id="_CPPv2N14SquareRootCtrlI4RealE8progressE"></span><span id="SquareRootCtrl:Real:::progress__b"></span>bool <code class="descname">progress</code><a class="headerlink" href="#_CPPv4N14SquareRootCtrlI4RealE8progressE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Whether or not to print convergence progress</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N14SquareRootCtrlI4RealE14SquareRootCtrlEv">
+<span id="_CPPv3N14SquareRootCtrlI4RealE14SquareRootCtrlEv"></span><span id="_CPPv2N14SquareRootCtrlI4RealE14SquareRootCtrlEv"></span><span id="SquareRootCtrl:Real:::SquareRootCtrl"></span><code class="descname">SquareRootCtrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N14SquareRootCtrlI4RealE14SquareRootCtrlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets <code class="docutils literal notranslate"><span class="pre">maxIts=100</span></code>, <code class="docutils literal notranslate"><span class="pre">tol=0</span></code> (which signals that matrix-dependent
+value will be computed), <code class="docutils literal notranslate"><span class="pre">power=1</span></code>, and <code class="docutils literal notranslate"><span class="pre">progress=false</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElSquareRoot_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRoot_s</code><span class="sig-paren">(</span>ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRoot_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSquareRoot_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRoot_d</code><span class="sig-paren">(</span>ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRoot_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSquareRoot_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRoot_c</code><span class="sig-paren">(</span>ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRoot_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSquareRoot_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRoot_z</code><span class="sig-paren">(</span>ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRoot_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSquareRootDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRootDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRootDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSquareRootDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRootDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRootDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSquareRootDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRootDist_c</code><span class="sig-paren">(</span>ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRootDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSquareRootDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSquareRootDist_z</code><span class="sig-paren">(</span>ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSquareRootDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><strong>TODO: Expert versions</strong></p>
+</div>
+</div>
+<div class="section" id="hermitian-positive-semi-definite">
+<h2>Hermitian Positive Semi-Definite<a class="headerlink" href="#hermitian-positive-semi-definite" title="Permalink to this headline">¶</a></h2>
+<p>Computes the Hermitian EVD, square-roots the eigenvalues, and then
+reforms the matrix. If any of the eigenvalues were sufficiently negative,
+a <a class="reference internal" href="../../core/environment.html#_CPPv422NonHPSDMatrixException" title="NonHPSDMatrixException"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">NonHPSDMatrixException</span></code></a> is thrown.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv414HPSDSquareRoot12UpperOrLowerR6MatrixI1FE">
+<span id="_CPPv314HPSDSquareRoot12UpperOrLowerR6MatrixI1FE"></span><span id="_CPPv214HPSDSquareRoot12UpperOrLowerR6MatrixI1FE"></span><span id="HPSDSquareRoot__UpperOrLower.Matrix:F:R"></span>void <code class="descname">HPSDSquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPSDSquareRoot12UpperOrLowerR6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HPSDSquareRoot12UpperOrLowerR18AbstractDistMatrixI1FE">
+<span id="_CPPv314HPSDSquareRoot12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="_CPPv214HPSDSquareRoot12UpperOrLowerR18AbstractDistMatrixI1FE"></span><span id="HPSDSquareRoot__UpperOrLower.AbstractDistMatrix:F:R"></span>void <code class="descname">HPSDSquareRoot</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPSDSquareRoot12UpperOrLowerR18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHPSDSquareRoot_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRoot_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRoot_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDSquareRoot_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRoot_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRoot_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDSquareRoot_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRoot_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRoot_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDSquareRoot_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRoot_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRoot_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDSquareRootDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRootDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_s<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRootDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDSquareRootDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRootDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_d<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRootDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDSquareRootDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRootDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_c<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRootDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPSDSquareRootDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPSDSquareRootDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElDistMatrix_z<em> A</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPSDSquareRootDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><strong>TODO: HermitianSquareRoot</strong></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

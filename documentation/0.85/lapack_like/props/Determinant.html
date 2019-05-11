@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Determinant &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Inertia" href="Inertia.html" />
+    <link rel="prev" title="Condition number" href="Condition.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="determinant">
+<h1>Determinant<a class="headerlink" href="#determinant" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/include/El/lapack_like/props/Determinant.hpp">Main header file</a></p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/tree/master/include/El/lapack_like/props/Determinant">Subroutines</a></p>
+<p>Though there are many different possible definitions of the determinant of a
+matrix <span class="math notranslate nohighlight">\(A \in \mathbb{F}^{n \times n}\)</span>, the simplest one is in terms of
+the product of the eigenvalues (including multiplicity):</p>
+<div class="math notranslate nohighlight">
+\[\mbox{det}(A) = \prod_{i=0}^{n-1} \lambda_i.\]</div>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p>Since <span class="math notranslate nohighlight">\(\mbox{det}(AB)=\mbox{det}(A)\mbox{det}(B)\)</span>, we can compute the
+determinant of an arbitrary matrix in <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> work by
+computing its LU decomposition (with partial pivoting), <span class="math notranslate nohighlight">\(PA=LU\)</span>,
+recognizing that <span class="math notranslate nohighlight">\(\mbox{det}(P)=\pm 1\)</span>
+(the <em>signature</em> of the permutation), and computing</p>
+<div class="math notranslate nohighlight">
+\[\mbox{det}(A) = \mbox{det}(P)\mbox{det}(L)\mbox{det}(U)
+              = \mbox{det}(P) \prod_{i=0}^{n-1} \upsilon_{i,i}
+              = \pm \prod_{i=0}^{n-1} \upsilon_{i,i},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\upsilon_{i,i}\)</span> is the i’th diagonal entry of <span class="math notranslate nohighlight">\(U\)</span>.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv411DeterminantRK6MatrixI1FE">
+<span id="_CPPv311DeterminantRK6MatrixI1FE"></span><span id="_CPPv211DeterminantRK6MatrixI1FE"></span><span id="Determinant__Matrix:F:CR"></span>F <code class="descname">Determinant</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411DeterminantRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411DeterminantRK18AbstractDistMatrixI1FE">
+<span id="_CPPv311DeterminantRK18AbstractDistMatrixI1FE"></span><span id="_CPPv211DeterminantRK18AbstractDistMatrixI1FE"></span><span id="Determinant__AbstractDistMatrix:F:CR"></span>F <code class="descname">Determinant</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411DeterminantRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411DeterminantR6MatrixI1FEb">
+<span id="_CPPv311DeterminantR6MatrixI1FEb"></span><span id="_CPPv211DeterminantR6MatrixI1FEb"></span><span id="Determinant__Matrix:F:R.b"></span>F <code class="descname">Determinant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411DeterminantR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411DeterminantR18AbstractDistMatrixI1FEb">
+<span id="_CPPv311DeterminantR18AbstractDistMatrixI1FEb"></span><span id="_CPPv211DeterminantR18AbstractDistMatrixI1FEb"></span><span id="Determinant__AbstractDistMatrix:F:R.b"></span>F <code class="descname">Determinant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411DeterminantR18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the determinant of the (fully populated) square matrix <cite>A</cite>.
+Some of the variants allow for overwriting the input matrix in order to
+avoid forming another temporary matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415SafeDeterminantRK6MatrixI1FE">
+<span id="_CPPv315SafeDeterminantRK6MatrixI1FE"></span><span id="_CPPv215SafeDeterminantRK6MatrixI1FE"></span><span id="SafeDeterminant__Matrix:F:CR"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeDeterminant</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415SafeDeterminantRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415SafeDeterminantRK18AbstractDistMatrixI1FE">
+<span id="_CPPv315SafeDeterminantRK18AbstractDistMatrixI1FE"></span><span id="_CPPv215SafeDeterminantRK18AbstractDistMatrixI1FE"></span><span id="SafeDeterminant__AbstractDistMatrix:F:CR"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeDeterminant</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415SafeDeterminantRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415SafeDeterminantR6MatrixI1FEb">
+<span id="_CPPv315SafeDeterminantR6MatrixI1FEb"></span><span id="_CPPv215SafeDeterminantR6MatrixI1FEb"></span><span id="SafeDeterminant__Matrix:F:R.b"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415SafeDeterminantR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415SafeDeterminantR18AbstractDistMatrixI1FEb">
+<span id="_CPPv315SafeDeterminantR18AbstractDistMatrixI1FEb"></span><span id="_CPPv215SafeDeterminantR18AbstractDistMatrixI1FEb"></span><span id="SafeDeterminant__AbstractDistMatrix:F:R.b"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415SafeDeterminantR18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the determinant of the square matrix <cite>A</cite> in an expanded form
+which is less likely to over/under-flow.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IE11SafeProductI1FE">
+<span id="_CPPv3IE11SafeProductI1FE"></span><span id="_CPPv2IE11SafeProductI1FE"></span>template&lt;&gt;<br /><em class="property">type </em><code class="descname">SafeProduct</code>&lt;F&gt;<a class="headerlink" href="#_CPPv4IE11SafeProductI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Represents the product of <cite>n</cite> values as <span class="math notranslate nohighlight">\(\rho \exp(\kappa n)\)</span>,
+where <span class="math notranslate nohighlight">\(|\rho| \le 1\)</span> and <span class="math notranslate nohighlight">\(\kappa \in \mathbb{R}\)</span>.</p>
+<dl class="member">
+<dt id="_CPPv4N11SafeProductI1FE3rhoE">
+<span id="_CPPv3N11SafeProductI1FE3rhoE"></span><span id="_CPPv2N11SafeProductI1FE3rhoE"></span><span id="SafeProduct:F:::rho__F"></span>F <code class="descname">rho</code><a class="headerlink" href="#_CPPv4N11SafeProductI1FE3rhoE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>For nonzero values, <cite>rho</cite> is the modulus and lies <em>on</em> the unit
+circle; in order to represent a value that is precisely zero, <cite>rho</cite>
+is set to zero.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N11SafeProductI1FE5kappaE">
+<span id="_CPPv3N11SafeProductI1FE5kappaE"></span><span id="_CPPv2N11SafeProductI1FE5kappaE"></span><span id="SafeProduct:F:::kappa__Base:F:"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">kappa</code><a class="headerlink" href="#_CPPv4N11SafeProductI1FE5kappaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><cite>kappa</cite> can be an arbitrary real number.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N11SafeProductI1FE1nE">
+<span id="_CPPv3N11SafeProductI1FE1nE"></span><span id="_CPPv2N11SafeProductI1FE1nE"></span><span id="SafeProduct:F:::n__Int"></span><a class="reference internal" href="../../core/environment.html#_CPPv43Int" title="Int">Int</a> <code class="descname">n</code><a class="headerlink" href="#_CPPv4N11SafeProductI1FE1nE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of values in the product.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElDeterminant_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminant_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, float*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminant_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElDeterminant_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminant_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, double*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminant_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElDeterminant_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminant_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminant_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElDeterminant_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminant_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminant_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElDeterminantDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminantDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, float*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminantDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElDeterminantDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminantDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, double*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminantDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElDeterminantDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminantDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.complex_float" title="complex_float">complex_float</a>*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminantDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElDeterminantDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElDeterminantDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, <a class="reference internal" href="../../core/environment.html#c.complex_double" title="complex_double">complex_double</a>*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElDeterminantDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the determinant of the (fully populated) square matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminant_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminant_s</code><span class="sig-paren">(</span>ElConstMatrix_s<em> A</em>, ElSafeProduct_s*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminant_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminant_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminant_d</code><span class="sig-paren">(</span>ElConstMatrix_d<em> A</em>, ElSafeProduct_d*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminant_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminant_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminant_c</code><span class="sig-paren">(</span>ElConstMatrix_c<em> A</em>, ElSafeProduct_c*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminant_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminant_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminant_z</code><span class="sig-paren">(</span>ElConstMatrix_z<em> A</em>, ElSafeProduct_z*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminant_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminantDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminantDist_s</code><span class="sig-paren">(</span>ElConstDistMatrix_s<em> A</em>, ElSafeProduct_s*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminantDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminantDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminantDist_d</code><span class="sig-paren">(</span>ElConstDistMatrix_d<em> A</em>, ElSafeProduct_d*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminantDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminantDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminantDist_c</code><span class="sig-paren">(</span>ElConstDistMatrix_c<em> A</em>, ElSafeProduct_c*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminantDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElSafeDeterminantDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElSafeDeterminantDist_z</code><span class="sig-paren">(</span>ElConstDistMatrix_z<em> A</em>, ElSafeProduct_z*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElSafeDeterminantDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the determinant of the (fully populated) square matrix <cite>A</cite> in an
+expanded form which helps prevent under/overflow.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="hpd">
+<h2>HPD<a class="headerlink" href="#hpd" title="Permalink to this headline">¶</a></h2>
+<p>A version of the above determinant specialized for Hermitian positive-definite
+matrices (which will therefore have all positive eigenvalues and a positive
+determinant).</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv414HPDDeterminant12UpperOrLowerRK6MatrixI1FE">
+<span id="_CPPv314HPDDeterminant12UpperOrLowerRK6MatrixI1FE"></span><span id="_CPPv214HPDDeterminant12UpperOrLowerRK6MatrixI1FE"></span><span id="HPDDeterminant__UpperOrLower.Matrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">HPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPDDeterminant12UpperOrLowerRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE">
+<span id="_CPPv314HPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="_CPPv214HPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="HPDDeterminant__UpperOrLower.AbstractDistMatrix:F:CR"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">HPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HPDDeterminant12UpperOrLowerR6MatrixI1FEb">
+<span id="_CPPv314HPDDeterminant12UpperOrLowerR6MatrixI1FEb"></span><span id="_CPPv214HPDDeterminant12UpperOrLowerR6MatrixI1FEb"></span><span id="HPDDeterminant__UpperOrLower.Matrix:F:R.b"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">HPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPDDeterminant12UpperOrLowerR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414HPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb">
+<span id="_CPPv314HPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="_CPPv214HPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="HPDDeterminant__UpperOrLower.AbstractDistMatrix:F:R.b"></span><a class="reference internal" href="../../core/environment.html#_CPPv4IE4BaseI1FE" title="Base&lt;F&gt;">Base</a>&lt;F&gt; <code class="descname">HPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414HPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the determinant of the (fully populated) Hermitian positive-definite
+matrix <cite>A</cite>.
+Some of the variants allow for overwriting the input matrix in order to
+avoid forming another temporary matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418SafeHPDDeterminant12UpperOrLowerRK6MatrixI1FE">
+<span id="_CPPv318SafeHPDDeterminant12UpperOrLowerRK6MatrixI1FE"></span><span id="_CPPv218SafeHPDDeterminant12UpperOrLowerRK6MatrixI1FE"></span><span id="SafeHPDDeterminant__UpperOrLower.Matrix:F:CR"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeHPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418SafeHPDDeterminant12UpperOrLowerRK6MatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418SafeHPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE">
+<span id="_CPPv318SafeHPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="_CPPv218SafeHPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE"></span><span id="SafeHPDDeterminant__UpperOrLower.AbstractDistMatrix:F:CR"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeHPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <em class="property">const</em> <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418SafeHPDDeterminant12UpperOrLowerRK18AbstractDistMatrixI1FE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418SafeHPDDeterminant12UpperOrLowerR6MatrixI1FEb">
+<span id="_CPPv318SafeHPDDeterminant12UpperOrLowerR6MatrixI1FEb"></span><span id="_CPPv218SafeHPDDeterminant12UpperOrLowerR6MatrixI1FEb"></span><span id="SafeHPDDeterminant__UpperOrLower.Matrix:F:R.b"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeHPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/matrix.html#_CPPv4IE6MatrixI1FE" title="Matrix&lt;F&gt;">Matrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418SafeHPDDeterminant12UpperOrLowerR6MatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418SafeHPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb">
+<span id="_CPPv318SafeHPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="_CPPv218SafeHPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb"></span><span id="SafeHPDDeterminant__UpperOrLower.AbstractDistMatrix:F:R.b"></span><a class="reference internal" href="#_CPPv4IE11SafeProductI1FE" title="SafeProduct&lt;F&gt;">SafeProduct</a>&lt;F&gt; <code class="descname">SafeHPDDeterminant</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#_CPPv412UpperOrLower" title="UpperOrLower">UpperOrLower</a> <em>uplo</em>, <a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1FE" title="AbstractDistMatrix&lt;F&gt;">AbstractDistMatrix</a>&lt;F&gt; &amp;<em>A</em>, bool <em>canOverwrite</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418SafeHPDDeterminant12UpperOrLowerR18AbstractDistMatrixI1FEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Return the determinant of the Hermitian positive-definite matrix <cite>A</cite> in an
+expanded form which is less likely to over/under-flow.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElHPDDeterminant_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminant_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_s<em> A</em>, float*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminant_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDDeterminant_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminant_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_d<em> A</em>, double*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminant_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDDeterminant_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminant_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, float*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminant_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDDeterminant_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminant_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, double*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminant_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDDeterminantDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminantDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_s<em> A</em>, float*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminantDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDDeterminantDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminantDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_d<em> A</em>, double*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminantDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDDeterminantDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminantDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, float*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminantDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDDeterminantDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDDeterminantDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, double*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDDeterminantDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the determinant of the (fully populated) Hermitian positive-definite
+matrix <cite>A</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminant_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminant_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_s<em> A</em>, ElSafeProduct_s*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminant_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminant_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminant_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_d<em> A</em>, ElSafeProduct_d*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminant_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminant_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminant_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_c<em> A</em>, ElSafeProduct_s*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminant_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminant_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminant_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstMatrix_z<em> A</em>, ElSafeProduct_d*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminant_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminantDist_s">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminantDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_s<em> A</em>, ElSafeProduct_s*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminantDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminantDist_d">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminantDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_d<em> A</em>, ElSafeProduct_d*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminantDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminantDist_c">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminantDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_c<em> A</em>, ElSafeProduct_s*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminantDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElHPDSafeDeterminantDist_z">
+<a class="reference internal" href="../../core/environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElHPDSafeDeterminantDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/environment.html#c.ElUpperOrLower" title="ElUpperOrLower">ElUpperOrLower</a><em> uplo</em>, ElConstDistMatrix_z<em> A</em>, ElSafeProduct_d*<em> det</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElHPDSafeDeterminantDist_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the determinant of the Hermitian positive-definite matrix <cite>A</cite> in an
+expanded form which is less likely to over/under-flow.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Clip &mdash; Elemental</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Frobenius prox" href="FrobeniusProx.html" />
+    <link rel="prev" title="Proximal maps" href="../prox.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Elemental
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.86
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tour.html">A brief tour of the library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build.html">Build system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">Core functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../blas_like.html">BLAS-like linear algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lapack_like.html">LAPACK-like linear algebra</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../optimization.html">Optimization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models.html">Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../prox.html">Proximal maps</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Clip</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lower-clip">Lower clip</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#upper-clip">Upper clip</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interval-clip">Interval clip</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="FrobeniusProx.html">Frobenius prox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="HingeLossProx.html">Hinge-loss prox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LogisticProx.html">Logistic prox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SVT.html">Singular-value soft-thresholding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SoftThreshold.html">Soft-thresholding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../control.html">Control theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrices.html">Special matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">Input/output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Elemental</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../optimization.html">Optimization</a> &raquo;</li>
+        
+          <li><a href="../prox.html">Proximal maps</a> &raquo;</li>
+        
+      <li>Clip</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/optimization/prox/Clip.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="clip">
+<h1>Clip<a class="headerlink" href="#clip" title="Permalink to this headline">¶</a></h1>
+<p>Force every entry of a matrix to lie within a given (half-)interval.</p>
+<p><a class="reference external" href="https://github.com/elemental/Elemental/blob/master/src/optimization/prox/Clip.cpp">Implementations</a></p>
+<div class="section" id="lower-clip">
+<h2>Lower clip<a class="headerlink" href="#lower-clip" title="Permalink to this headline">¶</a></h2>
+<p>Force every entry to be at least <cite>lowerBound</cite>.</p>
+<div class="section" id="c-api">
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv49LowerClipR6MatrixI4RealE4Real">
+<span id="_CPPv39LowerClipR6MatrixI4RealE4Real"></span><span id="_CPPv29LowerClipR6MatrixI4RealE4Real"></span><span id="LowerClip__Matrix:Real:R.Real"></span>void <code class="descname">LowerClip</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LowerClipR6MatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49LowerClipR18AbstractDistMatrixI4RealE4Real">
+<span id="_CPPv39LowerClipR18AbstractDistMatrixI4RealE4Real"></span><span id="_CPPv29LowerClipR18AbstractDistMatrixI4RealE4Real"></span><span id="LowerClip__AbstractDistMatrix:Real:R.Real"></span>void <code class="descname">LowerClip</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49LowerClipR18AbstractDistMatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElLowerClip_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLowerClip_s</code><span class="sig-paren">(</span>ElMatrix_s<em> X</em>, float<em> lowerBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLowerClip_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLowerClip_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLowerClip_d</code><span class="sig-paren">(</span>ElMatrix_d<em> X</em>, double<em> lowerBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLowerClip_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLowerClipDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLowerClipDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> X</em>, float<em> lowerBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLowerClipDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLowerClipDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLowerClipDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> X</em>, double<em> lowerBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLowerClipDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="upper-clip">
+<h2>Upper clip<a class="headerlink" href="#upper-clip" title="Permalink to this headline">¶</a></h2>
+<p>Force every entry to be at most <cite>upperBound</cite>.</p>
+<div class="section" id="id2">
+<h3>C++ API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv49UpperClipR6MatrixI4RealE4Real">
+<span id="_CPPv39UpperClipR6MatrixI4RealE4Real"></span><span id="_CPPv29UpperClipR6MatrixI4RealE4Real"></span><span id="UpperClip__Matrix:Real:R.Real"></span>void <code class="descname">UpperClip</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>upperBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49UpperClipR6MatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49UpperClipR18AbstractDistMatrixI4RealE4Real">
+<span id="_CPPv39UpperClipR18AbstractDistMatrixI4RealE4Real"></span><span id="_CPPv29UpperClipR18AbstractDistMatrixI4RealE4Real"></span><span id="UpperClip__AbstractDistMatrix:Real:R.Real"></span>void <code class="descname">UpperClip</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>upperBound</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49UpperClipR18AbstractDistMatrixI4RealE4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h3>C API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElUpperClip_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElUpperClip_s</code><span class="sig-paren">(</span>ElMatrix_s<em> X</em>, float<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElUpperClip_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElUpperClip_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElUpperClip_d</code><span class="sig-paren">(</span>ElMatrix_d<em> X</em>, double<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElUpperClip_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElUpperClipDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElUpperClipDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> X</em>, float<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElUpperClipDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElUpperClipDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElUpperClipDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> X</em>, double<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElUpperClipDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="interval-clip">
+<h2>Interval clip<a class="headerlink" href="#interval-clip" title="Permalink to this headline">¶</a></h2>
+<p>Force every entry to lie within the interval defined by <cite>lowerBound</cite> and
+<cite>upperBound</cite>.</p>
+<div class="section" id="id4">
+<h3>C++ API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="_CPPv44ClipR6MatrixI4RealE4Real4Real">
+<span id="_CPPv34ClipR6MatrixI4RealE4Real4Real"></span><span id="_CPPv24ClipR6MatrixI4RealE4Real4Real"></span><span id="Clip__Matrix:Real:R.Real.Real"></span>void <code class="descname">Clip</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/matrix/cxx.html#_CPPv4IE6MatrixI4RealE" title="Matrix&lt;Real&gt;">Matrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0, Real <em>upperBound</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ClipR6MatrixI4RealE4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44ClipR18AbstractDistMatrixI4RealE4Real4Real">
+<span id="_CPPv34ClipR18AbstractDistMatrixI4RealE4Real4Real"></span><span id="_CPPv24ClipR18AbstractDistMatrixI4RealE4Real4Real"></span><span id="Clip__AbstractDistMatrix:Real:R.Real.Real"></span>void <code class="descname">Clip</code><span class="sig-paren">(</span><a class="reference internal" href="../../core/dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI4RealE" title="AbstractDistMatrix&lt;Real&gt;">AbstractDistMatrix</a>&lt;Real&gt; &amp;<em>X</em>, Real <em>lowerBound</em> = 0, Real <em>upperBound</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44ClipR18AbstractDistMatrixI4RealE4Real4Real" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h3>C API<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.ElClip_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElClip_s</code><span class="sig-paren">(</span>ElMatrix_s<em> X</em>, float<em> lowerBound</em>, float<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElClip_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElClip_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElClip_d</code><span class="sig-paren">(</span>ElMatrix_d<em> X</em>, double<em> lowerBound</em>, double<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElClip_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElClipDist_s">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElClipDist_s</code><span class="sig-paren">(</span>ElDistMatrix_s<em> X</em>, float<em> lowerBound</em>, float<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElClipDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElClipDist_d">
+<a class="reference internal" href="../../core/environment/error.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElClipDist_d</code><span class="sig-paren">(</span>ElDistMatrix_d<em> X</em>, double<em> lowerBound</em>, double<em> upperBound</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElClipDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="FrobeniusProx.html" class="btn btn-neutral float-right" title="Frobenius prox" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../prox.html" class="btn btn-neutral float-left" title="Proximal maps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2009-2016, Jack Poulson
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

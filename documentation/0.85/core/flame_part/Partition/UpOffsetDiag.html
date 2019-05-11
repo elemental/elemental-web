@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Up an offset diagonal &#8212; Elemental</title>
+    <link rel="stylesheet" href="../../../_static/elemental.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Repartitioning" href="../Repartition.html" />
+    <link rel="prev" title="Up the main diagonal" href="UpDiag.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+<script>
+  videojs.options.flash.swf = "/videos/video-js.swf";
+</script>
+
+<link rel="stylesheet" href="../../../_static/featured.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="../../../_static/slides.min.jquery.js"></script>
+  <script>
+	$(function(){
+		$('#products').slides({
+			preload: true,
+			preloadImage: 'img/loading.gif',
+			effect: 'slide, fade',
+			crossfade: true,
+			slideSpeed: 350,
+			fadeSpeed: 500,
+			generateNextPrev: false,
+			generatePagination: false,
+	                play: 5000,
+                        hoverPause: false,
+                        animationStart: function(current){
+				$('.caption').animate({
+					bottom:-35
+				},100);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationStart on slide: ', current);
+				};
+			},
+			animationComplete: function(current){
+				$('.caption').animate({
+					bottom:0
+				},200);
+				if (window.console && console.log) {
+					// example return of current slide number
+					console.log('animationComplete on slide: ', current);
+				};
+			},
+			slidesLoaded: function() {
+				$('.caption').animate({
+					bottom:0
+				},200);
+			}
+		});
+	});
+  </script>
+
+
+<link rel="shortcut icon" href="../../../_static/elemental.ico" />
+
+
+  </head><body>
+<div class="wrapper">
+  <a href="/"><img src="../../../_static/elemental.png" height="125px" alt="Elemental Banner" /></a>
+  <div id="access">
+    <div class="menu">
+      <ul>
+	<li class="page_item"><a href="/about/" title="Find out more about Elemental">About</a></li>
+	<li class="page_item"><a href="/download/" title="Obtain Elemental">Download</a></li>
+	<li class="page_item"><a href="/documentation/" title="Learn how to use Elemental">Documentation</a></li>
+	<li class="page_item"><a href="/citing/" title="Learn how to cite Elemental">Citing</a></li>
+	<li class="page_item"><a href="/contributing/" title="Learn how to contribute to Elemental">Contributing</a></li>
+	<li class="page_item"><a href="/support/" title="Who has helped support the development of Elemental">Support</a></li>
+        <li class="page_item"><a href="/help/" title="Where to go for help">Help</a></li>
+      </ul>
+    </div><!-- .menu -->
+  </div><!-- #access -->
+</div><!-- #wrapper -->
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="up-an-offset-diagonal">
+<h1>Up an offset diagonal<a class="headerlink" href="#up-an-offset-diagonal" title="Permalink to this headline">¶</a></h1>
+<p>Given an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <cite>A</cite>, configure <cite>ATL</cite>, <cite>ATR</cite>, <cite>ABL</cite>, and <cite>ABR</cite> to view the local data of <cite>A</cite> corresponding to the partitioning</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \left(\begin{array}{cc} A_{TL} &amp; A_{TR} \\ A_{BL} &amp; A_{BR} \end{array}\right),\end{split}\]</div>
+<p>where the diagonal of <span class="math notranslate nohighlight">\(A_{BR}\)</span> lies on the <code class="docutils literal notranslate"><span class="pre">offset</span></code> diagonal of
+<span class="math notranslate nohighlight">\(A\)</span>, where the main diagonal corresponds to an offset of 0, the
+subdiagonal is an offset of <span class="math notranslate nohighlight">\(-1\)</span>, the superdiagonal is an offset of
+<span class="math notranslate nohighlight">\(1\)</span>, etc. The length of the diagonal of <span class="math notranslate nohighlight">\(A_{BR}\)</span> is specified as
+<code class="docutils literal notranslate"><span class="pre">diagDist</span></code>.</p>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv425PartitionUpOffsetDiagonal3IntR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int">
+<span id="_CPPv325PartitionUpOffsetDiagonal3IntR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="_CPPv225PartitionUpOffsetDiagonal3IntR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="PartitionUpOffsetDiagonal__Int.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Int"></span>void <code class="descname">PartitionUpOffsetDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>offset</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, <a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>diagDist</em> = <a class="reference internal" href="../../environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425PartitionUpOffsetDiagonal3IntR6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv431LockedPartitionUpOffsetDiagonal3IntRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int">
+<span id="_CPPv331LockedPartitionUpOffsetDiagonal3IntRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="_CPPv231LockedPartitionUpOffsetDiagonal3IntRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int"></span><span id="LockedPartitionUpOffsetDiagonal__Int.Matrix:T:CR.Matrix:T:R.Matrix:T:R.Matrix:T:R.Matrix:T:R.Int"></span>void <code class="descname">LockedPartitionUpOffsetDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="../../matrix.html#_CPPv4IE6MatrixI1TE" title="Matrix&lt;T&gt;">Matrix</a>&lt;T&gt; &amp;<em>ABR</em>, <a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>diagDist</em> = <a class="reference internal" href="../../environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431LockedPartitionUpOffsetDiagonal3IntRK6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TER6MatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv425PartitionUpOffsetDiagonal3IntR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int">
+<span id="_CPPv325PartitionUpOffsetDiagonal3IntR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="_CPPv225PartitionUpOffsetDiagonal3IntR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="PartitionUpOffsetDiagonal__Int.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.Int"></span>void <code class="descname">PartitionUpOffsetDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>offset</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ABR</em>, <a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>diagDist</em> = <a class="reference internal" href="../../environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425PartitionUpOffsetDiagonal3IntR18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv431LockedPartitionUpOffsetDiagonal3IntRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int">
+<span id="_CPPv331LockedPartitionUpOffsetDiagonal3IntRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="_CPPv231LockedPartitionUpOffsetDiagonal3IntRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int"></span><span id="LockedPartitionUpOffsetDiagonal__Int.AbstractDistMatrix:T:CR.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.AbstractDistMatrix:T:R.Int"></span>void <code class="descname">LockedPartitionUpOffsetDiagonal</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>offset</em>, <em class="property">const</em> <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>A</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ATL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ATR</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ABL</em>, <a class="reference internal" href="../../dist_matrix/ADM.html#_CPPv4IE18AbstractDistMatrixI1TE" title="AbstractDistMatrix&lt;T&gt;">AbstractDistMatrix</a>&lt;T&gt; &amp;<em>ABR</em>, <a class="reference internal" href="../../environment.html#_CPPv43Int" title="Int">Int</a> <em>diagDist</em> = <a class="reference internal" href="../../environment.html#_CPPv49Blocksizev" title="Blocksize">Blocksize</a>()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431LockedPartitionUpOffsetDiagonal3IntRK18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TER18AbstractDistMatrixI1TE3Int" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h2>C API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonal_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonal_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElMatrix_i<em> A</em>, ElMatrix_i<em> ATL</em>, ElMatrix_i<em> ATR</em>, ElMatrix_i<em> ABL</em>, ElMatrix_i<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonal_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonal_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonal_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElMatrix_s<em> A</em>, ElMatrix_s<em> ATL</em>, ElMatrix_s<em> ATR</em>, ElMatrix_s<em> ABL</em>, ElMatrix_s<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonal_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonal_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonal_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElMatrix_d<em> A</em>, ElMatrix_d<em> ATL</em>, ElMatrix_d<em> ATR</em>, ElMatrix_d<em> ABL</em>, ElMatrix_d<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonal_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonal_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonal_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElMatrix_c<em> A</em>, ElMatrix_c<em> ATL</em>, ElMatrix_c<em> ATR</em>, ElMatrix_c<em> ABL</em>, ElMatrix_c<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonal_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonal_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonal_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElMatrix_z<em> A</em>, ElMatrix_z<em> ATL</em>, ElMatrix_z<em> ATR</em>, ElMatrix_z<em> ABL</em>, ElMatrix_z<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonal_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonalDist_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonalDist_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElDistMatrix_i<em> A</em>, ElDistMatrix_i<em> ATL</em>, ElDistMatrix_i<em> ATR</em>, ElDistMatrix_i<em> ABL</em>, ElDistMatrix_i<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonalDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonalDist_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonalDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElDistMatrix_s<em> A</em>, ElDistMatrix_s<em> ATL</em>, ElDistMatrix_s<em> ATR</em>, ElDistMatrix_s<em> ABL</em>, ElDistMatrix_s<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonalDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonalDist_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonalDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElDistMatrix_d<em> A</em>, ElDistMatrix_d<em> ATL</em>, ElDistMatrix_d<em> ATR</em>, ElDistMatrix_d<em> ABL</em>, ElDistMatrix_d<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonalDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonalDist_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonalDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElDistMatrix_c<em> A</em>, ElDistMatrix_c<em> ATL</em>, ElDistMatrix_c<em> ATR</em>, ElDistMatrix_c<em> ABL</em>, ElDistMatrix_c<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonalDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElPartitionUpOffsetDiagonalDist_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElPartitionUpOffsetDiagonalDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElDistMatrix_z<em> A</em>, ElDistMatrix_z<em> ATL</em>, ElDistMatrix_z<em> ATR</em>, ElDistMatrix_z<em> ABL</em>, ElDistMatrix_z<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElPartitionUpOffsetDiagonalDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonal_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonal_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstMatrix_i<em> A</em>, ElMatrix_i<em> ATL</em>, ElMatrix_i<em> ATR</em>, ElMatrix_i<em> ABL</em>, ElMatrix_i<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonal_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonal_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonal_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstMatrix_s<em> A</em>, ElMatrix_s<em> ATL</em>, ElMatrix_s<em> ATR</em>, ElMatrix_s<em> ABL</em>, ElMatrix_s<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonal_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonal_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonal_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstMatrix_d<em> A</em>, ElMatrix_d<em> ATL</em>, ElMatrix_d<em> ATR</em>, ElMatrix_d<em> ABL</em>, ElMatrix_d<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonal_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonal_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonal_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstMatrix_c<em> A</em>, ElMatrix_c<em> ATL</em>, ElMatrix_c<em> ATR</em>, ElMatrix_c<em> ABL</em>, ElMatrix_c<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonal_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonal_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonal_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstMatrix_z<em> A</em>, ElMatrix_z<em> ATL</em>, ElMatrix_z<em> ATR</em>, ElMatrix_z<em> ABL</em>, ElMatrix_z<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonal_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonalDist_i">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonalDist_i</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstDistMatrix_i<em> A</em>, ElDistMatrix_i<em> ATL</em>, ElDistMatrix_i<em> ATR</em>, ElDistMatrix_i<em> ABL</em>, ElDistMatrix_i<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonalDist_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonalDist_s">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonalDist_s</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstDistMatrix_s<em> A</em>, ElDistMatrix_s<em> ATL</em>, ElDistMatrix_s<em> ATR</em>, ElDistMatrix_s<em> ABL</em>, ElDistMatrix_s<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonalDist_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonalDist_d">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonalDist_d</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstDistMatrix_d<em> A</em>, ElDistMatrix_d<em> ATL</em>, ElDistMatrix_d<em> ATR</em>, ElDistMatrix_d<em> ABL</em>, ElDistMatrix_d<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonalDist_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonalDist_c">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonalDist_c</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstDistMatrix_c<em> A</em>, ElDistMatrix_c<em> ATL</em>, ElDistMatrix_c<em> ATR</em>, ElDistMatrix_c<em> ABL</em>, ElDistMatrix_c<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonalDist_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="c.ElLockedPartitionUpOffsetDiagonalDist_z">
+<a class="reference internal" href="../../environment.html#c.ElError" title="ElError">ElError</a> <code class="descname">ElLockedPartitionUpOffsetDiagonalDist_z</code><span class="sig-paren">(</span><a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> offset</em>, ElConstDistMatrix_z<em> A</em>, ElDistMatrix_z<em> ATL</em>, ElDistMatrix_z<em> ATR</em>, ElDistMatrix_z<em> ABL</em>, ElDistMatrix_z<em> ABR</em>, <a class="reference internal" href="../../environment.html#c.ElInt" title="ElInt">ElInt</a><em> diagDist</em><span class="sig-paren">)</span><a class="headerlink" href="#c.ElLockedPartitionUpOffsetDiagonalDist_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<div class="wrapper">
+  <div class="footer">
+    <div class="footer-nav">
+      <div class="span-6">
+	<h4>Usage documentation</h4>
+	<ul>
+	  <li><a href="/documentation/">Documentation</a></li>
+          <li><a href="/download/">Download</a></li>
+	</ul>
+      </div>
+      <div class="span-6">
+	<h4>Developer resources</h4>
+	<ul>
+	  <!--<li><a href="/buildbot/">Buildbot</a></li>--!>
+	  <!--<li><a href="/benchbot/">Benchbot</a></li>--!>
+	  <li><a href="https://github.com/elemental/Elemental/">Elemental on GitHub</a></li>
+          <li><a href="/compilers/">Supported compilers/toolchains</a></li>
+
+	  <li><a href="/pub/">File archive</a></li>
+	</ul>
+      </div>
+      <!--<div class="span-6 last">
+	<h4>Search this site</h4>
+	<div id="searchbox">
+	  <form class="search" action="/search.html" method="get">
+	    <input type="text" name="q" size="18" />
+	    <input type="submit" value="Go" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>--!>
+    </div>
+    <br/>
+    &copy; Copyright 2013-2016, <a href="http://github.com/poulson">Jack Poulson</a>.<br/>
+    <a href="http://github.com/elemental/elemental-web.git">Modification</a> of 
+    <a href="http://fenicsproject.org">fenicsproject.org</a>  
+    [&copy; Copyright 2013, The FEniCS Project].
+  </div>
+</div>
+
+  </body>
+</html>

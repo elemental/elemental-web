@@ -5,6 +5,13 @@ Elemental documentation and webpage
 The repository contains the source for the pages at
 http://libelemental.org.
 
+* How to: set up python environment
+  ::
+
+    pip install sphinx sphinx_rtd_theme spinx-serve
+
+  This will install python dependencies.
+
 * How to: generate web pages
   ::
 
@@ -42,3 +49,10 @@ http://libelemental.org.
 
 * NOTE: This documentation was forked from fenics-web, which may be found at
   https://bitbucket.org/fenics-project/fenics-web.
+
+* How to preview on your local machine
+  ::
+
+    sphinx-serve -b build
+
+  This will host a webserver containing the rendered webpages

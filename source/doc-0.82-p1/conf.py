@@ -220,11 +220,11 @@ latex_logo = '../_themes/elemental/static/elemental.png'
 # If false, no module index is generated.
 #latex_use_modindex = True
 
-latex_elements = {'fontpkg': '\\usepackage{mathpazo}',
+latex_elements = {'fontpkg': r'\usepackage{mathpazo}',
                   'pointsize': '11pt',
                   'papersize': 'a4paper',
                   'fontenc': '',
-                  'preamble': '\\usepackage{amssymb} \\usepackage{stmaryrd}'}
+                  'preamble': r'\usepackage{amssymb} \usepackage{stmaryrd}'}
 
 # Parameters affecting the LaTeX PNGs in the HTML files
 pngmath_latex_preamble = r" \usepackage{stmaryrd} "
